@@ -37,12 +37,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ServerControllerBase {
+class ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ServerControllerBase.class);
 
     private Process serverProc;
 
-    protected Process startServer(String currPort, String currThreadCnt, String serverScript) throws IOException {
+    Process startServer(String currPort, String currThreadCnt, String serverScript) throws IOException {
         List<String> command = new ArrayList<>();
         command.add("node");
         command.add(serverScript);
@@ -74,7 +74,7 @@ public class ServerControllerBase {
         return serverProc;
     }
 
-    public static void stopServer(String processSignature) throws IOException {
+    void stopServer(String processSignature) throws IOException {
         closeAllServers(processSignature);
     }
 
@@ -83,7 +83,7 @@ public class ServerControllerBase {
         return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 
-    public static boolean getStatus(Process serverProc) {
+    static boolean getStatus(Process serverProc) {
         // We first get the server process ID
         Integer transServerPID = null;
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
@@ -134,14 +134,14 @@ public class ServerControllerBase {
                         while ((s = stdInput.readLine()) != null) {
                             logger.info(s);
                             if (doSendToStdout) {
-                                System.out.println(s);
+                                logger.info(s);
                             }
                         }
 
                         while ((s = stdError.readLine()) != null) {
                             logger.error(s);
                             if (doSendToStdout) {
-                                System.out.println(s);
+                                logger.info(s);
                             }
                         }
                     }

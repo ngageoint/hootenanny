@@ -30,6 +30,18 @@ package hoot.services.controllers.ingest;
 public class Script {
     private String name;
 
+    private String description;
+
+    private String content;
+
+    public Script() {}
+
+    public Script(String name, String description, String content) {
+        this.name = name;
+        this.description = description;
+        this.content = content;
+    }
+
     public String getName() {
         return name;
     }
@@ -37,8 +49,6 @@ public class Script {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String description;
 
     public String getDescription() {
         return description;
@@ -48,23 +58,11 @@ public class Script {
         this.description = description;
     }
 
-    private String content;
-
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Script() {
-
-    }
-
-    public Script(String name, String description, String content) {
-        this.name = name;
-        this.description = description;
         this.content = content;
     }
 }

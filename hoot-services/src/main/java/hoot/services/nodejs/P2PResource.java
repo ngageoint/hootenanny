@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.services;
+package hoot.services.nodejs;
 
 import static hoot.services.HootProperties.*;
 
@@ -39,40 +39,26 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.nodejs.ServerControllerBase;
-
 
 public class P2PResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
-    private static final Object procLock = new Object();
-    private static final Object portLock = new Object();
 
-    private static String currentPort;
-    private static Process _P2PProc;
+    private Process p2PServiceProcess;
 
-    public P2PResource() {
-    }
+    public P2PResource() {}
 
     public void startP2PService() {
-        // set default default port and threadcount
         try {
+            String p2PServiceScript = HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT;
+
             // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
+            super.stopServer(p2PServiceScript);
 
-            // Probably an overkill but just in-case using synch lock
-            String currPort = P_2_P_SERVER_PORT;
-            synchronized (portLock) {
-                currentPort = currPort;
-            }
-
-            synchronized (procLock) {
-                String currThreadCnt = P_2_P_SERVER_THREAD_COUNT;
-                _P2PProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
-            }
+            p2PServiceProcess = super.startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
         }
-        catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error starting Point-To-Polygon Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
@@ -94,17 +80,17 @@ public class P2PResource extends ServerControllerBase {
             // Destroy the reference to the process directly here via the Java
             // API vs having the base class kill it with a unix command. Killing it via command causes
             // the stxxl temp files created hoot threads not to be cleaned up.
-            _P2PProc.destroy();
+            p2PServiceProcess.destroy();
         }
         catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex;
+            String msg = "Error stopping Point-To-Polygon service: " + ex;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", "false");
+        JSONObject json = new JSONObject();
+        json.put("isRunning", "false");
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -121,17 +107,17 @@ public class P2PResource extends ServerControllerBase {
         boolean isRunning;
 
         try {
-            isRunning = getStatus(_P2PProc);
+            isRunning = getStatus(p2PServiceProcess);
         }
-        catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting status of Point-To-Polygon Service: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", isRunning);
-        res.put("port", currentPort);
+        JSONObject json = new JSONObject();
+        json.put("isRunning", isRunning);
+        json.put("port", P_2_P_SERVER_PORT);
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 }

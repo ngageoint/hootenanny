@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.services;
+package hoot.services.job;
 
 import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
@@ -36,9 +36,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
@@ -59,7 +56,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.CommandRunnerImpl;
-import hoot.services.job.Executable;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
 
@@ -75,22 +71,21 @@ public class TunningService implements Executable {
         return finalStatusDetail;
     }
 
-    public TunningService() {
-    }
+    public TunningService() {}
 
     @Override
     public void exec(JSONObject command) {
-        JSONObject res = new JSONObject();
+        JSONObject json = new JSONObject();
         String input = command.get("input").toString();
         String inputType = command.get("inputtype").toString();
         long startTime = new Date().getTime();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try (Connection connection = DbUtils.createConnection()) {
             String tempOutputPath;
             if (inputType.equalsIgnoreCase("db")) {
-                DbUtils.getNodesCountByName(conn, input);
-                DbUtils.getWayCountByName(conn, input);
-                DbUtils.getRelationCountByName(conn, input);
+                DbUtils.getNodesCountByName(connection, input);
+                DbUtils.getWayCountByName(connection, input);
+                DbUtils.getRelationCountByName(connection, input);
 
                 // if the count is greater than threshold then just use it and tell it too big
                 CommandRunner cmdRunner = new CommandRunnerImpl();
@@ -101,19 +96,15 @@ public class TunningService implements Executable {
 
                 CommandResult result = cmdRunner.exec(commandArr);
 
-                if (result.getExitStatus() == 0) {
-                    result.getStdout();
-                }
-                else {
-                    String err = result.getStderr();
-                    throw new RuntimeException(err);
+                if (result.getExitStatus() != 0 /* 0 means SUCCESS*/) {
+                    throw new RuntimeException(result.getStderr());
                 }
 
                 tempOutputPath = TEMP_OUTPUT_PATH + "/" + input + ".osm";
 
                 // fortify fix
                 if (!FileUtils.validateFilePath(TEMP_OUTPUT_PATH, tempOutputPath)) {
-                    throw new RuntimeException("input can not contain path.");
+                    throw new RuntimeException("Input can not contain path.");
                 }
             }
             else {
@@ -121,25 +112,25 @@ public class TunningService implements Executable {
             }
 
             File outputFile = new File(tempOutputPath);
-            JobSink sinkImplementation = parseOsm(outputFile);
+            JobSink sinkImplementation = this.parseOsm(outputFile);
 
             long endTime = new Date().getTime();
 
-            logger.debug("Start:{}  - End: {} Diff:{} TOTAL:{} NODES:{} Way:{} Relations:{}",
+            logger.debug("Start:{} - End: {} Diff:{} TOTAL:{} NODES:{} Way:{} Relations:{}",
                     startTime, endTime, endTime - startTime, totalSize, sinkImplementation.getTotalNodes(),
                     sinkImplementation.getTotalWay(), sinkImplementation.getTotalRelation());
 
-            res.put("EstimatedSize", totalSize * 15);
-            res.put("NodeCount", sinkImplementation.getTotalNodes());
-            res.put("WayCount", sinkImplementation.getTotalWay());
-            res.put("RelationCount", sinkImplementation.getTotalRelation());
+            json.put("EstimatedSize", totalSize * 15);
+            json.put("NodeCount", sinkImplementation.getTotalNodes());
+            json.put("WayCount", sinkImplementation.getTotalWay());
+            json.put("RelationCount", sinkImplementation.getTotalRelation());
         }
-        catch (Exception ex) {
-            String msg = "Tuning Service error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Tuning Service error: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
 
-        finalStatusDetail = res.toString();
+        finalStatusDetail = json.toString();
     }
 
     private JobSink parseOsm(File inputOsmFile) {
@@ -221,28 +212,28 @@ public class TunningService implements Executable {
                 totalNodeCnt++;
             }
             else if (entity instanceof Way) {
-                Double nByteSize = 96 + calcTagsByteSize(entity.getTags());
+                Double bytes = 96 + calcTagsByteSize(entity.getTags());
 
                 List<WayNode> wayNodes = ((Way) entity).getWayNodes();
 
                 for (WayNode wayNode : wayNodes) {
-                    String wnID = String.valueOf(wayNode.getNodeId());
-                    nByteSize += wnID.length();
+                    String id = String.valueOf(wayNode.getNodeId());
+                    bytes += id.length();
                 }
 
-                totalOSMsize += nByteSize;
+                totalOSMsize += bytes;
                 totalWayCnt++;
             }
             else if (entity instanceof Relation) {
-                Double nByteSize = 64 + calcTagsByteSize(entity.getTags());
+                Double bytes = 64 + calcTagsByteSize(entity.getTags());
 
                 List<RelationMember> relationMembers = ((Relation) entity).getMembers();
                 for (RelationMember relationMember : relationMembers) {
-                    nByteSize += relationMember.getMemberRole().length();
-                    nByteSize += 8;
+                    bytes += relationMember.getMemberRole().length();
+                    bytes += 8;
                 }
 
-                totalOSMsize += nByteSize;
+                totalOSMsize += bytes;
                 totalRelationCnt++;
             }
         }
