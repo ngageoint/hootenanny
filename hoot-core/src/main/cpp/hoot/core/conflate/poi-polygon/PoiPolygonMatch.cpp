@@ -217,13 +217,17 @@ bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstEl
   //be a little more restrictive with restaurants
   if (t1.get("amenity") == "restaurant" &&
       t2.get("amenity") == "restaurant" &&
-      t1.contains("cuisine") && t2.contains("cuisine") &&
-      t1.get("cuisine").toLower() != t2.get("cuisine").toLower() &&
-      //Don't return false on regional, since its location dependent and we don't take that into
-      //account.
-      t1.get("cuisine") != "regional" && t2.get("cuisine") != "regional")
+      t1.contains("cuisine") && t2.contains("cuisine"))
   {
-    return false;
+    const QString t1Cuisine = t1.get("cuisine").toLower();
+    const QString t2Cuisine = t2.get("cuisine").toLower();
+    if (t1Cuisine != t2Cuisine &&
+        //Don't return false on regional, since its location dependent and we don't take that into
+        //account.
+        t1Cuisine != "regional" && t2Cuisine != "regional")
+    {
+      return false;
+    }
   }
 
   const double tagScore = _getTagScore(e1, e2);
