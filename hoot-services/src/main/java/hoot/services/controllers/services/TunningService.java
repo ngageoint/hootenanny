@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
-import hoot.services.command.ICommandRunner;
+import hoot.services.command.CommandRunnerImpl;
 import hoot.services.job.Executable;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
@@ -68,7 +68,7 @@ public class TunningService implements Executable {
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
 
     private String finalStatusDetail;
-    private Double totalSize = 0.0;
+    private Double totalSize;
 
     @Override
     public String getFinalStatusDetail() {
@@ -82,21 +82,23 @@ public class TunningService implements Executable {
     public void exec(JSONObject command) {
         JSONObject res = new JSONObject();
         String input = command.get("input").toString();
-        String inputtype = command.get("inputtype").toString();
-        long starttime = new Date().getTime();
+        String inputType = command.get("inputtype").toString();
+        long startTime = new Date().getTime();
 
         try (Connection conn = DbUtils.createConnection()) {
             String tempOutputPath;
-            if (inputtype.equalsIgnoreCase("db")) {
+            if (inputType.equalsIgnoreCase("db")) {
                 DbUtils.getNodesCountByName(conn, input);
                 DbUtils.getWayCountByName(conn, input);
                 DbUtils.getRelationCountByName(conn, input);
 
                 // if the count is greater than threshold then just use it and tell it too big
-                ICommandRunner cmdRunner = new CommandRunner();
+                CommandRunner cmdRunner = new CommandRunnerImpl();
 
-                String commandArr = "make -f " + CORE_SCRIPT_PATH + "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_OUTPUT_PATH
+                String commandArr = "make -f " + CORE_SCRIPT_PATH +
+                        "/makeconvert INPUT=" + input + " OUTPUT=" + TEMP_OUTPUT_PATH
                         + "/" + input + ".osm";
+
                 CommandResult result = cmdRunner.exec(commandArr);
 
                 if (result.getExitStatus() == 0) {
@@ -119,12 +121,12 @@ public class TunningService implements Executable {
             }
 
             File outputFile = new File(tempOutputPath);
-
             JobSink sinkImplementation = parseOsm(outputFile);
 
             long endTime = new Date().getTime();
+
             logger.debug("Start:{}  - End: {} Diff:{} TOTAL:{} NODES:{} Way:{} Relations:{}",
-                    starttime, endTime, endTime - starttime, totalSize, sinkImplementation.getTotalNodes(),
+                    startTime, endTime, endTime - startTime, totalSize, sinkImplementation.getTotalNodes(),
                     sinkImplementation.getTotalWay(), sinkImplementation.getTotalRelation());
 
             res.put("EstimatedSize", totalSize * 15);
@@ -167,37 +169,20 @@ public class TunningService implements Executable {
         return sink;
     }
 
-    /**
-     * see CoreServiceContext.xml
-     */
-    public void init() {
-        //
-    }
-
-    /**
-     * see CoreServiceContext.xml
-     */
-    public void destroy() {
-        //
-    }
-
     private static class JobSink implements Sink {
         @Override
-        public void release() {
-        }
+        public void release() {}
 
         @Override
-        public void complete() {
-        }
+        public void complete() {}
 
-        private Double totalOSMsize = (double) 0;
-        private Double totalNodeCnt = (double) 0;
-        private Double totalWayCnt = (double) 0;
-        private Double totalRelationCnt = (double) 0;
+        private Double totalOSMsize;
+        private Double totalNodeCnt;
+        private Double totalWayCnt;
+        private Double totalRelationCnt;
 
         @Override
-        public void initialize(Map<String, Object> metaData) {
-        }
+        public void initialize(Map<String, Object> metaData) {}
 
         double getTotalSize() {
             return totalOSMsize;
@@ -217,9 +202,9 @@ public class TunningService implements Executable {
 
         static double calcTagsByteSize(Collection<Tag> tags){
             double totalBytes = 0;
-            for (Tag curTag : tags) {
-                String tagKey = curTag.getKey();
-                String tagVal = curTag.getValue();
+            for (Tag tag : tags) {
+                String tagKey = tag.getKey();
+                String tagVal = tag.getValue();
 
                 totalBytes += tagKey.length();
                 totalBytes += tagVal.length();

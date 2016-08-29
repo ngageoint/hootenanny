@@ -48,14 +48,7 @@ public class ResourcesCleanUtil implements Executable {
         return finalStatusDetail;
     }
 
-    public void init() {
-    }
-
-    public void destroy() {
-    }
-
-    public ResourcesCleanUtil() {
-    }
+    public ResourcesCleanUtil() {}
 
     @Override
     public void exec(JSONObject command) {
@@ -63,7 +56,7 @@ public class ResourcesCleanUtil implements Executable {
         finalStatusDetail = res.toJSONString();
     }
 
-    static JSONObject deleteLayers(String mapId) {
+    private static JSONObject deleteLayers(String mapId) {
         JSONObject res = new JSONObject();
         res.put("mapId", mapId);
         res.put("result", "success");
