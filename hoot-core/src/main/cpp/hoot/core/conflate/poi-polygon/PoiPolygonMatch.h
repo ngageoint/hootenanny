@@ -116,6 +116,9 @@ private:
   QString _t1BestKvp;
   QString _t2BestKvp;
 
+  static void _printMatchDistanceInfo(const QString matchType,
+                                      const QMultiMap<QString, double>& distanceInfo);
+
   void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                        const ElementId& eid2);
 

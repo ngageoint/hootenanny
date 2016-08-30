@@ -219,6 +219,8 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<con
 {
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
   map->visitRo(v);
+
+  //PoiPolygonMatch::printMatchDistanceInfo();
 }
 
 vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
