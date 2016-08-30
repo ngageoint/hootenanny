@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.nodejs;
+package hoot.services.controllers.ogr;
 
 import static hoot.services.HootProperties.*;
 
@@ -39,84 +39,73 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.nodejs.ServerControllerBase;
 
-public class P2PResource extends ServerControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
 
-    private Process p2PServiceProcess;
+@Path("")
+public class TranslatorResource extends ServerControllerBase {
+    private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    public P2PResource() {}
+    private static Process translationServiceProcess;
 
-    public void startP2PService() {
+    public TranslatorResource() {}
+
+    public static void startTranslationService() {
         try {
-            String p2PServiceScript = HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT;
+            String translationServiceScript = HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT;
 
-            // Make sure to wipe out previosuly running servers.
-            super.stopServer(p2PServiceScript);
+            // Make sure to wipe out previously running servers.
+            stopServer(translationServiceScript);
 
-            p2PServiceProcess = super.startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
+            // start Translaction Service
+            translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
+                    translationServiceScript);
         }
         catch (Exception e) {
-            String msg = "Error starting Point-To-Polygon Service: " + e.getMessage();
+            String msg = "Error starting Translation Service: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
 
-    /**
-     * Destroys all POI to POI server process where it effectively shutting them
-     * down.
-     * 
-     * GET hoot-services/services/p2pserver/stop
-     * 
-     * @return JSON containing state
-     */
-    @GET
-    @Path("/p2pserver/stop")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response stopP2PService() {
+    public static void stopTranslationService() {
         // This also gets called automatically from HootServletContext when
         // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
             // API vs having the base class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files created hoot threads not to be cleaned up.
-            p2PServiceProcess.destroy();
+            // the stxxl temp files created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            translationServiceProcess.destroy();
         }
-        catch (Exception ex) {
-            String msg = "Error stopping Point-To-Polygon service: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
-
-        JSONObject json = new JSONObject();
-        json.put("isRunning", "false");
-
-        return Response.ok(json.toJSONString()).build();
     }
 
     /**
-     * Gets current status of P2P server.
-     * 
-     * GET hoot-services/services/p2pserver/status
-     * 
-     * @return JSON containing state and port it is running
+     * Gets current status of translation server.
+     * <p>
+     * GET hoot-services/ogr/translationserver/status
+     *
+     * @return JSON containing state and port it is running#background=Bing&map=17.20/-105.00217/39.91295
      */
     @GET
-    @Path("/p2pserver/status")
+    @Path("/translationserver/status")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response isP2PServiceRunning() {
+    public Response isTranslationServiceRunning() {
         boolean isRunning;
-
         try {
-            isRunning = getStatus(p2PServiceProcess);
+            isRunning = getStatus(translationServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of Point-To-Polygon Service: " + e.getMessage();
+            String msg = "Error getting status of Translation Service: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         JSONObject json = new JSONObject();
         json.put("isRunning", isRunning);
-        json.put("port", P_2_P_SERVER_PORT);
+        json.put("port", TRANSLATION_SERVER_PORT);
 
         return Response.ok(json.toJSONString()).build();
     }

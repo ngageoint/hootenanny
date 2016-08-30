@@ -130,7 +130,7 @@ public class TunningService implements Executable {
             throw new RuntimeException(msg, e);
         }
 
-        finalStatusDetail = json.toString();
+        this.finalStatusDetail = json.toString();
     }
 
     private JobSink parseOsm(File inputOsmFile) {

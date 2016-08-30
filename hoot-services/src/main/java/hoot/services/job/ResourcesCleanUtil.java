@@ -50,7 +50,7 @@ public class ResourcesCleanUtil implements Executable {
     @Override
     public void exec(JSONObject command) {
         JSONObject json = deleteLayers(command.get("mapId").toString());
-        finalStatusDetail = json.toJSONString();
+        this.finalStatusDetail = json.toJSONString();
     }
 
     private static JSONObject deleteLayers(String mapId) {
