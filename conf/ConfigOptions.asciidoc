@@ -1219,6 +1219,14 @@ from the URL.
 
 Turns on autoformatting (line breaks, indentation etc) for XML output.
 
+=== osm.map.writer.schema
+
+* Data Type: string
+* Default Value: ``
+
+Sets the value for a "schema" attribute when writeing a map to OSM XML.
+NOTE: this will only be written if the value is not empty.
+
 === osm2ogr.ops
 
 * Data Type: list
