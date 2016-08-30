@@ -17,7 +17,8 @@
     "node-mocks-http": "~1.5.3"
   },
   "scripts": {
-    "test": "mocha --reporter dot --timeout 30000"
+    "test": "mocha --reporter dot --timeout 30000",
+    "cover": "node_modules/.bin/istanbul cover _mocha --"
   },
   "repository": {
     "type": "git",
