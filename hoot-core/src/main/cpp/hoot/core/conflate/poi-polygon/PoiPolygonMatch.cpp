@@ -150,7 +150,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double nameScore = _calculateNameScore(poi, poly);
   const bool nameMatch = nameScore >= _nameScoreThreshold;
 
-  //const bool addressMatch = _calculateAddressMatch(poly, poi);
+  const bool addressMatch = _calculateAddressMatch(poly, poi);
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
@@ -164,7 +164,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
-  //evidence += addressMatch ? 1 : 0;
+  evidence += addressMatch ? 1 : 0;
   evidence += distance <= _matchDistance ? 2 : 0;
 
   if (!closeMatch)
@@ -424,7 +424,6 @@ bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElem
     //haven't seen addresses yet in building relation node members
     /*else if (e2->getElementType() == ElementType::Relation)
       {
-
       }*/
   }
   if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
@@ -464,7 +463,7 @@ bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElem
        addrComp.compare(buildingAddrComb, poiAddrTag) == 1.0) ||
     (!poiAddrComb.isEmpty() && !buildingAddrTag.isEmpty() &&
        addrComp.compare(poiAddrComb, buildingAddrTag) == 1.0) ||
-    (!buildingAddrTag.isEmpty() && !poiAddrTag.isEmpty() &&
+    (!buildingAddrComb.isEmpty() && !poiAddrComb.isEmpty() &&
        addrComp.compare(buildingAddrComb, poiAddrComb) == 1.0);
 }
 
