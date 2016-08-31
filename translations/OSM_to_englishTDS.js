@@ -71,7 +71,7 @@ function initialize()
     hoot.Settings.set({"ogr.tds.add.fcsubtype":"false"});
 
     // Set the schema type for the export
-    hoot.Settings.set({"osm.map.writer.schema":"tds40"});
+    hoot.Settings.set({"osm.map.writer.schema":"TDSv40"});
 }
 
 
