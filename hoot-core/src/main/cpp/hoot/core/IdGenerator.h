@@ -46,6 +46,8 @@ public:
 
   virtual ~IdGenerator() {}
 
+  virtual boost::shared_ptr<IdGenerator> clone() const = 0;
+
   virtual long createNodeId() = 0;
 
   virtual long createRelationId() = 0;

@@ -100,7 +100,8 @@ private:
     vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
     // Please update the asciidoc user documentation if you change this usage.
-    cout << "usage: hoot <command> [--debug] [--warn] [-D name=value] [--conf <path>] [<args>]\n";
+    cout << "usage: hoot <command> [--trace] [--debug] [--warn] [-D name=value] [--conf <path>] "
+      "[<args>]\n";
     cout << endl;
     cout << "For detailed help on the following commands type: hoot --help (command name)\n"
             "\n";

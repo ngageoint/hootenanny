@@ -323,6 +323,7 @@ int main(int argc, char *argv[])
             "--info - Show info messages and above.\n"
             "--verbose - Show verbose messages and above.\n"
             "--debug - Show debug messages and above.\n"
+            "--trace - Show trace messages and above.\n"
             "--diff - Print diff when a script test fails.\n"
             "--include=[regex] - Include only tests that match the specified regex.\n"
             "--exclude=[regex] - Exclude tests that match the specified regex.\n"
@@ -436,6 +437,10 @@ int main(int argc, char *argv[])
 
     CppUnit::TextTestResult result;
 
+    if (args.contains("--trace"))
+    {
+      Log::getInstance().setLevel(Log::Trace);
+    }
     if (args.contains("--debug"))
     {
       Log::getInstance().setLevel(Log::Debug);
