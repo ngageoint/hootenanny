@@ -217,10 +217,15 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
+  PoiPolygonMatch::resetMatchDistanceInfo();
+
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
   map->visitRo(v);
 
-  //PoiPolygonMatch::printMatchDistanceInfo();
+  if (Log::getInstance().getLevel() == Log::Debug)
+  {
+    PoiPolygonMatch::printMatchDistanceInfo();
+  }
 }
 
 vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const

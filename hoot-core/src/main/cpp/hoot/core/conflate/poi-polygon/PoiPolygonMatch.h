@@ -93,6 +93,7 @@ public:
   static bool isPoiIsh(const Element& e);
 
   static void printMatchDistanceInfo();
+  static void resetMatchDistanceInfo();
 
 private:
 
@@ -111,8 +112,10 @@ private:
   double _typeScoreThreshold;
 
   static QString _testUuid;
-  static QMultiMap<QString, double> _matchRefIdsToDistances;
-  static QMultiMap<QString, double> _reviewRefIdsToDistances;
+  static QMultiMap<QString, double> _poiMatchRefIdsToDistances;
+  static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
+  static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
+  static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
   QString _t1BestKvp;
   QString _t2BestKvp;
 
@@ -132,12 +135,15 @@ private:
    * Returns true if the tag similarity score is greater than or equal to
    * poi.polygon.min.tag.score
    */
-  bool _calculateTypeMatch(const ConstOsmMapPtr& map, ConstElementPtr e1, ConstElementPtr e2);
+  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2);
   QStringList _getRelatedTags(const Tags& tags) const;
 
   bool _calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi);
+
+  double _getMatchDistanceForType(const QString typeKvp);
+  double _getReviewDistanceForType(const QString typeKvp);
 
 };
 

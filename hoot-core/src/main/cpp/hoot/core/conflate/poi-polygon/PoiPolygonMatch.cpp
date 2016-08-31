@@ -46,9 +46,11 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
-QMultiMap<QString, double> PoiPolygonMatch::_matchRefIdsToDistances;
-QMultiMap<QString, double> PoiPolygonMatch::_reviewRefIdsToDistances;
+QString PoiPolygonMatch::_testUuid = "";
+QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
+QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
+QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
+QMultiMap<QString, double> PoiPolygonMatch::_polyReviewRefIdsToDistances;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
@@ -133,7 +135,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   }
 
   shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
-  //may need a better way to handle this...(tried isValid)
+  //may need a better way to handle this...(already tried using isValid())
   if (QString::fromStdString(gpoly->toString()).toUpper().contains("EMPTY"))
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
@@ -145,7 +147,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   }
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
-  const bool typeMatch = _calculateTypeMatch(map, poi, poly);
+  const bool typeMatch = _calculateTypeMatch(poi, poly);
 
   const double nameScore = _calculateNameScore(poi, poly);
   const bool nameMatch = nameScore >= _nameScoreThreshold;
@@ -158,6 +160,8 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   const double distance = gpoly->distance(gpoi.get());
+  const double matchDistance =
+    max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
   const double reviewDistancePlusCe = _reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
@@ -165,7 +169,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += addressMatch ? 1 : 0;
-  evidence += distance <= _matchDistance ? 2 : 0;
+  evidence += distance <= matchDistance ? 2 : 0;
 
   if (!closeMatch)
   {
@@ -184,28 +188,36 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
   }
 
-  const QString ref2 = poi->getTags().get("REF2");
-  const QString review = poi->getTags().get("REVIEW");
-  if (ref2 == poly->getTags().get("REF1").split(";")[0])
+  if (Log::getInstance().getLevel() == Log::Debug)
   {
-    if (e1IsPoiIsh)
+    //output feature distances for all feature types which fell within the match threshold
+    const QString ref2 = poi->getTags().get("REF2");
+    const QString review = poi->getTags().get("REVIEW");
+    if (ref2 == poly->getTags().get("REF1").split(";")[0])
     {
-      _matchRefIdsToDistances.insert(_t1BestKvp, distance);
+      if (e1IsPoiIsh)
+      {
+        _poiMatchRefIdsToDistances.insert(_t1BestKvp, distance);
+        _polyMatchRefIdsToDistances.insert(_t2BestKvp, distance);
+      }
+      else
+      {
+        _poiMatchRefIdsToDistances.insert(_t2BestKvp, distance);
+        _polyMatchRefIdsToDistances.insert(_t1BestKvp, distance);
+      }
     }
-    else
+    else if (review == poly->getTags().get("REF1").split(";")[0])
     {
-      _matchRefIdsToDistances.insert(_t2BestKvp, distance);
-    }
-  }
-  else if (review == poly->getTags().get("REF1").split(";")[0])
-  {
-    if (e1IsPoiIsh)
-    {
-      _reviewRefIdsToDistances.insert(_t1BestKvp, distance);
-    }
-    else
-    {
-      _reviewRefIdsToDistances.insert(_t2BestKvp, distance);
+      if (e1IsPoiIsh)
+      {
+        _poiReviewRefIdsToDistances.insert(_t1BestKvp, distance);
+        _polyReviewRefIdsToDistances.insert(_t2BestKvp, distance);
+      }
+      else
+      {
+        _poiReviewRefIdsToDistances.insert(_t2BestKvp, distance);
+        _polyReviewRefIdsToDistances.insert(_t1BestKvp, distance);
+      }
     }
   }
 
@@ -221,10 +233,11 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(typeMatch);
     LOG_VARD(nameMatch);
     LOG_VARD(nameScore);
-    //LOG_VARD(addressMatch);
+    LOG_VARD(addressMatch);
     LOG_VARD(closeMatch);
     LOG_VARD(distance);
     LOG_VARD(_matchDistance);
+    LOG_VARD(matchDistance);
     LOG_VARD(_reviewDistance);
     LOG_VARD(reviewDistancePlusCe);
     LOG_VARD(ce);
@@ -237,23 +250,34 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
 
 void PoiPolygonMatch::printMatchDistanceInfo()
 {
-  _printMatchDistanceInfo("Match", _matchRefIdsToDistances);
-  _printMatchDistanceInfo("Review", _reviewRefIdsToDistances);
+  _printMatchDistanceInfo("POI Match", _poiMatchRefIdsToDistances);
+  _printMatchDistanceInfo("Poly Match", _polyMatchRefIdsToDistances);
+  _printMatchDistanceInfo("POI Review", _poiReviewRefIdsToDistances);
+  _printMatchDistanceInfo("Poly Review", _polyReviewRefIdsToDistances);
+}
+
+void PoiPolygonMatch::resetMatchDistanceInfo()
+{
+  _poiMatchRefIdsToDistances.clear();
+  _polyMatchRefIdsToDistances.clear();
+  _poiReviewRefIdsToDistances.clear();
+  _polyReviewRefIdsToDistances.clear();
 }
 
 void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
                                               const QMultiMap<QString, double>& distanceInfo)
 {
-  double maxDistance = -1.0;
-  double minimumDistance = 99999;
-  double averageDistance = -1.0;
-  int numberOfEntries = 0;
-
   foreach (QString type, distanceInfo.uniqueKeys())
   {
     if (!type.trimmed().isEmpty())
     {
+      double maxDistance = 0.0;
+      double minimumDistance = 99999;
+      double averageDistance = 0.0;
+      int numberOfEntries = 0;
+
       QList<double> distances = distanceInfo.values(type);
+      qSort(distances.begin(), distances.end());
       double sumDist = 0.0;
       QString distancesStr = "";
       for (QList<double>::const_iterator itr = distances.begin(); itr != distances.end(); ++itr)
@@ -267,12 +291,14 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       }
       distancesStr.chop(2);
       averageDistance = sumDist / (double)distances.size();
-      LOG_INFO(matchType << " distance info for type: " << type);
-      LOG_VAR(maxDistance);
-      LOG_VAR(minimumDistance);
-      LOG_VAR(averageDistance);
-      LOG_VAR(numberOfEntries);
-      LOG_VAR(distancesStr);
+
+      LOG_DEBUG(matchType.toUpper() << " distance info for type: " << type);
+      LOG_VARD(maxDistance);
+      LOG_VARD(minimumDistance);
+      LOG_VARD(averageDistance);
+      LOG_VARD(numberOfEntries);
+      LOG_VARD(distancesStr);
+      LOG_DEBUG("**************************");
     }
   }
 }
@@ -287,8 +313,7 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
    .extract(e1, e2);
 }
 
-bool PoiPolygonMatch::_calculateTypeMatch(const ConstOsmMapPtr& /*map*/, ConstElementPtr e1,
-                                          ConstElementPtr e2)
+bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
@@ -334,7 +359,7 @@ double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
       const QString t1Kvp = t1List.at(i);
       const QString t2Kvp = t2List.at(j);
       const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
-      if (score > result)
+      if (score >= result && Log::getInstance().getLevel() == Log::Debug)
       {
         if (!t1Kvp.isEmpty() && t1Kvp != "building=yes" && t1Kvp != "poi=yes")
         {
@@ -380,6 +405,24 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
   }
 
   return tagsList;
+}
+
+double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
+{
+  /*if (typeKvp == "amenity=fire_station")
+  {
+    return 0.0;
+  }*/
+  return _matchDistance;
+}
+
+double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
+{
+  if (typeKvp == "")
+  {
+    return 0.0;
+  }
+  return _reviewDistance;
 }
 
 bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi)
@@ -431,7 +474,7 @@ bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElem
     return false;
   }
 
-  Tags poiTags = poi->getTags();
+  const Tags poiTags = poi->getTags();
   const QString poiHouseNum = poiTags.get("addr:housenumber").trimmed();
   const QString poiStreet =
     Translator::getInstance().toEnglish(poiTags.get("addr:street")).trimmed().toLower();
