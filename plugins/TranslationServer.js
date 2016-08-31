@@ -28,6 +28,7 @@ var tdsToOsmMap = {
 };
 
 if (require.main === module) {
+    //I'm a running server
 
     // cluster for load balancing
     var cluster = require('cluster');
@@ -75,7 +76,8 @@ if (require.main === module) {
         http.createServer(TranslationServer).listen(serverPort);
     }
 } else {
-    http.createServer(TranslationServer).listen(serverPort);
+    //I'm being called from a mocha test
+    http.createServer(TranslationServer);
 }
 
 
@@ -112,6 +114,13 @@ function TranslationServer(request, response) {
             header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
             response.end(JSON.stringify(result));
+        } else if (request.method === 'OPTIONS') {
+            header["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS";
+            header["Access-Control-Allow-Credentials"] = false;
+            header["Access-Control-Max-Age"] = '86400'; // 24 hours
+            header["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+            response.writeHead(200, header);
+            response.end();
         } else {
             throw new Error('Unsupported method');
         }
@@ -152,6 +161,9 @@ function handleInputs(params) {
             break;
         case '/capabilities':
             result = getCapabilities(params);
+            break;
+        case '/version':
+            result = {version: '0.0.2'};
             break;
         default:
             throw new Error('Not found');
