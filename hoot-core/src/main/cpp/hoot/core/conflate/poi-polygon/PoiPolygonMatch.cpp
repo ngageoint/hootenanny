@@ -162,7 +162,9 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double distance = gpoly->distance(gpoi.get());
   const double matchDistance =
     max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
-  const double reviewDistancePlusCe = _reviewDistance + ce;
+  const double reviewDistance =
+    max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
+  const double reviewDistancePlusCe = reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
   int evidence = 0;
@@ -412,16 +414,184 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
   /*if (typeKvp == "amenity=fire_station")
   {
     return 0.0;
+  }
+  else if (typeKvp == "amenity=arts_centre")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=kindergarten")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=library")
+  {
+    return 4.0;
+  }
+  else if (typeKvp == "amenity=parking")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=police")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=school")
+  {
+    return 7.0;
+  }
+  else if (typeKvp == "amenity=social_facility")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=toilets")
+  {
+    return 9.0;
+  }
+  else if (typeKvp == "building=civic")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "building=hospital")
+  {
+    return 3.0;
+  }
+  else if (typeKvp == "leisure=park")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "leisure=swimming_pool")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "man_made=water_works")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=museum")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "building=retail")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "leisure=sports_centre")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "sport=swimming")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=carousel")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=hotel")
+  {
+    return 0.0;
   }*/
   return _matchDistance;
 }
 
 double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
 {
-  if (typeKvp == "")
+  /*if (typeKvp == "amenity=fire_station")
   {
     return 0.0;
   }
+  else if (typeKvp == "amenity=arts_centre")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=clinic")
+  {
+    return 32.0;
+  }
+  else if (typeKvp == "amenity=kindergarten")
+  {
+    return 7.0;
+  }
+  else if (typeKvp == "amenity=library")
+  {
+    return 4.0;
+  }
+  else if (typeKvp == "amenity=parking")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=police")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "amenity=school")
+  {
+    return 15.0;
+  }
+  else if (typeKvp == "amenity=social_facility")
+  {
+    return 5.0;
+  }
+  else if (typeKvp == "amenity=toilets")
+  {
+    return 43.0;
+  }
+  else if (typeKvp == "building=civic")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "building=hospital")
+  {
+    return 3.0;
+  }
+  else if (typeKvp == "leisure=park")
+  {
+    return 33.0;
+  }
+  else if (typeKvp == "leisure=swimming_pool")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "man_made=water_works")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=attraction")
+  {
+    return 14.0;
+  }
+  else if (typeKvp == "tourism=museum")
+  {
+    return 7.0;
+  }
+  else if (typeKvp == "building=retail")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "historic=monument")
+  {
+    return 19.0;
+  }
+  else if (typeKvp == "leisure=sports_centre")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "sport=swimming")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=attraction")
+  {
+    return 14.0;
+  }
+  else if (typeKvp == "tourism=carousel")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "tourism=hotel")
+  {
+    return 0.0;
+  }*/
   return _reviewDistance;
 }
 
