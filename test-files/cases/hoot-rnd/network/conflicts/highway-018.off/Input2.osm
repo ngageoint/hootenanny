@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-307008' action='modify' visible='true' lat='1.30278234102' lon='5.796576713' />
+  <node id='-307009' action='modify' visible='true' lat='1.30308440469' lon='5.796647828' />
+  <node id='-307010' action='modify' visible='true' lat='1.30259147983' lon='5.797626821' />
+  <node id='-307011' action='modify' visible='true' lat='1.30270490761' lon='5.797069837' />
+  <node id='-307012' action='modify' visible='true' lat='1.30278016907' lon='5.796585642' />
+  <node id='-307013' action='modify' visible='true' lat='1.3029595731' lon='5.795848302' />
+  <node id='-307014' action='modify' visible='true' lat='1.30252920783' lon='5.796531209' />
+  <node id='-307015' action='modify' visible='true' lat='1.30255352149' lon='5.796504488' />
+  <node id='-307016' action='modify' visible='true' lat='1.30270270908' lon='5.795983958' />
+  <node id='-307017' action='modify' visible='true' lat='1.302752739' lon='5.795798489' />
+  <node id='-307018' action='modify' visible='true' lat='1.30242452723' lon='5.796921958' />
+  <node id='-307019' action='modify' visible='true' lat='1.30229889329' lon='5.797404859' />
+  <node id='-307020' action='modify' visible='true' lat='1.30234849951' lon='5.797464981' />
+  <node id='-307021' action='modify' visible='true' lat='1.30240622279' lon='5.79752196' />
+  <node id='-307022' action='modify' visible='true' lat='1.30248003946' lon='5.797592197' />
+  <way id='-307003' action='modify' visible='true'>
+    <nd ref='-307008' />
+    <nd ref='-307009' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='MADRASAH' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+  <way id='-307004' action='modify' visible='true'>
+    <nd ref='-307010' />
+    <nd ref='-307011' />
+    <nd ref='-307012' />
+    <nd ref='-307008' />
+    <tag k='all_weather' v='yes' />
+    <tag k='alt_name' v='MADRASAH 2;MA 4;MA. 3' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='name' v='MAD 3' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+  <way id='-307005' action='modify' visible='true'>
+    <nd ref='-307008' />
+    <nd ref='-307013' />
+    <tag k='all_weather' v='yes' />
+    <tag k='alt_name' v='MA 4;MA. 4' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='name' v='M 1' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+  <way id='-307006' action='modify' visible='true'>
+    <nd ref='-307014' />
+    <nd ref='-307015' />
+    <nd ref='-307016' />
+    <nd ref='-307017' />
+    <tag k='all_weather' v='yes' />
+    <tag k='alt_name' v='MA 6;MA. 6' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='name' v='M 4' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+  <way id='-307007' action='modify' visible='true'>
+    <nd ref='-307014' />
+    <nd ref='-307018' />
+    <nd ref='-307019' />
+    <nd ref='-307020' />
+    <nd ref='-307021' />
+    <nd ref='-307022' />
+    <nd ref='-307010' />
+    <tag k='all_weather' v='yes' />
+    <tag k='alt_name' v='MADR. 5;MA 6;MA. 5' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='name' v='MAD 5' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='5' />
+  </way>
+</osm>

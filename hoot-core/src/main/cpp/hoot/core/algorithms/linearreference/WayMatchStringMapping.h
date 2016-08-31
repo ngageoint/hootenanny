@@ -59,9 +59,17 @@ public:
 
   virtual WayStringPtr getWayString2() = 0;
 
-  virtual WayLocation map1To2(WayLocation l1) = 0;
+  /**
+   * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
+   *        between two sublines.
+   */
+  virtual WayLocation map1To2(WayLocation l1, ElementId preferedEid = ElementId()) = 0;
 
-  virtual WayLocation map2To1(WayLocation l2) = 0;
+  /**
+   * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
+   *        between two sublines.
+   */
+  virtual WayLocation map2To1(WayLocation l2, ElementId preferedEid = ElementId()) = 0;
 
   virtual void setWayString1(const WayStringPtr& ws1) = 0;
 

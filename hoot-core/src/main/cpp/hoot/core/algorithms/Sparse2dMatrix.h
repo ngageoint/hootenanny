@@ -64,7 +64,7 @@ template<>
   {
     size_t
     operator()(const hoot::Sparse2dCellId& k) const
-    { return cantorPairing(k); }
+    { return Tgs::cantorPairing(k); }
   };
 }
 

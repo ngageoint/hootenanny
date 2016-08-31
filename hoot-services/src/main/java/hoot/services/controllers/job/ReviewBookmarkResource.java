@@ -52,7 +52,6 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.querydsl.sql.Configuration;
 import com.querydsl.sql.dml.SQLDeleteClause;
 
 import hoot.services.models.db.ReviewBookmarks;
@@ -403,19 +402,8 @@ public class ReviewBookmarkResource {
      * @return - total numbers of removed
      */
     private static long remove(ReviewBookmarkDelRequest request, Connection connection) {
-        return createDelClause(request, connection).execute();
-    }
-
-    /**
-     * Delete clause
-     *
-     * @param request
-     *            - Request containing bookmarkid
-     * @return - toal numbers of removed
-     */
-    private static SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request, Connection connection) {
-        Configuration configuration = DbUtils.getConfiguration();
-        return new SQLDeleteClause(connection, configuration, reviewBookmarks)
-                .where(reviewBookmarks.id.eq(request.getBookmarkId()));
+        return new SQLDeleteClause(connection, DbUtils.getConfiguration(), reviewBookmarks)
+                .where(reviewBookmarks.id.eq(request.getBookmarkId()))
+                .execute();
     }
 }

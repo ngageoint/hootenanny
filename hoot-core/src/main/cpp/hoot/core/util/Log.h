@@ -64,8 +64,21 @@ public:
   enum WarningLevel
   {
     None = 0,
+    /**
+     * Used for logging variable states and other info for tracing code. You want to know the value
+     * of 'i'? Use trace.
+     */
+    Trace = 500,
+    /**
+     * Used for program state information that may be useful when debugging other parts of the code.
+     * E.g. noting the projection or bounds of a map.
+     */
     Debug = 1000,
     Verbose = 1500,
+    /**
+     * Status information that would be useful to a user while the application is running. E.g.
+     * completion of phases of processing, or the number of features being processed.
+     */
     Info = 2000,
     Warn = 3000,
     Error = 4000,
@@ -105,6 +118,9 @@ public:
 
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& functionName, int lineNumber);
+
+  void progress(WarningLevel level, const string& str, const string& filename,
+    const string& functionName, int lineNumber);
 
   void setLevel(WarningLevel l);
 
@@ -155,7 +171,18 @@ private:
 #include <tgs/StreamUtils.hh>
 }
 
+#define PROGRESS_LEVEL(level, message) {\
+  if ((level) >= hoot::Log::getInstance().getLevel()) \
+  { \
+    std::stringstream ss_; \
+    ss_ << message; \
+    hoot::Log::getInstance().progress((level), ss_.str(), __FILE__, "", __LINE__); \
+  }}
+
+#define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
+
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
+#define LOG_VART(var) LOG_TRACE(#var << ": " << (var))
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
 #define LOG_VARV(var) LOG_VERBOSE(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))

@@ -12,7 +12,6 @@ Feature: DG G-EGD plugin
         When I hover over "#map"
         Then I should not see an image footprint on the map
         When I click on the first thumbnail
-        And I wait
         Then I should see an image overlay on the map
         When I click on the first thumbnail
         Then I should not see an image overlay on the map

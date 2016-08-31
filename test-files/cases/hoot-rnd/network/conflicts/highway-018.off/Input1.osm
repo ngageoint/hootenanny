@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-306977' action='modify' visible='true' lat='1.30274375284' lon='5.79580287884' />
+  <node id='-306978' action='modify' visible='true' lat='1.30252561507' lon='5.79654207884' />
+  <node id='-306979' action='modify' visible='true' lat='1.30278005884' lon='5.79658507884' />
+  <node id='-306980' action='modify' visible='true' lat='1.30258847175' lon='5.79763887884' />
+  <node id='-306981' action='modify' visible='true' lat='1.303086598' lon='5.79663687884' />
+  <node id='-306982' action='modify' visible='true' lat='1.30298542401' lon='5.79588887884' />
+  <way id='-306972' action='modify' visible='true'>
+    <nd ref='-306977' />
+    <nd ref='-306978' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='living_street' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-306973' action='modify' visible='true'>
+    <nd ref='-306979' />
+    <nd ref='-306978' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-306974' action='modify' visible='true'>
+    <nd ref='-306979' />
+    <nd ref='-306980' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='living_street' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-306975' action='modify' visible='true'>
+    <nd ref='-306981' />
+    <nd ref='-306979' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-306976' action='modify' visible='true'>
+    <nd ref='-306977' />
+    <nd ref='-306982' />
+    <nd ref='-306979' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='living_street' />
+  </way>
+</osm>

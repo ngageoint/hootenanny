@@ -27,11 +27,8 @@
 package hoot.services.models.osm;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +42,7 @@ import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
@@ -252,8 +250,10 @@ public class Node extends Element {
     @Override
     public org.w3c.dom.Element toXml(org.w3c.dom.Element parentXml, long modifyingUserId,
             String modifyingUserDisplayName, boolean multiLayerUniqueElementIds, boolean addChildren) {
+
         org.w3c.dom.Element element = super.toXml(parentXml, modifyingUserId, modifyingUserDisplayName,
                 multiLayerUniqueElementIds, addChildren);
+
         CurrentNodes nodeRecord = (CurrentNodes) record;
         if (nodeRecord.getVisible()) {
             element.setAttribute("lat", String.valueOf(nodeRecord.getLatitude()));
@@ -386,6 +386,7 @@ public class Node extends Element {
      */
     public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
             java.util.Map<String, String> tags, Connection conn) {
+
         long nextNodeId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                 .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
                 .fetchOne();
@@ -416,36 +417,12 @@ public class Node extends Element {
      */
     public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
             java.util.Map<String, String> tags, Connection conn) {
-        // querydsl does not support hstore so using jdbc
 
-        String strKv = "";
-        if (tags != null) {
-            for (Map.Entry<String, String> pairs : tags.entrySet()) {
-                String key = "\"" + pairs.getKey() + "\"";
-                String val = "\"" + pairs.getValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-
-                strKv += key + "=>" + val;
-            }
-        }
-
-        String strTags = "'";
-        strTags += strKv;
-        strTags += "'";
-
-        String sql = "INSERT INTO current_nodes_" + mapId + "(\n"
-                + "            id, latitude, longitude, changeset_id,  visible, \"timestamp\", tile, version, tags)\n"
-                + " VALUES(" + nodeId + "," + latitude + "," + longitude + "," + changesetId + "," + "true" + ","
-                + "CURRENT_TIMESTAMP" + "," + QuadTileCalculator.tileForPoint(latitude, longitude) + "," + "1" + ","
-                + strTags + ")";
-
-        try (Statement stmt = conn.createStatement()){
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error inserting into the database!", e);
-        }
+        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
+                .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
+                        currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
+                .values(nodeId, latitude, longitude, changesetId,
+                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
+                .execute();
     }
 }

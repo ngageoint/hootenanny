@@ -42,26 +42,62 @@ void OsmNetwork::addEdge(NetworkEdgePtr edge)
   }
   foreach (const ConstElementPtr& e, edge->getMembers())
   {
-    if (_eidToEdge.contains(e->getElementId()))
-    {
-      throw IllegalArgumentException(QString("A single ElementId is a member in multiple network "
-        "edges. (%1 and %2)").arg(_eidToEdge[e->getElementId()]->toString()).arg(edge->toString()));
-    }
-    _eidToEdge[e->getElementId()] = edge;
+    _eidToEdge.insert(e->getElementId(), edge);
   }
   _vertexToEdge.insertMulti(edge->getFrom(), edge);
   _vertexToEdge.insertMulti(edge->getTo(), edge);
   _edges.append(edge);
 }
 
-void OsmNetwork::addVertex(NetworkVertexPtr node)
+void OsmNetwork::addVertex(ConstNetworkVertexPtr node)
 {
-  _eidToVertex[node->getElementId()] = node;
+  _eidToVertex.insert(node->getElementId(), node);
 }
 
 QList<ConstNetworkEdgePtr> OsmNetwork::getEdgesFromVertex(ConstNetworkVertexPtr v) const
 {
   return _vertexToEdge.values(v);
+}
+
+ConstNetworkVertexPtr OsmNetwork::getSingleVertex(ElementId eid) const
+{
+  QList<ConstNetworkVertexPtr> vertices = _eidToVertex.values(eid);
+  if (vertices.size() > 1)
+  {
+    LOG_VARW(eid);
+    LOG_VARW(vertices);
+    throw IllegalArgumentException("Expected to receive a single vertex, but got more than one.");
+  }
+  else if (vertices.size() == 1)
+  {
+    return vertices[0];
+  }
+  else
+  {
+    return ConstNetworkVertexPtr();
+  }
+}
+
+void OsmNetwork::removeEdge(ConstNetworkEdgePtr edge)
+{
+  foreach (const ConstElementPtr& e, edge->getMembers())
+  {
+    _eidToEdge.remove(e->getElementId(), edge);
+  }
+  _vertexToEdge.remove(edge->getFrom(), edge);
+  _vertexToEdge.remove(edge->getTo(), edge);
+  _edges.removeAll(edge);
+}
+
+void OsmNetwork::removeVertex(ConstNetworkVertexPtr v)
+{
+  if (_vertexToEdge.count(v) >= 1)
+  {
+    LOG_VARW(v);
+    throw IllegalArgumentException("When removing a vertex the vertex cannot be part of an edge.");
+  }
+
+  _eidToVertex.remove(v->getElementId(), v);
 }
 
 QString OsmNetwork::toString()
@@ -70,7 +106,7 @@ QString OsmNetwork::toString()
 
   QSet<ElementId> touchedVertices;
 
-  foreach (const NetworkEdgePtr& e, _edges)
+  foreach (const ConstNetworkEdgePtr& e, _edges)
   {
     result << e->toString();
     touchedVertices.insert(e->getFrom()->getElementId());
@@ -82,7 +118,7 @@ QString OsmNetwork::toString()
 
   foreach (const ElementId& eid, untouchedVertices)
   {
-    result << _eidToVertex[eid]->toString();
+    result << hoot::toString(_eidToVertex.values(eid));
   }
 
   return result.join("\n");

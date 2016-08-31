@@ -67,6 +67,9 @@ function initialize()
 
     // Turn off the ESRI FCSUBTYPE
     hoot.Settings.set({"ogr.tds.add.fcsubtype":"false"});
+
+    // Set the schema type for the export
+    hoot.Settings.set({"osm.map.writer.schema":"TDSv61"});
 }
 
 

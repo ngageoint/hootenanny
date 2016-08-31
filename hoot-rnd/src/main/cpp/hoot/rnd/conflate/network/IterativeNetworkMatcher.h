@@ -31,7 +31,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
-#include <hoot/rnd/conflate/network/MatchScoreProvider.h>
 #include <hoot/rnd/conflate/network/NetworkMatcher.h>
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
@@ -54,12 +53,17 @@ class IterativeNetworkMatcherTest;
  * The approach seems to work well most of the time, but suffers from a greedy mentality.
  */
 class IterativeNetworkMatcher :
-  public NetworkMatcher,
-  public MatchScoreProvider
+  public NetworkMatcher
 {
 public:
+  static string className() { return "hoot::IterativeNetworkMatcher"; }
 
   const static double EPSILON;
+
+  /**
+   * Always construct with create() to make a shared pointer.
+   */
+  IterativeNetworkMatcher();
 
   /**
    * Use this instead of a constructor.
@@ -74,12 +78,8 @@ public:
 
   QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
-  virtual double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  virtual double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
-
 protected:
-  virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  virtual double _scoreEdges(ConstEdgeMatchPtr em) const;
 
   virtual double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
@@ -88,26 +88,9 @@ private:
   // for white box testing.
   friend class IterativeNetworkMatcherTest;
 
-  class DirectedEdgeScore
-  {
-  public:
+  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
 
-    DirectedEdgeScore() : score(0), reversed(false) {}
-    DirectedEdgeScore(double s, bool r) :
-      score(s),
-      reversed(r)
-    {}
-
-    QString toString() const { return QString("score: %1, reversed: %2").arg(score).arg(reversed); }
-
-    double score;
-    bool reversed;
-  };
-
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
-
-  /// [row][col]
-  typedef QHash< ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore> > EdgeScoreMap;
+  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
   /// [row][col]
   typedef QHash< ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double> > VertexScoreMap;
 
@@ -115,7 +98,7 @@ private:
    * A cost function used to compare network edges. It is a simple lookup.
    */
   class CostFunction :
-    public SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>::CostFunction
+    public SingleAssignmentProblemSolver<EdgeString, EdgeString>::CostFunction
   {
   public:
     const EdgeScoreMap* em1;
@@ -133,36 +116,24 @@ private:
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const ConstNetworkEdgePtr* e1,
-                        const ConstNetworkEdgePtr* e2) const
+    virtual double cost(const EdgeString* e1,
+                        const EdgeString* e2) const
     {
-      assert((*em1)[*e1][*e2].reversed == (*em2)[*e2][*e1].reversed);
+      bool valid = (e1->getFromVertex() == v1 && e2->getFromVertex() == v2) ||
+        (e1->getToVertex() == v1 && e2->getToVertex() == v2);
+
+      LOG_VAR(valid);
+      LOG_VAR(v1);
+      LOG_VAR(v2);
       double result = 0.0;
-      bool reversed = (*em1)[*e1][*e2].reversed;
-      bool valid = false;
-      if (reversed)
-      {
-        // if this edge is reversed, and the vertices are reversed
-        if (((*e1)->getFrom() == v1 && (*e2)->getTo() == v2) ||
-          ((*e1)->getTo() == v1 && (*e2)->getFrom() == v2))
-        {
-          valid = true;
-        }
-      }
-      else
-      {
-        // if this is not reversed and the vertices aren't reversed
-        if (((*e1)->getFrom() == v1 && (*e2)->getFrom() == v2) ||
-          ((*e1)->getTo() == v1 && (*e2)->getTo() == v2))
-        {
-          valid = true;
-        }
-      }
 
       if (valid)
       {
-        result = pow((*em1)[*e1][*e2].score * (*em2)[*e2][*e1].score, p);
+        ConstEdgeMatchPtr em(new EdgeMatch(e1->clone(), e2->clone()));
+        result = pow((*em1)[em] * (*em2)[em], p);
       }
+
+      LOG_VAR(result);
 
       return result;
     }
@@ -171,19 +142,21 @@ private:
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _edge12Scores, _edge21Scores;
   VertexScoreMap _vertex12Scores, _vertex21Scores;
-  /// P modifies the aggressiveness of the algorithm. Higher is more aggressive.
+  /// The smaller P the less impact the features previous score has on the result. 0 means it has
+  /// no impact.
   double _p;
+  /// The higher this value the faster the algorithm will converge
   double _dampening;
-
-  /**
-   * Always construct with create() to make a shared pointer.
-   */
-  IterativeNetworkMatcher();
 
   double _aggregateScores(QList<double> pairs);
 
-  double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
-    ConstNetworkVertexPtr from2, ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const;
+  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
+
+  void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
+    ConstNetworkEdgePtr eb);
+
+  double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstEdgeLocationPtr from1,
+    ConstEdgeLocationPtr from2, ConstEdgeLocationPtr to1, ConstEdgeLocationPtr to2) const;
 
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
 
@@ -193,15 +166,15 @@ private:
    * Normalizes the scores in a table. All the weights will sum to a constant based on the network
    * size. All values will be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeGlobalScores(EdgeScoreMap& t);
-  void _normalizeGlobalScores(VertexScoreMap& t);
+  void _normalizeScoresGlobal(EdgeScoreMap& t);
+  void _normalizeScoresGlobal(VertexScoreMap& t);
 
   /**
    * Normalizes the scores in a table. All the columns in a given row will sum to 1. All values will
    * be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeScores(EdgeScoreMap& t);
-  void _normalizeScores(VertexScoreMap& t);
+  void _normalizeScoresLocal(EdgeScoreMap& t);
+  void _normalizeScoresLocal(VertexScoreMap& t);
 
   void _seedEdgeScores();
 
@@ -215,6 +188,9 @@ private:
 
 typedef shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
 typedef shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+
+// not implemented
+bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);
 
 }
 

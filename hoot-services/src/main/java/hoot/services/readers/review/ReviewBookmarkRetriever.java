@@ -44,22 +44,26 @@ import hoot.services.utils.DbUtils;
 public class ReviewBookmarkRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 
-    private final Connection conn;
+    private final Connection connection;
 
-    public ReviewBookmarkRetriever(Connection cn) {
-        this.conn = cn;
+    public ReviewBookmarkRetriever(Connection connection) {
+        this.connection = connection;
     }
 
     public List<ReviewBookmarks> retrieve(long mapId, long relationId) {
-        SQLQuery<ReviewBookmarks> query = this.getQuery(mapId, relationId);
-        List<ReviewBookmarks> reviewBookmarks = query.fetch();
-        return reviewBookmarks;
+        return new SQLQuery<>(this.connection, DbUtils.getConfiguration())
+                .select(reviewBookmarks)
+                .from(reviewBookmarks)
+                .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)))
+                .fetch();
     }
 
-    public List<ReviewBookmarks> retrieve(long bookMarkId) {
-        SQLQuery<ReviewBookmarks> query = this.getQuery(bookMarkId);
-        List<ReviewBookmarks> reviewBookmarks = query.fetch();
-        return reviewBookmarks;
+    public List<ReviewBookmarks> retrieve(long bookmarkId) {
+        return new SQLQuery<>(this.connection, DbUtils.getConfiguration())
+                .select(reviewBookmarks)
+                .from(reviewBookmarks)
+                .where(reviewBookmarks.id.eq(bookmarkId))
+                .fetch();
     }
 
     /**
@@ -77,56 +81,7 @@ public class ReviewBookmarkRetriever {
      */
     public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
             long offset, Long[] creatorArray, Long[] layerArray) {
-        SQLQuery<ReviewBookmarks> query = this.getAllQuery(orderByCol, isAsc, limit, offset, creatorArray, layerArray);
-        List<ReviewBookmarks> reviewBookmarks = query.fetch();
-        return reviewBookmarks;
-    }
-
-    /**
-     * Get the total counts of all review tags
-     * 
-     * @return - numbers of toal count
-     */
-    public long getBookmarksCount() {
-        long count = new SQLQuery(this.conn, DbUtils.getConfiguration())
-                .from(reviewBookmarks)
-                .fetchCount();
-        return count;
-    }
-
-    /**
-     * SQL Query for retrieving review tag
-     * 
-     * @param mapId
-     * @param relationId
-     * @return - SQLQuery
-     */
-    private SQLQuery<ReviewBookmarks> getQuery(long mapId, long relationId) {
-        SQLQuery<ReviewBookmarks> query =
-                new SQLQuery<>(this.conn, DbUtils.getConfiguration())
-                        .select(reviewBookmarks)
-                        .from(reviewBookmarks)
-                        .where(reviewBookmarks.mapId.eq(mapId)
-                                .and(reviewBookmarks.relationId.eq(relationId)));
-        return query;
-    }
-
-    private SQLQuery<ReviewBookmarks> getQuery(long bookmarkId) {
-        SQLQuery<ReviewBookmarks> query =
-                new SQLQuery<>(this.conn, DbUtils.getConfiguration())
-                        .select(reviewBookmarks)
-                        .from(reviewBookmarks)
-                        .where(reviewBookmarks.id.eq(bookmarkId));
-        return query;
-    }
-
-    /**
-     * SQL Query for retrieving all tags
-     */
-    private SQLQuery<ReviewBookmarks> getAllQuery(String orderByCol, boolean isAsc, long limit, long offset,
-            Long[] creatorArray, Long[] layerArray) {
-
-        SQLQuery<ReviewBookmarks> query = new SQLQuery<>(this.conn, DbUtils.getConfiguration());
+        SQLQuery<ReviewBookmarks> query = new SQLQuery<>(this.connection, DbUtils.getConfiguration());
         query.select(reviewBookmarks).from(reviewBookmarks);
 
         if ((creatorArray != null) && (layerArray != null)) {
@@ -153,8 +108,20 @@ public class ReviewBookmarkRetriever {
             query.offset(offset);
         }
 
-        return query;
+        return query.fetch();
     }
+
+    /**
+     * Get the total counts of all review tags
+     * 
+     * @return - numbers of toal count
+     */
+    public long getBookmarksCount() {
+        return new SQLQuery(this.connection, DbUtils.getConfiguration())
+                .from(reviewBookmarks)
+                .fetchCount();
+    }
+
 
     /**
      * Filter for allowed columns for order by

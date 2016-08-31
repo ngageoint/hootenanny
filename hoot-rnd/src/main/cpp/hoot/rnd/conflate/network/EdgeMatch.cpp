@@ -29,21 +29,40 @@
 namespace hoot
 {
 
-/// @todo This and qHash are effective, but inefficient, please come up with a better method.
-bool operator==(const hoot::EdgeMatchPtr& em1, const hoot::EdgeMatchPtr& em2)
+/// @todo This could be made faster by only looking at the pointer for comparison. Unfortunately
+/// this would likely break IndexedEdgeMatchSet::contains. Another data structure in there could
+/// certainly alleviate this.
+bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2)
 {
-  return em1->toString() == em2->toString();
-}
+  bool result = em1.get() == em2.get() ||
+    (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
 
-uint qHash(const hoot::EdgeMatchPtr& em)
-{
-  return qHash(em->toString());
+//  bool strResult = em1->toString() == em2->toString();
+
+//  if (result != strResult)
+//  {
+//    LOG_VARE(result);
+//    LOG_VARE(strResult);
+//    LOG_VARE(em1);
+//    LOG_VARE(em2);
+//    throw HootException();
+//  }
+
+  return result;
 }
 
 EdgeMatch::EdgeMatch()
 {
   _edges1.reset(new EdgeString());
   _edges2.reset(new EdgeString());
+  _resetHash();
+}
+
+EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
+  _edges1(es1->clone()),
+  _edges2(es2->clone())
+{
+  _resetHash();
 }
 
 shared_ptr<EdgeMatch> EdgeMatch::clone() const
@@ -55,27 +74,34 @@ shared_ptr<EdgeMatch> EdgeMatch::clone() const
   return result;
 }
 
+bool EdgeMatch::contains(const shared_ptr<const EdgeMatch>& other) const
+{
+  return getString1()->contains(other->getString1()) &&
+    getString2()->contains(other->getString2());
+}
+
 bool EdgeMatch::contains(ConstNetworkEdgePtr e) const
 {
   return getString1()->contains(e) || getString2()->contains(e);
 }
 
+bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
+{
+  return getString1()->contains(v) || getString2()->contains(v);
+}
+
 bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
-  foreach (const EdgeString::EdgeEntry& ee, _edges1->getAllEdges())
+  if (other->getString1()->overlaps(getString1()))
   {
-    if (other->contains(ee.e))
-    {
-      return true;
-    }
+    LOG_INFO("Overlaps: " << toString() << " " << other);
+    return true;
   }
 
-  foreach (const EdgeString::EdgeEntry& ee, _edges2->getAllEdges())
+  if (other->getString2()->overlaps(getString2()))
   {
-    if (other->contains(ee.e))
-    {
-      return true;
-    }
+    LOG_INFO("Overlaps: " << toString() << " " << other);
+    return true;
   }
 
   return false;

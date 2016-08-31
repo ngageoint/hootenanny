@@ -45,7 +45,8 @@ class IterativeNetworkMatcherTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(IterativeNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);
-  CPPUNIT_TEST(edgeMatchTest);
+  /// @todo this isn't being actively tested now, we're using vagabond for now...
+  //CPPUNIT_TEST(edgeMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -105,10 +106,21 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", true,
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/DcGisRoads.osm", false,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb-multi10.osm", false,
+//      Status::Unknown2);
+
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB1.osm", false,
       Status::Unknown1);
-    OsmMapReaderFactory::getInstance().read(map, "tmp/dcperb30.osm", false,
+    OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyTestB2.osm", false,
       Status::Unknown2);
+
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input1.osm", false,
+//      Status::Unknown1);
+//    OsmMapReaderFactory::getInstance().read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input2.osm", false,
+//      Status::Unknown2);
+
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);
 
@@ -128,7 +140,7 @@ public:
     uut->matchNetworks(map, network1, network2);
 
     writeDebugMap(map, *uut, 0);
-    for (int i = 1; i <= 10; ++i)
+    for (int i = 1; i <= 20; ++i)
     {
       LOG_VAR(i);
       uut->iterate();
@@ -139,6 +151,6 @@ public:
   }
 };
 
-/// @todo CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IterativeNetworkMatcherTest, "slow");
 
 }

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1017010' action='modify' visible='true' lat='4.161130274' lon='4.47744414563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1529' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017011' action='modify' visible='true' lat='4.16051289129' lon='4.47741354563'>
+    <tag k='hoot:id' v='-1575' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017012' action='modify' visible='true' lat='4.15981163778' lon='4.47745904563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1727' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017013' action='modify' visible='true' lat='4.15802639382' lon='4.47756804563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1725' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017014' action='modify' visible='true' lat='4.15973890395' lon='4.47799914563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1719' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017015' action='modify' visible='true' lat='4.15946161237' lon='4.47895564563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1726' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017016' action='modify' visible='true' lat='4.15944014333' lon='4.47799004563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1720' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017017' action='modify' visible='true' lat='4.1592796271' lon='4.47807594563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1721' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-1017018' action='modify' visible='true' lat='4.15886298678' lon='4.47809064563'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-1722' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <way id='-1017008' action='modify' visible='true'>
+    <nd ref='-1017014' />
+    <nd ref='-1017016' />
+    <nd ref='-1017017' />
+    <nd ref='-1017018' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+  </way>
+</osm>
