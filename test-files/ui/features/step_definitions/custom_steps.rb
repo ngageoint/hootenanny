@@ -547,9 +547,12 @@ Then(/^I should (not )?see an image footprint on the map$/) do |negate|
 end
 
 Then(/^I should (not )?see an image overlay on the map$/) do |negate|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 30
   io = all('div.layer-overlay').last
   expectation = negate ? :should_not : :should
   io.send(expectation, have_css('img.tile'))
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|

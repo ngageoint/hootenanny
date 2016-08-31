@@ -58,6 +58,7 @@ OsmWriter::OsmWriter()
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
   _includePointInWays = false;
   _includeCompatibilityTags = true;
+  _osmSchema = ConfigOptions().getOsmMapWriterSchema();
   _precision = round(ConfigOptions().getWriterPrecision());
   _encodingErrorCount = 0;
 }
@@ -173,6 +174,12 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   writer.writeStartElement("osm");
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", "hootenanny");
+
+  if (_osmSchema != "")
+  {
+    writer.writeAttribute("schema", _osmSchema);
+  }
+
   char *wkt;
   map->getProjection()->exportToPrettyWkt(&wkt);
   writer.writeAttribute("srs", wkt);
