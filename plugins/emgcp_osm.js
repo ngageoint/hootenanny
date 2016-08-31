@@ -61,7 +61,18 @@ emgcp_osm = {
 
         for (var col in attrs)
         {
-            if (attrs[col] in ignoreList) delete attrs[col];
+            if (attrs[col] in ignoreList)
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            if (attrs[col] == undefined)
+            {
+                // Debug
+                // print('## ' + attrs[col] + ' is undefined');
+                delete attrs[col];
+            }
         }
 
         // Debug:

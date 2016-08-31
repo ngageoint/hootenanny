@@ -1769,12 +1769,14 @@ tds = {
             {
                 if (! attrs.F_CODE)
                 {
-                    throw new Error('No Valid F_Code');
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
                 }
                 else
                 {
                     //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-                    throw new Error(geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv40');
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv40'}, tableName: ''});
+                    return returnData;
                 }
             }
 
