@@ -582,7 +582,47 @@ mgcp = {
         // #
         // #####
 
-        if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
+        if (attrs.HWT && attrs.HWT !== '0')
+        {
+            tags.amenity = 'place_of_worship';
+
+            if (tags.building)
+            {
+                switch (tags.building)
+                {
+                    case 'cathedral':
+                    case 'chapel':
+                    case 'church':
+                        tags.religion = 'christian';
+                        break;
+
+                    case 'marabout':
+                    case 'mosque':
+                        tags.religion = 'muslim';
+                        break;
+
+                    case 'synagogue':
+                        tags.religion = 'jewish';
+                        break;
+
+                    case 'stupa':
+                        religion = 'buddhist';
+                        break;
+
+                    // In the spec, these don't specify a religion.
+                    // case 'religious_community':
+                    // case 'pagoda':
+                    // case 'shrine':
+                    // case 'tabernacle':
+                    // case 'temple':
+                } // End switch
+            }
+
+            if (tags['tower:type'] == 'minaret')
+            {
+                tags.religion = 'muslim';
+            }
+        } // End HWT
 
         // Add the LayerName to the source
         if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
@@ -620,7 +660,6 @@ mgcp = {
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
-            ["t.religion","t.landuse = 'cemetery'"],
             ["t.public_transport == 'station'","t.bus = 'yes'"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
