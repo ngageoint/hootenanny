@@ -160,18 +160,18 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   const double distance = gpoly->distance(gpoi.get());
-  const double matchDistance =
+  /*const double matchDistance =
     max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
   const double reviewDistance =
-    max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
-  const double reviewDistancePlusCe = reviewDistance + ce;
+    max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));*/
+  const double reviewDistancePlusCe = /*reviewDistance*/_reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += addressMatch ? 1 : 0;
-  evidence += distance <= matchDistance ? 2 : 0;
+  evidence += distance <= /*matchDistance*/_matchDistance ? 2 : 0;
 
   if (!closeMatch)
   {
@@ -239,7 +239,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(closeMatch);
     LOG_VARD(distance);
     LOG_VARD(_matchDistance);
-    LOG_VARD(matchDistance);
+    //LOG_VARD(matchDistance);
     LOG_VARD(_reviewDistance);
     LOG_VARD(reviewDistancePlusCe);
     LOG_VARD(ce);
