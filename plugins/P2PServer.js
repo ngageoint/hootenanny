@@ -9,6 +9,7 @@ var serverPort = 8096;
 var HOOT_HOME = process.env.HOOT_HOME;
 
 if (require.main === module) {
+    //I'm a running server
 
     // cluster for load balancing
     var cluster = require('cluster');
@@ -56,7 +57,8 @@ if (require.main === module) {
         http.createServer(P2Pserver).listen(serverPort);
     }
 } else {
-    http.createServer(P2Pserver).listen(serverPort);
+    //I'm being called from a mocha test
+    http.createServer(P2Pserver);
 }
 
 function P2Pserver(request, response) {
