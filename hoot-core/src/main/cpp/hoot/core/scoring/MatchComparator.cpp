@@ -361,6 +361,8 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
       if (Log::getInstance().getLevel() == Log::Debug)
       {
+        //This info from these tags can be misleading if you are conflating the same data type twice
+        //in the same conflation job. e.g. poi to poi AND poi to poly
         const MatchType expectedMatchType(expectedIndex);
         const MatchType actualMatchType(actualIndex);
         _tagTestOutcome(

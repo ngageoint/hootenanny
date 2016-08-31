@@ -46,7 +46,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "";
+QString PoiPolygonMatch::_testUuid = "{55e3a911-29d4-5208-8db0-0c7cb4dcda89}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -160,18 +160,18 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
   const double distance = gpoly->distance(gpoi.get());
-  /*const double matchDistance =
+  const double matchDistance =
     max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
   const double reviewDistance =
-    max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));*/
-  const double reviewDistancePlusCe = /*reviewDistance*/_reviewDistance + ce;
+    max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
+  const double reviewDistancePlusCe = reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += addressMatch ? 1 : 0;
-  evidence += distance <= /*matchDistance*/_matchDistance ? 2 : 0;
+  evidence += distance <= matchDistance ? 2 : 0;
 
   if (!closeMatch)
   {
@@ -411,6 +411,7 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
 
 double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
 {
+  //dataset c
   /*if (typeKvp == "amenity=fire_station")
   {
     return 0.0;
@@ -491,11 +492,191 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
   {
     return 0.0;
   }*/
+
+  //dataset d
+  if (typeKvp == "amenity=arts_centre")
+  {
+    return 25.0;
+  }
+  else if (typeKvp == "amenity=clinic")
+  {
+    return 129.0;
+  }
+  else if (typeKvp == "amenity=community_centre")
+  {
+    return 17.0;
+  }
+  else if (typeKvp == "amenity=embassy")
+  {
+    return 13.0;
+  }
+  else if (typeKvp == "amenity=fast_food")
+  {
+    return 38.0;
+  }
+  else if (typeKvp == "amenity=fuel")
+  {
+    return 104.0;
+  }
+  else if (typeKvp == "amenity=parking")
+  {
+    return 37.0;
+  }
+  else if (typeKvp == "building=train_station")
+  {
+    return 10.0;
+  }
+  else if (typeKvp == "building=transportation")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "historic=building")
+  {
+    return 7.0;
+  }
+  else if (typeKvp == "leisure=sports_centre")
+  {
+    return 71.0;
+  }
+  else if (typeKvp == "leisure=park")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "leisure=sports_complex")
+  {
+    return 58.0;
+  }
+  else if (typeKvp == "office=company")
+  {
+    return 75.0;
+  }
+  else if (typeKvp == "shop=car")
+  {
+    return 149.0;
+  }
+  else if (typeKvp == "shop=car_repair")
+  {
+    return 86.0;
+  }
+  else if (typeKvp == "shop=general")
+  {
+    return 56.0;
+  }
+  else if (typeKvp == "station=light_rail")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "station=light_rail")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "tourism=hotel")
+  {
+    return 57.0;
+  }
+  else if (typeKvp == "tourism=museum")
+  {
+    return 31.0;
+  }
+  else if (typeKvp == "amenity=place_of_worship")
+  {
+    return 16.0;
+  }
+  else if (typeKvp == "amenity=post_office")
+  {
+    return 86.0;
+  }
+  else if (typeKvp == "amenity=restaurant")
+  {
+    return 49.0;
+  }
+  else if (typeKvp == "amenity=townhall")
+  {
+    return 44.0;
+  }
+  else if (typeKvp == "building=hospital")
+  {
+    return 156.0;
+  }
+  else if (typeKvp == "historic=monument")
+  {
+    return 21.0;
+  }
+  else if (typeKvp == "amenity=hospital")
+  {
+    return 129.0;
+  }
+  else if (typeKvp == "amenity=public_building")
+  {
+    return 38.0;
+  }
+  else if (typeKvp == "amenity=swimming_pool")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "amenity=theatre")
+  {
+    return 25.0;
+  }
+  else if (typeKvp == "building=commercial")
+  {
+    return 9.0;
+  }
+  else if (typeKvp == "building=house")
+  {
+    return 0.0;
+  }
+  else if (typeKvp == "building=office")
+  {
+    return 75.0;
+  }
+  else if (typeKvp == "building=residential")
+  {
+    return 5.0;
+  }
+  else if (typeKvp == "leisure=water_park")
+  {
+    return 21.0;
+  }
+  else if (typeKvp == "shop=mall")
+  {
+    return 56.0;
+  }
+  else if (typeKvp == "sport=swimming")
+  {
+    return 63.0;
+  }
+  else if (typeKvp == "tourism=attraction")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "tourism=hostel")
+  {
+    return 2.0;
+  }
+  else if (typeKvp == "tourism=zoo")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "amenity=cinema")
+  {
+    return 32.0;
+  }
+  else if (typeKvp == "amenity=nightclub")
+  {
+    return 33.0;
+  }
+  else if (typeKvp == "historic=castle")
+  {
+    return 33.0;
+  }
+
   return _matchDistance;
 }
 
 double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
 {
+  //dataset c
   /*if (typeKvp == "amenity=fire_station")
   {
     return 0.0;
@@ -592,6 +773,173 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
   {
     return 0.0;
   }*/
+
+  //dataset d
+  if (typeKvp == "amenity=embassy")
+  {
+    return 80.0;
+  }
+  else if (typeKvp == "amenity=nightclub")
+  {
+    return 33.0;
+  }
+  else if (typeKvp == "amenity=parking")
+  {
+    return 43.0;
+  }
+  else if (typeKvp == "building=residential")
+  {
+    return 6.0;
+  }
+  else if (typeKvp == "building=train_station")
+  {
+    return 10.0;
+  }
+  else if (typeKvp == "building=transportation")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "historic=building")
+  {
+    return 7.0;
+  }
+  else if (typeKvp == "leisure=sports_centre")
+  {
+    return 71.0;
+  }
+  else if (typeKvp == "leisure=park")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "leisure=sports_complex")
+  {
+    return 58.0;
+  }
+  else if (typeKvp == "office=company")
+  {
+    return 75.0;
+  }
+  else if (typeKvp == "shop=car")
+  {
+    return 149.0;
+  }
+  else if (typeKvp == "shop=car_repair")
+  {
+    return 86.0;
+  }
+  else if (typeKvp == "shop=general")
+  {
+    return 56.0;
+  }
+  else if (typeKvp == "station=light_rail")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "station=light_rail")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "tourism=hotel")
+  {
+    return 57.0;
+  }
+  else if (typeKvp == "tourism=museum")
+  {
+    return 31.0;
+  }
+  else if (typeKvp == "amenity=place_of_worship")
+  {
+    return 16.0;
+  }
+  else if (typeKvp == "amenity=post_office")
+  {
+    return 86.0;
+  }
+  else if (typeKvp == "amenity=restaurant")
+  {
+    return 49.0;
+  }
+  else if (typeKvp == "amenity=townhall")
+  {
+    return 44.0;
+  }
+  else if (typeKvp == "building=hospital")
+  {
+    return 156.0;
+  }
+  else if (typeKvp == "historic=monument")
+  {
+    return 33.0;
+  }
+  else if (typeKvp == "amenity=hospital")
+  {
+    return 129.0;
+  }
+  else if (typeKvp == "amenity=public_building")
+  {
+    return 38.0;
+  }
+  else if (typeKvp == "amenity=swimming_pool")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "amenity=theatre")
+  {
+    return 25.0;
+  }
+  else if (typeKvp == "building=commercial")
+  {
+    return 9.0;
+  }
+  else if (typeKvp == "building=house")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "building=office")
+  {
+    return 75.0;
+  }
+  else if (typeKvp == "building=residential")
+  {
+    return 5.0;
+  }
+  else if (typeKvp == "leisure=water_park")
+  {
+    return 21.0;
+  }
+  else if (typeKvp == "shop=mall")
+  {
+    return 56.0;
+  }
+  else if (typeKvp == "sport=swimming")
+  {
+    return 63.0;
+  }
+  else if (typeKvp == "tourism=attraction")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "tourism=hostel")
+  {
+    return 2.0;
+  }
+  else if (typeKvp == "tourism=zoo")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "amenity=cinema")
+  {
+    return 32.0;
+  }
+  else if (typeKvp == "amenity=nightclub")
+  {
+    return 33.0;
+  }
+  else if (typeKvp == "historic=castle")
+  {
+    return 33.0;
+  }
+
   return _reviewDistance;
 }
 
