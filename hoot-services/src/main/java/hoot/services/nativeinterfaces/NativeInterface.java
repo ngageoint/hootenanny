@@ -34,7 +34,7 @@ import org.json.simple.JSONObject;
  *
  *         Abstract class for Native Interface.
  */
-public interface INativeInterface {
+public interface NativeInterface {
     /**
      * Performs execution. All required meta data should be in command
      * parameter.
@@ -43,14 +43,6 @@ public interface INativeInterface {
      * @throws NativeInterfaceException
      */
     JSONObject exec(JSONObject command) throws NativeInterfaceException;
-
-    /**
-     * Terminates job
-     *
-     * @param jobId
-     * @throws NativeInterfaceException
-     */
-    void terminate(String jobId) throws NativeInterfaceException;
 
     String getJobProgress(String jobId);
 }

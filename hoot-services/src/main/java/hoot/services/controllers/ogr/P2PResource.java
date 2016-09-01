@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.services;
+package hoot.services.controllers.ogr;
 
 import static hoot.services.HootProperties.*;
 
@@ -44,35 +44,39 @@ import hoot.services.nodejs.ServerControllerBase;
 
 public class P2PResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
-    private static final Object procLock = new Object();
-    private static final Object portLock = new Object();
 
-    private static String currentPort;
-    private static Process _P2PProc;
+    private static Process p2PServiceProcess;
 
-    public P2PResource() {
+    public P2PResource() {}
+
+    public static void startP2PService() {
+        try {
+            String p2PServiceScript = HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT;
+
+            // Make sure to wipe out previosuly running servers.
+            stopServer(p2PServiceScript);
+
+            p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
+        }
+        catch (Exception e) {
+            String msg = "Error starting Point-To-Polygon Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
     }
 
-    public void startP2PService() {
-        // set default default port and threadcount
+    public static void stopP2PService() {
+        // This also gets called automatically from HootServletContext when
+        // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
-            // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
-
-            // Probably an overkill but just in-case using synch lock
-            String currPort = P_2_P_SERVER_PORT;
-            synchronized (portLock) {
-                currentPort = currPort;
-            }
-
-            synchronized (procLock) {
-                String currThreadCnt = P_2_P_SERVER_THREAD_COUNT;
-                _P2PProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT);
-            }
+            // Destroy the reference to the process directly here via the Java
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            p2PServiceProcess.destroy();
         }
-        catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
@@ -87,24 +91,24 @@ public class P2PResource extends ServerControllerBase {
     @GET
     @Path("/p2pserver/stop")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response stopP2PService() {
+    public Response stopP2PServiceViaWeb() {
         // This also gets called automatically from HootServletContext when
         // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
             // API vs having the base class kill it with a unix command. Killing it via command causes
             // the stxxl temp files created hoot threads not to be cleaned up.
-            _P2PProc.destroy();
+            stopP2PService();
         }
-        catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error stopping Point-To-Polygon service: " + e;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", "false");
+        JSONObject json = new JSONObject();
+        json.put("isRunning", "false");
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -121,17 +125,17 @@ public class P2PResource extends ServerControllerBase {
         boolean isRunning;
 
         try {
-            isRunning = getStatus(_P2PProc);
+            isRunning = getStatus(p2PServiceProcess);
         }
-        catch (Exception ex) {
-            String msg = "Error starting P2P service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting status of Point-To-Polygon Service: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", isRunning);
-        res.put("port", currentPort);
+        JSONObject json = new JSONObject();
+        json.put("isRunning", isRunning);
+        json.put("port", P_2_P_SERVER_PORT);
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 }
