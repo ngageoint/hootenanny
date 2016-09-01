@@ -46,7 +46,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{55e3a911-29d4-5208-8db0-0c7cb4dcda89}";
+QString PoiPolygonMatch::_testUuid = "";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -412,6 +412,23 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
 double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
 {
   //dataset c
+  /*if (typeKvp == "amenity=toilets")
+  {
+    return 45.0;
+  }
+  else if (typeKvp == "amenity=clinic")
+  {
+    return 9.0; //33
+  }
+  else if (typeKvp == "amenity=school")
+  {
+    return 16.0; //63
+  }
+  else if (typeKvp == "leisure=park")
+  {
+    return 8.0;
+  }*/
+
   /*if (typeKvp == "amenity=fire_station")
   {
     return 0.0;
@@ -494,7 +511,7 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
   }*/
 
   //dataset d
-  if (typeKvp == "amenity=arts_centre")
+  /*if (typeKvp == "amenity=arts_centre")
   {
     return 25.0;
   }
@@ -669,7 +686,7 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
   else if (typeKvp == "historic=castle")
   {
     return 33.0;
-  }
+  }*/
 
   return _matchDistance;
 }
@@ -775,7 +792,7 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
   }*/
 
   //dataset d
-  if (typeKvp == "amenity=embassy")
+  /*if (typeKvp == "amenity=embassy")
   {
     return 80.0;
   }
@@ -938,7 +955,7 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
   else if (typeKvp == "historic=castle")
   {
     return 33.0;
-  }
+  }*/
 
   return _reviewDistance;
 }
