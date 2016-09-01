@@ -29,7 +29,6 @@
 
 #include "EdgeSublineMatch.h"
 #include "IndexedEdgeMatchSet.h"
-#include "MatchScoreProvider.h"
 #include "NetworkDetails.h"
 
 namespace hoot

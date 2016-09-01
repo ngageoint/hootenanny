@@ -48,6 +48,11 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
 
 HEADERS += \
 
@@ -78,17 +83,12 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
@@ -111,7 +111,6 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeString.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.h \
-    src/main/cpp/hoot/rnd/conflate/network/MatchScoreProvider.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.h \

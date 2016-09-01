@@ -151,7 +151,6 @@ public class JobResource {
         }
 
         private void processCommand() {
-
             logger.debug("Start chain job: {}", jobId);
 
             jobInfo.put("chainjobstatus", jobId);
@@ -492,77 +491,6 @@ public class JobResource {
         return jobExecMan.exec(command);
     }
 
-    /**
-     * Raw call to terminate job
-     */
-    public void terminateJob(String childId) {
-        try {
-            jobExecMan.terminate(childId);
-        }
-        catch (NativeInterfaceException e) {
-            throw new RuntimeException("Error terminating job with childId = " + childId, e);
-        }
-    }
-
-    /**
-     * Terminate Job and its children jobs
-     */
-    public String terminateJob(String jobId, String mapId) {
-        /*
-         * Example job status
-         *
-         * {"jobId":"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58","statusDetail":
-         * "{\"chainjobstatus\":\"dae4be8a-4964-4a9a-8d7d-4e8e738a5b58\", \
-         * "children\":[{\"id\":\"e16282c6-2432-4a45-a582-b0dd3f2f0d9f\",\"detail\":\"success\",\"status\":\"complete\"
-         * }, {\
-         * "id\":\"66d53cfc-29b6-49eb-9459-9a74794d34b2\",\"detail\":\"success\",\"status\":\"complete\"
-         * }, {\
-         * "id\":\"43821fd7-a488-4137-b25a-2a66d0a4e197\",\"detail\":\"success\",\"status\":\"complete\"}]}"
-         * ,"status":"complete"}
-         */
-        try {
-            JSONParser parser = new JSONParser();
-            // see if chain job
-            JSONObject status = getJobStatusObj(jobId);
-            if (status != null) {
-                String detailStr = status.get("statusDetail").toString();
-                JSONObject detail = (JSONObject) parser.parse(detailStr);
-                if (detail != null) {
-                    if (detail.containsKey("chainjobstatus") && detail.containsKey("children")) {
-                        if (detail.containsKey("mapid")) {
-                            mapId = detail.get("mapid").toString();
-                        }
-
-                        JSONArray children = (JSONArray) detail.get("children");
-                        if (children != null) {
-                            for (Object aChildren : children) {
-                                JSONObject child = (JSONObject) aChildren;
-                                if (child.get("status") != null) {
-                                    String childStat = child.get("status").toString();
-                                    if (childStat.equals(JOB_STATUS.RUNNING.toString())) {
-                                        if (child.get("id") != null) {
-                                            String childId = child.get("id").toString();
-                                            terminateJob(childId);
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (mapId != null) {
-                                ResourcesCleanUtil.deleteLayers(mapId);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error terminating job with jobId = " + jobId, e);
-        }
-
-        return jobId;
-    }
-
     String getProgressText(String jobId) throws Exception {
         return jobExecMan.getProgress(jobId);
     }
@@ -631,10 +559,7 @@ public class JobResource {
                                         }
                                         else {
                                             long currPerc = (Long) progStatus.get("percentComplete");
-
-                                            double dMxPartPerc = maxPartPercent;
-                                            double dCurrPerc = currPerc;
-                                            childProg = (int) (dMxPartPerc * (dCurrPerc / 100));
+                                            childProg = (int) (maxPartPercent * ((double) currPerc / 100));
                                         }
                                     }
                                     progMap.put(childId, childProg);
@@ -683,7 +608,7 @@ public class JobResource {
     /**
      * Return job status
      */
-    JSONObject getJobStatusObj(String jobId) throws SQLException {
+    private JSONObject getJobStatusObj(String jobId) throws SQLException {
         JSONObject status = new JSONObject();
 
         try (Connection conn = DbUtils.createConnection()) {

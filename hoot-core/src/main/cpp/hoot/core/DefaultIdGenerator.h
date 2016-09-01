@@ -48,6 +48,8 @@ public:
 
   virtual ~DefaultIdGenerator() {}
 
+  virtual IdGeneratorPtr clone() const;
+
   virtual long createNodeId() { return --_nodeId; }
 
   virtual long createRelationId() { return --_relationId; }

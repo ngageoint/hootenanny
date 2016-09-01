@@ -57,7 +57,6 @@ Meters WayString::_aggregateCircularError() const
 
 void WayString::append(const WaySubline& subline)
 {
-  LOG_VAR(subline);
   if (_sublines.size() > 0)
   {
     if (back().getWay() == subline.getWay() &&
@@ -214,15 +213,15 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     vector<long> newNids;
     if (subline.getFormer().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextWayId(),
+      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
         subline.getFormer().getCoordinate(), ce));
       destination->addNode(n);
       newNids.push_back(n->getId());
-      formeri = subline.getStart().getSegmentIndex() + 1;
+      formeri = subline.getFormer().getSegmentIndex() + 1;
     }
     else
     {
-      formeri = subline.getStart().getSegmentIndex();
+      formeri = subline.getFormer().getSegmentIndex();
     }
 
     // which is the last node that we can directly add.
@@ -239,7 +238,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     // if the last locaiton isn't on a node, create a new node for it
     if (subline.getLatter().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextWayId(),
+      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
         subline.getLatter().getCoordinate(), ce));
       destination->addNode(n);
       newNids.push_back(n->getId());
@@ -251,7 +250,6 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
       std::reverse(newNids.begin(), newNids.end());
     }
 
-    LOG_VAR(newNids);
     // add each node to the new way. If the node is a duplicate (could happen with adjoining
     // sublines) then just don't add it.
     foreach (long nid, newNids)

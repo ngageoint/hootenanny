@@ -33,7 +33,7 @@ public class CommandResult {
     private final String stdout;
     private final String stderr;
 
-    CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
+    public CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
         this.command = cmdString;
         this.exitStatus = result;
         this.stdout = stdoutString;
@@ -54,5 +54,15 @@ public class CommandResult {
 
     public String getStdout() {
         return stdout;
+    }
+
+    @Override
+    public String toString() {
+        return "CommandResult{" +
+                "command='" + command + '\'' +
+                ", exitStatus=" + exitStatus +
+                ", stdout='" + stdout + '\'' +
+                ", stderr='" + stderr + '\'' +
+                '}';
     }
 }
