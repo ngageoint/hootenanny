@@ -21,6 +21,7 @@ function checkMgcpV3 {
     OUT=test-output/translation/Mgcpv3_$1.osm
     IN=test-files/MGCPv3/$1.shp
     hoot --ogr2osm translations/MgcpTest.js $OUT $IN
+    #echo $IN  $OUT
     compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Uncomment this to update what we compare with.
     #cp $OUT test-files/MGCPv3/$1-output.osm
