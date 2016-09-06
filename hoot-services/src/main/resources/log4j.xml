@@ -45,7 +45,7 @@
     </appender>
 
     <logger name="hoot.services" additivity="false">
-        <level value="debug"/>
+        <level value="error"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
@@ -70,8 +70,9 @@
     </logger>
 
     <root>
-        <level value="debug" />
+        <level value="error" />
         <appender-ref ref="ConsoleAppender" />
     </root>
+
 
 </log4j:configuration>

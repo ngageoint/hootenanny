@@ -24,17 +24,14 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.job;
+package hoot.services.job;
 
 import java.sql.Connection;
-
-import javax.ws.rs.WebApplicationException;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.job.Executable;
 import hoot.services.utils.DbUtils;
 
 
@@ -48,39 +45,29 @@ public class ResourcesCleanUtil implements Executable {
         return finalStatusDetail;
     }
 
-    public void init() {
-    }
-
-    public void destroy() {
-    }
-
-    public ResourcesCleanUtil() {
-    }
+    public ResourcesCleanUtil() {}
 
     @Override
     public void exec(JSONObject command) {
-        JSONObject res = deleteLayers(command.get("mapId").toString());
-        finalStatusDetail = res.toJSONString();
+        JSONObject json = deleteLayers(command.get("mapId").toString());
+        this.finalStatusDetail = json.toJSONString();
     }
 
-    static JSONObject deleteLayers(String mapId) {
-        JSONObject res = new JSONObject();
-        res.put("mapId", mapId);
-        res.put("result", "success");
-
-        try (Connection conn = DbUtils.createConnection()){
-            DbUtils.deleteBookmarksById(conn, mapId);
-            DbUtils.deleteRenderDb(conn, mapId);
-            DbUtils.deleteOSMRecordByName(conn, mapId);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+    private static JSONObject deleteLayers(String mapId) {
+        try (Connection connection = DbUtils.createConnection()){
+            DbUtils.deleteBookmarksById(connection, mapId);
+            DbUtils.deleteRenderDb(connection, mapId);
+            DbUtils.deleteOSMRecordByName(connection, mapId);
         }
         catch (Exception e) {
             String msg = "Error deleting layer with mapId = " +  mapId;
             throw new RuntimeException(msg, e);
         }
 
-        return res;
+        JSONObject json = new JSONObject();
+        json.put("mapId", mapId);
+        json.put("result", "success");
+
+        return json;
     }
 }

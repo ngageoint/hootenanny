@@ -44,21 +44,24 @@ import org.slf4j.LoggerFactory;
 public class JobExecutionManager {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
 
-    private INativeInterface nativeInterface;
-
-    public INativeInterface getNativeInterface() {
-        return nativeInterface;
-    }
+    private NativeInterface nativeInterface;
 
     /**
      * @param nativeInterface
      */
-    public void setNativeInterface(INativeInterface nativeInterface) {
+    public void setNativeInterface(NativeInterface nativeInterface) {
         this.nativeInterface = nativeInterface;
     }
 
-    public JobExecutionManager() {
+    public JobExecutionManager() {}
 
+    public String getProgress(String jobId) throws NativeInterfaceException {
+        try {
+            return nativeInterface.getJobProgress(jobId);
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
+        }
     }
 
     /**
@@ -71,22 +74,9 @@ public class JobExecutionManager {
         return execWithResult(command);
     }
 
-    public void terminate(String jobId) throws NativeInterfaceException {
-        try {
-            getNativeInterface().terminate(jobId);
-        }
-        catch (NativeInterfaceException ne) {
-            throw ne;
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
-        }
-    }
-
     public JSONObject execWithResult(JSONObject command) throws NativeInterfaceException {
-        JSONObject ret;
         try {
-            ret = getNativeInterface().exec(command);
+            return nativeInterface.exec(command);
         }
         catch (NativeInterfaceException ne) {
             throw ne;
@@ -94,31 +84,5 @@ public class JobExecutionManager {
         catch (Exception e) {
             throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
-        return ret;
-    }
-
-    public String getProgress(String jobId) throws NativeInterfaceException {
-        String progress;
-        try {
-            progress = getNativeInterface().getJobProgress(jobId);
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
-        }
-        return progress;
-    }
-
-    /**
-     * See CoreServiceContext.xml
-     */
-    public void destroy() {
-        //
-    }
-
-    /**
-     * See CoreServiceContext.xml
-     */
-    public void init() {
-        //
     }
 }
