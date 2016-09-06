@@ -44,12 +44,18 @@ hoot.require('emgcp')
 
 // NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
 // This was renamed so the include will work.
+hoot.require('emgcp_rules')
 hoot.require('emgcp_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
 hoot.require('config');
 
+// Make sure the MGCP translator exports extra tags to the TXT field
+hoot.Settings.set({"ogr.mgcp.extra":"note"});
+
+// Throw errors instead of returning partial translations/o2s_X features
+hoot.Settings.set({"ogr.throw.error":"true"});
 
 emgcp_osm = {
     // This function converts the OSM+ to TDS and then translated the TDS into "English"
@@ -191,4 +197,8 @@ emgcp_osm = {
 
 if (typeof exports !== 'undefined') {
     exports.toOSM = emgcp_osm.toOSM;
+    exports.EnglishtoOSM = emgcp_osm.toOSM;
+    exports.RawtoOSM = mgcp.toOsm;
+    exports.OSMtoEnglish = emgcp.toEnglish;
+    exports.OSMtoRaw = mgcp.toMgcp;
 }

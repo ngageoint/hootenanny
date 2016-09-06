@@ -27,6 +27,13 @@ var tdsToOsmMap = {
     MGCP: '/translations/englishMGCP_to_OSM.js'
 };
 
+var translationsMap = {
+    TDSv40: '/plugins/etds40_osm.js',
+    TDSv61: '/plugins/etds61_osm.js',
+    MGCP: '/plugins/emgcp_osm.js'
+};
+
+
 if (require.main === module) {
     //I'm a running server
 
@@ -52,7 +59,7 @@ if (require.main === module) {
             var nThreadArg = val.split('=');
             if (nThreadArg.length == 2) {
                 var nThreadCnt = 1*nThreadArg[1];
-                if (nThreadCnt > 0){
+                if (nThreadCnt > 0) {
                     nCPU = nThreadCnt;
                 }
             }
@@ -93,13 +100,19 @@ function TranslationServer(request, response) {
             request.on('end', function() {
                 var urlbits = url.parse(request.url, true);
                 var params = urlbits.query;
-                params.osm = payload;
                 params.method = request.method;
                 params.path = urlbits.pathname;
 
+                if (params.path === '/translate') {
+                    params.tags = JSON.parse(payload);
+                    header['Accept'] = 'application/json';
+                    header['Content-Type'] = 'application/json';
+                } else {
+                    params.osm = payload;
+                    header['Accept'] = 'text/xml';
+                    header['Content-Type'] = 'text/xml';
+                }
                 var result = handleInputs(params);
-                header['Accept'] = 'text/xml';
-                header['Content-Type'] = 'text/xml';
                 response.writeHead(200, header);
                 response.end(result);
             });
@@ -140,6 +153,9 @@ function TranslationServer(request, response) {
 function handleInputs(params) {
     var result;
     switch(params.path) {
+        case '/translate':
+            result = JSON.stringify(translate(params));
+            break;
         case '/osmtotds':
             params.transMap = osmToTdsMap;
             params.transDir = 'toogr';
@@ -177,6 +193,31 @@ var getCapabilities = function(params) {
     } else {
         throw new Error('Unsupported method');
     }
+};
+
+var translate = function(data) {
+    data.translation = data.to || data.from;
+    if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
+        throw new Error('Unsupported translation schema');
+    }
+    hoot = require(HOOT_HOME + '/lib/HootJs');
+    createUuid = hoot.UuidHelper.createUuid;
+    var trans = require(HOOT_HOME + translationsMap[data.translation]);
+    var result;
+    if (data.to) {
+        if (data.english) {
+            result = trans.OSMtoEnglish(data.tags, '', data.geom);
+        } else {
+            result = trans.OSMtoRaw(data.tags, '', data.geom);
+        }
+    } else if (data.from) {
+        if (data.english) {
+            result = trans.EnglishtoOSM(data.tags, '', data.geom);
+        } else {
+            result = trans.RawtoOSM(data.tags, '', data.geom);
+        }
+    }
+    return result;
 };
 
 // This is where all interesting things happen interfacing with hoot core lib directly
@@ -518,4 +559,5 @@ if (typeof exports !== 'undefined') {
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
+    exports.translate = translate;
 }

@@ -6,6 +6,78 @@ var server = require('../TranslationServer.js');
 
 describe('TranslationServer', function () {
 
+    describe('translate', function() {
+        it('should translate OSMtoRaw', function() {
+            var data = server.translate({
+                tags: {
+                    'error:circular': '5',
+                    'highway': 'road',
+                    'hoot:status': '1',
+                    'name': '23RD ST NW',
+                    'hoot': 'DcGisRoadsCucumber'
+                },
+                to: 'MGCP',
+                geom: 'Line'
+            });
+            assert.equal(data[0].attrs.NAM, '23RD ST NW');
+            assert.equal(data[0].attrs.FCODE, 'AP030');
+            assert.equal(data[0].attrs.TXT, '<OSM>{"highway":"road"}</OSM>');
+        });
+
+        it('should translate OSMtoEnglish', function() {
+            var data = server.translate({
+                tags: {
+                    'error:circular': '5',
+                    'highway': 'road',
+                    'hoot:status': '1',
+                    'name': '23RD ST NW',
+                    'hoot': 'DcGisRoadsCucumber'
+                },
+                to: 'MGCP',
+                geom: 'Line',
+                english: true
+            });
+            assert.equal(data.attrs['Name'], '23RD ST NW');
+            assert.equal(data.attrs['Feature Code'], 'AP030:Road Line Feature');
+            assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
+        });
+
+        it('should translate EnglishtoOSM', function() {
+            var data = server.translate({
+                tags: {
+                    //'error:circular': '5',
+                    'Feature Code': 'AP030:Road Line Feature',
+                    //'hoot:status': '1',
+                    'Name': '23RD ST NW',
+                    'Thoroughfare Class': 'Unknown'
+                    //'hoot': 'DcGisRoadsCucumber'
+                },
+                from: 'MGCP',
+                geom: 'Line',
+                english: true
+            });
+            assert.equal(data.attrs.highway, 'road');
+            assert.equal(data.attrs.name, '23RD ST NW');
+        });
+
+        it('should translate RawtoOSM', function() {
+            var data = server.translate({
+                tags: {
+                    //'error:circular': '5',
+                    'FCODE': 'AP030',
+                    //'hoot:status': '1',
+                    'NAM': '23RD ST NW',
+                    'HCT': '0'
+                    //'hoot': 'DcGisRoadsCucumber'
+                },
+                from: 'MGCP',
+                geom: 'Line'
+            });
+            assert.equal(data.highway, 'road');
+            assert.equal(data.name, '23RD ST NW');
+        });
+    });
+
     describe('searchSchema', function() {
 
         var defaults = {};
@@ -135,6 +207,17 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
             });
         });
+
+        // it('should return error message for invalide F_CODE/geom combination in osmtotds POST', function() {
+        //     var osm2trans = server.handleInputs({
+        //         osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',
+        //         method: 'POST',
+        //         translation: 'MGCP',
+        //         path: '/osmtotds'
+        //     });
+        //     //console.log(osm2trans);
+        //     assert.equal(attrs.error, 'Point geometry is not valid for AK120 in MGCP TRD4');
+        // });
 
         it('should handle bad translation schema value in osmtotds POST', function() {
             assert.throws(function error() {
