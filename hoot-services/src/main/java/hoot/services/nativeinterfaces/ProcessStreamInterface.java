@@ -42,6 +42,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
@@ -55,12 +57,14 @@ import hoot.services.command.CommandRunnerImpl;
  *         separate process. It inherit from INativeInterface so it can be
  *         switched out with any other class implementing INativeInterface if
  *         needed. It is called by jobExecutionManager and it gets associated
- *         through spring entry located in CoreServiceContext.xml. This class
+ *         through spring entry located in applicationContext.xml. This class
  *         handles 2 types of execution format. 1. direct exec call like hoot
  *         --ogr2osm target input output if the "exectype" is "hoot" 2. make
  *         file script based execution where format is make -f [some makefile]
  *         [any argument make file uses] when "exectype" is "make"
  */
+@Transactional
+@Component
 public class ProcessStreamInterface implements NativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 

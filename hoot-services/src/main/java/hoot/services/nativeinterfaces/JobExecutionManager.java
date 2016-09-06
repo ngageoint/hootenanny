@@ -29,35 +29,29 @@ package hoot.services.nativeinterfaces;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * @author Jong Choi
  *
- *         The purpose of this class is to provide one additional indirection
- *         for managing Native Interface execution. This class is created by
- *         spring in CoreServiceContext.xml. Also note that nativeInterface
- *         member is assicated with this class in spring also. This class also
- *         manages the job status tracking through jobStatusManager memeber.
- *
- */
+ *   The purpose of this class is to provide one additional indirection for managing Native Interface execution.
+ **/
+@Transactional
+@Component("jobExecutionManagerNative")
 public class JobExecutionManager {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
 
+    @Autowired
     private NativeInterface nativeInterface;
-
-    /**
-     * @param nativeInterface
-     */
-    public void setNativeInterface(NativeInterface nativeInterface) {
-        this.nativeInterface = nativeInterface;
-    }
 
     public JobExecutionManager() {}
 
     public String getProgress(String jobId) throws NativeInterfaceException {
         try {
-            return nativeInterface.getJobProgress(jobId);
+            return this.nativeInterface.getJobProgress(jobId);
         }
         catch (Exception e) {
             throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
@@ -71,12 +65,8 @@ public class JobExecutionManager {
      * @throws NativeInterfaceException
      */
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
-        return execWithResult(command);
-    }
-
-    public JSONObject execWithResult(JSONObject command) throws NativeInterfaceException {
         try {
-            return nativeInterface.exec(command);
+            return this.nativeInterface.exec(command);
         }
         catch (NativeInterfaceException ne) {
             throw ne;

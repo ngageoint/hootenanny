@@ -26,8 +26,6 @@
  */
 package hoot.services.readers.review;
 
-import java.sql.Connection;
-
 import hoot.services.geo.BoundingBox;
 
 
@@ -35,19 +33,19 @@ final class ReviewableQueryFactory {
 
     private ReviewableQueryFactory() {}
 
-    static IReviewableQuery getReviewableQuery(Connection connection, long mapid, long seqid) {
-        return new ReviewableQuery(connection, mapid, seqid);
+    static IReviewableQuery getReviewableQuery(long mapId, long seqId) {
+        return new ReviewableQuery(mapId, seqId);
     }
 
-    static IReviewableQuery getRandomReviewableQuery(Connection connection, long mapid) {
-        return new RandomReviewableQuery(connection, mapid);
+    static IReviewableQuery getRandomReviewableQuery(long mapId) {
+        return new RandomReviewableQuery(mapId);
     }
 
-    static IReviewableQuery getReviewableStatisticsQuery(Connection connection, long mapid) {
-        return new ReviewableStatisticsQuery(connection, mapid);
+    static IReviewableQuery getReviewableStatisticsQuery(long mapId) {
+        return new ReviewableStatisticsQuery(mapId);
     }
 
-    static IReviewableQuery getAllReviewableItemsQuery(Connection connection, long mapid, BoundingBox bbox) {
-        return new AllReviewableItemsQuery(connection, mapid, bbox);
+    static IReviewableQuery getAllReviewableItemsQuery(long mapId, BoundingBox bbox) {
+        return new AllReviewableItemsQuery(mapId, bbox);
     }
 }

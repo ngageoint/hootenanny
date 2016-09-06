@@ -30,7 +30,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class ConflationResourceTest {
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-            Mockito.doReturn(true).when(spy).mapExists(anyLong(), any(Connection.class));
+            Mockito.doReturn(true).when(spy).mapExists(anyLong());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
             String jobId = spy.process(inputParams).getJobid();

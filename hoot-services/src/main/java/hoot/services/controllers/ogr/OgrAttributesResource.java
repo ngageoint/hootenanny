@@ -58,12 +58,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
-
+@Controller
 @Path("/info")
+@Transactional
 public class OgrAttributesResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
 

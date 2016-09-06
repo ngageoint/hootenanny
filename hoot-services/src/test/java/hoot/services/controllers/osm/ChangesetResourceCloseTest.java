@@ -29,6 +29,7 @@ package hoot.services.controllers.osm;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.*;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -47,17 +48,21 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.querydsl.sql.SQLQuery;
-
+import hoot.services.HootServicesJerseyApplication;
+import hoot.services.SpringConfig;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
@@ -82,6 +87,9 @@ import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = SpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCloseTest.class);
 
@@ -91,13 +99,11 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
-    public ChangesetResourceCloseTest() {
-        super();
-    }
+    public ChangesetResourceCloseTest() {}
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ChangesetResource.class);
+        return new HootServicesJerseyApplication();
     }
 
     @Test
@@ -220,7 +226,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
                 try {
                     QChangesets changesets = QChangesets.changesets;
-                    Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    Changesets changeset = createQuery(mapId)
                             .select(QChangesets.changesets)
                             .from(changesets)
                             .where(changesets.id.eq(changesetId))
@@ -235,7 +241,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                     // make sure the changeset bounds wasn't updated
-                    Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
+                    Changeset hootChangeset = new Changeset(mapId, changesetId);
                     BoundingBox changesetBounds = hootChangeset.getBounds();
                     BoundingBox defaultBounds = new BoundingBox();
 
@@ -606,7 +612,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</node>" +
                                 "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" " + "lat=\"" +
                                      updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                     "<tag k=\"key 3b\" v=\"val 3b\"></tag>" + "" +
+                                     "<tag k=\"key 3b\" v=\"val 3b\"></tag>" +
                                 "</node>" +
                                 "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
                                     "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
@@ -700,14 +706,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = createQuery(mapId)
                     .select(QChangesets.changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
                     .fetchOne();
 
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = createQuery(mapId)
                         .from(currentNodesTbl)
                         .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
 
@@ -764,8 +770,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways =
-                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentWays> ways = createQuery(mapId)
                                 .from(currentWaysTbl)
                                 .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
@@ -778,7 +783,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                List<CurrentWayNodes> wayNodes = createQuery(mapId)
                         .select(QCurrentWayNodes.currentWayNodes)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
@@ -808,7 +813,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = createQuery(mapId)
                         .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
@@ -836,7 +841,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertEquals(true, wayRecord.getVisible());
 
-                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = createQuery(mapId)
                         .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
@@ -864,7 +869,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             try {
                 Map<Long, CurrentRelations> relations =
-                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        createQuery(mapId)
                                 .from(currentRelationsTbl)
                                 .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
@@ -878,7 +883,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(relationRecord.getVisible());
 
                 List<CurrentRelationMembers> members =
-                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        createQuery(mapId)
                                 .select(currentRelationMembersTbl)
                                 .from(currentRelationMembersTbl)
                                 .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
@@ -917,7 +922,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                members = createQuery(mapId)
                         .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
@@ -952,7 +957,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                members = createQuery(mapId)
                         .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
@@ -979,7 +984,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                members = createQuery(mapId)
                         .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
@@ -1010,7 +1015,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
                 BoundingBox expandedBounds = new BoundingBox(originalBounds);
                 expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
-                Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
+                Changeset hootChangeset = new Changeset(mapId, changesetId);
                 BoundingBox changesetBounds = hootChangeset.getBounds();
                 Assert.assertEquals(changesetBounds, expandedBounds);
             }

@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -40,12 +41,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-
 import hoot.services.UnitTest;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 
@@ -61,6 +62,8 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testSetAllReviewsResolved() throws Exception {
+        Connection conn = DbUtils.createConnection();
+
         ReviewTestUtils testUtils = new ReviewTestUtils();
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
 

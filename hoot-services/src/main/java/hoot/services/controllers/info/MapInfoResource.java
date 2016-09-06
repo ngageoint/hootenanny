@@ -40,11 +40,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.utils.DbUtils;
 
 
+@Controller
 @Path("/map")
+@Transactional
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
@@ -58,8 +62,7 @@ public class MapInfoResource {
     };
 
 
-    public MapInfoResource() {
-    }
+    public MapInfoResource() {}
 
     /**
      * Service method endpoint for retrieving the physical size of a map record.

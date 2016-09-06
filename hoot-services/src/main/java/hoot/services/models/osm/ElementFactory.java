@@ -26,8 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
-
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
@@ -40,23 +38,20 @@ import hoot.services.models.osm.Element.ElementType;
  * Factory for creating the different OSM element types
  */
 public final class ElementFactory {
-    private ElementFactory() {
-    }
+    private ElementFactory() {}
 
     /**
      * Creates an element
      *
      * @param elementType
      *            the type of element to create
-     * @param conn
-     *            JDBC Connection
      * @return an element
      */
-    public static Element create(long mapId, ElementType elementType, Connection conn) {
+    public static Element create(long mapId, ElementType elementType) {
         try {
             return (Element) ConstructorUtils.invokeConstructor(
                     Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
-                    new Object[] { Long.valueOf(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+                    new Object[] { Long.valueOf(mapId) }, new Class<?>[] { Long.class });
         }
         catch (Exception e) {
             throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
@@ -70,11 +65,9 @@ public final class ElementFactory {
      *            the type of element to create
      * @param record
      *            record to associate with the element
-     * @param conn
-     *            JDBC Connection
      * @return an element
      */
-    public static Element create(ElementType elementType, Object record, Connection conn, long mapId) {
+    public static Element create(ElementType elementType, Object record, long mapId) {
         Object oElem = record;
 
         if (record instanceof Tuple) {
@@ -98,8 +91,8 @@ public final class ElementFactory {
             Long oMapId = mapId;
             return (Element) ConstructorUtils.invokeConstructor(
                 Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
-                new Object[] { oMapId, conn, oElem },
-                new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
+                new Object[] { oMapId, oElem },
+                new Class<?>[] { Long.class, oElem.getClass() });
         }
         catch (Exception e) {
             throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);

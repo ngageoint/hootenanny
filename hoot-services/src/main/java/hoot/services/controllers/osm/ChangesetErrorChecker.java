@@ -28,8 +28,8 @@ package hoot.services.controllers.osm;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -43,13 +43,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.querydsl.sql.SQLQuery;
-
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.utils.DbUtils;
+import hoot.services.models.osm.ElementFactory;
 import hoot.services.utils.DbUtils.EntityChangeType;
 
 
@@ -58,12 +55,10 @@ class ChangesetErrorChecker {
 
     private final Document changesetDoc;
     private final long mapId;
-    private final Connection dbConn;
 
-    ChangesetErrorChecker(Document changesetDoc, long mapId, Connection dbConn) {
+    ChangesetErrorChecker(Document changesetDoc, long mapId) {
         this.changesetDoc = changesetDoc;
         this.mapId = mapId;
-        this.dbConn = dbConn;
     }
 
     void checkForVersionErrors() {
@@ -101,14 +96,13 @@ class ChangesetErrorChecker {
 
                     if ((entityChangeType != EntityChangeType.CREATE)
                             && (!elementIdsToVersionsFromChangeset.isEmpty())) {
-                        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+                        Element prototype = ElementFactory.create(mapId, elementType);
 
-                        Map<Long, Long> elementIdsToVersionsFromDb =
-                                new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
-                                        .from(prototype.getElementTable())
-                                        .where(prototype.getElementIdField()
-                                                .in(elementIdsToVersionsFromChangeset.keySet()))
-                                        .transform(groupBy(prototype.getElementIdField()).as(prototype.getElementVersionField()));
+                        Map<Long, Long> elementIdsToVersionsFromDb = createQuery(mapId)
+                                .from(prototype.getElementTable())
+                                .where(prototype.getElementIdField()
+                                        .in(elementIdsToVersionsFromChangeset.keySet()))
+                                .transform(groupBy(prototype.getElementIdField()).as(prototype.getElementVersionField()));
 
                         if (!elementIdsToVersionsFromDb.equals(elementIdsToVersionsFromChangeset)) {
                             throw new IllegalArgumentException("Invalid version specified for element(s).");
@@ -136,7 +130,7 @@ class ChangesetErrorChecker {
                 // query to make this simpler... its just not working
                 for (EntityChangeType entityChangeType : EntityChangeType.values()) {
                     if (entityChangeType != EntityChangeType.DELETE) {
-                        NodeList relationMemberIdXmlNodes = null;
+                        NodeList relationMemberIdXmlNodes;
                         try {
                             relationMemberIdXmlNodes = XPathAPI.selectNodeList(changesetDoc,
                                     "//osmChange/" + entityChangeType.toString().toLowerCase()
@@ -159,7 +153,7 @@ class ChangesetErrorChecker {
                     }
                 }
 
-                if (!Element.allElementsVisible(mapId, elementType, relationMemberIds, dbConn)) {
+                if (!Element.allElementsVisible(mapId, elementType, relationMemberIds)) {
                     throw new IllegalStateException(elementType + " member(s) aren't visible for relation.");
                 }
             }
@@ -189,7 +183,7 @@ class ChangesetErrorChecker {
             }
         }
 
-        if (!Element.allElementsVisible(mapId, ElementType.Node, wayNodeIds, dbConn)) {
+        if (!Element.allElementsVisible(mapId, ElementType.Node, wayNodeIds)) {
             throw new IllegalStateException("Way node(s) aren't visible for way.");
         }
     }
@@ -294,7 +288,7 @@ class ChangesetErrorChecker {
 
         for (ElementType elementType : ElementType.values()) {
             if (elementType != ElementType.Changeset) {
-                if (!Element.allElementsExist(mapId, elementType, elementTypesToElementIds.get(elementType), dbConn)) {
+                if (!Element.allElementsExist(mapId, elementType, elementTypesToElementIds.get(elementType))) {
                     // TODO: list the id's and types of the elements that don't exist
                     throw new IllegalStateException("Element(s) being referenced don't exist.");
                 }
@@ -302,7 +296,7 @@ class ChangesetErrorChecker {
         }
 
         if (!elementTypesToElementIds.get(ElementType.Node).isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .from(currentNodes)
                     .where(currentNodes.id.in(elementTypesToElementIds.get(ElementType.Node)))
                     .transform(groupBy(currentNodes.id).as(currentNodes));

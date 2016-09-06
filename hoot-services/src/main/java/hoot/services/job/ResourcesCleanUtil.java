@@ -26,15 +26,21 @@
  */
 package hoot.services.job;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 import java.sql.Connection;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import hoot.services.utils.DbUtils;
 
 
+@Scope(SCOPE_PROTOTYPE)
+@Service("resourcesCleanUtil")
 public class ResourcesCleanUtil implements Executable {
     private static final Logger logger = LoggerFactory.getLogger(ResourcesCleanUtil.class);
 
@@ -54,10 +60,10 @@ public class ResourcesCleanUtil implements Executable {
     }
 
     private static JSONObject deleteLayers(String mapId) {
-        try (Connection connection = DbUtils.createConnection()){
-            DbUtils.deleteBookmarksById(connection, mapId);
-            DbUtils.deleteRenderDb(connection, mapId);
-            DbUtils.deleteOSMRecordByName(connection, mapId);
+        try {
+            DbUtils.deleteBookmarksById(mapId);
+            DbUtils.deleteRenderDb(mapId);
+            DbUtils.deleteOSMRecordByName(mapId);
         }
         catch (Exception e) {
             String msg = "Error deleting layer with mapId = " +  mapId;

@@ -65,9 +65,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
     private static final Logger log = LoggerFactory.getLogger(ElementResourceTest.class);
 
-    public ElementResourceTest() {
-        super();
-    }
+    public ElementResourceTest() {}
 
     @Override
     protected Application configure() {

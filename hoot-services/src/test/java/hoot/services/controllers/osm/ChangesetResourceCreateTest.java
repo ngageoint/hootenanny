@@ -26,7 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 
@@ -44,9 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.querydsl.sql.SQLExpressions;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLDeleteClause;
-import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.UnitTest;
 import hoot.services.models.db.Maps;
@@ -54,7 +52,6 @@ import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QMaps;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.DbUtils;
 
 
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
@@ -159,7 +156,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         // insert another map with the same name as the test map
         Maps map = new Maps();
 
-        long nextMapId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+        long nextMapId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
                 .from()
                 .fetchOne();
@@ -171,7 +168,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         map.setUserId(userId);
 
         QMaps maps = QMaps.maps;
-        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps).populate(map).execute();
+        createQuery(mapId).insert(maps).populate(map).execute();
 
         String mapName = null;
 
@@ -200,7 +197,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps).where(maps.id.eq(nextMapId)).execute();
+            createQuery().delete(maps).where(maps.id.eq(nextMapId)).execute();
         }
     }
 
@@ -225,7 +222,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
-            Assert.assertFalse(changesetDataExistsInServicesDb(conn));
+            Assert.assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -252,7 +249,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
-            Assert.assertFalse(changesetDataExistsInServicesDb(conn));
+            Assert.assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -305,7 +302,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset XML"));
-            Assert.assertFalse(changesetDataExistsInServicesDb(conn));
+            Assert.assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -332,7 +329,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
-            Assert.assertFalse(changesetDataExistsInServicesDb(conn));
+            Assert.assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -359,7 +356,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
-            Assert.assertFalse(changesetDataExistsInServicesDb(conn));
+            Assert.assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -367,13 +364,10 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
     /**
      * Determines whether any changeset data exists in the services database
      *
-     * @param conn
-     *            JDBC Connection
-     *
      * @return true if changeset data exists; false otherwise
      */
-    private static boolean changesetDataExistsInServicesDb(Connection conn) {
-        long recordCtr = new SQLQuery<>(conn, DbUtils.getConfiguration())
+    private static boolean changesetDataExistsInServicesDb() {
+        long recordCtr = createQuery()
                 .from(QChangesets.changesets)
                 .fetchCount();
         return (recordCtr > 0);

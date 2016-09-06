@@ -29,7 +29,6 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.*;
 
 import java.lang.management.ManagementFactory;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -52,6 +51,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
@@ -59,7 +60,9 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
 
 
+@Controller
 @Path("/conflation")
+@Transactional
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
 
@@ -110,7 +113,7 @@ public class ConflationResource extends JobControllerBase {
 
         String jobId = UUID.randomUUID().toString();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -184,12 +187,12 @@ public class ConflationResource extends JobControllerBase {
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
-                if (!mapExists(secondaryMapId, conn)) {
+                if (!mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
-                Map secondaryMap = new Map(secondaryMapId, conn);
+                Map secondaryMap = new Map(secondaryMapId);
                 setAoi(secondaryMap, commandArgs);
 
                 // write a timestamp representing the time the osm api db data was queried out
@@ -292,8 +295,8 @@ public class ConflationResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    boolean mapExists(long id, Connection conn) {
-        return Map.mapExists(id, conn);
+    boolean mapExists(long id) {
+        return Map.mapExists(id);
     }
 
     private void setAoi(Map secondaryMap, JSONArray commandArgs) {

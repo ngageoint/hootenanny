@@ -28,6 +28,7 @@ package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.MAX_QUERY_AREA_DEGREES;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import java.net.URLDecoder;
 import java.sql.Timestamp;
@@ -54,10 +55,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.querydsl.sql.SQLExpressions;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLDeleteClause;
-import com.querydsl.sql.dml.SQLInsertClause;
-import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
@@ -69,13 +66,12 @@ import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QMaps;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
@@ -110,7 +106,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Long[] oobNodeIdsArr = oobNodeIds.toArray(new Long[oobNodeIds.size()]);
 
             // create a way completely outside the query bounds
-            long oobWayId = OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null, conn);
+            long oobWayId = OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null);
 
             // create a way with some nodes inside the query bounds and some
             // outside; The way and the
@@ -120,7 +116,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> partiallyOobNodeIds = new LinkedHashSet<>();
             partiallyOobNodeIds.add(nodeIdsArr[0]);
             partiallyOobNodeIds.add(oobNodeIdsArr[0]);
-            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null, conn));
+            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null));
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
             // create a relation where all members are completely outside of the
@@ -134,7 +130,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // returned.
             members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
             members.add(new RelationMember(oobWayId, ElementType.Way, "role1"));
-            OsmTestUtils.insertNewRelation(changesetId, mapId, members, null, conn);
+            OsmTestUtils.insertNewRelation(changesetId, mapId, members, null);
 
             // create a relation where some members are inside the query bounds
             // and some are not
@@ -144,7 +140,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
             members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role1"));
             members.add(new RelationMember(oobWayId, ElementType.Way, "role1"));
-            relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null, conn));
+            relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null));
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
             // Query the elements back out geospatially. All but one of the
@@ -487,7 +483,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             // relations which reference that way and/or its nodes will also be
             // returned.
             members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
-            OsmTestUtils.insertNewRelation(changesetId, mapId, members, null, conn);
+            OsmTestUtils.insertNewRelation(changesetId, mapId, members, null);
 
             // create a relation where some members are inside the query bounds
             // and some are not
@@ -495,7 +491,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
             // see note above for why oobNodeIdsArr[1] is used here
             members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
-            relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null, conn));
+            relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null));
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
             // Query the elements back out geospatially. All but one of the
@@ -636,7 +632,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // create a way completely outside the query bounds
             /* long oobWayId = */
-            OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null, conn);
+            OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null);
 
             // create a way with some nodes inside the query bounds and some
             // outside; The way and the
@@ -646,7 +642,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> partiallyOobNodeIds = new LinkedHashSet<>();
             partiallyOobNodeIds.add(nodeIdsArr[0]);
             partiallyOobNodeIds.add(oobNodeIdsArr[0]);
-            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null, conn));
+            wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null));
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
             // Query the elements back out geospatially. All but one of the
@@ -864,7 +860,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // make one of the nodes invisible, so it shouldn't be returned in a map query
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes invisibleNode = createQuery(mapId)
                     .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
@@ -874,14 +870,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             invisibleNode.setVisible(false);
 
-            int success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
+            long success = createQuery(mapId).update(currentNodes)
                     .where(currentNodes.id.eq(invisibleNode.getId()))
                     .set(currentNodes.visible, false)
                     .execute();
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, createQuery(mapId)
                     .select(currentNodes.visible)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(nodeIdsArr[3]))
@@ -889,7 +885,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // make one of the ways invisible, so it shouldn't be returned in a map query
             QCurrentWays currentWays = QCurrentWays.currentWays;
-            CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            CurrentWays invisibleWay = createQuery(mapId)
                     .select(currentWays)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
@@ -899,14 +895,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             invisibleWay.setVisible(false);
 
-            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentWays)
+            success = createQuery(mapId).update(currentWays)
                     .where(currentWays.id.eq(invisibleWay.getId()))
                     .set(currentWays.visible, false)
                     .execute();
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, createQuery(mapId)
                     .select(currentWays.visible)
                     .from(currentWays)
                     .where(currentWays.id.eq(wayIdsArr[0]))
@@ -914,7 +910,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             // make one of the relations invisible, so it shouldn't be returned in a map query
             QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-            CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            CurrentRelations invisibleRelation = createQuery(mapId)
                     .select(currentRelations)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
@@ -924,14 +920,14 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
             invisibleRelation.setVisible(false);
 
-            success = (int) new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), currentRelations)
+            success = createQuery(mapId).update(currentRelations)
                     .where(currentRelations.id.eq(invisibleRelation.getId()))
                     .set(currentRelations.visible, false)
                     .execute();
 
             Assert.assertEquals(1, success);
 
-            Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertEquals(false, createQuery(mapId)
                     .select(currentRelations.visible)
                     .from(currentRelations)
                     .where(currentRelations.id.eq(relationIdsArr[0]))
@@ -1036,7 +1032,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             long maxQueryNumberOfNodes = 3;
 
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-            Assert.assertTrue(maxQueryNumberOfNodes < new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertTrue(maxQueryNumberOfNodes < createQuery(mapId)
                     .from(currentNodes)
                     .fetchCount());
 
@@ -1165,7 +1161,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         // insert another map with the same name as the test map
         Maps map = new Maps();
-        long nextMapId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+        long nextMapId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
                 .from()
                 .fetchOne();
@@ -1176,8 +1172,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         String duplicatedMapName = "map-with-id-" + mapId;
         map.setDisplayName(duplicatedMapName);
         map.setUserId(userId);
+
         QMaps maps = QMaps.maps;
-        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), maps).populate(map).execute();
+        createQuery(mapId).insert(maps).populate(map).execute();
 
         try {
             // try to query nodes from a map name that is linked to multiple map IDs
@@ -1196,7 +1193,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             throw e;
         }
         finally {
-            new SQLDeleteClause(conn, DbUtils.getConfiguration(), maps).where(maps.id.eq(nextMapId)).execute();
+            createQuery().delete(maps).where(maps.id.eq(nextMapId)).execute();
         }
     }
 
@@ -1318,9 +1315,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // existing test layer
         mapIds.add(mapId);
         // create some more maps
-        long mapId2 = MapUtils.insertMap(userId, conn);
+        long mapId2 = MapUtils.insertMap(userId);
         mapIds.add(mapId2);
-        long mapId3 = MapUtils.insertMap(userId, conn);
+        long mapId3 = MapUtils.insertMap(userId);
         mapIds.add(mapId3);
 
         // query out the layers
@@ -1354,8 +1351,8 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
 
-        MapUtils.deleteOSMRecord(conn, mapId2);
-        MapUtils.deleteOSMRecord(conn, mapId3);
+        MapUtils.deleteOSMRecord(mapId2);
+        MapUtils.deleteOSMRecord(mapId3);
     }
 
     @Test
@@ -1364,14 +1361,13 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // delete the only existing map
         QMaps maps = QMaps.maps;
 
-        new SQLDeleteClause(conn, DbUtils.getConfiguration(mapId), maps).where(maps.id.eq(mapId)).execute();
+        createQuery(mapId).delete(maps).where(maps.id.eq(mapId)).execute();
 
-        Assert.assertNull(
-                new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                        .select(maps)
-                        .from(maps)
-                        .where(maps.id.eq(mapId))
-                        .fetchOne());
+        Assert.assertNull(createQuery(mapId)
+                .select(maps)
+                .from(maps)
+                .where(maps.id.eq(mapId))
+                .fetchOne());
 
         // query out the layers
         /*

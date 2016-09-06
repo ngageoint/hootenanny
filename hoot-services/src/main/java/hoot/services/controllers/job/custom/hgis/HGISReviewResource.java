@@ -28,8 +28,6 @@ package hoot.services.controllers.job.custom.hgis;
 
 import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,6 +45,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.QMaps;
@@ -54,7 +54,9 @@ import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
 
 
+@Controller
 @Path("/review/custom/HGIS")
+@Transactional
 public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
@@ -145,17 +147,17 @@ public class HGISReviewResource extends HGISResource {
     public String updateMapsTag(String mapName) {
         String jobId = UUID.randomUUID().toString();
         JobStatusManager jobStatusManager = null;
-        try (Connection conn = DbUtils.createConnection()) {
-            jobStatusManager = new JobStatusManager(conn);
+        try {
+            jobStatusManager = new JobStatusManager();
             jobStatusManager.addJob(jobId);
 
             QMaps maps = QMaps.maps;
-            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, conn, maps, maps.id, maps.displayName);
+            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
 
-            updateMapTagWithReviewType(conn, mapId);
+            updateMapTagWithReviewType(mapId);
             jobStatusManager.setComplete(jobId);
         }
-        catch (SQLException | ReviewMapTagUpdateException e) {
+        catch (ReviewMapTagUpdateException e) {
             jobStatusManager.setFailed(jobId);
             throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
         }
@@ -163,12 +165,11 @@ public class HGISReviewResource extends HGISResource {
         return jobId;
     }
 
-    private static void updateMapTagWithReviewType(Connection connection, long mapId)
-            throws ReviewMapTagUpdateException {
+    private static void updateMapTagWithReviewType(long mapId) throws ReviewMapTagUpdateException {
         Map<String, String> tags = new HashMap<>();
         tags.put("reviewtype", "hgisvalidation");
 
-        long resCnt = DbUtils.updateMapsTableTags(tags, mapId, connection);
+        long resCnt = DbUtils.updateMapsTableTags(tags, mapId);
 
         if (resCnt < 1) {
             throw new ReviewMapTagUpdateException("Failed to update maps table for mapid:" + mapId);

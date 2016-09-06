@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,8 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.querydsl.sql.SQLQuery;
-
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
@@ -60,9 +60,7 @@ import hoot.services.utils.XmlUtils;
 public class UserResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
 
-    public UserResourceTest() {
-        super();
-    }
+    public UserResourceTest() {}
 
     @Override
     protected Application configure() {
@@ -163,13 +161,13 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             // link some changesets to the user
             Set<Long> changesetIds = new LinkedHashSet<>();
 
-            long changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
+            long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
             changesetIds.add(changesetId);
-            (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
+            (new Changeset(mapId, changesetId)).setBounds(originalBounds);
 
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = createQuery(mapId)
                     .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
@@ -178,12 +176,12 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
-            changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
+            changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
             changesetIds.add(changesetId);
 
-            (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
+            (new Changeset(mapId, changesetId)).setBounds(originalBounds);
 
-            changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            changeset = createQuery(mapId)
                     .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
@@ -299,7 +297,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             try {
                 // probably need a better check than this
                 Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
-                Assert.assertEquals(DbUtils.getTestUserId(conn),
+                Assert.assertEquals(DbUtils.getTestUserId(),
                         Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
 
                 // TODO: fix

@@ -52,9 +52,7 @@ import hoot.services.utils.MapUtils;
 public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetResourceUploadCommonTest.class);
 
-    public ChangesetResourceUploadCommonTest() {
-        super();
-    }
+    public ChangesetResourceUploadCommonTest() {}
 
     @Override
     protected Application configure() {
@@ -183,7 +181,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
         catch (Exception e) {
@@ -214,7 +212,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
     }

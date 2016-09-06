@@ -29,6 +29,7 @@ package hoot.services.nativeinterfaces;
 import org.json.simple.JSONObject;
 
 
+//@Component
 public class INativeInterfaceStubImpl implements NativeInterface {
     @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {

@@ -43,27 +43,6 @@ public final class DataDefinitionManager {
     private DataDefinitionManager() {
     }
 
-    static boolean checkDbExists(String dbName) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, dbName);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    return rs.next();
-                }
-            }
-        }
-    }
-
-    static void createDb(String dbname) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            String sql = "CREATE DATABASE \"" + dbname + "\"";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.execute();
-            }
-        }
-    }
-
     public static void deleteTables(List<String> tables, String dbname) throws SQLException {
         try (Connection conn = DbUtils.createConnection()) {
             for (String tblName : tables) {
@@ -126,13 +105,5 @@ public final class DataDefinitionManager {
         }
 
         return tblList;
-    }
-
-    static void createTable(String createTblSql, String dbname) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
-                stmt.executeUpdate();
-            }
-        }
     }
 }

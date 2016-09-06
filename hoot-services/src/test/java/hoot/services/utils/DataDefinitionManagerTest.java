@@ -28,6 +28,10 @@ package hoot.services.utils;
 
 import static hoot.services.HootProperties.DB_NAME;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -38,38 +42,61 @@ import hoot.services.UnitTest;
 
 
 public class DataDefinitionManagerTest {
+
+    private static boolean checkDbExists(String dbName) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, dbName);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        }
+    }
+
+    private static void createDb(String dbname) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            String sql = "CREATE DATABASE \"" + dbname + "\"";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.execute();
+            }
+        }
+    }
+
     @Test
     @Category(UnitTest.class)
     public void testDb() throws Exception {
-        boolean exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        boolean exists = checkDbExists("wfdbtest");
         if (exists) {
             DataDefinitionManager.deleteDb("wfdbtest", true);
         }
 
-        DataDefinitionManager.createDb("wfdbtest");
-        exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        createDb("wfdbtest");
+        exists = checkDbExists("wfdbtest");
         Assert.assertTrue(exists);
         DataDefinitionManager.deleteDb("wfdbtest", true);
 
-        exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        exists = checkDbExists("wfdbtest");
         Assert.assertTrue(!exists);
     }
 
     @Test
     @Category(UnitTest.class)
     public void testTable() throws Exception {
-        boolean exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        boolean exists = checkDbExists("wfdbtest");
         if (exists) {
             DataDefinitionManager.deleteDb("wfdbtest", true);
         }
 
-        DataDefinitionManager.createDb("wfdbtest");
-        exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        createDb("wfdbtest");
+        exists = checkDbExists("wfdbtest");
         Assert.assertTrue(exists);
 
         String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
                 + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
-        DataDefinitionManager.createTable(createTblSql, "wfdbtest");
+
+        createTable(createTblSql, "wfdbtest");
 
         List<String> tbls = DataDefinitionManager.getTablesList("wfdbtest", "test");
         Assert.assertTrue(!tbls.isEmpty());
@@ -81,9 +108,18 @@ public class DataDefinitionManagerTest {
 
         DataDefinitionManager.deleteDb("wfdbtest", true);
 
-        exists = DataDefinitionManager.checkDbExists("wfdbtest");
+        exists = checkDbExists("wfdbtest");
         Assert.assertTrue(!exists);
     }
+
+    static void createTable(String createTblSql, String dbname) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
+                stmt.executeUpdate();
+            }
+        }
+    }
+
 
     @Test
     @Category(UnitTest.class)

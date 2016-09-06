@@ -29,6 +29,7 @@ package hoot.services.controllers.osm;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.utils.DbUtils.createQuery;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
@@ -57,8 +58,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
@@ -95,9 +94,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
-    public ChangesetResourceUploadAllTest() {
-        super();
-    }
+    public ChangesetResourceUploadAllTest() {}
 
     @Override
     protected Application configure() {
@@ -431,8 +428,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         try {
-            Map<Long, CurrentNodes> nodes =
-                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Map<Long, CurrentNodes> nodes = createQuery(mapId)
                             .from(currentNodesTbl)
                             .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
 
@@ -529,8 +525,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         }
 
         try {
-            Map<Long, CurrentWays> ways =
-                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Map<Long, CurrentWays> ways = createQuery(mapId)
                             .from(currentWaysTbl)
                             .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
@@ -544,7 +539,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(2), wayRecord.getVersion());
             Assert.assertTrue(wayRecord.getVisible());
 
-            List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            List<CurrentWayNodes> wayNodes = createQuery(mapId)
                     .select(currentWayNodesTbl)
                     .from(currentWayNodesTbl)
                     .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
@@ -574,7 +569,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(2), wayRecord.getVersion());
             Assert.assertTrue(wayRecord.getVisible());
 
-            wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            wayNodes = createQuery(mapId)
                     .select(currentWayNodesTbl)
                     .from(currentWayNodesTbl)
                     .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
@@ -601,7 +596,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), wayRecord.getVersion());
             Assert.assertTrue(wayRecord.getVisible());
 
-            wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            wayNodes = createQuery(mapId)
                     .select(currentWayNodesTbl)
                     .from(currentWayNodesTbl)
                     .where(currentWayNodesTbl.wayId.eq(createdWayIdsArr[0]))
@@ -631,7 +626,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), wayRecord.getVersion());
             Assert.assertTrue(wayRecord.getVisible());
 
-            wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            wayNodes = createQuery(mapId)
                     .select(currentWayNodesTbl)
                     .from(currentWayNodesTbl)
                     .where(currentWayNodesTbl.wayId.eq(createdWayIdsArr[1]))
@@ -657,7 +652,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                     || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
 
             // verify the deleted way
-            Assert.assertNull(new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Assert.assertNull(createQuery(mapId)
                     .select(currentWaysTbl)
                     .from(currentWaysTbl)
                     .where(currentWaysTbl.id.eq(wayIdsArr[2]))
@@ -668,8 +663,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         }
 
         try {
-            Map<Long, CurrentRelations> relations =
-                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Map<Long, CurrentRelations> relations = createQuery(mapId)
                             .from(currentRelationsTbl)
                             .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
@@ -683,8 +677,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(2), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            List<CurrentRelationMembers> members =
-                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            List<CurrentRelationMembers> members = createQuery(mapId)
                             .select(currentRelationMembersTbl)
                             .from(currentRelationMembersTbl)
                             .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
@@ -724,7 +717,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(2), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            members = createQuery(mapId)
                     .select(currentRelationMembersTbl)
                     .from(currentRelationMembersTbl)
                     .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
@@ -761,7 +754,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            members = createQuery(mapId)
                     .select(currentRelationMembersTbl)
                     .from(currentRelationMembersTbl)
                     .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
@@ -787,7 +780,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            members = createQuery(mapId)
                     .select(currentRelationMembersTbl)
                     .from(currentRelationMembersTbl)
                     .where(currentRelationMembersTbl.relationId.eq(createdRelationIdsArr[0]))
@@ -826,7 +819,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            members = createQuery(mapId)
                     .select(currentRelationMembersTbl)
                     .from(currentRelationMembersTbl)
                     .where(currentRelationMembersTbl.relationId.eq(createdRelationIdsArr[1]))
@@ -861,7 +854,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
             Assert.assertTrue(relationRecord.getVisible());
 
-            members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            members = createQuery(mapId)
                     .select(currentRelationMembersTbl)
                     .from(currentRelationMembersTbl)
                     .where(currentRelationMembersTbl.relationId.eq(createdRelationIdsArr[2]))
@@ -882,12 +875,11 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             Assert.assertEquals("val 1", tags.get("key 1"));
 
             // verify the deleted relation
-            Assert.assertNull(
-                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                            .select(currentRelationsTbl)
-                            .from(currentRelationsTbl)
-                            .where(currentRelationsTbl.id.eq(relationIdsArr[2]))
-                            .fetchOne());
+            Assert.assertNull(createQuery(mapId)
+                    .select(currentRelationsTbl)
+                    .from(currentRelationsTbl)
+                    .where(currentRelationsTbl.id.eq(relationIdsArr[2]))
+                    .fetchOne());
 
             // verify the relations with no tags
             relationRecord = relations.get(relationIdsArr[3]);
@@ -900,7 +892,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
 
         try {
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = createQuery(mapId)
                     .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
@@ -916,7 +908,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
             double boundsExpansionFactor = Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES);
             expandedBounds.expand(originalBounds, boundsExpansionFactor);
             expandedBounds.expand(updatedBounds, boundsExpansionFactor);
-            Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
+            Changeset hootChangeset = new Changeset(mapId, changesetId);
             hootChangeset.getBounds();
         }
         catch (Exception e) {

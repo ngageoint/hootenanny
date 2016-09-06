@@ -28,9 +28,9 @@ package hoot.services.job;
 
 import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +52,8 @@ import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
@@ -60,6 +62,8 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
 
 
+@Scope(SCOPE_PROTOTYPE)
+@Service("tunningService")
 public class TunningService implements Executable {
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
 
@@ -80,12 +84,12 @@ public class TunningService implements Executable {
         String inputType = command.get("inputtype").toString();
         long startTime = new Date().getTime();
 
-        try (Connection connection = DbUtils.createConnection()) {
+        try {
             String tempOutputPath;
             if (inputType.equalsIgnoreCase("db")) {
-                DbUtils.getNodesCountByName(connection, input);
-                DbUtils.getWayCountByName(connection, input);
-                DbUtils.getRelationCountByName(connection, input);
+                DbUtils.getNodesCountByName(input);
+                DbUtils.getWayCountByName(input);
+                DbUtils.getRelationCountByName(input);
 
                 // if the count is greater than threshold then just use it and tell it too big
                 CommandRunner cmdRunner = new CommandRunnerImpl();

@@ -57,12 +57,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
 
+@Controller
 @Path("/ingest")
+@Transactional
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
 

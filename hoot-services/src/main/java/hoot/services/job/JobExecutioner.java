@@ -26,16 +26,12 @@
  */
 package hoot.services.job;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.DbUtils;
+import hoot.services.ApplicationContextUtils;
 
 
 /**
@@ -59,14 +55,14 @@ public class JobExecutioner extends Thread {
     public void run() {
         logger.debug("Handling job exec request...");
 
-        try (Connection connection = DbUtils.createConnection()) {
-            JobStatusManager jobStatusManager = new JobStatusManager(connection);
+        try {
+            JobStatusManager jobStatusManager = new JobStatusManager();
             command.put("jobId", jobId);
 
             try {
                 jobStatusManager.addJob(jobId);
 
-                ApplicationContext applicationContext = HootProperties.getSpringContext();
+                ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();
                 Executable executable = (Executable) applicationContext.getBean((String) command.get("execImpl"));
 
                 executable.exec(command);
@@ -78,7 +74,7 @@ public class JobExecutioner extends Thread {
                 jobStatusManager.setFailed(jobId, e.getMessage());
             }
         }
-        catch (SQLException sqle) {
+        catch (Exception sqle) {
             logger.error("Error executing job with ID = {}", jobId, sqle);
         }
     }

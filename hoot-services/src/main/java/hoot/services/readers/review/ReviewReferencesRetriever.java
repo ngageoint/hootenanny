@@ -27,8 +27,8 @@
 package hoot.services.readers.review;
 
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,33 +38,26 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.querydsl.sql.SQLQuery;
-
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
 import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.ReviewUtils;
 
 
 /**
  * Retrieves element references to reviews for a query element
  */
-public class ReviewReferencesRetriever {
+public final class ReviewReferencesRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
     private static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
-    private final Connection connection;
+    private ReviewReferencesRetriever() {}
 
-    public ReviewReferencesRetriever(Connection connection) {
-        this.connection = connection;
-    }
-
-    private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
-        return new SQLQuery<>(this.connection, DbUtils.getConfiguration(mapId))
+    private static List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
+        return createQuery(mapId)
                 .select(currentRelationMembers.relationId)
                 .from(currentRelationMembers)
                 .join(currentRelations).on(currentRelationMembers.relationId.eq(currentRelations.id))
@@ -84,29 +77,29 @@ public class ReviewReferencesRetriever {
      * @return a list containing all features the input feature needs to be
      *         reviewed with
      */
-    public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
+    public static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
         logger.debug("requestingElementInfo: {}", queryElementInfo);
 
-        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId(), connection);
+        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId());
 
         // check for query element aexistence
         Set<Long> elementIds = new HashSet<>();
         elementIds.add(queryElementInfo.getId());
         if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
-                Element.elementTypeFromString(queryElementInfo.getType()), elementIds, connection)) {
+                Element.elementTypeFromString(queryElementInfo.getType()), elementIds)) {
             ReviewUtils.handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
                     + queryElementInfo.getType() + " does not exist."), "");
         }
 
         // select all review relation id's from current relation members where
         // member id = requesting element's member id and the element type = the requesting element type
-        List<Long> allReviewRelationIds = this.getAllReviewRelations(queryElementInfo, mapIdNum);
+        List<Long> allReviewRelationIds = ReviewReferencesRetriever.getAllReviewRelations(queryElementInfo, mapIdNum);
 
         List<ReviewRef> references = new ArrayList<>();
         if (!allReviewRelationIds.isEmpty()) {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
-            List<CurrentRelationMembers> referencedMembers = new SQLQuery<>(connection, DbUtils.getConfiguration(mapIdNum))
+            List<CurrentRelationMembers> referencedMembers = createQuery(mapIdNum)
                     .select(QCurrentRelationMembers.currentRelationMembers)
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.in(allReviewRelationIds))
