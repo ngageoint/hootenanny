@@ -62,7 +62,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import hoot.services.HootServicesJerseyApplication;
-import hoot.services.SpringConfig;
+import hoot.services.HootServicesSpringConfig;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
@@ -88,7 +88,7 @@ import hoot.services.utils.XmlUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = HootServicesSpringConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCloseTest.class);

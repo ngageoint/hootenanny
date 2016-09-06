@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.utils.DataDefinitionManager;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -68,7 +68,7 @@ public class WfsManager {
     private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
 
     public void createWfsResource(String wfsJobName) throws Exception {
-        List<String> tblsList = DataDefinitionManager.getTablesList(WFS_STORE_DB, wfsJobName);
+        List<String> tblsList = DbUtils.getTablesList(WFS_STORE_DB, wfsJobName);
         createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);
         createService(wfsJobName);
     }

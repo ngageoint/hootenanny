@@ -34,6 +34,8 @@ import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.models.db.QMaps.maps;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -243,7 +245,7 @@ public final class DbUtils {
         tables.add("changesets_" + mapId);
 
         try {
-            DataDefinitionManager.deleteTables(tables, DB_NAME);
+            deleteTables(tables, DB_NAME);
         }
         catch (SQLException e) {
             throw new RuntimeException("Error deleting map related tables by map id.  mapId = " + mapId, e);
@@ -274,13 +276,13 @@ public final class DbUtils {
                 }
 
                 try {
-                    DataDefinitionManager.deleteDb(dbname, false);
+                    deleteDb(dbname, false);
                 }
                 catch (SQLException e1) {
                     logger.warn("Error deleting {} database!", dbname, e1);
 
                     try {
-                        DataDefinitionManager.deleteDb(connection.getCatalog() + "_renderdb_" + mapName, false);
+                        deleteDb(connection.getCatalog() + "_renderdb_" + mapName, false);
                     }
                     catch (SQLException e2) {
                         logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, e2);
@@ -550,5 +552,69 @@ public final class DbUtils {
                 .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
                 .from()
                 .fetchOne();
+    }
+
+    public static void deleteTables(List<String> tables, String dbname) throws SQLException {
+        try (Connection conn = createConnection()) {
+            for (String tblName : tables) {
+                String sql = "DROP TABLE \"" + tblName + "\"";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.execute();
+                }
+            }
+        }
+    }
+
+    static void deleteDb(String dbname, boolean force) throws SQLException {
+        try (Connection conn = createConnection()) {
+            // TODO: re-evaluate what this if block is supposed to to.
+            if (force) {
+                String columnName;
+                String sql = "SELECT column_name " + "FROM information_schema.columns "
+                        + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
+
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    // Get the column name from the db as it's version dependent
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        rs.next();
+                        columnName = rs.getString("column_name");
+                    }
+                }
+
+                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
+                        + "WHERE datname = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
+                    stmt.setString(1, dbname);
+                    // Get the column name from the db as it's version dependent
+                    try (ResultSet rs = stmt.executeQuery()) {
+                    }
+                }
+            }
+
+            String sql = "DROP DATABASE \"" + dbname + "\"";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.executeUpdate();
+            }
+        }
+    }
+
+    public static List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
+        List<String> tblList = new ArrayList<>();
+        try (Connection conn = createConnection()) {
+            String sql = "SELECT table_name " + "FROM information_schema.tables "
+                    + "WHERE table_schema='public' AND table_name LIKE " + "'" + filter_prefix.replace('-', '_')
+                    + "_%'";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        // Retrieve by column name
+                        tblList.add(rs.getString("table_name"));
+                    }
+                }
+            }
+        }
+
+        return tblList;
     }
 }

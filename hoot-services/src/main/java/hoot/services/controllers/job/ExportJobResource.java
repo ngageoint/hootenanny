@@ -59,7 +59,6 @@ import hoot.services.controllers.wfs.WfsManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
-import hoot.services.utils.DataDefinitionManager;
 import hoot.services.utils.DbUtils;
 
 
@@ -395,8 +394,8 @@ public class ExportJobResource extends JobControllerBase {
             WfsManager wfsMan = new WfsManager();
             wfsMan.removeWfsResource(id);
 
-            List<String> tbls = DataDefinitionManager.getTablesList(WFS_STORE_DB, id);
-            DataDefinitionManager.deleteTables(tbls, WFS_STORE_DB);
+            List<String> tbls = DbUtils.getTablesList(WFS_STORE_DB, id);
+            DbUtils.deleteTables(tbls, WFS_STORE_DB);
         }
         catch (WebApplicationException wae) {
             throw wae;

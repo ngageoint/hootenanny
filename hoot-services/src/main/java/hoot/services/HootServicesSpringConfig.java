@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -14,8 +15,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-public class SpringDBConfig {
+@ComponentScan(basePackages = {"hoot.services"})
+public class HootServicesSpringConfig {
 
+    @Bean
+    public ApplicationContextUtils applicationContextUtils() {
+        return new ApplicationContextUtils();
+    }
+
+    /*
+        TODO: Don't forget to externalize the DB connection properties!!!
+     */
     @Bean(name = "dataSource")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -35,20 +45,4 @@ public class SpringDBConfig {
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
-
-/*
-    @Bean
-    public com.querydsl.sql.Configuration querydslConfiguration() {
-        SQLTemplates templates = PostgreSQLTemplates.builder().build();
-        com.querydsl.sql.Configuration configuration = new com.querydsl.sql.Configuration(templates);
-        configuration.setExceptionTranslator(new SpringExceptionTranslator());
-        return configuration;
-    }
-
-    @Bean
-    public SQLQueryFactory queryFactory() {
-        Provider<Connection> provider = new SpringConnectionProvider(dataSource());
-        return new SQLQueryFactory(querydslConfiguration(), provider);
-    }
-*/
 }

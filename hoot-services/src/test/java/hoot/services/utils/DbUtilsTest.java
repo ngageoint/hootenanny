@@ -26,7 +26,14 @@
  */
 package hoot.services.utils;
 
+import static hoot.services.HootProperties.DB_NAME;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -154,5 +161,121 @@ public class DbUtilsTest {
         JSONObject exJson = (JSONObject) parser.parse(expected.replaceAll("'", "\""));
         JSONObject outJson = (JSONObject) parser.parse(output.replaceAll("\\\\\"", "\""));
         Assert.assertEquals(exJson, outJson);
+    }
+
+    private static boolean checkDbExists(String dbName) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, dbName);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        }
+    }
+
+    private static void createDb(String dbname) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            String sql = "CREATE DATABASE \"" + dbname + "\"";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.execute();
+            }
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDb() throws Exception {
+        boolean exists = checkDbExists("wfdbtest");
+        if (exists) {
+            DbUtils.deleteDb("wfdbtest", true);
+        }
+
+        createDb("wfdbtest");
+        exists = checkDbExists("wfdbtest");
+        Assert.assertTrue(exists);
+        DbUtils.deleteDb("wfdbtest", true);
+
+        exists = checkDbExists("wfdbtest");
+        Assert.assertTrue(!exists);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testTable() throws Exception {
+        boolean exists = checkDbExists("wfdbtest");
+        if (exists) {
+            DbUtils.deleteDb("wfdbtest", true);
+        }
+
+        createDb("wfdbtest");
+        exists = checkDbExists("wfdbtest");
+        Assert.assertTrue(exists);
+
+        String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
+                + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
+
+        createTable(createTblSql, "wfdbtest");
+
+        List<String> tbls = DbUtils.getTablesList("wfdbtest", "test");
+        Assert.assertTrue(!tbls.isEmpty());
+
+        DbUtils.deleteTables(tbls, "wfdbtest");
+
+        tbls = DbUtils.getTablesList("wfdbtest", "TEST");
+        Assert.assertTrue(tbls.isEmpty());
+
+        DbUtils.deleteDb("wfdbtest", true);
+
+        exists = checkDbExists("wfdbtest");
+        Assert.assertTrue(!exists);
+    }
+
+    static void createTable(String createTblSql, String dbname) throws SQLException {
+        try (Connection conn = DbUtils.createConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
+                stmt.executeUpdate();
+            }
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void createMap() throws Exception {
+        String dbname = DB_NAME;
+
+        try {
+            try {
+                // just in case the tables exist.
+                DbUtils.deleteMapRelatedTablesByMapId(1234);
+            }
+            catch (Exception ignored) {
+                // exception can be currently thrown while trying to delete non-existent tables.
+            }
+
+            MapUtils.createMap(1234);
+
+            List<String> tbls = DbUtils.getTablesList(dbname, "changesets");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = DbUtils.getTablesList(dbname, "current_nodes");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = DbUtils.getTablesList(dbname, "current_relation_members");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = DbUtils.getTablesList(dbname, "current_relations");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = DbUtils.getTablesList(dbname, "current_way_nodes");
+            Assert.assertTrue(!tbls.isEmpty());
+
+            tbls = DbUtils.getTablesList(dbname, "current_ways");
+            Assert.assertTrue(!tbls.isEmpty());
+        }
+        finally {
+            DbUtils.deleteMapRelatedTablesByMapId(1234);
+        }
     }
 }

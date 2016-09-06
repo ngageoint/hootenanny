@@ -93,7 +93,7 @@ public final class ReviewReferencesRetriever {
 
         // select all review relation id's from current relation members where
         // member id = requesting element's member id and the element type = the requesting element type
-        List<Long> allReviewRelationIds = ReviewReferencesRetriever.getAllReviewRelations(queryElementInfo, mapIdNum);
+        List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
 
         List<ReviewRef> references = new ArrayList<>();
         if (!allReviewRelationIds.isEmpty()) {

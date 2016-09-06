@@ -39,7 +39,7 @@ public class HootServicesJerseyApplication extends ResourceConfig {
         AnnotationConfigApplicationContext ctx = null;
 
         if (springConfigrationClass == null) {
-            ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+            ctx = new AnnotationConfigApplicationContext(HootServicesSpringConfig.class);
         }
         else {
             ctx = new AnnotationConfigApplicationContext(springConfigrationClass);

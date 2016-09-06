@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -954,7 +953,7 @@ public class MapResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) throws SQLException {
+    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) {
         // _zoomLevels
         String jobId = UUID.randomUUID().toString();
 
