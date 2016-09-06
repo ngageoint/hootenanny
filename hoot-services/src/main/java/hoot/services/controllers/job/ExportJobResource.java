@@ -394,8 +394,8 @@ public class ExportJobResource extends JobControllerBase {
             WfsManager wfsMan = new WfsManager();
             wfsMan.removeWfsResource(id);
 
-            List<String> tbls = DbUtils.getTablesList(WFS_STORE_DB, id);
-            DbUtils.deleteTables(tbls, WFS_STORE_DB);
+            List<String> tbls = DbUtils.getTablesList(id);
+            DbUtils.deleteTables(tbls);
         }
         catch (WebApplicationException wae) {
             throw wae;

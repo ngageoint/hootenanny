@@ -218,12 +218,12 @@ public class DbUtilsTest {
 
         createTable(createTblSql, "wfdbtest");
 
-        List<String> tbls = DbUtils.getTablesList("wfdbtest", "test");
+        List<String> tbls = DbUtils.getTablesList("test");
         Assert.assertTrue(!tbls.isEmpty());
 
-        DbUtils.deleteTables(tbls, "wfdbtest");
+        DbUtils.deleteTables(tbls);
 
-        tbls = DbUtils.getTablesList("wfdbtest", "TEST");
+        tbls = DbUtils.getTablesList("TEST");
         Assert.assertTrue(tbls.isEmpty());
 
         DbUtils.deleteDb("wfdbtest", true);
@@ -256,22 +256,22 @@ public class DbUtilsTest {
 
             MapUtils.createMap(1234);
 
-            List<String> tbls = DbUtils.getTablesList(dbname, "changesets");
+            List<String> tbls = DbUtils.getTablesList("changesets");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList(dbname, "current_nodes");
+            tbls = DbUtils.getTablesList("current_nodes");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList(dbname, "current_relation_members");
+            tbls = DbUtils.getTablesList("current_relation_members");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList(dbname, "current_relations");
+            tbls = DbUtils.getTablesList("current_relations");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList(dbname, "current_way_nodes");
+            tbls = DbUtils.getTablesList("current_way_nodes");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList(dbname, "current_ways");
+            tbls = DbUtils.getTablesList("current_ways");
             Assert.assertTrue(!tbls.isEmpty());
         }
         finally {

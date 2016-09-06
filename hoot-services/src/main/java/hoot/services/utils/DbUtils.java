@@ -27,7 +27,6 @@
 package hoot.services.utils;
 
 
-import static hoot.services.HootProperties.DB_NAME;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QCurrentWays.currentWays;
@@ -245,7 +244,7 @@ public final class DbUtils {
         tables.add("changesets_" + mapId);
 
         try {
-            deleteTables(tables, DB_NAME);
+            deleteTables(tables);
         }
         catch (SQLException e) {
             throw new RuntimeException("Error deleting map related tables by map id.  mapId = " + mapId, e);
@@ -554,7 +553,7 @@ public final class DbUtils {
                 .fetchOne();
     }
 
-    public static void deleteTables(List<String> tables, String dbname) throws SQLException {
+    public static void deleteTables(List<String> tables) throws SQLException {
         try (Connection conn = createConnection()) {
             for (String tblName : tables) {
                 String sql = "DROP TABLE \"" + tblName + "\"";
@@ -598,7 +597,7 @@ public final class DbUtils {
         }
     }
 
-    public static List<String> getTablesList(String dbName, String filter_prefix) throws SQLException {
+    public static List<String> getTablesList(String filter_prefix) throws SQLException {
         List<String> tblList = new ArrayList<>();
         try (Connection conn = createConnection()) {
             String sql = "SELECT table_name " + "FROM information_schema.tables "

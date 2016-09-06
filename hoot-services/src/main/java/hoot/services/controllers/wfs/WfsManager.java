@@ -27,7 +27,6 @@
 package hoot.services.controllers.wfs;
 
 import static hoot.services.HootProperties.WFS_STORE_CONN_NAME;
-import static hoot.services.HootProperties.WFS_STORE_DB;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -68,7 +67,7 @@ public class WfsManager {
     private static final Logger logger = LoggerFactory.getLogger(WfsManager.class);
 
     public void createWfsResource(String wfsJobName) throws Exception {
-        List<String> tblsList = DbUtils.getTablesList(WFS_STORE_DB, wfsJobName);
+        List<String> tblsList = DbUtils.getTablesList(wfsJobName);
         createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);
         createService(wfsJobName);
     }
