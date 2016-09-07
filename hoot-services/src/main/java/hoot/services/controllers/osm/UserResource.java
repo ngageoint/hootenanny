@@ -124,6 +124,9 @@ public class UserResource {
 
             responseDoc = writeResponse(new User(user));
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String message = "Error fetching OSM user data!";
             throw new WebApplicationException(e, Response.serverError().entity(message).build());
