@@ -42,19 +42,15 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -81,645 +77,616 @@ import hoot.services.utils.XmlUtils;
 
 
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadCreateTest.class);
-
     private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
 
-    public ChangesetResourceUploadCreateTest() {
-        super();
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ChangesetResource.class);
-    }
+    public ChangesetResourceUploadCreateTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testUploadCreate() throws Exception {
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+        long changesetId = OsmTestUtils.createTestChangeset(null, 0);
+
+        // now update it with new OSM elements; make this create the
+        // equivalent of the default dataset
+        // which is being created outside of the service call for all other
+        // tests, so the default dataset verification methods can be used
+        Document responseData = null;
         try {
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(null, 0);
-
-            // now update it with new OSM elements; make this create the
-            // equivalent of the default dataset
-            // which is being created outside of the service call for all other
-            // tests, so the default dataset verification methods can be used
-            Document responseData = null;
-            try {
-                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .post(Entity.entity(
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create>" +
-                                "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                     originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
-                                "</node>" +
-                                "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
-                                     originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                "</node>" +
-                                "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
-                                    "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                "</node>" +
-                                "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
-                                        "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 3\" v=\"val 3\"/>" + "</node>" + "<node id=\"-5\" lon=\"" + originalBounds.getMinLon() +
-                                       "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 4\" v=\"val 4\"/>" +
-                                "</node>" +
-                                "<way id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"-1\"></nd>" +
-                                    "<nd ref=\"-2\"></nd>" +
-                                    "<nd ref=\"-5\"></nd>" +
-                                    "<tag k=\"key 1\" v=\"val 1\"/>" +
-                                    "<tag k=\"key 2\" v=\"val 2\"/>" +
-                                "</way>" +
-                                "<way id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"-3\"></nd>" + "<nd ref=\"-2\"></nd>" +
-                                "</way>" +
-                                "<way id=\"-8\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" +
-                                    "<tag k=\"key 3\" v=\"val 3\"/>" +
-                                "</way>" +
-                                "<relation id=\"-9\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"-1\"></member>" +
-                                    "<member type=\"way\" role=\"role3\" ref=\"-7\"></member>" +
-                                    "<member type=\"way\" role=\"role2\" ref=\"-6\"></member>" +
-                                    "<member type=\"node\" ref=\"-3\"></member>" + "<tag k=\"key 1\" v=\"val 1\"/>" +
-                                "</relation>" +
-                                "<relation id=\"-10\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"-5\"></member>" +
-                                    "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>" +
-                                    "<tag k=\"key 2\" v=\"val 2\"/>" + "<tag k=\"key 3\" v=\"val 3\"/>" +
-                                "</relation>" +
-                                "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"way\" role=\"\" ref=\"-7\"></member>" +
-                                    "<tag k=\"key 4\" v=\"val 4\"/>" + "</relation>" +
-                                "<relation id=\"-12\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"-3\"></member>" +
-                                "</relation>" +
-                            "</create>" +
-                            "<modify/>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
-            }
-            catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
-
-            XPath xpath = XmlUtils.createXPath();
-            Set<Long> nodeIds = new LinkedHashSet<>();
-            Set<Long> wayIds = new LinkedHashSet<>();
-            Set<Long> relationIds = new LinkedHashSet<>();
-            try {
-                NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
-                Assert.assertEquals(5, returnedNodes.getLength());
-
-                long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
-                Assert.assertEquals(-1, oldElementId);
-                long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
-                Assert.assertNotSame(-1, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
-                Assert.assertEquals(-2, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
-                Assert.assertNotSame(-2, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
-                Assert.assertEquals(-3, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
-                Assert.assertNotSame(-3, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
-                Assert.assertEquals(-4, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
-                Assert.assertNotSame(-4, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
-                Assert.assertEquals(-5, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
-                Assert.assertNotSame(-5, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
-
-                NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
-                Assert.assertEquals(3, returnedWays.getLength());
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
-                Assert.assertEquals(-6, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
-                Assert.assertNotSame(-6, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
-                Assert.assertEquals(-7, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
-                Assert.assertNotSame(-7, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
-                Assert.assertEquals(-8, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
-                Assert.assertNotSame(-8, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
-
-                NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
-                Assert.assertEquals(4, returnedRelations.getLength());
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
-                Assert.assertEquals(-9, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
-                Assert.assertNotSame(-9, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
-                Assert.assertEquals(-10, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
-                Assert.assertNotSame(-10, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
-                Assert.assertEquals(-11, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
-                Assert.assertNotSame(-11, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
-                Assert.assertEquals(-12, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
-                Assert.assertNotSame(-12, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
-            }
-            catch (XPathExpressionException e) {
-                Assert.fail("Error parsing response document: " + e.getMessage());
-            }
-
-            // changes have actually occurred with the upload of the
-            // changeset...what's actually being done here is to compare the state of the default test data set
-            // with the dataset we uploaded here, and they should match each other
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testUploadCreateClosedPolygon() throws Exception {
-        try {
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(null, 0);
-
-            Document responseData = null;
-            try {
-                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .post(Entity.entity(
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create>" +
-                                "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                    originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                "</node>" +
-                                "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" + originalBounds.getMaxLat() +
-                                    "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                "</node>" +
-                                "<node id=\"-3\" lon=\"" + (originalBounds.getMinLon() - .001) + "\" lat=\"" +
-                                    (originalBounds.getMinLat() - .001) + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                "</node>" +
-                                "<way id=\"-1\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" +
-                                    "<nd ref=\"-3\"></nd>" + "<nd ref=\"-1\"></nd>" +
-                                "</way>" +
-                            "</create>" +
-                            "<modify/>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
-            }
-            catch (WebApplicationException e) {
-                Response r = e.getResponse();
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
-
-            XPath xpath = XmlUtils.createXPath();
-            List<Long> nodeIds = new ArrayList<>();
-            Set<Long> wayIds = new LinkedHashSet<>();
-            try {
-                NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
-                Assert.assertEquals(3, returnedNodes.getLength());
-
-                long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
-                Assert.assertEquals(-1, oldElementId);
-                long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
-                Assert.assertNotSame(-1, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
-                Assert.assertEquals(-2, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
-                Assert.assertNotSame(-2, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
-                Assert.assertEquals(-3, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
-                Assert.assertNotSame(-3, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
-
-                NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
-                Assert.assertEquals(1, returnedWays.getLength());
-
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
-                Assert.assertEquals(-1, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
-                Assert.assertNotSame(-1, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
-            }
-            catch (XPathExpressionException e) {
-                Assert.fail("Error parsing response document: " + e.getMessage());
-            }
-
-            Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-            Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            QChangesets changesets = QChangesets.changesets;
-
-            Changesets changeset = createQuery(mapId)
-                    .select(changesets)
-                    .from(changesets)
-                    .where(changesets.id.eq(changesetId))
-                    .fetchOne();
-
-            try {
-                Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                        .from(currentNodesTbl)
-                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
-
-                Assert.assertEquals(3, nodes.size());
-
-                CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
-                Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
-                Assert.assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
-                Assert.assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
-                Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
-                Assert.assertEquals(
-                        new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
-                        nodeRecord.getTile());
-                Assert.assertTrue(nodeRecord.getTimestamp().before(now));
-                Assert.assertEquals(new Long(1), nodeRecord.getVersion());
-                Assert.assertEquals(true, nodeRecord.getVisible());
-
-                nodeRecord = nodes.get(nodeIdsArr[1]);
-                Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
-                Assert.assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
-                Assert.assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
-                Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
-                Assert.assertEquals(
-                        new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
-                        nodeRecord.getTile());
-                Assert.assertTrue(nodeRecord.getTimestamp().before(now));
-                Assert.assertEquals(new Long(1), nodeRecord.getVersion());
-                Assert.assertEquals(true, nodeRecord.getVisible());
-
-                nodeRecord = nodes.get(nodeIdsArr[2]);
-                Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
-                Assert.assertEquals(new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
-                Assert.assertEquals(new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
-                Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
-                Assert.assertEquals(
-                        new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
-                        nodeRecord.getTile());
-                Assert.assertTrue(nodeRecord.getTimestamp().before(now));
-                Assert.assertEquals(new Long(1), nodeRecord.getVersion());
-                Assert.assertEquals(true, nodeRecord.getVisible());
-            }
-            catch (Exception e) {
-                Assert.fail("Error checking nodes: " + e.getMessage());
-            }
-
-            try {
-                Map<Long, CurrentWays> ways = createQuery(mapId)
-                        .from(currentWaysTbl)
-                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
-
-                Assert.assertEquals(1, ways.size());
-                CurrentWays wayRecord = ways.get(wayIdsArr[0]);
-                Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
-                Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
-                Assert.assertTrue(wayRecord.getTimestamp().before(now));
-                Assert.assertEquals(new Long(1), wayRecord.getVersion());
-                Assert.assertTrue(wayRecord.getVisible());
-
-                List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                        .select(currentWayNodesTbl)
-                        .from(currentWayNodesTbl)
-                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                        .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .fetch();
-
-                Assert.assertEquals(4, wayNodes.size());
-                CurrentWayNodes wayNode = wayNodes.get(0);
-                Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
-                Assert.assertEquals(new Long(1), wayNode.getSequenceId());
-                Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
-                wayNode = wayNodes.get(1);
-                Assert.assertEquals(nodeIdsArr[1], wayNode.getNodeId());
-                Assert.assertEquals(new Long(2), wayNode.getSequenceId());
-                Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
-                wayNode = wayNodes.get(2);
-                Assert.assertEquals(nodeIdsArr[2], wayNode.getNodeId());
-                Assert.assertEquals(new Long(3), wayNode.getSequenceId());
-                Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
-                wayNode = wayNodes.get(3);
-                Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
-                Assert.assertEquals(new Long(4), wayNode.getSequenceId());
-                Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
-            }
-            catch (Exception e) {
-                Assert.fail("Error checking ways: " + e.getMessage());
-            }
-
-            try {
-                Assert.assertNotNull(changeset);
-                Assert.assertTrue(changeset.getCreatedAt().before(now));
-                Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
-                Assert.assertEquals(new Integer(4), changeset.getNumChanges());
-                Assert.assertEquals(new Long(userId), changeset.getUserId());
-
-                BoundingBox expandedBounds = new BoundingBox(originalBounds);
-                BoundingBox updatedBounds = new BoundingBox((originalBounds.getMinLon() - .001),
-                        (originalBounds.getMinLat() - .001), originalBounds.getMaxLon(), originalBounds.getMaxLat());
-                expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
-
-                Changeset hootChangeset = new Changeset(mapId, changesetId);
-                BoundingBox changesetBounds = hootChangeset.getBounds();
-                Assert.assertEquals(changesetBounds, expandedBounds);
-            }
-            catch (Exception e) {
-                Assert.fail("Error checking changeset: " + e.getMessage());
-            }
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testUploadCreateElementNoTags() throws Exception {
-        try {
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
-
-            // now update the changeset with new nodes which have no tags, which is allowed
-            Document responseData = null;
-            try {
-                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .post(Entity.entity("<osmChange version=\"0.3\" generator=\"iD\">" +
+            responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
                         "<create>" +
                             "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                 originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
                             "</node>" +
                             "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
-                                originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                 originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                             "</node>" +
-                            "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
+                                "\" version=\"0\" changeset=\"" + changesetId + "\">" +
                             "</node>" +
-                            "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                            "</node>" +
-                            "<node id=\"-5\" lon=\"" + originalBounds.getMinLon() + "\" lat=\""
-                                + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
+                                    "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 3\" v=\"val 3\"/>" + "</node>" + "<node id=\"-5\" lon=\"" + originalBounds.getMinLon() +
+                                   "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 4\" v=\"val 4\"/>" +
                             "</node>" +
                             "<way id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<nd ref=\"-1\"></nd>" +
                                 "<nd ref=\"-2\"></nd>" +
                                 "<nd ref=\"-5\"></nd>" +
+                                "<tag k=\"key 1\" v=\"val 1\"/>" +
+                                "<tag k=\"key 2\" v=\"val 2\"/>" +
                             "</way>" +
                             "<way id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<nd ref=\"-3\"></nd>" + "<nd ref=\"-2\"></nd>" +
                             "</way>" +
                             "<way id=\"-8\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" +
+                                "<tag k=\"key 3\" v=\"val 3\"/>" +
                             "</way>" +
                             "<relation id=\"-9\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<member type=\"node\" role=\"role1\" ref=\"-1\"></member>" +
                                 "<member type=\"way\" role=\"role3\" ref=\"-7\"></member>" +
                                 "<member type=\"way\" role=\"role2\" ref=\"-6\"></member>" +
-                                "<member type=\"node\" ref=\"-3\"></member>" + "</relation>" +
+                                "<member type=\"node\" ref=\"-3\"></member>" + "<tag k=\"key 1\" v=\"val 1\"/>" +
+                            "</relation>" +
                             "<relation id=\"-10\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<member type=\"node\" role=\"role1\" ref=\"-5\"></member>" +
-                                "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>" + "</relation>" +
-                            "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                "<member type=\"way\" role=\"\" ref=\"-7\"></member>" + "" +
+                                "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>" +
+                                "<tag k=\"key 2\" v=\"val 2\"/>" + "<tag k=\"key 3\" v=\"val 3\"/>" +
                             "</relation>" +
+                            "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"way\" role=\"\" ref=\"-7\"></member>" +
+                                "<tag k=\"key 4\" v=\"val 4\"/>" + "</relation>" +
                             "<relation id=\"-12\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<member type=\"node\" role=\"role1\" ref=\"-3\"></member>" +
                             "</relation>" +
-                            "</create>" +
-                            "<modify/>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
+                        "</create>" +
+                        "<modify/>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
-            XPath xpath = XmlUtils.createXPath();
-            Set<Long> nodeIds = new LinkedHashSet<>();
-            Set<Long> wayIds = new LinkedHashSet<>();
-            Set<Long> relationIds = new LinkedHashSet<>();
-            try {
-                NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
-                Assert.assertEquals(5, returnedNodes.getLength());
+        XPath xpath = XmlUtils.createXPath();
+        Set<Long> nodeIds = new LinkedHashSet<>();
+        Set<Long> wayIds = new LinkedHashSet<>();
+        Set<Long> relationIds = new LinkedHashSet<>();
+        try {
+            NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
+            Assert.assertEquals(5, returnedNodes.getLength());
 
-                long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
-                Assert.assertEquals(-1, oldElementId);
-                long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
-                Assert.assertNotSame(-1, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+            long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
+            Assert.assertEquals(-1, oldElementId);
+            long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
+            Assert.assertNotSame(-1, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
-                Assert.assertEquals(-2, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
-                Assert.assertNotSame(-2, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
+            Assert.assertEquals(-2, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
+            Assert.assertNotSame(-2, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
-                Assert.assertEquals(-3, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
-                Assert.assertNotSame(-3, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
+            Assert.assertEquals(-3, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
+            Assert.assertNotSame(-3, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
-                Assert.assertEquals(-4, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
-                Assert.assertNotSame(-4, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
+            Assert.assertEquals(-4, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
+            Assert.assertNotSame(-4, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
-                Assert.assertEquals(-5, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
-                Assert.assertNotSame(-5, newElementId);
-                nodeIds.add(newElementId);
-                Assert.assertEquals(
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
-                        newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
+            Assert.assertEquals(-5, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
+            Assert.assertNotSame(-5, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
 
-                NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
-                Assert.assertEquals(3, returnedWays.getLength());
+            NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
+            Assert.assertEquals(3, returnedWays.getLength());
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
-                Assert.assertEquals(-6, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
-                Assert.assertNotSame(-6, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
+            Assert.assertEquals(-6, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
+            Assert.assertNotSame(-6, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
-                Assert.assertEquals(-7, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
-                Assert.assertNotSame(-7, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
+            Assert.assertEquals(-7, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
+            Assert.assertNotSame(-7, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
-                Assert.assertEquals(-8, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
-                Assert.assertNotSame(-8, newElementId);
-                wayIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
+            Assert.assertEquals(-8, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
+            Assert.assertNotSame(-8, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
 
-                NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
-                Assert.assertEquals(4, returnedRelations.getLength());
+            NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
+            Assert.assertEquals(4, returnedRelations.getLength());
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
-                Assert.assertEquals(-9, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
-                Assert.assertNotSame(-9, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
+            Assert.assertEquals(-9, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
+            Assert.assertNotSame(-9, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
-                Assert.assertEquals(-10, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
-                Assert.assertNotSame(-10, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
+            Assert.assertEquals(-10, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
+            Assert.assertNotSame(-10, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
-                Assert.assertEquals(-11, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
-                Assert.assertNotSame(-11, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
+            Assert.assertEquals(-11, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
+            Assert.assertNotSame(-11, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
 
-                oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
-                Assert.assertEquals(-12, oldElementId);
-                newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
-                Assert.assertNotSame(-12, newElementId);
-                relationIds.add(newElementId);
-                Assert.assertEquals(1,
-                        Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
-            }
-            catch (XPathExpressionException e) {
-                Assert.fail("Error parsing response document: " + e.getMessage());
-            }
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
+            Assert.assertEquals(-12, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
+            Assert.assertNotSame(-12, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
+        }
+        catch (XPathExpressionException e) {
+            Assert.fail("Error parsing response document: " + e.getMessage());
+        }
 
-            // see notes by similar call in testUploadCreate
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, false);
+        // changes have actually occurred with the upload of the
+        // changeset...what's actually being done here is to compare the state of the default test data set
+        // with the dataset we uploaded here, and they should match each other
+        OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testUploadCreateClosedPolygon() throws Exception {
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+        long changesetId = OsmTestUtils.createTestChangeset(null, 0);
+
+        Document responseData = null;
+        try {
+            responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create>" +
+                            "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "</node>" +
+                            "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" + originalBounds.getMaxLat() +
+                                "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "</node>" +
+                            "<node id=\"-3\" lon=\"" + (originalBounds.getMinLon() - .001) + "\" lat=\"" +
+                                (originalBounds.getMinLat() - .001) + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                            "</node>" +
+                            "<way id=\"-1\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" +
+                                "<nd ref=\"-3\"></nd>" + "<nd ref=\"-1\"></nd>" +
+                            "</way>" +
+                        "</create>" +
+                        "<modify/>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
+
+        XPath xpath = XmlUtils.createXPath();
+        List<Long> nodeIds = new ArrayList<>();
+        Set<Long> wayIds = new LinkedHashSet<>();
+        try {
+            NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
+            Assert.assertEquals(3, returnedNodes.getLength());
+
+            long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
+            Assert.assertEquals(-1, oldElementId);
+            long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
+            Assert.assertNotSame(-1, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
+            Assert.assertEquals(-2, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
+            Assert.assertNotSame(-2, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
+            Assert.assertEquals(-3, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
+            Assert.assertNotSame(-3, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
+
+            NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
+            Assert.assertEquals(1, returnedWays.getLength());
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
+            Assert.assertEquals(-1, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
+            Assert.assertNotSame(-1, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
+        }
+        catch (XPathExpressionException e) {
+            Assert.fail("Error parsing response document: " + e.getMessage());
+        }
+
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        QChangesets changesets = QChangesets.changesets;
+
+        Changesets changeset = createQuery(mapId)
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
+
+        try {
+            Map<Long, CurrentNodes> nodes = createQuery(mapId)
+                    .from(currentNodesTbl)
+                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
+            Assert.assertEquals(3, nodes.size());
+
+            CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
+            Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
+            Assert.assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
+            Assert.assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
+            Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
+            Assert.assertEquals(
+                    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                    nodeRecord.getTile());
+            Assert.assertTrue(nodeRecord.getTimestamp().before(now));
+            Assert.assertEquals(new Long(1), nodeRecord.getVersion());
+            Assert.assertEquals(true, nodeRecord.getVisible());
+
+            nodeRecord = nodes.get(nodeIdsArr[1]);
+            Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
+            Assert.assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
+            Assert.assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
+            Assert.assertEquals(nodeIdsArr[1], nodeRecord.getId());
+            Assert.assertEquals(
+                    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                    nodeRecord.getTile());
+            Assert.assertTrue(nodeRecord.getTimestamp().before(now));
+            Assert.assertEquals(new Long(1), nodeRecord.getVersion());
+            Assert.assertEquals(true, nodeRecord.getVisible());
+
+            nodeRecord = nodes.get(nodeIdsArr[2]);
+            Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
+            Assert.assertEquals(new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
+            Assert.assertEquals(new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
+            Assert.assertEquals(nodeIdsArr[2], nodeRecord.getId());
+            Assert.assertEquals(
+                    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                    nodeRecord.getTile());
+            Assert.assertTrue(nodeRecord.getTimestamp().before(now));
+            Assert.assertEquals(new Long(1), nodeRecord.getVersion());
+            Assert.assertEquals(true, nodeRecord.getVisible());
         }
         catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+            Assert.fail("Error checking nodes: " + e.getMessage());
         }
+
+        try {
+            Map<Long, CurrentWays> ways = createQuery(mapId)
+                    .from(currentWaysTbl)
+                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+
+            Assert.assertEquals(1, ways.size());
+            CurrentWays wayRecord = ways.get(wayIdsArr[0]);
+            Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
+            Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
+            Assert.assertTrue(wayRecord.getTimestamp().before(now));
+            Assert.assertEquals(new Long(1), wayRecord.getVersion());
+            Assert.assertTrue(wayRecord.getVisible());
+
+            List<CurrentWayNodes> wayNodes = createQuery(mapId)
+                    .select(currentWayNodesTbl)
+                    .from(currentWayNodesTbl)
+                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .fetch();
+
+            Assert.assertEquals(4, wayNodes.size());
+            CurrentWayNodes wayNode = wayNodes.get(0);
+            Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
+            Assert.assertEquals(new Long(1), wayNode.getSequenceId());
+            Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+            wayNode = wayNodes.get(1);
+            Assert.assertEquals(nodeIdsArr[1], wayNode.getNodeId());
+            Assert.assertEquals(new Long(2), wayNode.getSequenceId());
+            Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+            wayNode = wayNodes.get(2);
+            Assert.assertEquals(nodeIdsArr[2], wayNode.getNodeId());
+            Assert.assertEquals(new Long(3), wayNode.getSequenceId());
+            Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+            wayNode = wayNodes.get(3);
+            Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
+            Assert.assertEquals(new Long(4), wayNode.getSequenceId());
+            Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+        }
+        catch (Exception e) {
+            Assert.fail("Error checking ways: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertNotNull(changeset);
+            Assert.assertTrue(changeset.getCreatedAt().before(now));
+            Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
+            Assert.assertEquals(new Integer(4), changeset.getNumChanges());
+            Assert.assertEquals(new Long(userId), changeset.getUserId());
+
+            BoundingBox expandedBounds = new BoundingBox(originalBounds);
+            BoundingBox updatedBounds = new BoundingBox((originalBounds.getMinLon() - .001),
+                    (originalBounds.getMinLat() - .001), originalBounds.getMaxLon(), originalBounds.getMaxLat());
+            expandedBounds.expand(updatedBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
+
+            Changeset hootChangeset = new Changeset(mapId, changesetId);
+            BoundingBox changesetBounds = hootChangeset.getBounds();
+            Assert.assertEquals(changesetBounds, expandedBounds);
+        }
+        catch (Exception e) {
+            Assert.fail("Error checking changeset: " + e.getMessage());
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testUploadCreateElementNoTags() throws Exception {
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
+        long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+
+        // now update the changeset with new nodes which have no tags, which is allowed
+        Document responseData = null;
+        try {
+            responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity("<osmChange version=\"0.3\" generator=\"iD\">" +
+                    "<create>" +
+                        "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                            originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                        "</node>" +
+                        "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                            originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                        "</node>" +
+                        "<node id=\"-3\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                            originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                        "</node>" +
+                        "<node id=\"-4\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                            originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                        "</node>" +
+                        "<node id=\"-5\" lon=\"" + originalBounds.getMinLon() + "\" lat=\""
+                            + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                        "</node>" +
+                        "<way id=\"-6\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<nd ref=\"-1\"></nd>" +
+                            "<nd ref=\"-2\"></nd>" +
+                            "<nd ref=\"-5\"></nd>" +
+                        "</way>" +
+                        "<way id=\"-7\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<nd ref=\"-3\"></nd>" + "<nd ref=\"-2\"></nd>" +
+                        "</way>" +
+                        "<way id=\"-8\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<nd ref=\"-1\"></nd>" + "<nd ref=\"-2\"></nd>" +
+                        "</way>" +
+                        "<relation id=\"-9\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"-1\"></member>" +
+                            "<member type=\"way\" role=\"role3\" ref=\"-7\"></member>" +
+                            "<member type=\"way\" role=\"role2\" ref=\"-6\"></member>" +
+                            "<member type=\"node\" ref=\"-3\"></member>" + "</relation>" +
+                        "<relation id=\"-10\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"-5\"></member>" +
+                            "<member type=\"relation\" role=\"role1\" ref=\"-9\"></member>" + "</relation>" +
+                        "<relation id=\"-11\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"way\" role=\"\" ref=\"-7\"></member>" + "" +
+                        "</relation>" +
+                        "<relation id=\"-12\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"-3\"></member>" +
+                        "</relation>" +
+                        "</create>" +
+                        "<modify/>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
+
+        XPath xpath = XmlUtils.createXPath();
+        Set<Long> nodeIds = new LinkedHashSet<>();
+        Set<Long> wayIds = new LinkedHashSet<>();
+        Set<Long> relationIds = new LinkedHashSet<>();
+        try {
+            NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
+            Assert.assertEquals(5, returnedNodes.getLength());
+
+            long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
+            Assert.assertEquals(-1, oldElementId);
+            long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
+            Assert.assertNotSame(-1, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
+            Assert.assertEquals(-2, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
+            Assert.assertNotSame(-2, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
+            Assert.assertEquals(-3, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
+            Assert.assertNotSame(-3, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
+            Assert.assertEquals(-4, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
+            Assert.assertNotSame(-4, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
+            Assert.assertEquals(-5, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
+            Assert.assertNotSame(-5, newElementId);
+            nodeIds.add(newElementId);
+            Assert.assertEquals(
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
+                    newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
+
+            NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
+            Assert.assertEquals(3, returnedWays.getLength());
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
+            Assert.assertEquals(-6, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
+            Assert.assertNotSame(-6, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
+            Assert.assertEquals(-7, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
+            Assert.assertNotSame(-7, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
+            Assert.assertEquals(-8, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
+            Assert.assertNotSame(-8, newElementId);
+            wayIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
+
+            NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
+            Assert.assertEquals(4, returnedRelations.getLength());
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
+            Assert.assertEquals(-9, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
+            Assert.assertNotSame(-9, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
+            Assert.assertEquals(-10, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
+            Assert.assertNotSame(-10, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
+            Assert.assertEquals(-11, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
+            Assert.assertNotSame(-11, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
+
+            oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
+            Assert.assertEquals(-12, oldElementId);
+            newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
+            Assert.assertNotSame(-12, newElementId);
+            relationIds.add(newElementId);
+            Assert.assertEquals(1,
+                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
+        }
+        catch (XPathExpressionException e) {
+            Assert.fail("Error parsing response document: " + e.getMessage());
+        }
+
+        // see notes by similar call in testUploadCreate
+        OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, false);
     }
 
     @Test(expected = WebApplicationException.class)
@@ -757,10 +724,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
             Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -801,10 +764,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -842,10 +801,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
             Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -929,10 +884,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -976,10 +927,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
             // make sure the new nodes weren't created
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -1035,10 +982,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
 
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -1559,7 +1502,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
         invisibleRelation.setVisible(false);
 
-        int success = (int) createQuery(mapId).update(currentRelationsTbl)
+        long success = createQuery(mapId).update(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(invisibleRelation.getId()))
                 .set(currentRelationsTbl.visible, false)
                 .execute();
@@ -1721,10 +1664,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -1766,10 +1705,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Invalid OSM element ID for create"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -1814,10 +1749,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -1858,10 +1789,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -1907,10 +1834,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -1951,10 +1874,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -1999,10 +1918,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -2088,10 +2003,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -2132,10 +2043,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -2180,10 +2087,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -2222,10 +2125,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -2270,10 +2169,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -2315,10 +2210,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -2358,10 +2249,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -2406,10 +2293,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -2449,10 +2332,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }

@@ -33,13 +33,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -61,11 +59,6 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
 
     public UserResourceTest() {}
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(UserResource.class, UserDetailsResource.class);
-    }
 
     @Test
     @Category(UnitTest.class)

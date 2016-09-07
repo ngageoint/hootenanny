@@ -26,54 +26,122 @@
  */
 package hoot.services.osm;
 
+import javax.ws.rs.core.Application;
+
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import hoot.services.ApplicationContextUtils;
+import hoot.services.HootServicesJerseyApplication;
+import hoot.services.HootServicesSpringConfig;
 import hoot.services.utils.MapUtils;
 
 
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
+@Rollback
 public abstract class OsmResourceTestAbstract extends JerseyTest {
     private static final Logger logger = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
 
-    protected long userId = -1;
-    protected long mapId = -1;
+    protected static long userId = -1;
+    protected static long mapId = -1;
 
     public OsmResourceTestAbstract(String... controllerGroup) {
         super();
     }
 
     @BeforeClass
-    public static void beforeClass() throws Exception {}
+    public static void beforeClass() throws Exception {
+        AnnotationConfigWebApplicationContext appContext = null;
+        ApplicationContextUtils acu = null;
 
-    @Before
-    public void beforeTest() throws Exception {
         try {
+            appContext = new AnnotationConfigWebApplicationContext();
+            appContext.register(HootServicesSpringConfig.class);
+            appContext.refresh();
+
+            acu = new ApplicationContextUtils();
+            acu.setApplicationContext(appContext);
+
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            TransactionStatus ts = txManager.getTransaction(null);
+
             userId = MapUtils.insertUser();
             mapId = MapUtils.insertMap(userId);
             OsmTestUtils.setUserId(userId);
             OsmTestUtils.setMapId(mapId);
-        }
-        catch (Exception e) {
-            logger.error("{} ", e.getMessage());
-            throw e;
-        }
-    }
 
-    @After
-    public void afterTest() throws Exception {
-        // no need to clear out each map, if we're clearing the whole db out before each run
-        MapUtils.deleteOSMRecord(mapId);
+            txManager.commit(ts);
+        }
+        finally {
+            if (appContext != null) {
+                appContext.destroy();
+            }
+            if (acu != null) {
+                acu.setApplicationContext(null);
+            }
+        }
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
+        AnnotationConfigWebApplicationContext appContext = null;
+        ApplicationContextUtils acu = null;
+
+        try {
+            appContext = new AnnotationConfigWebApplicationContext();
+            appContext.register(HootServicesSpringConfig.class);
+            appContext.refresh();
+
+            acu = new ApplicationContextUtils();
+            acu.setApplicationContext(appContext);
+
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            TransactionStatus ts = txManager.getTransaction(null);
+
+            MapUtils.deleteOSMRecord(mapId);
+
+            appContext.destroy();
+            acu.setApplicationContext(null);
+            txManager.commit(ts);
+        }
+        finally {
+            if (appContext != null) {
+                appContext.destroy();
+            }
+            if (acu != null) {
+                acu.setApplicationContext(null);
+            }
+        }
+    }
+
+    @Before
+    public void beforeTest() throws Exception {}
+
+    @After
+    public void afterTest() throws Exception {}
+
+    @Override
+    protected Application configure() {
+        return new HootServicesJerseyApplication();
     }
 }

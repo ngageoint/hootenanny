@@ -29,10 +29,10 @@ package hoot.services.osm;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAX_RECORD_BATCH_SIZE;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +51,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.w3c.dom.Document;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLExpressions;
 
 import hoot.services.geo.BoundingBox;
@@ -63,9 +64,7 @@ import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
@@ -518,7 +517,6 @@ public class OsmTestUtils {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         try {
-            QCurrentWays currentWays = QCurrentWays.currentWays;
             Map<Long, CurrentWays> ways = createQuery(getMapId())
                     .from(currentWays)
                     .where((currentWays.changesetId.eq(changesetId)))
@@ -644,8 +642,6 @@ public class OsmTestUtils {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         try {
-            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-
             Map<Long, CurrentRelations> relations = createQuery(getMapId())
                     .from(currentRelations)
                     .where((currentRelations.changesetId.eq(changesetId)))
@@ -816,8 +812,6 @@ public class OsmTestUtils {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         try {
-            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-
             Map<Long, CurrentRelations> relations =
                     createQuery(getMapId())
                             .from(currentRelations)
@@ -1201,8 +1195,6 @@ public class OsmTestUtils {
      */
     public static void insertNewWay(long wayId, long changesetId, long mapId,
             List<Long> nodeIds, Map<String, String> tags) throws Exception {
-        Connection dbConn = DbUtils.createConnection();
-
         CurrentWays wayRecord = new CurrentWays();
         wayRecord.setChangesetId(changesetId);
         wayRecord.setId(wayId);
@@ -1215,48 +1207,13 @@ public class OsmTestUtils {
             wayRecord.setTags(tags);
         }
 
-        String strKv = "";
+        createQuery(mapId).insert(currentWays)
+                .columns(currentWays.id, currentWays.changesetId, currentWays.timestamp,
+                         currentWays.visible, currentWays.version, currentWays.tags)
+                .values(wayId, changesetId, Expressions.stringTemplate("CURRENT_TIMESTAMP"), true, 1, tags)
+                .execute();
 
-        if (tags != null) {
-            for (Object o : tags.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
-                String key = "\"" + pairs.getKey() + "\"";
-                String val = "\"" + pairs.getValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-
-                strKv += key + "=>" + val;
-            }
-        }
-        String strTags = "'";
-        strTags += strKv;
-        strTags += "'";
-
-        Statement stmt = null;
-        try {
-            String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-            Class.forName(POSTGRESQL_DRIVER);
-
-            stmt = dbConn.createStatement();
-
-            String sql = "INSERT INTO current_ways_" + mapId + "("
-                    + "            id, changeset_id, \"timestamp\", visible, version, tags)" + " VALUES(" + wayId + ","
-                    + changesetId + "," + "CURRENT_TIMESTAMP" + "," + "true" + "," + "1" + "," + strTags +
-
-                    ")";
-
-            stmt.executeUpdate(sql);
-            addWayNodes(mapId, new Way(mapId, wayRecord), nodeIds);
-        }
-        catch (Exception e) {
-            throw new Exception("Error inserting node.", e);
-        }
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
+        addWayNodes(mapId, new Way(mapId, wayRecord), nodeIds);
     }
 
     /*
@@ -1395,11 +1352,11 @@ public class OsmTestUtils {
      */
     public static void insertNewRelation(long relId, long changesetId, long mapId,
             List<RelationMember> members, Map<String, String> tags) throws Exception {
-        Connection dbConn = DbUtils.createConnection();
 
         CurrentRelations relationRecord = new CurrentRelations();
         relationRecord.setChangesetId(changesetId);
         relationRecord.setId(relId);
+
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         relationRecord.setTimestamp(now);
         relationRecord.setVersion(1L);
@@ -1408,48 +1365,13 @@ public class OsmTestUtils {
             relationRecord.setTags(tags);
         }
 
-        String strKv = "";
-        if (tags != null) {
-            for (Object o : tags.entrySet()) {
-                Map.Entry pairs = (Map.Entry) o;
-                String key = "\"" + pairs.getKey() + "\"";
-                String val = "\"" + pairs.getValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
+        createQuery(mapId).insert(currentRelations)
+                .columns(currentRelations.id, currentRelations.changesetId, currentRelations.timestamp,
+                        currentRelations.visible, currentRelations.version, currentRelations.tags)
+                .values(relId, changesetId, Expressions.stringTemplate("CURRENT_TIMESTAMP"), true, 1, tags)
+                .execute();
 
-                strKv += key + "=>" + val;
-            }
-        }
-        String strTags = "'";
-        strTags += strKv;
-        strTags += "'";
-
-        Statement stmt = null;
-        try {
-            String POSTGRESQL_DRIVER = "org.postgresql.Driver";
-            Class.forName(POSTGRESQL_DRIVER);
-
-            stmt = dbConn.createStatement();
-
-            String sql = "INSERT INTO current_relations_" + mapId + "(\n"
-                    + "            id, changeset_id, \"timestamp\", visible, version, tags)\n" + " VALUES(" + relId
-                    + "," + changesetId + "," + "CURRENT_TIMESTAMP" + "," + "true" + "," + "1" + "," + strTags +
-
-                    ")";
-
-            stmt.executeUpdate(sql);
-            addRelationMembers(mapId, new Relation(mapId, relationRecord), members);
-        }
-        catch (Exception e) {
-            throw new Exception("Error inserting node.", e);
-        }
-
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
+        addRelationMembers(mapId, new Relation(mapId, relationRecord), members);
     }
 
     /**

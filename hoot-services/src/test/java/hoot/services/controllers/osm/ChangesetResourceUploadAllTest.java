@@ -42,19 +42,15 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -86,8 +82,6 @@ import hoot.services.utils.XmlUtils;
 
 @Ignore
 public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
-    private static final Logger logger = LoggerFactory.getLogger(ChangesetResourceUploadAllTest.class);
-
     private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
@@ -95,11 +89,6 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
     public ChangesetResourceUploadAllTest() {}
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ChangesetResource.class);
-    }
 
     /*
      * This test tests basically everything possible in a valid changeset upload
@@ -272,7 +261,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
 
         // Log responseData.  For debugging purposes...
         String xml = XmlDocumentBuilder.toString(responseData);
-        logger.info(xml);
+        //logger.info(xml);
 
         Assert.assertNotNull(responseData);
 

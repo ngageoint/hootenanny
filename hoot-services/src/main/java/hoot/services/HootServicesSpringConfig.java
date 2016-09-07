@@ -24,7 +24,7 @@ public class HootServicesSpringConfig {
     }
 
     /*
-        TODO: Don't forget to externalize the DB connection properties!!!
+     *   TODO: Don't forget to externalize the DB connection properties!!!
      */
     @Bean(name = "dataSource")
     public DataSource dataSource() {
@@ -39,7 +39,7 @@ public class HootServicesSpringConfig {
         return dataSource;
     }
 
-    @Bean
+    @Bean(name = "transactionManager")
     @Autowired
     @DependsOn("dataSource")
     public PlatformTransactionManager transactionManager(DataSource dataSource) {

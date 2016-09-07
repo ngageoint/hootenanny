@@ -31,8 +31,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 import java.util.HashMap;
 
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QCurrentNodes;
@@ -47,8 +45,6 @@ import hoot.services.utils.MapUtils;
  * writing. Its not meant to be run as part of the test suite.
  */
 public class ChangesetDbWriterTest {
-    private static final Logger logger = LoggerFactory.getLogger(ChangesetDbWriterTest.class);
-
     private static final QCurrentNodes nodes = QCurrentNodes.currentNodes;
 
     private static final int NUM_NODES = 1000;
@@ -77,9 +73,7 @@ public class ChangesetDbWriterTest {
         }
         changeset += "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>";
 
-        logger.info("Create elements test start.");
         /* final Document response = */new ChangesetDbWriter().write(mapId, changesetId, changeset);
-        logger.info("Create elements test end.");
 
         Assert.assertEquals(NUM_NODES,
                 (int) createQuery(mapId)

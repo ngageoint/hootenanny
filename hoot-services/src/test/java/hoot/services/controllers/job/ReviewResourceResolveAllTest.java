@@ -32,11 +32,9 @@ import java.sql.Statement;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -52,11 +50,6 @@ import hoot.services.utils.RandomNumberGenerator;
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
     public ReviewResourceResolveAllTest() {
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ReviewResource.class);
     }
 
     @Test

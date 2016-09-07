@@ -26,8 +26,6 @@
  */
 package hoot.services.utils;
 
-import static hoot.services.HootProperties.DB_NAME;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,7 +70,7 @@ public class DbUtilsTest {
             Assert.assertEquals(v2, checkTags.get(k2));
 
             // Test tag append
-            Map<String, String> tagsAppend = new HashMap<String, String>();
+            Map<String, String> tagsAppend = new HashMap<>();
             String k3 = "key";
             String v3 = "value";
             tagsAppend.put(k3, v3);
@@ -216,7 +214,7 @@ public class DbUtilsTest {
         String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
                 + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
 
-        createTable(createTblSql, "wfdbtest");
+        createTable(createTblSql);
 
         List<String> tbls = DbUtils.getTablesList("test");
         Assert.assertTrue(!tbls.isEmpty());
@@ -232,7 +230,7 @@ public class DbUtilsTest {
         Assert.assertTrue(!exists);
     }
 
-    static void createTable(String createTblSql, String dbname) throws SQLException {
+    private static void createTable(String createTblSql) throws SQLException {
         try (Connection conn = DbUtils.createConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
                 stmt.executeUpdate();
@@ -243,8 +241,6 @@ public class DbUtilsTest {
     @Test
     @Category(UnitTest.class)
     public void createMap() throws Exception {
-        String dbname = DB_NAME;
-
         try {
             try {
                 // just in case the tables exist.

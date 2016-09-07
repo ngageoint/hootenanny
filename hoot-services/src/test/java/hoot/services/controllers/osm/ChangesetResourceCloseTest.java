@@ -40,7 +40,6 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -51,18 +50,9 @@ import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import hoot.services.HootServicesJerseyApplication;
-import hoot.services.HootServicesSpringConfig;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
@@ -87,12 +77,7 @@ import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = HootServicesSpringConfig.class, loader = AnnotationConfigContextLoader.class)
-@Transactional
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
-    private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCloseTest.class);
-
     private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
@@ -100,11 +85,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
     public ChangesetResourceCloseTest() {}
-
-    @Override
-    protected Application configure() {
-        return new HootServicesJerseyApplication();
-    }
 
     @Test
     @Category(UnitTest.class)
@@ -128,7 +108,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }
@@ -258,7 +237,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -484,7 +462,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -560,7 +537,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -1024,7 +1000,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -1100,7 +1075,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -1189,7 +1163,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             }
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
         finally {
@@ -1214,7 +1187,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Assert.fail("Unexpected response: " + e.getResponse());
         }
         catch (Exception e) {
-            log.error(e.getMessage());
             throw e;
         }
     }

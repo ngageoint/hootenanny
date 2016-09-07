@@ -33,16 +33,12 @@ import java.util.Calendar;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.querydsl.sql.SQLExpressions;
 
@@ -55,39 +51,24 @@ import hoot.services.osm.OsmTestUtils;
 
 
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
-    private static final Logger logger = LoggerFactory.getLogger(ChangesetResourceCreateTest.class);
-
-    public ChangesetResourceCreateTest() {
-        super();
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ChangesetResource.class);
-    }
+    public ChangesetResourceCreateTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testCreatePreflight() throws Exception {
+        String responseData = null;
         try {
-            String responseData = null;
-            try {
-                responseData = target("api/0.6/changeset/create")
-                        .queryParam("mapId", "1")
-                        //.type(MediaType.APPLICATION_FORM_URLENCODED)
-                        .request(MediaType.TEXT_PLAIN)
-                        .options(String.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
+            responseData = target("api/0.6/changeset/create")
+                    .queryParam("mapId", "1")
+                    //.type(MediaType.APPLICATION_FORM_URLENCODED)
+                    .request(MediaType.TEXT_PLAIN)
+                    .options(String.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
 
-            Assert.assertEquals("", responseData);
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
+        Assert.assertEquals("", responseData);
     }
 
     @Test
@@ -114,10 +95,6 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Assert.fail("Unexpected response: " + e.getResponse());
         }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test
@@ -141,12 +118,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
         }
         catch (WebApplicationException e) {
-            Response r = e.getResponse();
             Assert.fail("Unexpected response: " + e.getResponse());
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
         }
     }
 
@@ -170,14 +142,12 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         QMaps maps = QMaps.maps;
         createQuery(mapId).insert(maps).populate(map).execute();
 
-        String mapName = null;
-
         // Create a changeset, providing a map name that isn't unique. A failure
         // should occur and no data in system should be modified.
         try {
             // try to create a changeset from a map name that is linked to multiple map IDs
-            mapName = "map-with-id-" + mapId;
-                target("api/0.6/changeset/create")
+            String mapName = "map-with-id-" + mapId;
+            target("api/0.6/changeset/create")
                     .queryParam("mapId", mapName)
                     .request(MediaType.TEXT_PLAIN)
                     .put(Entity.entity(

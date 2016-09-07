@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.TransformerException;
@@ -42,18 +41,15 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
@@ -63,14 +59,7 @@ import hoot.services.utils.XmlUtils;
 
 public class ElementResourceTest extends OsmResourceTestAbstract {
 
-    private static final Logger log = LoggerFactory.getLogger(ElementResourceTest.class);
-
     public ElementResourceTest() {}
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ElementResource.class);
-    }
 
     private static void verifyFirstNodeWasReturned(Document responseData, String id, long changesetId,
             BoundingBox bounds) throws Exception {

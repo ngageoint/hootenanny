@@ -1,6 +1,5 @@
 package hoot.services.utils;
 
-import static hoot.services.HootProperties.DB_NAME;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -10,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-
-import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
@@ -37,11 +34,8 @@ public final class MapUtils {
      *             schema in liquibase, it will never be picked up unless this
      *             static code is also changed. See r6777
      */
-    @Transactional()
     public static void createMap(long mapId) {
         try {
-            String dbname = DB_NAME;
-
             Connection connection = createQuery().getConnection();
 
             // changesets
@@ -55,7 +49,7 @@ public final class MapUtils {
                     + " REFERENCES users (id) MATCH SIMPLE " + " ON UPDATE NO ACTION ON DELETE NO ACTION "
                     + " ) WITH ( OIDS=FALSE );";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
 
             // current_nodes
             createTblSql = "CREATE TABLE current_nodes_" + mapId + "(id bigserial NOT NULL, "
@@ -67,7 +61,7 @@ public final class MapUtils {
                     + "_changeset_id_fkey FOREIGN KEY (changeset_id) " + " REFERENCES changesets_" + mapId
                     + " (id) MATCH SIMPLE " + " ON UPDATE NO ACTION ON DELETE NO ACTION " + " ) WITH ( OIDS=FALSE );";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
 
             // current_relation_members
             createTblSql = "CREATE TABLE current_relation_members_" + mapId + "(relation_id bigint NOT NULL, "
@@ -77,7 +71,7 @@ public final class MapUtils {
                     + "_pkey PRIMARY KEY (relation_id , member_type , member_id , member_role , sequence_id ) "
                     + " ) WITH ( OIDS=FALSE );";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
 
             // current_relations
             createTblSql = "CREATE TABLE current_relations_" + mapId + "(" + "  id bigserial NOT NULL,"
@@ -89,7 +83,7 @@ public final class MapUtils {
                     + "      REFERENCES changesets_" + mapId + " (id) MATCH SIMPLE"
                     + "      ON UPDATE NO ACTION ON DELETE NO ACTION" + ")" + "WITH (" + "  OIDS=FALSE" + ");";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
 
             // current_way_nodes
             createTblSql = "CREATE TABLE current_way_nodes_" + mapId + "(" + "  way_id bigint NOT NULL,"
@@ -97,7 +91,7 @@ public final class MapUtils {
                     + mapId + "_nodes_pkey PRIMARY KEY (way_id , sequence_id )" + ")" + "WITH (" + "  OIDS=FALSE"
                     + ");";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
 
             // current_ways
             createTblSql = "CREATE TABLE current_ways_" + mapId + "(" + "  id bigserial NOT NULL,"
@@ -109,7 +103,7 @@ public final class MapUtils {
                     + "      REFERENCES changesets_" + mapId + " (id) MATCH SIMPLE"
                     + "      ON UPDATE NO ACTION ON DELETE NO ACTION" + ")" + "WITH (" + "  OIDS=FALSE" + ");";
 
-            createTable(createTblSql, dbname, connection);
+            createTable(createTblSql, connection);
         }
         catch (SQLException e) {
             throw new RuntimeException("Error creating map with id = " + mapId, e);
@@ -184,7 +178,7 @@ public final class MapUtils {
         createQuery().delete(maps).where(maps.id.eq(mapId)).execute();
     }
 
-    private static void createTable(String createTblSql, String dbname, Connection conn) throws SQLException {
+    private static void createTable(String createTblSql, Connection conn) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
             stmt.executeUpdate();
         }
