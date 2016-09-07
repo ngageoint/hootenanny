@@ -362,8 +362,6 @@ mgcp = {
             // Find an FCODE
             if (col in mgcp.fcodeLookup['F_CODE'])
             {
-                // Debug
-                // print('untangle: FCODE = ' + col);
                 attrs.F_CODE = col;
                 delete attrs[col];
 
@@ -374,27 +372,11 @@ mgcp = {
             if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
 
             // Look for Attributes
-            if (col in mgcp.rules.numBiased)
-            {
-                // Debug
-                //print('untangle: numBiased = ' + col);
-                continue;
-            }
+            if (col in mgcp.rules.numBiased) continue;
 
-            if (col in mgcp.rules.txtBiased)
-            {
-                // Debug
-                //print('untangle: txtBiased = ' + col);
-                continue;
-            }
+            if (col in mgcp.rules.txtBiased) continue;
 
-
-            if (col in mgcp.lookup)
-            {
-                // Debug
-                //print('untangle: Lookup = ' + col);
-                continue;
-            }
+            if (col in mgcp.lookup) continue;
 
             // Drop the "GEOM" attribute
             if (col == 'GEOM')
@@ -405,8 +387,6 @@ mgcp = {
 
             // Not an Attribute so push it to the tags object
             tags[col] = attrs[col];
-            // Debug
-            //print('untangle: to tags ' + col + ' = ' + attrs[col]);
             delete attrs[col];
         }
 
@@ -437,9 +417,6 @@ mgcp = {
 
         for (var col in attrs)
         {
-            // Before the cleanout, make sure that we just have
-
-
             // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
@@ -1395,7 +1372,7 @@ mgcp = {
         }
 
         // Untangle MGCP attributes & OSM tags.
-        // NOTE: This could get wrapped with an ENV variable so it only gets called during importance
+        // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         mgcp.untangleAttributes(attrs, tags);
 
         // Debug:
