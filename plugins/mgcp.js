@@ -329,6 +329,90 @@ mgcp = {
 
 
     // ##### Start of the xxToOsmxx Block #####
+
+    // Untangle MGCP attributes & OSM tags.
+    // Some people have been editing OSM files and inserting MGCP attributes
+    untangleAttributes: function (attrs, tags)
+    {
+        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // We need to unpack this before we can do anything.
+
+        // 392103533
+
+        // other_tags: :"ED010"=>"marsh","GEOM"=>"GM_Surface","SDP"=>"Digital_Globe","SDV"=>"2016-07-20","SRT"=>"30","TID"=>"1001","security:classification"=>"UNCLASSIFIED","source:date"=>"2016-08-09","wetland"=>"marsh":
+        if (attrs.other_tags)
+        {
+            var tList = attrs.other_tags.split('","');
+
+            delete attrs.other_tags;
+
+            for (var val in tList)
+            {
+                vList = tList[val].split('"=>"');
+
+                attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+                // Debug
+                //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+            }
+        }
+
+        for (var col in attrs)
+        {
+            // Find an FCODE
+            if (col in mgcp.fcodeLookup['F_CODE'])
+            {
+                // Debug
+                // print('untangle: FCODE = ' + col);
+                attrs.F_CODE = col;
+                delete attrs[col];
+
+                continue;
+            }
+
+            // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
+            if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
+
+            // Look for Attributes
+            if (col in mgcp.rules.numBiased)
+            {
+                // Debug
+                //print('untangle: numBiased = ' + col);
+                continue;
+            }
+
+            if (col in mgcp.rules.txtBiased)
+            {
+                // Debug
+                //print('untangle: txtBiased = ' + col);
+                continue;
+            }
+
+
+            if (col in mgcp.lookup)
+            {
+                // Debug
+                //print('untangle: Lookup = ' + col);
+                continue;
+            }
+
+            // Drop the "GEOM" attribute
+            if (col == 'GEOM')
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            // Not an Attribute so push it to the tags object
+            tags[col] = attrs[col];
+            // Debug
+            //print('untangle: to tags ' + col + ' = ' + attrs[col]);
+            delete attrs[col];
+        }
+
+    }, // End attribute attributeUntangle
+
+
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // Drop the FCSUBTYPE since we don't use it
@@ -351,9 +435,11 @@ mgcp = {
         // Unit conversion. Some attributes are in centimetres, others in decimetres
         // var unitList = { 'GAW':100, 'HCA':10, 'WD1':10, 'WD2':10, 'WD3':10, 'WT2':10 };
 
-        // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
         {
+            // Before the cleanout, make sure that we just have
+
+
             // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
@@ -1306,6 +1392,20 @@ mgcp = {
             mgcp.rules.one2one.push.apply(mgcp.rules.one2one,mgcp.rules.one2oneIn);
 
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
+        }
+
+        // Untangle MGCP attributes & OSM tags.
+        // NOTE: This could get wrapped with an ENV variable so it only gets called during importance
+        mgcp.untangleAttributes(attrs, tags);
+
+        // Debug:
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }
 
         // pre processing
