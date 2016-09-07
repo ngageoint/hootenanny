@@ -75,11 +75,7 @@ public class CapabilitiesResource {
 
         try {
             logger.info("Retrieving capabilities...");
-
             responseDoc = writeResponse();
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String message = "Error retrieving capabilities: " + e.getMessage();

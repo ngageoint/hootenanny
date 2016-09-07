@@ -149,8 +149,7 @@ public class ChangesetDbWriter {
      */
     private static long getNewElementId(long oldElementId, long nextElementId, EntityChangeType entityChangeType,
             int elementCtr) {
-        long newElementId = (entityChangeType == EntityChangeType.CREATE) ? (nextElementId + elementCtr) : oldElementId;
-        return newElementId;
+        return (entityChangeType == EntityChangeType.CREATE) ? (nextElementId + elementCtr) : oldElementId;
     }
 
     private long getOldElementId(NamedNodeMap nodeAttributes, EntityChangeType entityChangeType,
