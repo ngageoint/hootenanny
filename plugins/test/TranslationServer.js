@@ -7,6 +7,7 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     describe('translate', function() {
+        //MGCP
         it('should translate OSMtoRaw', function() {
             var data = server.translate({
                 tags: {
@@ -76,6 +77,76 @@ describe('TranslationServer', function () {
             assert.equal(data.highway, 'road');
             assert.equal(data.name, '23RD ST NW');
         });
+
+        //TDSv61
+        it('should translate OSMtoRaw', function() {
+            var data = server.translate({
+                tags: {
+                    'error:circular': '5',
+                    'highway': 'road',
+                    'hoot:status': '1',
+                    'name': '23RD ST NW',
+                    'hoot': 'DcGisRoadsCucumber'
+                },
+                to: 'TDSv61',
+                geom: 'Line'
+            });
+            assert.equal(data[0].attrs.NAM, '23RD ST NW');
+            assert.equal(data[0].attrs.FCODE, 'AP030');
+            assert.equal(data[0].attrs.TXT, '<OSM>{"highway":"road"}</OSM>');
+        });
+
+        it('should translate OSMtoEnglish', function() {
+            var data = server.translate({
+                tags: {
+                    'error:circular': '5',
+                    'highway': 'road',
+                    'hoot:status': '1',
+                    'name': '23RD ST NW',
+                    'hoot': 'DcGisRoadsCucumber'
+                },
+                to: 'TDSv61',
+                geom: 'Line',
+                english: true
+            });
+            assert.equal(data.attrs['Geographic Name Information : Full Name'], '23RD ST NW');
+            assert.equal(data.attrs['Feature Code'], 'AP030:Road Line Feature');
+            assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
+        });
+
+        it('should translate EnglishtoOSM', function() {
+            var data = server.translate({
+                tags: {
+                    //'error:circular': '5',
+                    'Feature Code': 'AP030:Road Line Feature',
+                    //'hoot:status': '1',
+                    'Geographic Name Information : Full Name': '23RD ST NW'
+                    //'hoot': 'DcGisRoadsCucumber'
+                },
+                from: 'TDSv61',
+                geom: 'Line',
+                english: true
+            });
+            assert.equal(data.attrs.highway, 'road');
+            assert.equal(data.attrs.name, '23RD ST NW');
+        });
+
+        it('should translate RawtoOSM', function() {
+            var data = server.translate({
+                tags: {
+                    'error:circular': '5',
+                    'FCODE': 'AP030',
+                    'hoot:status': '1',
+                    'ZI005_FNA': '23RD ST NW',
+                    'hoot': 'DcGisRoadsCucumber'
+                },
+                from: 'TDSv61',
+                geom: 'Line'
+            });
+            assert.equal(data.highway, 'road');
+            assert.equal(data.name, '23RD ST NW');
+        });
+
     });
 
     describe('searchSchema', function() {
