@@ -42,18 +42,29 @@ import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.HootServicesSpringTestConfig;
 import hoot.services.UnitTest;
 import hoot.services.job.JobStatusManager;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
+@Ignore
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
 public class JobResourceTest {
     private static final File homeFolder;
     private static final String original_HOME_FOLDER;
@@ -74,6 +85,7 @@ public class JobResourceTest {
             throw new RuntimeException(e);
         }
     }
+
     @BeforeClass
     public static void beforeClass() throws Exception {
     }

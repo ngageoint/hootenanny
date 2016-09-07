@@ -249,7 +249,7 @@ public class ChangesetDbWriter {
                     .select(prototypeElement.getElementIdField())
                     .from(prototypeElement.getElementTable())
                     .orderBy(prototypeElement.getElementIdField().desc())
-                    .fetchOne();
+                    .fetchFirst();
 
             nextElementId = highestElementId + 1;
         }

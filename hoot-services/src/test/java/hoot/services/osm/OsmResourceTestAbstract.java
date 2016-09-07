@@ -26,8 +26,14 @@
  */
 package hoot.services.osm;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.core.Application;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,7 +53,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.HootServicesJerseyApplication;
-import hoot.services.HootServicesSpringConfig;
+import hoot.services.HootServicesSpringTestConfig;
 import hoot.services.utils.MapUtils;
 
 
@@ -56,7 +62,7 @@ import hoot.services.utils.MapUtils;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = HootServicesSpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback
 public abstract class OsmResourceTestAbstract extends JerseyTest {
@@ -65,20 +71,23 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     protected static long userId = -1;
     protected static long mapId = -1;
 
+    private static AnnotationConfigWebApplicationContext appContext;
+
+    static {
+        appContext = new AnnotationConfigWebApplicationContext();
+        appContext.register(HootServicesSpringTestConfig.class);
+        appContext.refresh();
+    }
+
     public OsmResourceTestAbstract(String... controllerGroup) {
         super();
     }
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        AnnotationConfigWebApplicationContext appContext = null;
         ApplicationContextUtils acu = null;
 
         try {
-            appContext = new AnnotationConfigWebApplicationContext();
-            appContext.register(HootServicesSpringConfig.class);
-            appContext.refresh();
-
             acu = new ApplicationContextUtils();
             acu.setApplicationContext(appContext);
 
@@ -93,9 +102,6 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             txManager.commit(ts);
         }
         finally {
-            if (appContext != null) {
-                appContext.destroy();
-            }
             if (acu != null) {
                 acu.setApplicationContext(null);
             }
@@ -104,30 +110,19 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
 
     @AfterClass
     public static void afterClass() throws Exception {
-        AnnotationConfigWebApplicationContext appContext = null;
         ApplicationContextUtils acu = null;
 
         try {
-            appContext = new AnnotationConfigWebApplicationContext();
-            appContext.register(HootServicesSpringConfig.class);
-            appContext.refresh();
-
             acu = new ApplicationContextUtils();
             acu.setApplicationContext(appContext);
 
             PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+
             TransactionStatus ts = txManager.getTransaction(null);
-
             MapUtils.deleteOSMRecord(mapId);
-
-            appContext.destroy();
-            acu.setApplicationContext(null);
             txManager.commit(ts);
         }
         finally {
-            if (appContext != null) {
-                appContext.destroy();
-            }
             if (acu != null) {
                 acu.setApplicationContext(null);
             }
@@ -135,13 +130,42 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     }
 
     @Before
-    public void beforeTest() throws Exception {}
+    public void beforeTest() throws Exception {
+        List<String> tables = new ArrayList<>();
+
+        /*
+        SELECT EXISTS (
+            SELECT 1
+            FROM information_schema.tables
+            WHERE table_schema = 'schema_name'
+            AND table_name = 'table_name'
+            );
+         */
+        tables.add("current_way_nodes_" + mapId);
+        tables.add("current_relation_members_" + mapId);
+        tables.add("current_nodes_" + mapId);
+        tables.add("current_ways_" + mapId);
+        tables.add("current_relations_" + mapId);
+        tables.add("changesets_" + mapId);
+
+        BasicDataSource dbcpDatasource = appContext.getBean("dataSource", BasicDataSource.class);
+
+        try (Connection conn = dbcpDatasource.getConnection()) {
+            for (String tblName : tables) {
+                String sql = "TRUNCATE TABLE \"" + tblName + "\" CASCADE";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.execute();
+                }
+            }
+        }
+    }
 
     @After
     public void afterTest() throws Exception {}
 
     @Override
     protected Application configure() {
+        HootServicesJerseyApplication.setSpringConfigationClass(HootServicesSpringTestConfig.class);
         return new HootServicesJerseyApplication();
     }
 }

@@ -26,124 +26,146 @@
  */
 package hoot.services.utils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.ApplicationContextUtils;
+import hoot.services.HootServicesSpringTestConfig;
 import hoot.services.UnitTest;
 
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 public class DbUtilsTest {
+
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    @Before
+    public void setAppContext() {
+        new ApplicationContextUtils().setApplicationContext(applicationContext);
+    }
 
     @Test
     @Category(UnitTest.class)
+    @Transactional
+    @Rollback
     public void testUpdateMapsTableTags() throws Exception {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
         JSONParser parser = new JSONParser();
-        try {
-            Map<String, String> tags = new HashMap<>();
-            String k1 = "input1";
-            String k2 = "input2";
-            String v1 = "layer1";
-            String v2 = "layer2";
-            tags.put(k1, v1);
-            tags.put(k2, v2);
-            // Test tag set
-            long result = DbUtils.updateMapsTableTags(tags, mapId);
-            Assert.assertTrue(result > -1);
-            Map<String, String> checkTags = DbUtils.getMapsTableTags(mapId);
-            Assert.assertTrue(checkTags.containsKey(k1));
-            Assert.assertTrue(checkTags.containsKey(k2));
-            Assert.assertEquals(v1, checkTags.get(k1));
-            Assert.assertEquals(v2, checkTags.get(k2));
+        Map<String, String> tags = new HashMap<>();
+        String k1 = "input1";
+        String k2 = "input2";
+        String v1 = "layer1";
+        String v2 = "layer2";
+        tags.put(k1, v1);
+        tags.put(k2, v2);
+        // Test tag set
+        long result = DbUtils.updateMapsTableTags(tags, mapId);
+        Assert.assertTrue(result > -1);
+        Map<String, String> checkTags = DbUtils.getMapsTableTags(mapId);
+        Assert.assertTrue(checkTags.containsKey(k1));
+        Assert.assertTrue(checkTags.containsKey(k2));
+        Assert.assertEquals(v1, checkTags.get(k1));
+        Assert.assertEquals(v2, checkTags.get(k2));
 
-            // Test tag append
-            Map<String, String> tagsAppend = new HashMap<>();
-            String k3 = "key";
-            String v3 = "value";
-            tagsAppend.put(k3, v3);
-            result = DbUtils.updateMapsTableTags(tagsAppend, mapId);
-            Assert.assertTrue(result > -1);
-            checkTags = DbUtils.getMapsTableTags(mapId);
-            Assert.assertTrue(checkTags.containsKey(k1));
-            Assert.assertTrue(checkTags.containsKey(k2));
-            Assert.assertTrue(checkTags.containsKey(k3));
-            Assert.assertEquals(v1, checkTags.get(k1));
-            Assert.assertEquals(v2, checkTags.get(k2));
-            Assert.assertEquals(v3, checkTags.get(k3));
+        // Test tag append
+        Map<String, String> tagsAppend = new HashMap<>();
+        String k3 = "key";
+        String v3 = "value";
+        tagsAppend.put(k3, v3);
+        result = DbUtils.updateMapsTableTags(tagsAppend, mapId);
+        Assert.assertTrue(result > -1);
+        checkTags = DbUtils.getMapsTableTags(mapId);
+        Assert.assertTrue(checkTags.containsKey(k1));
+        Assert.assertTrue(checkTags.containsKey(k2));
+        Assert.assertTrue(checkTags.containsKey(k3));
+        Assert.assertEquals(v1, checkTags.get(k1));
+        Assert.assertEquals(v2, checkTags.get(k2));
+        Assert.assertEquals(v3, checkTags.get(k3));
 
-            // Test tag update
-            Map<String, String> tagsUpdate = new HashMap<>();
-            String k4 = "key";
-            String v4 = "change";
-            tagsUpdate.put(k4, v4);
-            result = DbUtils.updateMapsTableTags(tagsUpdate, mapId);
-            Assert.assertTrue(result > -1);
-            checkTags = DbUtils.getMapsTableTags(mapId);
-            Assert.assertTrue(checkTags.containsKey(k1));
-            Assert.assertTrue(checkTags.containsKey(k2));
-            Assert.assertTrue(checkTags.containsKey(k4));
-            Assert.assertEquals(v1, checkTags.get(k1));
-            Assert.assertEquals(v2, checkTags.get(k2));
-            Assert.assertEquals(v4, checkTags.get(k4));
+        // Test tag update
+        Map<String, String> tagsUpdate = new HashMap<>();
+        String k4 = "key";
+        String v4 = "change";
+        tagsUpdate.put(k4, v4);
+        result = DbUtils.updateMapsTableTags(tagsUpdate, mapId);
+        Assert.assertTrue(result > -1);
+        checkTags = DbUtils.getMapsTableTags(mapId);
+        Assert.assertTrue(checkTags.containsKey(k1));
+        Assert.assertTrue(checkTags.containsKey(k2));
+        Assert.assertTrue(checkTags.containsKey(k4));
+        Assert.assertEquals(v1, checkTags.get(k1));
+        Assert.assertEquals(v2, checkTags.get(k2));
+        Assert.assertEquals(v4, checkTags.get(k4));
 
-            // Test json tag value
-            Map<String, String> tagsJson = new HashMap<>();
-            String k5 = "params";
-            String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
-            tagsJson.put(k5, JsonUtils.escapeJson(v5));
-            result = DbUtils.updateMapsTableTags(tagsJson, mapId);
-            Assert.assertTrue(result > -1);
-            checkTags = DbUtils.getMapsTableTags(mapId);
-            Assert.assertTrue(checkTags.containsKey(k1));
-            Assert.assertTrue(checkTags.containsKey(k2));
-            Assert.assertTrue(checkTags.containsKey(k4));
-            Assert.assertTrue(checkTags.containsKey(k5));
-            Assert.assertEquals(v1, checkTags.get(k1));
-            Assert.assertEquals(v2, checkTags.get(k2));
-            Assert.assertEquals(v4, checkTags.get(k4));
-            Assert.assertEquals(parser.parse(JsonUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")),
-                    parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
+        // Test json tag value
+        Map<String, String> tagsJson = new HashMap<>();
+        String k5 = "params";
+        String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
+        tagsJson.put(k5, JsonUtils.escapeJson(v5));
+        result = DbUtils.updateMapsTableTags(tagsJson, mapId);
+        Assert.assertTrue(result > -1);
+        checkTags = DbUtils.getMapsTableTags(mapId);
+        Assert.assertTrue(checkTags.containsKey(k1));
+        Assert.assertTrue(checkTags.containsKey(k2));
+        Assert.assertTrue(checkTags.containsKey(k4));
+        Assert.assertTrue(checkTags.containsKey(k5));
+        Assert.assertEquals(v1, checkTags.get(k1));
+        Assert.assertEquals(v2, checkTags.get(k2));
+        Assert.assertEquals(v4, checkTags.get(k4));
+        Assert.assertEquals(parser.parse(JsonUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")),
+                parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
 
-            // Test that we can parse back into json
-            JSONObject oParams = (JSONObject) parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\""));
-            Assert.assertEquals("4835", oParams.get("INPUT1").toString());
-            Assert.assertEquals("15", ((JSONObject) oParams.get("ADV_OPTIONS")).get("small.way.merger.threshold").toString());
+        // Test that we can parse back into json
+        JSONObject oParams = (JSONObject) parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\""));
+        Assert.assertEquals("4835", oParams.get("INPUT1").toString());
+        Assert.assertEquals("15", ((JSONObject) oParams.get("ADV_OPTIONS")).get("small.way.merger.threshold").toString());
 
-            // Test stats tag value
-            Map<String, String> tagsStats = new HashMap<>();
-            String k6 = "stats";
-            String v6 = IOUtils.toString(this.getClass().getResourceAsStream("conflation-stats.csv"), "UTF-8");
-            tagsStats.put(k6, v6);
-            result = DbUtils.updateMapsTableTags(tagsStats, mapId);
-            Assert.assertTrue(result > -1);
-            checkTags = DbUtils.getMapsTableTags(mapId);
-            Assert.assertTrue(checkTags.containsKey(k1));
-            Assert.assertTrue(checkTags.containsKey(k2));
-            Assert.assertTrue(checkTags.containsKey(k4));
-            Assert.assertTrue(checkTags.containsKey(k6));
-            Assert.assertEquals(v1, checkTags.get(k1));
-            Assert.assertEquals(v2, checkTags.get(k2));
-            Assert.assertEquals(v4, checkTags.get(k4));
-            Assert.assertEquals(v6, checkTags.get(k6));
-
-        }
-        finally {
-            MapUtils.deleteOSMRecord(mapId);
-            MapUtils.deleteUser(userId);
-        }
+        // Test stats tag value
+        Map<String, String> tagsStats = new HashMap<>();
+        String k6 = "stats";
+        String v6 = IOUtils.toString(this.getClass().getResourceAsStream("conflation-stats.csv"), "UTF-8");
+        tagsStats.put(k6, v6);
+        result = DbUtils.updateMapsTableTags(tagsStats, mapId);
+        Assert.assertTrue(result > -1);
+        checkTags = DbUtils.getMapsTableTags(mapId);
+        Assert.assertTrue(checkTags.containsKey(k1));
+        Assert.assertTrue(checkTags.containsKey(k2));
+        Assert.assertTrue(checkTags.containsKey(k4));
+        Assert.assertTrue(checkTags.containsKey(k6));
+        Assert.assertEquals(v1, checkTags.get(k1));
+        Assert.assertEquals(v2, checkTags.get(k2));
+        Assert.assertEquals(v4, checkTags.get(k4));
+        Assert.assertEquals(v6, checkTags.get(k6));
     }
 
     @Test
@@ -161,39 +183,18 @@ public class DbUtilsTest {
         Assert.assertEquals(exJson, outJson);
     }
 
-    private static boolean checkDbExists(String dbName) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            String sql = "SELECT 1 FROM pg_database WHERE datname = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, dbName);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    return rs.next();
-                }
-            }
-        }
-    }
-
-    private static void createDb(String dbname) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            String sql = "CREATE DATABASE \"" + dbname + "\"";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.execute();
-            }
-        }
-    }
-
     @Test
     @Category(UnitTest.class)
     public void testDb() throws Exception {
         boolean exists = checkDbExists("wfdbtest");
         if (exists) {
-            DbUtils.deleteDb("wfdbtest", true);
+            DbUtils.deleteDb("wfdbtest");
         }
 
         createDb("wfdbtest");
         exists = checkDbExists("wfdbtest");
         Assert.assertTrue(exists);
-        DbUtils.deleteDb("wfdbtest", true);
+        DbUtils.deleteDb("wfdbtest");
 
         exists = checkDbExists("wfdbtest");
         Assert.assertTrue(!exists);
@@ -202,76 +203,46 @@ public class DbUtilsTest {
     @Test
     @Category(UnitTest.class)
     public void testTable() throws Exception {
-        boolean exists = checkDbExists("wfdbtest");
-        if (exists) {
-            DbUtils.deleteDb("wfdbtest", true);
-        }
+        try {
+            boolean exists = checkDbExists("wfdbtest");
+            if (exists) {
+                DbUtils.deleteDb("wfdbtest");
+            }
 
-        createDb("wfdbtest");
-        exists = checkDbExists("wfdbtest");
-        Assert.assertTrue(exists);
+            createDb("wfdbtest");
+            exists = checkDbExists("wfdbtest");
+            Assert.assertTrue(exists);
 
-        String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
+            String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
                 + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
 
-        createTable(createTblSql);
+            this.jdbcTemplate.execute(createTblSql);
 
-        List<String> tbls = DbUtils.getTablesList("test");
-        Assert.assertTrue(!tbls.isEmpty());
-
-        DbUtils.deleteTables(tbls);
-
-        tbls = DbUtils.getTablesList("TEST");
-        Assert.assertTrue(tbls.isEmpty());
-
-        DbUtils.deleteDb("wfdbtest", true);
-
-        exists = checkDbExists("wfdbtest");
-        Assert.assertTrue(!exists);
-    }
-
-    private static void createTable(String createTblSql) throws SQLException {
-        try (Connection conn = DbUtils.createConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void createMap() throws Exception {
-        try {
-            try {
-                // just in case the tables exist.
-                DbUtils.deleteMapRelatedTablesByMapId(1234);
-            }
-            catch (Exception ignored) {
-                // exception can be currently thrown while trying to delete non-existent tables.
-            }
-
-            MapUtils.createMap(1234);
-
-            List<String> tbls = DbUtils.getTablesList("changesets");
+            List<String> tbls = DbUtils.getTablesList("test");
             Assert.assertTrue(!tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList("current_nodes");
-            Assert.assertTrue(!tbls.isEmpty());
+            DbUtils.deleteTables(tbls);
 
-            tbls = DbUtils.getTablesList("current_relation_members");
-            Assert.assertTrue(!tbls.isEmpty());
+            tbls = DbUtils.getTablesList("TEST");
+            Assert.assertTrue(tbls.isEmpty());
 
-            tbls = DbUtils.getTablesList("current_relations");
-            Assert.assertTrue(!tbls.isEmpty());
+            DbUtils.deleteDb("wfdbtest");
 
-            tbls = DbUtils.getTablesList("current_way_nodes");
-            Assert.assertTrue(!tbls.isEmpty());
-
-            tbls = DbUtils.getTablesList("current_ways");
-            Assert.assertTrue(!tbls.isEmpty());
+            exists = checkDbExists("wfdbtest");
+            Assert.assertTrue(!exists);
         }
         finally {
-            DbUtils.deleteMapRelatedTablesByMapId(1234);
+            this.jdbcTemplate.execute("DROP TABLE IF EXISTS test_TABLE");
         }
+    }
+
+    private boolean checkDbExists(String dbName) {
+        List<Integer> result = this.jdbcTemplate
+                .queryForList("SELECT 1 FROM pg_database WHERE datname = ?", Integer.class, dbName);
+        return !result.isEmpty();
+    }
+
+    private void createDb(String dbname) {
+        this.jdbcTemplate.execute("CREATE DATABASE \"" + dbname + "\"");
     }
 }

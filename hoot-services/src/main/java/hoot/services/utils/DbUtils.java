@@ -140,7 +140,7 @@ public final class DbUtils {
         }
     }
 
-    public static Connection createConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();
         BasicDataSource dbcpDatasource = applicationContext.getBean("dataSource", BasicDataSource.class);
         return dbcpDatasource.getConnection();
@@ -262,7 +262,7 @@ public final class DbUtils {
     public static void deleteRenderDb(String mapName) {
         List<Long> mapIds = getMapIdsByName(mapName);
 
-        try (Connection connection = createConnection()) {
+        try (Connection connection = getConnection()) {
             if (!mapIds.isEmpty()) {
                 long mapId = mapIds.get(0);
 
@@ -275,13 +275,13 @@ public final class DbUtils {
                 }
 
                 try {
-                    deleteDb(dbname, false);
+                    deleteDb(dbname);
                 }
                 catch (SQLException e1) {
                     logger.warn("Error deleting {} database!", dbname, e1);
 
                     try {
-                        deleteDb(connection.getCatalog() + "_renderdb_" + mapName, false);
+                        deleteDb(connection.getCatalog() + "_renderdb_" + mapName);
                     }
                     catch (SQLException e2) {
                         logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, e2);
@@ -554,9 +554,10 @@ public final class DbUtils {
     }
 
     public static void deleteTables(List<String> tables) throws SQLException {
-        try (Connection conn = createConnection()) {
-            for (String tblName : tables) {
-                String sql = "DROP TABLE \"" + tblName + "\"";
+        try (Connection conn = getConnection()) {
+            for (String table : tables) {
+                // DDL Statement. No support in QueryDSL anymore. Have to do it the old-fashioned way.
+                String sql = "DROP TABLE \"" + table + "\"";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.execute();
                 }
@@ -564,32 +565,9 @@ public final class DbUtils {
         }
     }
 
-    static void deleteDb(String dbname, boolean force) throws SQLException {
-        try (Connection conn = createConnection()) {
-            // TODO: re-evaluate what this if block is supposed to to.
-            if (force) {
-                String columnName;
-                String sql = "SELECT column_name " + "FROM information_schema.columns "
-                        + "WHERE table_name='pg_stat_activity' AND column_name LIKE '%pid'";
-
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    // Get the column name from the db as it's version dependent
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        rs.next();
-                        columnName = rs.getString("column_name");
-                    }
-                }
-
-                String forceSql = "SELECT pg_terminate_backend(" + columnName + ") " + "FROM pg_stat_activity "
-                        + "WHERE datname = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(forceSql)) {
-                    stmt.setString(1, dbname);
-                    // Get the column name from the db as it's version dependent
-                    try (ResultSet rs = stmt.executeQuery()) {
-                    }
-                }
-            }
-
+    static void deleteDb(String dbname) throws SQLException {
+        try (Connection conn = getConnection()) {
+            // DDL Statement. No support in QueryDSL anymore. Have to do it the old-fashioned way.
             String sql = "DROP DATABASE \"" + dbname + "\"";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.executeUpdate();
@@ -597,23 +575,25 @@ public final class DbUtils {
         }
     }
 
-    public static List<String> getTablesList(String filter_prefix) throws SQLException {
-        List<String> tblList = new ArrayList<>();
-        try (Connection conn = createConnection()) {
-            String sql = "SELECT table_name " + "FROM information_schema.tables "
-                    + "WHERE table_schema='public' AND table_name LIKE " + "'" + filter_prefix.replace('-', '_')
+    public static List<String> getTablesList(String filterPrefix) throws SQLException {
+        List<String> tables = new ArrayList<>();
+
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT table_name " + "" +
+                    "FROM information_schema.tables " +
+                    "WHERE table_schema='public' AND table_name LIKE " + "'" + filterPrefix.replace('-', '_')
                     + "_%'";
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         // Retrieve by column name
-                        tblList.add(rs.getString("table_name"));
+                        tables.add(rs.getString("table_name"));
                     }
                 }
             }
         }
 
-        return tblList;
+        return tables;
     }
 }

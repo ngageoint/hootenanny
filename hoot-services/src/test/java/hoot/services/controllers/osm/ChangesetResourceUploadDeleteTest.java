@@ -30,6 +30,10 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
@@ -63,11 +67,6 @@ import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
-import hoot.services.models.db.QCurrentNodes;
-import hoot.services.models.db.QCurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelations;
-import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
@@ -81,15 +80,7 @@ import hoot.services.utils.XmlUtils;
 
 
 public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
-    private final QCurrentNodes currentNodesTbl = currentNodes;
-    private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
-    private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
-    private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
-    private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
-
-    public ChangesetResourceUploadDeleteTest() {
-        super();
-    }
+    public ChangesetResourceUploadDeleteTest() {}
 
     private void testUploadDelete(String request, BoundingBox originalBounds, long changesetId, Long[] nodeIdsArr,
             Long[] wayIdsArr, Long[] relationIdsArr) throws Exception {
@@ -143,9 +134,14 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         try {
+            /*
+            Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentNodesTbl)
+                        .map(currentNodesTbl.id, currentNodesTbl);
+             */
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -212,9 +208,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted node
             nodeRecord = createQuery(mapId)
-                    .select(currentNodesTbl)
-                    .from(currentNodesTbl)
-                    .where(currentNodesTbl.id.eq(nodeIdsArr[3]))
+                    .select(currentNodes)
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[3]))
                     .fetchOne();
 
             Assert.assertNull(nodeRecord);
@@ -225,8 +221,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(2, ways.size());
 
@@ -238,10 +234,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(3, wayNodes.size());
@@ -273,10 +269,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             wayNodes = createQuery(mapId)
-                    .from(currentWayNodesTbl)
-                    .select(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .from(currentWayNodes)
+                    .select(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -295,8 +291,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted way
             Assert.assertEquals(0L, createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .where(currentWaysTbl.id.eq(wayIdsArr[2]))
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[2]))
                     .fetchCount());
         }
         catch (Exception e) {
@@ -306,8 +302,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         try {
             Map<Long, CurrentRelations> relations =
                     createQuery(mapId)
-                            .from(currentRelationsTbl)
-                            .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
+                            .from(currentRelations)
+                            .transform(groupBy(currentRelations.id).as(currentRelations));
 
             Assert.assertEquals(3, relations.size());
 
@@ -321,10 +317,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             List<CurrentRelationMembers> members =
                     createQuery(mapId)
-                            .select(currentRelationMembersTbl)
-                            .from(currentRelationMembersTbl)
-                            .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                            .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
                             .fetch();
 
             Assert.assertEquals(4, members.size());
@@ -371,10 +367,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, members.size());
@@ -407,10 +403,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[3]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -425,9 +421,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             // verify the deleted relation
             Assert.assertNull(
                     createQuery(mapId)
-                            .select(currentRelationsTbl)
-                            .from(currentRelationsTbl)
-                            .where(currentRelationsTbl.id.eq(relationIdsArr[2]))
+                            .select(currentRelations)
+                            .from(currentRelations)
+                            .where(currentRelations.id.eq(relationIdsArr[2]))
                             .fetchOne());
 
             // verify tags that should no longer exist
@@ -558,8 +554,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         try {
             Map<Long, CurrentNodes> nodes =
                     createQuery(mapId)
-                            .from(currentNodesTbl)
-                            .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                            .from(currentNodes)
+                            .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -639,9 +635,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted node
             nodeRecord = createQuery(mapId)
-                    .select(currentNodesTbl)
-                    .from(currentNodesTbl)
-                    .where(currentNodesTbl.id.eq(nodeIdsArr[4]))
+                    .select(currentNodes)
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[4]))
                     .fetchOne();
 
             Assert.assertNull(nodeRecord);
@@ -652,8 +648,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(2, ways.size());
 
@@ -666,10 +662,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -699,10 +695,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[2]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -728,9 +724,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted way
             Assert.assertNull(createQuery(mapId)
-                    .select(currentWaysTbl)
-                    .from(currentWaysTbl)
-                    .where(currentWaysTbl.id.eq(wayIdsArr[0]))
+                    .select(currentWays)
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[0]))
                     .fetchOne());
         }
         catch (Exception e) {
@@ -968,8 +964,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -1036,9 +1032,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted node
             nodeRecord = createQuery(mapId)
-                    .select(currentNodesTbl)
-                    .from(currentNodesTbl)
-                    .where(currentNodesTbl.id.eq(nodeIdsArr[3]))
+                    .select(currentNodes)
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[3]))
                     .fetchOne();
 
             Assert.assertNull(nodeRecord);
@@ -1049,8 +1045,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(2, ways.size());
 
@@ -1062,10 +1058,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(3, wayNodes.size());
@@ -1096,10 +1092,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -1118,9 +1114,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted way
             Assert.assertNull(createQuery(mapId)
-                    .select(currentWaysTbl)
-                    .from(currentWaysTbl)
-                    .where(currentWaysTbl.id.eq(wayIdsArr[2]))
+                    .select(currentWays)
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[2]))
                     .fetchOne());
         }
         catch (Exception e) {
@@ -1129,8 +1125,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentRelations> relations = createQuery(mapId)
-                    .from(currentRelationsTbl)
-                    .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
+                    .from(currentRelations)
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
 
             Assert.assertEquals(3, relations.size());
 
@@ -1144,10 +1140,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             List<CurrentRelationMembers> members =
                     createQuery(mapId)
-                            .select(currentRelationMembersTbl)
-                            .from(currentRelationMembersTbl)
-                            .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                            .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
                             .fetch();
 
             Assert.assertEquals(4, members.size());
@@ -1194,10 +1190,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -1222,10 +1218,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[3]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -1241,9 +1237,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted relation
             Assert.assertNull(createQuery(mapId)
-                    .select(currentRelationsTbl)
-                    .from(currentRelationsTbl)
-                    .where(currentRelationsTbl.id.eq(relationIdsArr[1]))
+                    .select(currentRelations)
+                    .from(currentRelations)
+                    .where(currentRelations.id.eq(relationIdsArr[1]))
                     .fetchOne());
         }
         catch (Exception e) {
@@ -1363,8 +1359,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -1431,9 +1427,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted node
             nodeRecord = createQuery(mapId)
-                    .select(currentNodesTbl)
-                    .from(currentNodesTbl)
-                    .where(currentNodesTbl.id.eq(nodeIdsArr[3]))
+                    .select(currentNodes)
+                    .from(currentNodes)
+                    .where(currentNodes.id.eq(nodeIdsArr[3]))
                     .fetchOne();
 
             Assert.assertNull(nodeRecord);
@@ -1444,8 +1440,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(2, ways.size());
 
@@ -1457,10 +1453,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(3, wayNodes.size());
@@ -1491,10 +1487,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -1513,9 +1509,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             // verify the deleted way
             Assert.assertNull(
                     createQuery(mapId)
-                            .select(currentWaysTbl)
-                            .from(currentWaysTbl)
-                            .where(currentWaysTbl.id.eq(wayIdsArr[2]))
+                            .select(currentWays)
+                            .from(currentWays)
+                            .where(currentWays.id.eq(wayIdsArr[2]))
                             .fetchOne());
         }
         catch (Exception e) {
@@ -1524,8 +1520,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentRelations> relations = createQuery(mapId)
-                    .from(currentRelationsTbl)
-                    .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
+                    .from(currentRelations)
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
 
             Assert.assertEquals(3, relations.size());
 
@@ -1539,10 +1535,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             List<CurrentRelationMembers> members =
                     createQuery(mapId)
-                            .select(currentRelationMembersTbl)
-                            .from(currentRelationMembersTbl)
-                            .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                            .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
                             .fetch();
 
             Assert.assertEquals(4, members.size());
@@ -1589,10 +1585,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, members.size());
@@ -1625,10 +1621,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[3]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -1644,9 +1640,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted relation
             Assert.assertNull(createQuery(mapId)
-                    .select(currentRelationsTbl)
-                    .from(currentRelationsTbl)
-                    .where(currentRelationsTbl.id.eq(relationIdsArr[2]))
+                    .select(currentRelations)
+                    .from(currentRelations)
+                    .where(currentRelations.id.eq(relationIdsArr[2]))
                     .fetchOne());
         }
         catch (Exception e) {
@@ -2001,9 +1997,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         tags.clear();
 
         CurrentNodes insertedNodeRecord = createQuery(mapId)
-                .select(currentNodesTbl)
-                .from(currentNodesTbl)
-                .where(currentNodesTbl.id.eq(negativeNodeId))
+                .select(currentNodes)
+                .from(currentNodes)
+                .where(currentNodes.id.eq(negativeNodeId))
                 .fetchOne();
 
         Assert.assertNotNull(insertedNodeRecord);
@@ -2030,9 +2026,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         tags.clear();
 
         CurrentWays insertedWayRecord = createQuery(mapId)
-                .select(currentWaysTbl)
-                .from(currentWaysTbl)
-                .where(currentWaysTbl.id.eq(negativeWayId))
+                .select(currentWays)
+                .from(currentWays)
+                .where(currentWays.id.eq(negativeWayId))
                 .fetchOne();
 
         Assert.assertNotNull(insertedWayRecord);
@@ -2060,9 +2056,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         tags.clear();
 
         CurrentRelations insertedRelationRecord = createQuery(mapId)
-                .select(currentRelationsTbl)
-                .from(currentRelationsTbl)
-                .where(currentRelationsTbl.id.eq(negativeRelationId))
+                .select(currentRelations)
+                .from(currentRelations)
+                .where(currentRelations.id.eq(negativeRelationId))
                 .fetchOne();
 
         Assert.assertNotNull(insertedRelationRecord);
@@ -2176,7 +2172,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         try {
             Assert.assertEquals(0,
                     createQuery(mapId)
-                            .from(currentNodesTbl)
+                            .from(currentNodes)
                             .fetchCount());
         }
         catch (Exception e) {
@@ -2186,7 +2182,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         try {
             Assert.assertEquals(0,
                     createQuery(mapId)
-                            .from(currentWaysTbl)
+                            .from(currentWays)
                             .fetchCount());
         }
         catch (Exception e) {
@@ -2196,7 +2192,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         try {
             Assert.assertEquals(0,
                     createQuery(mapId)
-                            .from(currentRelationsTbl)
+                            .from(currentRelations)
                             .fetchCount());
         }
         catch (Exception e) {
@@ -2284,8 +2280,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(3, nodes.size());
 
@@ -2397,8 +2393,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(1, ways.size());
             Assert.assertNull(ways.get(wayIdsArr[0]));
@@ -2411,10 +2407,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -2531,8 +2527,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         try {
             Map<Long, CurrentRelations> relations = createQuery(mapId)
-                    .from(currentRelationsTbl)
-                    .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
+                    .from(currentRelations)
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
 
             Assert.assertEquals(2, relations.size());
 
@@ -2543,10 +2539,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             List<CurrentRelationMembers> relationMembers =
                     createQuery(mapId)
-                            .select(currentRelationMembersTbl)
-                            .from(currentRelationMembersTbl)
-                            .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                            .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
                             .fetch();
 
             Assert.assertEquals(4, relationMembers.size());
@@ -2589,10 +2585,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
 
             relationMembers = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, relationMembers.size());
@@ -2789,8 +2785,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(5, nodes.size());
 
@@ -2887,8 +2883,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                    .from(currentWaysTbl)
-                    .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             Assert.assertEquals(2, ways.size());
 
@@ -2901,10 +2897,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             List<CurrentWayNodes> wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(3, wayNodes.size());
@@ -2944,10 +2940,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(wayRecord.getVisible());
 
             wayNodes = createQuery(mapId)
-                    .select(currentWayNodesTbl)
-                    .from(currentWayNodesTbl)
-                    .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                    .orderBy(currentWayNodesTbl.sequenceId.asc())
+                    .select(currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, wayNodes.size());
@@ -2970,9 +2966,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             // verify the deleted way
             Assert.assertNull(createQuery(mapId)
-                    .select(currentWaysTbl)
-                    .from(currentWaysTbl)
-                    .where(currentWaysTbl.id.eq(wayIdsArr[2]))
+                    .select(currentWays)
+                    .from(currentWays)
+                    .where(currentWays.id.eq(wayIdsArr[2]))
                     .fetchOne());
         }
         catch (Exception e) {
@@ -3071,8 +3067,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -3152,8 +3148,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             List<CurrentRelations> relations = createQuery(mapId)
-                    .select(currentRelationsTbl)
-                    .from(currentRelationsTbl)
+                    .select(currentRelations)
+                    .from(currentRelations)
                     .fetch();
 
             Assert.assertEquals(3, relations.size());
@@ -3167,10 +3163,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             List<CurrentRelationMembers> members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, members.size());
@@ -3201,10 +3197,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, members.size());
@@ -3235,10 +3231,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -3344,8 +3340,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         try {
             Map<Long, CurrentNodes> nodes = createQuery(mapId)
-                    .from(currentNodesTbl)
-                    .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+                    .from(currentNodes)
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
             Assert.assertEquals(4, nodes.size());
 
@@ -3517,8 +3513,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         try {
             Map<Long, CurrentRelations> relations = createQuery(mapId)
-                    .from(currentRelationsTbl)
-                    .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
+                    .from(currentRelations)
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
 
             Assert.assertEquals(3, relations.size());
 
@@ -3532,10 +3528,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             List<CurrentRelationMembers> members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(4, members.size());
@@ -3587,10 +3583,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(2, members.size());
@@ -3628,10 +3624,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Assert.assertTrue(relationRecord.getVisible());
 
             members = createQuery(mapId)
-                    .select(currentRelationMembersTbl)
-                    .from(currentRelationMembersTbl)
-                    .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                    .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[3]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
                     .fetch();
 
             Assert.assertEquals(1, members.size());
@@ -3747,9 +3743,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
             try {
                 List<CurrentRelations> relations = createQuery(mapId)
-                        .select(currentRelationsTbl)
-                        .from(currentRelationsTbl)
-                        .orderBy(currentRelationsTbl.id.asc())
+                        .select(currentRelations)
+                        .from(currentRelations)
+                        .orderBy(currentRelations.id.asc())
                         .fetch();
 
                 Assert.assertEquals(3, relations.size());
@@ -3766,10 +3762,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
                 List<CurrentRelationMembers> members =
                         createQuery(mapId)
-                                .select(currentRelationMembersTbl)
-                                .from(currentRelationMembersTbl)
-                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .select(currentRelationMembers)
+                                .from(currentRelationMembers)
+                                .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembers.sequenceId.asc())
                                 .fetch();
 
                 Assert.assertEquals(2, members.size());
@@ -3801,10 +3797,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(relationRecord.getVisible());
 
                 members = createQuery(mapId)
-                        .select(currentRelationMembersTbl)
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .select(currentRelationMembers)
+                        .from(currentRelationMembers)
+                        .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                        .orderBy(currentRelationMembers.sequenceId.asc())
                         .fetch();
 
                 Assert.assertEquals(2, members.size());
@@ -3835,10 +3831,10 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(relationRecord.getVisible());
 
                 members = createQuery(mapId)
-                        .select(currentRelationMembersTbl)
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .select(currentRelationMembers)
+                        .from(currentRelationMembers)
+                        .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
+                        .orderBy(currentRelationMembers.sequenceId.asc())
                         .fetch();
 
                 Assert.assertEquals(1, members.size());

@@ -91,8 +91,6 @@ public class JobResource {
 
 
     static {
-        //jobExecMan = ((JobExecutionManager) HootProperties.getSpringContext().getBean("jobExecutionManagerNative"));
-
         Long value = Long.parseLong(CHAIN_JOS_STATUS_PING_INTERVAL);
 
         CHAIN_JOS_STATUS_PING_INTERVAL_VALUE = (value < 1000) ? 1000 : value;

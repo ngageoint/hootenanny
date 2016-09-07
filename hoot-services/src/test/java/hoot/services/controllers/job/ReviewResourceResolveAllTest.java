@@ -55,7 +55,7 @@ public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testSetAllReviewsResolved() throws Exception {
-        Connection conn = DbUtils.createConnection();
+        Connection conn = DbUtils.getConnection();
 
         ReviewTestUtils testUtils = new ReviewTestUtils();
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
