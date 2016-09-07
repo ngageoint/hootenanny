@@ -28,8 +28,6 @@
 //
 // Set of core translation routines
 //
-var config = require('./config.js');
-
 
 module.exports = {
 
@@ -53,7 +51,7 @@ module.exports = {
             }
             else
             {
-                if (config.getOgrDebugLookupclash() == 'true') print('Fwd Clash: ' + row[0] + ' ' + row[1] + '  is ' + lookup[row[0]][row[1]] + '  tried to change to ' + [row[2], row[3]]);
+                if (config.OgrDebugLookupclash) print('Fwd Clash: ' + row[0] + ' ' + row[1] + '  is ' + lookup[row[0]][row[1]] + '  tried to change to ' + [row[2], row[3]]);
             }
         }
 
@@ -146,7 +144,7 @@ module.exports = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + row[2] + ' ' + row[3] + '  is ' + lookup[row[2]][row[3]] + '  tried to change to ' + [row[0], row[1]]);
+                    if (config.OgrDebugLookupclash) print('Bkwd Clash: ' + row[2] + ' ' + row[3] + '  is ' + lookup[row[2]][row[3]] + '  tried to change to ' + [row[0], row[1]]);
                 }
             }
         }
@@ -200,7 +198,7 @@ module.exports = {
                         continue;
                     }
 
-                    hoot.logVerbose('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    debug('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
             } // End col in lookup
             else
@@ -238,7 +236,7 @@ module.exports = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logVerbose('Column not found:: (' + col + '=' + value + ')');
+                    if (config.OgrDebugLookupcolumn) debug('Column not found:: (' + col + '=' + value + ')');
                 }
             } // End !col in lookup
         } // End for col in inList
@@ -341,7 +339,7 @@ module.exports = {
                         continue;
                     }
 
-                    hoot.logVerbose('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+                    debug('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
@@ -353,7 +351,7 @@ module.exports = {
                         othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
-                        hoot.logVerbose('Adding to OTH field:: ' + othVal);
+                        debug('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
                         outList[otherVal[0] + endChar] = otherVal[1];
@@ -365,7 +363,7 @@ module.exports = {
                     } // End if otherVal
                     else
                     {
-                        hoot.logVerbose('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
+                        debug('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
                     }
                 } // End value != ''
             } // End tAttrib in lookup
@@ -380,7 +378,7 @@ module.exports = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logVerbose('Column not found:: (' + col + '=' + value + ')');
+                    if (config.OgrDebugLookupcolumn) debug('Column not found:: (' + col + '=' + value + ')');
                 }
             } // End !col in lookup
         } // End for col in inList
@@ -481,7 +479,7 @@ module.exports = {
             }
             else
             {
-                hoot.logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
+                debug('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
                 continue
             } // End !attrsi[]
 
@@ -491,7 +489,7 @@ module.exports = {
 
             if (tValue !== '999')
             {
-                hoot.logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
+                debug('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
                 continue;
             }
 
@@ -576,7 +574,7 @@ module.exports = {
             }
             else
             {
-                hoot.logWarn('Missing OSM end tag in: ' + rawMemo);
+                console.warn('Missing OSM end tag in: ' + rawMemo);
             }
         }
         else
@@ -760,7 +758,7 @@ module.exports = {
                     }
                     else
                     {
-                        hoot.logVerbose('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
+                        debug('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
                     }
                 }
             }
@@ -786,7 +784,7 @@ module.exports = {
                                 // Back to a string for a comparison
                                 if ((tInt + '') !== tNum)
                                 {
-                                    hoot.logVerbose('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                                    debug('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
                                 }
                                 tNum = tInt;
                         } // End in intList
@@ -798,7 +796,7 @@ module.exports = {
                     }
                     else
                     {
-                        hoot.logVerbose('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
+                        debug('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
                     }
                 }
             }

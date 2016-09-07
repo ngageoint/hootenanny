@@ -36,7 +36,6 @@
     values found in sample data and the DFDD/NFDD v4
 */
 var uuid = require('node-uuid');
-var config = require('./config.js');
 var translate = require('./translate.js');
 var fcodeCommon = require('./fcode_common.js');
 var rules = require('./mgcp_rules.js');
@@ -49,7 +48,9 @@ var ignoreList;
 var mgcpPostRules;
 var osmPostRules;
 
-module.exports = {
+var self = module.exports = {
+    fcodeLookup: fcodeLookup,
+
     getDbSchema: function() {
 
     rawSchema = schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
@@ -68,7 +69,7 @@ module.exports = {
     rawSchema = translate.addReviewFeature(rawSchema);
 
     // Add empty "extra" feature layers if needed
-    if (config.getOgrMgcpExtra() == 'file') rawSchema = translate.addExtraFeature(rawSchema);
+    if (config.OgrMgcpExtra == 'file') rawSchema = translate.addExtraFeature(rawSchema);
 
     // This function dumps the schema to the screen for debugging
     // translate.dumpSchema(rawSchema);
@@ -86,13 +87,13 @@ module.exports = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.getOgrDebugDumpvalidate() == 'true')
+            if (config.OgrDebugDumpvalidate)
             {
                 for (var val in attrs)
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
+                        console.warn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -113,7 +114,7 @@ module.exports = {
                             }
                             else
                             {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + rules.txtLength[val] + ' characters.');
+                                console.warn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,rules.txtLength[val]);
                             }
@@ -147,7 +148,7 @@ module.exports = {
                             }
                             else
                             {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + rules.txtLength[val] + ' characters.');
+                                console.warn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + rules.txtLength[val] + ' characters.');
                                 // Still too long. Chop to the maximum length.
                                 attrs[val] = tStr[0].substring(0,rules.txtLength[val]);
                             }
@@ -158,7 +159,7 @@ module.exports = {
         }
         else
         {
-            hoot.logWarn('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
+            console.warn('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -194,7 +195,7 @@ module.exports = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (config.getOgrDebugDumpvalidate() == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                if (config.OgrDebugDumpvalidate) console.warn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
@@ -204,14 +205,14 @@ module.exports = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    debug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    debug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -315,7 +316,7 @@ module.exports = {
         for (var i = 0, nFeat = newfeatures.length; i < nFeat; i++)
         {
             // pre processing
-            this.applyToMgcpPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+            self.applyToMgcpPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
 
             var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -760,7 +761,7 @@ module.exports = {
                 {
                     // Debug
                     // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    if (tags[tTags[i]]) console.warn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
             }
@@ -1149,7 +1150,7 @@ module.exports = {
             case 'AQ040': // Bridge
                 if (attrs.RST)
                 {
-                    // hoot.logWarn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
+                    // console.warn('Found RST = ' + attrsi.RST + ' in AQ040'); // Should not get this
                     var convSurf = { 1:5, 2:46, 5:104, 6:104, 8:104, 999:999 };
 
                     attrs.MCC = convSurf[attrs.RST];
@@ -1199,7 +1200,7 @@ module.exports = {
 
             case 'EA010': // Crop Land
                 if (attrs.CSP == '15') attrs.F_CODE = 'EA040';
-                // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+                // debug('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
                 break;
         } // End switch FCODE
 
@@ -1254,7 +1255,7 @@ module.exports = {
         tags = {};  // This is the output
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             print('In Layername: ' + layerName);
             var kList = Object.keys(attrs).sort()
@@ -1286,7 +1287,7 @@ module.exports = {
         }
 
         // pre processing
-        this.applyToOsmPreProcessing(attrs, layerName, geometryType);
+        self.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
         // Use the FCODE to add some tags.
         if (attrs.F_CODE)
@@ -1300,7 +1301,7 @@ module.exports = {
             }
             else
             {
-                hoot.logVerbose('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                debug('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1319,16 +1320,16 @@ module.exports = {
         translate.applyOne2One(notUsedAttrs, tags, lookup.toOsm, {'k':'v'});
 
         // post processing
-        this.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+        self.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug
         // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (config.OgrDebugAddfcode) tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
@@ -1350,7 +1351,7 @@ module.exports = {
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (rawSchema == undefined)
         {
-            var tmp_schema = this.getDbSchema();
+            var tmp_schema = self.getDbSchema();
         }
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
@@ -1361,7 +1362,7 @@ module.exports = {
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -1392,7 +1393,7 @@ module.exports = {
         }
 
         // pre processing
-        this.applyToMgcpPreProcessing(tags,attrs, geometryType);
+        self.applyToMgcpPreProcessing(tags,attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
         // the not used tags.
@@ -1410,14 +1411,14 @@ module.exports = {
 
         // post processing
         // applyToMgcpPostProcessing(attrs, tableName, geometryType);
-        this.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
+        self.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
         // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
 
         // If we have unused tags, add them to the TXT field.
         // NOTE: We are not checking if this is longer than 255 characters
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.OgrMgcpExtra == 'note')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
@@ -1433,7 +1434,7 @@ module.exports = {
         if (!layerNameLookup[tableName])
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (config.getOgrThrowError() == 'true')
+            if (config.OgrThrowError)
             {
                 if (! attrs.F_CODE)
                 {
@@ -1448,9 +1449,9 @@ module.exports = {
                 }
             }
 
-            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
+            debug('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
-            if (config.getOgrPartialTranslate() == 'true')
+            if (config.OgrPartialTranslate)
             {
                 tableName = 'Partial';
                 attrs.FCODE = 'Partial';
@@ -1470,7 +1471,7 @@ module.exports = {
                 tableName = 'o2s_' + geometryType.toString().charAt(0);
 
                 // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+                if (config.OgrDebugDumptags) for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
 
                 for (var i in tags)
                 {
@@ -1485,7 +1486,7 @@ module.exports = {
                 // Shapefiles can't handle fields > 254 chars.
                 // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
                 // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+                if (str.length < 255 || !config.OgrSplitO2s)
                 {
                     // return {attrs:{tag1:str}, tableName: tableName};
                     attrs = {tag1:str};
@@ -1495,7 +1496,7 @@ module.exports = {
                     // Not good. Will fix with the rewrite of the tag splitting code
                     if (str.length > 1012)
                     {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
+                        debug('o2s tags truncated to fit in available space.');
                         str = str.substring(0,1012);
                     }
 
@@ -1514,7 +1515,7 @@ module.exports = {
             // Check if we need to make a second feature
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             // attrs2 = twoFeatures(geometryType,tags,attrs);
-            returnData = this.manyFeatures(geometryType,tags,attrs);
+            returnData = self.manyFeatures(geometryType,tags,attrs);
 
             // Now go through the features and clean them up.
             var gType = geometryType.toString().charAt(0);
@@ -1525,7 +1526,7 @@ module.exports = {
                 delete returnData[i]['attrs']['F_CODE'];
 
                  // Validate attrs: remove all that are not supposed to be part of a feature
-                this.validateAttrs(geometryType,returnData[i]['attrs']);
+                self.validateAttrs(geometryType,returnData[i]['attrs']);
 
                 var gFcode = gType + returnData[i]['attrs']['FCODE'];
                 returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
@@ -1533,7 +1534,7 @@ module.exports = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && config.OgrMgcpExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -1561,7 +1562,7 @@ module.exports = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
