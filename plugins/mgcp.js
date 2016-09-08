@@ -336,10 +336,6 @@ mgcp = {
     {
         // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
         // We need to unpack this before we can do anything.
-
-        // 392103533
-
-        // other_tags: :"ED010"=>"marsh","GEOM"=>"GM_Surface","SDP"=>"Digital_Globe","SDV"=>"2016-07-20","SRT"=>"30","TID"=>"1001","security:classification"=>"UNCLASSIFIED","source:date"=>"2016-08-09","wetland"=>"marsh":
         if (attrs.other_tags)
         {
             var tList = attrs.other_tags.split('","');

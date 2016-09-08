@@ -50,7 +50,7 @@ etds40 = {
         }
 
         var eAttrs = {}; // The final English output
-        eAttrs['Feature Code'] = 'Not found';
+        eAttrs['Feature Code'] = '';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (tdsData.length > 0)
