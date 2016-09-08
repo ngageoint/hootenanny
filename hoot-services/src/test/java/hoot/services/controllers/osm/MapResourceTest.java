@@ -28,6 +28,7 @@ package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.MAX_QUERY_AREA_DEGREES;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.net.URLDecoder;
@@ -61,7 +62,6 @@ import hoot.services.models.db.Maps;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
@@ -820,7 +820,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .select(currentNodes)
                 .from(currentNodes)
                 .where(currentNodes.id.eq(nodeIdsArr[3]))
-                .fetchOne();
+                .fetchFirst();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -1111,7 +1111,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         long nextMapId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
                 .from()
-                .fetchOne();
+                .fetchFirst();
 
         map.setId(nextMapId);
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -1120,7 +1120,6 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         map.setDisplayName(duplicatedMapName);
         map.setUserId(userId);
 
-        QMaps maps = QMaps.maps;
         createQuery(mapId).insert(maps).populate(map).execute();
 
         try {
@@ -1302,12 +1301,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         MapUtils.deleteOSMRecord(mapId3);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetDeletedLayer() throws Exception {
         // delete the only existing map
-        QMaps maps = QMaps.maps;
-
         createQuery(mapId).delete(maps).where(maps.id.eq(mapId)).execute();
 
         Assert.assertNull(createQuery(mapId)

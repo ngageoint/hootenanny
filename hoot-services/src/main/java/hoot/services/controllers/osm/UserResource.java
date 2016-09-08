@@ -164,6 +164,9 @@ public class UserResource {
 
             response = new UserSaveResponse(user);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
             String msg = "Error saving user: " + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
@@ -187,9 +190,9 @@ public class UserResource {
             List<Users> res = retrieveAll();
             return new UsersGetResponse(res);
         }
-        catch (Exception ex) {
-            String message = "Error getting all users: " + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+        catch (Exception e) {
+            String msg = "Error getting all users: " + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
     }
 
