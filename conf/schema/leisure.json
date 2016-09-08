@@ -24,6 +24,10 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "leisure",
         "name": "leisure=park",
         "objectType": "tag",
@@ -46,6 +50,10 @@
         "geometries": [
             "node",
             "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
         ],
         "isA": "leisure",
         "name": "leisure=playground",
@@ -119,14 +127,28 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "leisure",
         "name": "leisure=swimming_pool",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "sport=swimming",
+                "weight": 0.9
+            }
+        ]
     },
     {
         "geometries": [
             "node",
             "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
         ],
         "isA": "leisure",
         "name": "leisure=stadium",

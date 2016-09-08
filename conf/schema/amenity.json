@@ -1722,6 +1722,14 @@
         }
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "amenity",
         "name": "amenity=school",
         "objectType": "tag",
@@ -1927,6 +1935,14 @@
         "objectType": "tag"
     },
     {
+         "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "amenity",
         "name": "amenity=theatre",
         "objectType": "tag",
@@ -2131,6 +2147,23 @@
         "objectType": "tag",
         "similarTo": {
             "name": "amenity=youth_centre",
+            "weight": 0.8
+        }
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "amenity",
+        "name": "amenity=golf_course",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "sport=golf",
             "weight": 0.8
         }
     }
