@@ -31,21 +31,45 @@
 namespace hoot
 {
 
-class NetworkMergerTest : public CppUnit::TestFixture
+class EdgeMatchTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(NetworkMergerTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE(EdgeMatchTest);
+  CPPUNIT_TEST(containsTest);
+  CPPUNIT_TEST(containsPartialTest);
+  CPPUNIT_TEST(containsStubTest);
+  CPPUNIT_TEST(overlapsTest);
+  CPPUNIT_TEST(reverseTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void containsTest()
+  {
+
+  }
+
+  void containsPartialTest()
+  {
+
+  }
+
+  void containsStubTest()
+  {
+
+  }
+
+  void overlapsTest()
+  {
+
+  }
+
+  void reverseTest()
   {
 
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NetworkMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeMatchTest, "quick");
 
 }
