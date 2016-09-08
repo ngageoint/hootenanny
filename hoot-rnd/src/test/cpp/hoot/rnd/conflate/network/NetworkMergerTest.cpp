@@ -34,7 +34,7 @@ namespace hoot
 class NetworkMergerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(NetworkMergerTest);
-  CPPUNIT_TEST(runTest);
+  //CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

@@ -34,11 +34,11 @@ namespace hoot
 class EdgeMatchTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeMatchTest);
-  CPPUNIT_TEST(containsTest);
-  CPPUNIT_TEST(containsPartialTest);
-  CPPUNIT_TEST(containsStubTest);
-  CPPUNIT_TEST(overlapsTest);
-  CPPUNIT_TEST(reverseTest);
+  //CPPUNIT_TEST(containsTest);
+  //CPPUNIT_TEST(containsPartialTest);
+  //CPPUNIT_TEST(containsStubTest);
+  //CPPUNIT_TEST(overlapsTest);
+  //CPPUNIT_TEST(reverseTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

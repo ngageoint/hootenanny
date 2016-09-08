@@ -34,22 +34,22 @@ namespace hoot
 class NetworkDetailsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(NetworkDetailsTest);
-  CPPUNIT_TEST(calculateLengthTest);
-  CPPUNIT_TEST(calculateHeadingAtVertexTest);
-  CPPUNIT_TEST(calculateMatchingSublinesTest);
-  CPPUNIT_TEST(getCandidateMatchesTest);
-  CPPUNIT_TEST(getEdgeMatchScoreTest);
-  CPPUNIT_TEST(getEdgeStringMatchScoreTest);
-  CPPUNIT_TEST(getEnvelopeTest);
-  CPPUNIT_TEST(getPartialEdgeMatchScoreTest);
-  CPPUNIT_TEST(getSearchRadiusTest);
-  CPPUNIT_TEST(getVertexMatchScoreTest);
-  CPPUNIT_TEST(hasConfidentTiePointTest);
-  CPPUNIT_TEST(isCandidateMatchTest);
-  CPPUNIT_TEST(isReversedTest);
-  CPPUNIT_TEST(isPartialCandidateMatchTest);
-  CPPUNIT_TEST(toWayTest);
-  CPPUNIT_TEST(toWayStringTest);
+  //CPPUNIT_TEST(calculateLengthTest);
+  //CPPUNIT_TEST(calculateHeadingAtVertexTest);
+  //CPPUNIT_TEST(calculateMatchingSublinesTest);
+  //CPPUNIT_TEST(getCandidateMatchesTest);
+  //CPPUNIT_TEST(getEdgeMatchScoreTest);
+  //CPPUNIT_TEST(getEdgeStringMatchScoreTest);
+  //CPPUNIT_TEST(getEnvelopeTest);
+  //CPPUNIT_TEST(getPartialEdgeMatchScoreTest);
+  //CPPUNIT_TEST(getSearchRadiusTest);
+  //CPPUNIT_TEST(getVertexMatchScoreTest);
+  //CPPUNIT_TEST(hasConfidentTiePointTest);
+  //CPPUNIT_TEST(isCandidateMatchTest);
+  //CPPUNIT_TEST(isReversedTest);
+  //CPPUNIT_TEST(isPartialCandidateMatchTest);
+  //CPPUNIT_TEST(toWayTest);
+  //CPPUNIT_TEST(toWayStringTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

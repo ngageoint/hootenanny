@@ -34,7 +34,7 @@ namespace hoot
 class EdgeSublineMatchTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeSublineMatchTest);
-  CPPUNIT_TEST(runBasicTest);
+  //CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
