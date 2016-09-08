@@ -1404,6 +1404,7 @@ mgcp = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1530,64 +1531,46 @@ mgcp = {
             // tableName = layerNameLookup[tableName];
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
-            if (config.getOgrPartialTranslate() == 'true')
-            {
-                tableName = 'Partial';
-                attrs.FCODE = 'Partial';
-                delete attrs.F_CODE;
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
 
-                // If we have unused tags, add them to partial feature.
-                if (Object.keys(notUsedTags).length > 0)
-                {
-                    for (var i in notUsedTags)
-                    {
-                        attrs['OSM:' + i] = notUsedTags[i];
-                    }
-                }
+            // Dump out what attributes we have converted before they get wiped out
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+            for (var i in tags)
+            {
+                // Clean out all of the "source:XXX" tags to save space
+                if (i.indexOf('source:') !== -1) delete tags[i];
+                if (i.indexOf('error:') !== -1) delete tags[i];
+                if (i.indexOf('hoot:') !== -1) delete tags[i];
+            }
+
+            var str = JSON.stringify(tags);
+
+            // Shapefiles can't handle fields > 254 chars.
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            {
+                //return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
             }
             else
             {
-                tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-                // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-                for (var i in tags)
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
                 {
-                    // Clean out all of the "source:XXX" tags to save space
-                    if (i.indexOf('source:') !== -1) delete tags[i];
-                    if (i.indexOf('error:') !== -1) delete tags[i];
-                    if (i.indexOf('hoot:') !== -1) delete tags[i];
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
                 }
 
-                var str = JSON.stringify(tags);
-
-                // Shapefiles can't handle fields > 254 chars.
-                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-                // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-                {
-                    // return {attrs:{tag1:str}, tableName: tableName};
-                    attrs = {tag1:str};
-                }
-                else
-                {
-                    // Not good. Will fix with the rewrite of the tag splitting code
-                    if (str.length > 1012)
-                    {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
-                        str = str.substring(0,1012);
-                    }
-
-                    // Now split the text across the available tags
-                    attrs = {tag1:str.substring(0,253),
-                            tag2:str.substring(253,506),
-                            tag3:str.substring(506,759),
-                            tag4:str.substring(759,1012)};
-                }
+                // Now split the text across the available tags
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
             }
 
-             returnData.push({attrs: attrs, tableName: tableName});
+            returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {
