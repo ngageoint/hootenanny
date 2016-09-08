@@ -24,32 +24,32 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGISHCRITERION_H
-#define BUILDINGISHCRITERION_H
+#ifndef POIPOLYGONPOLYCRITERION_H
+#define POIPOLYGONPOLYCRITERION_H
 
 // hoot
-#include "ElementCriterion.h"
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A filter that will keep poly-like features, as defined by PoiPolygonMatch.
  */
-class BuildingishCriterion : public ElementCriterion
+class PoiPolygonPolyCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::BuildingishCriterion"; }
+  static string className() { return "hoot::PoiPolygonPolyCriterion"; }
 
-  BuildingishCriterion();
+  PoiPolygonPolyCriterion();
 
   bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new BuildingishCriterion(); }
+  virtual ElementCriterion* clone() { return new PoiPolygonPolyCriterion(); }
 
 };
 
 }
 
-#endif // BUILDINGISHCRITERION_H
+#endif // POIPOLYGONPOLYCRITERION_H

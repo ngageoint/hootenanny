@@ -77,20 +77,22 @@ public:
   virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
 
   /**
-   * @brief Custom, looser definition of OsmSchema::isBuilding for this matcher
+   * Determines criteria for a feature to be considered a polygon for matching by
+   * PoiPolygonMatch
    *
    * @param element to be evaluated
    * @return true if the element meets the criteria; false otherwise
    */
-  static bool isBuildingIsh(const Element& e);
+  static bool isPoly(const Element& e);
 
   /**
-   * @brief Custom, looser definition of OsmSchema::isPoi for this matcher
+   * @Determines criteria for a feature to be considered a POI for matching by
+   * PoiPolygonMatch
    *
    * @param element to be evaluated
    * @return true if the element meets the criteria; false otherwise
    */
-  static bool isPoiIsh(const Element& e);
+  static bool isPoi(const Element& e);
 
   static void printMatchDistanceInfo();
   static void resetMatchDistanceInfo();

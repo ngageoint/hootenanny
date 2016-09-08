@@ -46,7 +46,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "";
+QString PoiPolygonMatch::_testUuid = "{12aa10bf-dade-5e5c-8eae-aba920a52842}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -88,19 +88,20 @@ _typeScoreThreshold(typeScoreThreshold)
   _calculateMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMatch::isBuildingIsh(const Element& e)
+bool PoiPolygonMatch::isPoly(const Element& e)
 {
   return OsmSchema::getInstance().isArea(e.getTags(), e.getElementType()) &&
-         OsmSchema::getInstance().getCategories(e.getTags()).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+         (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) /*||
+          e.getTags().getNames().size() > 0*/);
 }
 
-bool PoiPolygonMatch::isPoiIsh(const Element& e)
+bool PoiPolygonMatch::isPoi(const Element& e)
 {
   return e.getElementType() == ElementType::Node &&
          (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
            OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-             e.getTags().getNames().size() > 0);
+          e.getTags().getNames().size() > 0);
 }
 
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -110,16 +111,16 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   ConstElementPtr e2 = map->getElement(eid2);
 
   ConstElementPtr poi, poly;
-  bool e1IsPoiIsh = false;
-  if (isPoiIsh(*e1) && isBuildingIsh(*e2))
+  bool e1IsPoi = false;
+  if (isPoi(*e1) && isPoly(*e2))
   {
     _poiEid = eid1;
     _polyEid = eid2;
     poi = e1;
     poly = e2;
-    e1IsPoiIsh = true;
+    e1IsPoi = true;
   }
-  else if (isPoiIsh(*e2) && isBuildingIsh(*e1))
+  else if (isPoi(*e2) && isPoly(*e1))
   {
     _poiEid = eid2;
     _polyEid = eid1;
@@ -147,6 +148,11 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   }
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
+  /*const bool polyIsABuilding = OsmSchema::getInstance().isBuilding(poly);
+  const bool polyIsAParkArea = !polyIsABuilding && poly->getTags().get("leisure") == "park";
+  const bool poiIsABuilding = OsmSchema::getInstance().isBuilding(poi);
+  const bool poiIsAParkArea = !poiIsABuilding && poi->getTags().get("leisure") == "park";*/
+
   const bool typeMatch = _calculateTypeMatch(poi, poly);
 
   const double nameScore = _calculateNameScore(poi, poly);
@@ -159,7 +165,22 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double sigma2 = e1->getCircularError() / 2.0;
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-  const double distance = gpoly->distance(gpoi.get());
+  double distance = 9999;
+  //if (!polyIsAParkArea || poly->getElementType() != ElementType::Way)
+  //{
+    distance = gpoly->distance(gpoi.get());
+  //}
+  /*else if (poly->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr way = dynamic_pointer_cast<const Way>(poly);
+    const vector<long> wayNodeIds = way->getNodeIds();
+    for (size_t i = 0; i < wayNodeIds.size(); i++)
+    {
+      ConstElementPtr wayNode = _map->getElement(ElementType::Node, wayNodeIds.at(i));
+      shared_ptr<Geometry> gwayNode = ElementConverter(map).convertToGeometry(wayNode);
+      distance = min(distance, gwayNode->distance(gpoi.get()));
+    }
+  }*/
   const double matchDistance =
     max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
   const double reviewDistance =
@@ -173,22 +194,53 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   evidence += addressMatch ? 1 : 0;
   evidence += distance <= matchDistance ? 2 : 0;
 
-  if (!closeMatch)
+  /*if (poiIsAParkArea)
   {
-    _c.setMiss();
-  }
-  else if (evidence >= 3)
+    if (!typeMatch)
+    {
+      _c.setMiss();
+      return;
+    }
+  }*/
+
+  //if (!polyIsAParkArea && !poiIsAParkArea)
+  //{
+    if (!closeMatch)
+    {
+      _c.setMiss();
+    }
+    else if (evidence >= 3)
+    {
+      _c.setMatch();
+    }
+    else if (evidence >= 1)
+    {
+      _c.setReview();
+    }
+    else
+    {
+      _c.setMiss();
+    }
+  //}
+  /*else
   {
-    _c.setMatch();
-  }
-  else if (evidence >= 1)
-  {
-    _c.setReview();
-  }
-  else
-  {
-    _c.setMiss();
-  }
+    if (!closeMatch)
+    {
+      _c.setMiss();
+    }
+    else if (evidence >= 4)
+    {
+      _c.setMatch();
+    }
+    else if (evidence >= 3)
+    {
+      _c.setReview();
+    }
+    else
+    {
+      _c.setMiss();
+    }
+  }*/
 
   if (Log::getInstance().getLevel() == Log::Debug)
   {
@@ -197,7 +249,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     const QString review = poi->getTags().get("REVIEW");
     if (ref2 == poly->getTags().get("REF1").split(";")[0])
     {
-      if (e1IsPoiIsh)
+      if (e1IsPoi)
       {
         _poiMatchRefIdsToDistances.insert(_t1BestKvp, distance);
         _polyMatchRefIdsToDistances.insert(_t2BestKvp, distance);
@@ -210,7 +262,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     }
     else if (review == poly->getTags().get("REF1").split(";")[0])
     {
-      if (e1IsPoiIsh)
+      if (e1IsPoi)
       {
         _poiReviewRefIdsToDistances.insert(_t1BestKvp, distance);
         _polyReviewRefIdsToDistances.insert(_t2BestKvp, distance);
@@ -223,8 +275,8 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     }
   }
 
-  if (e1->getTags().get("uuid") == _testUuid ||
-      e2->getTags().get("uuid") == _testUuid)
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
   {
     LOG_VARD(_eid1);
     LOG_VARD(e1->getTags().get("uuid"));
@@ -245,7 +297,14 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(ce);
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
+    LOG_VARD(OsmSchema::getInstance().isBuilding(e1));
+    LOG_VARD(OsmSchema::getInstance().isBuilding(e2));
+    LOG_VARD(polyIsABuilding);
+    LOG_VARD(polyIsAParkArea);
+    LOG_VARD(poiIsABuilding);
+    LOG_VARD(poiIsAParkArea);
     LOG_VARD(evidence);
+    LOG_VARD(_c);
     LOG_DEBUG("**************************");
   }
 }
@@ -361,7 +420,7 @@ double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
       const QString t1Kvp = t1List.at(i);
       const QString t2Kvp = t2List.at(j);
       const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
-      if (score >= result && Log::getInstance().getLevel() == Log::Debug)
+      if (score >= result)
       {
         if (!t1Kvp.isEmpty() && t1Kvp != "building=yes" && t1Kvp != "poi=yes")
         {
@@ -374,8 +433,8 @@ double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
       }
       result = max(score, result);
 
-      if (e1->getTags().get("uuid") == _testUuid ||
-          e2->getTags().get("uuid") == _testUuid)
+      if (Log::getInstance().getLevel() == Log::Debug &&
+          (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
       {
         LOG_VARD(t1List.at(i));
         LOG_VARD(t2List.at(j));
@@ -412,549 +471,35 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
 double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
 {
   //dataset c
-  /*if (typeKvp == "amenity=toilets")
-  {
-    return 45.0;
-  }
-  else if (typeKvp == "amenity=clinic")
-  {
-    return 9.0; //33
-  }
-  else if (typeKvp == "amenity=school")
-  {
-    return 16.0; //63
-  }
-  else if (typeKvp == "leisure=park")
-  {
-    return 8.0;
-  }*/
-
-  /*if (typeKvp == "amenity=fire_station")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=arts_centre")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=kindergarten")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=library")
-  {
-    return 4.0;
-  }
-  else if (typeKvp == "amenity=parking")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=police")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=school")
-  {
-    return 7.0;
-  }
-  else if (typeKvp == "amenity=social_facility")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=toilets")
-  {
-    return 9.0;
-  }
-  else if (typeKvp == "building=civic")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "building=hospital")
-  {
-    return 3.0;
-  }
-  else if (typeKvp == "leisure=park")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "leisure=swimming_pool")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "man_made=water_works")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=museum")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "building=retail")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "leisure=sports_centre")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "sport=swimming")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=carousel")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=hotel")
-  {
-    return 0.0;
-  }*/
-
-  //dataset d
-  /*if (typeKvp == "amenity=arts_centre")
-  {
-    return 25.0;
-  }
-  else if (typeKvp == "amenity=clinic")
-  {
-    return 129.0;
-  }
-  else if (typeKvp == "amenity=community_centre")
-  {
-    return 17.0;
-  }
-  else if (typeKvp == "amenity=embassy")
-  {
-    return 13.0;
-  }
-  else if (typeKvp == "amenity=fast_food")
-  {
-    return 38.0;
-  }
-  else if (typeKvp == "amenity=fuel")
-  {
-    return 104.0;
-  }
-  else if (typeKvp == "amenity=parking")
-  {
-    return 37.0;
-  }
-  else if (typeKvp == "building=train_station")
+  if (typeKvp == "amenity=clinic")
   {
     return 10.0;
   }
-  else if (typeKvp == "building=transportation")
+  else if (typeKvp == "amenity=school" || typeKvp == "amenity=kindergarten")
   {
-    return 23.0;
-  }
-  else if (typeKvp == "historic=building")
-  {
-    return 7.0;
-  }
-  else if (typeKvp == "leisure=sports_centre")
-  {
-    return 71.0;
+    return 20.0;
   }
   else if (typeKvp == "leisure=park")
   {
-    return 1.0;
+    return 10.0;
   }
-  else if (typeKvp == "leisure=sports_complex")
-  {
-    return 58.0;
-  }
-  else if (typeKvp == "office=company")
-  {
-    return 75.0;
-  }
-  else if (typeKvp == "shop=car")
-  {
-    return 149.0;
-  }
-  else if (typeKvp == "shop=car_repair")
-  {
-    return 86.0;
-  }
-  else if (typeKvp == "shop=general")
-  {
-    return 56.0;
-  }
-  else if (typeKvp == "station=light_rail")
-  {
-    return 23.0;
-  }
-  else if (typeKvp == "station=light_rail")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "tourism=hotel")
-  {
-    return 57.0;
-  }
-  else if (typeKvp == "tourism=museum")
-  {
-    return 31.0;
-  }
-  else if (typeKvp == "amenity=place_of_worship")
-  {
-    return 16.0;
-  }
-  else if (typeKvp == "amenity=post_office")
-  {
-    return 86.0;
-  }
-  else if (typeKvp == "amenity=restaurant")
-  {
-    return 49.0;
-  }
-  else if (typeKvp == "amenity=townhall")
-  {
-    return 44.0;
-  }
-  else if (typeKvp == "building=hospital")
-  {
-    return 156.0;
-  }
-  else if (typeKvp == "historic=monument")
-  {
-    return 21.0;
-  }
-  else if (typeKvp == "amenity=hospital")
-  {
-    return 129.0;
-  }
-  else if (typeKvp == "amenity=public_building")
-  {
-    return 38.0;
-  }
-  else if (typeKvp == "amenity=swimming_pool")
-  {
-    return 23.0;
-  }
-  else if (typeKvp == "amenity=theatre")
-  {
-    return 25.0;
-  }
-  else if (typeKvp == "building=commercial")
-  {
-    return 9.0;
-  }
-  else if (typeKvp == "building=house")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "building=office")
-  {
-    return 75.0;
-  }
-  else if (typeKvp == "building=residential")
-  {
-    return 5.0;
-  }
-  else if (typeKvp == "leisure=water_park")
-  {
-    return 21.0;
-  }
-  else if (typeKvp == "shop=mall")
-  {
-    return 56.0;
-  }
-  else if (typeKvp == "sport=swimming")
-  {
-    return 63.0;
-  }
-  else if (typeKvp == "tourism=attraction")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "tourism=hostel")
-  {
-    return 2.0;
-  }
-  else if (typeKvp == "tourism=zoo")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "amenity=cinema")
-  {
-    return 32.0;
-  }
-  else if (typeKvp == "amenity=nightclub")
-  {
-    return 33.0;
-  }
-  else if (typeKvp == "historic=castle")
-  {
-    return 33.0;
-  }*/
 
   return _matchDistance;
 }
 
 double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
 {
-  //dataset c
-  /*if (typeKvp == "amenity=fire_station")
+  /*if (typeKvp == "leisure=park")
   {
-    return 0.0;
+    return 20.0;
   }
-  else if (typeKvp == "amenity=arts_centre")
+  else if (typeKvp == "leisure=playground")
   {
-    return 0.0;
+    return 20.0;
   }
-  else if (typeKvp == "amenity=clinic")
+  else if (typeKvp == "sport=basketball")
   {
-    return 32.0;
-  }
-  else if (typeKvp == "amenity=kindergarten")
-  {
-    return 7.0;
-  }
-  else if (typeKvp == "amenity=library")
-  {
-    return 4.0;
-  }
-  else if (typeKvp == "amenity=parking")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=police")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "amenity=school")
-  {
-    return 15.0;
-  }
-  else if (typeKvp == "amenity=social_facility")
-  {
-    return 5.0;
-  }
-  else if (typeKvp == "amenity=toilets")
-  {
-    return 43.0;
-  }
-  else if (typeKvp == "building=civic")
-  {
-    return 1.0;
-  }
-  else if (typeKvp == "building=hospital")
-  {
-    return 3.0;
-  }
-  else if (typeKvp == "leisure=park")
-  {
-    return 33.0;
-  }
-  else if (typeKvp == "leisure=swimming_pool")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "man_made=water_works")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=attraction")
-  {
-    return 14.0;
-  }
-  else if (typeKvp == "tourism=museum")
-  {
-    return 7.0;
-  }
-  else if (typeKvp == "building=retail")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "historic=monument")
-  {
-    return 19.0;
-  }
-  else if (typeKvp == "leisure=sports_centre")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "sport=swimming")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=attraction")
-  {
-    return 14.0;
-  }
-  else if (typeKvp == "tourism=carousel")
-  {
-    return 0.0;
-  }
-  else if (typeKvp == "tourism=hotel")
-  {
-    return 0.0;
-  }*/
-
-  //dataset d
-  /*if (typeKvp == "amenity=embassy")
-  {
-    return 80.0;
-  }
-  else if (typeKvp == "amenity=nightclub")
-  {
-    return 33.0;
-  }
-  else if (typeKvp == "amenity=parking")
-  {
-    return 43.0;
-  }
-  else if (typeKvp == "building=residential")
-  {
-    return 6.0;
-  }
-  else if (typeKvp == "building=train_station")
-  {
-    return 10.0;
-  }
-  else if (typeKvp == "building=transportation")
-  {
-    return 23.0;
-  }
-  else if (typeKvp == "historic=building")
-  {
-    return 7.0;
-  }
-  else if (typeKvp == "leisure=sports_centre")
-  {
-    return 71.0;
-  }
-  else if (typeKvp == "leisure=park")
-  {
-    return 1.0;
-  }
-  else if (typeKvp == "leisure=sports_complex")
-  {
-    return 58.0;
-  }
-  else if (typeKvp == "office=company")
-  {
-    return 75.0;
-  }
-  else if (typeKvp == "shop=car")
-  {
-    return 149.0;
-  }
-  else if (typeKvp == "shop=car_repair")
-  {
-    return 86.0;
-  }
-  else if (typeKvp == "shop=general")
-  {
-    return 56.0;
-  }
-  else if (typeKvp == "station=light_rail")
-  {
-    return 23.0;
-  }
-  else if (typeKvp == "station=light_rail")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "tourism=hotel")
-  {
-    return 57.0;
-  }
-  else if (typeKvp == "tourism=museum")
-  {
-    return 31.0;
-  }
-  else if (typeKvp == "amenity=place_of_worship")
-  {
-    return 16.0;
-  }
-  else if (typeKvp == "amenity=post_office")
-  {
-    return 86.0;
-  }
-  else if (typeKvp == "amenity=restaurant")
-  {
-    return 49.0;
-  }
-  else if (typeKvp == "amenity=townhall")
-  {
-    return 44.0;
-  }
-  else if (typeKvp == "building=hospital")
-  {
-    return 156.0;
-  }
-  else if (typeKvp == "historic=monument")
-  {
-    return 33.0;
-  }
-  else if (typeKvp == "amenity=hospital")
-  {
-    return 129.0;
-  }
-  else if (typeKvp == "amenity=public_building")
-  {
-    return 38.0;
-  }
-  else if (typeKvp == "amenity=swimming_pool")
-  {
-    return 23.0;
-  }
-  else if (typeKvp == "amenity=theatre")
-  {
-    return 25.0;
-  }
-  else if (typeKvp == "building=commercial")
-  {
-    return 9.0;
-  }
-  else if (typeKvp == "building=house")
-  {
-    return 1.0;
-  }
-  else if (typeKvp == "building=office")
-  {
-    return 75.0;
-  }
-  else if (typeKvp == "building=residential")
-  {
-    return 5.0;
-  }
-  else if (typeKvp == "leisure=water_park")
-  {
-    return 21.0;
-  }
-  else if (typeKvp == "shop=mall")
-  {
-    return 56.0;
-  }
-  else if (typeKvp == "sport=swimming")
-  {
-    return 63.0;
-  }
-  else if (typeKvp == "tourism=attraction")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "tourism=hostel")
-  {
-    return 2.0;
-  }
-  else if (typeKvp == "tourism=zoo")
-  {
-    return 60.0;
-  }
-  else if (typeKvp == "amenity=cinema")
-  {
-    return 32.0;
-  }
-  else if (typeKvp == "amenity=nightclub")
-  {
-    return 33.0;
-  }
-  else if (typeKvp == "historic=castle")
-  {
-    return 33.0;
+    return 50.0;
   }*/
 
   return _reviewDistance;
@@ -1025,7 +570,8 @@ bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElem
     return false;
   }
 
-  if (buildingTags.get("uuid") == _testUuid || poiTags.get("uuid") == _testUuid)
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (buildingTags.get("uuid") == _testUuid || poiTags.get("uuid") == _testUuid))
   {
     LOG_VARD(buildingAddrComb);
     LOG_VARD(poiAddrComb);

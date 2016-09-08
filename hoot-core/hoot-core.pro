@@ -526,7 +526,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiBuildingMerger.cpp \
-    src/main/cpp/hoot/core/filters/BuildingishCriterion.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.cpp \
+    src/main/cpp/hoot/core/filters/AreaCriterion.cpp \
+    src/main/cpp/hoot/core/filters/WayCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1058,5 +1060,7 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiBuildingMerger.h \
-    src/main/cpp/hoot/core/filters/BuildingishCriterion.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h \
+    src/main/cpp/hoot/core/filters/AreaCriterion.h \
+    src/main/cpp/hoot/core/filters/WayCriterion.h
 

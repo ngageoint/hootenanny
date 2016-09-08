@@ -39,7 +39,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include "PoiPolygonMatch.h"
 #include <hoot/core/visitors/IndexElementsVisitor.h>
-#include <hoot/core/filters/BuildingishCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h>
 
 // Standard
 #include <fstream>
@@ -102,7 +102,7 @@ public:
       {
         const shared_ptr<const Element>& n = _map->getElement(*it);
 
-        if (n->isUnknown() && PoiPolygonMatch::isBuildingIsh(*n))
+        if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
           // score each candidate and push it on the result vector
           PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf);
@@ -140,7 +140,7 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return element->isUnknown() && PoiPolygonMatch::isPoiIsh(*element);
+    return element->isUnknown() && PoiPolygonMatch::isPoi(*element);
   }
 
   shared_ptr<HilbertRTree>& getIndex()
@@ -152,12 +152,12 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<BuildingishCriterion> buildCrit(new BuildingishCriterion());
+      shared_ptr<PoiPolygonPolyCriterion> polyCrit(new PoiPolygonPolyCriterion());
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
-                             buildCrit,
+                             polyCrit,
                              boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
@@ -202,10 +202,10 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
-    bool foundPoi = PoiPolygonMatch::isPoiIsh(*e1) || PoiPolygonMatch::isPoiIsh(*e2);
-    bool foundBuilding = PoiPolygonMatch::isBuildingIsh(*e1) || PoiPolygonMatch::isBuildingIsh(*e2);
+    bool foundPoi = PoiPolygonMatch::isPoi(*e1) || PoiPolygonMatch::isPoi(*e2);
+    bool foundPoly = PoiPolygonMatch::isPoly(*e1) || PoiPolygonMatch::isPoly(*e2);
 
-    if (foundPoi && foundBuilding)
+    if (foundPoi && foundPoly)
     {
       result = new PoiPolygonMatch(map, eid1, eid2, getMatchThreshold(), _getRf());
     }

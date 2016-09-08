@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "BuildingishCriterion.h"
+#include "PoiPolygonPolyCriterion.h"
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
@@ -33,15 +33,15 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, BuildingishCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 
-BuildingishCriterion::BuildingishCriterion()
+PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
 {
 }
 
-bool BuildingishCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool PoiPolygonPolyCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
-  return PoiPolygonMatch::isBuildingIsh(*e);
+  return PoiPolygonMatch::isPoly(*e);
 }
 
 }
