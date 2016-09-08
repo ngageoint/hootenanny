@@ -43,7 +43,7 @@ Feature: OSM/TDS Switcher
         When I select a node map feature with class "tag-leisure-park"
         And I should see "Edit feature: "
         And I select the "TDSv61" option labelled "Filter By Type"
-        Then I wait 5 "seconds" to see "Feature out of spec"
+        Then I wait 10 "seconds" to see "Feature out of spec"
 
         # Add a point with TDSv61 schema
         When I click the "add-point" button
