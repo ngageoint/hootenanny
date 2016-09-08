@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+set -e
+
 # create the mocha-coverage report
 cd $HOOT_HOME/hoot-ui
 npm install -q
@@ -11,6 +14,9 @@ sudo -u tomcat6 rm -rf /var/lib/tomcat6/webapps/hootenanny-id/js/hoot
 sudo -u tomcat6 rm -rf /var/lib/tomcat6/webapps/hootenanny-id/js/id
 sudo -u tomcat6 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot /var/lib/tomcat6/webapps/hootenanny-id/js/hoot
 sudo -u tomcat6 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id /var/lib/tomcat6/webapps/hootenanny-id/js/id
+# activate EGD plugin so it's available for cucumber tests
+[ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat6 ~/ActivateEGDplugin.sh /var/lib/tomcat6
+
 sudo service tomcat6 start
 
 # start istanbul-middleware
