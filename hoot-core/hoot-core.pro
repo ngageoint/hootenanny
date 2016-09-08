@@ -506,6 +506,7 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/WayMatchStringSplitter.cpp \
     src/main/cpp/hoot/core/filters/ParallelWayCriterion.cpp \
@@ -1027,6 +1028,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.h \
     src/main/cpp/hoot/core/filters/ArbitraryCriterion.h \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \
