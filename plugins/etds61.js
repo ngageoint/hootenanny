@@ -52,7 +52,7 @@ etds61 = {
         }
 
         var eAttrs = {}; // The final English output
-        eAttrs['Feature Code'] = 'Not Found';
+        eAttrs['Feature Code'] = 'Not found';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (tdsData.length > 0)
@@ -83,7 +83,7 @@ etds61 = {
                 // Find an FCODE
                 if (tFCODE in etds61.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== 'Not Found')
+                    if (eAttrs['Feature Code'] !== 'Not found')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
                     }

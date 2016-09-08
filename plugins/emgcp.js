@@ -50,7 +50,7 @@ emgcp = {
         }
 
         var eAttrs = {}; // The final English output
-        eAttrs['Feature Code'] = 'Not Found';
+        eAttrs['Feature Code'] = 'Not found';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (mgcpData.length > 0)
@@ -81,7 +81,7 @@ emgcp = {
                 // Find an FCODE
                 if (tFCODE in emgcp.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== 'Not Found')
+                    if (eAttrs['Feature Code'] !== 'Not found')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }
