@@ -59,6 +59,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
 else
 	$(HOOT_HOME)/scripts/CoverHootUI.sh
 endif
+	echo ""
 
 clean-coverage:
 	rm -f coverage.log
