@@ -53,6 +53,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +88,9 @@ public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
     private static final long MAX_RESULT_SIZE;
 
+    @Autowired
+    private ReviewReferencesRetriever reviewReferencesRetriever;
+
     static {
         long value;
 
@@ -101,8 +105,7 @@ public class ReviewResource {
         MAX_RESULT_SIZE = value;
     }
 
-    public ReviewResource() {
-    }
+    public ReviewResource() {}
 
     /**
      * Resolves all reviews for a given map
@@ -207,7 +210,7 @@ public class ReviewResource {
                 // element can be involved in many different relations and since we do not know the
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
-                List<ReviewRef> references = ReviewReferencesRetriever.getAllReferences(elementInfo);
+                List<ReviewRef> references = reviewReferencesRetriever.getAllReferences(elementInfo);
                 logger.debug("Returning {} review references for requesting element: {}", references.size(), elementInfo);
                 responseRefs.setReviewRefs(references.toArray(new ReviewRef[references.size()]));
                 responseRefs.setQueryElementInfo(elementInfo);

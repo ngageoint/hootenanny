@@ -51,6 +51,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,8 +75,14 @@ import hoot.services.utils.PostgresUtils;
 public class ReviewBookmarkResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkResource.class);
 
-    public ReviewBookmarkResource() {
-    }
+    @Autowired
+    private ReviewBookmarksSaver reviewBookmarksSaver;
+
+    @Autowired
+    private ReviewBookmarkRetriever reviewBookmarkRetriever;
+
+
+    public ReviewBookmarkResource() {}
 
     /**
      * To create or update review bookmark
@@ -119,7 +126,7 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            long nSaved = ReviewBookmarksSaver.save(request);
+            long nSaved = reviewBookmarksSaver.save(request);
             response.setSavedCount(nSaved);
         }
         catch (WebApplicationException wae) {
@@ -161,10 +168,10 @@ public class ReviewBookmarkResource {
         try {
             List<ReviewBookmarks> reviewBookmarks;
             if (bookmarkId != null) {
-                reviewBookmarks = ReviewBookmarkRetriever.retrieve(bookmarkId);
+                reviewBookmarks = reviewBookmarkRetriever.retrieve(bookmarkId);
             }
             else {
-                reviewBookmarks = ReviewBookmarkRetriever.retrieve(mapId, relationId);
+                reviewBookmarks = reviewBookmarkRetriever.retrieve(mapId, relationId);
             }
 
             for (ReviewBookmarks mk : reviewBookmarks) {
@@ -299,7 +306,7 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            List<ReviewBookmarks> res = ReviewBookmarkRetriever.retrieveAll(orderByCol, isAsc, limit,
+            List<ReviewBookmarks> res = reviewBookmarkRetriever.retrieveAll(orderByCol, isAsc, limit,
                     offsetCnt, creatorArray, layerArray);
 
             for (ReviewBookmarks mk : res) {
@@ -342,12 +349,12 @@ public class ReviewBookmarkResource {
     @GET
     @Path("/stat")
     @Produces(MediaType.APPLICATION_JSON)
-    public static ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
+    public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
 
         try {
-            long nCnt = ReviewBookmarkRetriever.getBookmarksCount();
-            response.setTotalCount(nCnt);
+            long bookmarksCount = reviewBookmarkRetriever.getBookmarksCount();
+            response.setTotalCount(bookmarksCount);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -378,8 +385,8 @@ public class ReviewBookmarkResource {
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 
         try {
-            long nDel = remove(request);
-            response.setDeleteCount(nDel);
+            long count = remove(request);
+            response.setDeleteCount(count);
         }
         catch (WebApplicationException wae) {
             throw wae;

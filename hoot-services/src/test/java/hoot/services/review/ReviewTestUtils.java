@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.osm.ChangesetDbWriter;
 import hoot.services.models.osm.Changeset;
@@ -44,8 +42,6 @@ import hoot.services.models.osm.Element.ElementType;
  * Various utilities for review process testing
  */
 public class ReviewTestUtils {
-    private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
-
     public Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
 
     /**

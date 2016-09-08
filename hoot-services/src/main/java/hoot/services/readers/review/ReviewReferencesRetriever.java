@@ -26,6 +26,7 @@
  */
 package hoot.services.readers.review;
 
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -37,10 +38,10 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.models.db.CurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.osm.Element;
 import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
@@ -50,13 +51,13 @@ import hoot.services.utils.ReviewUtils;
 /**
  * Retrieves element references to reviews for a query element
  */
-public final class ReviewReferencesRetriever {
+@Component
+public class ReviewReferencesRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewReferencesRetriever.class);
-    private static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
-    private ReviewReferencesRetriever() {}
+    public ReviewReferencesRetriever() {}
 
-    private static List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
+    private List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
         return createQuery(mapId)
                 .select(currentRelationMembers.relationId)
                 .from(currentRelationMembers)
@@ -77,7 +78,7 @@ public final class ReviewReferencesRetriever {
      * @return a list containing all features the input feature needs to be
      *         reviewed with
      */
-    public static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
+    public List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
         logger.debug("requestingElementInfo: {}", queryElementInfo);
 
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId());
@@ -100,7 +101,7 @@ public final class ReviewReferencesRetriever {
             // select all relation members where themember's id is not equal to the requesting element's id and the
             // member's type is not = to the requesting element's type
             List<CurrentRelationMembers> referencedMembers = createQuery(mapIdNum)
-                    .select(QCurrentRelationMembers.currentRelationMembers)
+                    .select(currentRelationMembers)
                     .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.in(allReviewRelationIds))
                     .orderBy(currentRelationMembers.relationId.asc(),

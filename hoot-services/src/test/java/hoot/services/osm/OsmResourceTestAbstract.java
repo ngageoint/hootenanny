@@ -40,8 +40,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -66,7 +64,6 @@ import hoot.services.utils.MapUtils;
 @Transactional
 @Rollback
 public abstract class OsmResourceTestAbstract extends JerseyTest {
-    private static final Logger logger = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
 
     protected static long userId = -1;
     protected static long mapId = -1;

@@ -38,17 +38,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
 
-
-final class ReviewBookmarksSaver {
+@Component
+public class ReviewBookmarksSaver {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 
-    ReviewBookmarksSaver() {}
+    @Autowired
+    private ReviewBookmarkRetriever reviewBookmarkRetriever;
+
+    public ReviewBookmarksSaver() {}
 
     /**
      * Saves review tags. It first checks to see if exists and if not insert
@@ -58,11 +63,11 @@ final class ReviewBookmarksSaver {
      *            - request object containing inserted/updated fields
      * @return - numbers of saved tags
      */
-    static long save(ReviewBookmarkSaveRequest request) {
+     long save(ReviewBookmarkSaveRequest request) {
         long nSaved;
 
         if (request.getBookmarkId() > -1) {
-            List<ReviewBookmarks> res = ReviewBookmarkRetriever.retrieve(request.getBookmarkId());
+            List<ReviewBookmarks> res = reviewBookmarkRetriever.retrieve(request.getBookmarkId());
             nSaved = res.isEmpty() ? insert(request) : update(request, res.get(0));
         }
         else {
@@ -80,7 +85,7 @@ final class ReviewBookmarksSaver {
      *            - request object containing inserted fields
      * @return - total numbers of inserted
      */
-    private static long insert(ReviewBookmarkSaveRequest request) {
+    private long insert(ReviewBookmarkSaveRequest request) {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
@@ -101,7 +106,7 @@ final class ReviewBookmarksSaver {
      *            - Current review tag
      * @return total numbers of updated
      */
-    private static long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
+    private long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmarksDto) {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         reviewBookmarksDto.setLastModifiedAt(now);
@@ -122,7 +127,7 @@ final class ReviewBookmarksSaver {
      *            - json containing tags kv
      * @return - Expression Object for QueryDSL consumption
      */
-    private static Object jasonToHStore(JSONObject tags) {
+    private Object jasonToHStore(JSONObject tags) {
         Map<String, String> hStoreObject = new HashMap<>();
 
         if (tags != null) {

@@ -53,8 +53,7 @@ import hoot.services.UnitTest;
 @PrepareForTest({ BuildInfo.class })
 public class AboutResourceTest extends JerseyTest {
 
-    public AboutResourceTest() {
-    }
+    public AboutResourceTest() {}
 
     @Override
     protected Application configure() {

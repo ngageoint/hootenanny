@@ -45,8 +45,6 @@ import hoot.services.utils.MapUtils;
  * writing. Its not meant to be run as part of the test suite.
  */
 public class ChangesetDbWriterTest {
-    private static final QCurrentNodes nodes = QCurrentNodes.currentNodes;
-
     private static final int NUM_NODES = 1000;
     private static final int NUM_TAGS_PER_NODE = 10;
 
@@ -77,7 +75,7 @@ public class ChangesetDbWriterTest {
 
         Assert.assertEquals(NUM_NODES,
                 (int) createQuery(mapId)
-                        .from(nodes)
+                        .from(QCurrentNodes.currentNodes)
                         .fetchCount());
 
         Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,

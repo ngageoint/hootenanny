@@ -47,8 +47,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
@@ -57,8 +55,6 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ExportJobResourceTest {
-
-    private static final Logger log = LoggerFactory.getLogger(ExportJobResourceTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -160,7 +156,6 @@ public class ExportJobResourceTest {
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
-            log.debug(commandArgs);
 
             Assert.assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
             Assert.assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));

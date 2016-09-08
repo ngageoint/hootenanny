@@ -222,10 +222,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Assert.fail("Unexpected response: " + e.getResponse());
         }
+
         Assert.assertNotNull(responseData);
-
         verifyFirstRelationWasReturned(responseData, String.valueOf(relationIdsArr[0]), changesetId, null);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -250,9 +249,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
 
         Assert.assertNotNull(responseData);
-
         verifyFirstNodeWasReturned(responseData, uniqueElementId, changesetId, originalBounds);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -279,9 +276,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
 
         Assert.assertNotNull(responseData);
-
         verifyFirstWayWasReturned(responseData, uniqueElementId, changesetId, null);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -306,9 +301,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
 
         Assert.assertNotNull(responseData);
-
         verifyFirstRelationWasReturned(responseData, uniqueElementId, changesetId, null);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -342,7 +335,6 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         wayNodes.add(nodeIdsArr[4]);
 
         verifyFirstWayWasReturned(responseData, String.valueOf(wayIdsArr[0]), changesetId, wayNodes);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -378,7 +370,6 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
 
         verifyFirstRelationWasReturned(responseData, String.valueOf(relationIdsArr[0]), changesetId, members);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -413,7 +404,6 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         wayNodes.add(nodeIdsArr[4]);
 
         verifyFirstWayWasReturned(responseData, uniqueElementId, changesetId, wayNodes);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -449,7 +439,6 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
 
         verifyFirstRelationWasReturned(responseData, uniqueElementId, changesetId, members);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 

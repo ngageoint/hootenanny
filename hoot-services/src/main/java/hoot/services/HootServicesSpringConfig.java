@@ -24,7 +24,7 @@ public class HootServicesSpringConfig {
     }
 
     /*
-     *   TODO: Don't forget to externalize the DB connection properties!!!
+        TODO: Don't forget to externalize the DB connection properties!!!
      */
     @Bean(name = "dataSource")
     public DataSource dataSource() {

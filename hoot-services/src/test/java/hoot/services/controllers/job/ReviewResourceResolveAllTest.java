@@ -49,8 +49,7 @@ import hoot.services.utils.RandomNumberGenerator;
 
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
-    public ReviewResourceResolveAllTest() {
-    }
+    public ReviewResourceResolveAllTest() {}
 
     @Test
     @Category(UnitTest.class)

@@ -14,11 +14,11 @@ import hoot.services.controllers.filters.CorsResponseFilter;
 public class HootServicesJerseyApplication extends ResourceConfig {
     private static final Logger logger = Logger.getLogger(HootServicesJerseyApplication.class.getName());
 
-    private static Class<?> springConfigrationClass;
+    private static Class<?> springConfigurationClass;
 
 
-    public static void setSpringConfigationClass(Class<?> springConfigationClass) {
-        HootServicesJerseyApplication.springConfigrationClass = springConfigationClass;
+    public static void setSpringConfigationClass(Class<?> springConfigurationClass) {
+        HootServicesJerseyApplication.springConfigurationClass = springConfigurationClass;
     }
 
     public HootServicesJerseyApplication() {
@@ -33,18 +33,13 @@ public class HootServicesJerseyApplication extends ResourceConfig {
                                                      Level.ALL,
                                                      LoggingFeature.Verbosity.PAYLOAD_TEXT,
                                                      LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
-*/
+        */
+
         super.registerInstances(new LoggingFilter(Logger.getLogger(HootServicesJerseyApplication.class.getName()), true));
 
-        AnnotationConfigApplicationContext ctx = null;
-
-        if (springConfigrationClass == null) {
-            ctx = new AnnotationConfigApplicationContext(HootServicesSpringConfig.class);
+        if (springConfigurationClass != null) {
+            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(springConfigurationClass);
+            super.property("contextConfig", ctx);
         }
-        else {
-            ctx = new AnnotationConfigApplicationContext(springConfigrationClass);
-        }
-
-        super.property("contextConfig", ctx);
     }
 }

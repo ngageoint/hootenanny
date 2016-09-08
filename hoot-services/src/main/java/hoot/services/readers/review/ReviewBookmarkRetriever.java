@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.sql.SQLQuery;
@@ -40,12 +41,13 @@ import com.querydsl.sql.SQLQuery;
 import hoot.services.models.db.ReviewBookmarks;
 
 
-public final class ReviewBookmarkRetriever {
+@Component
+public class ReviewBookmarkRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 
-    private ReviewBookmarkRetriever() {}
+    public ReviewBookmarkRetriever() {}
 
-    public static List<ReviewBookmarks> retrieve(long mapId, long relationId) {
+    public List<ReviewBookmarks> retrieve(long mapId, long relationId) {
         return createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
@@ -53,7 +55,7 @@ public final class ReviewBookmarkRetriever {
                 .fetch();
     }
 
-    public static List<ReviewBookmarks> retrieve(long bookmarkId) {
+    public List<ReviewBookmarks> retrieve(long bookmarkId) {
         return createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
@@ -74,7 +76,7 @@ public final class ReviewBookmarkRetriever {
      *            - offset row for paging
      * @return - list of Review tags
      */
-    public static List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
+    public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
             long offset, Long[] creatorArray, Long[] layerArray) {
         SQLQuery<ReviewBookmarks> query = createQuery().query()
                 .select(reviewBookmarks).from(reviewBookmarks);
@@ -111,7 +113,7 @@ public final class ReviewBookmarkRetriever {
      * 
      * @return - numbers of toal count
      */
-    public static long getBookmarksCount() {
+    public long getBookmarksCount() {
         return createQuery().from(reviewBookmarks).fetchCount();
     }
 
@@ -125,7 +127,7 @@ public final class ReviewBookmarkRetriever {
      *            - asc | dsc
      * @return - OrderSpecifier
      */
-    private static OrderSpecifier<?> getSpecifier(String orderByCol, boolean isAsc) {
+    private OrderSpecifier<?> getSpecifier(String orderByCol, boolean isAsc) {
         OrderSpecifier<?> order = reviewBookmarks.id.asc();
         if (orderByCol != null) {
             switch (orderByCol) {

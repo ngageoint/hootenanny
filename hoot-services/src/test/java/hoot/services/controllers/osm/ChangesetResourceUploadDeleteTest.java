@@ -54,6 +54,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -1976,6 +1977,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         }
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNegativeElementId() throws Exception {
