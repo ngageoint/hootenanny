@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS += @DEFS@
 QMAKE_CXXFLAGS += -frounding-math
 
 CONFIG += @HAS_LOG4CXX@ @HAS_NEWMAT@ @HAS_CPPUNIT@ @HAS_HADOOP@ \
-  @HAS_COVERAGE@ @HAS_SERVICES@ @HAS_STXXL@ @HAS_RND@ @HAS_NODEJS@ @HAS_UI_TESTS
+  @HAS_COVERAGE@ @HAS_SERVICES@ @HAS_STXXL@ @HAS_RND@ @HAS_NODEJS@ @HAS_UI_TESTS@ 
 
 # Default to release mode, this can be overridden in LocalConfig.pri
 CONFIG += release
