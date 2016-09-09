@@ -180,6 +180,7 @@ public class JobStatusManager {
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);
         }
+
         return null;
     }
 
@@ -205,42 +206,42 @@ public class JobStatusManager {
      * @param jobStatus
      * @param isComplete
      */
-    private static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail) {
-        JobStatus stat = createQuery()
+    private void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail) {
+        JobStatus status = createQuery()
                 .select(QJobStatus.jobStatus)
                 .from(QJobStatus.jobStatus)
                 .where(QJobStatus.jobStatus.jobId.eq(jobId))
                 .fetchOne();
 
-        if (stat != null) {
+        if (status != null) {
             if (isComplete) {
-                stat.setPercentComplete(100.0);
-                stat.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                status.setPercentComplete(100.0);
+                status.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             }
 
-            stat.setStatus(jobStatus);
+            status.setStatus(jobStatus);
 
             if (statusDetail != null) {
-                stat.setStatusDetail(statusDetail);
+                status.setStatusDetail(statusDetail);
             }
-
-            createQuery().update(QJobStatus.jobStatus)
-                    .populate(stat)
-                    .where(QJobStatus.jobStatus.jobId.eq(stat.getJobId()))
-                    .execute();
         }
         else {
-            stat = new JobStatus();
-            stat.setJobId(jobId);
-            stat.setStatus(jobStatus);
+            status = new JobStatus();
+            status.setJobId(jobId);
+            status.setStatus(jobStatus);
             Timestamp ts = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            stat.setStart(ts);
+            status.setStart(ts);
 
             if (isComplete) {
-                stat.setEnd(ts);
+                status.setEnd(ts);
             }
-
-            createQuery().insert(QJobStatus.jobStatus).populate(stat).execute();
         }
+
+        createQuery().merge(QJobStatus.jobStatus)
+                .columns(QJobStatus.jobStatus.jobId, QJobStatus.jobStatus.end, QJobStatus.jobStatus.statusDetail,
+                        QJobStatus.jobStatus.status, QJobStatus.jobStatus.start, QJobStatus.jobStatus.percentComplete)
+                .values(status.getJobId(), status.getEnd(), status.getStatusDetail(), status.getStatus(),
+                        status.getStart(), status.getPercentComplete())
+                .execute();
     }
 }

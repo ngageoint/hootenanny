@@ -32,19 +32,17 @@ import hoot.services.models.db.Users;
 public class UserSaveResponse {
     private Users user;
 
+    public UserSaveResponse() {}
+
+    public UserSaveResponse(Users u) {
+        user = u;
+    }
+
     public Users getUser() {
         return user;
     }
 
     public void setUser(Users u) {
         user = u;
-    }
-
-    public UserSaveResponse(Users u) {
-        user = u;
-    }
-
-    public UserSaveResponse() {
-
     }
 }

@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.job;
 
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
@@ -41,10 +42,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
+
 
 @Component
 public class ReviewBookmarksSaver {
@@ -88,7 +89,6 @@ public class ReviewBookmarksSaver {
     private long insert(ReviewBookmarkSaveRequest request) {
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
         return createQuery().insert(reviewBookmarks)
                 .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
                         reviewBookmarks.createdBy, reviewBookmarks.detail)
@@ -113,7 +113,6 @@ public class ReviewBookmarksSaver {
         reviewBookmarksDto.setLastModifiedBy(request.getUserId());
         reviewBookmarksDto.setDetail(jasonToHStore(request.getDetail()));
 
-        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
         return createQuery().update(reviewBookmarks)
                 .populate(reviewBookmarksDto)
                 .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()))

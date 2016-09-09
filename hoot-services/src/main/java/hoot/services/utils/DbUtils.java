@@ -50,7 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -182,50 +181,6 @@ public final class DbUtils {
                 .from(maps)
                 .where(maps.id.eq(mapId))
                 .fetchFirst();
-    }
-
-    private static long getNodeCountByMapName(String mapName, Expression<?> table) {
-        long recordCount = 0;
-
-        List<Long> mapIds = getMapIdsByName(mapName);
-
-        for (Long mapId : mapIds) {
-            recordCount += createQuery(mapId.toString())
-                    .from(table)
-                    .fetchCount();
-        }
-
-        return recordCount;
-    }
-
-    /**
-     * Get current_nodes record count by map name
-     *
-     * @param mapName map name
-     * @return count of nodes record
-     */
-    public static long getNodesCountByName(String mapName) {
-        return getNodeCountByMapName(mapName, currentNodes);
-    }
-
-    /**
-     * Get current_ways record count by map name
-     *
-     * @param mapName map name
-     * @return current_ways record count
-     */
-    public static long getWayCountByName(String mapName) {
-        return getNodeCountByMapName(mapName, currentWays);
-    }
-
-    /**
-     * Get current_relations record count by map name
-     *
-     * @param mapName map name
-     * @return current_relations record count
-     */
-    public static long getRelationCountByName(String mapName) {
-        return getNodeCountByMapName(mapName, currentRelations);
     }
 
     /**

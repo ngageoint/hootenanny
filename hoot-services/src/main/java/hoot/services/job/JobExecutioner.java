@@ -42,8 +42,7 @@ import hoot.services.ApplicationContextUtils;
 public class JobExecutioner extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
 
-    private JobStatusManager jobStatusManager;
-
+    private final JobStatusManager jobStatusManager;
     private final JSONObject command;
     private final String jobId;
 
@@ -61,27 +60,27 @@ public class JobExecutioner extends Thread {
         logger.debug("Handling job exec request...");
 
         try {
-            command.put("jobId", jobId);
-
             ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
-            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            PlatformTransactionManager tm = appContext.getBean("transactionManager", PlatformTransactionManager.class);
             Executable executable = appContext.getBean((String) command.get("execImpl"), Executable.class);
 
             TransactionStatus transactionStatus = null;
 
             try {
-                transactionStatus = txManager.getTransaction(null);
+                transactionStatus = tm.getTransaction(null);
 
+                command.put("jobId", jobId);
                 jobStatusManager.addJob(jobId);
                 executable.exec(command);
                 jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
 
-                txManager.commit(transactionStatus);
+                tm.commit(transactionStatus);
             }
             catch (Exception e) {
-                if (transactionStatus != null) {
-                    txManager.rollback(transactionStatus);
+                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
+                    tm.rollback(transactionStatus);
                 }
+
                 logger.error("Error executing job with ID = {}", jobId, e);
                 jobStatusManager.setFailed(jobId, e.getMessage());
             }

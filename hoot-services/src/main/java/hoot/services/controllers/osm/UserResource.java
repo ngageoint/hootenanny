@@ -91,7 +91,7 @@ public class UserResource {
     public Response get(@PathParam("userId") String userId) {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());
 
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             long userIdNum;
             try {
@@ -111,11 +111,7 @@ public class UserResource {
             }
 
             // there is only ever one test user
-            Users user = createQuery()
-                    .select(users)
-                    .from(users)
-                    .where(users.id.eq(userIdNum))
-                    .fetchOne();
+            Users user = createQuery().select(users).from(users).where(users.id.eq(userIdNum)).fetchOne();
 
             if (user == null) {
                 String message = "No user exists with ID: " + userId + ".  Please request a valid user.";
@@ -154,25 +150,16 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
-        UserSaveResponse response;
+        Users user;
         try {
-            Users user = getOrSaveByEmail(userEmail);
-            if (user == null) {
-                String msg = "SQL Insert failed.";
-                throw new WebApplicationException(Response.serverError().entity(msg).build());
-            }
-
-            response = new UserSaveResponse(user);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            user = getOrSaveByEmail(userEmail);
         }
         catch (Exception e) {
             String msg = "Error saving user: " + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return response;
+        return new UserSaveResponse(user);
     }
 
     /**
@@ -186,14 +173,16 @@ public class UserResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public UsersGetResponse getAllUsers() {
+        List<Users> users;
         try {
-            List<Users> res = retrieveAll();
-            return new UsersGetResponse(res);
+            users = retrieveAllUsers();
         }
         catch (Exception e) {
             String msg = "Error getting all users: " + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return new UsersGetResponse(users);
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {
@@ -201,19 +190,15 @@ public class UserResource {
 
         Document responseDoc = XmlDocumentBuilder.create();
         Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
-        Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */-1);
+        Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */ -1);
         osmElement.appendChild(userElement);
         responseDoc.appendChild(osmElement);
 
         return responseDoc;
     }
 
-    private static List<Users> retrieveAll() {
-        return createQuery()
-                .select(QUsers.users)
-                .from(QUsers.users)
-                .orderBy(QUsers.users.displayName.asc())
-                .fetch();
+    private static List<Users> retrieveAllUsers() {
+        return createQuery().select(QUsers.users).from(QUsers.users).orderBy(QUsers.users.displayName.asc()).fetch();
     }
 
     private static Users getOrSaveByEmail(String userEmail) {
@@ -225,8 +210,12 @@ public class UserResource {
 
         // none then create
         if (users == null) {
-            long nCreated = insert(userEmail);
-            if (nCreated > 0) {
+            long rowCount = createQuery().insert(QUsers.users)
+                    .columns(QUsers.users.email, QUsers.users.displayName)
+                    .values(userEmail, userEmail)
+                    .execute();
+
+            if (rowCount > 0) {
                 users = createQuery()
                         .select(QUsers.users)
                         .from(QUsers.users)
@@ -236,12 +225,5 @@ public class UserResource {
         }
 
         return users;
-    }
-
-    private static long insert(String email) {
-        return createQuery().insert(users)
-                .columns(users.email, users.displayName)
-                .values(email, email)
-                .execute();
     }
 }

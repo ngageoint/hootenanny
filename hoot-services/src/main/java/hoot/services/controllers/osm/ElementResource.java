@@ -78,8 +78,7 @@ public class ElementResource {
     private static final Pattern UNIQUE_ELEMENT_ID_PATTERN = Pattern.compile(UNIQUE_ELEMENT_ID_REGEX);
 
 
-    public ElementResource() {
-    }
+    public ElementResource() {}
 
     /**
      * Returns a single element item's XML for a given map without its element
@@ -157,7 +156,7 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Document elementDoc = null;
+        Document elementDoc;
         try {
             elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true, false);
         }
@@ -415,7 +414,7 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
-        Document elementDoc = null;
+        Document elementDoc;
         try {
             elementDoc = XmlDocumentBuilder.create();
         }

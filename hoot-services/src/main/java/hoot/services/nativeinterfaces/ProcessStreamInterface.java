@@ -73,8 +73,7 @@ public class ProcessStreamInterface implements NativeInterface {
     private static final Map<String, CommandRunner> jobProcesses = new ConcurrentHashMap<>();
     private static final Map<String, CommandRunner> progProcesses = new ConcurrentHashMap<>();
 
-    public ProcessStreamInterface() {
-    }
+    public ProcessStreamInterface() {}
 
     @Override
     public String getJobProgress(String jobId) {

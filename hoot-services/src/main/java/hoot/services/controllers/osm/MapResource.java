@@ -707,7 +707,7 @@ public class MapResource {
 
         String jobId = UUID.randomUUID().toString();
 
-        // TODO: Needs to be executed using a threa connection pool!
+        // TODO: Needs to be executed using a thread pool!
         (new JobExecutioner(jobId, command, jobStatusManager)).start();
 
         JSONObject json = new JSONObject();
@@ -786,25 +786,22 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFolder(@QueryParam("folderName") String folderName,
                               @QueryParam("parentId") Long parentId) {
-        Long newId = -1L;
 
+        Long newId = -1L;
         try {
-            List<Long> ids = createQuery()
+            newId = createQuery()
                     .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
                     .from()
-                    .fetch();
+                    .fetchOne();
 
-            if ((ids != null) && (!ids.isEmpty())) {
-                newId = ids.get(0);
-                Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-                long userId = 1;
-                createQuery().insert(folders)
-                        .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
-                                folders.parentId)
-                        .values(newId, now, folderName, true, userId, parentId)
-                        .execute();
-            }
+            long userId = 1;
+            createQuery().insert(folders)
+                    .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
+                            folders.parentId)
+                    .values(newId, now, folderName, true, userId, parentId)
+                    .execute();
         }
         catch (Exception e) {
             handleError(e, null, null);
@@ -926,24 +923,18 @@ public class MapResource {
                                         @QueryParam("updateType") String updateType) {
         try {
             // Delete any existing to avoid duplicate entries
-            createQuery().delete(folderMapMappings)
-                    .where(folderMapMappings.mapId.eq(mapId))
-                    .execute();
+            createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
 
             if (updateType.equalsIgnoreCase("new") || updateType.equalsIgnoreCase("update")) {
-                List<Long> ids = createQuery()
+                Long newId = createQuery()
                         .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
                         .from()
-                        .fetch();
+                        .fetchOne();
 
-                if ((ids != null) && (!ids.isEmpty())) {
-                    Long newId = ids.get(0);
-
-                    createQuery().insert(folderMapMappings)
-                            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-                            .values(newId, mapId, folderId)
-                            .execute();
-                }
+                createQuery().insert(folderMapMappings)
+                        .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+                        .values(newId, mapId, folderId)
+                        .execute();
             }
         }
         catch (Exception e) {
@@ -1096,7 +1087,7 @@ public class MapResource {
      * @return a XML document response
      */
     private static Document writeEmptyResponse() {
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             responseDoc = XmlDocumentBuilder.create();
         }
@@ -1106,6 +1097,7 @@ public class MapResource {
 
         Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
         responseDoc.appendChild(elementRootXml);
+
         return responseDoc;
     }
 
@@ -1125,7 +1117,7 @@ public class MapResource {
      */
     private static Document writeResponse(java.util.Map<ElementType, java.util.Map<Long, Tuple>> results,
             BoundingBox queryBounds, boolean multiLayerUniqueElementIds, long mapId) {
-        Document responseDoc = null;
+        Document responseDoc;
         try {
             responseDoc = XmlDocumentBuilder.create();
         }

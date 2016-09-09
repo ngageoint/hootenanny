@@ -33,12 +33,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.utils.DbUtils;
 
 
 @Scope(SCOPE_PROTOTYPE)
 @Service("resourcesCleanUtil")
+@Transactional
 public class ResourcesCleanUtil implements Executable {
     private static final Logger logger = LoggerFactory.getLogger(ResourcesCleanUtil.class);
 
@@ -57,7 +59,7 @@ public class ResourcesCleanUtil implements Executable {
         this.finalStatusDetail = json.toJSONString();
     }
 
-    private static JSONObject deleteLayers(String mapId) {
+    private JSONObject deleteLayers(String mapId) {
         try {
             DbUtils.deleteBookmarksById(mapId);
             DbUtils.deleteRenderDb(mapId);
