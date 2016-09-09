@@ -62,14 +62,12 @@ import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.utils.CaseInsensitiveStringList;
 
 
 @Controller
 @Path("/customscript")
-@Transactional
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
     private static final boolean FOUO_TRANSLATIONS_EXIST;

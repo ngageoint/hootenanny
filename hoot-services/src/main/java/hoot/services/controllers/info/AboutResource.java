@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
@@ -54,7 +53,6 @@ import hoot.services.nativeinterfaces.NativeInterfaceException;
  */
 @Controller
 @Path("/about")
-@Transactional
 public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 

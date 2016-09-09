@@ -498,16 +498,6 @@ public final class DbUtils {
         }
     }
 
-    /**
-     * Returns table size in byte
-     */
-    public static long getTableSizeInBytes(String tableName) {
-        return createQuery()
-                .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
-                .from()
-                .fetchOne();
-    }
-
     public static void deleteTables(List<String> tables) throws SQLException {
         try (Connection conn = getConnection()) {
             for (String table : tables) {

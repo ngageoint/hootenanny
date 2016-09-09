@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
@@ -50,7 +49,6 @@ import hoot.services.job.JobStatusManager;
 
 @Controller
 @Path("/tunning")
-@Transactional
 public class TunningServiceResource {
     private static final Logger logger = LoggerFactory.getLogger(TunningServiceResource.class);
 

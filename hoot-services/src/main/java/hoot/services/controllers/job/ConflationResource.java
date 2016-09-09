@@ -52,7 +52,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
@@ -62,7 +61,6 @@ import hoot.services.utils.JsonUtils;
 
 @Controller
 @Path("/conflation")
-@Transactional
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
 

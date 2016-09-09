@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
@@ -48,6 +49,7 @@ import hoot.services.readers.review.ReviewBookmarkRetriever;
 
 
 @Component
+@Transactional
 public class ReviewBookmarksSaver {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 

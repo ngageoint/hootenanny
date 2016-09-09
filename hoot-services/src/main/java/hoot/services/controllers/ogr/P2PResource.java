@@ -39,13 +39,11 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.nodejs.ServerControllerBase;
 
 
 @Controller
-@Transactional
 public class P2PResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
 
