@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+set -e
+
 # create the mocha-coverage report
 cd $HOOT_HOME/hoot-ui
 npm install -q
