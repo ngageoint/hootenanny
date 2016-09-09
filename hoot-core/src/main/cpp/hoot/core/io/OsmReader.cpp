@@ -327,8 +327,9 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     _path.chop(std::strlen(".bz2"));
 
     // "man bunzip2" confirms success return code is zero
-    //  -k option is "keep," meaning don't delete input .osm.bz2
-    const std::string cmd(std::string("bunzip2 -k ") + originalFile.toStdString());
+    // -f option decompresses file even if decompressed file is already there
+    // -k option is "keep", meaning don't delete input .osm.bz2
+    const std::string cmd(std::string("bunzip2 -fk ") + originalFile.toStdString());
     LOG_DEBUG("Running uncompress command: " << cmd);
 
     int retVal;

@@ -232,6 +232,7 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
     src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
+    src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp
