@@ -664,7 +664,8 @@ mgcp = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
-            ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"]
+            ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
+            ["t.water && !(t.natural)","t.natural = 'water'"]
             ];
 
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -796,6 +797,16 @@ mgcp = {
 
         } // End process tags.note
 
+        // AC000 (Processing Facility) vs AL010 (Facility)
+        // In TDS, this is just AL010. Therefore, make it AL010 and use a custom rule if we are exporting
+        // We are assumeing that it should produce something.
+        if (tags.facility == 'processing')
+        {
+            if (! tags.product) tags.product = 'unknown';
+            tags.facility = 'yes';
+        }
+
+
     }, // End of applyToOsmPostProcessing
 
     // ##### Start of the xxToMgcpxx Block #####
@@ -910,6 +921,14 @@ mgcp = {
 
             // If we don't have a Feature Function then assign one.
             if (!attrs.FFN) attrs.FFN = facilityList[tags.amenity];
+        }
+
+        // AL010 (Facility) vs AC000 (Processing Facility)
+        if (tags.facility && tags.product)
+        {
+            tags.facility = 'processing';
+
+            if (tags.product == 'unknown') delete tags.product;
         }
 
         // Cutlines and Highways.
