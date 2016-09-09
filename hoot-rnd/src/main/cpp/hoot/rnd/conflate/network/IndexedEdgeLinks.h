@@ -38,11 +38,17 @@ namespace hoot
  * To make the terminology a little more precise, the term link will refer to a link from one
  * pair of edges to another pair of edges.
  */
-class IndexedEdgeLinks : public QMultiHash<EdgeMatchPtr, EdgeMatchPtr>
+class IndexedEdgeLinks : public QMultiHash<ConstEdgeMatchPtr, ConstEdgeMatchPtr>
 {
 public:
   IndexedEdgeLinks();
 };
+
+typedef shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
+typedef shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
+
+// not implemented
+bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);
 
 }
 

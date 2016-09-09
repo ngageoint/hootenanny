@@ -10,7 +10,7 @@ Feature: Manage Tab
             | Datasets |
             | Translation Assistant |
             | Translations |
-            | WFS Exports |
+            #| WFS Exports |
             | Basemaps |
             | Log |
             | Reports |
@@ -27,7 +27,7 @@ Feature: Manage Tab
         And I should see "Tag Schema"
         Then I click on the "Translations" option in the "settingsSidebar"
         And I should see "Add New Translation"
-        Then I click on the "WFS Exports" option in the "settingsSidebar"
+        #Then I click on the "WFS Exports" option in the "settingsSidebar"
         Then I click on the "Basemaps" option in the "settingsSidebar"
         And I should see "New Basemap"
         Then I click on the "Log" option in the "settingsSidebar"
@@ -84,7 +84,7 @@ Feature: Manage Tab
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
-        And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
+        And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         And I fill "importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_Cucumber_manage"

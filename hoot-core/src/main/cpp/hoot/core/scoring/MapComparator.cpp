@@ -187,7 +187,10 @@ public:
               "Node count does not match.");
     for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
     {
-      CHECK(rw->getNodeIds()[i] == w->getNodeIds()[i]);
+      CHECK_MSG(rw->getNodeIds()[i] == w->getNodeIds()[i],
+        QString("Node IDs don't match. (%1 vs. %2)").
+        arg(hoot::toString(rw)).
+        arg(hoot::toString(w)));
     }
   }
 
@@ -196,12 +199,17 @@ public:
     shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
     shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
 
-    CHECK(rr->getType() == r->getType());
-    CHECK(rr->getMembers().size() == r->getMembers().size());
+    QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
+
+    CHECK_MSG(rr->getType() == r->getType(), "Types do not match. " + relationStr);
+    CHECK_MSG(rr->getMembers().size() == r->getMembers().size(),
+      "Member count does not match. " + relationStr);
     for (size_t i = 0; i < rr->getMembers().size(); i++)
     {
-      CHECK(rr->getMembers()[i].role == r->getMembers()[i].role);
-      CHECK(rr->getMembers()[i].getElementId() == r->getMembers()[i].getElementId());
+      CHECK_MSG(rr->getMembers()[i].role == r->getMembers()[i].role,
+        "Member role does not match. " + relationStr);
+      CHECK_MSG(rr->getMembers()[i].getElementId() == r->getMembers()[i].getElementId(),
+        "Member element ID does not match. " + relationStr);
     }
   }
 

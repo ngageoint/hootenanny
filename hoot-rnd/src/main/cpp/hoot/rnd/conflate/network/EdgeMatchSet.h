@@ -37,7 +37,7 @@ class EdgeMatchSet
 public:
   virtual ~EdgeMatchSet() {}
 
-  virtual bool contains(const EdgeMatchPtr &em) const = 0;
+  virtual bool contains(const ConstEdgeMatchPtr &em) const = 0;
 
   virtual QString toString() const = 0;
 
@@ -45,6 +45,9 @@ public:
 
 typedef shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
 typedef shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
+
+// not implemented
+bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);
 
 }
 

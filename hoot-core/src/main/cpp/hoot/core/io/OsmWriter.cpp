@@ -53,10 +53,12 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
 
 OsmWriter::OsmWriter()
 {
+  _formatXml = ConfigOptions().getOsmMapWriterFormatXml();
   _includeIds = false;
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
   _includePointInWays = false;
   _includeCompatibilityTags = true;
+  _osmSchema = ConfigOptions().getOsmMapWriterSchema();
   _precision = round(ConfigOptions().getWriterPrecision());
   _encodingErrorCount = 0;
 }
@@ -161,7 +163,12 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   }
   QXmlStreamWriter writer(_fp.get());
   writer.setCodec("UTF-8");
-  writer.setAutoFormatting(true);
+
+  if (_formatXml)
+  {
+    writer.setAutoFormatting(true);
+  }
+
   writer.writeStartDocument();
 
   writer.writeStartElement("osm");
@@ -180,6 +187,11 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
     map->getProjection()->exportToWkt(&wkt);
     writer.writeAttribute("srs", wkt);
     free(wkt);
+  }
+
+  if (_osmSchema != "")
+  {
+    writer.writeAttribute("schema", _osmSchema);
   }
 
   _timestamp = "1970-01-01T00:00:00Z";

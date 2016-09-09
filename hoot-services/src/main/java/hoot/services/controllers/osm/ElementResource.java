@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -58,9 +57,9 @@ import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element;
+import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -95,7 +94,6 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: node|way|relation}/{elementId}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElement(@QueryParam("mapId") String mapId,
                                @PathParam("elementId") long elementId,
@@ -142,7 +140,6 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElementByUniqueId(@PathParam("elementId") String elementId) {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
@@ -196,7 +193,6 @@ public class ElementResource {
      */
     @GET
     @Path("/{elementType: way|relation}/{elementId}/full")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getFullElement(@QueryParam("mapId") String mapId,
                                    @PathParam("elementId") long elementId,
@@ -243,7 +239,6 @@ public class ElementResource {
      */
     @GET
     @Path("/element/{elementId}/full")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getFullElementByUniqueId(@PathParam("elementId") String elementId) {
         if (!UNIQUE_ELEMENT_ID_PATTERN.matcher(elementId).matches()) {
@@ -354,7 +349,6 @@ public class ElementResource {
      */
     @GET
     @Path("{elementType: nodes|ways|relations}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response getElements(@QueryParam("mapId") String mapId,
                                 @QueryParam("elementIds") String elementIds,

@@ -434,7 +434,7 @@ public class FileUploadResource extends JobControllerBase {
         int fgdbCnt = 0;
         int geonamesCnt = 0;
 
-        if (ext.equalsIgnoreCase("osm")) {
+        if (ext.equalsIgnoreCase("osm") || ext.equalsIgnoreCase("pbf")) {
             JSONObject reqType = new JSONObject();
             reqType.put("type", "OSM");
             reqType.put("name", inputFileName);
@@ -496,7 +496,7 @@ public class FileUploadResource extends JobControllerBase {
     private static JSONObject getZipContentType(String zipFilePath, JSONArray contentTypes, String fName)
             throws IOException {
         JSONObject resultStat = new JSONObject();
-        String[] extList = { "gdb", "osm", "shp", "geonames" };
+        String[] extList = { "gdb", "osm", "shp", "geonames", "pbf" };
 
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
             ZipEntry ze = zis.getNextEntry();

@@ -65,7 +65,7 @@
     </logger>
 
     <logger name="org.glassfish.jersey" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
@@ -73,5 +73,6 @@
         <level value="error" />
         <appender-ref ref="ConsoleAppender" />
     </root>
+
 
 </log4j:configuration>

@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import java.sql.Connection;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class ChangesetDbWriterTest {
         Connection conn = DbUtils.createConnection();
         long userId = MapUtils.insertUser(conn);
         long mapId = MapUtils.insertMap(userId, conn);
-        long changesetId = Changeset.insertNew(mapId, userId, conn);
+        long changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
 
         try {

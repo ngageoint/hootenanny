@@ -131,7 +131,7 @@ public class OsmTestUtils {
 
     // allow num changes to be passed in as a var for testing purposes
     public static long createTestChangeset(BoundingBox bounds, int numChanges) throws Exception {
-        long changesetId = Changeset.insertNew(getMapId(), getUserId(), getConn());
+        long changesetId = Changeset.insertNew(getMapId(), getUserId(), getConn(), new HashMap<String, String>());
         Changeset changeset = new Changeset(getMapId(), changesetId, getConn());
 
         if (bounds != null) {
@@ -167,12 +167,12 @@ public class OsmTestUtils {
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
         Set<Long> nodeIds = new LinkedHashSet<>();
+
         nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
         tags.clear();
 
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMaxLat(), bounds.getMaxLon(), null, getConn()));
-
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), null, getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMaxLat(), bounds.getMaxLon(), tags, getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
 
         tags.put("key 3", "val 3");
         nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
@@ -1149,21 +1149,15 @@ public class OsmTestUtils {
     }
 
     // This method adds nodes that are completely outside of the query bounds,
-    // so that we can
-    // make sure it that ways and relations created with them don't come back in
-    // the response.
-    // Eventually, this out of bounds data should be made part of the test
-    // dataset created in
-    // ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
-    // not doing it right
-    // now.
+    // so that we can make sure it that ways and relations created with them don't come back in
+    // the response.  Eventually, this out of bounds data should be made part of the test
+    // dataset created in ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
+    // not doing it right now.
     public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
         Set<Long> nodeIds = new LinkedHashSet<>();
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, null,
-                getConn()));
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, null,
-                getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, new HashMap<String, String>(), getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, new HashMap<String, String>(), getConn()));
         return nodeIds;
     }
 

@@ -126,7 +126,7 @@ template<>
             pair<hoot::VertexId, hoot::VertexId>(k.vid1, k.vid2));
       size_t h2 = fastHashDouble()(k.w1);
       size_t h3 = fastHashDouble()(k.w2);
-      return cantorPairing(h1, cantorPairing(h2, h3));
+      return Tgs::cantorPairing(h1, Tgs::cantorPairing(h2, h3));
     }
   };
 }

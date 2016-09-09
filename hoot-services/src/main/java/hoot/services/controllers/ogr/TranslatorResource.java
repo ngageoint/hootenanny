@@ -46,35 +46,24 @@ import hoot.services.nodejs.ServerControllerBase;
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static final Object procLock = new Object();
-    private static final Object portLock = new Object();
+    private static Process translationServiceProcess;
 
-    private static String currentPort;
-    private static Process transProc;
+    public TranslatorResource() {}
 
-    public TranslatorResource() {
-    }
-
-    public void startTranslationService() {
-        // set default default port and threadcount
+    public static void startTranslationService() {
         try {
-            // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
+            String translationServiceScript = HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT;
 
-            // Probably an overkill but just in-case using synch lock
-            String currPort = TRANSLATION_SERVER_PORT;
-            synchronized (portLock) {
-                currentPort = currPort;
-            }
+            // Make sure to wipe out previously running servers.
+            stopServer(translationServiceScript);
 
-            synchronized (procLock) {
-                String currThreadCnt = TRANSLATION_SERVER_THREAD_COUNT;
-                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
-            }
+            // start Translaction Service
+            translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
+                    translationServiceScript);
         }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error starting Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
@@ -86,11 +75,11 @@ public class TranslatorResource extends ServerControllerBase {
             // API vs having the base class kill it with a unix command. Killing it via command causes
             // the stxxl temp files created by hoot threads not to be cleaned up.
             // stopServer(homeFolder + "/scripts/" + translationServerScript);
-            transProc.destroy();
+            translationServiceProcess.destroy();
         }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
@@ -107,17 +96,17 @@ public class TranslatorResource extends ServerControllerBase {
     public Response isTranslationServiceRunning() {
         boolean isRunning;
         try {
-            isRunning = getStatus(transProc);
+            isRunning = getStatus(translationServiceProcess);
         }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting status of Translation Service: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", isRunning);
-        res.put("port", currentPort);
+        JSONObject json = new JSONObject();
+        json.put("isRunning", isRunning);
+        json.put("port", TRANSLATION_SERVER_PORT);
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 }

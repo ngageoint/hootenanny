@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include <hoot/core/algorithms/WayMatchStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -128,12 +129,15 @@ public:
 
     QDir().mkdir("test-output/algorithms/");
 
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
+    uut.updateSublineMapping();
+
     uut.setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
 
-    uut.mergeNode(getNode(map, "n0")->getElementId());
+    uut.mergeIntersection(getNode(map, "n0")->getElementId());
     uut.mergeNode(getNode(map, "n1")->getElementId());
     uut.mergeNode(getNode(map, "n2")->getElementId());
-    uut.mergeNode(getNode(map, "n3")->getElementId());
+    uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
     shared_ptr<OsmWriter> writer(new OsmWriter());
@@ -157,6 +161,9 @@ public:
     WayMatchStringMerger uut(map, mapping, replaced);
 
     QDir().mkdir("test-output/algorithms/");
+
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
+    uut.updateSublineMapping();
 
     uut.setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
     uut.mergeTags();
@@ -182,6 +189,7 @@ public:
 
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
+    WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
     QDir().mkdir("test-output/algorithms/");
 

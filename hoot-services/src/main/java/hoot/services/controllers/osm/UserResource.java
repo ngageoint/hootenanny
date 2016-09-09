@@ -90,7 +90,6 @@ public class UserResource {
      * @return Response with the requested user's information
      */
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("userId") String userId) {
         logger.debug("Retrieving user with ID: {} ...", userId.trim());

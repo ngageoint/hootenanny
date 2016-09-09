@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1412396" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0041284590245350" lon="0.0029442308556703"/>
-    <node visible="true" id="-1412395" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0052754767788688" lon="0.0026901011743566"/>
-    <node visible="true" id="-1412394" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0030461588366219" lon="0.0033741214800000"/>
-    <node visible="true" id="-1412391" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0040975847654301" lon="0.0033633926400000"/>
-    <node visible="true" id="-1412389" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0053206720740364" lon="0.0031273582500000"/>
-    <node visible="true" id="-1412388" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0068656244523149" lon="0.0026231029500000"/>
-    <node visible="true" id="-1412380" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0031427183564815" lon="0.0029986122100000"/>
-    <node visible="true" id="-1412378" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0038830080456493" lon="0.0029986122100000"/>
-    <node visible="true" id="-1412376" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0056747236536516" lon="0.0026016452800000"/>
-    <node visible="true" id="-1412375" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0067261495824770" lon="0.0022046783500000"/>
+    <node visible="true" id="-1412397" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0057328274076645" lon="0.0029928353283275"/>
+    <node visible="true" id="-1412396" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0041284719296967" lon="0.0029442279974678"/>
+    <node visible="true" id="-1412395" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0052754981744904" lon="0.0026900964353179"/>
+    <node visible="true" id="-1412394" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0030461588400000" lon="0.0033741214800000"/>
+    <node visible="true" id="-1412391" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0040975847700000" lon="0.0033633926400000"/>
+    <node visible="true" id="-1412389" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0053206720800000" lon="0.0031273582500000"/>
+    <node visible="true" id="-1412388" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0068656244600000" lon="0.0026231029500000"/>
+    <node visible="true" id="-1412380" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0031427183600000" lon="0.0029986122100000"/>
+    <node visible="true" id="-1412378" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0038830080500000" lon="0.0029986122100000"/>
+    <node visible="true" id="-1412376" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0056747236600000" lon="0.0026016452800000"/>
+    <node visible="true" id="-1412375" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0067261495900000" lon="0.0022046783500000"/>
+    <way visible="true" id="-1412400" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1412397"/>
+        <nd ref="-1412389"/>
+        <tag k="note" v="2a"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-1412399" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1412388"/>
+        <nd ref="-1412397"/>
+        <tag k="note" v="2a"/>
+        <tag k="highway" v="road"/>
+    </way>
     <way visible="true" id="-1412398" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1412396"/>
         <nd ref="-1412378"/>
@@ -39,12 +52,6 @@
         <nd ref="-1412391"/>
         <nd ref="-1412389"/>
         <tag k="note" v="2b"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-1412390" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1412388"/>
-        <nd ref="-1412389"/>
-        <tag k="note" v="2a"/>
         <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="-1412382" timestamp="1970-01-01T00:00:00Z" version="1">
