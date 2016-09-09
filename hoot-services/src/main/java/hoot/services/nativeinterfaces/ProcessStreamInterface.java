@@ -89,6 +89,20 @@ public class ProcessStreamInterface implements NativeInterface {
     }
 
     @Override
+    public void terminate(String jobId) throws NativeInterfaceException {
+        try {
+            CommandRunner cmdRunner = jobProcesses.get(jobId);
+            if (cmdRunner != null) {
+                cmdRunner.terminate();
+            }
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
+                    NativeInterfaceException.HttpCode.SERVER_ERROR, e);
+        }
+    }
+
+    @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         logger.debug("Executing command : {}", command.toJSONString());
 

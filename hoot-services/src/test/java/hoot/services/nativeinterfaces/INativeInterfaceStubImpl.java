@@ -54,4 +54,9 @@ public class INativeInterfaceStubImpl implements NativeInterface {
     public String getJobProgress(String jobId) {
         return null;
     }
+
+    @Override
+    public void terminate(String jobId) throws NativeInterfaceException {
+
+    }
 }

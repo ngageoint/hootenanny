@@ -123,4 +123,7 @@ public class CommandRunnerImpl implements CommandRunner {
     public String getStdout() {
         return this.stdout;
     }
+
+    public void terminate() {
+    }
 }
