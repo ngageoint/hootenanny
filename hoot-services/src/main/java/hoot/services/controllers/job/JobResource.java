@@ -535,82 +535,84 @@ public class JobResource {
         try {
             JSONObject status = getJobStatusObj(jobId);
 
-            try {
-                String detail = (status.get("statusDetail") != null) ? status.get("statusDetail").toString() : null;
-                if ((detail != null) && (!detail.trim().isEmpty()) && detail.trim().startsWith("{")) {
-                    JSONParser p = new JSONParser();
-                    JSONObject stat = (JSONObject) p.parse(detail);
+            if (status != null) {
+                try {
+                    String detail = (status.get("statusDetail") != null) ? status.get("statusDetail").toString() : null;
+                    if ((detail != null) && (!detail.trim().isEmpty()) && detail.trim().startsWith("{")) {
+                        JSONParser p = new JSONParser();
+                        JSONObject stat = (JSONObject) p.parse(detail);
 
-                    // for now we will check for chain job only since ogr2osm is called for such job
-                    if (stat.get("chainjobstatus") != null) {
-                        String strCnt = stat.get("childrencount").toString();
-                        int nCnt = Integer.parseInt(strCnt);
-                        int maxPartPercent = 100 / nCnt;
+                        // for now we will check for chain job only since ogr2osm is called for such job
+                        if (stat.get("chainjobstatus") != null) {
+                            String strCnt = stat.get("childrencount").toString();
+                            int nCnt = Integer.parseInt(strCnt);
+                            int maxPartPercent = 100 / nCnt;
 
-                        int nComplete = 0;
+                            int nComplete = 0;
 
-                        Map<String, Integer> progMap = new LinkedHashMap<>();
+                            Map<String, Integer> progMap = new LinkedHashMap<>();
 
-                        JSONArray children = (JSONArray) stat.get("children");
+                            JSONArray children = (JSONArray) stat.get("children");
 
-                        String lastLine = "";
-                        for (Object aChildren : children) {
-                            JSONObject child = (JSONObject) aChildren;
-                            String childId = child.get("id").toString();
-                            if (child.get("status").toString().endsWith("running")) {
+                            String lastLine = "";
+                            for (Object aChildren : children) {
+                                JSONObject child = (JSONObject) aChildren;
+                                String childId = child.get("id").toString();
+                                if (child.get("status").toString().endsWith("running")) {
 
-                                String progress = getProgressText(childId);
-                                String[] lines = progress.split("\n");
+                                    String progress = getProgressText(childId);
+                                    String[] lines = progress.split("\n");
 
-                                Integer childProg = progMap.get(childId);
-                                if (childProg == null) {
-                                    childProg = 0;
-                                    progMap.put(childId, 0);
-                                }
-                                for (String line : lines) {
-                                    String currLine = line.trim();
-                                    if (currLine.startsWith("{")) {
-                                        JSONObject progInfo = (JSONObject) p.parse(currLine);
-                                        JSONObject progStatus = (JSONObject) progInfo.get("status");
-                                        if (progStatus.get("jobFinished").toString().equals("true")) {
-                                            // If completed before we can get the progress info.
-                                            // (This happens because the job status ping time may
-                                            // be longer than the whole job)
-                                            childProg = maxPartPercent;
-                                        }
-                                        else {
-                                            long currPerc = (Long) progStatus.get("percentComplete");
-                                            childProg = (int) (maxPartPercent * ((double) currPerc / 100));
-                                        }
+                                    Integer childProg = progMap.get(childId);
+                                    if (childProg == null) {
+                                        childProg = 0;
+                                        progMap.put(childId, 0);
                                     }
-                                    progMap.put(childId, childProg);
-                                    lastLine = currLine;
+                                    for (String line : lines) {
+                                        String currLine = line.trim();
+                                        if (currLine.startsWith("{")) {
+                                            JSONObject progInfo = (JSONObject) p.parse(currLine);
+                                            JSONObject progStatus = (JSONObject) progInfo.get("status");
+                                            if (progStatus.get("jobFinished").toString().equals("true")) {
+                                                // If completed before we can get the progress info.
+                                                // (This happens because the job status ping time may
+                                                // be longer than the whole job)
+                                                childProg = maxPartPercent;
+                                            }
+                                            else {
+                                                long currPerc = (Long) progStatus.get("percentComplete");
+                                                childProg = (int) (maxPartPercent * ((double) currPerc / 100));
+                                            }
+                                        }
+                                        progMap.put(childId, childProg);
+                                        lastLine = currLine;
+                                    }
                                 }
+                                else {
+                                    progMap.put(childId, maxPartPercent);
+                                    nComplete++;
+                                }
+                            }
+
+                            int totalPercent = 0;
+                            if (nComplete == nCnt) {
+                                totalPercent = 100;
                             }
                             else {
-                                progMap.put(childId, maxPartPercent);
-                                nComplete++;
+                                for (Map.Entry<String, Integer> entry : progMap.entrySet()) {
+                                    totalPercent += entry.getValue();
+                                }
                             }
-                        }
 
-                        int totalPercent = 0;
-                        if (nComplete == nCnt) {
-                            totalPercent = 100;
+                            status.put("percentcomplete", totalPercent);
+                            status.put("lasttext", lastLine);
                         }
-                        else {
-                            for (Map.Entry<String, Integer> entry : progMap.entrySet()) {
-                                totalPercent += entry.getValue();
-                            }
-                        }
-
-                        status.put("percentcomplete", totalPercent);
-                        status.put("lasttext", lastLine);
                     }
                 }
-            }
-            catch (Exception ex) {
-                // if something goes wrong we will not put progress
-                logger.error("Error during job status retrieval!", ex);
+                catch (Exception ex) {
+                    // if something goes wrong we will not put progress
+                    logger.error("Error during job status retrieval!", ex);
+                }
             }
 
             outStr = status.toJSONString();
