@@ -28,6 +28,7 @@ package hoot.services.controllers.osm;
 
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.File;
@@ -70,6 +71,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -85,7 +87,6 @@ import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element.ElementType;
@@ -106,7 +107,8 @@ import hoot.services.utils.XmlDocumentBuilder;
 public class MapResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
-    private static final QMaps maps = QMaps.maps;
+    @Autowired
+    private JobStatusManager jobStatusManager;
 
     public MapResource() {}
 
@@ -705,7 +707,8 @@ public class MapResource {
 
         String jobId = UUID.randomUUID().toString();
 
-        (new JobExecutioner(jobId, command)).start();
+        // TODO: Needs to be executed using a threa connection pool!
+        (new JobExecutioner(jobId, command, jobStatusManager)).start();
 
         JSONObject json = new JSONObject();
         json.put("jobId", jobId);
@@ -957,7 +960,6 @@ public class MapResource {
         // _zoomLevels
         String jobId = UUID.randomUUID().toString();
 
-        JobStatusManager jobStatusManager = null;
         try {
             // Currently we do not have any way to get map id directly from hoot
             // core command when it runs so for now we need get the all the map ids matching name and pick
@@ -973,7 +975,6 @@ public class MapResource {
                 // once core
                 // implement map Id return
                 long mapId = mapIds.get(mapIds.size() - 1);
-                jobStatusManager = new JobStatusManager();
                 jobStatusManager.addJob(jobId);
 
                 // Hack alert!

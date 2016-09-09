@@ -121,7 +121,7 @@ public class JobResourceTest {
         JobResource spy = Mockito.spy(real);
 
         Mockito.doReturn(Response.ok().build()).when(spy).processJob(Matchers.anyString(), Matchers.any(String.class));
-        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger();
+        //Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger();
         Mockito.doReturn(mockChild).when(spy).execReflection(Matchers.anyString(),
                          Matchers.any(JSONObject.class), Matchers.any(JobStatusManager.class));
 
@@ -241,7 +241,7 @@ public class JobResourceTest {
 
         // so I use this to avoid actual call
         Mockito.doReturn(Response.ok().build()).when(spy).processJob(Matchers.anyString(), Matchers.anyString());
-        Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger();
+        //Mockito.doReturn(mockJobStatusManager).when(spy).createJobStatusMananger();
 
         // failure point
         Mockito.doThrow(new Exception("Mock failure for testing Process Chain Job failure. (Not real failure!!!)"))

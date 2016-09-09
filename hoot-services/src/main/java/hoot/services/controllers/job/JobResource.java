@@ -57,9 +57,13 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.ApplicationContextUtils;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
@@ -89,6 +93,9 @@ public class JobResource {
     @Autowired
     private JobExecutionManager jobExecMan;
 
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
 
     static {
         Long value = Long.parseLong(CHAIN_JOS_STATUS_PING_INTERVAL);
@@ -111,8 +118,7 @@ public class JobResource {
      * configured Native Interface.
      *
      */
-    public JobResource() {
-    }
+    public JobResource() {}
 
     @POST
     @Path("/chain/{jobid}")
@@ -148,7 +154,21 @@ public class JobResource {
 
         @Override
         public void run() {
-            processCommand();
+            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+
+            TransactionStatus transactionStatus = null;
+            try {
+                transactionStatus = txManager.getTransaction(null);
+                processCommand();
+                txManager.commit(transactionStatus);
+            }
+            catch (Exception e) {
+                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
+                    txManager.rollback(transactionStatus);
+                }
+                logger.error("Error executing job with ID = {}", jobId, e);
+            }
         }
 
         private void processCommand() {
@@ -156,11 +176,8 @@ public class JobResource {
 
             jobInfo.put("chainjobstatus", jobId);
 
-            JobStatusManager jobStatusManager = null;
             JSONObject childJobInfo = null;
             try {
-                jobStatusManager = createJobStatusMananger();
-
                 JSONParser parser = new JSONParser();
                 JSONArray chain = (JSONArray) parser.parse(jobs);
 
@@ -257,8 +274,10 @@ public class JobResource {
             parameters[i] = param.get("value");
         }
 
-        Class<?> clazz = Class.forName(className);
-        Object instance = clazz.newInstance();
+        Class<?> springBeanClass = Class.forName(className);
+
+        ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+        Object springBeanInstance = appContext.getBean(springBeanClass);
 
         JSONObject childJobInfo;
         String currentChildJobId = childJobId;
@@ -278,13 +297,13 @@ public class JobResource {
             Class<?>[] newParamTypes = new Class[paramsList.size() + 1];
             System.arraycopy(paramTypes, 0, newParamTypes, 0, paramsList.size());
             newParamTypes[parameters.length] = String.class;
-            Method method = clazz.getDeclaredMethod(methodName, newParamTypes);
+            Method method = springBeanClass.getDeclaredMethod(methodName, newParamTypes);
             // This will blow if the method is not designed to handle job id
-            method.invoke(instance, newParams);
+            method.invoke(springBeanInstance, newParams);
         }
         else {
-            Method method = clazz.getDeclaredMethod(methodName, paramTypes);
-            Object oReflectJobId = method.invoke(instance, parameters);
+            Method method = springBeanClass.getDeclaredMethod(methodName, paramTypes);
+            Object oReflectJobId = method.invoke(springBeanInstance, parameters);
             if (oReflectJobId != null) {
                 currentChildJobId = oReflectJobId.toString();
             }
@@ -387,24 +406,35 @@ public class JobResource {
         private final String jobId;
         private final String params;
 
-        public ProcessJobWorkerThread(String jobid, String jobParams) {
+        ProcessJobWorkerThread(String jobid, String jobParams) {
             jobId = jobid;
             params = jobParams;
         }
 
         @Override
         public void run() {
-            processCommand();
+            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+
+            TransactionStatus transactionStatus = null;
+            try {
+                transactionStatus = txManager.getTransaction(null);
+                processCommand();
+                txManager.commit(transactionStatus);
+            }
+            catch (Exception e) {
+                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
+                    txManager.rollback(transactionStatus);
+                }
+                logger.error("Error executing job with ID = {}", jobId, e);
+            }
         }
 
         private void processCommand() {
             logger.debug("Processing job: {}", jobId);
 
-            JobStatusManager jobStatusManager = null;
             JSONObject command = null;
             try {
-                jobStatusManager = createJobStatusMananger();
-
                 JSONParser parser = new JSONParser();
                 command = (JSONObject) parser.parse(params);
 
@@ -602,8 +632,6 @@ public class JobResource {
     private JSONObject getJobStatusObj(String jobId) {
         JSONObject status = new JSONObject();
 
-        JobStatusManager jobStatusManager = createJobStatusMananger();
-
         status.put("jobId", jobId);
         JobStatus jobStatusObj = jobStatusManager.getJobStatusObj(jobId);
         if (jobStatusObj == null) {
@@ -645,12 +673,11 @@ public class JobResource {
         return child;
     }
 
-    protected JobStatusManager createJobStatusMananger() {
-        return new JobStatusManager();
+    private void initJob(String jobId) {
+        jobStatusManager.addJob(jobId);
     }
 
-    private void initJob(String jobId) {
-        JobStatusManager jobStatusManager = createJobStatusMananger();
-        jobStatusManager.addJob(jobId);
+    public void terminateJob(String childId) throws NativeInterfaceException {
+        jobExecMan.terminate(childId);
     }
 }

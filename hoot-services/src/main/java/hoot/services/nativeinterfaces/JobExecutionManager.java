@@ -75,4 +75,16 @@ public class JobExecutionManager {
             throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
     }
+
+    public void terminate(String jobId) throws NativeInterfaceException {
+        try {
+            this.nativeInterface.terminate(jobId);
+        }
+        catch (NativeInterfaceException ne) {
+            throw ne;
+        }
+        catch (Exception e) {
+            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
+        }
+    }
 }

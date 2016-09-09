@@ -30,6 +30,8 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
 
@@ -40,12 +42,15 @@ import hoot.services.ApplicationContextUtils;
 public class JobExecutioner extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
 
+    private JobStatusManager jobStatusManager;
+
     private final JSONObject command;
     private final String jobId;
 
-    public JobExecutioner(String jobId, JSONObject command) {
+    public JobExecutioner(String jobId, JSONObject command, JobStatusManager jobStatusManager) {
         this.command = command;
         this.jobId = jobId;
+        this.jobStatusManager = jobStatusManager;
     }
 
     /**
@@ -56,26 +61,33 @@ public class JobExecutioner extends Thread {
         logger.debug("Handling job exec request...");
 
         try {
-            JobStatusManager jobStatusManager = new JobStatusManager();
             command.put("jobId", jobId);
 
+            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            Executable executable = appContext.getBean((String) command.get("execImpl"), Executable.class);
+
+            TransactionStatus transactionStatus = null;
+
             try {
+                transactionStatus = txManager.getTransaction(null);
+
                 jobStatusManager.addJob(jobId);
-
-                ApplicationContext applicationContext = ApplicationContextUtils.getApplicationContext();
-                Executable executable = (Executable) applicationContext.getBean((String) command.get("execImpl"));
-
                 executable.exec(command);
-
                 jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
+
+                txManager.commit(transactionStatus);
             }
             catch (Exception e) {
+                if (transactionStatus != null) {
+                    txManager.rollback(transactionStatus);
+                }
                 logger.error("Error executing job with ID = {}", jobId, e);
                 jobStatusManager.setFailed(jobId, e.getMessage());
             }
         }
-        catch (Exception sqle) {
-            logger.error("Error executing job with ID = {}", jobId, sqle);
+        catch (Exception e) {
+            logger.error("Error executing job with ID = {}", jobId, e);
         }
     }
 }

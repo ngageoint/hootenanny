@@ -35,6 +35,8 @@ import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QJobStatus;
@@ -46,6 +48,8 @@ import hoot.services.models.db.QJobStatus;
  *         This job status management class. It tracks current execution status.
  *
  */
+@Component
+@Transactional
 public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
 

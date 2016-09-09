@@ -27,6 +27,7 @@
 package hoot.services.controllers.job.custom.hgis;
 
 import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+import static hoot.services.models.db.QMaps.maps;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,11 +46,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.job.JobStatusManager;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
 
@@ -59,6 +60,10 @@ import hoot.services.utils.DbUtils;
 @Transactional
 public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
+
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
 
     public HGISReviewResource() {
         super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
@@ -104,8 +109,8 @@ public class HGISReviewResource extends HGISResource {
 
         try {
             String jobId = UUID.randomUUID().toString();
-            JSONObject validationCommand = _createBashPostBody(createParamObj(src, output));
 
+            JSONObject validationCommand = _createBashPostBody(createParamObj(src, output));
             JSONObject updateMapTagCommand = createUpdateMapTagCommand(output);
 
             // with new relation based review process we will no longer need to run prepare review
@@ -146,15 +151,12 @@ public class HGISReviewResource extends HGISResource {
     // The method is invoked reflectively
     public String updateMapsTag(String mapName) {
         String jobId = UUID.randomUUID().toString();
-        JobStatusManager jobStatusManager = null;
         try {
-            jobStatusManager = new JobStatusManager();
             jobStatusManager.addJob(jobId);
 
-            QMaps maps = QMaps.maps;
             long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
-
             updateMapTagWithReviewType(mapId);
+
             jobStatusManager.setComplete(jobId);
         }
         catch (ReviewMapTagUpdateException e) {

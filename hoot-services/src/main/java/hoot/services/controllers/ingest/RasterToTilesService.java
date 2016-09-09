@@ -59,6 +59,10 @@ public class RasterToTilesService extends JobControllerBase {
     @Autowired
     private JobExecutionManager jobExecManager;
 
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
+
     public RasterToTilesService() {
         super(RASTER_TO_TILES);
     }
@@ -75,9 +79,7 @@ public class RasterToTilesService extends JobControllerBase {
     public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
         // _zoomLevels
         try {
-            JobStatusManager jobStatusManager = null;
             try {
-                jobStatusManager = new JobStatusManager();
                 jobStatusManager.addJob(jobId);
 
                 QMaps maps = QMaps.maps;
