@@ -4,35 +4,11 @@
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human.  This
 section describes that process.
 
-=== Prerequities
+=== Prerequisites
 
 * Launch a Hootenanny VM (see Vagrant instructions).
 * Install JOSM on your Hootenanny VM.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
-* Create a new "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint modeled off of the JOSM Internal Style with the following additional rules. You'll need to modify the rules to include your own sad.png icon. Any icon will do, but an exmple sad.png and highlight XML file (RefTodoHighlight.xml) are available in $HOOT_HOME/docs/styles.
-------
-    <rule>
-        <condition k="REF2" v="todo"/>
-        <icon annotate="true" src="sad.png" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="highway"/>
-        <condition k="REF2" v="todo"/>
-        <line colour="building#2222DD" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="building"/>
-        <condition k="REF2" v="todo"/>
-        <area colour="building#2222DD" priority="10000"/>
-        <line colour="building#2222DD" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="hoot:mismatch" v="true"/>
-        <area colour="building#22FF22" priority="10000"/>
-    </rule>
-------
+* Use the "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint $HOOT_HOME/docs/styles/RefTodoHighlight.xml
 
 === Test Data Preparation
 
