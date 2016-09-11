@@ -611,6 +611,10 @@
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-metainf-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-spring3</artifactId>
             <exclusions>
                 <exclusion>

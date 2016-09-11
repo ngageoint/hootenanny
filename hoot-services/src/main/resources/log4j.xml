@@ -45,7 +45,7 @@
     </appender>
 
     <logger name="hoot.services" additivity="false">
-        <level value="error"/>
+        <level value="debug"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
@@ -65,12 +65,12 @@
     </logger>
 
     <logger name="org.glassfish.jersey" additivity="false">
-        <level value="info"/>
+        <level value="all"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <root>
-        <level value="error" />
+        <level value="all" />
         <appender-ref ref="ConsoleAppender" />
     </root>
 
