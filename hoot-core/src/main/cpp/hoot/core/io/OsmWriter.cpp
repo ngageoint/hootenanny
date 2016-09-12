@@ -175,15 +175,24 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", "hootenanny");
 
+  int epsg = map->getProjection()->GetEPSGGeogCS();
+  if (epsg > -1)
+  {
+    writer.writeAttribute("srs", QString("+epsg:%1").arg(epsg));
+  }
+  else
+  {
+    char *wkt;
+    //map->getProjection()->exportToPrettyWkt(&wkt);
+    map->getProjection()->exportToWkt(&wkt);
+    writer.writeAttribute("srs", wkt);
+    free(wkt);
+  }
+
   if (_osmSchema != "")
   {
     writer.writeAttribute("schema", _osmSchema);
   }
-
-  char *wkt;
-  map->getProjection()->exportToPrettyWkt(&wkt);
-  writer.writeAttribute("srs", wkt);
-  free(wkt);
 
   _timestamp = "1970-01-01T00:00:00Z";
 
