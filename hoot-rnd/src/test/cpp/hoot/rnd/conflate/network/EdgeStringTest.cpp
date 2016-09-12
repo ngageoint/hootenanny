@@ -27,6 +27,9 @@
 
 // Hoot
 #include <hoot/rnd/conflate/network/EdgeString.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/rnd/conflate/network/EdgeLocation.h>
+#include <hoot/rnd/conflate/network/NetworkVertex.h>
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -35,6 +38,7 @@ namespace hoot
 class EdgeStringTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeStringTest);
+  //CPPUNIT_TEST(runBasicTest);
   //CPPUNIT_TEST(equalTest);
   //CPPUNIT_TEST(addTest);
   //CPPUNIT_TEST(appendTest);
@@ -68,6 +72,55 @@ class EdgeStringTest : public CppUnit::TestFixture
 
 public:
 
+  void runBasicTest()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+
+    ConstNetworkVertexPtr vertex4(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkVertexPtr vertex5(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
+    ConstNetworkEdgePtr edge3(new NetworkEdge(vertex4, vertex5, true));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    LOG_VARD(edgeStr.getToVertex());
+    edgeStr.appendEdge(edge2);
+
+    LOG_VARD(edgeStr.getAllEdges());
+    LOG_VARD(edgeStr.getCount());
+    LOG_VARD(edgeStr.getEdge(0));
+    LOG_VARD(edgeStr.getEdgeSubline(0));
+    LOG_VARD(edgeStr.getEdgeSet());
+    //LOG_VARD(edgeStr.calculateLength(map));
+    LOG_VARD(edgeStr.getEdgeSet());
+    //LOG_VARD(edgeStr.getEdgeAtOffset(map, 10));
+    LOG_VARD(edgeStr.getFrom());
+    LOG_VARD(edgeStr.getTo());
+    LOG_VARD(edgeStr.getFromVertex());
+    LOG_VARD(edgeStr.getToVertex());
+    LOG_VARD(edgeStr.getFirstEdge());
+    LOG_VARD(edgeStr.getLastEdge());
+    LOG_VARD(edgeStr.getMembers());
+    LOG_VARD(edgeStr.isEdgeClosed());
+    LOG_VARD(edgeStr.isAtExtreme(vertex1));
+    LOG_VARD(edgeStr.isAtExtreme(vertex2));
+    LOG_VARD(edgeStr.isFromOnVertex());
+    LOG_VARD(edgeStr.isToOnVertex());
+    LOG_VARD(edgeStr.isFullPartial());
+    LOG_VARD(edgeStr.isStub());
+  }
+
   void equalTest()
   {
 
@@ -75,8 +128,7 @@ public:
 
   void addTest()
   {
-    //EdgeString es1;
-    //es1.addFirstEdge();
+
   }
 
   void appendTest()

@@ -26,10 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/elements/Node.h>
 #include <hoot/rnd/conflate/network/EdgeLocation.h>
-#include <hoot/rnd/conflate/network/NetworkVertex.h>
-#include <hoot/rnd/conflate/network/NetworkEdge.h>
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -39,6 +36,7 @@ class EdgeLocationTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeLocationTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(invalidTest);
   CPPUNIT_TEST(runOperatorTests);
   CPPUNIT_TEST_SUITE_END();
 
@@ -82,6 +80,20 @@ public:
     HOOT_STR_EQUALS(
       "Attempted to get a vertex on an edge location that isn't on a vertex.",
       exceptionMsg.toStdString());
+  }
+
+  void invalidTest()
+  {
+    shared_ptr<OsmMap> map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 100, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+
+    EdgeLocation edgeLoc(edge, -0.1);
+
+    CPPUNIT_ASSERT(!edgeLoc.isValid());
   }
 
   void runOperatorTests()
