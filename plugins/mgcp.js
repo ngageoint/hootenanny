@@ -329,6 +329,66 @@ mgcp = {
 
 
     // ##### Start of the xxToOsmxx Block #####
+
+    // Untangle MGCP attributes & OSM tags.
+    // Some people have been editing OSM files and inserting MGCP attributes
+    untangleAttributes: function (attrs, tags)
+    {
+        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // We need to unpack this before we can do anything.
+        if (attrs.other_tags)
+        {
+            var tList = attrs.other_tags.split('","');
+
+            delete attrs.other_tags;
+
+            for (var val in tList)
+            {
+                vList = tList[val].split('"=>"');
+
+                attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+                // Debug
+                //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+            }
+        }
+
+        for (var col in attrs)
+        {
+            // Find an FCODE
+            if (col in mgcp.fcodeLookup['F_CODE'])
+            {
+                attrs.F_CODE = col;
+                delete attrs[col];
+
+                continue;
+            }
+
+            // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
+            if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
+
+            // Look for Attributes
+            if (col in mgcp.rules.numBiased) continue;
+
+            if (col in mgcp.rules.txtBiased) continue;
+
+            if (col in mgcp.lookup) continue;
+
+            // Drop the "GEOM" attribute
+            if (col == 'GEOM')
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            // Not an Attribute so push it to the tags object
+            tags[col] = attrs[col];
+            delete attrs[col];
+        }
+
+    }, // End attribute attributeUntangle
+
+
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // Drop the FCSUBTYPE since we don't use it
@@ -351,7 +411,6 @@ mgcp = {
         // Unit conversion. Some attributes are in centimetres, others in decimetres
         // var unitList = { 'GAW':100, 'HCA':10, 'WD1':10, 'WD2':10, 'WD3':10, 'WT2':10 };
 
-        // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
         {
             // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
@@ -1308,6 +1367,20 @@ mgcp = {
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
         }
 
+        // Untangle MGCP attributes & OSM tags.
+        // NOTE: This could get wrapped with an ENV variable so it only gets called during import
+        mgcp.untangleAttributes(attrs, tags);
+
+        // Debug:
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        }
+
         // pre processing
         mgcp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
@@ -1331,6 +1404,7 @@ mgcp = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1457,64 +1531,46 @@ mgcp = {
             // tableName = layerNameLookup[tableName];
             hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
-            if (config.getOgrPartialTranslate() == 'true')
-            {
-                tableName = 'Partial';
-                attrs.FCODE = 'Partial';
-                delete attrs.F_CODE;
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
 
-                // If we have unused tags, add them to partial feature.
-                if (Object.keys(notUsedTags).length > 0)
-                {
-                    for (var i in notUsedTags)
-                    {
-                        attrs['OSM:' + i] = notUsedTags[i];
-                    }
-                }
+            // Dump out what attributes we have converted before they get wiped out
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+            for (var i in tags)
+            {
+                // Clean out all of the "source:XXX" tags to save space
+                if (i.indexOf('source:') !== -1) delete tags[i];
+                if (i.indexOf('error:') !== -1) delete tags[i];
+                if (i.indexOf('hoot:') !== -1) delete tags[i];
+            }
+
+            var str = JSON.stringify(tags);
+
+            // Shapefiles can't handle fields > 254 chars.
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            {
+                //return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
             }
             else
             {
-                tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-                // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-                for (var i in tags)
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
                 {
-                    // Clean out all of the "source:XXX" tags to save space
-                    if (i.indexOf('source:') !== -1) delete tags[i];
-                    if (i.indexOf('error:') !== -1) delete tags[i];
-                    if (i.indexOf('hoot:') !== -1) delete tags[i];
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
                 }
 
-                var str = JSON.stringify(tags);
-
-                // Shapefiles can't handle fields > 254 chars.
-                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-                // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-                {
-                    // return {attrs:{tag1:str}, tableName: tableName};
-                    attrs = {tag1:str};
-                }
-                else
-                {
-                    // Not good. Will fix with the rewrite of the tag splitting code
-                    if (str.length > 1012)
-                    {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
-                        str = str.substring(0,1012);
-                    }
-
-                    // Now split the text across the available tags
-                    attrs = {tag1:str.substring(0,253),
-                            tag2:str.substring(253,506),
-                            tag3:str.substring(506,759),
-                            tag4:str.substring(759,1012)};
-                }
+                // Now split the text across the available tags
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
             }
 
-             returnData.push({attrs: attrs, tableName: tableName});
+            returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {

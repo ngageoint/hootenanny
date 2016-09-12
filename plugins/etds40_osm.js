@@ -72,7 +72,7 @@ etds40_osm = {
         var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-        if (attrs['Feature Code'])
+        if (attrs['Feature Code'] && attrs['Feature Code'] !== 'Not found')
         {
             if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
@@ -91,7 +91,14 @@ etds40_osm = {
                 attrs['Feature Code'] = fcode[0];
             }
         }
-
+        else
+        {
+            // No FCODE, throw error
+            // throw new Error('No Valid Feature Code');
+            // return null;
+            // return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
+            return {attrs:{}, tableName: ''};
+        }
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
