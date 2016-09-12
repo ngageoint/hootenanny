@@ -299,10 +299,10 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(e2->getCircularError());
     LOG_VARD(OsmSchema::getInstance().isBuilding(e1));
     LOG_VARD(OsmSchema::getInstance().isBuilding(e2));
-    LOG_VARD(polyIsABuilding);
-    LOG_VARD(polyIsAParkArea);
-    LOG_VARD(poiIsABuilding);
-    LOG_VARD(poiIsAParkArea);
+    //LOG_VARD(polyIsABuilding);
+    //LOG_VARD(polyIsAParkArea);
+    //LOG_VARD(poiIsABuilding);
+    //LOG_VARD(poiIsAParkArea);
     LOG_VARD(evidence);
     LOG_VARD(_c);
     LOG_DEBUG("**************************");

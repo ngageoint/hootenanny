@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIBUILDINGMERGERJS_H
-#define POIBUILDINGMERGERJS_H
+#ifndef POIPOLYGONMERGERJS_H
+#define POIPOLYGONMERGERJS_H
 
 #include <hoot/js/SystemNodeJs.h>
 #include <v8.h>
@@ -34,9 +34,9 @@ namespace hoot
 {
 
 /**
- * Hoot JS wrapper around PoiBuildingMerger
+ * Hoot JS wrapper around PoiPolygonMerger
  */
-class PoiBuildingMergerJs : public node::ObjectWrap
+class PoiPolygonMergerJs : public node::ObjectWrap
 {
 
 public:
@@ -45,19 +45,19 @@ public:
 
 private:
 
-  PoiBuildingMergerJs();
-  ~PoiBuildingMergerJs();
+  PoiPolygonMergerJs();
+  ~PoiPolygonMergerJs();
 
   /**
-   * Merges a POI with a building
+   * Merges a POI with a polygon
    *
-   * @param args an OSM map containing a single node POI and a single poly building, which
+   * @param args an OSM map containing a single node POI and a single poly, area or building, which
    * can be a way or a relation (multipolygon)
-   * @return a map with the building and POI merged
+   * @return a map with the polygon and POI merged
    */
-  static v8::Handle<v8::Value> jsPoiBuildingMerge(const v8::Arguments& args);
+  static v8::Handle<v8::Value> jsPoiPolyMerge(const v8::Arguments& args);
 };
 
 }
 
-#endif // POIBUILDINGMERGERJS_H
+#endif // POIPOLYGONMERGERJS_H

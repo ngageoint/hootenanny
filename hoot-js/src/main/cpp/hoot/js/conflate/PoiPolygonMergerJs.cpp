@@ -28,7 +28,7 @@
 #include <utility>    // For std::pair
 #include <hoot/js/SystemNodeJs.h>
 
-#include "PoiBuildingMergerJs.h"
+#include "PoiPolygonMergerJs.h"
 
 #include <hoot/js/OsmMapJs.h>
 #include <boost/shared_ptr.hpp>
@@ -40,30 +40,30 @@
 #include <hoot/js/PluginContext.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/core/conflate/poi-polygon/PoiBuildingMerger.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 
 namespace hoot
 {
 
-HOOT_JS_REGISTER(PoiBuildingMergerJs)
+HOOT_JS_REGISTER(PoiPolygonMergerJs)
 
 
-PoiBuildingMergerJs::PoiBuildingMergerJs()
+PoiPolygonMergerJs::PoiPolygonMergerJs()
 {
 }
 
-PoiBuildingMergerJs::~PoiBuildingMergerJs()
+PoiPolygonMergerJs::~PoiPolygonMergerJs()
 {
 }
 
-void PoiBuildingMergerJs::Init(v8::Handle<v8::Object> exports)
+void PoiPolygonMergerJs::Init(v8::Handle<v8::Object> exports)
 {
   exports->Set(
-    v8::String::NewSymbol("poiBuildingMerge"),
-    v8::FunctionTemplate::New(jsPoiBuildingMerge)->GetFunction());
+    v8::String::NewSymbol("poiPolyMerge"),
+    v8::FunctionTemplate::New(jsPoiPolyMerge)->GetFunction());
 }
 
-v8::Handle<v8::Value> PoiBuildingMergerJs::jsPoiBuildingMerge(const v8::Arguments& args)
+v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& args)
 {
   HandleScope scope;
   try
@@ -73,14 +73,13 @@ v8::Handle<v8::Value> PoiBuildingMergerJs::jsPoiBuildingMerge(const v8::Argument
       return
         v8::ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException("Expected on argument for 'poiBuildingMerge'.")));
+            IllegalArgumentException("Expected on argument for 'poiPolyMerge'.")));
     }
 
-    // arg 1: map with a single POI and a single building
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
     OsmMapPtr map(mapJs->getMap());
 
-    PoiBuildingMerger::merge(map);
+    PoiPolygonMerger::merge(map);
 
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);

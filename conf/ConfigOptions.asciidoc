@@ -1060,7 +1060,7 @@ script.
 === ogr.log.limit
 
 * Data Type: double
-* Default Value: `3`
+* Default Value: `999`
 
 The number of identical log messages that will be emitted before they're silenced.
 

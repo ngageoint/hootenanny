@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,7 +35,9 @@ namespace hoot
 
 class PoiPolygonMerger : public MergerBase
 {
+
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -45,13 +47,23 @@ public:
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
     const;
 
+  /**
+   * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
+   *
+   * @param map an OSM map containing a single node POI and a single polygon area or building, which
+   * can be a way or a relation (multipolygon)
+   */
+  static void merge(OsmMapPtr map);
+
   virtual QString toString() const;
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
+
   set< pair<ElementId, ElementId> > _pairs;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, vector<ElementId>& buildings1,

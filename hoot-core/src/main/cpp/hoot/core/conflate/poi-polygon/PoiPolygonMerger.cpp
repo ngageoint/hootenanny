@@ -29,12 +29,10 @@
 // hoot
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CountNodesVisitor.h>
+
+#include "PoiPolygonMatch.h"
 
 namespace hoot
 {
@@ -213,6 +211,76 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   assert(newElement.size() == 1);
 
   return *newElement.begin();
+}
+
+void PoiPolygonMerger::merge(OsmMapPtr map)
+{
+  //there should be one poi node and one building/area poly, which is either a way or a relation
+  //in the input map
+
+  int poiCount = 0;
+  ElementId poiElementId;
+  NodeMap::const_iterator nodeItr = map->getNodeMap().begin();
+  while (nodeItr != map->getNodeMap().end())
+  {
+    const int nodeId = nodeItr->first;
+    if (PoiPolygonMatch::isPoi(*map->getNode(nodeId)))
+    {
+      poiElementId = ElementId::node(nodeId);
+      poiCount++;
+    }
+    nodeItr++;
+  }
+  if (poiCount == 0)
+  {
+    throw IllegalArgumentException("No POI passed to POI/Polygon merger.");
+  }
+  if (poiCount > 1)
+  {
+    throw IllegalArgumentException("More than one POI passed to POI/Polygon merger.");
+  }
+
+  int polyCount = 0;
+  ElementId polyElementId;
+  WayMap::const_iterator wayItr = map->getWays().begin();
+  while (wayItr != map->getWays().end())
+  {
+    const int wayId = wayItr->first;
+    if (PoiPolygonMatch::isPoly(*map->getWay(wayId)))
+    {
+      polyElementId = ElementId::way(wayId);
+      polyCount++;
+    }
+    wayItr++;
+  }
+  if (polyElementId.isNull())
+  {
+    RelationMap::const_iterator relItr = map->getRelationMap().begin();
+    while (relItr != map->getRelationMap().end())
+    {
+      const int relationId = relItr->first;
+      if (PoiPolygonMatch::isPoly(*map->getRelation(relationId)))
+      {
+        polyElementId = ElementId::relation(relationId);
+        polyCount++;
+      }
+      relItr++;
+    }
+  }
+  if (polyCount == 0)
+  {
+    throw IllegalArgumentException("No polygon passed to POI/Polygon merger.");
+  }
+  if (polyCount > 1)
+  {
+    throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
+  }
+
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));
+  PoiPolygonMerger merger(pairs);
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
 }
 
 QString PoiPolygonMerger::toString() const
