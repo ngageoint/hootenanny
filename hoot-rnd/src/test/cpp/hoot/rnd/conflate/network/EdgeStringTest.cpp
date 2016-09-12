@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/rnd/conflate/network/EdgeString.h>
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -34,6 +35,7 @@ namespace hoot
 class EdgeStringTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeStringTest);
+  //CPPUNIT_TEST(equalTest);
   //CPPUNIT_TEST(addTest);
   //CPPUNIT_TEST(appendTest);
   //CPPUNIT_TEST(calculateLengthTest);
@@ -66,9 +68,15 @@ class EdgeStringTest : public CppUnit::TestFixture
 
 public:
 
-  void addTest()
+  void equalTest()
   {
 
+  }
+
+  void addTest()
+  {
+    //EdgeString es1;
+    //es1.addFirstEdge();
   }
 
   void appendTest()
