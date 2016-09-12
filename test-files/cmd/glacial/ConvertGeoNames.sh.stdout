@@ -1,7 +1,8 @@
-10:31:06.844 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  78) Converting test-files/cmd/glacial/ConvertGeoNames.geonames to /dev/stdout...
-10:31:06.848 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::TranslationOp
+14:56:28.111 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting test-files/cmd/glacial/ConvertGeoNames.geonames to /dev/stdout...
+14:56:28.112 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/ConvertGeoNames.geonames ...
+14:56:28.112 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::TranslationOp
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="293683" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1234800000000007" lon="34.7174499999999995">
         <tag k="ele" v="454"/>
         <tag k="alt_name" v="Wadi ar Rudayhi;Wadi el Rideihi;Wādī ar Rudayḩī;wdy ʼ-rdyhy;ודי א-רדיהי"/>
@@ -103,3 +104,4 @@
         <tag k="error:circular" v="15"/>
     </node>
 </osm>
+14:56:28.128 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 118) Convert operation took 0 seconds

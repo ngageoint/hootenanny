@@ -15,7 +15,7 @@
         <nd ref="-15"/>
         <tag k="width" v="5"/>
         <tag k="note" v="3;4"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="source" v="Yahoo imagery"/>
         <tag k="raw:COE" v="0"/>
         <tag k="all_weather" v="yes"/>

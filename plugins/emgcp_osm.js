@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,12 +92,12 @@ emgcp_osm = {
         var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-        if (attrs['Feature Code'])
+        if (attrs['Feature Code'] && attrs['Feature Code'] !== 'Not found')
         {
-            if (attrs['Feature Code'].indexOf('&') > -1)
+            if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
                 // Two FCODE's
-                var tList = attrs['Feature Code'].split('&');
+                var tList = attrs['Feature Code'].split(' & ');
                 var fcode = tList[0].split(':');
                 attrs['Feature Code'] = fcode[0].trim();
 
@@ -109,7 +109,6 @@ emgcp_osm = {
                 // One FCODE
                 var fcode = attrs['Feature Code'].split(':');
                 attrs['Feature Code'] = fcode[0].trim();
-
             }
         }
         else
@@ -149,7 +148,6 @@ emgcp_osm = {
             // return null;
             return {attrs:{'error':'Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP'}, tableName: ''};
         }
-
         // Go looking for "OSM:XXX" values and copy them to the output
         for (var i in attrs)
         {
@@ -171,9 +169,9 @@ emgcp_osm = {
                     if (ftag[1] !== tags[ftag[0]])
                     {
                         hoot.logVerbose('emgcp_osm: fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
-                    }
                 }
             }
+        }
             else
             {
                 //throw new Error('Feature Code ' + fCode2 + ' is not valid for MGCP');
@@ -196,7 +194,7 @@ emgcp_osm = {
 } // End of emgcp_osm
 
 if (typeof exports !== 'undefined') {
-    exports.toOSM = emgcp_osm.toOSM;
+exports.toOSM = emgcp_osm.toOSM;
     exports.EnglishtoOSM = emgcp_osm.toOSM;
     exports.RawtoOSM = mgcp.toOsm;
     exports.OSMtoEnglish = emgcp.toEnglish;

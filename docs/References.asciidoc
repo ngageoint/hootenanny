@@ -67,6 +67,12 @@
 - [[[seth2008]]] Seth, Sharad, and Ashok Samal. "Conflation of Features." In
   Encyclopedia of GIS, pp. 129-133. Springer US, 2008.
 - [[[vi1966]]] VI, L. (1966). Binary codes capable of correcting deletions, insertions, and reversals. _Soviet Physics Doklady_ , 10: 707–10.
+- [[[guthrie2006]]] Guthrie, David, Ben Allison, Wei Liu, Louise Guthrie, and Yorick Wilks.
+  http://www.cs.brandeis.edu/~marc/misc/proceedings/lrec-2006/pdf/357_pdf.pdf["A closer look at skip-gram modelling."]
+  In Proceedings of the 5th international Conference on Language Resources and Evaluation (LREC-2006), pp. 1-4. 2006.
+- [[[keskustalo2003]]] Keskustalo, Heikki, Ari Pirkola, Kari Visala, Erkka Leppänen, and Kalervo Järvelin.
+  http://www.sis.uta.fi/infim/julkaisut/fire/Spire-llncs.pdf["Non-adjacent digrams improve matching of cross-lingual spelling variants."]
+  In International Symposium on String Processing and Information Retrieval, pp. 252-265. Springer Berlin Heidelberg, 2003.
 
 [bibliography]
 .Websites

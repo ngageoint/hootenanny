@@ -133,10 +133,6 @@ var postHandler = function(data)
     var map = new hoot.OsmMap();
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);
-    //This setting will update hoot:status tag to 3 when merging matches.
-    hoot.set({
-        'writer.include.debug': true
-    });
     var script = 'PoiGeneric.js';
     var mergedMap = hoot.poiMerge(script, map, -1);
     var xml = hoot.OsmWriter.toString(mergedMap);

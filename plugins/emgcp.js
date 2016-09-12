@@ -35,7 +35,7 @@ emgcp = {
     {
         var mgcpData = [];
 
-        mgcpData = mgcp.toMgcp(tags, elementType, geometryType)
+        mgcpData = mgcp.toMgcp(tags, elementType, geometryType);
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
@@ -50,7 +50,8 @@ emgcp = {
         }
 
         var eAttrs = {}; // The final English output
-        eAttrs['Feature Code'] = '';
+
+        eAttrs['Feature Code'] = 'Not found';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (mgcpData.length > 0)
@@ -81,7 +82,7 @@ emgcp = {
                 // Find an FCODE
                 if (tFCODE in emgcp.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== '')
+                    if (eAttrs['Feature Code'] !== 'Not found')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }

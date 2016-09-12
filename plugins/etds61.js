@@ -52,7 +52,7 @@ etds61 = {
         }
 
         var eAttrs = {}; // The final English output
-        eAttrs['Feature Code'] = '';
+        eAttrs['Feature Code'] = 'Not found';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (tdsData.length > 0)
@@ -60,6 +60,7 @@ etds61 = {
             for (var fNum = 0, fLen = tdsData.length; fNum < fLen; fNum++)
             {
                 var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
+
                 delete tdsData[fNum]['attrs']['F_CODE'];
 
                 // Translate the single values
@@ -83,7 +84,7 @@ etds61 = {
                 // Find an FCODE
                 if (tFCODE in etds61.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== '')
+                    if (eAttrs['Feature Code'] !== 'Not found')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + etds61.rules.fcodeLookup[tFCODE]['desc'];
                     }
