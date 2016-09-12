@@ -6,7 +6,7 @@ section describes that process.
 
 === Prerequisites
 
-* Launch a Hootenanny VM (see Vagrant instructions).
+* Launch a Hootenanny VM: https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md
 * Install JOSM on your Hootenanny VM.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
 * Use the "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint $HOOT_HOME/docs/styles/RefTodoHighlight.xml
 
@@ -14,18 +14,22 @@ section describes that process.
 
 ==== Test Data Preparation Quick Start
 
-This is an contrived example set of commands that perform all the data preparation described in this section.  Not all of the commands may apply to your data, so read the rest of the section for more background, if needed.  Some, but not all, of these steps can be done in the Hootenanny iD Editor User Interface as well.  See that Hootenanny User Interface Documentation for more details on how to perform those steps within it.
+This is a contrived example set of commands that perform all the data preparation described in this section.  Not all of the commands may apply to your data, so read the rest of the section for more background, if needed.  Some, but not all, of these steps can be done in the Hootenanny iD Editor User Interface as well.  See that Hootenanny User Interface Documentation for more details on how to perform those steps within it.
 
 ----------------------------
-# translate
+# translate (may be optional)
 hoot ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
 hoot ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
 
-# clean
-hoot cleanup TranslatedOutput1.osm CleanedOutput1.osm
-hoot cleanup TranslatedOutput2.osm CleanedOutput2.osm
+# crop (optional)
+hoot crop-map TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop-map TranslatedOutput2.osm CroppedOutput2.osm "-77.0551,38.8845,-77.0281,38.9031"
 
-# prune
+# clean (optional)
+hoot cleanup CroppedOutput1.osm CleanedOutput1.osm
+hoot cleanup CroppedOutput2.osm CleanedOutput2.osm
+
+# prune (optional)
 hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput1.osm BuildingsOutput1.osm
 hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput2.osm BuildingsOutput2.osm
 
@@ -42,14 +46,24 @@ After obtaining the data, look over its attribution.  It should have tags that c
 
 Also, examine the geometries of the features with a backdrop of accurate satellite imagery, if possible.  This should give you clues as to the geospatial accuracy of the mapped data.  The poorer the overall geospatial accuracy is, also likely the harder the data will be to conflate.  The same caveats apply here as described in the previous attribution quality section.
 
-==== Translating Test Data
+==== Translating Test Data (may be optional)
 
-Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  For instructions on how to translate data, see the ogr2osm command documentation.
+Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the ogr2osm command documentation.
 
 An example:
 
 ----------------------
 hoot ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
+----------------------------
+
+==== Cropping Test Data (optional)
+
+If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM can be slow when dealing with very large datasets.  See the command line documenation on the crop-map command in the Hootenanny User Guide for more information on cropping data.
+
+An example:
+
+----------------------
+hoot crop-map Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
 ----------------------------
 
 ==== Cleaning the Test Data (optional)
@@ -76,7 +90,14 @@ hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" Input.osm JustBuildings
 
 See the Hootenanny Command Line Documentation for a complete list of the available visitors that can be used for filtering.
 
-For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in two datasets from two separate files and removes all features that aren't buildings or POI's:
+For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in two datasets from two separate files and removes all features that aren't buildings or POI's.  First, the command (assumes a script called
+'RemoveIrrelevants.js':
+
+---------------------
+node ../RemoveIrrelevants.js Input1.osm Input2.osm PrunedOutput1.osm PrunedOutput2.osm
+---------------------
+
+Now the script, RemoveIrrelevants.js:
 
 ------------------------------
 var HOOT_HOME = process.env.HOOT_HOME
