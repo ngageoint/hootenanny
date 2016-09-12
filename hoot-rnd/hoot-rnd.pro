@@ -62,6 +62,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/PartialNetworkMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkDetailsTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkMergerCreatorTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeStringTest.cpp \
 
 HEADERS += \
 
