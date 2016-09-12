@@ -20,7 +20,7 @@ var nCPU = os.cpus().length;
 // Argument parser
 process.argv.forEach(function (val, index, array) {
 	// port arg
-	// Note that default port comes from serverPort var 
+	// Note that default port comes from serverPort var
   if(val.indexOf('port=') == 0){
   	var portArg = val.split('=');
   	if(portArg.length == 2){
@@ -42,7 +42,7 @@ process.argv.forEach(function (val, index, array) {
 });
 
 // This is when the cluster master gets invoked
-if(cluster.isMaster){	
+if(cluster.isMaster){
 	// Spawn off http server process by requested thread count
 	for(var i=0; i<nCPU; i++) {
 		cluster.fork();
@@ -60,7 +60,7 @@ if(cluster.isMaster){
 		function(request, response){
 
 			// we sends request based on requested path
-			var subPath = url.parse(request.url).pathname; 
+			var subPath = url.parse(request.url).pathname;
 
 			if(subPath == '/p2pmerge'){
 				mergeP2P(request, response);
@@ -86,16 +86,16 @@ var mergeP2P = function(request, response)
 		request.on('end', function(data){
 			postHandler(alldata, response);
 		});
-	} 
+	}
 	else if(request.method === "GET"){
-	}	
+	}
 }
 
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data, response)
 {
 	var hoot = require(HOOT_HOME + '/lib/HootJs');
-	
+
 	var result = {};
 	/*var input = "<?xml version='1.0' encoding='UTF-8'?>\
 	<osm version='0.6' upload='true' generator='JOSM'>\
@@ -115,10 +115,6 @@ var postHandler = function(data, response)
 	var map = new hoot.OsmMap();
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);
-    //This setting will update hoot:status tag to 3 when merging matches.
-    var settings = {};
-    settings["writer.include.debug"] = true;
-    hoot.set(settings);
 
 	var script = 'PoiGeneric.js';
     var mergedMap = hoot.poiMerge(script, map, -1);
