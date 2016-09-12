@@ -26,6 +26,10 @@
  */
 
 // Hoot
+#include <hoot/core/elements/Node.h>
+#include <hoot/rnd/conflate/network/EdgeLocation.h>
+#include <hoot/rnd/conflate/network/NetworkVertex.h>
+#include <hoot/rnd/conflate/network/NetworkEdge.h>
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -34,73 +38,53 @@ namespace hoot
 class EdgeLocationTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeLocationTest);
-  //CPPUNIT_TEST(getEdgeTest);
-  //CPPUNIT_TEST(getPortionTest);
-  //CPPUNIT_TEST(isExtremeTest);
-  //CPPUNIT_TEST(isFirstTest);
-  //CPPUNIT_TEST(isLastTest);
-  //CPPUNIT_TEST(isValidTest);
-  //CPPUNIT_TEST(getVertexTest);
-  //CPPUNIT_TEST(equalsTest);
-  //CPPUNIT_TEST(lessThanTest);
-  //CPPUNIT_TEST(greaterThanTest);
-  //CPPUNIT_TEST(lessThanOrEqualsTest);
-  //CPPUNIT_TEST(greaterThanOrEqualsTest);
+  CPPUNIT_TEST(runBasicTest);
+  //CPPUNIT_TEST(runOperatorTests);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void getEdgeTest()
+  void runBasicTest()
   {
+    shared_ptr<OsmMap> map(new OsmMap());
+    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
+    NetworkVertexPtr vertex1(new NetworkVertex(node1));
+    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 100, 0);
+    NetworkVertexPtr vertex2(new NetworkVertex(node2));
+    NetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
 
+    EdgeLocation edgeLoc(edge, 0.5);
+    ConstNetworkEdgePtr outputEdge = edgeLoc.getEdge();
+
+    CPPUNIT_ASSERT(outputEdge->getFrom() == vertex1);
+    CPPUNIT_ASSERT(outputEdge->getTo() == vertex2);
+    CPPUNIT_ASSERT(outputEdge->isDirected());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, edgeLoc.getPortion(), 0.0);
+
+    CPPUNIT_ASSERT(edgeLoc.isExtreme(0.9));
+    CPPUNIT_ASSERT(!edgeLoc.isExtreme(0.1));
+    CPPUNIT_ASSERT(edgeLoc.isFirst(0.9));
+    CPPUNIT_ASSERT(!edgeLoc.isFirst(0.1));
+    CPPUNIT_ASSERT(!edgeLoc.isLast(0.1));
+    CPPUNIT_ASSERT(edgeLoc.isLast(0.9));
+    CPPUNIT_ASSERT(edgeLoc.isValid());
+
+    CPPUNIT_ASSERT(edgeLoc.getVertex(0.9) == vertex2);
+    QString exceptionMsg("");
+    try
+    {
+      edgeLoc.getVertex(0.1);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Attempted to get a vertex on an edge location that isn't on a vertex.",
+      exceptionMsg.toStdString());
   }
 
-  void getPortionTest()
-  {
-
-  }
-
-  void isFirstTest()
-  {
-
-  }
-
-  void isLastTest()
-  {
-
-  }
-
-  void isValidTest()
-  {
-
-  }
-
-  void getVertexTest()
-  {
-
-  }
-
-  void equalsTest()
-  {
-
-  }
-
-  void lessThanTest()
-  {
-
-  }
-
-  void greaterThanTest()
-  {
-
-  }
-
-  void lessThanOrEqualsTest()
-  {
-
-  }
-
-  void greaterThanOrEqualsTest()
+  void runOperatorTests()
   {
 
   }
