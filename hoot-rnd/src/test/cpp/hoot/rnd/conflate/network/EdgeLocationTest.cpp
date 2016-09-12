@@ -44,7 +44,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -84,7 +84,7 @@ public:
 
   void invalidTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -98,7 +98,7 @@ public:
 
   void runOperatorTests()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));

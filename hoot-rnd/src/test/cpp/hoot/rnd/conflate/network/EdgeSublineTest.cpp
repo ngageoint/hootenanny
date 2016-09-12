@@ -49,7 +49,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -85,7 +85,7 @@ public:
 
   void invalidTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -108,7 +108,7 @@ public:
 
   void zeroLengthTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -124,7 +124,7 @@ public:
 
   void backwardTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -147,7 +147,7 @@ public:
 
   void overlapsTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
           new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -170,7 +170,7 @@ public:
 
   void reverseTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -202,7 +202,7 @@ public:
 
   void createFullSublineTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -232,7 +232,7 @@ public:
 
   void equalTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
