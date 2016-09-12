@@ -20,7 +20,7 @@
         <nd ref="-1"/>
         <tag k="REF1" v="Cheddar's"/>
         <tag k="REF2" v="Cheddar's"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Cheddar's"/>
         <tag k="building" v="yes"/>
