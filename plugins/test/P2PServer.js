@@ -81,7 +81,7 @@ describe('P2PServer', function () {
                 assert.equal(result.osm.node[0].$.lat, "48.0479399000000029");
                 assert.equal(result.osm.node[0].$.lon, "11.7012813999999992");
                 assert.equal(result.osm.node[0].tag[0].$.k, "hoot:status");
-                assert.equal(result.osm.node[0].tag[0].$.v, "1");
+                assert.equal(result.osm.node[0].tag[0].$.v, "3");
                 assert.equal(result.osm.node[0].tag[1].$.k, "name");
                 assert.equal(result.osm.node[0].tag[1].$.v, "POST, JÄGER-VON-FALL-STRASSE");
                 assert.equal(result.osm.node[0].tag[2].$.k, "amenity");
