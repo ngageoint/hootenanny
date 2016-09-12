@@ -1,6 +1,8 @@
 
 == Conflating a New Feature Type With Generic Conflation
 
+TODO: rewrite this document to account for generic and non-generic conflation
+
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
 more quickly creating the capability to conflate additional feature types by exposing, via a Javascript
@@ -19,51 +21,11 @@ Hootenanny's Javascript API, see the User Guide.
 
 === Obtaining Test Data
 
-This document assumes you are testing with data that had matches made in test data manually by a human.  
-Assuming the human matches to be perfect, by comparing how Hootenanny conflates data to the human 
-matches it can be derived how good quantitatively Hootenanny is at conflating the data with a correctness score.  
-It is possible to add a new feature type to conflate without first having manually matched test data to test against.  
-However, in that case the only way to evaluate the correctness of Hootenanny's conflation is 
-qualitatively by examining the conflated and unconflated data in an editor overlayed in an editor,
-since there are no matches to score.  For the rest of this documents, its assumed you have test
-data with manual matches available for use.
+This document assumes you are testing with data that had matches made in test data manually by a human.  See the "Hootenanny Manual Conflation" section in this document for more details on this process.  
 
-You will need at least two datasets from the same general AOI to score matches against.  One can be 
-OSM data and the other from some other reliable data source.  After obtaining the data, look over its attribution.  
-It should have tags that clearly identify the feature types of the contained data.  In the case of 
-OSM data, the tags should fall cleanly into the OSM tag specification.  If the tagging is poor, then
-the conflation accuracy of the data will also likely be poor.  Also examine the geometries of the
-features in an data editor such as the link:$$https://josm.openstreetmap.de/$$[Java Open Street Map (JOSM)] for editing OSM data, with a backdrop of accurate satellite imagery, if possible.  This should give you clues as to the accuracy of the mapped data.  The poorer the overall accuracy is, also likely the harder the data will be to conflate.
+=== Pruning the Test Data
 
-=== Adding Manual Matches to the Test Data
-Manually matched data can be used to train various classification models applied for different features such as rivers, railways, POIs, etc. As a rule of thumb, it is recommended that there are at least 200 manual matches made in the data to provide enough data to be trained on.  
-
-After the manual matches have been made, you can move onto scoring how well Hootenanny produces its matches compared to the manual matches. To reduce bias two people will independently perform the conflation process. One person will use the reference data as base data for conflation and merge in the second data source. The other person can use the second data source and merge in the reference data. This will help reduce the overall bias.   
-
-==== Creating REF data
-
-Once users have identified appropriate datasets to manually match, the'll need to translate them properly in one of the supported Hootenanny schemas or
-create their own custom translation schema bearing in mind that the trained classifier will work best when using the OSM schema.  When using JOSM to 
-manually match data, the user will need to create a field that they can associate positive matches.  The following are typical scenarios of data matching 
-relationships:
-
-* one to many POIs/Lines/Polygons
-* many to one POIs/Lines/Polygons
-* one to one POIs/Lines/Polygons
-
-To associate the matched features in the comparable datasets, you'll need to have a column in both datasets that can represent either match, miss or review. For this, the hoot
-command line below is an operator that will add the visitor tag REF1 to the reference dataset with a unique value so that corresponding features in matched data can be properly 
-associated.  The AddRef2Visitor command adds a TODO value for the REF2 field which will get replaced with the REF1 manually matched values that the user identifies in JOSM.  
-
-----------------
-hoot convert -D convert.ops=hoot::AddRef1Visitor [ReferenceData].osm Ref1.osm
-hoot convert -D convert.ops=hoot::AddRef2Visitor [MatchData].osm Ref2.osm
-----------------
-
-Note that matching standards will vary between the type of features (Roads, POIs, Buildings, etc..) that you are trying to match.  For example a corresponding pair of matched Road features may
-appear as a single road in the reference data but a divided road in the second dataset.  Similarly, a single POI in one dataset may represent a cluster of buildings or POIs in another dataset. 
-Covering the range of matching standards is beyond the scope of this document but this is simply an attempt to provide some background into work flows that have been effective for training
-models in the past.   
+TODO (also add pruning of existing irrelevant ref tags)  
 
 === Cropping the Test data
 

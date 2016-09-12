@@ -1,14 +1,207 @@
 
 == Hootenanny Manual Conflation
 
-To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually conflated by a human.  This
-document describes that process.
+To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human.  This
+section describes that process.
 
-To reduce bias two people will independently perform the conflation process. One person will use the NGA provided data as base data for conflation and merge in the OSM data. The other person will use the OSM data as base data and merge in the NGA provided data. When in doubt the conflator (tm) should give a very minor bias to the base data set. This will help reduce the overall bias. This does not mean that you can't modify the base data.
+=== Prerequisites
 
-JOSM will be used to conflate the two data sets and the conflation will take place in two passes. The first pass will be without using any additional data source for input (e.g. imagery, lidar or other maps). After the map has been conflated without imagery the second pass may use the same GeoEye provided imagery that Goffeney will be using to aid in conflation. No cheating!
+* Launch a Hootenanny VM: https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md
+* Install JOSM on your Hootenanny VM.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
+* Use the "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint $HOOT_HOME/docs/styles/RefTodoHighlight.xml
 
-The manual conflation process is interested in the following attributes:
+=== Test Data Preparation
+
+==== Test Data Preparation Quick Start
+
+This is a contrived example set of commands that perform all the data preparation described in this section.  Not all of the commands may apply to your data, so read the rest of the section for more background, if needed.  Some, but not all, of these steps can be done in the Hootenanny iD Editor User Interface as well.  See that Hootenanny User Interface Documentation for more details on how to perform those steps within it.
+
+----------------------------
+# translate (may be optional)
+hoot ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
+hoot ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
+
+# crop (optional)
+hoot crop-map TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop-map TranslatedOutput2.osm CroppedOutput2.osm "-77.0551,38.8845,-77.0281,38.9031"
+
+# clean (optional)
+hoot cleanup CroppedOutput1.osm CleanedOutput1.osm
+hoot cleanup CroppedOutput2.osm CleanedOutput2.osm
+
+# prune (optional)
+hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput1.osm BuildingsOutput1.osm
+hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput2.osm BuildingsOutput2.osm
+
+# add ref tags
+hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput1.osm Ref1.osm
+hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput2.osm Ref2.osm
+----------------------------
+
+==== Obtaining Test Data
+
+You will need at least two datasets from the same general AOI to manually match features.  Normally, we are manually conflating an OSM dataset with an NGA provided dataset.  Sometimes in place of an NGA dataset we may use some reliable, publicly available data and convert it to the OSM format, if needed.  Adding more than one pair of datasets into the training pipeline is encouraged and can strengthen the resulting model if the additional datasets contain unique feature matching situations that are representative of the data you will be eventually conflating.
+
+After obtaining the data, look over its attribution.  It should have tags that clearly identify the feature types of the contained data.  In the case of OSM data, the tags should fall cleanly into the OSM tag specification (taginfo.openstreetmap.org) or can be translated into the OSM tag specification with either an existing translation or a new one that you write (see the following translation section).  If the tagging is poor, then the accuracy of the conflated data will also likely be poor.  However if the poor data quality accurately represents the quality of the datasets you eventually want to conflate with Hootenanny and you understand the possible shortcomings, then manually matching poor quality datasets may make sense. 
+
+Also, examine the geometries of the features with a backdrop of accurate satellite imagery, if possible.  This should give you clues as to the geospatial accuracy of the mapped data.  The poorer the overall geospatial accuracy is, also likely the harder the data will be to conflate.  The same caveats apply here as described in the previous attribution quality section.
+
+==== Translating Test Data (may be optional)
+
+Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the ogr2osm command documentation.
+
+An example:
+
+----------------------
+hoot ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
+----------------------------
+
+==== Cropping Test Data (optional)
+
+If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM can be slow when dealing with very large datasets.  See the command line documenation on the crop-map command in the Hootenanny User Guide for more information on cropping data.
+
+An example:
+
+----------------------
+hoot crop-map Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
+----------------------------
+
+==== Cleaning the Test Data (optional)
+
+The Hootenanny cleanup command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the cleanup command documentation for more details.  
+
+An example:
+
+-------------------------
+hoot cleanup Input.osm CleanedOutput.osm
+-------------------------
+
+==== Pruning Irrelevant Test Data (optional)
+
+If you have a dataset which contains features not relevant to the manual matching you are doing, you can use Hootenanny to remove them.  This step is optional, though, and can be done by a developer when later creating conflation regression tests using the same data.  The advantage to doing it before manual matching is that you will have less clutter on the screen during the process.
+
+There are two basic ways to prune various types of data.  
+
+You can use the hoot convert command with a visitor operation.  This command line example filters a dataset down to just highways:
+
+------------------------------
+hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" Input.osm JustBuildings.osm
+------------------------------
+
+See the Hootenanny Command Line Documentation for a complete list of the available visitors that can be used for filtering.
+
+For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in two datasets from two separate files and removes all features that aren't buildings or POI's.  First, the command (assumes a script called
+'RemoveIrrelevants.js':
+
+---------------------
+node ../RemoveIrrelevants.js Input1.osm Input2.osm PrunedOutput1.osm PrunedOutput2.osm
+---------------------
+
+Now the script, RemoveIrrelevants.js:
+
+------------------------------
+var HOOT_HOME = process.env.HOOT_HOME
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+
+// create a new map and populate it with two input files
+hoot.debug("Loading maps...");
+var map = new hoot.OsmMap();
+hoot.loadMap(map, input1, false, 1);
+hoot.loadMap(map, input2, false, 2);
+
+// if it is not a building or a POI
+var building = new hoot.BuildingCriterion(map);
+var poi = new hoot.PoiCriterion();
+var or1 = new hoot.OrCriterion(building, poi);
+var not = new hoot.NotCriterion(or1);
+
+// remove the feature from the map.
+var rro = new hoot.RefRemoveOp(not);
+hoot.debug("Removing features from the map...");
+rro.apply(map);
+
+var copy1 = map.clone();
+var copy2 = map.clone();
+
+// remove all of unknown2 from copy1
+hoot.debug("Removing all of unknown2 from copy1...");
+copy1.visit(
+    new hoot.RemoveElementsVisitor( 
+        new hoot.StatusCriterion({'status.criterion.status':'Unknown2'}),
+        {'remove.elements.visitor.recursive':true}));
+
+// remove all of unknown1 from copy2
+hoot.debug("Removing all of unknown1 from copy2...");
+copy2.visit(
+    new hoot.RemoveElementsVisitor( 
+        new hoot.StatusCriterion({'status.criterion.status':'Unknown1'}),
+        {'remove.elements.visitor.recursive':true}));
+
+hoot.debug("Saving maps...");
+hoot.saveMap(copy1, output1);
+hoot.saveMap(copy2, output2);
+------------------------------
+
+If you need help with a specific filtering task for your data, reach out to the Hootenanny core development team.
+
+==== Adding REF Tags to Test Data
+
+In manual matching, you match a feature in one dataset to a feature in another using REF tags on the features (specific examples of this will follow).  One dataset will have a "REF1" tag on all of its features and the other will have a "REF2" tag on all of its features.  The values for both REF tags start out as "todo", so you know as a manual matcher that you still need to match the feature.  Typically you want to put REF1 tags on the larger data set. REF tags are six digit hex values that are unique to a single file.
+
+An example that generates the tags on two separate input datasets:
+
+--------------------------
+hoot convert -D convert.ops=hoot::AddRef1Visitor Input1.osm Ref1.osm
+hoot convert -D convert.ops=hoot::AddRef2Visitor Input2.osm Ref2.osm
+-------------------------
+
+An example REF tag value: REF2=007be5
+
+=== Matching Overview
+
+The following are typical scenarios of data matching relationships:
+
+* one to one Points/Lines/Polygons 
+* one to many Points/Lines/Polygons
+* many to one Points/Lines/Polygons
+
+Note that matching standards will vary between the type of features that you are trying to match.  For example, a corresponding pair of matched road features may appear as a single road in the reference data but a divided road in the second dataset.  Similarly, a single POI in one dataset may represent a cluster of buildings or POIs in another dataset.
+
+JOSM is used to conflate the two data sets and the conflation should take place in two passes.  The first pass should be without using any additional data source for input (e.g. imagery, lidar or other maps).  After the map has been conflated without imagery, the second pass may use the imagery.  Resist the urge to consult data sources other than the ones your are matching for information...no cheating!
+
+One way to reduce bias in matching is to have two people independently perform the manual matching process.  One person will use the NGA provided data as base data for matching and merge OSM data into it.  The other person will use the OSM data as base data and merge in the NGA provided data.  When in doubt, the conflator (tm) should give a very minor bias to the base data set.  This will help reduce the overall bias but doesn't mean that you can't modify the base data.
+
+=== Matching Process
+
+There are two files used as input:
+
+* REF1 - This is the file with a REF1 tag on all features.  Do not modify this file in any way.
+* REF2 - This is the file with a REF2 tag on all features.  Only modify the tags in this file.  Do not modify the geometries, remove elements, add elements, etc.
+ 
+By default all features are marked with REF2=todo. The JOSM paint style given in an earlier section highlights the todo in blue, which tells Hootenanny that a human has not reviewed the record and to omit it from training and testing.
+
+* To create a match between a feature in the REF2 dataset with a feature in the REF1 dataset, you add the REF1 tag ID value of the feature in the REF1 dataset to the value of the REF2 tag of the feature in the REF2 dataset, replacing its current "todo" value. To signify that one feature matches multiple features, use a ';' delimiter between the REF ID.  Example: 
+** Single match: REF2=007be5
+** Two matches: REF2=007be5;007be6 
+* To flag to features for review, do the same as in the previous step but populate the value of the REVIEW tag instead.  Example:
+**  Single review: REVIEW=007be5
+**  Two reviews: REVIEW=007be5;007be6
+* To communicate that a feature in the REF2 dataset matches no other feature in the REF1 dataset (a miss), change the REF2 tag value from "todo" to "none".  Example: 
+** REF2=none
+
+Match/Miss/Review are the main match tagging types, but some feature types have additional options for tagging (Conflict, Divided, etc.).  Throughout the rest of this section, specific matching standards are presented for the all types of data that have been manually matched for use in Hootenanny model training at this time.
+
+=== How Many Matches Do I Need to Make?
+
+As a rule of thumb, it is recommended that there are at least 200 manual matches made in the data to provide enough data to be trained on.  However, its very possible that number may fluctuate depending on the input data used.
+
+=== Roads
+
+==== Road Conflation Standards
+
+Road Conflation is the process of taking two input data sets and producing a third output (conflated) data set. This should not be confused with road matching (described later).
+
+The Hootenanny road conflation process is interested in the following things:
 
 * name, alt_name
 * Network accuracy (one way streets, intersections, tunnels, bridges, etc)
@@ -16,87 +209,61 @@ The manual conflation process is interested in the following attributes:
 * Road types (primary, motorway, residential etc.)
 * lanes
 
-Due to the simplicity of conflating and mechanical nature, we are not interested in:
+Due to the simplicity of conflating and mechanical nature, we are not interested in these things:
 
 * license
 * classification
 * GFID 
 * source
 
-=== JOSM
+===== Divided Highways
 
-JOSM is the editor we've been using for manual conflation. It can be found here: http://josm.openstreetmap.de/
+Wherever possible divided highways should be tagged as two one way streets rather than a highway with the "divider=yes" tag.
 
-The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
-
-=== Road Conflation Standards
-
-Road Conflation is the process of taking two input data sets and producing a third output (conflated) data set. This should not be confused with matching.
-
-==== Divided Highways
-
-Wherever possible divided highways should be tagged as two oneway streets rather than a highway with the "divider=yes" tag.
-
-==== Names
+===== Names
 
 When you have multiple different enough names in the two inputs sets the names must be merged. Rather than try and explain this in detail I'll give a few examples. In these example Road 1 is the data set we're biased towards.
 
-*Example 1*
-
-| Road 1 | Road 2 |
-| @highway=primary@ | @highway=secondary@ |
-| @name=Foo Street@ | @name=Foo St@ |
-|  | @alt_name=Bar St@ |
+.*Example 1 Input*
+[width="50%"]
+|======
+| *Road 1* | *Road 2*
+| highway=primary  |  highway=secondary 
+| name=Foo Street | name=Foo St
+| |  alt_name=Bar St
+|======
 
 Even though we can say with reasonable confidence that Foo St is equivalent to Foo Street we keep all names. Even if the only difference is in the capitalization. so we'll merge them into the following:
 
-| @highway=primary@ |
-| @name=Foo Street@ |
-| @alt_name=Bar St;Foo St@ |
+.*Example 1 Output*
+[width="25%"]
+|======
+| highway=primary 
+| name=Foo Street
+| alt_name=Bar St;Foo St
+|======
 
-*Example 2*
+.*Example 2 Input*
+[width="50%"]
+|======
+| *Road 1* | *Road 2*
+| highway=primary  |  highway=tertiary 
+| name=Foo Street | name=Foo Ln
+|======
 
-| Road 1 | Road 2 |
-| @highway=primary@ | @highway=tertiary@ |
-| @name=Foo Street@ | @name=Foo Ln@ |
+In this case we have two conflicting names so we'll keep the base name and turn the other name into an alt_name:
 
-In this case we have two conflicting names so we'll keep the base name and turn the other name into an @alt_name@:
-
-| @highway=secondary@ |
-| @name=Foo Street@ |
-| @alt_name=Foo Ln@ |
+.*Example 2 Output*
+[width="25%"]
+|======
+| highway=secondary 
+| name=Foo Street
+| alt_name=Foo Ln
+|======
 
 *NOTE:* Previously we would merge Foo St and Foo Street. Some of the early (circa 2012) data sets may show this old style merging.
 
-==== Tips & Tricks
-
-Some of the input files attached to ticket include a "tiger:reviewed=no" tag. This tag makes the features glow yellow in JOSM and is there solely as an aid in conflating. When you have the feature looking exactly the way to want it, delete the tag. That will make the yellow glow disappear and you can move on.
-
-=== POI Matching Standards
-
-POI matching is the process of tagging nodes with information that explicitly states the matching relationship between POIs. What is a POI? This definition gets nasty and rather than play semantics police we call all point data representing semi-permanent locations a POI. Or in other words, anything OSM tags as a node. (E.g. stop signs, bridges, restaurants, cities, etc.)
-
-The possible relationships between two POIs are below. A pair of POIs should only have the most specific relationship (e.g. it should _never_ be conflict _and_ miss).
-
-* Match - The user is confident that the two POIs represent the same entity.
-* Miss - The user is confident that the two POIs do not represent the same entity.
-* Conflict - The user is confident that the POIs conflict. E.g. They can't both exist in the same data set. I don't have a good example for this, but it may come up. 
-* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
-
-==== Creating POI REF data
-
-Hootenanny contains some simple tools to help in the generation of REF tags. The steps are as follows:
-
-* Translate only the POI data into @.osm+@. See @--ogr2osm@ for details. If you have raw OSM data as input you can likely use JOSM to strip out the non-POIs.
-* Add REF1 _or_ REF2 tags. Typically you want to put REF1 tags on the larger data set. REF tags used to be UUIDs, but those were a bit unwieldy and we didn't need the precision. They're now six digit hex values that are unique to a single file.
-** @hoot --convert -D convert.ops=hoot::AddRef1Visitor Poi1.osm Ref1.osm@
-** @hoot --convert -D convert.ops=hoot::AddRef2Visitor Poi2.osm Ref2.osm@
-
-h3. Manually Matching the Data
-
-This process is very similar to the road process. See the sections below for details.
-
-=== Road Matching Standards
+==== Road Matching Standards
 
 Road matching is the process of tagging roads with information that explicitly states the matching relationship between roads. The possible relationships between two road segments are below. A pair of road segments should only have the most specific relationship (e.g. it should _never_ be divided _and_ match).
 
@@ -106,96 +273,36 @@ Road matching is the process of tagging roads with information that explicitly s
 * Conflict - The user is confident that the two roads conflict. E.g. They can't both exist in the same data set.
 * Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
 
-The following sections describe how to tag the data to represent these five states.
+===== Road Match Tagging
 
-==== Creating Road REF data
-
-Hootenanny contains some simple tools to help in the generation of REF tags. The steps are as follows:
-
-* Translate into @.osm+@. See @--ogr2osm@ for details.
-* Reduce the data set down to only roads:
-** @hoot --convert -D "convert.ops=hoot::KeepHighwaysVisitor;hoot::KeepHighwaysVisitor" Input.osm JustHighways.osm@
-* Cleanup the data
-** @hoot --cleanup JustHighways.osm Cleaned.osm@
-* Add REF1 _or_ REF2 tags. Typically you want to put REF1 tags on the larger data set. REF tags used to be UUIDs, but those were a bit unwieldy and we didn't need the precision. They're now six digit hex values that are unique to a single file.
-** @hoot --convert -D convert.ops=hoot::AddRef1Visitor Cleaned.osm Ref1.osm@
-** @hoot --convert -D convert.ops=hoot::AddRef2Visitor Cleaned.osm Ref2.osm@
-
-==== Manually Matching the Data
-
-===== Prerequisites
-
-* Download and install JOSM
-* Create a new "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint modeled off of the JOSM Internal Style with the following additional rules. You'll need to modify the rules to include your own @sad.png@ icon. Any icon will do, but an exmple @sad.png@ and highlight XML file (RefTodoHighlight.xml) are available in $HOOT_HOME/docs/styles.
-------
-    <rule>
-        <condition k="REF2" v="todo"/>
-        <icon annotate="true" src="/home/jason.surratt/local/etc/sad.png" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="highway"/>
-        <condition k="REF2" v="todo"/>
-        <line colour="building#2222DD" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="building"/>
-        <condition k="REF2" v="todo"/>
-        <area colour="building#2222DD" priority="10000"/>
-        <line colour="building#2222DD" priority="10000"/>
-    </rule>
-
-    <rule>
-        <condition k="hoot:mismatch" v="true"/>
-        <area colour="building#22FF22" priority="10000"/>
-    </rule>
-------
-* (optional) Install Hoot.
-
-===== Match Tagging
-
-There are two files used as input:
-
-* REF1 - This is the file with a REF1 tag on all roads. Do not modify this file in any way.
-* REF2 - This is the file with a REF2 tag on all roads. Only modify the tags in this file. Do not modify the geometries, remove elements, add elements, etc.
-
-The following paragraphs refer to how to modify the tags associated with REF2.
-
-*Todo*
-
-By default all roads are marked with @REF2=todo@. This highlights the roads in blue in JOSM and tells Hootenanny that a human has not reviewed the record and it will be omitted from training and testing.
-
-*Miss*
-
-If you are confident that a road segment matches no other roads then set @REF2=none@.
+See the Matching Overview section for general details on how to change Miss/Match/Review REF tags.  Here are more road specific REF tag examples, as well as descriptions of additional REF tags road matching supports:
 
 *Divided*
 
 There are two ways that a road segment can match because of a difference in divided road standards. It can either be two one-way roads in REF2 that match a single two-way road in REF1, or one two-way road in REF2 that matches two one-way roads in REF1. If you are tagging a match as divided then don't include that particular UUID in any other tag. In other words, if you mark it as divided then don't mark it as a match.
 
-If there are two one-way roads in REF2 (the layer you're editing) then tag the match with @DIVIDED2@.
+If there are two one-way roads in REF2 (the layer you're editing) then tag the match with DIVIDED2.
 
-* First one-way: @DIVIDED2=007be5@
-* Second one-way: @DIVIDED2=007be5@
+* First one-way: DIVIDED2=007be5
+* Second one-way: DIVIDED2=007be5
 
-If there is one road in REF2 (the layer you're editing) then tag the match with @DIVIDED1@. In this case it should contain at least two UUIDs.
+If there is one road in REF2 (the layer you're editing) then tag the match with DIVIDED1. In this case it should contain at least two UUIDs.
 
-* @DIVIDED1=007be5;007be6@
+* DIVIDED1=007be5;007be6
 
 *Match*
 
 If you are confident that a road segment matches one or more other roads segments then set those semi-colon delimited values in the REF2 tag. If it is a partial match, then the beginning and end of the partial match can be clearly discerned. For example:
 
-* Single match: @REF2=007be5@
-* Two matches: @REF2=007be5;007be6@
+* Single match: REF2=007be5
+* Two matches: REF2=007be5;007be6
 
 *Conflict*
 
-If a road segment conflicts with another road segement (e.g. one is a roundabout and the other is a four-way intersection) then populate the @CONFLICT@ tag with the road segments that conflict.
+If a road segment conflicts with another road segement (e.g. one is a roundabout and the other is a four-way intersection) then populate the CONFLICT tag with the road segments that conflict.
 
-* Single conflict: @CONFLICT=007be5@
-* Multiple conflicts: @CONFLICT=007be5;007be6@
+* Single conflict: CONFLICT=007be5
+* Multiple conflicts: CONFLICT=007be5;007be6
 
 It is possible that a road segment matches some other road segments and conflicts with others. In this case the tags may be:
 
@@ -210,28 +317,46 @@ If part of the road conflicts and part of it matches, then the mark the whole se
 
 This is the catch all. If you aren't confident of any of the other categories. Maybe it matches, maybe it doesn't, then mark the road segment as review.
 
-* Single review: @REVIEW=007be5@
+* Single review: REVIEW=007be5
 
-=== Building Matching Standards
+===== Road Matching Tips & Tricks
 
-Unlike roads buildings/POIs are simply being matched and not merged. In time it may make sense to merge buildings/POIs too, but for now we are simply keeping one feature or the other.
+Some of the input files attached to ticket include a "tiger:reviewed=no" tag. This tag makes the features glow yellow in JOSM and is there solely as an aid in conflating. When you have the feature looking exactly the way to want it, delete the tag. That will make the yellow glow disappear and you can move on.
 
-To match buildings two files will be provided. One file will have all the features tagged with a @REF1@ key and the other will have a @REF2@ key. The @REF1@ data set is the reference data set. The @REF2@ data set is the set being matched. The @REF1@ data set should not be changed at all. The @REF2@ data set will be modified to match all relevant @REF2@ features.
+=== Buildings
 
-Attached is a custom rendering rule set for JOSM. This XML file makes all the @REF2@ buildings that have not been matched show up as blue and all unmatched POIs show up as sad faces. By default @REF2@ is set to @todo@ which causes the appropriate @todo@ rendering. During matching you identify all the associated features in the @REF1@ data set that match and copy their @REF1@ unique IDs into the @REF1@ field. If there are no confident matches then the @REF2@ field should be set to @none@.
+==== Building Conflation Standards
 
-For example:
+The Hootenanny building conflation process is interested in the following things:
+
+* name
+* overlap
+* geometrical similarity
+
+==== Building Matching Standards
+
+Building matching is the process of tagging building polygons with information that explicitly states the matching relationship between them.  In the OSM data model, buildings may be made up of ways and relations.  For more information on what consitutes a building in OSM terms, see taginfo.openstreetmap.org.
+
+* Match - The user is confident that the two buildings represent the same entity.
+* Miss - The user is confident that the two buildings do not represent the same entity. 
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+===== Building Match Tagging
+
+See the Matching Overview section for details on how to change Miss/Match/Review REF tags.
+
+Here is a building specific example:
 
 You have two McDonalds mapped as nodes with the following key value pairs (KVP).
 
-@REF1@ node:
+REF1 node:
 ------
 name=McDonalds
 amenity=restaurant
 REF1={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}
 ------
 
-@REF2@ node:
+REF2 node:
 ------
 name=McDonalds
 amenity=restaurant
@@ -239,18 +364,18 @@ cuisine=burger
 REF2=todo
 ------
 
-As stated above, we do not change the @REF1@ layer at all. But since we're confident of a match due to the name and closeness of the two nodes we will assign a match. In this case we'll set @REF2={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}@.
+As stated above, we do not change the REF1 layer at all. But since we're confident of a match due to the name and closeness of the two nodes we will assign a match. In this case we'll set REF2={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}.
 
 In some cases both a building will be mapped and a restaurant. For instance:
 
-@REF1@ way:
+REF1 way:
 ------
 building=yes
 amenity=restaurant
 REF1={ad10206a-a3e5-4575-9356-c32c2a04ce05}
 ------
 
-@REF2@ node:
+REF2 node:
 ------
 name=McDonalds
 amenity=restaurant
@@ -258,31 +383,31 @@ cuisine=burger
 REF2=todo
 ------
 
-@REF2@ way:
+REF2 way:
 ------
 building=yes
 REF2=todo
 ------
 
-Due to the location of the points and buildings we're confident that all three records represent the same entity. To match this we simply set @REF2={ad10206a-a3e5-4575-9356-c32c2a04ce05}@ for both the node and the way.
+Due to the location of the points and buildings we're confident that all three records represent the same entity. To match this we simply set REF2={ad10206a-a3e5-4575-9356-c32c2a04ce05} for both the node and the way.
 
-In some instances the @REF2@ data set may use one large way to represent a group of buildings in @REF1@. In this case you may have the following:
+In some instances the REF2 data set may use one large way to represent a group of buildings in REF1. In this case you may have the following:
 
-@REF1@ way:
+REF1 way:
 ------
 name=ST JOES
 building=yes
 REF1={116765b9-be01-44e8-8d85-c3e1b4184b2c}
 ------
 
-@REF1@ way:
+REF1 way:
 ------
 name=ST JOES
 building=yes
 REF1={fb02c530-3a4c-4735-b506-40c4dcb3f97b}
 ------
 
-@REF2@ way:
+REF2 way:
 ------
 name=Saint Joe's
 building=yes
@@ -290,7 +415,69 @@ amenity=hospital
 REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}
 ------
 
-In this case we're confident due to geometry and names that the @REF2@ building matches both of the @REF1@ buildings so we set the @REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}@. Notice the semi-colon deliminating the two unique IDs. There is no artificial limit to the number of unique IDs that may be in a @REF@ tag.
+In this case we're confident due to geometry and names that the REF2 building matches both of the REF1 buildings so we set the REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}. Notice the semi-colon deliminating the two unique IDs. There is no artificial limit to the number of unique IDs that may be in a REF tag.
 
+=== POI's
 
+==== POI Conflation Standards
+
+The Hootenanny POI conflation process is interested in the following things:
+
+* name
+* type
+* distance between features
+
+==== POI Matching Standards
+
+POI matching is the process of tagging nodes with information that explicitly states the matching relationship between POIs. What is a POI? This definition gets nasty and rather than play semantics police we call all point data representing semi-permanent locations a POI. Or in other words, anything OSM tags as a node. (E.g. stop signs, bridges, restaurants, cities, etc.)
+
+The possible relationships between two POIs are below. A pair of POIs should only have the most specific relationship (e.g. it should _never_ be conflict _and_ miss).
+
+* Match - The user is confident that the two POIs represent the same entity.
+* Miss - The user is confident that the two POIs do not represent the same entity.
+* Conflict - The user is confident that the POIs conflict. E.g. They can't both exist in the same data set. I don't have a good example for this, but it may come up. 
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+===== POI Match Tagging
+
+See the Matching Overview section for details on how to change Miss/Match/Review REF tags.  In addition to those tags, POI to POI matching defines a Conflict tag.
+
+=== Areas
+
+For now, an area is defined as a polygon representing a semi-permanent location.  An example is a park polygon surrounding various other POI's and polygons representing things like baseball fields, clubhouses, tennis courts, etc.
+
+TODO: This type of conflation is still largely under investigation.
+
+=== POI's and Buildings
+
+==== POI/Building Conflation Standards
+
+The Hootenanny POI/Building conflation process is interested in the following things:
+
+* name
+* type
+* distance between features
+* address
+
+==== POI/Building Matching Standards
+
+POI to building matching is the process of tagging POI's and buildings with information that explicitly states the matching relationship between them.  POI's and buildings are defined in the POI Matching Standards and Building Matching Standards sections. 
+
+* Match - The user is confident that the POI and building represent the same entity.
+* Miss - The user is confident that the POI and building do not represent the same entity.
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+==== POI/Building Match Tagging
+
+See the Matching Overview section for details on how to change Miss/Match/Review REF tags.
+
+=== POI's and Areas
+
+==== POI/Area Matching Standards
+
+TODO: This type of conflation is still largely under investigation.
+
+==== POI/Area Match Tagging
+
+TODO: This type of conflation is still largely under investigation.
 
