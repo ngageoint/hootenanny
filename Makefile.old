@@ -413,30 +413,40 @@ IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\* \*core/proto\
 coverage/core/core/index.html:
 	echo "Generating core code coverage report..."
 	mkdir -p coverage/core/core
-	rm -f coverage/core/log
+	rm -f coverage/core/core/log
 	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
 
 coverage/core/hadoop/index.html:
-	echo "Generating hadoop code coverage report..."
+	echo "Generating core hadoop code coverage report..."
 	mkdir -p coverage/core/hadoop
-	rm -f coverage/core/log
+	rm -f coverage/core/hadoop/log
 	lcov --capture --ignore-errors source -d hoot-hadoop/tmp/debug -b hoot-hadoop/ --output-file coverage/core/hadoop/Hadoop.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	lcov -r coverage/core/hadoop/Hadoop.info $(IGNORED) \*tbs/src\* -o coverage/core/hadoop/HadoopTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	genhtml coverage/core/hadoop/HadoopTrimmed.info --output-directory coverage/core/hadoop/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/hadoop/HadoopTrimmed.info --output-directory coverage/core/hadoop/ 2>&1 | grep -v -F "geninfo" >> coverage/core/hadoop/log
 
 coverage/core/tbs/index.html:
-	echo "Generating tbs code coverage report..."
+	echo "Generating core tbs code coverage report..."
 	mkdir -p coverage/core/tbs
-	rm -f coverage/core/log
+	rm -f coverage/core/tbs/log
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
 
-core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
+core-rnd-coverage:
+ifeq ($(BUILD_RND),rnd)
+	echo "Generating core rnd code coverage report..."
+	mkdir -p coverage/core/rnd
+	rm -f coverage/core/rnd/log
+	lcov --capture --ignore-errors source -d hoot-rnd/tmp/debug -b hoot-rnd/ --output-file coverage/core/rnd/Rnd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) \*hoot-core/src\* -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
+endif
 
-coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
+core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
 
 conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@
