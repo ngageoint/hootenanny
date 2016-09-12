@@ -71,7 +71,9 @@ public class JobExecutioner extends Thread {
 
                 command.put("jobId", jobId);
                 jobStatusManager.addJob(jobId);
+
                 executable.exec(command);
+
                 jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
 
                 tm.commit(transactionStatus);

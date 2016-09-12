@@ -36,11 +36,10 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.JobStatus;
-import hoot.services.models.db.QJobStatus;
 
 
 /**
@@ -50,7 +49,7 @@ import hoot.services.models.db.QJobStatus;
  *
  */
 @Component
-@Transactional(isolation = Isolation.SERIALIZABLE)
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
 
@@ -172,11 +171,7 @@ public class JobStatusManager {
      */
     public JobStatus getJobStatusObj(String jobId) {
         try {
-            return createQuery()
-                    .select(jobStatus)
-                    .from(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .fetchOne();
+            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);
@@ -191,8 +186,7 @@ public class JobStatusManager {
      */
     private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) {
         try {
-            boolean isComplete = (jobStatus != RUNNING);
-            updateJobStatus(jobId, jobStatus.ordinal(), isComplete, statusDetail);
+            updateJobStatus(jobId, jobStatus, statusDetail);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -204,45 +198,45 @@ public class JobStatusManager {
      * Updates job status. If the record does not exist then creates.
      *
      * @param jobId
-     * @param jobStatus
-     * @param isComplete
+     * @param newStatus
      */
-    private void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail) {
-        JobStatus status = createQuery()
-                .select(QJobStatus.jobStatus)
-                .from(QJobStatus.jobStatus)
-                .where(QJobStatus.jobStatus.jobId.eq(jobId))
+    private void updateJobStatus(String jobId, JOB_STATUS newStatus, String statusDetail) {
+        JobStatus currentJobStatus = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
                 .fetchOne();
 
-        if (status != null) {
-            if (isComplete) {
-                status.setPercentComplete(100.0);
-                status.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+                currentJobStatus.setPercentComplete(100.0);
+                currentJobStatus.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             }
 
-            status.setStatus(jobStatus);
+            currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {
-                status.setStatusDetail(statusDetail);
+                currentJobStatus.setStatusDetail(statusDetail);
             }
+
+            createQuery().update(jobStatus).where(jobStatus.jobId.eq(jobId)).populate(currentJobStatus).execute();
         }
-        else {
-            status = new JobStatus();
-            status.setJobId(jobId);
-            status.setStatus(jobStatus);
+        else if (currentJobStatus == null) {
+            currentJobStatus = new JobStatus();
+            currentJobStatus.setJobId(jobId);
+            currentJobStatus.setStatus(newStatus.ordinal());
             Timestamp ts = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            status.setStart(ts);
+            currentJobStatus.setStart(ts);
 
-            if (isComplete) {
-                status.setEnd(ts);
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+                currentJobStatus.setPercentComplete(100.0);
+                currentJobStatus.setEnd(ts);
             }
-        }
+            else {
+                currentJobStatus.setPercentComplete(0.0);
+            }
 
-        createQuery().merge(QJobStatus.jobStatus)
-                .columns(QJobStatus.jobStatus.jobId, QJobStatus.jobStatus.end, QJobStatus.jobStatus.statusDetail,
-                        QJobStatus.jobStatus.status, QJobStatus.jobStatus.start, QJobStatus.jobStatus.percentComplete)
-                .values(status.getJobId(), status.getEnd(), status.getStatusDetail(), status.getStatus(),
-                        status.getStart(), status.getPercentComplete())
-                .execute();
+           createQuery().insert(jobStatus).populate(currentJobStatus).execute();
+        }
     }
 }

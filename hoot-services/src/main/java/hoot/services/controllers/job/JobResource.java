@@ -128,7 +128,6 @@ public class JobResource {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         try {
-            initJob(jobId);
             Runnable chainJobWorker = new ProcessChainJobWorkerThread(jobId, jobs);
             jobThreadExecutor.execute(chainJobWorker);
         }
@@ -173,6 +172,8 @@ public class JobResource {
 
         private void processCommand() {
             logger.debug("Start chain job: {}", jobId);
+
+            jobStatusManager.addJob(jobId);
 
             jobInfo.put("chainjobstatus", jobId);
 
@@ -381,7 +382,6 @@ public class JobResource {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         try {
-            initJob(jobId);
             Runnable jobWorker = new ProcessJobWorkerThread(jobId, params);
             jobThreadExecutor.execute(jobWorker);
         }
@@ -432,6 +432,8 @@ public class JobResource {
 
         private void processCommand() {
             logger.debug("Processing job: {}", jobId);
+
+            jobStatusManager.addJob(jobId);
 
             JSONObject command = null;
             try {
@@ -531,7 +533,7 @@ public class JobResource {
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJobStatus(@PathParam("jobId") String jobId) {
-        String outStr = "unknown";
+        String jobStatus = "unknown";
         try {
             JSONObject status = getJobStatusObj(jobId);
 
@@ -613,9 +615,9 @@ public class JobResource {
                     // if something goes wrong we will not put progress
                     logger.error("Error during job status retrieval!", ex);
                 }
-            }
 
-            outStr = status.toJSONString();
+                jobStatus = status.toJSONString();
+            }
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -625,7 +627,7 @@ public class JobResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(outStr).build();
+        return Response.ok(jobStatus).build();
     }
 
     /**
@@ -673,10 +675,6 @@ public class JobResource {
         child.put("status", stat);
 
         return child;
-    }
-
-    private void initJob(String jobId) {
-        jobStatusManager.addJob(jobId);
     }
 
     public void terminateJob(String childId) throws NativeInterfaceException {
