@@ -1061,13 +1061,6 @@ script.
 
 The number of identical log messages that will be emitted before they're silenced.
 
-=== ogr.partial.translate
-
-* Data Type: bool
-* Default Value: `false`
-
-Write partial translations instead of o2s_[PAL] features.
-
 === ogr.reader.bounding.box
 
 * Data Type: string
