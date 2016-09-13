@@ -53,6 +53,8 @@ public class JobCancellationResource extends JobControllerBase {
         super(null);
     }
 
+    // TODO: Review this controller to make sure that cancellation logic works correctly
+
     /**
      * Cancel job.
      * 
