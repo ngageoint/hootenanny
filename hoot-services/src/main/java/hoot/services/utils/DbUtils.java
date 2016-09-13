@@ -221,31 +221,35 @@ public final class DbUtils {
             if (!mapIds.isEmpty()) {
                 long mapId = mapIds.get(0);
 
-                String dbname;
+                String currentCatalog;
                 try {
-                    dbname = connection.getCatalog() + "_renderdb_" + mapId;
+                    currentCatalog = connection.getCatalog();
                 }
                 catch (SQLException e) {
-                    throw new RuntimeException("Error deleting renderdb for map with id = " + mapId, e);
+                    throw new RuntimeException("Error retrieving current catalog name!", e);
                 }
 
+                String dbNameByMapId = currentCatalog + "_renderdb_" + mapId;
                 try {
-                    deleteDb(dbname);
+                    deleteDb(dbNameByMapId);
                 }
                 catch (SQLException e1) {
-                    logger.warn("Error deleting {} database!", dbname, e1);
+                    logger.warn("Error deleting {} database!  The database might not exist!  Cause: {}",
+                            dbNameByMapId, e1.getMessage());
 
+                    String dbNameByMapName = currentCatalog + "_renderdb_" + mapName;
                     try {
-                        deleteDb(connection.getCatalog() + "_renderdb_" + mapName);
+                        deleteDb(dbNameByMapName);
                     }
                     catch (SQLException e2) {
-                        logger.warn("No renderdb present to delete for {} or map id {}", mapName, mapId, e2);
+                        logger.warn("Couldn't delete renderdb with name {} or {}.  Cause: {}",
+                                dbNameByMapId, dbNameByMapName, e2.getMessage());
                     }
                 }
             }
         }
         catch (SQLException e) {
-            throw new RuntimeException("Error deleting render DB for map = " + mapName, e);
+            logger.error("Error deleting renderdb for map = {}", mapName, e);
         }
     }
 
@@ -510,10 +514,28 @@ public final class DbUtils {
         }
     }
 
-    static void deleteDb(String dbname) throws SQLException {
+    static void deleteDb(String dbName) throws SQLException {
         try (Connection conn = getConnection()) {
-            // DDL Statement. No support in QueryDSL anymore. Have to do it the old-fashioned way.
-            String sql = "DROP DATABASE \"" + dbname + "\"";
+            // Straight SQL below. No DDL support in QueryDSL anymore. Have to do it the old-fashioned way.
+
+            // 1) Make sure no one can connect to this database.
+            String sql = "UPDATE pg_database SET datallowconn = 'false' WHERE datname = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, dbName);
+                stmt.executeUpdate();
+            }
+
+            // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
+            // For Postgresql < 9.2 use: SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname = 'mydb';
+            // For Postgresql >= 9.2 use: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'mydb';
+            sql = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, dbName);
+                stmt.executeQuery();
+            }
+
+            // 3) Drop the database as the last step.
+            sql = "DROP DATABASE \"" + dbName + "\"";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.executeUpdate();
             }
