@@ -55,15 +55,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
-
-    ConstNetworkVertexPtr vertex3(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstNetworkVertexPtr vertex4(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
-    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge2, 0.7));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -71,7 +65,7 @@ public:
     CPPUNIT_ASSERT(!edgeSubline.isZeroLength());
     CPPUNIT_ASSERT(!edgeSubline.isBackwards());
 
-    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge1);
+    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge);
     CPPUNIT_ASSERT(edgeSubline.getStart() == edgeLocStart);
     CPPUNIT_ASSERT(edgeSubline.getEnd() == edgeLocEnd);
     CPPUNIT_ASSERT(edgeSubline.getFormer() == edgeLocStart);
@@ -79,8 +73,6 @@ public:
 
     CPPUNIT_ASSERT(edgeSubline.contains(vertex1));
     CPPUNIT_ASSERT(!edgeSubline.contains(vertex2));
-    CPPUNIT_ASSERT(!edgeSubline.contains(vertex3));
-    CPPUNIT_ASSERT(!edgeSubline.contains(vertex4));
   }
 
   void invalidTest()
@@ -91,15 +83,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, -0.1));
-
-    ConstNetworkVertexPtr vertex3(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstNetworkVertexPtr vertex4(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
-    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge2, 0.7));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, -0.1));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -130,15 +116,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.7));
-
-    ConstNetworkVertexPtr vertex3(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstNetworkVertexPtr vertex4(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
-    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge2, 0.0));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.7));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.0));
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -178,13 +158,7 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
-
-    ConstNetworkVertexPtr vertex3(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstNetworkVertexPtr vertex4(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
-    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge2, 0.7));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.7));
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
     edgeSubline.reverse();
@@ -193,11 +167,11 @@ public:
     CPPUNIT_ASSERT(!edgeSubline.isZeroLength());
     CPPUNIT_ASSERT(edgeSubline.isBackwards());
 
-    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge2);
+    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge1);
     CPPUNIT_ASSERT(edgeSubline.getStart() == edgeLocEnd);
     CPPUNIT_ASSERT(edgeSubline.getEnd() == edgeLocStart);
-    CPPUNIT_ASSERT(edgeSubline.getFormer() == edgeLocStart); //??
-    CPPUNIT_ASSERT(edgeSubline.getLatter() == edgeLocEnd); //??
+    CPPUNIT_ASSERT(edgeSubline.getFormer() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeSubline.getLatter() == edgeLocEnd);
   }
 
   void createFullSublineTest()
@@ -238,15 +212,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
-
-    ConstNetworkVertexPtr vertex3(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstNetworkVertexPtr vertex4(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
-    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge2, 0.7));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
 
     ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart, edgeLocEnd));
     ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart, edgeLocEnd));

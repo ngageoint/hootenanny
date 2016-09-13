@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/MapProjector.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
 #include <hoot/core/TestUtils.h>
 
@@ -112,10 +113,11 @@ public:
     NetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
     ConstWayPtr way = TestUtils::createWay(map, nodes);
     edge1->addMember(way);
+    MapProjector::projectToPlanar(map);
 
     EdgeString edgeStr;
     edgeStr.appendEdge(edge1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, edgeStr.calculateLength(map), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1111782.53516264, edgeStr.calculateLength(map), 0.0001);
   }
 
   void edgeWithInvalidNumMembersTest()
@@ -186,12 +188,13 @@ public:
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
     NetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
     edge2->addMember(way);
+    MapProjector::projectToPlanar(map);
 
     EdgeString edgeStr;
     edgeStr.appendEdge(edge1);
     edgeStr.appendEdge(edge2);
-    CPPUNIT_ASSERT(edge1 == edgeStr.getEdgeAtOffset(map, 10.0));
-    CPPUNIT_ASSERT(edge2 == edgeStr.getEdgeAtOffset(map, 20.0));
+    CPPUNIT_ASSERT(edge1 == edgeStr.getEdgeAtOffset(map, 0.0));
+    CPPUNIT_ASSERT(edge2 == edgeStr.getEdgeAtOffset(map, edgeStr.calculateLength(map)));
   }
 
   void overlapTest()

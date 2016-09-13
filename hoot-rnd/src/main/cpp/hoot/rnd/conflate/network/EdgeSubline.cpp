@@ -34,7 +34,9 @@ EdgeSubline::EdgeSubline(ConstEdgeLocationPtr start, ConstEdgeLocationPtr end) :
   _start(start),
   _end(end)
 {
-  assert(start->getEdge() == _end->getEdge());
+  //LOG_VARD(_start->getEdge());
+  //LOG_VARD(_end->getEdge());
+  assert(_start->getEdge() == _end->getEdge());
 }
 
 EdgeSubline::EdgeSubline(ConstNetworkEdgePtr e, double start, double end) :

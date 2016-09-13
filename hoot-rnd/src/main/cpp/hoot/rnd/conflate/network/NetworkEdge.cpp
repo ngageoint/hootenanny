@@ -40,7 +40,7 @@ NetworkEdge::NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, b
   _to(to),
   _directed(directed)
 {
-
+  //_members.clear();
 }
 
 Meters NetworkEdge::calculateLength(const ConstElementProviderPtr& provider) const
