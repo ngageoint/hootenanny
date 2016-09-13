@@ -43,7 +43,7 @@ class EdgeStringTest : public CppUnit::TestFixture
   CPPUNIT_TEST(overlapEdgeTest);
   CPPUNIT_TEST(overlapSublineTest);
   CPPUNIT_TEST(reverseTest);
-  CPPUNIT_TEST(fullPartialTest);
+  CPPUNIT_TEST(partialTest);
   CPPUNIT_TEST(stubTest);
   CPPUNIT_TEST(edgeClosedTest);
   CPPUNIT_TEST(addDisconnectedEdgeTest);
@@ -307,7 +307,7 @@ public:
     CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex3));
   }
 
-  void fullPartialTest()
+  void partialTest()
   {
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
@@ -317,13 +317,21 @@ public:
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
     ConstNetworkVertexPtr vertex3(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.1));
+    ConstEdgeLocationPtr edgeLocStart1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLocStart2(new EdgeLocation(edge1, 0.1));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.9));
-    ConstEdgeSublinePtr edgeSubline(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart1, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart2, edgeLocEnd));
 
-    EdgeString edgeStr;
-    edgeStr.appendEdge(edgeSubline);
-    CPPUNIT_ASSERT(edgeStr.isFullPartial());
+    EdgeString edgeStr1;
+    edgeStr1.appendEdge(edgeSubline1);
+    CPPUNIT_ASSERT(edgeStr1.isPartial());
+    CPPUNIT_ASSERT(!edgeStr1.isFullPartial());
+
+    EdgeString edgeStr2;
+    edgeStr2.appendEdge(edgeSubline2);
+    CPPUNIT_ASSERT(edgeStr2.isPartial());
+    CPPUNIT_ASSERT(edgeStr2.isFullPartial());
   }
 
   void stubTest()
