@@ -53,8 +53,7 @@ public class P2PResource extends ServerControllerBase {
 
     public static void startP2PService() {
         try {
-            String p2PServiceScript = HOME_FOLDER + "/scripts/" + P_2_P_SERVER_SCRIPT;
-
+            String p2PServiceScript = HOME_FOLDER + P_2_P_SERVER_SCRIPT;
             // Make sure to wipe out previosuly running servers.
             stopServer(p2PServiceScript);
 
@@ -64,7 +63,7 @@ public class P2PResource extends ServerControllerBase {
             String msg = "Error starting Point-To-Polygon Service: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
-    }
+            }
 
     public static void stopP2PService() {
         // This also gets called automatically from HootServletContext when
@@ -75,7 +74,7 @@ public class P2PResource extends ServerControllerBase {
             // the stxxl temp files created by hoot threads not to be cleaned up.
             // stopServer(homeFolder + "/scripts/" + translationServerScript);
             p2PServiceProcess.destroy();
-        }
+            }
         catch (Exception e) {
             String msg = "Error stopping Translation Service: " + e.getMessage();
             throw new RuntimeException(msg, e);
