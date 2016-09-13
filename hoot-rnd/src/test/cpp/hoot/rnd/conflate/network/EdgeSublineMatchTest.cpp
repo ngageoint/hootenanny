@@ -42,6 +42,8 @@ public:
 
   void basicTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
