@@ -38,6 +38,7 @@ class EdgeLocationTest : public CppUnit::TestFixture
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(invalidTest);
   CPPUNIT_TEST(operatorTests);
+  CPPUNIT_TEST(hashTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -116,6 +117,23 @@ public:
     CPPUNIT_ASSERT(edgeLoc3 < edgeLoc1);
   }
 
+  void hashTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+
+    EdgeLocationPtr edgeLoc(new EdgeLocation(edge, 0.5));
+
+    QHash<EdgeLocationPtr, QString> edgeLocs;
+    edgeLocs.insert(edgeLoc, "test");
+    CPPUNIT_ASSERT_EQUAL(1, edgeLocs.size());
+    CPPUNIT_ASSERT(edgeLocs.value(edgeLoc) == "test");
+    CPPUNIT_ASSERT(edgeLocs.key("test") == edgeLoc);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeLocationTest, "quick");

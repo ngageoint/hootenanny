@@ -41,6 +41,7 @@ class EdgeMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(containsStubTest);
   CPPUNIT_TEST(overlapsTest);
   CPPUNIT_TEST(reverseTest);
+  CPPUNIT_TEST(hashTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -263,6 +264,35 @@ public:
     CPPUNIT_ASSERT(!edgeMatch.containsStub());
   }
 
+  void hashTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+    ConstNetworkVertexPtr vertex4(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
+    ConstNetworkEdgePtr edge3(new NetworkEdge(vertex3, vertex4, true));
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edge1);
+    edgeStr1->appendEdge(edge2);
+    EdgeStringPtr edgeStr2(new EdgeString());
+    edgeStr2->appendEdge(edge2);
+    edgeStr2->appendEdge(edge3);
+
+    EdgeMatchPtr edgeMatch(new EdgeMatch(edgeStr1, edgeStr2));
+
+    QHash<EdgeMatchPtr, QString> edgeMatches;
+    edgeMatches.insert(edgeMatch, "test");
+    CPPUNIT_ASSERT_EQUAL(1, edgeMatches.size());
+    CPPUNIT_ASSERT(edgeMatches.value(edgeMatch) == "test");
+    CPPUNIT_ASSERT(edgeMatches.key("test") == edgeMatch);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeMatchTest, "quick");

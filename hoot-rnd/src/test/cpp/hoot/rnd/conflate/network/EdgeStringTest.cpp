@@ -51,6 +51,7 @@ class EdgeStringTest : public CppUnit::TestFixture
   CPPUNIT_TEST(equalsTest);
   CPPUNIT_TEST(containsEdgeStringTest);
   CPPUNIT_TEST(appendSublineTest);
+  CPPUNIT_TEST(hashTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -525,6 +526,28 @@ public:
     CPPUNIT_ASSERT(!edgeStr.isStub());
   }
 
+  void hashTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+
+    EdgeStringPtr edgeStr(new EdgeString());
+    edgeStr->appendEdge(edge1);
+    edgeStr->appendEdge(edge2);
+
+    QHash<EdgeStringPtr, QString> edgeStrings;
+    edgeStrings.insert(edgeStr, "test");
+    CPPUNIT_ASSERT_EQUAL(1, edgeStrings.size());
+    CPPUNIT_ASSERT(edgeStrings.value(edgeStr) == "test");
+    CPPUNIT_ASSERT(edgeStrings.key("test") == edgeStr);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeStringTest, "quick");
