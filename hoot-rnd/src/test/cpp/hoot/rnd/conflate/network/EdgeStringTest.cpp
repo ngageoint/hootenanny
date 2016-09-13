@@ -57,6 +57,8 @@ public:
 
   void basicTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -98,6 +100,13 @@ public:
 
     CPPUNIT_ASSERT(!edgeStr.isFullPartial());
     CPPUNIT_ASSERT(!edgeStr.isStub());
+
+    HOOT_STR_EQUALS(
+      "{ _start: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 1 } }",
+      edgeStr.getAllEdges()[0].getSubline()->toString());
+    HOOT_STR_EQUALS(
+      "{ _start: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 1 } }",
+      edgeStr.getAllEdges()[1].getSubline()->toString());
   }
 
   void calculateLengthTest()

@@ -99,7 +99,6 @@ public:
   void operatorTests()
   {
     OsmMapPtr map(new OsmMap());
-
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
