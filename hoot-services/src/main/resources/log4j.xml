@@ -45,32 +45,32 @@
     </appender>
 
     <logger name="hoot.services" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="org.deegree" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="com.querydsl" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="org.springframework" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="org.glassfish.jersey" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <root>
-        <level value="error" />
+        <level value="info" />
         <appender-ref ref="ConsoleAppender" />
     </root>
 
