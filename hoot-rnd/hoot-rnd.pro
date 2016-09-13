@@ -59,7 +59,6 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeMatchTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeSublineMatchTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/PartialNetworkMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeStringTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeSublineTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeLocationTest.cpp \
