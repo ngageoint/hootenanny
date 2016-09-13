@@ -28,47 +28,39 @@
 /*
     "English" TDS to OSM+ conversion script
 
-    This script is the same as the standard "etds_osm" script but uses "tds61" instead of "tds"
+    Based on tds/__init__.js script
 */
-if (typeof hoot === 'undefined') {
-    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
-}
 
-// For the new fuzy rules
-hoot.require('SchemaTools')
+var translate = require('./translate.js');
+var mgcp = require('./mgcp.js');
+var emgcp_osm_rules = require('./emgcp_osm_rules.js');
 
-// For the OSM+ to TDS61 translation
-hoot.require('tds61')
-hoot.require('tds61_rules')
-hoot.require('fcode_common')
-
-// For the TDS to TDS "English" translation
-hoot.require('etds61')
-
-// NOTE: This include has "etds_osm_rules" NOT "etds_osm.rules"
-// This was renamed so the include will work.
-hoot.require('etds61_osm_rules')
-
-// Common translation scripts
-hoot.require('translate');
-hoot.require('config');
-
-
-etds61_osm = {
-    // This function converts the "English" TDS to TDS and then to OSM+
+module.exports = {
+    // This function converts the OSM+ to TDS and then translated the TDS into "English"
     toOSM : function(attrs, elementType, geometryType)
     {
         // Strip out the junk - this is also done in the toOsmPreProcessing but this
         // means that there is less to convert later
-        var ignoreList = { '-999999':1, '-999999.0':1, 'noinformation':1, 'No Information':1, 'noInformation':1 };
+        var ignoreList = { '-32767':1, '-32767.0':1, 'UNK':1, 'Unknown':1 };
 
         for (var col in attrs)
         {
-            if (attrs[col] in ignoreList) delete attrs[col];
+            if (attrs[col] in ignoreList)
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            if (attrs[col] == undefined)
+            {
+                // Debug
+                // print('## ' + attrs[col] + ' is undefined');
+                delete attrs[col];
+            }
         }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -78,23 +70,24 @@ etds61_osm = {
         var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-        if (attrs['Feature Code'] && attrs['Feature Code'] !== 'Not found')
+        if (attrs['Feature Code'])
         {
-            if (attrs['Feature Code'].indexOf(' & ') > -1)
+            if (attrs['Feature Code'].indexOf('&') > -1)
             {
                 // Two FCODE's
-                var tList = attrs['Feature Code'].split(' & ');
+                var tList = attrs['Feature Code'].split('&');
                 var fcode = tList[0].split(':');
-                attrs['Feature Code'] = fcode[0];
+                attrs['Feature Code'] = fcode[0].trim();
 
                 fcode = tList[1].split(':');
-                fCode2 = fcode[0];
+                fCode2 = fcode[0].trim();
             }
             else
             {
                 // One FCODE
                 var fcode = attrs['Feature Code'].split(':');
-                attrs['Feature Code'] = fcode[0];
+                attrs['Feature Code'] = fcode[0].trim();
+
             }
         }
         else
@@ -102,18 +95,17 @@ etds61_osm = {
             // No FCODE, throw error
             // throw new Error('No Valid Feature Code');
             // return null;
-            // return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
-            return {attrs:{}, tableName: ''};
+            return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
         }
 
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
-            if (val in etds61_osm_rules.singleValues)
+            if (val in emgcp_osm_rules.singleValues)
             {
-                nAttrs[etds61_osm_rules.singleValues[val]] = attrs[val];
+                nAttrs[emgcp_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // print('Single: ' + etds61_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // print('Single: ' + emgcp_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -121,11 +113,20 @@ etds61_osm = {
         }
 
         // Use a lookup table to convert the remaining attribute names from "English" to TDS
-        translate.applyOne2One(attrs, nAttrs, etds61_osm_rules.enumValues, {'k':'v'});
+        translate.applyOne2One(attrs, nAttrs, emgcp_osm_rules.enumValues, {'k':'v'});
+
         var tags = {};
 
         // Now convert the attributes to tags.
-        tags = tds61.toOsm(nAttrs,'',geometryType);
+        tags = mgcp.toOsm(nAttrs,'',geometryType);
+
+        // NOTE mgcp.fcodeLookup DOES NOT EXIST until mgcp.toOsm is called.
+        if (! mgcp.fcodeLookup.toOsm['F_CODE'][nAttrs.F_CODE])
+        {
+            // throw new Error('Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP');
+            // return null;
+            return {attrs:{'error':'Feature Code ' + nAttrs.F_CODE + ' is not valid for MGCP'}, tableName: ''};
+        }
 
         // Go looking for "OSM:XXX" values and copy them to the output
         for (var i in attrs)
@@ -136,7 +137,7 @@ etds61_osm = {
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            var ftag = tds61.fcodeLookup['F_CODE'][fCode2];
+            var ftag = mgcp.fcodeLookup.toOsm['F_CODE'][fCode2];
             if (ftag)
             {
                 if (!(tags[ftag[0]]))
@@ -147,14 +148,19 @@ etds61_osm = {
                 {
                     if (ftag[1] !== tags[ftag[0]])
                     {
-                        hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                        debug('emgcp_osm: fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                     }
                 }
+            }
+            else
+            {
+                //throw new Error('Feature Code ' + fCode2 + ' is not valid for MGCP');
+                return {attrs:{'error':'Feature Code ' + fCode2 + ' is not valid for MGCP'}, tableName: ''};
             }
         }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             var kList = Object.keys(tags).sort()
             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
@@ -165,12 +171,4 @@ etds61_osm = {
 
     } // End of toOSM
 
-} // End of etds61_osm
-
-if (typeof exports !== 'undefined') {
-    exports.toOSM = etds61_osm.toOSM;
-    exports.EnglishtoOSM = etds61_osm.toOSM;
-    exports.RawtoOSM = tds61.toOsm;
-    exports.OSMtoEnglish = etds61.toEnglish;
-    exports.OSMtoRaw = tds61.toNfdd;
-}
+} // End of emgcp_osm

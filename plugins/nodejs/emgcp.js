@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,16 +29,21 @@
     OSM+ to "English" MGCP conversion script
 */
 
-emgcp = {
+var translate = require('./translate.js');
+var mgcp = require('./mgcp.js');
+
+var emgcp = module.exports = {
+    rules: require('./emgcp_rules.js'),
+
     // This function converts the OSM+ to MGCP and then translates the MGCP into "English"
     toEnglish : function(tags, elementType, geometryType)
     {
         var mgcpData = [];
 
-        mgcpData = mgcp.toMgcp(tags, elementType, geometryType);
+        mgcpData = mgcp.toMgcp(tags, elementType, geometryType)
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             for (var i = 0, fLen = mgcpData.length; i < fLen; i++)
             {
@@ -50,8 +55,7 @@ emgcp = {
         }
 
         var eAttrs = {}; // The final English output
-
-        eAttrs['Feature Code'] = 'Not found';
+        eAttrs['Feature Code'] = '';
 
         // Defensive: This will either be populated or we threw an error earlier
         if (mgcpData.length > 0)
@@ -82,7 +86,7 @@ emgcp = {
                 // Find an FCODE
                 if (tFCODE in emgcp.rules.fcodeLookup)
                 {
-                    if (eAttrs['Feature Code'] !== 'Not found')
+                    if (eAttrs['Feature Code'] !== '')
                     {
                         eAttrs['Feature Code'] = eAttrs['Feature Code'] + ' & ' + tFCODE + ':' + emgcp.rules.fcodeLookup[tFCODE]['desc'];
                     }
@@ -95,7 +99,7 @@ emgcp = {
 
         }
 
-        if (config.getOgrDebugDumptags() == 'true')
+        if (config.OgrDebugDumptags)
         {
             var kList = Object.keys(eAttrs).sort()
             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');

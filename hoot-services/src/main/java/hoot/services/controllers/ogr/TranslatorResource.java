@@ -52,7 +52,7 @@ public class TranslatorResource extends ServerControllerBase {
 
     public static void startTranslationService() {
         try {
-            String translationServiceScript = HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT;
+            String translationServiceScript = HOME_FOLDER + TRANSLATION_SERVER_SCRIPT;
 
             // Make sure to wipe out previously running servers.
             stopServer(translationServiceScript);
@@ -60,7 +60,7 @@ public class TranslatorResource extends ServerControllerBase {
             // start Translaction Service
             translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
                     translationServiceScript);
-        }
+            }
         catch (Exception e) {
             String msg = "Error starting Translation Service: " + e.getMessage();
             throw new RuntimeException(msg, e);

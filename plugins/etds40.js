@@ -58,6 +58,7 @@ etds40 = {
             for (var fNum = 0, fLen = tdsData.length; fNum < fLen; fNum++)
             {
                 var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
+
                 delete tdsData[fNum]['attrs']['F_CODE'];
 
                 // Translate the single values
