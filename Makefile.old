@@ -411,12 +411,12 @@ IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\* \*core/proto\
 # Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
 
 coverage/core/core/index.html:
-	#echo "Generating core code coverage report..."
-	#mkdir -p coverage/core/core
-	#rm -f coverage/core/core/log
-	#lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	#lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	#genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
+	echo "Generating core code coverage report..."
+	mkdir -p coverage/core/core
+	rm -f coverage/core/core/log
+	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
 
 coverage/core/hadoop/index.html:
 	echo "Generating core hadoop code coverage report..."
