@@ -26,16 +26,10 @@
  */
 package hoot.services.controllers.job;
 
-import static hoot.services.HootProperties.CHAIN_JOS_STATUS_PING_INTERVAL;
 import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -50,20 +44,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.ApplicationContextUtils;
 import hoot.services.job.JobStatusManager;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
@@ -82,13 +71,9 @@ import hoot.services.nativeinterfaces.NativeInterfaceException;
 @Transactional
 public class JobResource {
     private static final Logger logger = LoggerFactory.getLogger(JobResource.class);
-    private static final long CHAIN_JOS_STATUS_PING_INTERVAL_VALUE;
 
-    // Thread pool for chain and job processor
+    // Thread pool for chain and job processing
     private static final ExecutorService jobThreadExecutor;
-
-    private final JSONObject jobInfo = new JSONObject();
-    private final JSONArray childrenInfo = new JSONArray();
 
     @Autowired
     private JobExecutionManager jobExecMan;
@@ -98,26 +83,17 @@ public class JobResource {
 
 
     static {
-        Long value = Long.parseLong(CHAIN_JOS_STATUS_PING_INTERVAL);
-
-        CHAIN_JOS_STATUS_PING_INTERVAL_VALUE = (value < 1000) ? 1000 : value;
-
         int threadpoolSize = 5;
         try {
             threadpoolSize = Integer.parseInt(INTERNAL_JOB_THREAD_SIZE);
         }
         catch (NumberFormatException ignored) {
-            logger.error("Failed to get internalJobThreadSize. Setting threadpool size to 5.");
+            logger.error("Failed to get internalJobThreadSize.  Defaulting threadpool size to 5.");
         }
 
         jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
     }
 
-    /**
-     * Constructor. execManager is the one that handles the execution through
-     * configured Native Interface.
-     *
-     */
     public JobResource() {}
 
     @POST
@@ -128,11 +104,8 @@ public class JobResource {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         try {
-            Runnable chainJobWorker = new ProcessChainJobWorkerThread(jobId, jobs);
+            Runnable chainJobWorker = new ProcessChainJobRunnable(jobId, jobs, jobStatusManager, jobExecMan);
             jobThreadExecutor.execute(chainJobWorker);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String msg = "Error during processing of a chain job!" + " jobId = " + jobId + ", jobs = " + jobs;
@@ -142,238 +115,6 @@ public class JobResource {
         return Response.ok().build();
     }
 
-    private class ProcessChainJobWorkerThread implements Runnable {
-        private final String jobId;
-        private final String jobs;
-
-        public ProcessChainJobWorkerThread(String jobid, String jobParams) {
-            jobId = jobid;
-            jobs = jobParams;
-        }
-
-        @Override
-        public void run() {
-            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
-            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
-
-            TransactionStatus transactionStatus = null;
-            try {
-                transactionStatus = txManager.getTransaction(null);
-                processCommand();
-                txManager.commit(transactionStatus);
-            }
-            catch (Exception e) {
-                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
-                    txManager.rollback(transactionStatus);
-                }
-                logger.error("Error executing job with ID = {}", jobId, e);
-            }
-        }
-
-        private void processCommand() {
-            logger.debug("Start chain job: {}", jobId);
-
-            jobStatusManager.addJob(jobId);
-
-            jobInfo.put("chainjobstatus", jobId);
-
-            JSONObject childJobInfo = null;
-            try {
-                JSONParser parser = new JSONParser();
-                JSONArray chain = (JSONArray) parser.parse(jobs);
-
-                int nChain = chain.size();
-                jobInfo.put("childrencount", String.valueOf(nChain));
-
-                for (Object aChain : chain) {
-                    String internalJobId = UUID.randomUUID().toString();
-
-                    // prep child job
-
-                    JSONObject job = (JSONObject) aChain;
-                    String excType = job.get("exectype").toString();
-                    String warnings = null;
-
-                    if (excType.equalsIgnoreCase("reflection")) {
-                        // getting jobInfo from inside since it generates job id.
-                        childJobInfo = execReflection(jobId, job, jobStatusManager);
-                        Object oWarn = childJobInfo.get("warnings");
-                        if (oWarn != null) {
-                            warnings = oWarn.toString();
-                        }
-                    }
-                    else if (excType.equalsIgnoreCase("reflection_sync")) {
-                        childJobInfo = execReflectionSync(jobId, internalJobId, job, jobStatusManager);
-                    }
-                    else {
-                        // create and set info
-                        childJobInfo = createChildInfo(internalJobId, JOB_STATUS.RUNNING.toString());
-                        setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
-                        jobStatusManager.updateJob(jobId, jobInfo.toString());
-
-                        JSONObject result = processJob(internalJobId, job);
-
-                        // try to get warning
-                        Object oWarn = result.get("warnings");
-                        if (oWarn != null) {
-                            warnings = oWarn.toString();
-                        }
-                    }
-
-                    // if we have warnings then pass on
-                    String resDetail = "success";
-                    if (warnings != null) {
-                        resDetail = "WARNINGS: " + warnings;
-                    }
-
-                    setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.COMPLETE.toString(), resDetail);
-
-                    jobStatusManager.updateJob(jobId, jobInfo.toString());
-                }
-
-                jobStatusManager.setComplete(jobId, jobInfo.toString());
-            }
-            catch (Exception ex) {
-                if (jobStatusManager != null) {
-                    if (childJobInfo != null) {
-                        setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.FAILED.toString(), ex.getMessage());
-                        logger.error(ex.getMessage(), ex);
-                    }
-                    jobStatusManager.setFailed(jobId, jobInfo.toString());
-                }
-            }
-            finally {
-                logger.debug("End process chain Job: {}", jobId);
-            }
-        }
-    }
-
-    // this function is currently used by WfsManager only and WfsManager does
-    // not perform any job tracking. It is raw class.
-    private JSONObject execReflectionSync(String jobId, String childJobId, JSONObject job,
-            JobStatusManager jobStatusManager) throws Exception {
-        String className = job.get("class").toString();
-        String methodName = job.get("method").toString();
-
-        String internalJobId = (job.get("internaljobid") == null) ? null : job.get("internaljobid").toString();
-
-        JSONArray paramsList = (JSONArray) job.get("params");
-
-        Class<?>[] paramTypes = new Class[paramsList.size()];
-        Object[] parameters = new Object[paramsList.size()];
-        for (int i = 0; i < paramsList.size(); i++) {
-            JSONObject param = (JSONObject) paramsList.get(i);
-            String paramType = param.get("paramtype").toString();
-            Object oIsPrim = param.get("isprimitivetype");
-            if ((oIsPrim != null) && oIsPrim.toString().equalsIgnoreCase("true")) {
-                Class<?> classWrapper = Class.forName(paramType);
-                paramTypes[i] = (Class<?>) classWrapper.getField("TYPE").get(null);
-            }
-            else {
-                paramTypes[i] = Class.forName(paramType);
-            }
-            parameters[i] = param.get("value");
-        }
-
-        Class<?> springBeanClass = Class.forName(className);
-
-        ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
-        Object springBeanInstance = appContext.getBean(springBeanClass);
-
-        JSONObject childJobInfo;
-        String currentChildJobId = childJobId;
-
-        // May be we would need create interface to guarranttee that it will
-        // return a job id?  Add internal job id to end of method call
-        if (internalJobId != null) {
-            currentChildJobId = internalJobId;
-            childJobInfo = createChildInfo(currentChildJobId, JOB_STATUS.RUNNING.toString());
-            setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
-            jobStatusManager.updateJob(jobId, jobInfo.toString());
-
-            Object[] newParams = new Object[paramsList.size() + 1];
-            System.arraycopy(parameters, 0, newParams, 0, parameters.length);
-            newParams[parameters.length] = internalJobId;
-
-            Class<?>[] newParamTypes = new Class[paramsList.size() + 1];
-            System.arraycopy(paramTypes, 0, newParamTypes, 0, paramsList.size());
-            newParamTypes[parameters.length] = String.class;
-            Method method = springBeanClass.getDeclaredMethod(methodName, newParamTypes);
-            // This will blow if the method is not designed to handle job id
-            method.invoke(springBeanInstance, newParams);
-        }
-        else {
-            Method method = springBeanClass.getDeclaredMethod(methodName, paramTypes);
-            Object oReflectJobId = method.invoke(springBeanInstance, parameters);
-            if (oReflectJobId != null) {
-                currentChildJobId = oReflectJobId.toString();
-            }
-            
-            // Updating job status info. Looks like we need to wait till job is
-            // done to get job id. With this we can not canel..
-            childJobInfo = createChildInfo(currentChildJobId, JobStatusManager.JOB_STATUS.RUNNING.toString());
-            setJobInfo(jobInfo, childJobInfo, childrenInfo, JOB_STATUS.RUNNING.toString(), "processing");
-            jobStatusManager.updateJob(jobId, jobInfo.toString());
-        }
-
-        return childJobInfo;
-    }
-
-    JSONObject execReflection(String jobId, JSONObject job, JobStatusManager jobStatusManager) throws Exception {
-        JSONObject childJobInfo = execReflectionSync(jobId, null, job, jobStatusManager);
-        Object oReflectJobId = childJobInfo.get("id");
-
-        if (oReflectJobId != null) {
-            String reflectionJobId = oReflectJobId.toString();
-            boolean isDone = false;
-            // If we do not get any Job Status then try 10 time and give up
-            int nRetryCnt = 0;
-            while (!isDone) {
-                JSONObject status = getJobStatusObj(reflectionJobId);
-                if (status != null) {
-                    String currStat = status.get("status").toString();
-                    if (!currStat.equalsIgnoreCase("running")) {
-                        isDone = true;
-                        if (currStat.equals(JOB_STATUS.FAILED.toString())) {
-                            throw new Exception(status.get("statusDetail").toString());
-                        }
-                        if (status.get("statusDetail") != null) {
-                            childJobInfo.put("warnings", status.get("statusDetail").toString());
-                            childJobInfo.put("detail", "warning");
-                            childJobInfo.put("status", JOB_STATUS.COMPLETE.toString());
-                        }
-                    }
-                }
-                else {
-                    try {
-                        Thread.sleep(1000);
-                    }
-                    catch (InterruptedException ignored) {
-                        isDone = true;
-                    }
-
-                    if (nRetryCnt > 10) {
-                        // isDone = true;
-                    }
-                    nRetryCnt++;
-                }
-                if (!isDone) {
-                    try {
-                        Thread.sleep(CHAIN_JOS_STATUS_PING_INTERVAL_VALUE);
-                    }
-                    catch (InterruptedException ignored) {
-                        //
-                    }
-                }
-            }
-        }
-
-        return childJobInfo;
-    }
-
-    /**
-     * Processes requested job. Parameter is in String in JSON format
-     */
     @POST
     @Path("/{jobid}")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -382,11 +123,8 @@ public class JobResource {
         logger.debug("Curent JobResource thread count:{}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         try {
-            Runnable jobWorker = new ProcessJobWorkerThread(jobId, params);
+            Runnable jobWorker = new ProcessJobRunnable(jobId, params, jobStatusManager, jobExecMan);
             jobThreadExecutor.execute(jobWorker);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String msg = "Error during processing a job with jobId = " + jobId + ", params = " + params;
@@ -394,128 +132,6 @@ public class JobResource {
         }
 
         return Response.ok().build();
-    }
-
-    /**
-     * process job worker thread. Spawns this thread to return right away to
-     * client while keeping open thread count low. Job Status will be updated
-     * while running as thread.
-     *
-     */
-    public class ProcessJobWorkerThread implements Runnable {
-        private final String jobId;
-        private final String params;
-
-        ProcessJobWorkerThread(String jobid, String jobParams) {
-            jobId = jobid;
-            params = jobParams;
-        }
-
-        @Override
-        public void run() {
-            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
-            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
-
-            TransactionStatus transactionStatus = null;
-            try {
-                transactionStatus = txManager.getTransaction(null);
-                processCommand();
-                txManager.commit(transactionStatus);
-            }
-            catch (Exception e) {
-                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
-                    txManager.rollback(transactionStatus);
-                }
-                logger.error("Error executing job with ID = {}", jobId, e);
-            }
-        }
-
-        private void processCommand() {
-            logger.debug("Processing job: {}", jobId);
-
-            jobStatusManager.addJob(jobId);
-
-            JSONObject command = null;
-            try {
-                JSONParser parser = new JSONParser();
-                command = (JSONObject) parser.parse(params);
-
-                //log.debug(JsonUtils.objectToJson(command));
-                JSONObject result = processJob(jobId, command);
-                //log.debug(JsonUtils.objectToJson(result));
-
-                String warnings = null;
-                Object oWarn = result.get("warnings");
-                if (oWarn != null) {
-                    warnings = oWarn.toString();
-                }
-                String statusDetail = "";
-                if (warnings != null) {
-                    statusDetail += "WARNINGS: " + warnings;
-                }
-
-                Map<String, String> params = paramsToMap(command);
-                if (params.containsKey("writeStdOutToStatusDetail")
-                        && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail"))) {
-                    statusDetail += "INFO: " + result.get("stdout");
-                }
-
-                if (StringUtils.trimToNull(statusDetail) != null) {
-                    jobStatusManager.setComplete(jobId, statusDetail);
-                }
-                else {
-                    jobStatusManager.setComplete(jobId);
-                }
-            }
-            catch (Exception e) {
-                if (jobStatusManager != null) {
-                    jobStatusManager.setFailed(jobId, e.getMessage());
-                    logger.error("Error processing {}", command, e);
-                }
-            }
-            finally {
-                logger.debug("End process Job: {}", jobId);
-            }
-        }
-    }
-
-    private static Map<String, String> paramsToMap(JSONObject command) {
-        JSONArray paramsList = (JSONArray) command.get("params");
-
-        Map<String, String> paramsMap = new HashMap<>();
-        for (Object aParamsList : paramsList) {
-            JSONObject o = (JSONObject) aParamsList;
-            for (Object o1 : o.entrySet()) {
-                Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o1;
-                String key = (String) mEntry.getKey();
-                String val = (String) mEntry.getValue();
-                paramsMap.put(key, val);
-            }
-        }
-        return paramsMap;
-    }
-
-    private JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
-        logger.debug("processing Job: {}", jobId);
-        command.put("jobId", jobId);
-
-        String resourceName = command.get("caller").toString();
-        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
-
-        Map<String, String> paramsMap = paramsToMap(command);
-
-        List<String> missingList = new ArrayList<>();
-        if (!validator.validateRequiredExists(paramsMap, missingList)) {
-            logger.error("Missing following required field(s): {}", missingList);
-        }
-
-        logger.debug("calling native request Job: {}", jobId);
-
-        return jobExecMan.exec(command);
-    }
-
-    String getProgressText(String jobId) throws Exception {
-        return jobExecMan.getProgress(jobId);
     }
 
     /**
@@ -637,7 +253,7 @@ public class JobResource {
         JSONObject status = new JSONObject();
 
         status.put("jobId", jobId);
-        JobStatus jobStatusObj = jobStatusManager.getJobStatusObj(jobId);
+        JobStatus jobStatusObj = this.jobStatusManager.getJobStatusObj(jobId);
         if (jobStatusObj == null) {
             return null;
         }
@@ -653,31 +269,11 @@ public class JobResource {
         return status;
     }
 
-    private static void setJobInfo(JSONObject jobInfo, JSONObject child, JSONArray children, String stat, String detail) {
-        for (Object aChildren : children) {
-            JSONObject c = (JSONObject) aChildren;
-            if (c.get("id").toString().equals(child.get("id").toString())) {
-                c.put("status", stat);
-                c.put("detail", detail);
-                return;
-            }
-        }
-
-        child.put("status", stat);
-        child.put("detail", detail);
-        children.add(child);
-        jobInfo.put("children", children);
-    }
-
-    private static JSONObject createChildInfo(String id, String stat) {
-        JSONObject child = new JSONObject();
-        child.put("id", id);
-        child.put("status", stat);
-
-        return child;
+    private String getProgressText(String jobId) throws NativeInterfaceException {
+        return this.jobExecMan.getProgress(jobId);
     }
 
     public void terminateJob(String childId) throws NativeInterfaceException {
-        jobExecMan.terminate(childId);
+        this.jobExecMan.terminate(childId);
     }
 }
