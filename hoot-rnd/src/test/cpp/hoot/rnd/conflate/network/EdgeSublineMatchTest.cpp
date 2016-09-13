@@ -35,12 +35,12 @@ namespace hoot
 class EdgeSublineMatchTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeSublineMatchTest);
-  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  void basicTest()
   {
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(

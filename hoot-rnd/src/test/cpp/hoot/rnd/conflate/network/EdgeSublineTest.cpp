@@ -35,7 +35,7 @@ namespace hoot
 class EdgeSublineTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeSublineTest);
-  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(invalidTest);
   CPPUNIT_TEST(zeroLengthTest);
   CPPUNIT_TEST(backwardTest);
@@ -47,7 +47,7 @@ class EdgeSublineTest : public CppUnit::TestFixture
 
 public:
 
-  void runBasicTest()
+  void basicTest()
   {
     OsmMapPtr map(new OsmMap());
 

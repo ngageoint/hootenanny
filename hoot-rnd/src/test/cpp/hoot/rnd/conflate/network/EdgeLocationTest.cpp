@@ -35,20 +35,20 @@ namespace hoot
 class EdgeLocationTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeLocationTest);
-  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(invalidTest);
-  CPPUNIT_TEST(runOperatorTests);
+  CPPUNIT_TEST(operatorTests);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  void basicTest()
   {
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 100, 0)));
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
 
     EdgeLocation edgeLoc(edge, 0.5);
@@ -88,7 +88,7 @@ public:
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 100, 0)));
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
 
     EdgeLocation edgeLoc(edge, -0.1);
@@ -96,14 +96,14 @@ public:
     CPPUNIT_ASSERT(!edgeLoc.isValid());
   }
 
-  void runOperatorTests()
+  void operatorTests()
   {
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 100, 0)));
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
 
     ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge, 0.5));
