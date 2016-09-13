@@ -34,6 +34,7 @@ mgcp.rules = {
     // FCODE rules for Import
     fcodeOne2oneInV3 : [
         // MGCP TRDv3 Only Fcodes
+        ['F_CODE','AL015','building','yes'], // Building - changed to AL013
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
         ['F_CODE','AL240','man_made','tower'], // Non-communication Tower - NFDD AL241
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
