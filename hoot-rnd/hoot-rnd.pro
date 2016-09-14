@@ -96,7 +96,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
