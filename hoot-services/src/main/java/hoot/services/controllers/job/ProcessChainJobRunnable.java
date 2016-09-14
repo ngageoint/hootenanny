@@ -268,6 +268,7 @@ class ProcessChainJobRunnable implements Runnable {
 
     private JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
         logger.debug("processing Job: {}", jobId);
+
         command.put("jobId", jobId);
 
         String resourceName = command.get("caller").toString();
