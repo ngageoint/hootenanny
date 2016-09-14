@@ -96,7 +96,6 @@ class ProcessJobRunnable implements Runnable {
         }
         catch (Exception e) {
             jobStatusManager.setFailed(jobId, e.getMessage());
-            logger.error("Error processing {}", command, e);
             throw e;
         }
         finally {
@@ -106,6 +105,7 @@ class ProcessJobRunnable implements Runnable {
 
     private JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
         logger.debug("processing Job: {}", jobId);
+
         command.put("jobId", jobId);
 
         String resourceName = command.get("caller").toString();
