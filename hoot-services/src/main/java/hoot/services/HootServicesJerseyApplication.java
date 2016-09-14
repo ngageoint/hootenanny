@@ -35,7 +35,7 @@ public class HootServicesJerseyApplication extends ResourceConfig {
                                                      LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
         */
 
-        super.registerInstances(new LoggingFilter(Logger.getLogger(HootServicesJerseyApplication.class.getName()), true));
+        super.registerInstances(new LoggingFilter(logger, true));
 
         if (springConfigurationClass != null) {
             AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(springConfigurationClass);
