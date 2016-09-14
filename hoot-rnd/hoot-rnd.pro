@@ -50,7 +50,6 @@ SOURCES += \
     src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
