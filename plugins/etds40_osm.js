@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,9 @@
 
     Based on tds/__init__.js script
 */
+if (typeof hoot === 'undefined') {
+    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
 
 // For the OSM+ to TDS translation
 hoot.require('tds40')
@@ -72,7 +75,7 @@ etds40_osm = {
         var nAttrs = {}; // the "new" TDS attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-        if (attrs['Feature Code'])
+        if (attrs['Feature Code'] && attrs['Feature Code'] !== 'Not found')
         {
             if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
@@ -91,7 +94,14 @@ etds40_osm = {
                 attrs['Feature Code'] = fcode[0];
             }
         }
-
+        else
+        {
+            // No FCODE, throw error
+            // throw new Error('No Valid Feature Code');
+            // return null;
+            // return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
+            return {attrs:{}, tableName: ''};
+        }
         // Translate the single values from "English" to TDS
         for (var val in attrs)
         {
@@ -132,8 +142,10 @@ etds40_osm = {
                 }
                 else
                 {
-                    // Debug: Dump out the tags from the FCODE
-                    hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    if (ftag[1] !== tags[ftag[0]])
+                    {
+                        hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    }
                 }
             }
         }
@@ -152,4 +164,10 @@ etds40_osm = {
 
 } // End of etds40_osm
 
-exports.toOSM = etds40_osm.toOSM;
+if (typeof exports !== 'undefined') {
+    exports.toOSM = etds40_osm.toOSM;
+    exports.EnglishtoOSM = etds40_osm.toOSM;
+    exports.RawtoOSM = tds.toOsm;
+    exports.OSMtoEnglish = etds40.toEnglish;
+    exports.OSMtoRaw = tds.toNfdd;
+}
