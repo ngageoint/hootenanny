@@ -62,6 +62,7 @@ Feature: OSM/TDS Switcher
         And I click the "div.label" with text "Building (AL013)"
         And I should see a "g.tag-building" on the map
         # I can add a new tag using a TDSv61 field
+        Then I wait 5 seconds
         Then I select the "Floor Count" option labelled "Add field:"
         Then I fill "preset-input-TDSv61\/BNF" with "3"
         And I click the "map" at "440","425"
