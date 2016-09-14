@@ -518,7 +518,8 @@ public final class DbUtils {
         try (Connection conn = getConnection()) {
             // Straight SQL below. No DDL support in QueryDSL anymore. Have to do it the old-fashioned way.
 
-            // 1) Make sure no one can connect to this database.
+            // 1) Make sure no one can connect to this database.  Requires db owner privileges to execute.
+
             String sql = "UPDATE pg_database SET datallowconn = 'false' WHERE datname = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, dbName);
@@ -526,15 +527,32 @@ public final class DbUtils {
             }
 
             // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
+            //    Requires superuser privileges.
+
             // For Postgresql < 9.2 use: SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname = 'mydb';
+            sql = "SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname = ?";
+            try {
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setString(1, dbName);
+                    stmt.executeQuery();
+                }
+            }
+            catch (Exception e) {
+                logger.debug("Failed to execute: {}", sql, e);
+            }
+
             // For Postgresql >= 9.2 use: SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'mydb';
             sql = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, dbName);
                 stmt.executeQuery();
             }
+            catch (Exception e) {
+                logger.debug("Failed to execute: {}", sql, e);
+            }
 
-            // 3) Drop the database as the last step.
+            // 3) Drop the database as the last step.  Requires database owner privilege.
+
             sql = "DROP DATABASE \"" + dbName + "\"";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.executeUpdate();
