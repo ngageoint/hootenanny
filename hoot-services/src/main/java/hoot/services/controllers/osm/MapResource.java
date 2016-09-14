@@ -125,7 +125,7 @@ public class MapResource {
     public MapLayers getLayers() {
         MapLayers mapLayers = null;
         try {
-            logger.info("Retrieving map layers list...");
+            logger.debug("Retrieving map layers list...");
 
             List<Maps> mapLayerRecords = createQuery()
                     .select(maps)
@@ -169,7 +169,7 @@ public class MapResource {
     public FolderRecords getFolders() {
         FolderRecords folderRecords = null;
         try {
-            logger.info("Retrieving folders list...");
+            logger.debug("Retrieving folders list...");
 
             List<Folders> folderRecordSet = createQuery()
                     .select(folders)
@@ -207,7 +207,7 @@ public class MapResource {
         LinkRecords linkRecords = null;
 
         try {
-            logger.info("Retrieving links list...");
+            logger.debug("Retrieving links list...");
 
             createQuery().delete(folderMapMappings)
                     .where(new SQLQuery<>()
@@ -399,7 +399,7 @@ public class MapResource {
                         @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
         Document responseDoc = null;
         try {
-            logger.info("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
+            logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
 
             long mapIdNum = -2;
             try {
@@ -515,7 +515,7 @@ public class MapResource {
                 // OSM API database data can't be displayed on a hoot map, due to differences
                 // between the display code, so we return a zero count if its that layer.
                 if (mapIdNum != -1) {
-                    logger.info("Retrieving node count for map with ID: {} ...", mapId);
+                    logger.debug("Retrieving node count for map with ID: {} ...", mapId);
                     bbox = (String) param.get("tile");
                     String[] coords = bbox.split(",");
                     if (coords.length == 4) {
@@ -576,7 +576,7 @@ public class MapResource {
     public Response getMBR(@QueryParam("mapId") String mapId) {
         JSONObject ret = new JSONObject();
         try {
-            logger.info("Retrieving MBR for map with ID: {} ...", mapId);
+            logger.debug("Retrieving MBR for map with ID: {} ...", mapId);
 
             long mapIdNum = -2;
             try {
@@ -1027,7 +1027,7 @@ public class MapResource {
                 if (mapIdNum != -1) // not OSM API db
                 {
                     mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-                    logger.info("Retrieving map tags for map with ID: {} ...", mapIdNum);
+                    logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
 
                     try {
                         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);

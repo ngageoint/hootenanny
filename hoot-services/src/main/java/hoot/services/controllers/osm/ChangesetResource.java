@@ -255,7 +255,7 @@ public class ChangesetResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String close(@PathParam("changesetId") Long changesetId,
                         @QueryParam("mapId") Long mapId) {
-        logger.info("Closing changeset with ID: {} ...", changesetId);
+        logger.debug("Closing changeset with ID: {} ...", changesetId);
 
         if (mapId == null) {
             String msg = "Invalid map id!";

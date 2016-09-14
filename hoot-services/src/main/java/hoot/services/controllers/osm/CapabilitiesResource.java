@@ -72,7 +72,7 @@ public class CapabilitiesResource {
         Document responseDoc;
 
         try {
-            logger.info("Retrieving capabilities...");
+            logger.debug("Retrieving capabilities...");
             responseDoc = writeResponse();
         }
         catch (Exception e) {
