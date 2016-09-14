@@ -1,8 +1,9 @@
 # Translation Server API
-* ### Translates OSM xml to/from supported schemas.
-* ### Provides full field information for selected feature types.
-* ### Provides available key/value information for translated schemas by feature type. (a la taginfo).
-* ### Provides a search service for translated feature types.
+* Translates OSM xml to/from supported schemas.
+* Provides full field information for selected feature types.
+* Provides available key/value information for translated schemas by feature type. (a la taginfo).
+* Provides a search service for translated feature types.
+
 ___
 ## GET /version
 
@@ -324,7 +325,7 @@ sortname | The property to sort. (NOT SURE THIS IS IMPLEMENTED)
 _optional_ | **Example: count_nodes**
 
 ___
-sortorder | The sort order [asc | desc]. (NOT SURE THIS IS IMPLEMENTED).
+sortorder | The sort order [asc or desc]. (NOT SURE THIS IS IMPLEMENTED).
 --- | --- 
 _optional_ | **Example: desc**
 
@@ -442,7 +443,7 @@ sortname | The property to sort. (NOT SURE THIS IS IMPLEMENTED)
 _optional_ | **Example: count_nodes**
 
 ___
-sortorder | The sort order [asc | desc]. (NOT SURE THIS IS IMPLEMENTED).
+sortorder | The sort order [asc or desc]. (NOT SURE THIS IS IMPLEMENTED).
 --- | --- 
 _optional_ | **Example: desc**
 
