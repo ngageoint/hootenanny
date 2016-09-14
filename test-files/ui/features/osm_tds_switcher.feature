@@ -18,6 +18,7 @@ Feature: OSM/TDS Switcher
         Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030:Road"
         Then I select the "TDSv40" option labelled "Filter By Type"
         Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
+        Then I wait 5 seconds
         Then I should see element "#preset-input-TDSv40\/ZI005_FNA" with value "23RD ST NW"
         Then I select the "MGCP" option labelled "Filter By Type"
         Then I wait 10 "seconds" to see "label" element with text "Thoroughfare Class"
