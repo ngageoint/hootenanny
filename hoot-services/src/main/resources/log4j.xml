@@ -49,6 +49,13 @@
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
+    <logger name="hoot.services.HootServicesJerseyApplication" additivity="false">
+        <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to INFO for detailed
+             logging of HTTP request/response messages received and sent by the Jersey Framework -->
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
     <logger name="org.deegree" additivity="false">
         <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
