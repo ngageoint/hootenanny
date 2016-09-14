@@ -46,7 +46,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{12aa10bf-dade-5e5c-8eae-aba920a52842}";
+QString PoiPolygonMatch::_testUuid = "{e54ee15f-b551-5cd6-b907-16b640dc78a8}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -92,8 +92,8 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 {
   return OsmSchema::getInstance().isArea(e.getTags(), e.getElementType()) &&
          (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) /*||
-          e.getTags().getNames().size() > 0*/);
+           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
+          e.getTags().getNames().size() > 0);
 }
 
 bool PoiPolygonMatch::isPoi(const Element& e)
@@ -135,6 +135,29 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
                                    eid2.toString());
   }
 
+  const bool polyIsABuilding = OsmSchema::getInstance().isBuilding(poly);
+  const bool polyIsAParkArea = !polyIsABuilding && poly->getTags().get("leisure") == "park";
+  const bool poiIsABuilding = OsmSchema::getInstance().isBuilding(poi);
+  const bool poiIsAParkArea = !poiIsABuilding && poi->getTags().get("leisure") == "park";
+  const bool poiHasType =
+    OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  //If the poi is not a park and being compared to a park polygon, we want to be more restrictive
+  //on type matching, if the poi has a type at all.
+  if (polyIsAParkArea && !poiIsAParkArea && poiHasType)
+  {
+    _c.setMiss();
+    return;
+  }
+
+  /*const QString name = poi->getTags().get("name");
+  if (poiIsAParkArea && polyIsABuilding &&
+      (name.toLower().contains("rec center") || name.toLower().contains("recreation center")))
+  {
+    _c.setMiss();
+    return;
+  }*/
+
   shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
   //may need a better way to handle this...(already tried using isValid())
   if (QString::fromStdString(gpoly->toString()).toUpper().contains("EMPTY"))
@@ -147,11 +170,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     return;
   }
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
-
-  /*const bool polyIsABuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsAParkArea = !polyIsABuilding && poly->getTags().get("leisure") == "park";
-  const bool poiIsABuilding = OsmSchema::getInstance().isBuilding(poi);
-  const bool poiIsAParkArea = !poiIsABuilding && poi->getTags().get("leisure") == "park";*/
 
   const bool typeMatch = _calculateTypeMatch(poi, poly);
 
@@ -193,15 +211,6 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   evidence += nameMatch ? 1 : 0;
   evidence += addressMatch ? 1 : 0;
   evidence += distance <= matchDistance ? 2 : 0;
-
-  /*if (poiIsAParkArea)
-  {
-    if (!typeMatch)
-    {
-      _c.setMiss();
-      return;
-    }
-  }*/
 
   //if (!polyIsAParkArea && !poiIsAParkArea)
   //{
@@ -409,6 +418,8 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
 double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
 {
   double result = 0.0;
+  _t1BestKvp = "";
+  _t2BestKvp = "";
 
   const QStringList t1List = _getRelatedTags(e1->getTags());
   const QStringList t2List = _getRelatedTags(e2->getTags());
@@ -471,7 +482,7 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
 double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
 {
   //dataset c
-  if (typeKvp == "amenity=clinic")
+  /*if (typeKvp == "amenity=clinic")
   {
     return 10.0;
   }
@@ -482,7 +493,7 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString typeKvp)
   else if (typeKvp == "leisure=park")
   {
     return 10.0;
-  }
+  }*/
 
   return _matchDistance;
 }
