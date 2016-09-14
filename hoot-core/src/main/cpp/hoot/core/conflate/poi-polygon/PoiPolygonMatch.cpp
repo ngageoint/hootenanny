@@ -171,34 +171,12 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   }
   shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
 
-  const bool typeMatch = _calculateTypeMatch(poi, poly);
-
-  const double nameScore = _calculateNameScore(poi, poly);
-  const bool nameMatch = nameScore >= _nameScoreThreshold;
-
-  const bool addressMatch = _calculateAddressMatch(poly, poi);
-
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
   const double sigma2 = e1->getCircularError() / 2.0;
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-  double distance = 9999;
-  //if (!polyIsAParkArea || poly->getElementType() != ElementType::Way)
-  //{
-    distance = gpoly->distance(gpoi.get());
-  //}
-  /*else if (poly->getElementType() == ElementType::Way)
-  {
-    ConstWayPtr way = dynamic_pointer_cast<const Way>(poly);
-    const vector<long> wayNodeIds = way->getNodeIds();
-    for (size_t i = 0; i < wayNodeIds.size(); i++)
-    {
-      ConstElementPtr wayNode = _map->getElement(ElementType::Node, wayNodeIds.at(i));
-      shared_ptr<Geometry> gwayNode = ElementConverter(map).convertToGeometry(wayNode);
-      distance = min(distance, gwayNode->distance(gpoi.get()));
-    }
-  }*/
+  const double distance = gpoly->distance(gpoi.get());
   const double matchDistance =
     max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
   const double reviewDistance =
@@ -206,50 +184,35 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double reviewDistancePlusCe = reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
+  const bool typeMatch = _calculateTypeMatch(poi, poly);
+
+  const double nameScore = _calculateNameScore(poi, poly);
+  const bool nameMatch = nameScore >= _nameScoreThreshold;
+
+  const bool addressMatch = _calculateAddressMatch(poly, poi);
+
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
   evidence += nameMatch ? 1 : 0;
   evidence += addressMatch ? 1 : 0;
   evidence += distance <= matchDistance ? 2 : 0;
 
-  //if (!polyIsAParkArea && !poiIsAParkArea)
-  //{
-    if (!closeMatch)
-    {
-      _c.setMiss();
-    }
-    else if (evidence >= 3)
-    {
-      _c.setMatch();
-    }
-    else if (evidence >= 1)
-    {
-      _c.setReview();
-    }
-    else
-    {
-      _c.setMiss();
-    }
-  //}
-  /*else
+  if (!closeMatch)
   {
-    if (!closeMatch)
-    {
-      _c.setMiss();
-    }
-    else if (evidence >= 4)
-    {
-      _c.setMatch();
-    }
-    else if (evidence >= 3)
-    {
-      _c.setReview();
-    }
-    else
-    {
-      _c.setMiss();
-    }
-  }*/
+    _c.setMiss();
+  }
+  else if (evidence >= 3)
+  {
+    _c.setMatch();
+  }
+  else if (evidence >= 1)
+  {
+    _c.setReview();
+  }
+  else
+  {
+    _c.setMiss();
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug)
   {
