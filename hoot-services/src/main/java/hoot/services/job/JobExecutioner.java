@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import hoot.services.HootProperties;
 import hoot.services.utils.DbUtils;
@@ -65,7 +66,9 @@ public class JobExecutioner extends Thread {
             try {
                 jobStatusManager.addJob(jobId);
 
-                Executable executable = (Executable) HootProperties.getSpringContext().getBean((String) command.get("execImpl"));
+                ApplicationContext applicationContext = HootProperties.getSpringContext();
+                Executable executable = (Executable) applicationContext.getBean((String) command.get("execImpl"));
+
                 executable.exec(command);
 
                 jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());

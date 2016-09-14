@@ -202,6 +202,12 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     ConstEdgeStringPtr notStub = e1->isStub() ? e2 : e1;
 
     bool candidate = true;
+
+    if (notStub->calculateLength(_map) > ConfigOptions().getNetworkMaxStubLength())
+    {
+      candidate = false;
+    }
+
     foreach (EdgeString::EdgeEntry ee, notStub->getAllEdges())
     {
       candidate = candidate && isCandidateMatch(ee.getEdge(), stub->getFirstEdge());
@@ -256,22 +262,37 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
       // create a copy of the map for experimentation
       OsmMapPtr mapCopy(new OsmMap(_map->getProjection()));
       CopySubsetOp(_map, wids).apply(mapCopy);
+      // we don't want to impact the global IDs with our little test.
+      mapCopy->setIdGenerator(_map->getIdGenerator().clone());
       mapCopy->addElement(r1);
       mapCopy->addElement(r2);
 
-      WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
+//      WayPtr w1 = ws1->copySimplifiedWayIntoMap(*_map, mapCopy);
+//      WayPtr w2 = ws2->copySimplifiedWayIntoMap(*_map, mapCopy);
 
-      // convert from a mapping to a WaySublineMatchString
-      WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
-        mapping);
+//      double hd = HausdorffDistanceExtractor().distance(*mapCopy, w1, w2);
+//      if (hd > sr)
+//      {
+//        LOG_VAR(hd);
+//        LOG_VAR(sr);
+//        result = 0.0;
+//      }
+//      else
+      {
+        WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
 
-      LOG_VAR(matchString);
+        // convert from a mapping to a WaySublineMatchString
+        WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
+          mapping);
 
-      MatchClassification c;
-      // calculate the match score
-      c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
+        LOG_VAR(matchString);
 
-      result = c.getMatchP();
+        MatchClassification c;
+        // calculate the match score
+        c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
+
+        result = c.getMatchP();
+      }
     }
   }
 
@@ -358,7 +379,18 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e) const
 
   if (e->isStub())
   {
-    ce = getSearchRadius(e->getFrom());
+    foreach (ConstNetworkEdgePtr e, _n2->getEdgesFromVertex(e->getFrom()))
+    {
+      if (e->isStub() == false)
+      {
+        ce = std::max(ce, getSearchRadius(e));
+      }
+    }
+
+    if (ce == -1)
+    {
+      ce = e->getFrom()->getElement()->getCircularError();
+    }
   }
   else
   {
@@ -384,7 +416,18 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgeP
 
 Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v) const
 {
-  return v->getElement()->getCircularError();
+  // use the ce of the containing edge, not the vertex.
+  Meters ce = -1;
+  foreach (ConstNetworkEdgePtr e, _n1->getEdgesFromVertex(v))
+  {
+    ce = std::max(ce, getSearchRadius(e));
+  }
+  foreach (ConstNetworkEdgePtr e, _n2->getEdgesFromVertex(v))
+  {
+    ce = std::max(ce, getSearchRadius(e));
+  }
+
+  return ce;
 }
 
 Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const
@@ -425,13 +468,16 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 
   Meters srh = ConfigOptions().getSearchRadiusHighway();
   double sr = srh <= 0.0 ? getSearchRadius(w1, w2) : srh;
+  LOG_VART(srh);
+  LOG_VART(sr);
+  //_sublineMatcher->setMinSplitSize(sr / 2.0);
   // calculated the shared sublines
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(_map, w1, w2, sr);
 
   MatchClassification c;
   bool reversed = false;
-  LOG_VAR(sr);
-  LOG_VAR(sublineMatch);
+  LOG_VART(sr);
+  LOG_VART(sublineMatch);
   if (sublineMatch.isValid())
   {
     // calculate the match score

@@ -48,8 +48,7 @@ import hoot.services.job.JobExecutioner;
 public class TunningServiceResource {
     private static final Logger logger = LoggerFactory.getLogger(TunningServiceResource.class);
 
-    public TunningServiceResource() {
-    }
+    public TunningServiceResource() {}
 
     @POST
     @Path("/execute")
@@ -60,19 +59,16 @@ public class TunningServiceResource {
 
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject oParams = (JSONObject) jsonParser.parse(params);
-            String input = oParams.get("INPUT").toString();
-            String inputtype = oParams.get("INPUT_TYPE").toString();
+            JSONObject parameters = (JSONObject) jsonParser.parse(params);
+            String input = parameters.get("INPUT").toString();
+            String inputType = parameters.get("INPUT_TYPE").toString();
 
             JSONObject command = new JSONObject();
             command.put("input", input);
-            command.put("inputtype", inputtype);
-            command.put("execImpl", "TunningService");
+            command.put("inputtype", inputType);
+            command.put("execImpl", "tunningService");
 
             (new JobExecutioner(uuid, command)).start();
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();

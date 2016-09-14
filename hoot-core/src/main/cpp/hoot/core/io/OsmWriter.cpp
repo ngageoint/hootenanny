@@ -58,6 +58,7 @@ OsmWriter::OsmWriter()
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
   _includePointInWays = false;
   _includeCompatibilityTags = true;
+  _osmSchema = ConfigOptions().getOsmMapWriterSchema();
   _precision = round(ConfigOptions().getWriterPrecision());
   _encodingErrorCount = 0;
 }
@@ -173,10 +174,25 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   writer.writeStartElement("osm");
   writer.writeAttribute("version", "0.6");
   writer.writeAttribute("generator", "hootenanny");
-  char *wkt;
-  map->getProjection()->exportToPrettyWkt(&wkt);
-  writer.writeAttribute("srs", wkt);
-  free(wkt);
+
+  int epsg = map->getProjection()->GetEPSGGeogCS();
+  if (epsg > -1)
+  {
+    writer.writeAttribute("srs", QString("+epsg:%1").arg(epsg));
+  }
+  else
+  {
+    char *wkt;
+    //map->getProjection()->exportToPrettyWkt(&wkt);
+    map->getProjection()->exportToWkt(&wkt);
+    writer.writeAttribute("srs", wkt);
+    free(wkt);
+  }
+
+  if (_osmSchema != "")
+  {
+    writer.writeAttribute("schema", _osmSchema);
+  }
 
   _timestamp = "1970-01-01T00:00:00Z";
 
@@ -255,7 +271,14 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(it.key()));
-        writer.writeAttribute("v", removeInvalidCharacters(it.value()));
+        if (it.key() == "hoot:status" && n->getStatus() != Status::Invalid)
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(QString::number(n->getStatus().getEnum())));
+        }
+        else
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(it.value()));
+        }
         writer.writeEndElement();
       }
     }
@@ -331,7 +354,14 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
-        writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+        if (tit.key() == "hoot:status" && w->getStatus() != Status::Invalid)
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(QString::number(w->getStatus().getEnum())));
+        }
+        else
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+        }
         writer.writeEndElement();
       }
     }
@@ -402,7 +432,14 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
-        writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+        if (tit.key() == "hoot:status" && r->getStatus() != Status::Invalid)
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
+        }
+        else
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+        }
         writer.writeEndElement();
       }
     }

@@ -466,6 +466,11 @@ void Settings::parseCommonArguments(QStringList& args)
       // move on to the next argument.
       args = args.mid(2);
     }
+    else if (args[0] == "--trace")
+    {
+      Log::getInstance().setLevel(Log::Trace);
+      args = args.mid(1);
+    }
     else if (args[0] == "--debug")
     {
       Log::getInstance().setLevel(Log::Debug);

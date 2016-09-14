@@ -212,7 +212,6 @@ public class ElementResource {
             throw wae;
         }
         catch (Exception e) {
-            e.printStackTrace();
             String msg = "Error getting full element data!" +
                     "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());

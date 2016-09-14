@@ -135,8 +135,6 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     //    board example)
     // They're conflicts!
     QSet<ConstEdgeMatchPtr> conflict = _edgeMatches->getMatchesThatOverlap(em);
-    LOG_VAR(conflict);
-    LOG_VAR(em);
     QSet<ConstEdgeMatchPtr> touches;
     ConstNetworkVertexPtr from1, to1;
     ConstNetworkVertexPtr from2, to2;
@@ -145,35 +143,26 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       from1 = em->getString1()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from1));
       conflict += _edgeMatches->getMatchesWithInteriorVertex(from1);
-      LOG_VAR(conflict);
-      LOG_VAR(touches);
     }
     if (em->getString1()->getTo()->isExtreme())
     {
       to1 = em->getString1()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to1));
       conflict += _edgeMatches->getMatchesWithInteriorVertex(to1);
-      LOG_VAR(conflict);
-      LOG_VAR(touches);
     }
     if (em->getString2()->getFrom()->isExtreme())
     {
       from2 = em->getString2()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from2));
       conflict += _edgeMatches->getMatchesWithInteriorVertex(from2);
-      LOG_VAR(conflict);
-      LOG_VAR(touches);
     }
     if (em->getString2()->getTo()->isExtreme())
     {
       to2 = em->getString2()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to2));
       conflict += _edgeMatches->getMatchesWithInteriorVertex(to2);
-      LOG_VAR(conflict);
-      LOG_VAR(touches);
     }
     conflict -= em;
-    LOG_VAR(conflict);
 
     // if the two edge matches end in the same vertices and there is no overlap these are
     // supporters!
@@ -195,7 +184,10 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     touches -= em;
     touches -= support;
     conflict += touches;
-    LOG_VAR(conflict);
+    LOG_VART(em);
+    LOG_VART(conflict);
+    LOG_VART(touches);
+    LOG_VART(support);
 
     foreach (ConstEdgeMatchPtr other, conflict)
     {
@@ -214,9 +206,8 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       }
     }
 
-    LOG_VAR(em);
-    foreach (ConstEdgeMatchPtr aSupport, support) LOG_VAR(aSupport);
-    foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VAR(aConflict);
+//    foreach (ConstEdgeMatchPtr aSupport, support) LOG_VARD(aSupport);
+//    foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VARD(aConflict);
 
     _scores[em] = 1.0;
     _weights[em] = 1.0;
@@ -354,13 +345,14 @@ void ConflictsNetworkMatcher::_iterateSimple()
 {
   const double partialHandicap = _partialHandicap;
   const double stubHandicap = _stubHandicap;
+  double aggression = _aggression;
   EdgeScoreMap newScores, newWeights;
   double weightSum = EPSILON;
   int count = 0;
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     PROGRESS_INFO(++count << "/" << _scores.size());
-    double aggression = _aggression;
+
     double handicap = em->containsPartial() ? partialHandicap : 1.0;
     if (em->containsStub())
     {
@@ -446,7 +438,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       denominator += s;
     }
 
-    newScores[em] = pow(numerator / denominator, _aggression);
+    newScores[em] = pow(numerator / denominator, aggression);
     newWeights[em] = denominator;
     weightSum += denominator;
     LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<

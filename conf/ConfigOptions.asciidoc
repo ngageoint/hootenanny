@@ -861,7 +861,7 @@ Possible values include:
 === network.conflicts.partial.handicap
 
 * Data Type: double
-* Default Value: `0.3`
+* Default Value: `0.2`
 
 A larger value will increase the weight of partial matches. A smaller value prefers whole matches
 over partial matches. This value is generally not changed by users. Reasonable range is (0, ~2].
@@ -935,6 +935,13 @@ can be large and slow things down significantly.
 An internal option for manipulating the way network matching occurs. This should only be used for
 debug and test. The parameter must be a class that is registered with the factory and subclasses
 `NetworkMatcher`.
+
+=== network.max.stub.length
+
+* Data Type: double
+* Default Value: `20`
+
+The maximum allowable length of a stub connection (way to node match). Value in meters.
 
 === network.miss.threshold
 
@@ -1054,13 +1061,6 @@ script.
 
 The number of identical log messages that will be emitted before they're silenced.
 
-=== ogr.partial.translate
-
-* Data Type: bool
-* Default Value: `false`
-
-Write partial translations instead of o2s_[PAL] features.
-
 === ogr.reader.bounding.box
 
 * Data Type: string
@@ -1151,6 +1151,13 @@ Geodatabases.
 Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
+=== ogr.throw.error
+
+* Data Type: bool
+* Default Value: `false`
+
+For the schema switcher, throw errors instead of returning a partial translation/o2s_X feature from a translation.
+
 === ogr.writer.create.all.layers
 
 * Data Type: bool
@@ -1218,6 +1225,14 @@ from the URL.
 * Default Value: `true`
 
 Turns on autoformatting (line breaks, indentation etc) for XML output.
+
+=== osm.map.writer.schema
+
+* Data Type: string
+* Default Value: ``
+
+Sets the value for a "schema" attribute when writeing a map to OSM XML.
+NOTE: this will only be written if the value is not empty.
 
 === osm2ogr.ops
 

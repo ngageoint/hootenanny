@@ -63,6 +63,9 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
   case Log::None:
     return Level::getAll();
     break;
+  case Log::Trace:
+    return Level::getTrace();
+    break;
   case Log::Debug:
     return Level::getDebug();
     break;

@@ -3,17 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="processStreamInterface" class="hoot.services.nativeinterfaces.ProcessStreamInterface">
-    </bean>
+    <bean id="processStreamInterface" class="hoot.services.nativeinterfaces.ProcessStreamInterface"/>
 
     <bean id="jobExecutionManagerNative" class="hoot.services.nativeinterfaces.JobExecutionManager">
         <property name="nativeInterface" ref="processStreamInterface"/>
     </bean>
 
-    <bean id="ResourcesCleanUtil" class="hoot.services.controllers.job.ResourcesCleanUtil">
-    </bean>
+    <bean id="resourcesCleanUtil" class="hoot.services.job.ResourcesCleanUtil" scope="prototype"/>
 
-    <bean id="TunningService" class="hoot.services.controllers.services.TunningService">
-    </bean>
+    <bean id="tunningService" class="hoot.services.job.TunningService" scope="prototype"/>
 
 </beans>

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,7 +38,7 @@ tds61 = {
     getDbSchema: function() {
         layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
         nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
-        
+
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         tds61.rawSchema = tds61.schema.getDbSchema();
 
@@ -48,7 +48,7 @@ tds61 = {
         // Add empty "extra" feature layers if needed
         if (config.getOgrTdsExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
 
-     /* 
+     /*
         // This has been removed since we no longer have text enumerations in the schema
 
         // Go go through the Schema and fix/add attributes
@@ -127,7 +127,7 @@ tds61 = {
             newSchema.push({ name: layerName,
                           desc: layerName,
                           geom: geomType,
-                          columns:[] 
+                          columns:[]
                         });
         } // End fc loop
 
@@ -139,7 +139,7 @@ tds61 = {
             // 'PGB230':'AeronauticPnt', // AircraftHangar
             // 'AGB230':'AeronauticSrf', // AircraftHangar
             // 'AGB015':'AeronauticSrf', // Apron
-            // .... 
+            // ....
             // So we add the geometry to the FCODE
 
             fCode = tds61.rawSchema[os].geom.charAt(0) + tds61.rawSchema[os].fcode;
@@ -147,7 +147,7 @@ tds61 = {
 
             // Loop through the new schema and find the right layer
             for (var ns = 0; ns < newSchemaLen; ns++)
-            { 
+            {
                 // If we find the layer, populate it
                 if (newSchema[ns].name == layerName)
                 {
@@ -182,7 +182,7 @@ tds61 = {
                                         }
                                     } // End nen loop
                                     // if the enumerated value isn't in the new list, add it
-                                    if (!esame) 
+                                    if (!esame)
                                     {
                                         newSchema[ns].columns[cns].enumerations.push(tds61.rawSchema[os].columns[cos].enumerations[oen]);
                                     }
@@ -191,7 +191,7 @@ tds61 = {
                         } // End nsc loop
 
                         // if the attr isn't in the new schema, add it
-                        if (!same) 
+                        if (!same)
                         {
                             // Remove the Default Value so we get all Null values on export
                             // delete tds61.rawSchema[os].columns[cos].defValue;
@@ -203,7 +203,7 @@ tds61 = {
                 } // End if layerName
             } // End newSchema loop
         } // end tds61.rawSchema loop
-        
+
         // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
         tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
 
@@ -252,9 +252,9 @@ tds61 = {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
             if (config.getOgrDebugDumpvalidate() == 'true')
             {
-        	    for (var val in attrs) 
+        	    for (var val in attrs)
         	    {
-            	    if (attrList.indexOf(val) == -1) 
+            	    if (attrList.indexOf(val) == -1)
                     {
                         if (val in othList)
                         {
@@ -297,7 +297,7 @@ tds61 = {
             }
             else
             {
-        	    for (var val in attrs) 
+        	    for (var val in attrs)
         	    {
             	    if (attrList.indexOf(val) == -1)
                     {
@@ -384,12 +384,12 @@ tds61 = {
             for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
 
             // If we DONT have the value in the list, add it to the OTH or MEMO field
-            if (enumValueList.indexOf(attrValue) == -1) 
+            if (enumValueList.indexOf(attrValue) == -1)
             {
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
                 // No "Other" value. Push to the Memo field
-                if (enumValueList.indexOf('999') == -1) 
+                if (enumValueList.indexOf('999') == -1)
                 {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
@@ -565,7 +565,7 @@ tds61 = {
         // but renamed in different features. We swap these so that there is only one
         // set of rules needed in the One2One section.
         // These get converted back on output - if we need to.
-        var swapList = { 
+        var swapList = {
                 'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
                 'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
                 'HYP':'ZI024_HYP',
@@ -580,12 +580,12 @@ tds61 = {
                 'SUR':'ZI026_SUR',
                 'WBD':'PWA',
                 'WD1':'ZI016_WD1',
-                'YWQ':'ZI024_YWQ',   
+                'YWQ':'ZI024_YWQ',
                 'ZI025_MAN':'MAN',
                 'ZI025_WLE':'WLE',
                 'ZI032_GUG':'GUG',
                 'ZI032_TOS':'TOS',
-                'ZI032_PYC':'PYC',   
+                'ZI032_PYC':'PYC',
                 'ZI032_PYM':'PYM',
                 'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
                 'ZVH_VDT':'VDT'
@@ -729,7 +729,7 @@ tds61 = {
                 ['AP040', ['ap040','gate_c','gate_p']], // Gate
                 ['AP041', ['ap041','vehicle_barrier_c','vehicle_barrier_p']], // Vehicle Barrier
                 ['AP050', ['ap050','trail_c']], // Trail
-                ['AQ040', ['aq040','bridge_c','bridge_p']], // Bridge 
+                ['AQ040', ['aq040','bridge_c','bridge_p']], // Bridge
                 ['AQ045', ['aq045','bridge_span_c','bridge_span_p']], // Bridge Span
                 ['AQ065', ['aq065','culvert_c','culvert_p']], // Culvert
                 ['AQ070', ['aq070','ferry_crossing_c']], // Ferry Crossing
@@ -744,9 +744,9 @@ tds61 = {
                 ['AT042', ['at042','pylon_p']], // Pylon
                 ['BH010', ['bh010','aqueduct_s','aqueduct_c']], // Aqueduct
                 ['BH020', ['bh020','canal_s','canal_c']], // Canal
-                ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch 
-                ['BH070', ['bh070','ford_c','ford_p']], // Ford 
-                ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody 
+                ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch
+                ['BH070', ['bh070','ford_c','ford_p']], // Ford
+                ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody
                 ['BH140', ['bh140', 'river_s','river_c']], // River
                 ['BH170', ['bh170','natural_pool_p']], // Natural Pool
                 ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
@@ -843,7 +843,7 @@ tds61 = {
 
         // Add the LayerName to the source
         if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
-        
+
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (attrs.UFI)
         {
@@ -851,7 +851,7 @@ tds61 = {
         }
         else
         {
-            tags.uuid = createUuid(); 
+            tags.uuid = createUuid();
         }
 
 
@@ -1084,15 +1084,21 @@ tds61 = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
-
-                tags.note = tObj.text;
             }
 
+            if (tObj.text && tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
         } // End process tags.note
 
 
     }, // End of applyToOsmPostProcessing
-  
+
     // ##### End of the xxToOsmxx Block #####
 
 // #####################################################################################################
@@ -1205,7 +1211,7 @@ tds61 = {
 
         // Some tags imply that they are buildings but don't actually say so.
         // Most of these are taken from raw OSM and the OSM Wiki
-        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that 
+        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
         // are not buildings.
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
@@ -1251,7 +1257,7 @@ tds61 = {
         }
 
         // Fix up water features from OSM
-        if (tags.natural == 'water' && !(tags.water)) 
+        if (tags.natural == 'water' && !(tags.water))
         {
             if (geometryType =='Line')
             {
@@ -1286,9 +1292,9 @@ tds61 = {
                 delete tags.highway;
             }
             else
-            { 
+            {
                 // Drop the cutline/cleared way
-                delete tags.man_made; 
+                delete tags.man_made;
 
                 if (tags.memo)
                 {
@@ -1409,9 +1415,9 @@ tds61 = {
         // If we still don't have an FCODE, try looking for individual elements
         if (!attrs.F_CODE)
         {
-            var fcodeMap = { 
-                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070', 
-                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010', 
+            var fcodeMap = {
+                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
+                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
                 'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
                 'mine:access':'AA010'
                            };
@@ -1433,12 +1439,12 @@ tds61 = {
 
         if (tags.material)
         {
-            if (pymList.indexOf(attrs.F_CODE) !== -1) 
+            if (pymList.indexOf(attrs.F_CODE) !== -1)
             {
                 tags['tower:material'] = tags.material;
                 delete tags.material;
             }
-            else if (vcmList.indexOf(attrs.F_CODE) !== -1) 
+            else if (vcmList.indexOf(attrs.F_CODE) !== -1)
             {
                 tags['material:vertical'] = tags.material;
                 delete tags.material;
@@ -1657,7 +1663,7 @@ tds61 = {
                         attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
                         attrs.RTY = '-999999'; // No Information
                 } // End tags.highway switch
-                
+
             } // End ROI & RIN_ROI
 
             // Use the Width to populate the Minimum Travelled Way Width - Customer requested
@@ -1666,7 +1672,7 @@ tds61 = {
                 attrs.ZI016_WD1 = attrs.WID;
                 delete attrs.WID;
             }
-            
+
             // Private Access roads - Customer requested
             if (tags.access == 'private' && !(attrs.CAA))
             {
@@ -1754,7 +1760,7 @@ tds61 = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName);
+            print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
@@ -1804,6 +1810,7 @@ tds61 = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1820,7 +1827,7 @@ tds61 = {
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug
-        // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+        for (var i in notUsedAttrs) console.log('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -1829,8 +1836,8 @@ tds61 = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-            print('');
+            for (var i = 0, fLen = kList.length; i < fLen; i++) console.log('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            console.log('');
         }
 
         return tags;
@@ -1865,7 +1872,7 @@ tds61 = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.  
+        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
         // There is no way we can translate these to a single TDS feature.
         if (geometryType == 'Collection') return null;
 
@@ -1887,7 +1894,7 @@ tds61 = {
 
             tds61.lookup = translate.createBackwardsLookup(tds61.rules.one2one);
             // translate.dumpOne2OneLookup(tds61.lookup);
-            
+
             // Make the fuzzy lookup table
             tds61.fuzzy = schemaTools.generateToOgrTable(tds61.rules.fuzzyTable);
 
@@ -1941,62 +1948,61 @@ tds61 = {
         }
 
         // Now check for invalid feature geometry
-        // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
+        // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(nfddAttrLookup[gFcode])) 
+        if (!(nfddAttrLookup[gFcode]))
         {
-            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-            if (config.getOgrPartialTranslate() == 'true')
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (config.getOgrThrowError() == 'true')
             {
-                tableName = 'Partial';
-                attrs.F_CODE = 'Partial';
-
-                // If we have unused tags, add them to partial feature.
-                if (Object.keys(notUsedTags).length > 0)
+                if (! attrs.F_CODE)
                 {
-                    for (var i in notUsedTags)
-                    {
-                        attrs['OSM:' + i] = notUsedTags[i];
-                    }
-                }
-            }
-            else
-            {
-                tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-                // Debug:
-                // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-                // Convert all of the Tags to a string so we can jam it into an attribute
-                var str = JSON.stringify(tags);
-
-                // Shapefiles can't handle fields > 254 chars.
-                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-                // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-                {
-                    // return {attrs:{tag1:str}, tableName: tableName};
-                    attrs = {tag1:str};
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
                 }
                 else
                 {
-                    // Not good. Will fix with the rewrite of the tag splitting code
-                    if (str.length > 1012)
-                    {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
-                        str = str.substring(0,1012);
-                    }
-
-                    // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                    attrs = {tag1:str.substring(0,253),
-                            tag2:str.substring(253,506),
-                            tag3:str.substring(506,759),
-                            tag4:str.substring(759,1012)};
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
                 }
+            }
+
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Debug:
+            // Dump out what attributes we have converted before they get wiped out
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+            // Convert all of the Tags to a string so we can jam it into an attribute
+            var str = JSON.stringify(tags);
+
+            // Shapefiles can't handle fields > 254 chars.
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            {
+                // return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
@@ -2072,7 +2078,6 @@ tds61 = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                //for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
                 var kList = Object.keys(returnData[i]['attrs']).sort()
                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
