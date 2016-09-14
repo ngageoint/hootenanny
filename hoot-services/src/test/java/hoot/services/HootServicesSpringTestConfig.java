@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -15,7 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"hoot.services"})
+@ComponentScan(basePackages = {"hoot.services"},
+        excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
 public class HootServicesSpringTestConfig {
 
     @Bean
@@ -23,9 +25,6 @@ public class HootServicesSpringTestConfig {
         return new ApplicationContextUtils();
     }
 
-    /*
-        TODO: Don't forget to externalize the DB connection properties!!!
-     */
     @Bean(name = "dataSource")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
