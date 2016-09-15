@@ -23,8 +23,8 @@ node app.js &
 PID=$!
 
 # run cucumber tests
-cd $HOOT_HOME
-make ui-test -s
+cd $HOOT_HOME/test-files/ui
+make test -s
 
 # download the cucumber-coverage report
 cd $HOOT_HOME/hoot-ui
