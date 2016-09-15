@@ -13,7 +13,7 @@ Feature: Import Zipped GDB Dataset
         Then I should see element "[id='importDatasetLayerName']" with value "DcGisRoads"
         Then I type "gdb_zip_Cucumber" in input "importDatasetLayerName"
         When I press "big.loud" span with text "Import"
-        Then I wait 30 "seconds" to see "gdb_zip_Cucumber"
+        Then I wait 45 "seconds" to see "gdb_zip_Cucumber"
 
     Scenario: Delete Dataset
         And I click the "gdb_zip_Cucumber" Dataset
