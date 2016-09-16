@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,7 +40,7 @@ class ValueAggregator;
  * Calculates the distance from one set of lines to the other set of lines. There are several
  * options for how to aggregate the distances. See subclasses of ValueAggregator.
  *
- * The distance will be calaculated from target to candidate and candidate to target. The lower
+ * The distance will be calculated from target to candidate and candidate to target. The lower
  * of the two values will be returned.
  *
  * The distances are determined by sampling one of the geometries into points every samples meters

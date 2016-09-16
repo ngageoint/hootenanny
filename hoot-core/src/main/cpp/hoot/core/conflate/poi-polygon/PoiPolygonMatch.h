@@ -54,6 +54,10 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
+    set<ElementId> areaIds);
+
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
     double matchDistance, double reviewDistance, double nameScoreThreshold,
     double typeScoreThreshold);
 
@@ -94,6 +98,15 @@ public:
    */
   static bool isPoi(const Element& e);
 
+  /**
+   * Determines criteria for a feature to be considered an area by
+   * PoiPolygonMatch
+   *
+   * @param element to be evaluated
+   * @return true if the element meets the criteria; false otherwise
+   */
+  static bool isArea(const Element& e);
+
   static void printMatchDistanceInfo();
   static void resetMatchDistanceInfo();
 
@@ -121,6 +134,8 @@ private:
   QString _t1BestKvp;
   QString _t2BestKvp;
 
+  set<ElementId> _areaIds;
+
   static void _printMatchDistanceInfo(const QString matchType,
                                       const QMultiMap<QString, double>& distanceInfo);
 
@@ -128,21 +143,21 @@ private:
                        const ElementId& eid2);
 
   /**
-   * Returns a score from 0 to 1 representing the similarity of the names. A score of -1 means one
-   * or both of the features have no names.
+   * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
+   * means one or both of the features have no names.
    */
-  double _calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  double _getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  double _getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
   /**
-   * Returns true if the tag similarity score is greater than or equal to
-   * poi.polygon.min.tag.score
+   * Returns a score from 0 to 1 representing the similarity of the feature types.
    */
-  bool _calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
+  double _getTypeScore(ConstElementPtr e1, ConstElementPtr e2);
 
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2);
   QStringList _getRelatedTags(const Tags& tags) const;
 
-  bool _calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi);
+  bool _getAddressMatch(ConstElementPtr building, ConstElementPtr poi);
 
   double _getMatchDistanceForType(const QString typeKvp);
   double _getReviewDistanceForType(const QString typeKvp);

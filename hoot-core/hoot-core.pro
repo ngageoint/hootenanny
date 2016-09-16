@@ -528,7 +528,8 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.cpp \
     src/main/cpp/hoot/core/filters/AreaCriterion.cpp \
-    src/main/cpp/hoot/core/filters/WayCriterion.cpp
+    src/main/cpp/hoot/core/filters/WayCriterion.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1062,5 +1063,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h \
     src/main/cpp/hoot/core/filters/AreaCriterion.h \
-    src/main/cpp/hoot/core/filters/WayCriterion.h
+    src/main/cpp/hoot/core/filters/WayCriterion.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h
 

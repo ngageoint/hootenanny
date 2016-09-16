@@ -40,13 +40,19 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
+#include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
+#include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
 
 namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{e54ee15f-b551-5cd6-b907-16b640dc78a8}";
+QString PoiPolygonMatch::_testUuid = "{92607327-734d-5cb4-afb9-65f68361adbf}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -65,6 +71,25 @@ _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
+{
+  _calculateMatch(map, eid1, eid2);
+}
+
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
+                                 shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 set<ElementId> areaIds = set<ElementId>()) :
+Match(threshold),
+_eid1(eid1),
+_eid2(eid2),
+_rf(rf),
+_badGeomCount(0),
+_map(map),
+_matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
+_reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
+_nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
+_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
+_areaIds(areaIds)
 {
   _calculateMatch(map, eid1, eid2);
 }
@@ -104,11 +129,16 @@ bool PoiPolygonMatch::isPoi(const Element& e)
           e.getTags().getNames().size() > 0);
 }
 
+bool PoiPolygonMatch::isArea(const Element& e)
+{
+  return isPoly(e) && !OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType());
+}
+
 void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                       const ElementId& eid2)
 {
-  ConstElementPtr e1 = map->getElement(eid1);
-  ConstElementPtr e2 = map->getElement(eid2);
+  ConstElementPtr e1 = _map->getElement(eid1);
+  ConstElementPtr e2 = _map->getElement(eid2);
 
   ConstElementPtr poi, poly;
   bool e1IsPoi = false;
@@ -135,30 +165,7 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
                                    eid2.toString());
   }
 
-  const bool polyIsABuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsAParkArea = !polyIsABuilding && poly->getTags().get("leisure") == "park";
-  const bool poiIsABuilding = OsmSchema::getInstance().isBuilding(poi);
-  const bool poiIsAParkArea = !poiIsABuilding && poi->getTags().get("leisure") == "park";
-  const bool poiHasType =
-    OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  //If the poi is not a park and being compared to a park polygon, we want to be more restrictive
-  //on type matching, if the poi has a type at all.
-  if (polyIsAParkArea && !poiIsAParkArea && poiHasType)
-  {
-    _c.setMiss();
-    return;
-  }
-
-  /*const QString name = poi->getTags().get("name");
-  if (poiIsAParkArea && polyIsABuilding &&
-      (name.toLower().contains("rec center") || name.toLower().contains("recreation center")))
-  {
-    _c.setMiss();
-    return;
-  }*/
-
-  shared_ptr<Geometry> gpoly = ElementConverter(map).convertToGeometry(poly);
+  shared_ptr<Geometry> gpoly = ElementConverter(_map).convertToGeometry(poly);
   //may need a better way to handle this...(already tried using isValid())
   if (QString::fromStdString(gpoly->toString()).toUpper().contains("EMPTY"))
   {
@@ -169,7 +176,178 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     _c.setMiss();
     return;
   }
-  shared_ptr<Geometry> gpoi = ElementConverter(map).convertToGeometry(poi);
+  shared_ptr<Geometry> gpoi = ElementConverter(_map).convertToGeometry(poi);
+
+  const bool poiHasType =
+    OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  const bool polyHasType =
+    OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+
+  const double typeScore = _getTypeScore(poi, poly);
+  const bool exactTypeMatch = typeScore == 1.0;
+
+  const bool exactNameMatch = _getExactNameScore(poi, poly) == 1.0;
+
+  //park rules
+
+//  const QString poiName = poi->getTags().get("name").toLower();
+//  const QString polyName = poi->getTags().get("name").toLower();
+//  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+//  const bool polyIsParkArea = !polyIsBuilding && poly->getTags().get("leisure") == "park";
+//  const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
+//  const bool poiIsParkArea = !poiIsBuilding && poi->getTags().get("leisure") == "park";
+//  const bool poiIsRecCenter =
+//    poiName.contains("recreation center") || poiName.contains("rec center");
+//  const bool polyIsRecCenter =
+//    polyName.contains("recreation center") || polyName.contains("rec center");
+//  const bool poiIsPlayground = poi->getTags().get("leisure") == "playground";
+//  const bool poiIsClubhouse = poiName.contains("clubhouse");
+//  const bool polyIsClubhouse = polyName.contains("clubhouse");
+//  bool polyVeryCloseToAnotherParkPoly = false;
+//  double parkPolyAngleHistVal = -1.0;
+//  double parkPolyOverlapVal = -1.0;
+//  double distBetweenParkPolys = -1.0;
+//  bool otherParkPolyNameMatch = false;
+//  bool otherParkPolyExactNameMatch = false;
+//  for (set<ElementId>::const_iterator it = _areaIds.begin(); it != _areaIds.end(); ++it)
+//  {
+//    ConstElementPtr area = map->getElement(*it);
+//    const bool areaIsAPark = area->getTags().get("leisure") == "park";
+//    if (areaIsAPark)
+//    {
+//      otherParkPolyNameMatch = _getNameScore(poi, area) >= _nameScoreThreshold;
+//      otherParkPolyExactNameMatch = _getExactNameScore(poi, area) == 1.0;
+//      shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
+//      distBetweenParkPolys = areaGeom->distance(gpoly.get());
+//      //if ((areaGeom->intersects(gpoly.get()) /*|| parkPolyAngleHistVal >= 0.5*/) /*&&
+//          //distBetweenParkPolys <= 25.0*/)
+//      //if (distBetweenParkPolys <= 25.0)
+//      //{
+//        parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
+//        parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
+
+//        if (parkPolyAngleHistVal >= 0.8 && parkPolyOverlapVal >= 0.2)
+//        {
+//          polyVeryCloseToAnotherParkPoly = true;
+
+//          if (Log::getInstance().getLevel() == Log::Debug &&
+//              (poly->getTags().get("uuid") == _testUuid || area->getTags().get("uuid") == _testUuid))
+//          {
+//            LOG_DEBUG("poly examined and found very close to a park: " << poly->toString());
+//            LOG_DEBUG("park it was very close to: " << area->toString());
+//            LOG_VARD(parkPolyAngleHistVal);
+//            LOG_VARD(parkPolyOverlapVal);
+//            //LOG_VARD(parkPolyEdgeDistVal);
+//            //LOG_VARD(parkPolyCompactnessVal);
+//            //LOG_VARD(parkPolySmallerOverlapVal);
+//            //LOG_VARD(parkPolySampledAngleHistVal);
+//            LOG_VARD(distBetweenParkPolys);
+//          }
+//        }
+//      //}
+//    }
+//  }
+
+  /*if (poiIsParkArea && !polyIsParkArea && !polyIsBuilding && polyVeryCloseToAnotherParkPoly)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rules #1...");
+      LOG_VARD(exactNameMatch);
+      LOG_VARD(polyIsBuilding);
+      LOG_VARD(polyIsParkArea);
+      LOG_VARD(poiIsBuilding);
+      LOG_VARD(poiIsParkArea);
+      LOG_VARD(poiHasType);
+      LOG_VARD(polyHasType);
+      LOG_VARD(poiIsRecCenter);
+      LOG_VARD(polyIsRecCenter);
+      LOG_VARD(poiIsPlayground);
+      LOG_VARD(poiIsClubhouse);
+      LOG_VARD(polyIsClubhouse);
+      LOG_VARD(polyVeryCloseToAnotherParkPoly);
+      LOG_VARD(parkPolyAngleHistVal);
+      LOG_VARD(parkPolyOverlapVal);
+      LOG_VARD(distBetweenParkPolys);
+      LOG_VARD(otherParkPolyNameMatch);
+    }
+    _c.setMiss();
+    return;
+  }*/
+  //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
+  //to another park poly (as defined above), we want to be more restrictive on type matching,
+  //but only if the poi has any type at all.  If it has no type, then behave as normal.
+  /*if ((polyIsParkArea || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
+       !poiIsParkArea && poiHasType && !poiIsPlayground && !poiIsRecCenter &&
+       !polyIsRecCenter && !poiIsClubhouse && !polyIsClubhouse)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rules #2...");
+      LOG_VARD(exactNameMatch);
+      LOG_VARD(polyIsABuilding);
+      LOG_VARD(polyIsAParkArea);
+      LOG_VARD(poiIsABuilding);
+      LOG_VARD(poiIsAParkArea);
+      LOG_VARD(poiHasType);
+      LOG_VARD(polyHasType);
+      LOG_VARD(poiIsRecCenter);
+      LOG_VARD(polyIsRecCenter);
+      LOG_VARD(poiIsPlayground);
+      LOG_VARD(poiIsClubhouse);
+      LOG_VARD(polyIsClubhouse);
+      LOG_VARD(polyVeryCloseToAnotherParkPoly);
+      LOG_VARD(parkPolyAngleHistVal);
+      LOG_VARD(parkPolyOverlapVal);
+      //LOG_VARD(parkPolyEdgeDistVal);
+      //LOG_VARD(parkPolyCompactnessVal);
+      //LOG_VARD(parkPolySmallerOverlapVal);
+      //LOG_VARD(parkPolySampledAngleHistVal);
+      LOG_VARD(distBetweenParkPolys);
+      LOG_VARD(otherParkPolyNameMatch);
+    }
+    _c.setMiss();
+    return;
+  }*/
+  /*if (poiIsParkArea && exactTypeMatch && !poiIsPlayground && polyHasType &&
+      !exactNameMatch && !poiIsRecCenter && !polyIsRecCenter && !poiIsClubhouse &&
+      !polyIsClubhouse)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rules #3...");
+      LOG_VARD(exactNameMatch);
+      LOG_VARD(polyIsABuilding);
+      LOG_VARD(polyIsAParkArea);
+      LOG_VARD(poiIsABuilding);
+      LOG_VARD(poiIsAParkArea);
+      LOG_VARD(poiHasType);
+      LOG_VARD(polyHasType);
+      LOG_VARD(poiIsRecCenter);
+      LOG_VARD(polyIsRecCenter);
+      LOG_VARD(poiIsPlayground);
+      LOG_VARD(poiIsClubhouse);
+      LOG_VARD(polyIsClubhouse);
+      LOG_VARD(polyVeryCloseToAnotherParkPoly);
+      LOG_VARD(parkPolyAngleHistVal);
+      LOG_VARD(parkPolyOverlapVal);
+      //LOG_VARD(parkPolyEdgeDistVal);
+      //LOG_VARD(parkPolyCompactnessVal);
+      //LOG_VARD(parkPolySmallerOverlapVal);
+      //LOG_VARD(parkPolySampledAngleHistVal);
+      LOG_VARD(distBetweenParkPolys);
+      LOG_VARD(otherParkPolyNameMatch);
+    }
+    _c.setMiss();
+    return;
+  }*/
+
+  //end park rules
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = e1->getCircularError() / 2.0;
@@ -184,12 +362,12 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
   const double reviewDistancePlusCe = reviewDistance + ce;
   const bool closeMatch = distance <= reviewDistancePlusCe;
 
-  const bool typeMatch = _calculateTypeMatch(poi, poly);
+  const bool typeMatch = typeScore >= _typeScoreThreshold;
 
-  const double nameScore = _calculateNameScore(poi, poly);
+  const double nameScore = _getNameScore(poi, poly);
   const bool nameMatch = nameScore >= _nameScoreThreshold;
 
-  const bool addressMatch = _calculateAddressMatch(poly, poi);
+  const bool addressMatch = _getAddressMatch(poly, poi);
 
   int evidence = 0;
   evidence += typeMatch ? 1 : 0;
@@ -256,29 +434,45 @@ void PoiPolygonMatch::_calculateMatch(const ConstOsmMapPtr& map, const ElementId
     LOG_VARD(_eid2);
     LOG_VARD(e2->getTags().get("uuid"));
     LOG_VARD(e2->getTags());
+    LOG_VARD(typeScore);
     LOG_VARD(typeMatch);
     LOG_VARD(nameMatch);
+    LOG_VARD(exactNameMatch);
     LOG_VARD(nameScore);
     LOG_VARD(addressMatch);
     LOG_VARD(closeMatch);
     LOG_VARD(distance);
     LOG_VARD(_matchDistance);
-    //LOG_VARD(matchDistance);
     LOG_VARD(_reviewDistance);
     LOG_VARD(reviewDistancePlusCe);
     LOG_VARD(ce);
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
-    LOG_VARD(OsmSchema::getInstance().isBuilding(e1));
-    LOG_VARD(OsmSchema::getInstance().isBuilding(e2));
-    //LOG_VARD(polyIsABuilding);
-    //LOG_VARD(polyIsAParkArea);
-    //LOG_VARD(poiIsABuilding);
-    //LOG_VARD(poiIsAParkArea);
     LOG_VARD(evidence);
     LOG_VARD(_c);
     LOG_DEBUG("**************************");
   }
+
+  /*if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
+    LOG_VARD(polyIsBuilding);
+    LOG_VARD(polyIsParkArea);
+    LOG_VARD(poiIsBuilding);
+    LOG_VARD(poiIsParkArea);
+    LOG_VARD(poiHasType);
+    LOG_VARD(polyHasType);
+    LOG_VARD(polyVeryCloseToAnotherParkPoly);
+    LOG_VARD(parkPolyAngleHistVal);
+    LOG_VARD(parkPolyOverlapVal);
+    LOG_VARD(distBetweenParkPolys);
+    LOG_VARD(otherParkPolyNameMatch);
+    LOG_VARD(poiIsRecCenter);
+    LOG_VARD(polyIsRecCenter);
+    LOG_VARD(poiIsPlayground);
+    LOG_VARD(poiIsClubhouse);
+    LOG_VARD(polyIsClubhouse);
+  }*/
 }
 
 void PoiPolygonMatch::printMatchDistanceInfo()
@@ -336,7 +530,7 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
   }
 }
 
-double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
+double PoiPolygonMatch::_getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
   return
     NameExtractor(
@@ -346,7 +540,19 @@ double PoiPolygonMatch::_calculateNameScore(ConstElementPtr e1, ConstElementPtr 
    .extract(e1, e2);
 }
 
-bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
+double PoiPolygonMatch::_getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
+{
+  //TODO: fix
+  /*return
+    NameExtractor(
+      new TranslateStringDistance(
+        new MeanWordSetDistance(
+          new ExactStringDistance())))
+   .extract(e1, e2);*/
+   ExactStringDistance().compare(e1->getTags().get("name"), e2->getTags().get("name"));
+}
+
+double PoiPolygonMatch::_getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
@@ -367,15 +573,15 @@ bool PoiPolygonMatch::_calculateTypeMatch(ConstElementPtr e1, ConstElementPtr e2
     }
   }
 
-  const double tagScore = _getTagScore(e1, e2);
+  const double typeScore = _getTagScore(e1, e2);
 
   if (e1->getTags().get("uuid") == _testUuid ||
       e2->getTags().get("uuid") == _testUuid)
   {
-    LOG_VARD(tagScore);
+    LOG_VARD(typeScore);
   }
 
-  return tagScore >= _typeScoreThreshold;
+  return typeScore;
 }
 
 double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
@@ -479,7 +685,7 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp)
   return _reviewDistance;
 }
 
-bool PoiPolygonMatch::_calculateAddressMatch(ConstElementPtr building, ConstElementPtr poi)
+bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr building, ConstElementPtr poi)
 {
   Tags buildingTags = building->getTags();
   QString buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();

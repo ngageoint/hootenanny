@@ -40,6 +40,7 @@
 #include "PoiPolygonMatch.h"
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h>
 
 // Standard
 #include <fstream>
@@ -105,7 +106,7 @@ public:
         if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
           // score each candidate and push it on the result vector
-          PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf);
+          PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf, _areaIds);
 
           // if we're confident this is a miss
           if (m->getType() == MatchType::Miss)
@@ -125,15 +126,51 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
+  void collectAreaIds(const shared_ptr<const Element>& e)
+  {
+    _areaIds.clear();
+    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    env->expandBy(e->getCircularError() /*+ ConfigOptions().getPoiPolygonMatchReviewDistance()*/);
+
+    // find other nearby candidates
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getAreaIndex(),
+                                                                   _areaIndexToEid,
+                                                                   getMap());
+    ElementId from(e->getElementType(), e->getId());
+
+    //_elementsEvaluated++;
+    //int neighborCount = 0;
+
+    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    {
+      if (from != *it)
+      {
+        const shared_ptr<const Element>& n = _map->getElement(*it);
+
+        if (n->isUnknown() && PoiPolygonMatch::isArea(*n))
+        {
+          _areaIds.insert(*it);
+        }
+      }
+    }
+  }
+
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
     return e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance();
+  }
+
+  Meters getAreaSearchRadius(const shared_ptr<const Element>& e) const
+  {
+    return e->getCircularError() /*+ ConfigOptions().getPoiPolygonMatchReviewDistance()*/;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
     if (isMatchCandidate(e))
     {
+      collectAreaIds(e);
       checkForMatch(e);
     }
   }
@@ -152,12 +189,12 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<PoiPolygonPolyCriterion> polyCrit(new PoiPolygonPolyCriterion());
+      shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
-                             polyCrit,
+                             crit,
                              boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
@@ -167,6 +204,32 @@ public:
     }
 
     return _index;
+  }
+
+  shared_ptr<HilbertRTree>& getAreaIndex()
+  {
+    if (!_areaIndex)
+    {
+      // No tuning was done, I just copied these settings from OsmMapIndex.
+      // 10 children - 368
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _areaIndex.reset(new HilbertRTree(mps, 2));
+
+      shared_ptr<PoiPolygonAreaCriterion> crit(new PoiPolygonAreaCriterion());
+
+      // Instantiate our visitor
+      IndexElementsVisitor v(_areaIndex,
+                             _areaIndexToEid,
+                             crit,
+                             boost::bind(&PoiPolygonMatchVisitor::getAreaSearchRadius, this, _1),
+                             getMap());
+
+      getMap()->visitWaysRo(v);
+      //getMap()->visitRelationsRo(v);
+      v.finalizeIndex();
+    }
+
+    return _areaIndex;
   }
 
   ConstOsmMapPtr getMap() { return _map; }
@@ -185,6 +248,10 @@ private:
   // Used for finding neighbors
   shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
+  // used for finding surrounding areas
+  shared_ptr<HilbertRTree> _areaIndex;
+  deque<ElementId> _areaIndexToEid;
+  set<ElementId> _areaIds;
 
   shared_ptr<PoiPolygonRfClassifier> _rf;
 };
@@ -193,6 +260,8 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
+//TODO: This logic isn't consistent with the logic creating a PoiPolygonMatch in
+//PoiPolygonMatchVisitor::checkForMatch...is that a problem?
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
   ElementId eid2)
 {
