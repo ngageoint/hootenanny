@@ -61,7 +61,7 @@ public:
     double matchDistance, double reviewDistance, double nameScoreThreshold,
     double typeScoreThreshold);
 
-  virtual const MatchClassification& getClassification() const { return _c; }
+  virtual const MatchClassification& getClassification() const { return _class; }
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Poi | MatchMembers::Polygon; }
 
@@ -69,7 +69,7 @@ public:
 
   virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
 
-  virtual double getProbability() const { return _c.getMatchP(); }
+  virtual double getProbability() const { return _class.getMatchP(); }
 
   virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   { return false; }
@@ -117,7 +117,7 @@ private:
   shared_ptr<const PoiPolygonRfClassifier> _rf;
   static QString _matchName;
   ElementId _poiEid, _polyEid;
-  MatchClassification _c;
+  MatchClassification _class;
   int _badGeomCount;
   ConstOsmMapPtr _map;
 
@@ -161,6 +161,7 @@ private:
 
   double _getMatchDistanceForType(const QString typeKvp);
   double _getReviewDistanceForType(const QString typeKvp);
+  double _getMinWayNodeDistance(ConstWayPtr way, shared_ptr<Geometry> poiGeom);
 
 };
 
