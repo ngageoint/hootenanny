@@ -26,11 +26,87 @@
  */
 #include "ZValue.h"
 
+//Std Includes
+#include <math.h>
+
+//Hoot Includes
+#include <hoot/core/util/HootException.h>
+
 namespace hoot
 {
 
-ZValue::ZValue()
+ZValue::ZValue(int dimensions, int depth, vector<double> min, vector<double> max)
 {
+  _depth = depth;
+  _dimensions = dimensions;
+  _min = min;
+  _max = max;
+  _range = (1 << _depth) - 1;
+  _b.reserve(dimensions);
+}
+
+ZValue::~ZValue()
+{
+  _b.clear();
+  _min.clear();
+  _max.clear();
+}
+
+long int ZValue::calculate(vector<double> point)
+{
+  for (int i = 0; i < _dimensions; i++)
+  {
+    _b[i] = calculateComponent(point[i], i);
+  }
+  return calculate(_b);
+}
+
+long int ZValue::calculate(vector<long int> point)
+{
+    long int bitRead = 1 << (_depth - 1);
+    long int result = 0;
+    for (int depth = 0; depth < _depth; depth++)
+    {
+      // reverse the order so it looks like a "z" and makes it consistent
+      // with the Wikipedia definition.
+      for (int i = _dimensions - 1; i >= 0; i--)
+      {
+        long int bit = ((point[i] & bitRead) != 0) ? 1 : 0;
+        result = (result << 1) | bit;
+      }
+      bitRead = bitRead >> 1;
+    }
+    return result;
+}
+
+long int ZValue::calculateComponent(double v, int d)
+{
+  if (d >= (int)_min.size() || d >= (int)_max.size())
+  {
+    throw HootException("Input vector size is greater than min or max size.");
+  }
+  return round(((v - _min[d]) / (_max[d] - _min[d])) * _range);
+}
+
+void ZValue::decompose(long int v, vector<long int>& point)
+{
+  for (uint i = 0; i < point.size(); i++)
+  {
+    point[i] = 0;
+  }
+
+  long bitRead = 1 << ((_depth * _dimensions) - 1);
+  for (int depth = 0; depth < _depth; depth++)
+  {
+    // reverse the order so it looks like a "z" and makes it consistent
+    // with the Wikipedia definition.
+    for (int i = _dimensions - 1; i >= 0; i--)
+    {
+      long bit = ((v & bitRead) != 0) ? 1 : 0;
+      point[i] = (point[i] << 1) | bit;
+      bitRead = bitRead >> 1;
+    }
+  }
 }
 
 }

@@ -28,6 +28,7 @@
 #define ZVALUE_H
 
 #include <string>
+#include <vector>
 
 namespace hoot
 {
@@ -40,8 +41,48 @@ public:
 
   static string className() { return "hoot::ZValue"; }
 
-  ZValue();
+  ZValue() {}
 
+  ZValue(int dimensions, int depth, vector<double> min, vector<double> max);
+
+  ~ZValue();
+
+  long int calculate(vector<double> point);
+
+  /**
+   * Calculates the z value by interleaving values that are already scaled to
+   * the proper space.
+   */
+  long int calculate(vector<long int> point);
+
+  /**
+   * Calculates the non-interleaved component for one dimension.
+   */
+  long int calculateComponent(double v, int d);
+
+  void decompose(long int v, vector<long int>& point);
+
+  int getDepth() { return _depth; }
+
+  int getDimensions() { return _dimensions; }
+
+  double getMax(int d) { return _max[d]; }
+
+  double getMin(int d) { return _min[d]; }
+
+  /**
+    * Returns the maximum value in any one dimension (number of bins in that
+    * direction - 1).
+    */
+  long int getMaxDimensionRange() { return _range; }
+
+private:
+  vector<long int> _b;
+  int _depth;
+  int _dimensions;
+  vector<double> _min;
+  vector<double> _max;
+  long int _range;
 };
 
 }

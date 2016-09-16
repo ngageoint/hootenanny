@@ -42,6 +42,12 @@ LongBox::LongBox(vector<long int> min, vector<long int> max)
   setMax(max);
 }
 
+shared_ptr<LongBox> LongBox::copy()
+{
+  shared_ptr<LongBox> box(new LongBox(getMin(), getMax()));
+  return box;
+}
+
 LongBox::~LongBox()
 {
   _min.clear();
