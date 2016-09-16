@@ -55,8 +55,10 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp 
 
 HEADERS += \
 
@@ -96,7 +98,7 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
