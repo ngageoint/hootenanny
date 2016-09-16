@@ -22,13 +22,6 @@ After do |scenario|
   # The +scenario+ argument is optional, but
   # if you use it, you can inspect status with
   # the #failed?, #passed? and #exception methods.
-
-  if(scenario.failed?)
-    #Do something if scenario fails.
-
-    # Tell Cucumber to quit after this scenario is done - if it failed.
-    Cucumber.wants_to_quit = true if scenario.failed?
-  end
 end
 
 #Tagged hooks

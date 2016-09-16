@@ -1,0 +1,10 @@
+293683	Wādī ar Rudayḩī	Wadi ar Rudayhi	Wadi ar Rudayhi,Wadi el Rideihi,Wādī ar Rudayḩī,wdy ʼ-rdyhy,ודי א-רדיהי	30.12348	34.71745	H	WAD	EG		00				0		454	Africa/Cairo	2013-01-11
+293900	Wādī al Judayrāt	Wadi al Judayrat	Nahal Qadesh Barnea`,Naẖal Qadesh Barnea‘,Wadi al Judayrat,Wadi al Qudayrat,Wadi el Qudeirat,Wādī al Judayrāt,Wādī al Qudayrāt	30.68624	34.40351	H	WAD	EG		27				0		302	Africa/Cairo	2012-01-18
+294386	Wādī Maghārah	Wadi Magharah	Wadi Maghara,Wadi Magharah,Wadi Makra`a,Wadi Maqra`a,Wādī Maghāra,Wādī Maghārah,Wādī Makra‘a,Wādī Maqra‘a,wdy mqrʻh,ודי מקרעה	30.38905	34.52796	H	WAD	EG		00				0		611	Africa/Cairo	2013-01-11
+294428	Naẖal Lavan	Nahal Lavan	Nahal Lavan,Naẖal Lavan,Wadi al Abyad,Wadi el Abiad,Wâdi el Abiad,Wādī al Abyaḑ,nhl lbn,נחל לבן	30.9579	34.36573	H	WAD	EG		01				0		172	Africa/Cairo	2012-02-02
+294618	Wādī al Juraynāt	Wadi al Juraynat	Jureinat,Jureināt,Wadi Gureinat,Wadi al Juraynat,Wadi el Gerainat,Wadi el Gireinat,Wādī al Juraynāt,Wādī el Gireināt	30.03694	34.7175	H	WAD	EG		27				0		495	Africa/Cairo	2012-01-18
+294761	Har H̱izqiyyahu	Har Hizqiyyahu	Har Hizkiyyahu,Har Hizqiyyahu,Har H̱izkiyyahu,Har H̱izqiyyahu,hr hzqyhw,הר חזקיהו	29.64318	34.87893	T	MT	EG		01				0		831	Africa/Cairo	2012-01-18
+294868	Ra’s Kharūf	Ra's Kharuf	Har Harif,Har H̱arif,Jebel Kharuf,Ra's Kharuf,Ras Kharuf,Ra’s Kharūf,Rās Kharūf,rs h'rwp,רס ח’רוף	30.50834	34.52704	T	MT	EG		27				0		881	Africa/Cairo	2012-11-08
+295764	Wādī Abū ‘Urqān	Wadi Abu `Urqan	Abu `Urjan,Abū ‘Urjān,Wadi Abu Urgan,Wadi Abu Urgân,Wadi Abu `Urgan,Wadi Abu `Urjan,Wadi Abu `Urqan,Wādī Abū ‘Urgān,Wādī Abū ‘Urjān,Wādī Abū ‘Urqān,wdy ʼbw ʻrgn,wdy ʼbw ʻrqn,ודי אבו ערגן,ודי אבו ערקן	30.12703	34.70504	H	WAD	EG		01				0		460	Africa/Cairo	2013-01-11
+345949	‘Ayn ash Shifā’	`Ayn ash Shifa'	Ain el Shafa,Tatararat,Tatarat,Tâtarât,`Ain Shafa,`Ain el-Shifa,`Ain esh Shifa,`Ayn ash Shifa',‘Ain esh Shifa,‘Ayn ash Shifā’,‘Aîn Shafa,‘Aîn el-Shifa	29.15636	25.58912	H	SPNG	EG		22				0		-14	Africa/Cairo	2012-01-19
+345950	Jabal Nakhl	Jabal Nakhl	Gebel Nukhl,Gebel Nukhul,Jabal Nakhl	29.04518	33.25652	T	MT	EG		26				0		610	Africa/Cairo	2012-01-19
