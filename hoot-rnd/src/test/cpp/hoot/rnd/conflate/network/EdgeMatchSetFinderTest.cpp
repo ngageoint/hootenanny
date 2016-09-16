@@ -148,7 +148,7 @@ public:
    * +-------+--------+-------+ 4A
    *      +-------+-------+ 4B
    *
-   * Two partials on 4A and no partials on 3B
+   * Two partials on 4A and no partials on 4B
    */
   void partialTest4()
   {

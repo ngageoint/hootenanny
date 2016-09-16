@@ -52,6 +52,7 @@ public:
   QString toString() const;
 
 private:
+
   ConstNetworkEdgePtr _e;
   double _portion;
 
