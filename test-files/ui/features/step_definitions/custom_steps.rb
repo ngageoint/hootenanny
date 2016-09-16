@@ -267,8 +267,12 @@ end
 
 When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
   combobox = page.find('label', :text=> lbl).find(:xpath,"..")
-  combobox.find('.combobox-caret').click
-  page.find('div.combobox').find('a', :text=> opt).click
+  begin
+    page.find('div.combobox').find('a', :text=> opt).click
+  rescue Capybara::ElementNotFound
+    combobox.find('.combobox-caret').click
+    page.find('div.combobox').find('a', :text=> opt).click
+  end
 end
 
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
