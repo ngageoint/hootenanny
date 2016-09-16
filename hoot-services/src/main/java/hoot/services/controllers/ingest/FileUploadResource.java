@@ -169,6 +169,17 @@ public class FileUploadResource extends JobControllerBase {
                     osmCnt += (Integer) zipStat.get("osmcnt");
                     geonamesCnt += (Integer) zipStat.get("geonamescnt");
                 }
+
+                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && geonamesCnt == 1) {
+                    inputFileName = fName + ".geonames";
+                    String directory = HOME_FOLDER + "/upload/" + jobId;
+                    // we need to rename the file for hoot to ingest
+                    new File(directory + File.separator + inputsList.get(0)).renameTo(new File(directory + File.separator + inputFileName));
+                    inputsList.set(0, inputFileName);
+                    reqList = new JSONArray();
+                    buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat);
+                }
+
             }
 
             if (((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt) > 0) && ((osmZipCnt + osmCnt) > 0)) {
@@ -443,7 +454,7 @@ public class FileUploadResource extends JobControllerBase {
             reqList.add(reqType);
             osmCnt++;
         }
-        else if (ext.equalsIgnoreCase("geonames")) {
+        else if (ext.equalsIgnoreCase("geonames") || ext.equalsIgnoreCase("txt")) {
             JSONObject reqType = new JSONObject();
             reqType.put("type", "GEONAMES");
             reqType.put("name", inputFileName);

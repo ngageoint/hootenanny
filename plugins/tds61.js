@@ -1827,7 +1827,7 @@ tds61 = {
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug
-        for (var i in notUsedAttrs) console.log('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+        for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -1836,8 +1836,8 @@ tds61 = {
         if (config.getOgrDebugDumptags() == 'true')
         {
             var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) console.log('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-            console.log('');
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            print('');
         }
 
         return tags;
