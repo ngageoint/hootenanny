@@ -121,6 +121,7 @@ private:
   int _badGeomCount;
   ConstOsmMapPtr _map;
 
+  double _distance;
   double _matchDistance;
   double _reviewDistance;
   double _nameScoreThreshold;
@@ -139,8 +140,7 @@ private:
   static void _printMatchDistanceInfo(const QString matchType,
                                       const QMultiMap<QString, double>& distanceInfo);
 
-  void _calculateMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
-                       const ElementId& eid2);
+  void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
@@ -162,6 +162,9 @@ private:
   double _getMatchDistanceForType(const QString typeKvp);
   double _getReviewDistanceForType(const QString typeKvp);
   double _getMinWayNodeDistance(ConstWayPtr way, shared_ptr<Geometry> poiGeom);
+
+  bool _failsParkRules(ConstElementPtr poi, ConstElementPtr poly, shared_ptr<Geometry> gpoly,
+                       shared_ptr<Geometry> gpoi);
 
 };
 
