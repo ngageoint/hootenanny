@@ -122,6 +122,7 @@ private:
   ConstOsmMapPtr _map;
 
   double _distance;
+  bool _exactNameMatch;
   double _matchDistance;
   double _reviewDistance;
   double _nameScoreThreshold;
@@ -163,8 +164,8 @@ private:
   double _getReviewDistanceForType(const QString typeKvp);
   double _getMinWayNodeDistance(ConstWayPtr way, shared_ptr<Geometry> poiGeom);
 
-  bool _failsParkRules(ConstElementPtr poi, ConstElementPtr poly, shared_ptr<Geometry> gpoly,
-                       shared_ptr<Geometry> gpoi);
+  bool _triggersParkRule(ConstElementPtr poi, ConstElementPtr poly, shared_ptr<Geometry> gpoly,
+                         shared_ptr<Geometry> gpoi);
 
 };
 
