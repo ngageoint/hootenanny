@@ -762,7 +762,6 @@ When(/^I click the review item column in the tag table$/) do
 end
 
 Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
-  el = find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
-  page.find(el).include?(id)
+  el = find('div.layer-data').all('path[class*=" ' + id + '"]')
 end
 
