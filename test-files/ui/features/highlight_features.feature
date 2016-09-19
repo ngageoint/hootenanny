@@ -16,5 +16,5 @@ Feature: Highlight features on click
         Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
 
     Scenario: I click on a feature and see a highlight
-        When I select a node map feature with OSM id "n15_9"
-        Then I should see element "n15_9" with a highlight
+        When I select a node map feature with OSM id "n15_14"
+        Then I should see element "n15_14" with a highlight
