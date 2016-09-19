@@ -762,7 +762,7 @@ When(/^I click the review item column in the tag table$/) do
 end
 
 Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
-  el = find(id)
-  el.should have_css('.selected')
+  el = find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
+  el.have_css('.selected')
 end
 
