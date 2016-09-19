@@ -51,6 +51,8 @@ public:
 
   static string className() { return "hoot::LongBox"; }
 
+  LongBox() {}
+
   LongBox(vector<long int> min, vector<long int> max);
 
   shared_ptr<LongBox> copy();
@@ -69,9 +71,9 @@ public:
 
   int getDimensions() { return getMin().size(); }
 
-  vector<long int> getMax() { return _max; }
+  vector<long int> getMax() const { return _max; }
 
-  vector<long int> getMin() { return _min; }
+  vector<long int> getMin() const { return _min; }
 
   void setMax(vector<long int> max) { _max = max; }
 

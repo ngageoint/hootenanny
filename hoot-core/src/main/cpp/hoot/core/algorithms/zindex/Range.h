@@ -55,7 +55,11 @@ public:
 
   bool hashCode();
 
-  int compareTo(Range r);
+  bool operator>(Range r) { return (_min - r.getMin()) > 0; }
+
+  bool operator<(Range r) { return (_min - r.getMin()) < 0; }
+
+  bool operator=(Range r) { return _min == r.getMin(); }
 
   bool in(long int l);
 

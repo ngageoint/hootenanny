@@ -28,6 +28,7 @@
 
 //Std Includes
 #include <math.h>
+#include <queue>
 
 //Hoot Inlcudes
 #include <hoot/core/util/HootException.h>
@@ -37,11 +38,83 @@
 
 namespace hoot
 {
+class LongBox;
+/**
+* Used when experimenting with various range decomposition approaches.
+*/
+class LongBoxContainer
+{
+public:
 
-struct range_sort {
+  LongBoxContainer() {}
+
+  LongBoxContainer(LongBox box, long int excess)
+  {
+    _box = box;
+    _excess = excess;
+  }
+
+  bool operator=(LongBoxContainer bc) const
+  {
+    if (_excess != bc.getExcess())
+    {
+       return false;
+    }
+    if (_box.getMin().size() != bc.getBox().getMin().size() || _box.getMax().size() != bc.getBox().getMax().size())
+    {
+      return false;
+    }
+    vector<long int> bcMin = bc.getBox().getMin();
+    vector<long int> bcMax = bc.getBox().getMax();
+    for (uint i = 0; i < _box.getMin().size(); i++)
+    {
+      long int value = _box.getMin()[i];
+      if (std::find(bcMin.begin(), bcMin.end(), value) == bcMin.end() )
+      {
+        return false;
+      }
+    }
+    for (uint i = 0; i < _box.getMax().size(); i++)
+    {
+      long int value = _box.getMax()[i];
+      if (std::find(bcMax.begin(), bcMax.end(), value) == bcMax.end() )
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  int hashCode()
+  {
+    return (int) (_excess ^ (_excess >> 32));
+  }
+
+  bool operator<(const LongBoxContainer& o) const
+  {
+    return getExcess() < o.getExcess();
+  }
+
+  LongBox getBox() const { return _box; }
+
+  long int getExcess() const { return _excess; }
+
+  bool isPerfectFit() { return getExcess() == 0; }
+
+  QString toString()
+  {
+    return QString::number(_excess) + _box.toString();
+  }
+
+private:
+  LongBox _box;
+  long int _excess;
+};
+
+struct range_sort
+{
   bool operator() (Range a, Range b) { return (a.getMin() < b.getMin());}
 } range_object;
-
 
 ZCurveRanger::ZCurveRanger(ZValue& zv)
 {
@@ -249,40 +322,51 @@ vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int l
 
 vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
 {
-  /*PriorityQueue<LongBoxContainer> pq = new PriorityQueue<>();
-  pq.add(new LongBoxContainer(box, calculateExcess(box)));
+  priority_queue<LongBoxContainer> pq;
+  pq.push(LongBoxContainer(box, calculateExcess(make_shared<LongBox>(box))));
 
-   List<LongBox> completed = new LinkedList<>();
-   while ((!pq.isEmpty()) && ((pq.size() + completed.size()) < count)) {
-       LongBoxContainer lbc = pq.remove();
+  vector<LongBox> completed;
+  while ((!pq.empty()) && (((int)pq.size() + (int)completed.size()) < count))
+  {
+    LongBoxContainer lbc = pq.top();
+    pq.pop();
 
-       if (lbc.isPerfectFit()) {
-           completed.add(lbc.getBox());
-       }
-       else {
-           List<LongBox> boxes = decomposeBox(lbc.getBox(), 0);
+    if (lbc.isPerfectFit())
+    {
+      completed.push_back(lbc.getBox());
+    }
+    else
+    {
+      vector<shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(lbc.getBox()), 0);
 
-           if (boxes.size() == 1) {
-               completed.add(boxes.get(0));
-           }
-           else if (boxes.size() == 2) {
-               pq.add(new LongBoxContainer(boxes.get(0), calculateExcess(boxes.get(0))));
-               pq.add(new LongBoxContainer(boxes.get(1), calculateExcess(boxes.get(1))));
-           }
-           else {
-               throw new RuntimeException("Invalid boxes.size = " + boxes.size());
-           }
-       }
-   }
+      if (boxes.size() == 1)
+      {
+        completed.push_back(*boxes[0].get());
+      }
+      else if (boxes.size() == 2)
+      {
+        pq.push(LongBoxContainer(*boxes[0].get(), calculateExcess(boxes[0])));
+        pq.push(LongBoxContainer(*boxes[1].get(), calculateExcess(boxes[1])));
+      }
+      else
+      {
+        throw new HootException("Invalid boxes.size = " + boxes.size());
+      }
+    }
+  }
 
-   while (!pq.isEmpty()) {
-       completed.add(pq.remove().getBox());
-   }*/
+  while (!pq.empty())
+  {
+    LongBoxContainer lbc = pq.top();
+    completed.push_back(lbc.getBox());
+  }
 
-   vector<Range> result;
-   /*for (LongBox aCompleted : completed) {
-       result.add(toRange(aCompleted));
-   }*/
+  vector<Range> result;
+  result.reserve(completed.size());
+  for (uint i = 0; i < completed.size(); i++)
+  {
+    result[i] = _toRange(make_shared<LongBox>(completed[i]));
+  }
 
   return _condenseRanges(result);
 }

@@ -56,11 +56,6 @@ bool Range::hashCode()
   return result;
 }
 
-int Range::compareTo(Range r)
-{
-  return _min - r.getMin();
-}
-
 bool Range::in(long int l)
 {
   return (l >= _min) && (l <= _max);
