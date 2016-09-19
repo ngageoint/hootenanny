@@ -608,6 +608,11 @@ Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/)
   el['placeholder'].should eq value
 end
 
+Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
+  el = find(id)
+  el.should have_css('.selected')
+end
+
 Then(/^I choose "([^"]*)" radio button$/) do |text|
   choose(text)
 end
