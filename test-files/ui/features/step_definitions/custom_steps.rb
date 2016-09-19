@@ -763,5 +763,6 @@ end
 
 Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
   el = find('div.layer-data').all('path[class*=" ' + id + '"]')
+  el.include?('.selected')
 end
 
