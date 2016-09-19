@@ -608,11 +608,6 @@ Then(/^I should see element "([^"]*)" with no value and placeholder "([^"]*)"$/)
   el['placeholder'].should eq value
 end
 
-Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
-  el = find(id)
-  el.should have_css('.selected')
-end
-
 Then(/^I choose "([^"]*)" radio button$/) do |text|
   choose(text)
 end
@@ -765,3 +760,9 @@ end
 When(/^I click the review item column in the tag table$/) do
   page.all('td.f1').first.click
 end
+
+Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
+  el = find(id)
+  el.should have_css('.selected')
+end
+

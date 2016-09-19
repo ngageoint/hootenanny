@@ -7,14 +7,14 @@ Feature: Highlight features on click
 
     Scenario: Add Data
         And I press "Add Reference Dataset"
-        And I click the "AllDataTypesACucumber" Dataset
+        And I click the "DcGisRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 30 "seconds" to see "AllDataTypesACucumber"
+        Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
         And I press "Add Secondary Dataset"
-        And I click the "AllDataTypesBCucumber" Dataset
+        And I click the "DcOsmRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 30 "seconds" to see "AllDataTypesBCucumber"
+        Then I wait 30 "seconds" to see "DcOsmRoadsCucumber"
 
     Scenario: I click on a feature and see a highlight
-        When I select a node map feature with OSM id "n15_14"
-        Then I should see element "n15_14" with a highlight
+        When I select a node map feature with OSM id "w250_16"
+        Then I should see element "w250_16" with a highlight
