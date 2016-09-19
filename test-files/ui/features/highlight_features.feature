@@ -16,5 +16,5 @@ Feature: Highlight features on click
         Then I wait 30 "seconds" to see "DcOsmRoadsCucumber"
 
     Scenario: I click on a feature and see a highlight
-        When I select a node map feature with OSM id "w250_16"
+        When I select a way map feature with OSM id "w250_16"
         Then I should see element "w250_16" with a highlight
