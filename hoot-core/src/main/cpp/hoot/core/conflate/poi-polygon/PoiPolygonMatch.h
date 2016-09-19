@@ -122,6 +122,8 @@ private:
   ConstOsmMapPtr _map;
 
   double _distance;
+  double _nameScore;
+  bool _nameMatch;
   bool _exactNameMatch;
   double _matchDistance;
   double _reviewDistance;
