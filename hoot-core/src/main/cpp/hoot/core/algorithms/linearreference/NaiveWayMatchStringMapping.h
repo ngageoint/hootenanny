@@ -44,9 +44,9 @@ public:
 
   virtual WayStringPtr getWayString2() { return _ws2; }
 
-  virtual WayLocation map1To2(WayLocation l1);
+  virtual WayLocation map1To2(WayLocation l1, ElementId preferredEid);
 
-  virtual WayLocation map2To1(WayLocation l2);
+  virtual WayLocation map2To1(WayLocation l2, ElementId preferredEid);
 
   virtual void setWayString1(const WayStringPtr& ws1) { _ws1 = ws1; }
 

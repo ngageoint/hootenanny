@@ -38,7 +38,6 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -256,7 +255,7 @@ public class WfsManager {
         }
         catch (Exception ex) {
             String msg = "Error retrieving WFS services: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return services;

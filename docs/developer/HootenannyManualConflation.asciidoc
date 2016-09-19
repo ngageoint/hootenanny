@@ -1,0 +1,296 @@
+
+== Hootenanny Manual Conflation
+
+To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually conflated by a human.  This
+document describes that process.
+
+To reduce bias two people will independently perform the conflation process. One person will use the NGA provided data as base data for conflation and merge in the OSM data. The other person will use the OSM data as base data and merge in the NGA provided data. When in doubt the conflator (tm) should give a very minor bias to the base data set. This will help reduce the overall bias. This does not mean that you can't modify the base data.
+
+JOSM will be used to conflate the two data sets and the conflation will take place in two passes. The first pass will be without using any additional data source for input (e.g. imagery, lidar or other maps). After the map has been conflated without imagery the second pass may use the same GeoEye provided imagery that Goffeney will be using to aid in conflation. No cheating!
+
+The manual conflation process is interested in the following attributes:
+
+* name, alt_name
+* Network accuracy (one way streets, intersections, tunnels, bridges, etc)
+* Completeness
+* Road types (primary, motorway, residential etc.)
+* lanes
+
+Due to the simplicity of conflating and mechanical nature, we are not interested in:
+
+* license
+* classification
+* GFID 
+* source
+
+=== JOSM
+
+JOSM is the editor we've been using for manual conflation. It can be found here: http://josm.openstreetmap.de/
+
+The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
+
+=== Road Conflation Standards
+
+Road Conflation is the process of taking two input data sets and producing a third output (conflated) data set. This should not be confused with matching.
+
+==== Divided Highways
+
+Wherever possible divided highways should be tagged as two oneway streets rather than a highway with the "divider=yes" tag.
+
+==== Names
+
+When you have multiple different enough names in the two inputs sets the names must be merged. Rather than try and explain this in detail I'll give a few examples. In these example Road 1 is the data set we're biased towards.
+
+*Example 1*
+
+| Road 1 | Road 2 |
+| @highway=primary@ | @highway=secondary@ |
+| @name=Foo Street@ | @name=Foo St@ |
+|  | @alt_name=Bar St@ |
+
+Even though we can say with reasonable confidence that Foo St is equivalent to Foo Street we keep all names. Even if the only difference is in the capitalization. so we'll merge them into the following:
+
+| @highway=primary@ |
+| @name=Foo Street@ |
+| @alt_name=Bar St;Foo St@ |
+
+*Example 2*
+
+| Road 1 | Road 2 |
+| @highway=primary@ | @highway=tertiary@ |
+| @name=Foo Street@ | @name=Foo Ln@ |
+
+In this case we have two conflicting names so we'll keep the base name and turn the other name into an @alt_name@:
+
+| @highway=secondary@ |
+| @name=Foo Street@ |
+| @alt_name=Foo Ln@ |
+
+*NOTE:* Previously we would merge Foo St and Foo Street. Some of the early (circa 2012) data sets may show this old style merging.
+
+==== Tips & Tricks
+
+Some of the input files attached to ticket include a "tiger:reviewed=no" tag. This tag makes the features glow yellow in JOSM and is there solely as an aid in conflating. When you have the feature looking exactly the way to want it, delete the tag. That will make the yellow glow disappear and you can move on.
+
+=== POI Matching Standards
+
+POI matching is the process of tagging nodes with information that explicitly states the matching relationship between POIs. What is a POI? This definition gets nasty and rather than play semantics police we call all point data representing semi-permanent locations a POI. Or in other words, anything OSM tags as a node. (E.g. stop signs, bridges, restaurants, cities, etc.)
+
+The possible relationships between two POIs are below. A pair of POIs should only have the most specific relationship (e.g. it should _never_ be conflict _and_ miss).
+
+* Match - The user is confident that the two POIs represent the same entity.
+* Miss - The user is confident that the two POIs do not represent the same entity.
+* Conflict - The user is confident that the POIs conflict. E.g. They can't both exist in the same data set. I don't have a good example for this, but it may come up. 
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+==== Creating POI REF data
+
+Hootenanny contains some simple tools to help in the generation of REF tags. The steps are as follows:
+
+* Translate only the POI data into @.osm+@. See @--ogr2osm@ for details. If you have raw OSM data as input you can likely use JOSM to strip out the non-POIs.
+* Add REF1 _or_ REF2 tags. Typically you want to put REF1 tags on the larger data set. REF tags used to be UUIDs, but those were a bit unwieldy and we didn't need the precision. They're now six digit hex values that are unique to a single file.
+** @hoot --convert -D convert.ops=hoot::AddRef1Visitor Poi1.osm Ref1.osm@
+** @hoot --convert -D convert.ops=hoot::AddRef2Visitor Poi2.osm Ref2.osm@
+
+h3. Manually Matching the Data
+
+This process is very similar to the road process. See the sections below for details.
+
+=== Road Matching Standards
+
+Road matching is the process of tagging roads with information that explicitly states the matching relationship between roads. The possible relationships between two road segments are below. A pair of road segments should only have the most specific relationship (e.g. it should _never_ be divided _and_ match).
+
+* Divided - The user is confident that this road segment is part of a mismatched divided highway. This frequently happens when one data set maps divided highways as two one-way features and the other maps them as a single two-way feature.
+* Match - The user is confident that the two road segments _partially or_ fully match.
+* Miss - The user is confident that the two road segments do not match.
+* Conflict - The user is confident that the two roads conflict. E.g. They can't both exist in the same data set.
+* Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
+
+The following sections describe how to tag the data to represent these five states.
+
+==== Creating Road REF data
+
+Hootenanny contains some simple tools to help in the generation of REF tags. The steps are as follows:
+
+* Translate into @.osm+@. See @--ogr2osm@ for details.
+* Reduce the data set down to only roads:
+** @hoot --convert -D "convert.ops=hoot::KeepHighwaysVisitor;hoot::KeepHighwaysVisitor" Input.osm JustHighways.osm@
+* Cleanup the data
+** @hoot --cleanup JustHighways.osm Cleaned.osm@
+* Add REF1 _or_ REF2 tags. Typically you want to put REF1 tags on the larger data set. REF tags used to be UUIDs, but those were a bit unwieldy and we didn't need the precision. They're now six digit hex values that are unique to a single file.
+** @hoot --convert -D convert.ops=hoot::AddRef1Visitor Cleaned.osm Ref1.osm@
+** @hoot --convert -D convert.ops=hoot::AddRef2Visitor Cleaned.osm Ref2.osm@
+
+==== Manually Matching the Data
+
+===== Prerequisites
+
+* Download and install JOSM
+* Create a new "JOSM Paint style":http://josm.openstreetmap.de/wiki/Help/Dialog/MapPaint modeled off of the JOSM Internal Style with the following additional rules. You'll need to modify the rules to include your own @sad.png@ icon. Any icon will do, but an exmple @sad.png@ and highlight XML file (RefTodoHighlight.xml) are available in $HOOT_HOME/docs/styles.
+------
+    <rule>
+        <condition k="REF2" v="todo"/>
+        <icon annotate="true" src="/home/jason.surratt/local/etc/sad.png" priority="10000"/>
+    </rule>
+
+    <rule>
+        <condition k="highway"/>
+        <condition k="REF2" v="todo"/>
+        <line colour="building#2222DD" priority="10000"/>
+    </rule>
+
+    <rule>
+        <condition k="building"/>
+        <condition k="REF2" v="todo"/>
+        <area colour="building#2222DD" priority="10000"/>
+        <line colour="building#2222DD" priority="10000"/>
+    </rule>
+
+    <rule>
+        <condition k="hoot:mismatch" v="true"/>
+        <area colour="building#22FF22" priority="10000"/>
+    </rule>
+------
+* (optional) Install Hoot.
+
+===== Match Tagging
+
+There are two files used as input:
+
+* REF1 - This is the file with a REF1 tag on all roads. Do not modify this file in any way.
+* REF2 - This is the file with a REF2 tag on all roads. Only modify the tags in this file. Do not modify the geometries, remove elements, add elements, etc.
+
+The following paragraphs refer to how to modify the tags associated with REF2.
+
+*Todo*
+
+By default all roads are marked with @REF2=todo@. This highlights the roads in blue in JOSM and tells Hootenanny that a human has not reviewed the record and it will be omitted from training and testing.
+
+*Miss*
+
+If you are confident that a road segment matches no other roads then set @REF2=none@.
+
+*Divided*
+
+There are two ways that a road segment can match because of a difference in divided road standards. It can either be two one-way roads in REF2 that match a single two-way road in REF1, or one two-way road in REF2 that matches two one-way roads in REF1. If you are tagging a match as divided then don't include that particular UUID in any other tag. In other words, if you mark it as divided then don't mark it as a match.
+
+If there are two one-way roads in REF2 (the layer you're editing) then tag the match with @DIVIDED2@.
+
+* First one-way: @DIVIDED2=007be5@
+* Second one-way: @DIVIDED2=007be5@
+
+If there is one road in REF2 (the layer you're editing) then tag the match with @DIVIDED1@. In this case it should contain at least two UUIDs.
+
+* @DIVIDED1=007be5;007be6@
+
+*Match*
+
+If you are confident that a road segment matches one or more other roads segments then set those semi-colon delimited values in the REF2 tag. If it is a partial match, then the beginning and end of the partial match can be clearly discerned. For example:
+
+* Single match: @REF2=007be5@
+* Two matches: @REF2=007be5;007be6@
+
+*Conflict*
+
+If a road segment conflicts with another road segement (e.g. one is a roundabout and the other is a four-way intersection) then populate the @CONFLICT@ tag with the road segments that conflict.
+
+* Single conflict: @CONFLICT=007be5@
+* Multiple conflicts: @CONFLICT=007be5;007be6@
+
+It is possible that a road segment matches some other road segments and conflicts with others. In this case the tags may be:
+
+------
+REF1=007be5
+CONFLICT=007be6
+------
+
+If part of the road conflicts and part of it matches, then the mark the whole section as conflicting. In other words a single UUID should never be in both the REF1 and CONFLICT tag.
+
+*Review*
+
+This is the catch all. If you aren't confident of any of the other categories. Maybe it matches, maybe it doesn't, then mark the road segment as review.
+
+* Single review: @REVIEW=007be5@
+
+=== Building Matching Standards
+
+Unlike roads buildings/POIs are simply being matched and not merged. In time it may make sense to merge buildings/POIs too, but for now we are simply keeping one feature or the other.
+
+To match buildings two files will be provided. One file will have all the features tagged with a @REF1@ key and the other will have a @REF2@ key. The @REF1@ data set is the reference data set. The @REF2@ data set is the set being matched. The @REF1@ data set should not be changed at all. The @REF2@ data set will be modified to match all relevant @REF2@ features.
+
+Attached is a custom rendering rule set for JOSM. This XML file makes all the @REF2@ buildings that have not been matched show up as blue and all unmatched POIs show up as sad faces. By default @REF2@ is set to @todo@ which causes the appropriate @todo@ rendering. During matching you identify all the associated features in the @REF1@ data set that match and copy their @REF1@ unique IDs into the @REF1@ field. If there are no confident matches then the @REF2@ field should be set to @none@.
+
+For example:
+
+You have two McDonalds mapped as nodes with the following key value pairs (KVP).
+
+@REF1@ node:
+------
+name=McDonalds
+amenity=restaurant
+REF1={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}
+------
+
+@REF2@ node:
+------
+name=McDonalds
+amenity=restaurant
+cuisine=burger
+REF2=todo
+------
+
+As stated above, we do not change the @REF1@ layer at all. But since we're confident of a match due to the name and closeness of the two nodes we will assign a match. In this case we'll set @REF2={e3eed6ac-2937-4e7b-ad6a-233a3d35a7da}@.
+
+In some cases both a building will be mapped and a restaurant. For instance:
+
+@REF1@ way:
+------
+building=yes
+amenity=restaurant
+REF1={ad10206a-a3e5-4575-9356-c32c2a04ce05}
+------
+
+@REF2@ node:
+------
+name=McDonalds
+amenity=restaurant
+cuisine=burger
+REF2=todo
+------
+
+@REF2@ way:
+------
+building=yes
+REF2=todo
+------
+
+Due to the location of the points and buildings we're confident that all three records represent the same entity. To match this we simply set @REF2={ad10206a-a3e5-4575-9356-c32c2a04ce05}@ for both the node and the way.
+
+In some instances the @REF2@ data set may use one large way to represent a group of buildings in @REF1@. In this case you may have the following:
+
+@REF1@ way:
+------
+name=ST JOES
+building=yes
+REF1={116765b9-be01-44e8-8d85-c3e1b4184b2c}
+------
+
+@REF1@ way:
+------
+name=ST JOES
+building=yes
+REF1={fb02c530-3a4c-4735-b506-40c4dcb3f97b}
+------
+
+@REF2@ way:
+------
+name=Saint Joe's
+building=yes
+amenity=hospital
+REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}
+------
+
+In this case we're confident due to geometry and names that the @REF2@ building matches both of the @REF1@ buildings so we set the @REF2={116765b9-be01-44e8-8d85-c3e1b4184b2c};{fb02c530-3a4c-4735-b506-40c4dcb3f97b}@. Notice the semi-colon deliminating the two unique IDs. There is no artificial limit to the number of unique IDs that may be in a @REF@ tag.
+
+
+

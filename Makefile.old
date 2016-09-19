@@ -126,13 +126,16 @@ endif
 
 pp-test:
 ifneq ($(HADOOP_HOME),)
+	echo "Running pp tests..."
 	cd pretty-pipes/pp-lib/ ; $(MAKE) -f Makefile.mvn test
 endif
 
 plugins-test:
-	echo Running plugins tests...
-	# Only run the plugins tests if mocha is installed.
-	cd plugins; (command -v mocha &> /dev/null) && mocha --reporter dot || echo Skipping mocha tests
+ifneq ($(shell which mocha),)
+	cd plugins; mocha --reporter dot --timeout 30000
+else
+	@echo Skipping mocha tests
+endif
 
 pp-test-all:
 ifneq ($(HADOOP_HOME),)
@@ -285,6 +288,7 @@ endif
 
 services-test: services-build
 ifeq ($(BUILD_SERVICES),services)
+	echo "Running services tests..."
 	cd hoot-services && $(MAKE) -f Makefile test
 endif
 
@@ -429,6 +433,8 @@ coverage/core/tbs/index.html:
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+
+core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 
 coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html
 

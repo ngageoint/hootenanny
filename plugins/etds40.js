@@ -60,15 +60,30 @@ etds40 = {
             {
                 var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
 
-                // Go through the list of possible attributes and add the missing ones
-                var tmpList = etds40.rules.fcodeLookup[tFCODE]['enum'];
-
-                for (var i=0, elen = tmpList.length; i < elen; i++)
+                if (tFCODE == 'Partial')
                 {
-                    // If we don't find one, add it with it's default value
-                    if (!(tdsData[fNum]['attrs'][tmpList[i]]))
+                    // Go looking for "OSM:XXX" values and copy them to the output
+                    for (var i in tdsData[fNum]['attrs'])
                     {
-                        tdsData[fNum]['attrs'][tmpList[i]] = etds40.rules.engDefault[tmpList[i]];
+                        if (i.indexOf('OSM:') > -1)
+                        {
+                            eAttrs[i] = tdsData[fNum]['attrs'][i];
+                            delete tdsData[fNum]['attrs'][i]
+                        }
+                    }
+                }
+                else
+                {
+                    // Go through the list of possible attributes and add the missing ones
+                    var tmpList = etds40.rules.fcodeLookup[tFCODE]['enum'];
+
+                    for (var i=0, elen = tmpList.length; i < elen; i++)
+                    {
+                        // If we don't find one, add it with it's default value
+                        if (!(tdsData[fNum]['attrs'][tmpList[i]]))
+                        {
+                            tdsData[fNum]['attrs'][tmpList[i]] = etds40.rules.engDefault[tmpList[i]];
+                        }
                     }
                 }
 
@@ -112,6 +127,7 @@ etds40 = {
         else
         {
             // If we can't find an FCODE, just return the tags.
+            // We _probably_ won't get here but just in case.....
 
             // Add "OSM:" to each of the tags
             for (var i in tags)

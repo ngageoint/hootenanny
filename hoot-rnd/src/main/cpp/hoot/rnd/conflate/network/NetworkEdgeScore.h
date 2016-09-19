@@ -44,7 +44,7 @@ public:
 
   ConstEdgeMatchPtr getEdgeMatch() const { return _em; }
 
-  double getScore() const { return _score12 * _score21; }
+  double getScore() const { return sqrt(_score12 * _score21); }
 
   double getScore12() const { return _score12; }
 
@@ -68,6 +68,9 @@ private:
 };
 
 typedef shared_ptr<NetworkEdgeScore> NetworkEdgeScorePtr;
+
+// not implemented
+bool operator<(NetworkEdgeScorePtr, NetworkEdgeScorePtr);
 
 }
 

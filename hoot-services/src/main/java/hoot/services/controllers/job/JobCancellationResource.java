@@ -35,7 +35,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -65,7 +64,7 @@ public class JobCancellationResource extends JobControllerBase {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response process(String args) {
         String jobId = UUID.randomUUID().toString();
 
@@ -95,16 +94,18 @@ public class JobCancellationResource extends JobControllerBase {
             jobArgs.add(jobCancellationCommand);
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
-
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error process data clean request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject res = new JSONObject();
         res.put("jobid", jobId);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(res.toJSONString()).build();
     }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySnapMergeManipulation.h"
 
@@ -38,6 +38,7 @@
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
 namespace hoot
@@ -122,9 +123,9 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   // remove the old way that was split and snapped
   if (w1 != splits1[mns1Index])
   {
-    result->removeWay(w1);
+    RemoveWayOp::removeWay(result, w1->getId());
   }
-  result->removeWay(w2);
+  RemoveWayOp::removeWay(result, w2->getId());
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
   {

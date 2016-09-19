@@ -29,13 +29,12 @@ package hoot.services.controllers.osm;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,9 +72,8 @@ public class UserDetailsResource {
      * //TODO: update to get actual logged in user once security is implemented
      */
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_XML)
-    public Response getDetails() throws ParserConfigurationException, SQLException {
+    public Response getDetails() {
         logger.debug("Retrieving logged in user details...");
 
         // For now, we're just grabbing the first user in the db, since we don't
@@ -86,6 +84,10 @@ public class UserDetailsResource {
 
         try (Connection conn = DbUtils.createConnection()) {
             userId = DbUtils.getTestUserId(conn);
+        }
+        catch (SQLException e) {
+            String msg = "Error getting OSM user info: " + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return (new UserResource()).get(String.valueOf(userId));

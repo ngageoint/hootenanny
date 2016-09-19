@@ -43,7 +43,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -79,19 +78,23 @@ public class ReportsResource {
     @Path("/get")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getReport(@QueryParam("id") String id, @QueryParam("reportname") String name) {
-        File out;
+        File report;
+
         try {
-            out = getReportFile(id);
+            report = getReportFile(id);
         }
-        catch (Exception ex) {
-            String message = "Error exporting report file: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error returning report with id = " + id + ", reportname = "  + name;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        ResponseBuilder rBuild = Response.ok(out, "application/pdf");
-        rBuild.header("Content-Disposition", "attachment; filename=" + name);
+        ResponseBuilder responseBuilder = Response.ok(report, "application/pdf");
+        responseBuilder.header("Content-Disposition", "attachment; filename=" + name);
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 
     /**
@@ -103,19 +106,22 @@ public class ReportsResource {
      */
     @GET
     @Path("/list")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getReport() {
-        JSONArray reps;
+        JSONArray reports;
 
         try {
-            reps = getReportsList();
+            reports = getReportsList();
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            String message = "Error getting reports list: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String message = "Error getting reports list!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
-        return Response.ok(reps.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(reports.toJSONString()).build();
     }
 
     /**
@@ -129,33 +135,36 @@ public class ReportsResource {
      */
     @GET
     @Path("/delete")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response delReport(@QueryParam("id") String id) {
-        JSONObject resp = new JSONObject();
         boolean isDeleted;
 
         try {
             isDeleted = deleteReport(id);
         }
-        catch (Exception ex) {
-            String message = "Error exporting report file: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error deleting report file with id = " + id;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        resp.put("id", id);
-        resp.put("deleted", String.valueOf(isDeleted));
+        JSONObject entity = new JSONObject();
+        entity.put("id", id);
+        entity.put("deleted", String.valueOf(isDeleted));
 
-        return Response.ok(resp.toString(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     // Gets the meta data of the report
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject res = new JSONObject();
 
-        String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
         File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
 
         if (metaFolder != null) {
+            String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
             File file = new File(metaDataPath);
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");

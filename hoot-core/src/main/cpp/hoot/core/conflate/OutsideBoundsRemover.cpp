@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OutsideBoundsRemover.h"
@@ -33,6 +33,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 
 namespace hoot
 {
@@ -66,7 +67,7 @@ void OutsideBoundsRemover::removeWays()
       // if the way envelope doesn't intersect the given envelope.
       if (_envelope.intersects(e) == false)
       {
-        _inputMap->removeWay(w);
+        RemoveWayOp::removeWay(_inputMap, w->getId());
       }
     }
     else
@@ -74,7 +75,7 @@ void OutsideBoundsRemover::removeWays()
       // if the way envelope intersects the given envelope.
       if (_envelope.intersects(e) == true)
       {
-        _inputMap->removeWay(w);
+        RemoveWayOp::removeWay(_inputMap, w->getId());
       }
     }
   }

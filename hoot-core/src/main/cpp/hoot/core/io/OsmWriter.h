@@ -103,10 +103,12 @@ public:
   QString removeInvalidCharacters(const QString& s);
 
 protected:
+  bool _formatXml;
   bool _includeIds;
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  QString _osmSchema;
   QString _timestamp;
   int _precision;
   auto_ptr<QIODevice> _fp;

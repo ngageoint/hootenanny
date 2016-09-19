@@ -7,11 +7,11 @@ Feature: Resolve all reviews feature
     And I press "Add Reference Dataset"
     And I click the "DcGisRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 30 "seconds" to see "DcGisRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
     And I press "Add Secondary Dataset"
     And I click the "DcTigerRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 30 "seconds" to see "DcTigerRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcTigerRoadsCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
@@ -35,11 +35,11 @@ Feature: Resolve all reviews feature
 
   Scenario: I can conflate with another dataset
     Then I click on "input.fill-dark[type='submit']"
-    Then I wait 30 "seconds" to see "Add Secondary Dataset"
+    Then I wait 30 seconds
     And I press "Add Secondary Dataset"
     And I click the "DcOsmRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 30 "seconds" to see "DcOsmRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"

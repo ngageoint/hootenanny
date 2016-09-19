@@ -26,8 +26,10 @@
  */
 package hoot.services.controllers.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -38,50 +40,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.PostgresUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
@@ -90,14 +92,19 @@ import hoot.services.utils.XmlUtils;
 public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceUploadModifyTest.class);
 
-    private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
+    private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
     public ChangesetResourceUploadModifyTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     @Test
@@ -117,12 +124,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             // Now, update some of the elements and their tags.
             BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
             Document responseData = null;
+
             try {
-                responseData = resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                         .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                        .post(Document.class,
+                        .request(MediaType.TEXT_XML)
+                        .post(Entity.entity(
                             "<osmChange version=\"0.3\" generator=\"iD\">" +
                                 "<create/>" +
                                 "<modify>" +
@@ -155,11 +162,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                                     "</relation>" +
                                     "</modify>" +
                                     "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                            "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response:" + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -223,15 +229,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentNodesTbl)
-                        .map(currentNodesTbl.id, currentNodesTbl);
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -245,7 +253,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(2, tags.size());
                 Assert.assertEquals("val 1b", tags.get("key 1b"));
@@ -262,23 +270,23 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3b", tags.get("key 3b"));
 
                 nodeRecord = nodes.get(nodeIdsArr[2]);
                 Assert.assertTrue((nodeRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
 
                 nodeRecord = nodes.get(nodeIdsArr[3]);
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3", tags.get("key 3"));
 
                 nodeRecord = nodes.get(nodeIdsArr[4]);
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 4", tags.get("key 4"));
@@ -288,8 +296,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(3, ways.size());
 
@@ -299,11 +308,14 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(wayRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
+
                 List<CurrentWayNodes> wayNodes =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentWayNodesTbl)
                                 .from(currentWayNodesTbl)
                                 .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                                .orderBy(currentWayNodesTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
                 CurrentWayNodes wayNode = wayNodes.get(0);
@@ -315,7 +327,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 // verify the previously existing tags
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 2", tags.get("key 2"));
@@ -327,11 +339,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                                .from(currentWayNodesTbl)
-                                .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc())
-                                .list(currentWayNodesTbl);
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -348,7 +361,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 // verify the way with no tags
                 Assert.assertTrue((wayRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
 
                 // verify the created ways
                 wayRecord = ways.get(wayIdsArr[2]);
@@ -359,11 +372,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -380,7 +394,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
 
                 // verify the created tags
-                tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
 
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
@@ -391,9 +405,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl)
-                        .map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 CurrentRelations relationRecord = relations.get(relationIdsArr[0]);
                 Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
@@ -402,10 +417,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> members =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(3, members.size());
 
@@ -435,7 +453,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
                 // removed tag
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
 
                 relationRecord = relations.get(relationIdsArr[1]);
 
@@ -446,9 +464,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -468,7 +489,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(2), member.getSequenceId());
                 Assert.assertEquals(nodeIdsArr[4], member.getMemberId());
 
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
 
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(2, tags.size());
@@ -483,11 +504,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -499,7 +521,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
                 Assert.assertEquals(wayIdsArr[1], member.getMemberId());
 
-                tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
 
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
@@ -513,11 +535,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -529,7 +552,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
             }
             catch (Exception e) {
                 Assert.fail("Error checking relations: " + e.getMessage());
@@ -575,28 +598,25 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             // OsmTestUtils.createAfterModifiedTestChangesetBounds();
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "</way>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create/>" +
+                            "<modify>" +
+                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "</way>" +
+                            "</modify>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -617,14 +637,15 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(3, ways.size());
 
@@ -636,10 +657,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentWayNodesTbl).where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(4, wayNodes.size());
 
@@ -693,7 +716,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateNodeIds() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -706,36 +729,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to create two nodes with the same ID. A failure should occur and
         // no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
-                                        originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                       "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                                       "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                    "</node>" +
-                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
-                                        "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                       "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                                    "</node>" +
-                                "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_XML)
+            .post(Entity.entity(
+                "<osmChange version=\"0.3\" generator=\"iD\">" +
+                    "<create/>" +
+                    "<modify>" +
+                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
+                            originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                           "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                           "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                        "</node>" +
+                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
+                            "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                           "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                        "</node>" +
+                    "</modify>" +
+                    "<delete if-unused=\"true\"/>" +
+                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Duplicate OSM element ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -744,7 +762,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetSpecifiedInUrl() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -755,36 +773,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Upload a changeset where the changeset specified in the URL doesn't
         // exist. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + (changesetId + 1) + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                         "<osmChange version=\"0.3\" generator=\"iD\">" +
-                             "<modify>" +
-                                 "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() +
-                                       "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                     "<tag k=\"name 1\" v=\"val 1\"/>" +
-                                     "<tag k=\"name 2\" v=\"val 2\"/>" +
-                                 "</node>" +
-                                 "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMinLon() +
-                                       "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                     "<tag k=\"name 1\" v=\"val 1\"/>" +
-                                 "</node>" +
-                                 "</modify>" +
-                             "<create/>" +
-                             "<delete if-unused=\"true\"/>" +
-                         "</osmChange>");
+            target("api/0.6/changeset/" + (changesetId + 1) + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                     "<osmChange version=\"0.3\" generator=\"iD\">" +
+                         "<modify>" +
+                             "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() +
+                                   "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                 "<tag k=\"name 1\" v=\"val 1\"/>" +
+                                 "<tag k=\"name 2\" v=\"val 2\"/>" +
+                             "</node>" +
+                             "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMinLon() +
+                                   "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                 "<tag k=\"name 1\" v=\"val 1\"/>" +
+                             "</node>" +
+                             "</modify>" +
+                         "<create/>" +
+                         "<delete if-unused=\"true\"/>" +
+                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("Changeset to be updated does not exist"));
-
+            Assert.assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
-
             throw e;
         }
         catch (Exception e) {
@@ -793,7 +806,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyEmptyNodeCoords() throws Exception {
         // Try to update a changeset with nodes that have empty coordinate
@@ -802,7 +815,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         uploadModifyNodeCoords("", "");
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyNodeCoordsOutOfBounds() throws Exception {
         // Try to update a changeset with nodes that have out of world bounds
@@ -822,36 +835,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Now update the changeset via the service where one of the nodes has a
         // empty coords. A ailure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
-                                   "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                            "</node>" +
-                            "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + lon + "\" " + "lat=\"" + lat +
-                                   "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                            "</node>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " +
+                               "lat=\"" + originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                            "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                            "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                        "</node>" +
+                        "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + lon + "\" " + "lat=\"" + lat +
+                               "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                            "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                        "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error uploading changeset with ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error uploading changeset with ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -880,45 +888,42 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                 "<create/>" +
-                                 "<modify>" +
-                                     "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\"" +
-                                           updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                     "</node>" +
-                                     "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
-                                           updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                     "</node>" +
-                                     "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                         "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                         "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                     "</way>" +
-                                     "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                         "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                         "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                     "</way>" +
-                                     "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                         "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                         "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                         "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                                     "</relation>" +
-                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\">" +
-                                        "</member>" + "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
-                                     "</relation>" +
-                                 "</modify>" +
-                                 "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                             "<create/>" +
+                             "<modify>" +
+                                 "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\"" +
+                                       updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                 "</node>" +
+                                 "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                                       updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                 "</node>" +
+                                 "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                     "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                     "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                 "</way>" +
+                                 "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                     "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                     "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                 "</way>" +
+                                 "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                     "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                     "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                     "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                 "</relation>" +
+                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\">" +
+                                    "</member>" + "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                 "</relation>" +
+                             "</modify>" +
+                             "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -983,13 +988,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
-
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentNodesTbl)
-                        .map(currentNodesTbl.id, currentNodesTbl);
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -1004,7 +1007,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
                 Assert.assertTrue((nodeRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
 
                 nodeRecord = nodes.get(nodeIdsArr[1]);
                 Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
@@ -1018,7 +1021,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
                 Assert.assertTrue((nodeRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
 
                 nodeRecord = nodes.get(nodeIdsArr[2]);
                 Assert.assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
@@ -1032,16 +1035,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
                 Assert.assertTrue((nodeRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
 
                 nodeRecord = nodes.get(nodeIdsArr[3]);
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3", tags.get("key 3"));
 
                 nodeRecord = nodes.get(nodeIdsArr[4]);
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 4", tags.get("key 4"));
@@ -1051,8 +1054,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+
                 Assert.assertEquals(3, ways.size());
 
                 CurrentWays wayRecord = ways.get(wayIdsArr[0]);
@@ -1063,9 +1068,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentWayNodesTbl).where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
-                        .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1081,7 +1089,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 Assert.assertTrue((wayRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
 
                 wayRecord = ways.get(wayIdsArr[1]);
 
@@ -1091,11 +1099,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1109,7 +1118,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 Assert.assertTrue((wayRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
 
                 wayRecord = ways.get(wayIdsArr[2]);
 
@@ -1119,11 +1128,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1139,7 +1149,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
 
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
 
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
@@ -1150,8 +1160,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl).map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 Assert.assertEquals(4, relations.size());
 
@@ -1162,10 +1174,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> members =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(3, members.size());
 
@@ -1194,7 +1209,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
 
                 relationRecord = relations.get(relationIdsArr[1]);
 
@@ -1205,11 +1220,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1229,7 +1245,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(2), member.getSequenceId());
                 Assert.assertEquals(nodeIdsArr[4], member.getMemberId());
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
 
                 relationRecord = relations.get(relationIdsArr[2]);
                 Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
@@ -1238,9 +1254,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(relationRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertEquals(true, relationRecord.getVisible());
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -1252,7 +1272,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
                 Assert.assertEquals(wayIdsArr[1], member.getMemberId());
 
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
 
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
@@ -1266,11 +1286,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
 
@@ -1282,15 +1303,18 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
             }
             catch (Exception e) {
                 Assert.fail("Error checking relations: " + e.getMessage());
             }
 
             try {
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId)).singleResult(changesets);
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -1315,7 +1339,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInNode() throws Exception {
         BoundingBox changeset1Bounds = OsmTestUtils.createStartingTestBounds();
@@ -1334,51 +1358,56 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // occur and no data in the system should be modified.
         BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId1 + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<node id=\"" + nodeIds1Arr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
-                                      "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId1 + "\">" +
-                                    "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                                    "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                "</node>" +
-                                "<node id=\"" + nodeIds2Arr[2] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
-                                    "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId2 + "\">" +
-                                    "<tag k=\"key 3b\" v=\"val 3b\"></tag>" +
-                                "</node>" +
-                            "</modify>" +
-                        "<delete if-unused=\"true\"/>" + "</osmChange>");
+            target("api/0.6/changeset/" + changesetId1 + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIds1Arr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                  "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId1 + "\">" +
+                                "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                            "</node>" +
+                            "<node id=\"" + nodeIds2Arr[2] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId2 + "\">" +
+                                "<tag k=\"key 3b\" v=\"val 3b\"></tag>" +
+                            "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
 
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid changeset ID"));
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
 
             OsmTestUtils.verifyTestNodesUnmodified(nodeIds1, changesetId1, changeset1Bounds);
             OsmTestUtils.verifyTestNodesUnmodified(nodeIds2, changesetId2, changeset2Bounds);
 
             try {
                 QChangesets changesets = QChangesets.changesets;
-                Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId1)).singleResult(changesets);
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId1))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
-                final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+                Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
                 Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
                 Assert.assertEquals(new Integer(12), changeset.getNumChanges());
                 Assert.assertEquals(new Long(userId), changeset.getUserId());
 
                 // changeset = changesetDao.findById(changesetId2);
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId2)).singleResult(changesets);
+                changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId2))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -1412,7 +1441,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyNonExistingNode() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1426,38 +1455,33 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset with a node that has an ID that doesn't exist. A
         // failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
-                                       originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                "</node>" +
-                                "<node id=\"" + ((int) RandomNumberGenerator.nextDouble(nodeIdsArr[0] + 10 ^ 4, Integer.MAX_VALUE)) +
-                                        "\" lon=\"" + updateBounds.getMinLon() + "\" " + "lat=\"" + updateBounds.getMinLat() +
-                                        "\" version=\"1\" changeset=\"" + changesetId + "\">" + "" +
-                                    "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                                "</node>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
+                                   originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                            "</node>" +
+                            "<node id=\"" + ((int) RandomNumberGenerator.nextDouble(nodeIdsArr[0] + 10 ^ 4, Integer.MAX_VALUE)) +
+                                    "\" lon=\"" + updateBounds.getMinLon() + "\" " + "lat=\"" + updateBounds.getMinLat() +
+                                    "\" version=\"1\" changeset=\"" + changesetId + "\">" + "" +
+                                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                            "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
 
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
-
-            // make sure the bad node wasn't created and the other node wasn't
-            // updated
+            // make sure the bad node wasn't created and the other node wasn't updated
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -1478,7 +1502,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
 
             // link some nodes to the changeset
-            Set<Long> nodeIds = new LinkedHashSet<>();
 
             // explicitly create a node with a negative ID
             Map<String, String> tags = new HashMap<>();
@@ -1489,14 +1512,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             tags.clear();
 
-            CurrentNodes insertedNodeRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes insertedNodeRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodesTbl)
                     .from(currentNodesTbl)
                     .where(currentNodesTbl.id.eq(negativeNodeId))
-                    .singleResult(currentNodesTbl);
+                    .fetchOne();
 
             Assert.assertNotNull(insertedNodeRecord);
             Assert.assertEquals(new Long(negativeNodeId), insertedNodeRecord.getId());
 
+            Set<Long> nodeIds = new LinkedHashSet<>();
             nodeIds.add(negativeNodeId);
 
             tags.put("key 1", "val 1");
@@ -1507,7 +1532,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
 
             // link some ways to the changeset
-            Set<Long> wayIds = new LinkedHashSet<>();
             List<Long> wayNodeIds = new ArrayList<>();
 
             // explicitly create a way with a negative ID
@@ -1521,14 +1545,16 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
             tags.clear();
 
-            CurrentNodes insertedWayRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            CurrentNodes insertedWayRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(currentNodesTbl)
                     .from(currentNodesTbl)
                     .where(currentNodesTbl.id.eq(negativeWayId))
-                    .singleResult(currentNodesTbl);
+                    .fetchOne();
 
             Assert.assertNotNull(insertedWayRecord);
             Assert.assertEquals(new Long(negativeWayId), insertedWayRecord.getId());
 
+            Set<Long> wayIds = new LinkedHashSet<>();
             wayIds.add(negativeWayId);
             wayNodeIds.clear();
             wayNodeIds.add(nodeIdsArr[1]);
@@ -1538,7 +1564,6 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
             // link some relations to the changeset
-            Set<Long> relationIds = new LinkedHashSet<>();
             // explicitly create a relation with a negative ID
 
             List<RelationMember> members = new ArrayList<>();
@@ -1549,14 +1574,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             long negativeRelationId = -1;
             OsmTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags, conn);
             tags.clear();
-            CurrentRelations insertedRelationRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelationsTbl)
-                    .where(currentRelationsTbl.id.eq(negativeRelationId))
-                    .singleResult(currentRelationsTbl);
+            CurrentRelations insertedRelationRecord =
+                    new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                            .select(currentRelationsTbl)
+                            .from(currentRelationsTbl)
+                            .where(currentRelationsTbl.id.eq(negativeRelationId))
+                            .fetchOne();
 
             Assert.assertNotNull(insertedRelationRecord);
             Assert.assertEquals(new Long(negativeRelationId), insertedRelationRecord.getId());
 
+            Set<Long> relationIds = new LinkedHashSet<>();
             relationIds.add(negativeRelationId);
 
             members.clear();
@@ -1571,51 +1599,49 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             // Update the changeset via the service. This update is valid, because the property was changed above.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                                         "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                        "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                                        "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                    "</node>" +
-                                    "<node id=\"" + negativeNodeId + "\" lon=\"" + originalBounds.getMaxLon() + "\" " +
-                                           "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                        "<tag k=\"key 3b\" v=\"val 3b\"></tag>" +
-                                    "</node>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                        "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                                        "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                    "</way>" +
-                                    "<way id=\"" + negativeWayId + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                        "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                                    "</way>" +
-                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" +
-                                           changesetId + "\" >" +
-                                        "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                        "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                        "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                    "</relation>" +
-                                    "<relation id=\"" + negativeRelationId + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                        "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                    "</relation>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>"
-                            + "</osmChange>");
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create/>" +
+                            "<modify>" +
+                                "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
+                                     "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                    "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                    "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                                "</node>" +
+                                "<node id=\"" + negativeNodeId + "\" lon=\"" + originalBounds.getMaxLon() + "\" " +
+                                       "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                    "<tag k=\"key 3b\" v=\"val 3b\"></tag>" +
+                                "</node>" +
+                                "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                    "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                    "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                                "</way>" +
+                                "<way id=\"" + negativeWayId + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                    "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                                "</way>" +
+                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" +
+                                       changesetId + "\" >" +
+                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                    "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                                "</relation>" +
+                                "<relation id=\"" + negativeRelationId + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                "</relation>" +
+                            "</modify>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -1684,12 +1710,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(changesetId)).singleResult(changesets);
+
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentNodesTbl).map(currentNodesTbl.id, currentNodesTbl);
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentNodesTbl)
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
 
                 Assert.assertEquals(2, nodes.size());
                 Assert.assertEquals(negativeNodeId, (long) nodeIdsArr[0]);
@@ -1709,7 +1734,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
 
-                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
 
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(1, parsedTags.size());
@@ -1727,7 +1752,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
-                parsedTags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                parsedTags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(2, parsedTags.size());
                 Assert.assertEquals("val 1b", parsedTags.get("key 1b"));
@@ -1738,8 +1763,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWaysTbl)
-                        .map(currentWaysTbl.id, currentWaysTbl);
+                Map<Long, CurrentWays> ways = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .from(currentWaysTbl)
+                        .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
+
                 Assert.assertEquals(2, ways.size());
 
                 // verify the updated ways
@@ -1754,10 +1781,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(wayRecord.getVisible());
 
                 List<CurrentWayNodes> wayNodes =
-
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
+                                .select(currentWayNodesTbl)
                                 .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
-                                .orderBy(currentWayNodesTbl.sequenceId.asc()).list(currentWayNodesTbl);
+                                .orderBy(currentWayNodesTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1773,7 +1801,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
 
-                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
 
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(1, parsedTags.size());
@@ -1787,9 +1815,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodesTbl)
-                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1])).orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
+                        .from(currentWayNodesTbl)
+                        .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
+                        .orderBy(currentWayNodesTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
 
@@ -1805,7 +1836,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
 
-                parsedTags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                parsedTags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
 
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(2, parsedTags.size());
@@ -1817,8 +1848,10 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationsTbl).map(currentRelationsTbl.id, currentRelationsTbl);
+                Map<Long, CurrentRelations> relations =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .from(currentRelationsTbl)
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 Assert.assertEquals(2, relations.size());
                 Assert.assertEquals(negativeRelationId, (long) relationIdsArr[0]);
@@ -1831,10 +1864,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> memberRecords = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> memberRecords =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1854,7 +1890,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(2), member.getSequenceId());
                 Assert.assertEquals(wayIdsArr[1], member.getMemberId());
 
-                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                Map<String, String> parsedTags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
 
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(1, parsedTags.size());
@@ -1868,9 +1904,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                memberRecords = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembersTbl)
+                memberRecords = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc()).list(currentRelationMembersTbl);
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
 
@@ -1890,7 +1929,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(2), member.getSequenceId());
                 Assert.assertEquals(wayIdsArr[0], member.getMemberId());
 
-                parsedTags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                parsedTags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
 
                 Assert.assertNotNull(parsedTags);
                 Assert.assertEquals(1, parsedTags.size());
@@ -1901,8 +1940,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             }
 
             try {
-                changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                        .where(changesets.id.eq(changesetId)).singleResult(changesets);
+                QChangesets changesets = QChangesets.changesets;
+                Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(changesets)
+                        .from(changesets)
+                        .where(changesets.id.eq(changesetId))
+                        .fetchOne();
 
                 Assert.assertNotNull(changeset);
                 Assert.assertTrue(changeset.getCreatedAt().before(now));
@@ -1927,7 +1970,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyNodeInvalidVersion() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1942,36 +1985,33 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the nodes has version that doesn't
         // match the version on the server. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML).post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
-                                      originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                                    "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                "</node>" +
-                                "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                                     "lat=\"" + updateBounds.getMinLat() + "\" version=\"2\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                                "</node>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" " + "lat=\"" +
+                                  originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                                "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                            "</node>" +
+                            "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
+                                 "lat=\"" + updateBounds.getMinLat() + "\" version=\"2\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                            "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
 
             // make sure neither node was updated
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -1991,24 +2031,22 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // relations with no members are allowed
-        Document responseData = resource()
-                .path("api/0.6/changeset/" + changesetId + "/upload")
-                .queryParam("mapId", String.valueOf(mapId))
-                .type(MediaType.TEXT_XML)
-                .accept(MediaType.TEXT_XML)
-                .post(Document.class,
-                    "<osmChange version=\"0.3\" generator=\"iD\">" +
-                        "<create/>" +
-                        "<modify>" +
-                           "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "</relation>" +
-                        "</modify>" +
-                        "<delete if-unused=\"true\"/>" +
-                    "</osmChange>");
+        Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_XML)
+            .post(Entity.entity(
+                "<osmChange version=\"0.3\" generator=\"iD\">" +
+                    "<create/>" +
+                    "<modify>" +
+                       "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" + "</relation>" +
+                    "</modify>" +
+                    "<delete if-unused=\"true\"/>" +
+                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
 
         Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation").getLength());
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayInvalidVersion() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2023,35 +2061,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // than zero, which is what the version should be for all new elements. A failure should occur
         // and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "</way>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"2\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "</way>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"2\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2060,7 +2093,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationInvalidVersion() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2074,37 +2107,32 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the relations has an invalid
         // version. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                                        changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"2\" changeset=\"" +
-                                        changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
+                                    changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"2\" changeset=\"" +
+                                    changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2113,7 +2141,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyChangesetClosed() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2125,10 +2153,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
         // close the changeset
         QChangesets changesets = QChangesets.changesets;
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
                 .from(changesets)
                 .where(changesets.id.eq(changesetId))
-                .singleResult(changesets);
+                .fetchOne();
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         changeset.setClosedAt(now);
@@ -2138,10 +2167,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .set(changesets.closedAt, now)
                 .execute();
 
-        changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
                 .from(changesets)
                 .where(changesets.id.eq(changesetId))
-                .singleResult(changesets);
+                .fetchOne();
+
         Assert.assertTrue(changeset.getClosedAt().equals(now));
 
         BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
@@ -2149,35 +2180,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to update the closed changeset. A failure should occur and no
         // data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
-                                     "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                     "<tag k=\"key 1\" v=\"val 1\"></tag>" +
-                                     "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                "</node>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" " +
+                                 "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                 "<tag k=\"key 1\" v=\"val 1\"></tag>" +
+                                 "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                            "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(
-                    r.getEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
 
             // make sure nothing was updated
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
-
             throw e;
         }
         catch (Exception e) {
@@ -2186,7 +2212,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingNodeTagValue() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2199,35 +2225,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Upload a changeset where one of the tags specified has no value
         // attribute. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML).accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<modify>" +
-                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                      originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"name 1\"/>" + // missing tag value
-                                    "<tag k=\"name 2\" v=\"val 2\"/>" +
-                                "</node>" +
-                                "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
-                                      originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                    "<tag k=\"name 1\" v=\"val 1\"/>" +
-                                "</node>" +
-                            "</modify>" +
-                            "<create/>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<modify>" +
+                            "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                  originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"name 1\"/>" + // missing tag value
+                                "<tag k=\"name 2\" v=\"val 2\"/>" +
+                            "</node>" +
+                            "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
+                                  originalBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "<tag k=\"name 1\" v=\"val 1\"/>" +
+                            "</node>" +
+                        "</modify>" +
+                        "<create/>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error parsing tag"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2236,7 +2258,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyTooFewNodesForWay() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2250,36 +2272,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // A way has to have two or more nodes. Try to upload a way with one
         // node. The request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<tag k=\"key 1\" v=\"val 1\"/>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<tag k=\"key 1\" v=\"val 1\"/>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Too few nodes specified for way"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Too few nodes specified for way"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyTooManyNodesForWay() throws Exception {
         String originalMaximumWayNodes = MAXIMUM_WAY_NODES;
@@ -2309,32 +2326,27 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             // use a lower number of max way nodes then default for efficiency
             HootCustomPropertiesSetter.setProperty("MAXIMUM_WAY_NODES", "2");
 
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Too many nodes specified for way"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Too many nodes specified for way"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         finally {
@@ -2342,7 +2354,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayWithNonExistentNode() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2356,36 +2368,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to create a way referencing a node that doesn't exist. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + (nodeIdsArr[4] + 2) + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + (nodeIdsArr[4] + 2) + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentNode() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2399,36 +2406,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to update a relation referencing a node that doesn't exist. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + (nodeIdsArr[4] + 2) + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + (nodeIdsArr[4] + 2) + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentWay() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2443,37 +2445,32 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to update a relation referencing a way that doesn't exist. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                                   changesetId + "\" >" +
-                                "<member type=\"way\" role=\"role1\" ref=\"" + (wayIdsArr[2] + 1) + "\"></member>" +
-                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                            "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                        "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
+                               changesetId + "\" >" +
+                            "<member type=\"way\" role=\"role1\" ref=\"" + (wayIdsArr[2] + 1) + "\"></member>" +
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                        "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentRelation() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2487,37 +2484,32 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to create a relation referencing a relation that doesn't exist.
         // The request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                                        changesetId + "\" >" +
-                                    "<member type=\"relation\" role=\"role1\" ref=\"" + (relationIdsArr[3] + 1) + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
+                                    changesetId + "\" >" +
+                                "<member type=\"relation\" role=\"role1\" ref=\"" + (relationIdsArr[3] + 1) + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayWithInvisibleNode() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2529,8 +2521,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of way nodes invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodesTbl)
-                .where(currentNodesTbl.id.eq(nodeIdsArr[0])).singleResult(currentNodesTbl);
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
+                .from(currentNodesTbl)
+                .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -2542,43 +2537,40 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a way which references an invisible node. The request
         // should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("aren't visible for way"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("aren't visible for way"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleNode() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2590,10 +2582,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation node members invisible
-        CurrentNodes invisibleNode = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentNodes invisibleNode = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleNode);
 
@@ -2605,44 +2598,40 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentNodesTbl.visible)
                 .from(currentNodesTbl)
                 .where(currentNodesTbl.id.eq(nodeIdsArr[0]))
-                .singleResult(currentNodesTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible node. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("visible for relation"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleWay() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2655,10 +2644,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation way members invisible
-        CurrentWays invisibleWay = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentWays invisibleWay = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleWay);
 
@@ -2670,44 +2660,40 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentWaysTbl.visible)
                 .from(currentWaysTbl)
                 .where(currentWaysTbl.id.eq(wayIdsArr[0]))
-                .singleResult(currentWaysTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible way. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("visible for relation"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleRelation() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2720,10 +2706,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation's members invisible
-        CurrentRelations invisibleRelation = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        CurrentRelations invisibleRelation = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl);
+                .fetchOne();
 
         Assert.assertNotNull(invisibleRelation);
         invisibleRelation.setVisible(false);
@@ -2734,45 +2721,41 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
                 .execute();
 
         Assert.assertEquals(1, success);
-        Assert.assertEquals(false, new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+        Assert.assertEquals(false, new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(currentRelationsTbl.visible)
                 .from(currentRelationsTbl)
                 .where(currentRelationsTbl.id.eq(relationIdsArr[0]))
-                .singleResult(currentRelationsTbl.visible));
+                .fetchOne());
 
         // Try to upload a relation which references an invisible relation. The
         // request should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
-                                        "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                    "</relation>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("visible for relation"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateWayIds() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2786,40 +2769,35 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to upload two ways with the same ID. The request should fail and
         // no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                "</way>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Duplicate OSM element ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInWay() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2834,34 +2812,29 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // changeset ID that doesn't match the changeset ID specified in the URL. A failure should
         // occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "</way>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + (changesetId + 1) + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                    "</way>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + (changesetId + 1) + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid changeset ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2870,7 +2843,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInRelation() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2886,35 +2859,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // changeset ID that doesn't match the changeset ID specified in the URL. A failure should
         // occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + (changesetId + 1) + "\" >" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + (changesetId + 1) + "\" >" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
     }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid changeset ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2923,7 +2891,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingWayTagValue() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2937,36 +2905,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Upload a changeset where one of the tags specified has no value
         // attribute. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "</way>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                        "<tag k=\"name 1\"/>" + // missing tag value
-                                    "</way>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                "<tag k=\"name 1\"/>" + // missing tag value
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error parsing tag"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -2975,7 +2938,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingRelationTagValue() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -2989,34 +2952,29 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Upload a changeset where one of the element tags specified has no
         // value attribute. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<tag k=\"name 1\"/>" + // missing tag value
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<tag k=\"name 1\"/>" + // missing tag value
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Error parsing tag"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3025,7 +2983,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateWayNodeIds() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3040,40 +2998,35 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to upload a way which lists the same node twice. The request
         // should fail and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                "</way>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Duplicate OSM element ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayEmptyNodeId() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3087,35 +3040,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the ways has a node with an empty
         // string for its ID. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                "</way>" +
-                                "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" + "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             // TODO: needed?
-            // Assert.assertTrue(r.getEntity(String.class).contains("Invalid
-            // version"));
+            // Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
 
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3124,7 +3073,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayMissingNodeId() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3139,36 +3088,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the ways has a node with no ID
         // attribute. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd></nd>" + // missing node ID
-                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                "</way>" +
-                                "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<nd ref=\"\"></nd>" +
-                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                "</way>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd></nd>" + // missing node ID
+                                "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                            "</way>" +
+                            "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<nd ref=\"\"></nd>" +
+                                "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                            "</way>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             // TODO: needed?
-            // Assert.assertTrue(r.getEntity(String.class).contains("Invalid
-            // version"));
-
+            // Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3177,7 +3121,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateRelationIds() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3192,41 +3136,36 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Try to upload two relations with the same ID. The request should fail
         // and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
-                                    changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[2] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" +
+                                changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[2] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Duplicate OSM element ID"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationReferencingItself() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3241,35 +3180,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset with a relation that references itself as a
         // member. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                                    "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("contains a relation member that references itself"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("contains a relation member that references itself"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3278,7 +3212,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationEmptyMemberId() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3292,35 +3226,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the relations has a member with an
         // empty string for an ID. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                            "</relation>" +
-                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                "<member type=\"node\" role=\"role1\" ref=\"\"></member>" + // empty member id
-                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                            "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                        "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                        "</relation>" +
+                        "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"\"></member>" + // empty member id
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                        "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3329,7 +3258,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationMissingMemberId() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3343,34 +3272,30 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the relations has a member with an
         // empty string for an ID.  A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\"></member>" + // missing member ID
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\"></member>" + // missing member ID
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.BAD_REQUEST, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Element in changeset has empty ID."));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3379,7 +3304,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationInvalidMemberType() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3393,35 +3318,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the relations has a member with an
         // empty string for one of its member's type. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                     "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                     // invalid member type
-                                     "<member type=\"blah\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                 "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                 // invalid member type
+                                 "<member type=\"blah\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                            "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {
@@ -3430,7 +3351,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationMissingMemberType() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -3444,35 +3365,31 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // Update the changeset where one of the relations has a member with no
         // type. A failure should occur and no data in the system should be modified.
         try {
-            resource()
-                    .path("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .type(MediaType.TEXT_XML)
-                    .accept(MediaType.TEXT_XML)
-                    .post(Document.class,
-                        "<osmChange version=\"0.3\" generator=\"iD\">" +
-                            "<create/>" +
-                            "<modify>" +
-                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                    "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                    // missing member type
-                                    "<member role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
-                                "</relation>" +
-                            "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+            target("api/0.6/changeset/" + changesetId + "/upload")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create/>" +
+                        "<modify>" +
+                            "<relation id=\"" + relationIdsArr[0] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
                                 "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                                "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                                // missing member type
+                                "<member role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
                             "</relation>" +
-                            "</modify>" +
-                            "<delete if-unused=\"true\"/>" +
-                        "</osmChange>");
+                        "<relation id=\"" + relationIdsArr[1] + "\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
+                            "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[1] + "\"></member>" +
+                        "</relation>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Invalid version"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
         catch (Exception e) {

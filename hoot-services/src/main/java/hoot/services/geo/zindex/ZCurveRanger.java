@@ -200,7 +200,7 @@ public class ZCurveRanger {
         }
 
         if (column >= 100) {
-            throw new Error();
+            throw new RuntimeException("MaxBitColumn >= 100!");
         }
 
         return column;
@@ -228,9 +228,9 @@ public class ZCurveRanger {
      * Condense ranges that overlap or are within "slop" cells of each other.
      */
     private List<Range> condenseRanges(List<Range> r) {
-        List<Range> result = new LinkedList<>();
         Collections.sort(r);
 
+        List<Range> result = new LinkedList<>();
         result.add(r.get(0));
         for (int i = 1; i < r.size(); i++) {
             if ((r.get(i).getMin() - result.get(result.size() - 1).getMax()) <= slop) {
@@ -285,8 +285,6 @@ public class ZCurveRanger {
     }
 
     private List<Range> decomposeRange(LongBox box, LongBox focusBox, int levels) {
-        List<Range> result = new LinkedList<>();
-
         List<LongBox> boxes = decomposeBox(box, levels / 2);
 
         for (int j = 0; j < (levels * 2); j++) {
@@ -304,6 +302,7 @@ public class ZCurveRanger {
             boxes = newBoxes;
         }
 
+        List<Range> result = new LinkedList<>();
         for (LongBox boxe : boxes) {
             result.add(toRange(boxe));
         }
@@ -316,12 +315,11 @@ public class ZCurveRanger {
     }
 
     private List<Range> decomposeRangeIterative(LongBox box, int count) {
-        List<Range> result = new LinkedList<>();
-        List<LongBox> completed = new LinkedList<>();
 
         PriorityQueue<LongBoxContainer> pq = new PriorityQueue<>();
         pq.add(new LongBoxContainer(box, calculateExcess(box)));
 
+        List<LongBox> completed = new LinkedList<>();
         while ((!pq.isEmpty()) && ((pq.size() + completed.size()) < count)) {
             LongBoxContainer lbc = pq.remove();
 
@@ -339,7 +337,7 @@ public class ZCurveRanger {
                     pq.add(new LongBoxContainer(boxes.get(1), calculateExcess(boxes.get(1))));
                 }
                 else {
-                    throw new Error();
+                    throw new RuntimeException("Invalid boxes.size = " + boxes.size());
                 }
             }
         }
@@ -348,6 +346,7 @@ public class ZCurveRanger {
             completed.add(pq.remove().getBox());
         }
 
+        List<Range> result = new LinkedList<>();
         for (LongBox aCompleted : completed) {
             result.add(toRange(aCompleted));
         }

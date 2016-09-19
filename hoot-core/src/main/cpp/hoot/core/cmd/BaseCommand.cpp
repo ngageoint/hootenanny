@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseCommand.h"
@@ -75,6 +75,7 @@ QString BaseCommand::_getHelpPath() const
 void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
                           Status defaultStatus)
 {
+  LOG_INFO("Loading map data from " << path << " ...");
   OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
 }
 

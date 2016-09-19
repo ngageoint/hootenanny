@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CustomPoiMerger.h"
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/schema/TagComparator.h>
 
 namespace hoot
@@ -78,7 +79,7 @@ void CustomPoiMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Elemen
       // if the POI has no parents, then simply remove it.
       if (map->getIndex().getParents(eid).size() == 0)
       {
-        map->removeElement(eid);
+        RemoveElementOp::removeElement(map, eid);
       }
       // if the POI has parents, then remove all tags on the node.
       else

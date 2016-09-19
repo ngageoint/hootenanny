@@ -26,12 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import hoot.services.db2.Users;
+import hoot.services.models.db.Users;
 
 
-@XmlRootElement
 public class UserSaveResponse {
     private Users user;
 

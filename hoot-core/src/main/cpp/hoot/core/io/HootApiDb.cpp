@@ -669,7 +669,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+  //LOG_DEBUG("Inserted node with ID: " << QString::number(id));
 
   return true;
 }

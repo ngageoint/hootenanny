@@ -29,23 +29,18 @@ package hoot.services.utils;
 import static hoot.services.HootProperties.HOME_FOLDER;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,106 +48,114 @@ import org.slf4j.LoggerFactory;
 public final class MultipartSerializer {
     private static final Logger logger = LoggerFactory.getLogger(MultipartSerializer.class);
 
-    private MultipartSerializer() {
-    }
+    private MultipartSerializer() {}
 
-    public static void serializeFGDB(List<FileItem> fileItemsList, String jobId, Map<String, String> uploadedFiles,
-            Map<String, String> uploadedFilesPaths) throws Exception {
-        Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
-        Map<String, String> folderMap = new HashMap<>();
+    private static void serializeFGDB(List<BodyPart> fileItems, String jobId, Map<String, String> uploadedFiles,
+            Map<String, String> uploadedFilesPaths) {
+        try {
+            Map<String, String> folderMap = new HashMap<>();
 
-        while (fileItemsIterator.hasNext()) {
-            FileItem fileItem = fileItemsIterator.next();
-            String fileName = fileItem.getName();
+            for (BodyPart fileItem : fileItems) {
+                String fileName = fileItem.getContentDisposition().getFileName();
 
-            String relPath = FilenameUtils.getPath(fileName);
-            if (relPath.endsWith("/")) {
-                relPath = relPath.substring(0, relPath.length() - 1);
-            }
-            fileName = FilenameUtils.getName(fileName);
-
-            String fgdbFolderPath = HOME_FOLDER + "/upload/" + jobId + "/" + relPath;
-
-            boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", fgdbFolderPath);
-
-            if (isPathSafe) {
-                String pathVal = folderMap.get(fgdbFolderPath);
-                if (pathVal == null) {
-                    File folderPath = new File(fgdbFolderPath);
-                    FileUtils.forceMkdir(folderPath);
-                    folderMap.put(fgdbFolderPath, relPath);
+                String relPath = FilenameUtils.getPath(fileName);
+                if (relPath.endsWith("/")) {
+                    relPath = relPath.substring(0, relPath.length() - 1);
                 }
+                fileName = FilenameUtils.getName(fileName);
 
-                if (fileName == null) {
-                    String msg = "A valid file name was not specified.";
-                    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-                }
+                String fgdbFolderPath = HOME_FOLDER + "/upload/" + jobId + "/" + relPath;
+                boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", fgdbFolderPath);
 
-                String uploadedPath = fgdbFolderPath + "/" + fileName;
-                boolean isFileSafe = validatePath(fgdbFolderPath, uploadedPath);
-                if (isFileSafe) {
-                    File file = new File(uploadedPath);
-                    fileItem.write(file);
-                }
-                else {
-                    throw new Exception("Illegal file path:" + uploadedPath);
-                }
-            }
-            else {
-                throw new Exception("Illegal path:" + fgdbFolderPath);
-            }
-        }
+                if (isPathSafe) {
+                    String pathVal = folderMap.get(fgdbFolderPath);
+                    if (pathVal == null) {
+                        File folderPath = new File(fgdbFolderPath);
+                        FileUtils.forceMkdir(folderPath);
+                        folderMap.put(fgdbFolderPath, relPath);
+                    }
 
-        for (Map.Entry<String, String> pairs : folderMap.entrySet()) {
-            String nameOnly = "";
-            String fgdbName = pairs.getValue();
-            String[] nParts = fgdbName.split("\\.");
+                    if (fileName == null) {
+                        throw new IOException("File name cannot be null!");
+                    }
 
-            for (int i = 0; i < (nParts.length - 1); i++) {
-                if (!nameOnly.isEmpty()) {
-                    nameOnly += ".";
-                }
-                nameOnly += nParts[i];
-            }
-            uploadedFiles.put(nameOnly, "GDB");
-            uploadedFilesPaths.put(nameOnly, fgdbName);
-        }
-    }
-
-    public static void serializeUploadedFiles(List<FileItem> fileItemsList, Map<String, String> uploadedFiles,
-            Map<String, String> uploadedFilesPaths, String repFolderPath) throws Exception {
-        for (FileItem fileItem : fileItemsList) {
-            String fileName = fileItem.getName();
-
-            if (fileName == null) {
-                String msg = "A valid file name was not specified.";
-                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
-            String uploadedPath = repFolderPath + "/" + fileName;
-
-            boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", uploadedPath);
-            if (isPathSafe) {
-                File file = new File(uploadedPath);
-                fileItem.write(file);
-
-                String[] nameParts = fileName.split("\\.");
-                if (nameParts.length > 1) {
-                    String extension = nameParts[nameParts.length - 1].toUpperCase();
-
-                    String[] subArr = ArrayUtils.removeElement(nameParts, nameParts[nameParts.length - 1]);
-                    String filename = StringUtils.join(subArr, '.');
-                    if (extension.equalsIgnoreCase("OSM") || extension.equalsIgnoreCase("GEONAMES")
-                            || extension.equalsIgnoreCase("SHP") || extension.equalsIgnoreCase("ZIP")) {
-                        uploadedFiles.put(filename, extension);
-                        uploadedFilesPaths.put(filename, fileName);
-                        logger.debug("Saving uploaded:{}", filename);
+                    String uploadedPath = fgdbFolderPath + "/" + fileName;
+                    boolean isFileSafe = validatePath(fgdbFolderPath, uploadedPath);
+                    if (isFileSafe) {
+                        try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
+                            File file = new File(uploadedPath);
+                            FileUtils.copyInputStreamToFile(fileStream, file);
+                        }
+                    }
+                    else {
+                        throw new IOException("Illegal file path:" + uploadedPath);
                     }
                 }
+                else {
+                    throw new IOException("Illegal path:" + fgdbFolderPath);
+                }
             }
-            else {
-                throw new Exception("Illegal path: " + uploadedPath);
+
+            for (Map.Entry<String, String> pairs : folderMap.entrySet()) {
+                String nameOnly = "";
+                String fgdbName = pairs.getValue();
+                String[] nParts = fgdbName.split("\\.");
+
+                for (int i = 0; i < (nParts.length - 1); i++) {
+                    if (!nameOnly.isEmpty()) {
+                        nameOnly += ".";
+                    }
+                    nameOnly += nParts[i];
+                }
+                uploadedFiles.put(nameOnly, "GDB");
+                uploadedFilesPaths.put(nameOnly, fgdbName);
             }
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error trying to serialize FGDB!", e);
+        }
+    }
+
+    private static void serializeUploadedFiles(List<BodyPart> fileItems, Map<String, String> uploadedFiles,
+            Map<String, String> uploadedFilesPaths, String repFolderPath) {
+        try {
+            for (BodyPart fileItem : fileItems) {
+                String fileName = fileItem.getContentDisposition().getFileName();
+
+                if (fileName == null) {
+                    throw new RuntimeException("A valid file name was not specified.");
+                }
+
+                String uploadedPath = repFolderPath + "/" + fileName;
+
+                boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", uploadedPath);
+                if (isPathSafe) {
+                    try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
+                        File file = new File(uploadedPath);
+                        FileUtils.copyInputStreamToFile(fileStream, file);
+                    }
+
+                    String[] nameParts = fileName.split("\\.");
+                    if (nameParts.length > 1) {
+                        String extension = nameParts[nameParts.length - 1].toUpperCase();
+                        String[] subArr = ArrayUtils.removeElement(nameParts, nameParts[nameParts.length - 1]);
+                        String filename = StringUtils.join(subArr, '.');
+                        if (extension.equalsIgnoreCase("OSM") || extension.equalsIgnoreCase("GEONAMES")
+                                || extension.equalsIgnoreCase("SHP") || extension.equalsIgnoreCase("ZIP")
+                                || extension.equalsIgnoreCase("PBF")) {
+                            uploadedFiles.put(filename, extension);
+                            uploadedFilesPaths.put(filename, fileName);
+                            logger.debug("Saving uploaded:{}", filename);
+                        }
+                    }
+                }
+                else {
+                    throw new IOException("Illegal path: " + uploadedPath);
+                }
+            }
+        }
+        catch (Exception ioe) {
+            throw new RuntimeException("Error trying to serialize uploaded files!", ioe);
         }
     }
 
@@ -168,50 +171,45 @@ public final class MultipartSerializer {
      *            = The list of files uploaded
      * @param uploadedFilesPaths
      *            = The list of uploaded files paths
-     * @param request
+     * @param multiPart
      *            = The request object that holds post data
-     * @throws Exception
      */
     public static void serializeUpload(String jobId, String inputType, Map<String, String> uploadedFiles,
-            Map<String, String> uploadedFilesPaths, HttpServletRequest request) throws Exception {
-        // Uploaded data container folder path. It is unique to each job
-        String repFolderPath = HOME_FOLDER + "/upload/" + jobId;
-        boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", repFolderPath);
+            Map<String, String> uploadedFilesPaths, FormDataMultiPart multiPart) {
 
-        if (isPathSafe) {
-            File dir = new File(repFolderPath);
-            FileUtils.forceMkdir(dir);
+        try {
+            // Uploaded data container folder path. It is unique to each job
+            String repFolderPath = HOME_FOLDER + "/upload/" + jobId;
+            boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", repFolderPath);
 
-            if (!ServletFileUpload.isMultipartContent(request)) {
-                String msg = "Content type is not multipart/form-data";
-                throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
+            if (isPathSafe) {
+                File dir = new File(repFolderPath);
+                FileUtils.forceMkdir(dir);
 
-            DiskFileItemFactory fileFactory = new DiskFileItemFactory();
-            File filesDir = new File(repFolderPath);
-            fileFactory.setRepository(filesDir);
-            ServletFileUpload uploader = new ServletFileUpload(fileFactory);
+                List<BodyPart> bodyParts = multiPart.getBodyParts();
 
-            List<FileItem> fileItemsList = uploader.parseRequest(request);
-
-            // If user request type is DIR then treat it as FGDB folder
-            if (inputType.equalsIgnoreCase("DIR")) {
-                serializeFGDB(fileItemsList, jobId, uploadedFiles, uploadedFilesPaths);
+                // If user request type is DIR then treat it as FGDB folder
+                if (inputType.equalsIgnoreCase("DIR")) {
+                    serializeFGDB(bodyParts, jobId, uploadedFiles, uploadedFilesPaths);
+                }
+                else {
+                    // Can be shapefile or zip file
+                    serializeUploadedFiles(bodyParts, uploadedFiles, uploadedFilesPaths, repFolderPath);
+                }
             }
             else {
-                // Can be shapefile or zip file
-                serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, repFolderPath);
+                throw new IOException("Illegal path: " + repFolderPath);
             }
         }
-        else {
-            throw new Exception("Illegal path: " + repFolderPath);
+        catch (Exception e) {
+            throw new RuntimeException("Error trying to serialize upload!", e);
         }
     }
 
     // See #6760
     // Stop file path manipulation vulnerability by validating the new path is
     // within container path
-    public static boolean validatePath(String basePath, String newPath) {
+    private static boolean validatePath(String basePath, String newPath) {
         boolean isValidated = false;
 
         try {
@@ -226,8 +224,8 @@ public final class MultipartSerializer {
                 isValidated = true;
             }
         }
-        catch (Exception ex) {
-            logger.error("failed to validate MultipartSerializer path: {}", ex.getMessage());
+        catch (IOException ex) {
+            logger.error("Failed to validate MultipartSerializer path: {}", ex.getMessage());
         }
 
         return isValidated;

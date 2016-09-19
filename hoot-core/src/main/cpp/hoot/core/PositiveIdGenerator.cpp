@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PositiveIdGenerator.h"
@@ -33,6 +33,18 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(IdGenerator, PositiveIdGenerator)
+
+IdGeneratorPtr PositiveIdGenerator::clone() const
+{
+  PositiveIdGenerator* copy = new PositiveIdGenerator();
+  IdGeneratorPtr result(copy);
+
+  copy->_nodeId = _nodeId;
+  copy->_wayId = _wayId;
+  copy->_relationId = _relationId;
+
+  return result;
+}
 
 }
 

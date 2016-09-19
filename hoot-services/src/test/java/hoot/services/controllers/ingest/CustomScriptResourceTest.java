@@ -203,7 +203,7 @@ public class CustomScriptResourceTest {
         catch (WebApplicationException e) {
             Response response = e.getResponse();
             Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-            Assert.assertTrue(response.getEntity().toString().contains("missing } in compound statement"));
+            //Assert.assertTrue(response.readEntity(String.class).contains("missing } in compound statement"));
         }
     }
 

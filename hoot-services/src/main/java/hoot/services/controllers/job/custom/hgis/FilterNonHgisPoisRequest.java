@@ -26,10 +26,7 @@
  */
 package hoot.services.controllers.job.custom.hgis;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-
-@XmlRootElement
 public class FilterNonHgisPoisRequest {
     private String source;
 

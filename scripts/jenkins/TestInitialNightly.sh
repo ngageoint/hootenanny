@@ -8,8 +8,14 @@ cd $HOOT_HOME
 
 hoot --version --debug
 
+# Run the tests that don't get hit by coverage
+make -sj`nproc` pp-test
+make -sj`nproc` plugins-test
+
 export HOOT_TEST_DIFF=--diff
-make -sj`nproc` test-all
+# Running glacial tests here because we're not sure core-coverage runs them
+echo "Running glacial tests..."
+bin/HootTest $HOOT_TEST_DIFF --glacial
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
@@ -17,5 +23,12 @@ make -sj`nproc` test-all
 
 make -sj`nproc` archive
 
-make -sj`nproc` coverage
+# Generate coverage reports
+echo "Building core coverage reports..."
+make -sj`nproc` core-coverage
 
+echo "Building services coverage reports..."
+make -sj`nproc` services-coverage
+
+echo "Building UI coverage reports..."
+make ui-coverage

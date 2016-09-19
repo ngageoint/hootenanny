@@ -35,12 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -61,7 +58,7 @@ public class ConflationResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testProcess() throws Exception {
+    public void testProcess() {
         String params = "{\"INPUT1_TYPE\":\"DB\",\"INPUT1\":\"DcGisRoads\",\"INPUT2_TYPE\":\"DB\",\"INPUT2\":\"DcTigerRoads\",";
         params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\",\"COLLECT_STATS\":\"false\"}";
 
@@ -80,12 +77,8 @@ public class ConflationResourceTest {
 
         ConflationResource spy = Mockito.spy(new ConflationResource());
         Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
-        Response resp = spy.process(params);
-        String result = resp.getEntity().toString();
-        JSONParser parser = new JSONParser();
-        JSONObject o = (JSONObject) parser.parse(result);
-        String jobId = o.get("jobid").toString();
-        verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+        JobId resp = spy.process(params);
+        verify(spy).postChainJobRquest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
     }
 
     @Test
@@ -93,7 +86,7 @@ public class ConflationResourceTest {
     public void testProcessOsmApiDbInput() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
-            final String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
+            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
@@ -102,10 +95,9 @@ public class ConflationResourceTest {
 
             Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             Mockito.doReturn(true).when(spy).mapExists(anyLong(), any(Connection.class));
-            final BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
+            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-            final String jobId = ((JSONObject) (new JSONParser())
-                    .parse(spy.process(inputParams).getEntity().toString())).get("jobid").toString();
+            String jobId = spy.process(inputParams).getJobid();
 
             // just checking that the request made it the command runner w/o
             // error
@@ -121,8 +113,8 @@ public class ConflationResourceTest {
                      * Matchers.matches("\"osm_api_db_export_time\":\"" +
                      * DbUtils.TIME_STAMP_REGEX + "\"")
                      */
-                    AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
-                            Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
+            AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
+                    Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
         }
         finally {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
@@ -150,7 +142,6 @@ public class ConflationResourceTest {
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-
             Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("OSM_API_DB not allowed as secondary input type"));

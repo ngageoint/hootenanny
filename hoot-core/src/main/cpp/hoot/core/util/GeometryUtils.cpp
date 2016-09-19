@@ -317,4 +317,12 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
   }
 }
 
+QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
+{
+  return QString::number(bounds.getMinX()) + "," +
+    QString::number(bounds.getMinY()) + "," +
+    QString::number(bounds.getMaxX()) + "," +
+    QString::number(bounds.getMaxY());
+}
+
 }

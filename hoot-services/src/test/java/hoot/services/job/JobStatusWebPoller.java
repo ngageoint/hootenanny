@@ -32,6 +32,7 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
@@ -40,12 +41,12 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import com.mysema.query.sql.SQLQuery;
-import com.sun.jersey.api.client.WebResource;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.db2.QJobStatus;
 import hoot.services.job.JobStatusManager.JOB_STATUS;
+import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.QJobStatus;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -53,12 +54,12 @@ import hoot.services.job.JobStatusManager.JOB_STATUS;
  */
 public class JobStatusWebPoller {
 
-    private final WebResource webResource;
+    private final WebTarget webTarget;
     private final Connection conn;
     private final int jobStatusPollDelayMs;
 
-    public JobStatusWebPoller(WebResource webResource, Connection conn) {
-        this.webResource = webResource;
+    public JobStatusWebPoller(WebTarget webTarget, Connection conn) {
+        this.webTarget = webTarget;
         this.conn = conn;
 
         // increase this to something long when debugging in debugger to the
@@ -76,7 +77,7 @@ public class JobStatusWebPoller {
      * @throws ParseException
      */
     private JOB_STATUS pollJobStatus(String jobId) throws ParseException {
-        String response = webResource.path("status/" + jobId).accept(MediaType.APPLICATION_JSON).get(String.class);
+        String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
         return JOB_STATUS.valueOf(((String) responseObj.get("status")).toUpperCase());
@@ -91,7 +92,7 @@ public class JobStatusWebPoller {
      * @throws ParseException
      */
     private JSONObject pollJobStatusObj(String jobId) throws ParseException {
-        String response = webResource.path("status/" + jobId).accept(MediaType.APPLICATION_JSON).get(String.class);
+        String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
         return responseObj;
@@ -143,14 +144,12 @@ public class JobStatusWebPoller {
      *            status the job should have in the database
      */
     private void verifyJobStatusInDb(String jobId, JOB_STATUS status) {
-        SQLQuery query = new SQLQuery(conn, DbUtils.getConfiguration());
         QJobStatus jobStatus = QJobStatus.jobStatus;
-
-        hoot.services.db2.JobStatus finalJobStatus =
-                query
-                     .from(jobStatus)
-                     .where(jobStatus.jobId.eq(jobId))
-                     .singleResult(jobStatus);
+        JobStatus finalJobStatus = new SQLQuery<>(conn, DbUtils.getConfiguration())
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchOne();
 
         Assert.assertNotNull(finalJobStatus);
         Assert.assertEquals(jobId, finalJobStatus.getJobId());

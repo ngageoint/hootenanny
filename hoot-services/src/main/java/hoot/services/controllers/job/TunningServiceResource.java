@@ -35,7 +35,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -49,37 +48,33 @@ import hoot.services.job.JobExecutioner;
 public class TunningServiceResource {
     private static final Logger logger = LoggerFactory.getLogger(TunningServiceResource.class);
 
-    public TunningServiceResource() {
-    }
+    public TunningServiceResource() {}
 
     @POST
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response process(String params) {
-        String jobId = UUID.randomUUID().toString();
+    @Produces(MediaType.APPLICATION_JSON)
+    public JobId process(String params) {
+        String uuid = UUID.randomUUID().toString();
 
         try {
             JSONParser jsonParser = new JSONParser();
-            JSONObject oParams = (JSONObject) jsonParser.parse(params);
-            String input = oParams.get("INPUT").toString();
-            String inputtype = oParams.get("INPUT_TYPE").toString();
+            JSONObject parameters = (JSONObject) jsonParser.parse(params);
+            String input = parameters.get("INPUT").toString();
+            String inputType = parameters.get("INPUT_TYPE").toString();
 
             JSONObject command = new JSONObject();
             command.put("input", input);
-            command.put("inputtype", inputtype);
-            command.put("execImpl", "TunningService");
+            command.put("inputtype", inputType);
+            command.put("execImpl", "tunningService");
 
-            (new JobExecutioner(jobId, command)).start();
+            (new JobExecutioner(uuid, command)).start();
         }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobId", jobId);
-
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return new JobId(uuid);
     }
 }

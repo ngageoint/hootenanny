@@ -62,6 +62,8 @@ public:
 
   static QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
 
+  static set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map);
+
   /**
    * Returns true if the element is in at least one review.
    */

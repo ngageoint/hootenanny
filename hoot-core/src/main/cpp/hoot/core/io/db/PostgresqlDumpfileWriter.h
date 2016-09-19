@@ -62,10 +62,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <QtCore/QString>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
-#include <QtCore/Q_INT64>
+#include <QString>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <Q_INT64>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/OsmMapWriter.h>
@@ -114,7 +114,8 @@ public:
 
 private:
 
-  std::map<QString, QStringList> _outputSections;
+  std::map<QString,
+    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
 
   std::list<QString> _sectionNames;
 
@@ -217,9 +218,9 @@ private:
   void _writeTagsToTables(
     const Tags& tags,
     const ElementIdDatatype nodeDbId,
-    const QString& currentTableName,
+    boost::shared_ptr<QTextStream>& currentTable,
     const QString& currentTableFormatString,
-    const QString& historicalTableName,
+    boost::shared_ptr<QTextStream>& historicalTable,
     const QString& historicalTableFormatString );
 
   void _createWayTables();
@@ -240,6 +241,8 @@ private:
     const unsigned int memberSequenceIndex );
 
   void _createTable( const QString& tableName, const QString& tableHeader );
+
+  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
 
   void _incrementChangesInChangeset();
 

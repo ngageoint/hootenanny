@@ -26,25 +26,26 @@
  */
 package hoot.services.readers.review;
 
+import static com.querydsl.sql.SQLExpressions.select;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
+import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysema.query.Tuple;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLSubQuery;
-import com.mysema.query.types.query.ListSubQuery;
+import com.querydsl.core.Tuple;
+import com.querydsl.sql.SQLQuery;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentWayNodes;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItemBbox;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -65,19 +66,17 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
     @Override
     public ReviewQueryMapper execQuery() {
         BoundingBox currBbox = new BoundingBox();
-        ReviewableItemBbox ret = new ReviewableItemBbox(currBbox, getMapId(), relationId);
+        ReviewableItemBbox reviewableItemBbox = new ReviewableItemBbox(currBbox, getMapId(), relationId);
 
         // do recursive bbox retrieval since relation may contain other relation
-        List<Long> relIds = new ArrayList<>();
-        relIds.add(relationId);
         List<BoundingBox> membersBboxList = new ArrayList<>();
-        getRelationMembersBboxRecursive(membersBboxList, relIds);
+        getRelationMembersBboxRecursive(membersBboxList, Collections.singletonList(relationId));
 
         for (BoundingBox bbx : membersBboxList) {
             currBbox.add(bbx);
         }
 
-        return ret;
+        return reviewableItemBbox;
     }
 
     /**
@@ -86,41 +85,41 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      * 
      * @param membersBboxList
      *            - storage containing bbox of all member elements
-     * @param relIds
+     * @param relationIds
      *            - relation ids of relation members
      */
-    private void getRelationMembersBboxRecursive(List<BoundingBox> membersBboxList, List<Long> relIds) {
-        for (Long relId : relIds) {
-            BoundingBox nodeMemBbox = getRelationNodeMembersBbox(relId);
+    private void getRelationMembersBboxRecursive(List<BoundingBox> membersBboxList, List<Long> relationIds) {
+        for (Long relationId : relationIds) {
+            BoundingBox nodeMemBbox = getRelationNodeMembersBbox(relationId);
             if (nodeMemBbox != null) {
                 membersBboxList.add(nodeMemBbox);
             }
 
-            BoundingBox wayMemBbox = getRelationWayMembersBbox(relId);
+            BoundingBox wayMemBbox = getRelationWayMembersBbox(relationId);
             if (wayMemBbox != null) {
                 membersBboxList.add(wayMemBbox);
             }
 
-            List<Long> memRelationIds = getRelationMembers(relId);
+            List<Long> memRelationIds = getRelationMembers(relationId);
             if (!memRelationIds.isEmpty()) {
                 getRelationMembersBboxRecursive(membersBboxList, memRelationIds);
             }
         }
     }
 
-    private static boolean validateTuple(Tuple tup) {
-        boolean ret = true;
+    private static boolean validateTuple(Tuple tuple) {
+        boolean isValid = true;
 
-        int nCols = tup.size();
-        for (int i = 0; i < nCols; i++) {
-            Object o = tup.get(i, Object.class);
+        int columnsCount = tuple.size();
+        for (int i = 0; i < columnsCount; i++) {
+            Object o = tuple.get(i, Object.class);
             if (o == null) {
-                ret = false;
+                isValid = false;
                 break;
             }
         }
 
-        return ret;
+        return isValid;
     }
 
     /**
@@ -161,39 +160,31 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
     private BoundingBox getRelationWayMembersBbox(long relationId) {
         BoundingBox bbox = null;
 
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        SQLQuery sql = getRelationWayMembersBboxQuery(relationId);
-        List<Tuple> tups = sql.list(currentNodes.latitude.min(), currentNodes.latitude.max(),
-                currentNodes.longitude.min(), currentNodes.longitude.min());
+        SQLQuery<Long> currentRelationMembersSub =
+                select(currentRelationMembers.memberId)
+                        .from(currentRelationMembers)
+                        .where(currentRelationMembers.relationId.eq(relationId)
+                                .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)));
 
-        for (Tuple tup : tups) {
-            bbox = resultSetToBbox(tup);
+        SQLQuery<Long> wayNodesSub =
+                select(currentWayNodes.nodeId)
+                        .from(currentWayNodes)
+                        .where(currentWayNodes.wayId.in(currentRelationMembersSub));
+
+        List<Tuple> result = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+                .select(currentNodes.latitude.min(),
+                        currentNodes.latitude.max(),
+                        currentNodes.longitude.min(),
+                        currentNodes.longitude.min())
+                .from(currentNodes)
+                .where(currentNodes.id.in(wayNodesSub))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            bbox = resultSetToBbox(tuple);
         }
 
         return bbox;
-    }
-
-    /**
-     * Query for retrieving relation way member's bbox.
-     * 
-     * @param relationId
-     *            - container relation id
-     * @return - com.mysema.query.sql.SQLQuery object
-     */
-    SQLQuery getRelationWayMembersBboxQuery(long relationId) {
-        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
-                .where(currentRelationMembers.relationId.eq(relationId)
-                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))
-                .list(currentRelationMembers.memberId);
-
-        QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-        ListSubQuery<Long> wayNodesSub = new SQLSubQuery().from(currentWayNodes).where(currentWayNodes.wayId.in(sub))
-                .list(currentWayNodes.nodeId);
-
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId())).from(currentNodes)
-                .where(currentNodes.id.in(wayNodesSub));
     }
 
     /**
@@ -204,36 +195,25 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      * @return - BoundingBox
      */
     private BoundingBox getRelationNodeMembersBbox(long relationId) {
-        BoundingBox bbox = null;
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        SQLQuery sql = getRelationNodeMembersBboxQuery(relationId);
-        List<Tuple> tups = sql.list(currentNodes.latitude.min(), currentNodes.latitude.max(),
-                currentNodes.longitude.min(), currentNodes.longitude.min());
+        SQLQuery<Long> sub =
+                select(currentRelationMembers.memberId)
+                .from(currentRelationMembers)
+                .where(currentRelationMembers.relationId.eq(relationId)
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)));
 
-        for (Tuple tup : tups) {
-            bbox = resultSetToBbox(tup);
+        List<Tuple> result = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+                .select(currentNodes.latitude.min(), currentNodes.latitude.max(),
+                        currentNodes.longitude.min(), currentNodes.longitude.min())
+                .from(currentNodes)
+                .where(currentNodes.id.in(sub))
+                .fetch();
+
+        BoundingBox bbox = null;
+        for (Tuple row : result) {
+            bbox = resultSetToBbox(row);
         }
 
         return bbox;
-    }
-
-    /**
-     * Query for retrieving relation node member's bbox.
-     * 
-     * @param relationId
-     *            - container relation id
-     * @return - com.mysema.query.sql.SQLQuery object
-     */
-    SQLQuery getRelationNodeMembersBboxQuery(long relationId) {
-        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        ListSubQuery<Long> sub = new SQLSubQuery().from(currentRelationMembers)
-                .where(currentRelationMembers.relationId.eq(relationId)
-                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
-                .list(currentRelationMembers.memberId);
-
-        QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId())).from(currentNodes)
-                .where(currentNodes.id.in(sub));
     }
 
     /**
@@ -244,22 +224,11 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      * @return - List of relation member ids
      */
     private List<Long> getRelationMembers(long relationId) {
-        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        List<Long> relMemberIds = getRelationMembersQuery(relationId).list(currentRelationMembers.memberId);
-        return relMemberIds;
-    }
-
-    /**
-     * Query for retrieving all relation members of a relation.
-     * 
-     * @param relationId
-     *            - container relation id
-     * @return - com.mysema.query.sql.SQLQuery object
-     */
-    SQLQuery getRelationMembersQuery(long relationId) {
-        QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-        return new SQLQuery(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
-                .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationId)
-                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)));
+        return new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+                .select(currentRelationMembers.memberId)
+                .from(currentRelationMembers)
+                .where(currentRelationMembers.relationId.eq(relationId)
+                        .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)))
+                .fetch();
     }
 }

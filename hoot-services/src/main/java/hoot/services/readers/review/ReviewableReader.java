@@ -28,9 +28,6 @@ package hoot.services.readers.review;
 
 import java.sql.Connection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItem;
@@ -38,31 +35,25 @@ import hoot.services.models.review.ReviewableStatistics;
 
 
 public class ReviewableReader {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableReader.class);
+    private final Connection connection;
 
-    private final Connection conn;
-
-    public ReviewableReader(Connection conn) {
-        this.conn = conn;
+    public ReviewableReader(Connection connection) {
+        this.connection = connection;
     }
 
-    public ReviewableItem getReviewableItem(long mapid, long seqid) throws Exception {
-        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(conn, mapid, seqid).execQuery();
-        return r;
+    public ReviewableItem getReviewableItem(long mapId, long sortOrder) {
+        return (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapId, sortOrder).execQuery();
     }
 
-    public ReviewableItem getRandomReviewableItem(long mapid) throws Exception {
-        ReviewableItem r = (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(conn, mapid).execQuery();
-        return r;
+    public ReviewableItem getRandomReviewableItem(long mapId) {
+        return (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapId).execQuery();
     }
 
-    public ReviewableStatistics getReviewablesStatistics(long mapid) throws Exception {
-        ReviewableStatistics r = (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(conn, mapid).execQuery();
-        return r;
+    public ReviewableStatistics getReviewablesStatistics(long mapId) {
+        return (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapId).execQuery();
     }
 
-    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) throws Exception {
-        AllReviewableItems r = (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(conn, mapid, bbox).execQuery();
-        return r;
+    public AllReviewableItems getAllReviewableItems(long mapId, BoundingBox bbox) {
+        return (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapId, bbox).execQuery();
     }
 }

@@ -26,13 +26,12 @@
  */
 package hoot.services.models.osm;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
-import com.mysema.query.Tuple;
+import com.querydsl.core.Tuple;
 
 import hoot.services.models.osm.Element.ElementType;
 
@@ -52,18 +51,16 @@ public final class ElementFactory {
      * @param conn
      *            JDBC Connection
      * @return an element
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
      */
-    public static Element create(long mapId, ElementType elementType, Connection conn)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException {
-        return (Element) ConstructorUtils.invokeConstructor(
-                Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
-                new Object[] { Long.valueOf(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+    public static Element create(long mapId, ElementType elementType, Connection conn) {
+        try {
+            return (Element) ConstructorUtils.invokeConstructor(
+                    Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
+                    new Object[] { Long.valueOf(mapId), conn }, new Class<?>[] { Long.class, Connection.class });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
+        }
     }
 
     /**
@@ -76,15 +73,8 @@ public final class ElementFactory {
      * @param conn
      *            JDBC Connection
      * @return an element
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws NoSuchMethodException
      */
-    public static Element create(ElementType elementType, Object record, Connection conn, long mapId)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
-            InvocationTargetException {
+    public static Element create(ElementType elementType, Object record, Connection conn, long mapId) {
         Object oElem = record;
 
         if (record instanceof Tuple) {
@@ -104,10 +94,15 @@ public final class ElementFactory {
             }
         }
 
-        Long oMapId = mapId;
-        return (Element) ConstructorUtils.invokeConstructor(
+        try {
+            Long oMapId = mapId;
+            return (Element) ConstructorUtils.invokeConstructor(
                 Class.forName(ClassUtils.getPackageName(ElementFactory.class) + "." + elementType),
                 new Object[] { oMapId, conn, oElem },
                 new Class<?>[] { Long.class, Connection.class, oElem.getClass() });
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error creating " + elementType + " OSM element for map with id = " + mapId, e);
+        }
     }
 }

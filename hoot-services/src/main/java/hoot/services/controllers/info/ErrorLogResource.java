@@ -40,7 +40,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
@@ -73,22 +72,25 @@ public class ErrorLogResource {
      */
     @GET
     @Path("/debuglog")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getDebugLog() {
-        String logStr;
+        String errorLog;
         try {
             // 50k Length
-            logStr = ErrorLog.getErrorlog(50000);
+            errorLog = ErrorLog.getErrorlog(50000);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
-            String message = "Error getting error logger: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error getting error log: " + ex;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("logger", logStr);
+        JSONObject entity = new JSONObject();
+        entity.put("logger", errorLog);
 
-        return Response.ok(res.toJSONString(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(entity.toJSONString()).build();
     }
 
     /**
@@ -106,20 +108,24 @@ public class ErrorLogResource {
         try {
             String outputPath = ErrorLog.generateExportLog();
             out = new File(outputPath);
+            // TODO: Really not sure about the line below.  Will the be always a single export?  Probably not.
             exportLogPath = outputPath;
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
-            String message = "Error exporting logger file: " + ex;
-            throw new WebApplicationException(ex, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String message = "Error exporting log file!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
         String dtStr = dateFormat.format(date);
 
-        ResponseBuilder rBuild = Response.ok(out, MediaType.APPLICATION_OCTET_STREAM);
-        rBuild.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
+        ResponseBuilder responseBuilder = Response.ok(out);
+        responseBuilder.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 }

@@ -26,6 +26,7 @@
  */
 package hoot.services.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAX_RECORD_BATCH_SIZE;
 
@@ -35,7 +36,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -43,44 +43,43 @@ import java.util.Set;
 
 import javax.xml.xpath.XPath;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.xpath.XPathAPI;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
-import org.postgresql.util.PGobject;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLExpressions;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.DbUtils.RecordBatchType;
-import hoot.services.utils.PostgresUtils;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.GeoUtils;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
-import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
+import hoot.services.models.osm.Element.ElementType;
+import hoot.services.utils.DbUtils;
+import hoot.services.utils.GeoUtils;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlUtils;
+import hoot.services.utils.DbUtils.RecordBatchType;
 
 
 /*
@@ -99,9 +98,9 @@ import hoot.services.utils.XmlUtils;
  * we're not working with any data from the wrong map.
  */
 public class OsmTestUtils {
-    public static Connection conn;
-    public static long mapId = -1;
-    public static long userId = -1;
+    private static Connection conn;
+    private static long mapId = -1;
+    private static long userId = -1;
 
     private static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
 
@@ -125,29 +124,35 @@ public class OsmTestUtils {
      * If a null bounds is specified, then the changeset gets no starting
      * bounds, as if it has newly been created with no data uploaded to it.
      */
-    public static long createTestChangeset(final BoundingBox bounds) throws Exception {
+    public static long createTestChangeset( BoundingBox bounds) throws Exception {
         // default changeset we use for testing has 12 edits
         return createTestChangeset(bounds, 12);
     }
 
     // allow num changes to be passed in as a var for testing purposes
-    public static long createTestChangeset(final BoundingBox bounds, final int numChanges) throws Exception {
-        final long changesetId = Changeset.insertNew(mapId, userId, conn);
-        Changeset changeset = new Changeset(mapId, changesetId, conn);
+    public static long createTestChangeset(BoundingBox bounds, int numChanges) throws Exception {
+        long changesetId = Changeset.insertNew(getMapId(), getUserId(), getConn(), new HashMap<String, String>());
+        Changeset changeset = new Changeset(getMapId(), changesetId, getConn());
+
         if (bounds != null) {
             changeset.setBounds(bounds);
         }
+
         changeset.updateNumChanges(numChanges);
         changeset.updateExpiration();
 
         QChangesets changesets = QChangesets.changesets;
 
-        hoot.services.db2.Changesets changesetPojo = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
+        Changesets changesetPojo = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
         Assert.assertNotNull(changesetPojo);
         Assert.assertEquals(numChanges, (long) changesetPojo.getNumChanges());
-        Assert.assertEquals(userId, (long) changesetPojo.getUserId());
+        Assert.assertEquals(getUserId(), (long) changesetPojo.getUserId());
+
         return changesetId;
     }
 
@@ -156,74 +161,74 @@ public class OsmTestUtils {
      * the test data used in this method doesn't have closed polys and other
      * tests test for that, leaving it returned as a Set for now.
      */
-    public static Set<Long> createTestNodes(final long changesetId, final BoundingBox bounds) throws Exception {
-        Set<Long> nodeIds = new LinkedHashSet<Long>();
-        Map<String, String> tags = new HashMap<String, String>();
+    public static Set<Long> createTestNodes(long changesetId, BoundingBox bounds) throws Exception {
+        Map<String, String> tags = new HashMap<>();
 
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
-        nodeIds.add(Node.insertNew(changesetId, mapId, bounds.getMinLat(), bounds.getMinLon(), tags, conn));
+        Set<Long> nodeIds = new LinkedHashSet<>();
+
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
         tags.clear();
 
-        nodeIds.add(Node.insertNew(changesetId, mapId, bounds.getMaxLat(), bounds.getMaxLon(), null, conn));
-
-        nodeIds.add(Node.insertNew(changesetId, mapId, bounds.getMinLat(), bounds.getMinLon(), null, conn));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMaxLat(), bounds.getMaxLon(), tags, getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
 
         tags.put("key 3", "val 3");
-        nodeIds.add(Node.insertNew(changesetId, mapId, bounds.getMinLat(), bounds.getMinLon(), tags, conn));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
         tags.clear();
 
         tags.put("key 4", "val 4");
-        nodeIds.add(Node.insertNew(changesetId, mapId, bounds.getMinLat(), bounds.getMinLon(), tags, conn));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags, getConn()));
         tags.clear();
 
         return nodeIds;
     }
 
-    public static Set<Long> createTestWays(final long changesetId, final Set<Long> nodeIds) throws Exception {
-        Set<Long> wayIds = new LinkedHashSet<Long>();
-        List<Long> wayNodeIds = new ArrayList<Long>();
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-        Map<String, String> tags = new HashMap<String, String>();
+    public static Set<Long> createTestWays(long changesetId, Set<Long> nodeIds) throws Exception {
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Map<String, String> tags = new HashMap<>();
 
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
+        List<Long> wayNodeIds = new ArrayList<>();
         wayNodeIds.add(nodeIdsArr[0]);
         wayNodeIds.add(nodeIdsArr[1]);
         wayNodeIds.add(nodeIdsArr[4]);
-        wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, tags, conn));
+        Set<Long> wayIds = new LinkedHashSet<>();
+        wayIds.add(insertNewWay(changesetId, getMapId(), wayNodeIds, tags, getConn()));
         tags.clear();
         wayNodeIds.clear();
 
         wayNodeIds.add(nodeIdsArr[2]);
         wayNodeIds.add(nodeIdsArr[1]);
-        wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, null, conn));
+        wayIds.add(insertNewWay(changesetId, getMapId(), wayNodeIds, null, getConn()));
         wayNodeIds.clear();
 
         tags.put("key 3", "val 3");
         wayNodeIds.add(nodeIdsArr[0]);
         wayNodeIds.add(nodeIdsArr[1]);
-        wayIds.add(insertNewWay(changesetId, mapId, wayNodeIds, tags, conn));
+        wayIds.add(insertNewWay(changesetId, getMapId(), wayNodeIds, tags, getConn()));
         tags.clear();
         wayNodeIds.clear();
 
         return wayIds;
     }
 
-    public static Set<Long> createTestRelations(final long changesetId, final Set<Long> nodeIds, final Set<Long> wayIds)
+    public static Set<Long> createTestRelations(long changesetId, Set<Long> nodeIds, Set<Long> wayIds)
             throws Exception {
-        Set<Long> relationIds = new LinkedHashSet<Long>();
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-        final Long[] wayIdsArr = wayIds.toArray(new Long[] {});
-        Map<String, String> tags = new HashMap<String, String>();
-        List<RelationMember> members = new ArrayList<RelationMember>();
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+        List<RelationMember> members = new ArrayList<>();
 
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
         members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
         members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+        Map<String, String> tags = new HashMap<>();
         tags.put("key 1", "val 1");
-        final long firstRelationId = insertNewRelation(changesetId, mapId, members, tags, conn);
+        long firstRelationId = insertNewRelation(changesetId, getMapId(), members, tags, getConn());
+        Set<Long> relationIds = new LinkedHashSet<>();
         relationIds.add(firstRelationId);
         tags.clear();
         members.clear();
@@ -232,18 +237,18 @@ public class OsmTestUtils {
         tags.put("key 3", "val 3");
         members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
         members.add(new RelationMember(firstRelationId, ElementType.Relation, "role1"));
-        relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
+        relationIds.add(insertNewRelation(changesetId, getMapId(), members, tags, getConn()));
         tags.clear();
         members.clear();
 
         tags.put("key 4", "val 4");
         members.add(new RelationMember(wayIdsArr[1], ElementType.Way));
-        relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
+        relationIds.add(insertNewRelation(changesetId, getMapId(), members, tags, getConn()));
         tags.clear();
         members.clear();
 
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-        relationIds.add(insertNewRelation(changesetId, mapId, members, null, conn));
+        relationIds.add(insertNewRelation(changesetId, getMapId(), members, null, getConn()));
         members.clear();
 
         return relationIds;
@@ -251,17 +256,17 @@ public class OsmTestUtils {
 
     // This is similar to createTestRelations but without any ways involved to
     // support certain tests.
-    public static Set<Long> createTestRelationsNoWays(final long changesetId, final Set<Long> nodeIds)
+    public static Set<Long> createTestRelationsNoWays(long changesetId, Set<Long> nodeIds)
             throws Exception {
-        Set<Long> relationIds = new LinkedHashSet<Long>();
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-        Map<String, String> tags = new HashMap<String, String>();
-        List<RelationMember> members = new ArrayList<RelationMember>();
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        List<RelationMember> members = new ArrayList<>();
 
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+        Map<String, String> tags = new HashMap<>();
         tags.put("key 1", "val 1");
-        final long firstRelationId = insertNewRelation(changesetId, mapId, members, tags, conn);
+        long firstRelationId = insertNewRelation(changesetId, getMapId(), members, tags, getConn());
+        Set<Long> relationIds = new LinkedHashSet<>();
         relationIds.add(firstRelationId);
         tags.clear();
         members.clear();
@@ -270,26 +275,29 @@ public class OsmTestUtils {
         tags.put("key 3", "val 3");
         members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
         members.add(new RelationMember(firstRelationId, ElementType.Relation, "role1"));
-        relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
+        relationIds.add(insertNewRelation(changesetId, getMapId(), members, tags, getConn()));
         tags.clear();
         members.clear();
 
         tags.put("key 4", "val 4");
         members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-        relationIds.add(insertNewRelation(changesetId, mapId, members, tags, conn));
+        relationIds.add(insertNewRelation(changesetId, getMapId(), members, tags, getConn()));
         tags.clear();
         members.clear();
 
         return relationIds;
     }
 
-    public static void verifyTestChangesetCreatedByRequest(final Long changesetId) {
+    public static void verifyTestChangesetCreatedByRequest(Long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(changesetId)).singleResult(changesets);
+        Changesets changeset = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
         Assert.assertNotNull(changeset);
-        final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         Assert.assertTrue(changeset.getCreatedAt().before(now));
         Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
         Assert.assertEquals(new Double(GeoUtils.DEFAULT_COORD_VALUE), changeset.getMaxLat());
@@ -297,41 +305,43 @@ public class OsmTestUtils {
         Assert.assertEquals(new Double(GeoUtils.DEFAULT_COORD_VALUE), changeset.getMinLon());
         Assert.assertEquals(new Double(GeoUtils.DEFAULT_COORD_VALUE), changeset.getMinLat());
         Assert.assertEquals(new Integer(0), changeset.getNumChanges());
-        Assert.assertEquals(new Long(userId), changeset.getUserId());
+        Assert.assertEquals(new Long(getUserId()), changeset.getUserId());
     }
 
-    public static void verifyTestDataUnmodified(final BoundingBox originalBounds, final long changesetId,
-            final Set<Long> nodeIds, final Set<Long> wayIds, final Set<Long> relationIds) {
+    public static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
+            Set<Long> nodeIds, Set<Long> wayIds, Set<Long> relationIds) {
         verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, true);
     }
 
-    public static void verifyTestDataUnmodified(final BoundingBox originalBounds, final long changesetId,
-            final Set<Long> nodeIds, final Set<Long> wayIds, final Set<Long> relationIds, final boolean verifyTags) {
+    public static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
+            Set<Long> nodeIds, Set<Long> wayIds, Set<Long> relationIds, boolean verifyTags) {
         verifyTestChangesetUnmodified(changesetId, originalBounds);
         verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds, verifyTags);
         verifyTestWaysUnmodified(wayIds, nodeIds, changesetId, verifyTags);
         verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId, verifyTags);
     }
 
-    public static void verifyTestChangesetUnmodified(final long changesetId) {
+    public static void verifyTestChangesetUnmodified(long changesetId) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
+            Changesets changeset = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(changesets)
+                    .from(changesets)
+                    .where(changesets.id.eq(changesetId))
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             Assert.assertTrue(changeset.getCreatedAt().before(now));
             Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
             Assert.assertEquals(new Integer(12), changeset.getNumChanges());
-            Assert.assertEquals(new Long(userId), changeset.getUserId());
+            Assert.assertEquals(new Long(getUserId()), changeset.getUserId());
 
             // make sure the changeset bounds has never been modified
-            hoot.services.models.osm.Changeset hootChangeset = new hoot.services.models.osm.Changeset(mapId,
-                    changesetId, conn);
+            Changeset hootChangeset = new Changeset(getMapId(), changesetId, getConn());
             BoundingBox changesetBounds = hootChangeset.getBounds();
             BoundingBox defaultBounds = new BoundingBox();
-            Assert.assertTrue(changesetBounds.equals(defaultBounds));
+            Assert.assertEquals(defaultBounds, changesetBounds);
         }
         catch (Exception e) {
             Assert.fail("Error checking changeset: " + e.getMessage());
@@ -339,43 +349,49 @@ public class OsmTestUtils {
     }
 
     // for testing purposes allow specifying numChanges as a variable
-    public static void verifyTestChangesetClosed(final long changesetId, final int numChanges) {
+    public static void verifyTestChangesetClosed(long changesetId, int numChanges) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(changesetId)).singleResult(changesets);
+        Changesets changeset = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
         Assert.assertNotNull(changeset);
-        final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         Assert.assertTrue(changeset.getCreatedAt().before(now));
         Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
         Assert.assertTrue(changeset.getClosedAt().before(now));
         Assert.assertEquals(new Integer(numChanges), changeset.getNumChanges());
-        Assert.assertEquals(new Long(userId), changeset.getUserId());
+        Assert.assertEquals(new Long(getUserId()), changeset.getUserId());
     }
 
-    public static void verifyTestChangesetClosed(final long changesetId) {
+    public static void verifyTestChangesetClosed(long changesetId) {
         // default changeset we use for testing has 12 edits
         verifyTestChangesetClosed(changesetId, 12);
     }
 
-    public static void verifyTestChangesetUnmodified(final long changesetId, final BoundingBox originalBounds) {
+    public static void verifyTestChangesetUnmodified(long changesetId, BoundingBox originalBounds) {
         try {
             QChangesets changesets = QChangesets.changesets;
-            hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(changesets).where(changesets.id.eq(changesetId)).singleResult(changesets);
+            Changesets changeset = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(changesets)
+                    .from(changesets)
+                    .where(changesets.id.eq(changesetId))
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             Assert.assertTrue(changeset.getCreatedAt().before(now));
             Assert.assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
             Assert.assertEquals(new Integer(12), changeset.getNumChanges());
-            Assert.assertEquals(new Long(userId), changeset.getUserId());
+            Assert.assertEquals(new Long(getUserId()), changeset.getUserId());
 
             // make sure the changeset bounds wasn't updated
-            hoot.services.models.osm.Changeset hootChangeset = new hoot.services.models.osm.Changeset(mapId,
-                    changesetId, conn);
+            Changeset hootChangeset = new Changeset(getMapId(), changesetId, getConn());
             BoundingBox changesetBounds = hootChangeset.getBounds();
             BoundingBox defaultBounds = new BoundingBox();
+
             // a change the size of the expansion factor is made automatically,
             // so the changeset's
             // bounds should be no larger than that
@@ -387,21 +403,21 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyTestNodesUnmodified(final Set<Long> nodeIds, final long changesetId,
-            final BoundingBox originalBounds) {
+    public static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId, BoundingBox originalBounds) {
         verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds, true);
     }
 
-    public static void verifyTestNodesUnmodified(final Set<Long> nodeIds, final long changesetId,
-            final BoundingBox originalBounds, final boolean verifyTags) {
+    public static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId,
+            BoundingBox originalBounds, boolean verifyTags) {
         try {
             QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 
-            final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-            final Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentNodes)
-                    .where((currentNodes.changesetId.eq(changesetId))).map(currentNodes.id, currentNodes)
+            Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+            Map<Long, CurrentNodes> nodes = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .from(currentNodes)
+                    .where((currentNodes.changesetId.eq(changesetId)))
+                    .transform(groupBy(currentNodes.id).as(currentNodes));
 
-            ;
             Assert.assertEquals(5, nodes.size());
 
             CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -410,9 +426,10 @@ public class OsmTestUtils {
             Assert.assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
             Assert.assertEquals(nodeIdsArr[0], nodeRecord.getId());
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
+
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     // System.out.println(tags.get("key 1"));
                     Assert.assertEquals("val 1", tags.get("key 1"));
@@ -432,8 +449,8 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Assert.assertTrue(nodeRecord.getTags() == null
-                            || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                    Assert.assertTrue((nodeRecord.getTags() == null)
+                            || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking node tags: " + e.getMessage());
@@ -448,8 +465,8 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Assert.assertTrue(nodeRecord.getTags() == null
-                            || StringUtils.isEmpty(((PGobject) nodeRecord.getTags()).getValue()));
+                    Assert.assertTrue((nodeRecord.getTags() == null)
+                            || PostgresUtils.postgresObjToHStore(nodeRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking node tags: " + e.getMessage());
@@ -464,7 +481,7 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 3", tags.get("key 3"));
                 }
@@ -481,7 +498,7 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(1), nodeRecord.getVersion());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -495,31 +512,36 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyTestWaysUnmodified(final Set<Long> wayIds, final Set<Long> nodeIds,
-            final long changesetId) {
+    public static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId) {
         verifyTestWaysUnmodified(wayIds, nodeIds, changesetId, true);
     }
 
-    public static void verifyTestWaysUnmodified(final Set<Long> wayIds, final Set<Long> nodeIds, final long changesetId,
-            final boolean verifyTags) {
-        QCurrentWays currentWays = QCurrentWays.currentWays;
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-        final Long[] wayIdsArr = wayIds.toArray(new Long[] {});
+    public static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId,
+            boolean verifyTags) {
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         try {
-            final Map<Long, CurrentWays> ways = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWays)
-                    .where((currentWays.changesetId.eq(changesetId))).map(currentWays.id, currentWays)
+            QCurrentWays currentWays = QCurrentWays.currentWays;
+            Map<Long, CurrentWays> ways = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .from(currentWays)
+                    .where((currentWays.changesetId.eq(changesetId)))
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
-            ;
             Assert.assertEquals(3, ways.size());
 
-            QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
             CurrentWays wayRecord = ways.get(wayIdsArr[0]);
             Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
             Assert.assertEquals(wayIdsArr[0], wayRecord.getId());
             Assert.assertEquals(new Long(1), wayRecord.getVersion());
-            List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
-                    .where(currentWayNodes.wayId.eq(wayIdsArr[0])).orderBy(currentWayNodes.sequenceId.asc())
-                    .list(currentWayNodes);
+            QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
+
+            List<CurrentWayNodes> wayNodes = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(QCurrentWayNodes.currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[0]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(3, wayNodes.size());
             CurrentWayNodes wayNode = wayNodes.get(0);
             Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
@@ -535,7 +557,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                     Assert.assertEquals("val 2", tags.get("key 2"));
@@ -549,11 +571,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
             Assert.assertEquals(wayIdsArr[1], wayRecord.getId());
             Assert.assertEquals(new Long(1), wayRecord.getVersion());
-            wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
-                    .where(currentWayNodes.wayId.eq(wayIdsArr[1])).orderBy(currentWayNodes.sequenceId.asc())
-                    .list(currentWayNodes)
 
-            ;
+            wayNodes = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(QCurrentWayNodes.currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[1]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(2, wayNodes.size());
             wayNode = wayNodes.get(0);
             Assert.assertEquals(nodeIdsArr[2], wayNode.getNodeId());
@@ -563,10 +588,11 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[1], wayNode.getNodeId());
             Assert.assertEquals(new Long(2), wayNode.getSequenceId());
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             if (verifyTags) {
                 try {
-                    Assert.assertTrue(wayRecord.getTags() == null
-                            || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                    Assert.assertTrue((wayRecord.getTags() == null)
+                            || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking way tags: " + e.getMessage());
@@ -577,9 +603,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), wayRecord.getChangesetId());
             Assert.assertEquals(wayIdsArr[2], wayRecord.getId());
             Assert.assertEquals(new Long(1), wayRecord.getVersion());
-            wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentWayNodes)
-                    .where(currentWayNodes.wayId.eq(wayIdsArr[2])).orderBy(currentWayNodes.sequenceId.asc())
-                    .list(currentWayNodes);
+
+            wayNodes = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(QCurrentWayNodes.currentWayNodes)
+                    .from(currentWayNodes)
+                    .where(currentWayNodes.wayId.eq(wayIdsArr[2]))
+                    .orderBy(currentWayNodes.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(2, wayNodes.size());
             wayNode = wayNodes.get(0);
             Assert.assertEquals(nodeIdsArr[0], wayNode.getNodeId());
@@ -591,7 +622,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 3", tags.get("key 3"));
                 }
@@ -605,31 +636,41 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyTestRelationsUnmodified(final Set<Long> relationIds, final Set<Long> wayIds,
-            final Set<Long> nodeIds, final long changesetId) {
+    public static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
+            Set<Long> nodeIds, long changesetId) {
         verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId, true);
     }
 
-    public static void verifyTestRelationsUnmodified(final Set<Long> relationIds, final Set<Long> wayIds,
-            final Set<Long> nodeIds, final long changesetId, final boolean verifyTags) {
-        QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-        final Long[] relationIdsArr = relationIds.toArray(new Long[] {});
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
-        final Long[] wayIdsArr = wayIds.toArray(new Long[] {});
+    public static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
+            Set<Long> nodeIds, long changesetId, boolean verifyTags) {
+        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         try {
-            final Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelations).where((currentRelations.changesetId.eq(changesetId)))
-                    .map(currentRelations.id, currentRelations);
+            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
+
+            Map<Long, CurrentRelations> relations =
+                    new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .from(currentRelations)
+                    .where((currentRelations.changesetId.eq(changesetId)))
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
+
             Assert.assertEquals(4, relations.size());
 
-            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
             CurrentRelations relationRecord = relations.get(relationIdsArr[0]);
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            List<CurrentRelationMembers> relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers);
+            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
+
+            List<CurrentRelationMembers> relationMembers =
+                    new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
+                            .fetch();
+
             Assert.assertEquals(4, relationMembers.size());
             CurrentRelationMembers member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -661,7 +702,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                 }
@@ -674,9 +715,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembers)
+
+            relationMembers = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers);
+                    .orderBy(currentRelationMembers.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(2, relationMembers.size());
             member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -694,7 +740,7 @@ public class OsmTestUtils {
             Assert.assertEquals(relationIdsArr[0], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 2", tags.get("key 2"));
                     Assert.assertEquals("val 3", tags.get("key 3"));
@@ -708,9 +754,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembers)
+
+            relationMembers = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
                     .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers);
+                    .orderBy(currentRelationMembers.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(1, relationMembers.size());
             member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -721,7 +772,7 @@ public class OsmTestUtils {
             Assert.assertEquals(wayIdsArr[1], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -734,11 +785,15 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[3], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            relationMembers =
 
-                    new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembers)
+            relationMembers =
+                    new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
                             .where(currentRelationMembers.relationId.eq(relationIdsArr[3]))
-                            .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers);
+                            .orderBy(currentRelationMembers.sequenceId.asc())
+                            .fetch();
+
             Assert.assertEquals(1, relationMembers.size());
             member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -749,8 +804,8 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Assert.assertTrue(relationRecord.getTags() == null
-                            || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                    Assert.assertTrue((relationRecord.getTags() == null)
+                            || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
                 }
                 catch (Exception e) {
                     Assert.fail("Error checking relation tags: " + e.getMessage());
@@ -762,29 +817,35 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyTestRelationsNoWaysUnmodified(final Set<Long> relationIds, final Set<Long> nodeIds,
-            final long changesetId, final boolean verifyTags) {
-        QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-        final Long[] relationIdsArr = relationIds.toArray(new Long[] {});
-        final Long[] nodeIdsArr = nodeIds.toArray(new Long[] {});
+    public static void verifyTestRelationsNoWaysUnmodified(Set<Long> relationIds, Set<Long> nodeIds,
+            long changesetId, boolean verifyTags) {
+        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         try {
-            final Map<Long, CurrentRelations> relations = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelations).where((currentRelations.changesetId.eq(changesetId)))
-                    .map(currentRelations.id, currentRelations)
+            QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
 
-            ;
+            Map<Long, CurrentRelations> relations =
+                    new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .from(currentRelations)
+                    .where((currentRelations.changesetId.eq(changesetId)))
+                    .transform(groupBy(currentRelations.id).as(currentRelations));
+
             Assert.assertEquals(3, relations.size());
 
-            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
             CurrentRelations relationRecord = relations.get(relationIdsArr[0]);
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[0], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            List<CurrentRelationMembers> relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                    .from(currentRelationMembers).where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers)
 
-            ;
+            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
+            List<CurrentRelationMembers> relationMembers =
+                    new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                            .select(currentRelationMembers)
+                            .from(currentRelationMembers)
+                            .where(currentRelationMembers.relationId.eq(relationIdsArr[0]))
+                            .orderBy(currentRelationMembers.sequenceId.asc())
+                            .fetch();
+
             Assert.assertEquals(2, relationMembers.size());
             CurrentRelationMembers member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -802,7 +863,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 1", tags.get("key 1"));
                 }
@@ -815,11 +876,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[1], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembers)
-                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers)
 
-            ;
+            relationMembers = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[1]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(2, relationMembers.size());
             member = relationMembers.get(0);
             Assert.assertEquals(relationRecord.getId(), member.getRelationId());
@@ -837,7 +901,7 @@ public class OsmTestUtils {
             Assert.assertEquals(relationIdsArr[0], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(2, tags.size());
                     Assert.assertEquals("val 2", tags.get("key 2"));
                     Assert.assertEquals("val 3", tags.get("key 3"));
@@ -851,11 +915,14 @@ public class OsmTestUtils {
             Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             Assert.assertEquals(relationIdsArr[2], relationRecord.getId());
             Assert.assertEquals(new Long(1), relationRecord.getVersion());
-            relationMembers = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(currentRelationMembers)
-                    .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
-                    .orderBy(currentRelationMembers.sequenceId.asc()).list(currentRelationMembers)
 
-            ;
+            relationMembers = new SQLQuery<>(getConn(), DbUtils.getConfiguration(getMapId()))
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.eq(relationIdsArr[2]))
+                    .orderBy(currentRelationMembers.sequenceId.asc())
+                    .fetch();
+
             Assert.assertEquals(1, relationMembers.size());
             member = relationMembers.get(0);
             Assert.assertEquals(relationIdsArr[2], member.getRelationId());
@@ -866,7 +933,7 @@ public class OsmTestUtils {
             Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
             if (verifyTags) {
                 try {
-                    Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                    Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                     Assert.assertEquals(1, tags.size());
                     Assert.assertEquals("val 4", tags.get("key 4"));
                 }
@@ -880,7 +947,7 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyOsmHeader(final Document responseData) {
+    public static void verifyOsmHeader(Document responseData) {
         try {
             XPath xpath = XmlUtils.createXPath();
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
@@ -895,7 +962,7 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyBounds(final Document responseData, final BoundingBox expectedBounds) {
+    public static void verifyBounds(Document responseData, BoundingBox expectedBounds) {
         try {
             XPath xpath = XmlUtils.createXPath();
             Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/bounds").getLength());
@@ -913,8 +980,8 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyNode(final Document responseData, final long index, final String expectedId,
-            final long changesetId, final double lat, final double lon, final boolean multiLayerUniqueElementIds) {
+    public static void verifyNode(Document responseData, long index, String expectedId,
+            long changesetId, double lat, double lon, boolean multiLayerUniqueElementIds) {
         try {
             XPath xpath = XmlUtils.createXPath();
             if (!multiLayerUniqueElementIds) {
@@ -924,8 +991,7 @@ public class OsmTestUtils {
             else {
                 Assert.assertEquals(expectedId, xpath.evaluate("//osm/node[" + index + "]/@id", responseData));
             }
-            Assert.assertEquals(true,
-                    Boolean.parseBoolean(xpath.evaluate("//osm/node[" + index + "]/@visible", responseData)));
+            Assert.assertTrue(Boolean.parseBoolean(xpath.evaluate("//osm/node[" + index + "]/@visible", responseData)));
             Assert.assertEquals(1, Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@version", responseData)));
             Assert.assertEquals(changesetId,
                     Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@changeset", responseData)));
@@ -939,11 +1005,11 @@ public class OsmTestUtils {
             }
 
             Timestamp nodeTimestamp = new Timestamp(timeFormatter.parseDateTime(timeStampStr).getMillis());
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             Assert.assertTrue(nodeTimestamp.before(now));
-            Assert.assertEquals("user-with-id-" + userId,
+            Assert.assertEquals("user-with-id-" + getUserId(),
                     xpath.evaluate("//osm/node[" + index + "]/@user", responseData));
-            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@uid", responseData)));
+            Assert.assertEquals(getUserId(), Long.parseLong(xpath.evaluate("//osm/node[" + index + "]/@uid", responseData)));
             Assert.assertEquals(lat, Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lat", responseData)),
                     0.0);
             Assert.assertEquals(lon, Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lon", responseData)),
@@ -954,8 +1020,8 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyWay(final Document responseData, final long index, final String expectedId,
-            final long changesetId, final Set<Long> expectedWayNodeIds, final boolean multiLayerUniqueElementIds) {
+    public static void verifyWay(Document responseData, long index, String expectedId,
+            long changesetId, Set<Long> expectedWayNodeIds, boolean multiLayerUniqueElementIds) {
         try {
             XPath xpath = XmlUtils.createXPath();
 
@@ -966,8 +1032,7 @@ public class OsmTestUtils {
             else {
                 Assert.assertEquals(expectedId, xpath.evaluate("//osm/way[" + index + "]/@id", responseData));
             }
-            Assert.assertEquals(true,
-                    Boolean.parseBoolean(xpath.evaluate("//osm/way[" + index + "]/@visible", responseData)));
+            Assert.assertTrue(Boolean.parseBoolean(xpath.evaluate("//osm/way[" + index + "]/@visible", responseData)));
             Assert.assertEquals(1, Long.parseLong(xpath.evaluate("//osm/way[" + index + "]/@version", responseData)));
             Assert.assertEquals(changesetId,
                     Long.parseLong(xpath.evaluate("//osm/way[" + index + "]/@changeset", responseData)));
@@ -981,14 +1046,14 @@ public class OsmTestUtils {
             }
 
             Timestamp wayTimestamp = new Timestamp(timeFormatter.parseDateTime(timeStampStr).getMillis());
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             Assert.assertTrue(wayTimestamp.before(now));
-            Assert.assertEquals("user-with-id-" + userId,
+            Assert.assertEquals("user-with-id-" + getUserId(),
                     xpath.evaluate("//osm/way[" + index + "]/@user", responseData));
-            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/way[" + index + "]/@uid", responseData)));
+            Assert.assertEquals(getUserId(), Long.parseLong(xpath.evaluate("//osm/way[" + index + "]/@uid", responseData)));
 
             if (expectedWayNodeIds != null) {
-                final Long[] expectedWayNodeIdsArr = expectedWayNodeIds.toArray(new Long[] {});
+                Long[] expectedWayNodeIdsArr = expectedWayNodeIds.toArray(new Long[expectedWayNodeIds.size()]);
                 Assert.assertEquals(expectedWayNodeIdsArr.length,
                         XPathAPI.selectNodeList(responseData, "//osm/way[" + index + "]/nd").getLength());
                 for (int i = 0; i < expectedWayNodeIdsArr.length; i++) {
@@ -1002,9 +1067,8 @@ public class OsmTestUtils {
         }
     }
 
-    public static void verifyRelation(final Document responseData, final long index, final String expectedId,
-            final long changesetId, final List<RelationMember> expectedMembers,
-            final boolean multiLayerUniqueElementIds) {
+    public static void verifyRelation(Document responseData, long index, String expectedId,
+            long changesetId, List<RelationMember> expectedMembers, boolean multiLayerUniqueElementIds) {
         try {
             XPath xpath = XmlUtils.createXPath();
 
@@ -1015,7 +1079,7 @@ public class OsmTestUtils {
             else {
                 Assert.assertEquals(expectedId, xpath.evaluate("//osm/relation[" + index + "]/@id", responseData));
             }
-            Assert.assertEquals(true,
+            Assert.assertTrue(
                     Boolean.parseBoolean(xpath.evaluate("//osm/relation[" + index + "]/@visible", responseData)));
             Assert.assertEquals(1,
                     Long.parseLong(xpath.evaluate("//osm/relation[" + index + "]/@version", responseData)));
@@ -1031,11 +1095,11 @@ public class OsmTestUtils {
             }
 
             Timestamp relationTimestamp = new Timestamp(timeFormatter.parseDateTime(timeStampStr).getMillis());
-            final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
             Assert.assertTrue(relationTimestamp.before(now));
-            Assert.assertEquals("user-with-id-" + userId,
+            Assert.assertEquals("user-with-id-" + getUserId(),
                     xpath.evaluate("//osm/relation[" + index + "]/@user", responseData));
-            Assert.assertEquals(userId,
+            Assert.assertEquals(getUserId(),
                     Long.parseLong(xpath.evaluate("//osm/relation[" + index + "]/@uid", responseData)));
 
             if (expectedMembers != null) {
@@ -1059,17 +1123,21 @@ public class OsmTestUtils {
         }
     }
 
-    public static void closeChangeset(final long mapId, final long changesetId) {
+    public static void closeChangeset(long mapId, long changesetId) {
         QChangesets changesets = QChangesets.changesets;
-        hoot.services.db2.Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(changesetId)).singleResult(changesets);
+        Changesets changeset = new SQLQuery<>(getConn(), DbUtils.getConfiguration(mapId))
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
-        final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         changeset.setClosedAt(now);
         // changesetDao.update(changeset);
 
-        new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
-                .where(changesets.id.eq(changeset.getId())).populate(changeset).execute();
+        new SQLUpdateClause(getConn(), DbUtils.getConfiguration(mapId), changesets)
+                .where(changesets.id.eq(changeset.getId()))
+                .populate(changeset).execute();
     }
 
     public static BoundingBox createTestQueryBounds() throws Exception {
@@ -1081,21 +1149,15 @@ public class OsmTestUtils {
     }
 
     // This method adds nodes that are completely outside of the query bounds,
-    // so that we can
-    // make sure it that ways and relations created with them don't come back in
-    // the response.
-    // Eventually, this out of bounds data should be made part of the test
-    // dataset created in
-    // ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
-    // not doing it right
-    // now.
+    // so that we can make sure it that ways and relations created with them don't come back in
+    // the response.  Eventually, this out of bounds data should be made part of the test
+    // dataset created in ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
+    // not doing it right now.
     public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
         Set<Long> nodeIds = new LinkedHashSet<>();
-        nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, null,
-                conn));
-        nodeIds.add(Node.insertNew(changesetId, mapId, queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, null,
-                conn));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, new HashMap<String, String>(), getConn()));
+        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, new HashMap<String, String>(), getConn()));
         return nodeIds;
     }
 
@@ -1115,10 +1177,14 @@ public class OsmTestUtils {
      * @return ID of the newly created way
      * @throws Exception
      */
-    public static long insertNewWay(final long changesetId, final long mapId, final List<Long> nodeIds,
-            final Map<String, String> tags, Connection dbConn) throws Exception {
-        long nextWayId = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                .uniqueResult(SQLExpressions.nextval(Long.class, "current_ways_id_seq"));
+    public static long insertNewWay(long changesetId, long mapId, List<Long> nodeIds,
+            Map<String, String> tags, Connection dbConn) throws Exception {
+
+        long nextWayId = new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "current_ways_id_seq"))
+                .from()
+                .fetchOne();
+
         insertNewWay(nextWayId, changesetId, mapId, nodeIds, tags, dbConn);
 
         return nextWayId;
@@ -1143,29 +1209,28 @@ public class OsmTestUtils {
      * @throws Exception
      *             see addNodeRefs
      */
-    public static void insertNewWay(final long wayId, final long changesetId, final long mapId,
-            final List<Long> nodeIds, final Map<String, String> tags, Connection dbConn) throws Exception {
+    public static void insertNewWay(long wayId, long changesetId, long mapId,
+            List<Long> nodeIds, Map<String, String> tags, Connection dbConn) throws Exception {
         CurrentWays wayRecord = new CurrentWays();
         wayRecord.setChangesetId(changesetId);
         wayRecord.setId(wayId);
 
-        final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         wayRecord.setTimestamp(now);
-        wayRecord.setVersion(new Long(1));
+        wayRecord.setVersion(1L);
         wayRecord.setVisible(true);
-        if (tags != null && tags.size() > 0) {
+        if ((tags != null) && (!tags.isEmpty())) {
             wayRecord.setTags(tags);
         }
 
         String strKv = "";
 
         if (tags != null) {
-            Iterator it = tags.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
+            for (Object o : tags.entrySet()) {
+                Map.Entry pairs = (Map.Entry) o;
                 String key = "\"" + pairs.getKey() + "\"";
                 String val = "\"" + pairs.getValue() + "\"";
-                if (strKv.length() > 0) {
+                if (!strKv.isEmpty()) {
                     strKv += ",";
                 }
 
@@ -1176,9 +1241,9 @@ public class OsmTestUtils {
         strTags += strKv;
         strTags += "'";
 
-        String POSTGRESQL_DRIVER = "org.postgresql.Driver";
         Statement stmt = null;
         try {
+            String POSTGRESQL_DRIVER = "org.postgresql.Driver";
             Class.forName(POSTGRESQL_DRIVER);
 
             stmt = dbConn.createStatement();
@@ -1196,8 +1261,9 @@ public class OsmTestUtils {
             throw new Exception("Error inserting node.", e);
         }
         finally {
-            if (stmt != null)
+            if (stmt != null) {
                 stmt.close();
+            }
         }
     }
 
@@ -1217,9 +1283,9 @@ public class OsmTestUtils {
      * in the services db, or if any of the referenced nodes are not set to be
      * visible in the services db
      */
-    private static void addWayNodes(final long mapId, final Way way, final List<Long> nodeIds) throws Exception {
+    private static void addWayNodes(long mapId, Way way, List<Long> nodeIds) throws Exception {
         CurrentWays wayRecord = (CurrentWays) way.getRecord();
-        List<CurrentWayNodes> wayNodeRecords = new ArrayList<CurrentWayNodes>();
+        List<CurrentWayNodes> wayNodeRecords = new ArrayList<>();
         long sequenceCtr = 1;
         for (long nodeId : nodeIds) {
             CurrentWayNodes wayNodeRecord = new CurrentWayNodes();
@@ -1232,7 +1298,7 @@ public class OsmTestUtils {
 
         int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
-                conn, maxRecordBatchSize);
+                getConn(), maxRecordBatchSize);
     }
 
     /*
@@ -1241,8 +1307,8 @@ public class OsmTestUtils {
      * relations of size = 0 are allowed; see
      * http://wiki.openstreetmap.org/wiki/Empty_relations
      */
-    private static void addRelationMembers(final long mapId, final Relation relation,
-            final List<RelationMember> members) throws Exception {
+    private static void addRelationMembers(long mapId, Relation relation, List<RelationMember> members)
+            throws Exception {
         CurrentRelations relationRecord = (CurrentRelations) relation.getRecord();
         /*
          * final Set<Long> nodeIds = getMemberIdsByType(members,
@@ -1274,7 +1340,7 @@ public class OsmTestUtils {
          * relationRecord.getId()); }
          */
 
-        List<CurrentRelationMembers> memberRecords = new ArrayList<CurrentRelationMembers>();
+        List<CurrentRelationMembers> memberRecords = new ArrayList<>();
         int sequenceCtr = 1;
         for (RelationMember member : members) {
             CurrentRelationMembers memberRecord = new CurrentRelationMembers();
@@ -1289,7 +1355,7 @@ public class OsmTestUtils {
 
         int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
         DbUtils.batchRecords(mapId, memberRecords, QCurrentRelationMembers.currentRelationMembers, null,
-                RecordBatchType.INSERT, conn, maxRecordBatchSize);
+                RecordBatchType.INSERT, getConn(), maxRecordBatchSize);
     }
 
     /**
@@ -1308,11 +1374,16 @@ public class OsmTestUtils {
      * @return ID of the newly created element
      * @throws Exception
      */
-    public static long insertNewRelation(final long changesetId, final long mapId, final List<RelationMember> members,
-            final Map<String, String> tags, Connection dbConn) throws Exception {
-        final long nextRelationId = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId))
-                .uniqueResult(SQLExpressions.nextval(Long.class, "current_relations_id_seq"));
+    public static long insertNewRelation(long changesetId, long mapId, List<RelationMember> members,
+            Map<String, String> tags, Connection dbConn) throws Exception {
+
+        long nextRelationId = new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                .select(SQLExpressions.nextval(Long.class, "current_relations_id_seq"))
+                .from()
+                .fetchOne();
+
         insertNewRelation(nextRelationId, changesetId, mapId, members, tags, dbConn);
+
         return nextRelationId;
     }
 
@@ -1320,7 +1391,7 @@ public class OsmTestUtils {
      * Inserts a new relation into the services database with the specified ID;
      * useful for testing
      *
-     * @param wayId
+     * @param relId
      *            ID to assign to the new way
      * @param changesetId
      *            corresponding changeset ID for the element to be inserted
@@ -1334,27 +1405,26 @@ public class OsmTestUtils {
      *            JDBC Connection
      * @throws Exception
      */
-    public static void insertNewRelation(final long relId, final long changesetId, final long mapId,
-            final List<RelationMember> members, final Map<String, String> tags, Connection dbConn) throws Exception {
+    public static void insertNewRelation(long relId, long changesetId, long mapId,
+            List<RelationMember> members, Map<String, String> tags, Connection dbConn) throws Exception {
         CurrentRelations relationRecord = new CurrentRelations();
         relationRecord.setChangesetId(changesetId);
         relationRecord.setId(relId);
-        final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         relationRecord.setTimestamp(now);
-        relationRecord.setVersion(new Long(1));
+        relationRecord.setVersion(1L);
         relationRecord.setVisible(true);
-        if (tags != null && tags.size() > 0) {
+        if ((tags != null) && (!tags.isEmpty())) {
             relationRecord.setTags(tags);
         }
 
         String strKv = "";
         if (tags != null) {
-            Iterator it = tags.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry) it.next();
+            for (Object o : tags.entrySet()) {
+                Map.Entry pairs = (Map.Entry) o;
                 String key = "\"" + pairs.getKey() + "\"";
                 String val = "\"" + pairs.getValue() + "\"";
-                if (strKv.length() > 0) {
+                if (!strKv.isEmpty()) {
                     strKv += ",";
                 }
 
@@ -1365,9 +1435,9 @@ public class OsmTestUtils {
         strTags += strKv;
         strTags += "'";
 
-        String POSTGRESQL_DRIVER = "org.postgresql.Driver";
         Statement stmt = null;
         try {
+            String POSTGRESQL_DRIVER = "org.postgresql.Driver";
             Class.forName(POSTGRESQL_DRIVER);
 
             stmt = dbConn.createStatement();
@@ -1386,8 +1456,9 @@ public class OsmTestUtils {
         }
 
         finally {
-            if (stmt != null)
+            if (stmt != null) {
                 stmt.close();
+            }
         }
     }
 
@@ -1404,18 +1475,46 @@ public class OsmTestUtils {
      * @return a tag count
      * @throws Exception
      */
-    public static long getTagCountForElementType(final long mapId, final ElementType elementType, Connection dbConn)
+    public static long getTagCountForElementType(long mapId, ElementType elementType, Connection dbConn)
             throws Exception {
-        final Element prototype = ElementFactory.create(mapId, elementType, dbConn);
-        List<?> records = new SQLQuery(dbConn, DbUtils.getConfiguration(mapId)).from(prototype.getElementTable())
-                .list(prototype.getElementTable());
+        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+
+        List<?> records = new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+                .select(prototype.getElementTable())
+                .from(prototype.getElementTable())
+                .fetch();
+
         long tagCount = 0;
         for (Object record : records) {
-            PGobject tags = (PGobject) MethodUtils.invokeMethod(record, "getTags", new Object[] {});
+            Object tags = MethodUtils.invokeMethod(record, "getTags");
             if (tags != null) {
                 tagCount += PostgresUtils.postgresObjToHStore(tags).size();
             }
         }
         return tagCount;
+    }
+
+    public static long getMapId() {
+        return mapId;
+    }
+
+    public static void setMapId(long mapId) {
+        OsmTestUtils.mapId = mapId;
+    }
+
+    public static long getUserId() {
+        return userId;
+    }
+
+    public static void setUserId(long userId) {
+        OsmTestUtils.userId = userId;
+    }
+
+    public static Connection getConn() {
+        return conn;
+    }
+
+    public static void setConn(Connection conn) {
+        OsmTestUtils.conn = conn;
     }
 }

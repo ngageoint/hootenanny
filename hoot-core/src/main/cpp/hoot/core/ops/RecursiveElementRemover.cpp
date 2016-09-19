@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
@@ -30,6 +30,9 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SetVisitor.h>
 
@@ -134,7 +137,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
       _remove(map, e[i].getElementId(), removeSet);
     }
 
-    map->removeRelation(eid.getId());
+    RemoveRelationOp::removeRelation(map, eid.getId());
   }
   else if (eid.getType() == ElementType::Way)
   {
@@ -147,11 +150,11 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
       _remove(map, ElementId::node(nodes[i]), removeSet);
     }
 
-    map->removeWay(w);
+    RemoveWayOp::removeWay(map, w->getId());
   }
   else if (eid.getType() == ElementType::Node)
   {
-    map->removeNodeNoCheck(eid.getId());
+    RemoveNodeOp::removeNodeNoCheck(map, eid.getId());
   }
   else
   {

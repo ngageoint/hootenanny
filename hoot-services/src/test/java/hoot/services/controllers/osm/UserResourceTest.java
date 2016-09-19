@@ -26,13 +26,18 @@
  */
 package hoot.services.controllers.osm;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -40,17 +45,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.mysema.query.sql.SQLQuery;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
@@ -58,7 +61,12 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
 
     public UserResourceTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(UserResource.class, UserDetailsResource.class);
     }
 
     @Test
@@ -67,11 +75,10 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         try {
             Document responseData = null;
             try {
-                responseData = resource().path("user/" + userId).accept(MediaType.TEXT_XML).get(Document.class);
+                responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -108,12 +115,10 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         try {
             Document responseData = null;
             try {
-                responseData = resource().path("user/" + "user-with-id-" + userId).accept(MediaType.TEXT_XML)
-                        .get(Document.class);
+                responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -158,43 +163,41 @@ public class UserResourceTest extends OsmResourceTestAbstract {
             // link some changesets to the user
             Set<Long> changesetIds = new LinkedHashSet<>();
 
-            long changesetId = Changeset.insertNew(mapId, userId, conn);
+            long changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
             changesetIds.add(changesetId);
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
             QChangesets changesets = QChangesets.changesets;
 
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
-            changesetId = Changeset.insertNew(mapId, userId, conn);
+            changesetId = Changeset.insertNew(mapId, userId, conn, new HashMap<String, String>());
             changesetIds.add(changesetId);
 
             (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
 
-            changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             Assert.assertNotNull(changeset);
             Assert.assertEquals(userId, (long) changeset.getUserId());
 
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("user/" + userId)
-                        .accept(MediaType.TEXT_XML)
-                        .get(Document.class);
+                responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -225,43 +228,43 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetInvalidUserId() throws Exception {
         // TODO: change this to something randomly generated and very large
         try {
             long invalidUserId = 999999;
-            resource().path("user/" + invalidUserId).accept(MediaType.TEXT_XML).get(Document.class);
+            target("user/" + invalidUserId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.getEntity(String.class).contains("No user exists with ID"));
+            Assert.assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetEmptyUserId() throws Exception {
         try {
-            resource().path("user/").accept(MediaType.TEXT_XML).get(Document.class);
+            target("user/").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMissingUserId() throws Exception {
         try {
-            resource().path("user").accept(MediaType.TEXT_XML).get(Document.class);
+            target("user").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
             Assert.assertEquals(404, r.getStatus());
             throw e;
         }
@@ -275,11 +278,10 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         try {
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/user/details").accept(MediaType.TEXT_XML).get(Document.class);
+                responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -299,6 +301,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
                 Assert.assertEquals(DbUtils.getTestUserId(conn),
                         Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+
                 // TODO: fix
                 // Assert.assertEquals(
                 // "user-with-id-" +

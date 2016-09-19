@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__HASH_MAP__
@@ -47,6 +47,28 @@
 #include <QString>
 
 #include "SharedPtr.h"
+
+namespace Tgs
+{
+
+/**
+ * Cantor pairing function:
+ * http://en.wikipedia.org/wiki/Cantor_pairing_function#Cantor_pairing_function
+ */
+template<class T>
+size_t cantorPairing(const T& k1, const T& k2)
+{
+  T pi = ((k1 + k2) / 2) * (k1 + k2 + 1) + k2;
+  return __gnu_cxx::hash<T>()(pi);
+}
+
+template<class T>
+size_t cantorPairing(const std::pair<T, T>& k)
+{
+  return cantorPairing(k.first, k.second);
+}
+
+}
 
 namespace __gnu_cxx
 {
@@ -75,29 +97,12 @@ struct hash< boost::shared_ptr<T> > {
   }
 };
 
-/**
- * Cantor pairing function:
- * http://en.wikipedia.org/wiki/Cantor_pairing_function#Cantor_pairing_function
- */
-template<class T>
-size_t cantorPairing(const T& k1, const T& k2)
-{
-  T pi = ((k1 + k2) / 2) * (k1 + k2 + 1) + k2;
-  return hash<T>()(pi);
-}
-
-template<class T>
-size_t cantorPairing(const std::pair<T, T>& k)
-{
-  return cantorPairing(k.first, k.second);
-}
-
 template<>
   struct hash<std::pair<long, long> >
   {
     size_t
     operator()(const std::pair<long, long>& k) const
-    { return cantorPairing(k); }
+    { return Tgs::cantorPairing(k); }
   };
 
 template<>
@@ -105,7 +110,7 @@ template<>
   {
     size_t
     operator()(const std::pair<unsigned long, unsigned long>& k) const
-    { return cantorPairing(k); }
+    { return Tgs::cantorPairing(k); }
   };
 
 template<>
@@ -113,7 +118,7 @@ template<>
   {
     size_t
     operator()(const std::pair<int, int>& k) const
-    { return cantorPairing(k); }
+    { return Tgs::cantorPairing(k); }
   };
 
 template<>
@@ -121,7 +126,7 @@ template<>
   {
     size_t
     operator()(const std::pair<unsigned int, unsigned int>& k) const
-    { return cantorPairing(k); }
+    { return Tgs::cantorPairing(k); }
   };
 
 /**
@@ -140,7 +145,7 @@ struct fastHashDouble
       x.i[0] = 0;
       x.i[1] = 0;
       x.v = k;
-      return cantorPairing(x.i[0], x.i[1]);
+      return Tgs::cantorPairing(x.i[0], x.i[1]);
     }
     else
     {
@@ -160,7 +165,7 @@ template<>
     {
       size_t long1 = fastHashDouble().operator ()(k.first);
       size_t long2 = fastHashDouble().operator ()(k.first);
-      return cantorPairing(long1, long2);
+      return Tgs::cantorPairing(long1, long2);
     }
   };
 

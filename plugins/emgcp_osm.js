@@ -114,10 +114,16 @@ emgcp_osm = {
         // Now convert the attributes to tags.
         tags = mgcp.toOsm(nAttrs,'',geometryType);
 
+        // Go looking for "OSM:XXX" values and copy them to the output
+        for (var i in attrs)
+        {
+            if (i.indexOf('OSM:') > -1) tags[i.replace('OSM:','')] = attrs[i];
+        }
+
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
         {
-            var ftag = mgcp.fcodeLookup['FCODE'][fCode2];
+            var ftag = mgcp.fcodeLookup['F_CODE'][fCode2];
             if (ftag)
             {
                 if (!(tags[ftag[0]]))
@@ -127,7 +133,7 @@ emgcp_osm = {
                 else
                 {
                     // Debug: Dump out the tags from the FCODE
-                    print('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                 }
             }
         }

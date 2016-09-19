@@ -30,6 +30,7 @@
 //hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
@@ -51,7 +52,7 @@ void RemoveEmptyReviewRelationsVisitor::visit(const ElementPtr& e)
     if (r->getType() == Relation::REVIEW && r->getMembers().size() == 0)
     {
       //LOG_DEBUG("Removing review relation with ID: " << r->getId());
-      _map->removeRelation(r->getId());
+      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

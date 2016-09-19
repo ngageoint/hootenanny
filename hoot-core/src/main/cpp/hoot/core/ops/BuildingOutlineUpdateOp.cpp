@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -39,6 +39,7 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -97,7 +98,7 @@ public:
       {
         if (n2w.getWaysByNode(oldNodes[i]).size() == 0 && _map.containsNode(oldNodes[i]))
         {
-          _map.removeNode(oldNodes[i]);
+          RemoveNodeOp::removeNode(_map.shared_from_this(), oldNodes[i]);
         }
       }
     }

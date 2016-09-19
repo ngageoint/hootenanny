@@ -29,15 +29,10 @@ package hoot.services.models.osm;
 import static hoot.services.HootProperties.*;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.Calendar;
-import java.util.Map;
+import java.util.HashMap;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.XPathAPI;
@@ -50,14 +45,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.dml.SQLInsertClause;
-import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
-import hoot.services.utils.DbUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.QChangesets;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.QChangesets;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.GeoUtils;
 
 
@@ -65,9 +60,9 @@ import hoot.services.utils.GeoUtils;
  * Represents the model of an OSM changeset
  */
 public class Changeset extends Changesets {
-
     private static final Logger logger = LoggerFactory.getLogger(Changeset.class);
     private static final QChangesets changesets = QChangesets.changesets;
+
     private final Connection conn;
     private long mapId = -1;
 
@@ -97,20 +92,34 @@ public class Changeset extends Changesets {
      * @param dbConn
      *   s         JDBC Connection
      * @return ID of the created changeset
-     * @throws Exception
      */
-    public static long createChangeset(Document changesetDoc, long mapId, long userId, Connection dbConn)
-            throws Exception {
+    public static long createChangeset(Document changesetDoc, long mapId, long userId, Connection dbConn) {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = insertNew(mapId, userId, dbConn);
-
-        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
-            throw new Exception("Invalid changeset ID: " + changesetId);
+        NodeList nodeList;
+        try {
+            nodeList = XPathAPI.selectNodeList(changesetDoc, "//changeset/tag");
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error during a call to XPathAPI!", e);
         }
 
-        (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId,
-                XPathAPI.selectNodeList(changesetDoc, "//changeset/tag"));
+        java.util.Map<String, String> tags = new HashMap<>();
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            NamedNodeMap tagAttributes = nodeList.item(i).getAttributes();
+
+            if ((tagAttributes.getNamedItem("k") == null) || (tagAttributes.getNamedItem("v") == null)) {
+                throw new RuntimeException("Error inserting tags: cannot insert(" + tagAttributes +")");
+            }
+
+            String key = tagAttributes.getNamedItem("k").getNodeValue();
+            String value = tagAttributes.getNamedItem("v").getNodeValue();
+
+            tags.put(key, value);
+        }
+
+        long changesetId = insertNew(mapId, userId, dbConn, tags);
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -129,19 +138,11 @@ public class Changeset extends Changesets {
      * @param dbConn
      *            JDBC Connection
      * @return ID of the created changeset
-     * @throws Exception
      */
-    public static long createChangeset(long mapId, long userId, java.util.Map<String, String> tags,
-            Connection dbConn) throws Exception {
+    public static long createChangeset(long mapId, long userId, java.util.Map<String, String> tags, Connection dbConn) {
         logger.debug("Creating changeset for map ID: {}...", mapId);
 
-        long changesetId = insertNew(mapId, userId, dbConn);
-
-        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
-            throw new Exception("Invalid changeset ID: " + changesetId);
-        }
-
-        (new Changeset(mapId, changesetId, dbConn)).insertTags(mapId, tags);
+        long changesetId = insertNew(mapId, userId, dbConn, tags);
 
         logger.debug("Created changeset for with ID: {} for map with ID: {}", changesetId, mapId);
 
@@ -155,17 +156,17 @@ public class Changeset extends Changesets {
      *            ID of the changeset to close
      * @param dbConn
      *            JDBC Connection
-     * @throws Exception
      */
-    public static void closeChangeset(long mapId, long changesetId, Connection dbConn) throws Exception {
+    public static void closeChangeset(long mapId, long changesetId, Connection dbConn) {
         Changeset changeset = new Changeset(mapId, changesetId, dbConn);
         changeset.verifyAvailability();
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        new SQLUpdateClause(dbConn, DbUtils.getConfiguration(mapId), changesets).where(changesets.id.eq(changesetId))
-                .set(changesets.closedAt, now).execute();
-
+        new SQLUpdateClause(dbConn, DbUtils.getConfiguration(mapId), changesets)
+                .where(changesets.id.eq(changesetId))
+                .set(changesets.closedAt, now)
+                .execute();
     }
 
     /**
@@ -176,32 +177,31 @@ public class Changeset extends Changesets {
      *
      * @return true if the changeset is open; false otherwise
      */
-    public boolean isOpen() {
-        // For some strange reason, Changeset DAO's started not working at some
-        // point. More specifically, calls to ChangesetDao would return stale data. I
-        // suspect it has something to do with the way the transaction is being initialized, but since I
-        // couldn't figure out how to fix it, I changed this code to not use ChangesetDao anymore.
-
-        Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+    private boolean isOpen() {
+        Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-        return changesetRecord.getClosedAt().after(now) && (changesetRecord.getNumChanges() <
-                Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
+
+        return changesetRecord.getClosedAt().after(now) &&
+                (changesetRecord.getNumChanges() < Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
     }
 
     /**
      * Close this changeset
-     *
-     * @throws Exception
      */
-    public void close() throws Exception {
+    public void close() {
         logger.debug("Closing changeset...");
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets).where(changesets.id.eq(getId()))
-                .set(changesets.closedAt, now).execute() != 1) {
-            throw new Exception("Error closing changeset.");
+        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
+                .where(changesets.id.eq(getId()))
+                .set(changesets.closedAt, now)
+                .execute() != 1) {
+            throw new RuntimeException("Error closing changeset.");
         }
     }
 
@@ -214,14 +214,15 @@ public class Changeset extends Changesets {
      * effectively extends the changeset's expiration once any data is written
      * to it and leaves it with a shorter expiration if it has been opened but
      * had no data added to it.
-     *
-     * @throws Exception
      */
-    public void updateExpiration() throws Exception {
+    public void updateExpiration() {
         DateTime now = new DateTime();
 
-        Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+        Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         if (isOpen()) {
             int maximumChangesetElements = Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
@@ -274,8 +275,10 @@ public class Changeset extends Changesets {
 
             if (newClosedAt != null) {
                 if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
-                        .where(changesets.id.eq(getId())).set(changesets.closedAt, newClosedAt).execute() != 1) {
-                    throw new Exception("Error updating expiration on changeset.");
+                        .where(changesets.id.eq(getId()))
+                        .set(changesets.closedAt, newClosedAt)
+                        .execute() != 1) {
+                    throw new RuntimeException("Error updating expiration on changeset.");
                 }
             }
         }
@@ -287,9 +290,10 @@ public class Changeset extends Changesets {
             // unable to track down what causes this to happen.
             if (!changesetRecord.getClosedAt().before(new Timestamp(now.getMillis()))) {
                 if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
-                        .where(changesets.id.eq(getId())).set(changesets.closedAt, new Timestamp(now.getMillis()))
+                        .where(changesets.id.eq(getId()))
+                        .set(changesets.closedAt, new Timestamp(now.getMillis()))
                         .execute() != 1) {
-                    throw new Exception("Error updating expiration on changeset.");
+                    throw new RuntimeException("Error updating expiration on changeset.");
                 }
             }
         }
@@ -301,18 +305,23 @@ public class Changeset extends Changesets {
      *
      * @param numChanges
      *            the number of changes for the changeset
-     * @throws Exception
      */
-    public void updateNumChanges(int numChanges) throws Exception {
+    public void updateNumChanges(int numChanges) {
         logger.debug("Updating num changes...");
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         int currentNumChanges = changeset.getNumChanges();
-        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets).where(changesets.id.eq(getId()))
-                .set(changesets.numChanges, currentNumChanges + numChanges).execute() != 1) {
-            throw new Exception("Error updating num changes.");
+
+        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
+                .where(changesets.id.eq(getId()))
+                .set(changesets.numChanges, currentNumChanges + numChanges)
+                .execute() != 1) {
+            throw new RuntimeException("Error updating num changes.");
         }
     }
 
@@ -321,15 +330,18 @@ public class Changeset extends Changesets {
      *
      * @param bounds
      *            new bounds
-     * @throws Exception
      */
-    public void setBounds(BoundingBox bounds) throws Exception {
+    public void setBounds(BoundingBox bounds) {
         logger.debug("Updating changeset bounds...");
 
-        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets).where(changesets.id.eq(getId()))
-                .set(changesets.maxLat, bounds.getMaxLat()).set(changesets.maxLon, bounds.getMaxLon())
-                .set(changesets.minLat, bounds.getMinLat()).set(changesets.minLon, bounds.getMinLon()).execute() != 1) {
-            throw new Exception("Error updating changeset bounds.");
+        if (new SQLUpdateClause(conn, DbUtils.getConfiguration(mapId), changesets)
+                .where(changesets.id.eq(getId()))
+                .set(changesets.maxLat, bounds.getMaxLat())
+                .set(changesets.maxLon, bounds.getMaxLon())
+                .set(changesets.minLat, bounds.getMinLat())
+                .set(changesets.minLon, bounds.getMinLon())
+                .execute() != 1) {
+            throw new RuntimeException("Error updating changeset bounds.");
         }
     }
 
@@ -337,13 +349,15 @@ public class Changeset extends Changesets {
      * Retrieves a changeset's bounds from the database
      *
      * @return changeset bounds
-     * @throws Exception
      */
-    public BoundingBox getBounds() throws Exception {
+    public BoundingBox getBounds() {
         logger.debug("Retrieving changeset bounds...");
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         // I don't like doing this...
         double minLon = changeset.getMinLon();
@@ -372,7 +386,7 @@ public class Changeset extends Changesets {
      *            JDBC Connection
      * @return ID of the inserted changeset
      */
-    public static long insertNew(long mapId, long userId, Connection dbConn) {
+    public static long insertNew(long mapId, long userId, Connection dbConn, java.util.Map<String, String> tags) {
         logger.debug("Inserting new changeset...");
 
         DateTime now = new DateTime();
@@ -389,52 +403,53 @@ public class Changeset extends Changesets {
             closedAt = new Timestamp(now.plusMinutes(changesetIdleTimeout).getMillis());
         }
 
-        return new SQLInsertClause(dbConn, DbUtils.getConfiguration(mapId), changesets)
+        long changesetId = new SQLInsertClause(dbConn, DbUtils.getConfiguration(mapId), changesets)
                 .columns(changesets.closedAt, changesets.createdAt, changesets.maxLat, changesets.maxLon,
-                        changesets.minLat, changesets.minLon, changesets.userId)
+                        changesets.minLat, changesets.minLon, changesets.userId, changesets.tags)
                 .values(closedAt, new Timestamp(now.getMillis()), GeoUtils.DEFAULT_COORD_VALUE,
                         GeoUtils.DEFAULT_COORD_VALUE, GeoUtils.DEFAULT_COORD_VALUE, GeoUtils.DEFAULT_COORD_VALUE,
-                        userId)
+                        userId, tags)
                 .executeWithKey(changesets.id);
+
+        if ((changesetId == Long.MAX_VALUE) || (changesetId < 1)) {
+            throw new RuntimeException("Invalid changeset ID: " + changesetId);
+        }
+
+        return changesetId;
     }
 
     /**
      * Determines whether the changeset is available for update
      *
-     * @throws Exception
-     *             //TODO: verify user updating changeset is the same one that
-     *             created it; otherwise return 409
+     * TODO: verify user updating changeset is the same one that created it; otherwise return 409
      */
-    public void verifyAvailability() throws Exception {
+    public void verifyAvailability() {
+        logger.debug("Verifying changeset with ID: {} has previously been created ...", getId());
+
         // see comments in isOpen method for why ChangesetDao is not used here anymore
-        boolean changesetExists;
-
-        try {
-            logger.debug("Verifying changeset with ID: {} has previously been created ...", getId());
-
-            changesetExists = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(getId())).count() > 0;
-        }
-        catch (Exception ex) {
-            String msg = "Error updating changeset with ID: " + getId() + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
+        boolean changesetExists = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchCount() > 0;
 
         if (!changesetExists) {
             // I haven't been able to explicit find in the OSM docs or code what
             // type of response is returned here, but a 404 seems to make sense.
-            throw new Exception("Changeset to be updated does not exist with ID: " + getId() + ".  Please create the "
-                    + "changeset first.");
+            throw new IllegalStateException("Changeset to be updated does not exist with ID: "
+                    + getId() + ".  Please create the " + "changeset first.");
         }
 
         // this handles checking changeset expiration
         if (!isOpen()) {
             // this needs to be retrieved again to refresh the data
-            Changesets changesetRecord = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                    .where(changesets.id.eq(getId())).singleResult(changesets);
+            Changesets changesetRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(changesets)
+                    .from(changesets)
+                    .where(changesets.id.eq(getId()))
+                    .fetchOne();
 
-            throw new Exception(
-                    "The changeset with ID: " + getId() + " was closed at " + changesetRecord.getClosedAt());
+            throw new IllegalStateException("The changeset with ID: " + getId() +
+                    " was closed at " + changesetRecord.getClosedAt());
         }
     }
 
@@ -444,94 +459,25 @@ public class Changeset extends Changesets {
      * threshold.
      *
      * @return true; if the changeset entity count is exceeded; false otherwise
-     * @throws TransformerException
      */
-    public boolean requestChangesExceedMaxElementThreshold(Document changesetDiffDoc) throws TransformerException {
-        int newChangeCount = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/node").getLength()
-                + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/way").getLength()
-                + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/relation").getLength();
+    public boolean requestChangesExceedMaxElementThreshold(Document changesetDiffDoc) {
+        int newChangeCount = 0;
 
-        Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId)).from(changesets)
-                .where(changesets.id.eq(getId())).singleResult(changesets);
+        try {
+            newChangeCount = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/node").getLength()
+                    + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/way").getLength()
+                    + XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/*/relation").getLength();
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error accessing changesetDiffDoc using XPathAPI!", e);
+        }
+
+        Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                .select(QChangesets.changesets)
+                .from(changesets)
+                .where(changesets.id.eq(getId()))
+                .fetchOne();
 
         return (newChangeCount + changeset.getNumChanges()) > Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS);
-    }
-
-    private void writeTags(long mapId, String tagsStr) throws Exception {
-        String sql = "UPDATE changesets_" + mapId + " SET tags=? WHERE id=?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setObject(1, tagsStr, Types.OTHER);
-            ps.setLong(2, getId());
-
-            long execResult = ps.executeUpdate();
-
-            if (execResult < 1) {
-                throw new Exception("No tags were changed for changeset_" + mapId);
-            }
-        }
-    }
-
-    /**
-     * Inserts all tags for an element into the services database
-     * 
-     * @param mapId
-     *            ID of the map owning the element
-     * @param tags
-     *            map containing tags
-     * @throws Exception
-     */
-    private void insertTags(long mapId, java.util.Map<String, String> tags) throws Exception {
-        try {
-            logger.debug("Inserting tags for changeset with ID: {}", getId());
-
-            String strKv = "";
-            for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-                strKv += tagEntry.getKey() + "=>" + tagEntry.getValue();
-            }
-            String tagsStr = "";
-            tagsStr += strKv;
-
-            writeTags(mapId, tagsStr);
-        }
-        catch (Exception e) {
-            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Inserts all tags for an element into the services database
-     *
-     * @param mapId
-     *            ID of the map owning the element
-     * @param xml
-     *            list of XML tags
-     * @throws Exception
-     */
-    private void insertTags(long mapId, NodeList xml) throws Exception {
-        try {
-            logger.debug("Inserting tags for changeset with ID: {}", getId());
-
-            String strKv = "";
-            for (int i = 0; i < xml.getLength(); i++) {
-                NamedNodeMap tagAttributes = xml.item(i).getAttributes();
-                String key = "\"" + tagAttributes.getNamedItem("k").getNodeValue() + "\"";
-                String val = "\"" + tagAttributes.getNamedItem("v").getNodeValue() + "\"";
-                if (!strKv.isEmpty()) {
-                    strKv += ",";
-                }
-                strKv += key + "=>" + val;
-            }
-            String tagsStr = "";
-            tagsStr += strKv;
-
-            writeTags(mapId, tagsStr);
-        }
-        catch (Exception e) {
-            throw new Exception("Error inserting tags for changeset with ID: " + getId() + " - " + e.getMessage(), e);
-        }
     }
 }

@@ -26,13 +26,10 @@
  */
 package hoot.services.controllers.osm;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Model class for the Hootenanny folder record
  */
-@XmlRootElement
+
 public class LinkRecord {
     private long id;
 

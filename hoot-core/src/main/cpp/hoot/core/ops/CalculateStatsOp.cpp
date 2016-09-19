@@ -259,7 +259,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     }
 
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-            any_cast<QMap<QString, long> >(matchCandidateCountsData);
+      any_cast<QMap<QString, long> >(matchCandidateCountsData);
     LOG_VARD(matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
     for (QMap<QString, long >::const_iterator iterator = matchCandidateCountsByMatchCreator.begin();

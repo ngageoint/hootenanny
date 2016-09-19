@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -35,46 +37,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.mysema.query.sql.SQLQuery;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.PostgresUtils;
-import hoot.services.db2.Changesets;
-import hoot.services.db2.CurrentNodes;
-import hoot.services.db2.CurrentRelationMembers;
-import hoot.services.db2.CurrentRelations;
-import hoot.services.db2.CurrentWayNodes;
-import hoot.services.db2.CurrentWays;
-import hoot.services.db2.QChangesets;
-import hoot.services.db2.QCurrentNodes;
-import hoot.services.db2.QCurrentRelationMembers;
-import hoot.services.db2.QCurrentRelations;
-import hoot.services.db2.QCurrentWayNodes;
-import hoot.services.db2.QCurrentWays;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Changesets;
+import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelationMembers;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWayNodes;
+import hoot.services.models.db.CurrentWays;
+import hoot.services.models.db.QChangesets;
+import hoot.services.models.db.QCurrentNodes;
+import hoot.services.models.db.QCurrentRelationMembers;
+import hoot.services.models.db.QCurrentRelations;
+import hoot.services.models.db.QCurrentWayNodes;
+import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
@@ -82,14 +85,19 @@ import hoot.services.utils.XmlUtils;
 public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     private static final Logger log = LoggerFactory.getLogger(ChangesetResourceCloseTest.class);
 
-    private final QCurrentNodes currentNodesTbl = QCurrentNodes.currentNodes;
+    private final QCurrentNodes currentNodesTbl = currentNodes;
     private final QCurrentWays currentWaysTbl = QCurrentWays.currentWays;
     private final QCurrentWayNodes currentWayNodesTbl = QCurrentWayNodes.currentWayNodes;
     private final QCurrentRelations currentRelationsTbl = QCurrentRelations.currentRelations;
     private final QCurrentRelationMembers currentRelationMembersTbl = QCurrentRelationMembers.currentRelationMembers;
 
     public ChangesetResourceCloseTest() {
-        super("hoot.services.controllers.osm");
+        super();
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ChangesetResource.class);
     }
 
     @Test
@@ -101,15 +109,14 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             // close the changeset via the service
             try {
-                ClientResponse response = resource()
-                        .path("api/0.6/changeset/" + changesetId + "/close")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .put(ClientResponse.class, "");
+                Response response = target("api/0.6/changeset/" + changesetId + "/close")
+                        .queryParam("mapId", mapId)
+                        .request(MediaType.APPLICATION_JSON)
+                        .put(Entity.text(""), Response.class);
                 Assert.assertEquals(200, response.getStatus());
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
 
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
@@ -120,7 +127,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testCloseClosedChangeset() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -128,61 +135,48 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
         // close the changeset
         OsmTestUtils.closeChangeset(mapId, changesetId);
-        // QChangesets changesets = QChangesets.changesets;
-        /*
-         * hoot.services.db2.Changesets changeset = new SQLQuery(conn,
-         * DbUtils.getConfiguration(mapId)).from(changesets)
-         * .where(changesets.id.eq(changesetId)).singleResult(changesets); final
-         * Timestamp now = new Timestamp(Calendar.getInstance()
-         * .getTimeInMillis());
-         */
-        // this check causes intermittent test failures
-        // Thread.sleep(1000);
-        // Assert.assertTrue(changeset.getClosedAt().before(now));
 
-        ClientResponse response = null;
+        //ClientResponse response = null;
         try {
             // Try to close an already closed changeset. A failure should occur
-            // and no
-            // data in the
-            // system should be modified.
-            response = resource()
-                    .path("api/0.6/changeset/" + changesetId + "/close")
-                    .put(ClientResponse.class, "");
+            // and no data in the system should be modified.
+            target("api/0.6/changeset/" + changesetId + "/close")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.APPLICATION_JSON)
+                    .put(Entity.text(""), String.class);
         }
-        catch (Exception e) {
-            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(response.getStatus()));
-            Assert.assertTrue(response.getEntity(String.class)
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class)
                     .contains("The changeset with ID: " + changesetId + " was closed at"));
-
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
             OsmTestUtils.verifyTestChangesetClosed(changesetId);
-
             throw e;
         }
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testCloseNonExistingChangeset() throws Exception {
         // Try to close a changeset that doesn't exist. A failure should occur
         // and no data in system should be modified.
-        ClientResponse response = null;
         try {
             // close a changeset that doesn't exist
-            response = resource()
-                    .path("api/0.6/changeset/1/close")
-                    .put(ClientResponse.class, "");
+            target("api/0.6/changeset/1/close")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.text(""), String.class);
         }
-        catch (Exception e) {
-            Assert.assertEquals(404, response.getStatus());
-            Assert.assertTrue(response.getEntity(String.class).contains("Changeset to be updated does not exist"));
-
+        catch (WebApplicationException e) {
+            Response r = e.getResponse();
+            Assert.assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
+            Assert.assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToEmptyChangeset() throws Exception {
         String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
@@ -197,41 +191,40 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // Now create a new changeset with a number of elements larger than
             // the max allowed. A failure should occur and no data in the system should be modified.
             try {
-                resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create>" +
-                                    "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
-                                          "\" lat=\"" + originalBounds.getMinLat() +
-                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                        "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
-                                    "</node>" +
-                                    "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() +
-                                          "\" lat=\"" + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" +
-                                          changesetId + "\">" + "</node>" + "<node id=\"-3\" lon=\"" +
-                                          originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
-                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                    "</node>" +
-                                "</create>" +
-                                "<modify/>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", mapId)
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create>" +
+                                "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
+                                      "\" lat=\"" + originalBounds.getMinLat() +
+                                      "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                "</node>" +
+                                "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() +
+                                      "\" lat=\"" + originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" +
+                                      changesetId + "\">" + "</node>" + "<node id=\"-3\" lon=\"" +
+                                      originalBounds.getMinLon() + "\" lat=\"" + originalBounds.getMinLat() +
+                                      "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "</node>" +
+                            "</create>" +
+                            "<modify/>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
+            catch (WebApplicationException e) {
+                Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity(String.class).contains("Changeset maximum element threshold exceeded"));
+                Assert.assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
 
                 try {
                     QChangesets changesets = QChangesets.changesets;
-                    Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                    Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                            .select(QChangesets.changesets)
                             .from(changesets)
                             .where(changesets.id.eq(changesetId))
-                            .singleResult(changesets);
+                            .fetchOne();
 
                     Assert.assertNotNull(changeset);
                     Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
@@ -245,6 +238,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     Changeset hootChangeset = new Changeset(mapId, changesetId, conn);
                     BoundingBox changesetBounds = hootChangeset.getBounds();
                     BoundingBox defaultBounds = new BoundingBox();
+
                     // a change the size of the expansion factor is made
                     // automatically, so the changeset's bounds should be no larger than that
                     defaultBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
@@ -285,11 +279,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // max allowed. The elements should be written and the changeset closed.
             Document responseData = null;
             try {
-                responseData = resource().path("api/0.6/changeset/" + changesetId + "/upload")
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
                         .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
+                        .request(MediaType.TEXT_XML)
+                        .post(Entity.entity(
                             "<osmChange version=\"0.3\" generator=\"iD\">" +
                                 "<create>" +
                                     "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
@@ -345,11 +338,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                                 "</create>" +
                                 "<modify/>" +
                                 "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                            "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -495,7 +487,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToExistingChangeset() throws Exception {
         String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
@@ -518,50 +510,46 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // Now update an existing changeset with a number of elements larger than
             // the max allowed. A failure should occur and no data in the system should be modified.
             try {
-                resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\"" +
-                                            updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                    "</node>" +
-                                    "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() +
-                                            "\" lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
-                                            changesetId + "\">" +
-                                    "</node>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "</way>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
-                                    "</way>" +
-                                    "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                        "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                        "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                                    "</relation>" +
-                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
-                                        "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
-                                    "</relation>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create/>" +
+                            "<modify>" +
+                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" lat=\"" +
+                                        updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                "</node>" +
+                                "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() +
+                                        "\" lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
+                                        changesetId + "\">" +
+                                "</node>" +
+                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                "</way>" +
+                                "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[1] + "\"></nd>" +
+                                "</way>" +
+                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                    "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                    "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                "</relation>" +
+                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                    "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                "</relation>" +
+                            "</modify>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
+            catch (WebApplicationException e) {
+                Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-                Assert.assertTrue(r.getEntity(String.class).contains("Changeset maximum element threshold exceeded"));
-
+                Assert.assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
                 OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
                 throw e;
             }
         }
@@ -604,51 +592,48 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // should be written and the changeset closed.
             Document responseData = null;
             try {
-                responseData = resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
-                                        "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                        "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
-                                        "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
-                                    "</node>" +
-                                    "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" " + "lat=\"" +
-                                         updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
-                                         "<tag k=\"key 3b\" v=\"val 3b\"></tag>" + "" +
-                                    "</node>" +
-                                    "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                                        "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                    "</way>" +
-                                    "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
-                                        "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
-                                    "</way>" +
-                                    "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
-                                        "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                        "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
-                                    "</relation>" +
-                                    "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
-                                        "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
-                                        "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
-                                        "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                        "<tag k=\"key 3\" v=\"val 3\"></tag>" +
-                                    "</relation>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create/>" +
+                            "<modify>" +
+                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " +
+                                    "lat=\"" + updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                    "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                                    "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                                "</node>" +
+                                "<node id=\"" + nodeIdsArr[1] + "\" lon=\"" + originalBounds.getMaxLon() + "\" " + "lat=\"" +
+                                     updatedBounds.getMinLat() + "\" version=\"1\" changeset=\"" + changesetId + "\">" +
+                                     "<tag k=\"key 3b\" v=\"val 3b\"></tag>" + "" +
+                                "</node>" +
+                                "<way id=\"" + wayIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[0] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                    "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                "</way>" +
+                                "<way id=\"" + wayIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<nd ref=\"" + nodeIdsArr[4] + "\"></nd>" +
+                                    "<nd ref=\"" + nodeIdsArr[2] + "\"></nd>" +
+                                "</way>" +
+                                "<relation id=\"" + relationIdsArr[0] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"way\" role=\"role4\" ref=\"" + wayIdsArr[1] + "\"></member>" +
+                                    "<member type=\"way\" role=\"role2\" ref=\"" + wayIdsArr[0] + "\"></member>" +
+                                    "<member type=\"node\" ref=\"" + nodeIdsArr[2] + "\"></member>" +
+                                "</relation>" +
+                                "<relation id=\"" + relationIdsArr[1] + "\" version=\"1\" changeset=\"" + changesetId + "\" >" +
+                                    "<member type=\"relation\" role=\"role1\" ref=\"" + relationIdsArr[0] + "\"></member>" +
+                                    "<member type=\"node\" ref=\"" + nodeIdsArr[4] + "\"></member>" +
+                                    "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                    "<tag k=\"key 3\" v=\"val 3\"></tag>" +
+                                "</relation>" +
+                            "</modify>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
-                Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+            catch (WebApplicationException e) {
+                Assert.fail("Unexpected response: " + e.getResponse());
             }
             Assert.assertNotNull(responseData);
 
@@ -715,15 +700,17 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             QChangesets changesets = QChangesets.changesets;
-            Changesets changeset = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                    .select(QChangesets.changesets)
                     .from(changesets)
                     .where(changesets.id.eq(changesetId))
-                    .singleResult(changesets);
+                    .fetchOne();
 
             try {
-                Map<Long, CurrentNodes> nodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                Map<Long, CurrentNodes> nodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                         .from(currentNodesTbl)
-                        .map(currentNodesTbl.id, currentNodesTbl);
+                        .transform(groupBy(currentNodesTbl.id).as(currentNodesTbl));
+
                 Assert.assertEquals(5, nodes.size());
 
                 CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
@@ -738,7 +725,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertTrue(nodeRecord.getVisible());
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(2, tags.size());
                 Assert.assertEquals("val 1b", tags.get("key 1b"));
@@ -755,19 +742,19 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertTrue(nodeRecord.getTimestamp().before(now));
                 Assert.assertEquals(new Long(2), nodeRecord.getVersion());
                 Assert.assertEquals(true, nodeRecord.getVisible());
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3b", tags.get("key 3b"));
 
                 nodeRecord = nodes.get(nodeIdsArr[3]);
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3", tags.get("key 3"));
 
                 nodeRecord = nodes.get(nodeIdsArr[4]);
-                tags = PostgresUtils.postgresObjToHStore((PGobject) nodeRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 4", tags.get("key 4"));
@@ -778,10 +765,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             try {
                 Map<Long, CurrentWays> ways =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                                 .from(currentWaysTbl)
-                                .map(currentWaysTbl.id,
-                                currentWaysTbl);
+                                .transform(groupBy(currentWaysTbl.id).as(currentWaysTbl));
 
                 Assert.assertEquals(3, ways.size());
 
@@ -792,11 +778,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                List<CurrentWayNodes> wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                List<CurrentWayNodes> wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(QCurrentWayNodes.currentWayNodes)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[0]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
                 CurrentWayNodes wayNode = wayNodes.get(0);
@@ -809,7 +796,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
 
                 // verify the previously existing tags
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 2", tags.get("key 2"));
@@ -821,11 +808,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayRecord.getVersion());
                 Assert.assertTrue(wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[1]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
                 wayNode = wayNodes.get(0);
@@ -838,7 +826,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 // verify the way with no tags
                 Assert.assertTrue((wayRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) wayRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
 
                 // verify the created ways
                 wayRecord = ways.get(wayIdsArr[2]);
@@ -848,11 +836,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), wayRecord.getVersion());
                 Assert.assertEquals(true, wayRecord.getVisible());
 
-                wayNodes = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                wayNodes = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentWayNodesTbl)
                         .from(currentWayNodesTbl)
                         .where(currentWayNodesTbl.wayId.eq(wayIdsArr[2]))
                         .orderBy(currentWayNodesTbl.sequenceId.asc())
-                        .list(currentWayNodesTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, wayNodes.size());
                 wayNode = wayNodes.get(0);
@@ -864,7 +853,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), wayNode.getSequenceId());
                 Assert.assertEquals(wayRecord.getId(), wayNode.getWayId());
                 // verify the created tags
-                tags = PostgresUtils.postgresObjToHStore((PGobject) wayRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 3", tags.get("key 3"));
@@ -875,9 +864,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             try {
                 Map<Long, CurrentRelations> relations =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
                                 .from(currentRelationsTbl)
-                                .map(currentRelationsTbl.id, currentRelationsTbl);
+                                .transform(groupBy(currentRelationsTbl.id).as(currentRelationsTbl));
 
                 Assert.assertEquals(4, relations.size());
 
@@ -888,11 +877,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                List<CurrentRelationMembers> members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                        .from(currentRelationMembersTbl)
-                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
-                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                List<CurrentRelationMembers> members =
+                        new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                                .select(currentRelationMembersTbl)
+                                .from(currentRelationMembersTbl)
+                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[0]))
+                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                                .fetch();
 
                 Assert.assertEquals(3, members.size());
                 CurrentRelationMembers member = members.get(0);
@@ -916,9 +907,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(3), member.getSequenceId());
 
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
-                Map<String, String> tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
-                Assert.assertTrue((relationRecord.getTags() == null)
-                        || (StringUtils.trimToNull(((PGobject) relationRecord.getTags()).getValue()) == null));
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
+                Assert.assertTrue((tags == null) || tags.isEmpty());
 
                 relationRecord = relations.get(relationIdsArr[1]);
                 Assert.assertEquals(new Long(changesetId), relationRecord.getChangesetId());
@@ -927,11 +917,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(2), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[1]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(2, members.size());
                 member = members.get(0);
@@ -948,7 +939,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(2), member.getSequenceId());
 
                 Assert.assertEquals(nodeIdsArr[4], member.getMemberId());
-                tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(2, tags.size());
                 Assert.assertEquals("val 2", tags.get("key 2"));
@@ -961,11 +952,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members = new SQLQuery(conn, DbUtils.getConfiguration(mapId))
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
                         .from(currentRelationMembersTbl)
                         .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[2]))
                         .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                        .list(currentRelationMembersTbl);
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
                 member = members.get(0);
@@ -975,7 +967,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
 
                 Assert.assertEquals(wayIdsArr[1], member.getMemberId());
-                tags = PostgresUtils.postgresObjToHStore((PGobject) relationRecord.getTags());
+                tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
                 Assert.assertNotNull(tags);
                 Assert.assertEquals(1, tags.size());
                 Assert.assertEquals("val 4", tags.get("key 4"));
@@ -987,12 +979,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Long(1), relationRecord.getVersion());
                 Assert.assertTrue(relationRecord.getVisible());
 
-                members =
-                        new SQLQuery(conn, DbUtils.getConfiguration(mapId))
-                                .from(currentRelationMembersTbl)
-                                .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
-                                .orderBy(currentRelationMembersTbl.sequenceId.asc())
-                                .list(currentRelationMembersTbl);
+                members = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+                        .select(currentRelationMembersTbl)
+                        .from(currentRelationMembersTbl)
+                        .where(currentRelationMembersTbl.relationId.eq(relationIdsArr[3]))
+                        .orderBy(currentRelationMembersTbl.sequenceId.asc())
+                        .fetch();
 
                 Assert.assertEquals(1, members.size());
                 member = members.get(0);
@@ -1002,7 +994,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Assert.assertEquals(new Integer(1), member.getSequenceId());
                 Assert.assertEquals(nodeIdsArr[2], member.getMemberId());
                 Assert.assertTrue((relationRecord.getTags() == null)
-                        || StringUtils.isEmpty(((PGobject) relationRecord.getTags()).getValue()));
+                        || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
             }
             catch (Exception e) {
                 Assert.fail("Error checking relations: " + e.getMessage());
@@ -1036,7 +1028,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenNoElementsAddedToItBeforeExpiration() throws Exception {
         String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
@@ -1074,35 +1066,31 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // closing the changeset, and
             // No data in the system should be modified by the create request.
             try {
-                resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create>" +
-                                    "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
-                                          "\" lat=\"" + originalBounds.getMinLat() +
-                                          "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                        "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
-                                    "</node>" +
-                                    "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
-                                         originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
-                                    "</node>" +
-                                "</create>" +
-                                "<modify/>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create>" +
+                                "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() +
+                                      "\" lat=\"" + originalBounds.getMinLat() +
+                                      "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                    "<tag k=\"key 1\" v=\"val 1\"/>" + "<tag k=\"key 2\" v=\"val 2\"/>" +
+                                "</node>" +
+                                "<node id=\"-2\" lon=\"" + originalBounds.getMaxLon() + "\" lat=\"" +
+                                     originalBounds.getMaxLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +
+                                "</node>" +
+                            "</create>" +
+                            "<modify/>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
+            catch (WebApplicationException e) {
+                Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 Assert.assertTrue(
-                        r.getEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
-
+                        r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
                 OsmTestUtils.verifyTestChangesetClosed(changesetId, 0);
-
                 throw e;
             }
         }
@@ -1117,7 +1105,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenLengthBetweenUpdatesCausesExpiration() throws Exception {
         String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
@@ -1167,34 +1155,31 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // Access the changeset with an update request. This will trigger
             // closing the changeset, and No data in the system should be modified by the update request.
             try {
-                resource()
-                        .path("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .type(MediaType.TEXT_XML)
-                        .accept(MediaType.TEXT_XML)
-                        .post(Document.class,
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
-                                "<create/>" +
-                                "<modify>" +
-                                    "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" "
-                                           + "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
-                                           changesetId + "\">" +
-                                        "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>" +
-                                    "</node>" +
-                                "</modify>" +
-                                "<delete if-unused=\"true\"/>" +
-                            "</osmChange>");
+                target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .request(MediaType.TEXT_XML)
+                    .post(Entity.entity(
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
+                            "<create/>" +
+                            "<modify>" +
+                                "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updateBounds.getMinLon() + "\" "
+                                       + "lat=\"" + updateBounds.getMinLat() + "\" version=\"1\" changeset=\"" +
+                                       changesetId + "\">" +
+                                    "<tag k=\"key 1\" v=\"val 1\"></tag>" + "<tag k=\"key 2\" v=\"val 2\"></tag>" +
+                                "</node>" +
+                            "</modify>" +
+                            "<delete if-unused=\"true\"/>" +
+                        "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (UniformInterfaceException e) {
-                ClientResponse r = e.getResponse();
+            catch (WebApplicationException e) {
+                Response r = e.getResponse();
                 Assert.assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 Assert.assertTrue(
-                        r.getEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
+                        r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
 
                 // make sure nothing was updated
                 OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
                 OsmTestUtils.verifyTestChangesetClosed(changesetId);
-
                 throw e;
             }
         }
@@ -1215,14 +1200,13 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
     public void testClosePreflight() throws Exception {
         try {
             String changeSetId = "1";
-            resource()
-                    .path("api/0.6/changeset/" + changeSetId + "/close")
+            target("api/0.6/changeset/" + changeSetId + "/close")
                     .queryParam("mapId", "1")
-                    .options(String.class);
+                    .request()
+                    .options();
         }
-        catch (UniformInterfaceException e) {
-            ClientResponse r = e.getResponse();
-            Assert.fail("Unexpected response " + r.getStatus() + " " + r.getEntity(String.class));
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
         }
         catch (Exception e) {
             log.error(e.getMessage());

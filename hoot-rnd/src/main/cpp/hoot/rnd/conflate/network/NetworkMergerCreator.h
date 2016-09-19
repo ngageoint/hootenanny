@@ -35,6 +35,8 @@
 namespace hoot
 {
 
+class NetworkMatch;
+
 class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
@@ -58,6 +60,14 @@ private:
   const OsmMap* _map;
   Meters _minSplitSize;
   shared_ptr<SublineStringMatcher> _sublineMatcher;
+
+  /**
+   * If there are exactly 2 matches
+   * and one match contains the other.
+   * return the matches that contains the other.
+   * Otherwise, return 0.
+   */
+  const NetworkMatch* _getLargestContainer(const MatchSet& matches) const;
 
   /**
    * Returns true if one or more matches are conflicting matches.

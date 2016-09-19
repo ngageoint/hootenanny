@@ -30,14 +30,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.math.util.MathUtils;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import hoot.services.db2.CurrentNodes;
 import hoot.services.geo.zindex.Box;
+import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.GeoUtils;
 
 
@@ -48,6 +47,8 @@ import hoot.services.utils.GeoUtils;
  * https://github.com/openstreetmap/openstreetmap-website/
  */
 public class BoundingBox {
+    private static final double BOUNDS_ERROR = 0.0000001;
+
     public static final double LON_LIMIT = 180.0;
     public static final double LAT_LIMIT = 90.0;
 
@@ -80,8 +81,6 @@ public class BoundingBox {
         return "minLon: " + minLon + ", minLat: " + minLat + ", maxLon: " + maxLon + ", maxLat: " + maxLat;
     }
 
-    private static final double BOUNDS_ERROR = 0.0000001;
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof BoundingBox) {
@@ -98,11 +97,23 @@ public class BoundingBox {
         }
     }
 
-    public BoundingBox() {
-
+    @Override
+    public int hashCode() {
+        long temp = Double.doubleToLongBits(minLon);
+        int result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(minLat);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(maxLon);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(maxLat);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
-    public BoundingBox(double minLon, double minLat, double maxLon, double maxLat) throws Exception {
+    public BoundingBox() {
+    }
+
+    public BoundingBox(double minLon, double minLat, double maxLon, double maxLat)  {
         validateAndSetCoords(minLon, minLat, maxLon, maxLat);
     }
 
@@ -114,7 +125,7 @@ public class BoundingBox {
     }
 
     // bbox = minlon,minlat,maxlon,maxlat
-    public BoundingBox(String bbox) throws Exception {
+    public BoundingBox(String bbox) {
         String[] bboxParts = bbox.split(",");
         validateAndSetCoords(Double.parseDouble(bboxParts[0]), Double.parseDouble(bboxParts[1]),
                 Double.parseDouble(bboxParts[2]), Double.parseDouble(bboxParts[3]));
@@ -136,12 +147,15 @@ public class BoundingBox {
             if (coord.getLat() < minLat) {
                 minLat = coord.getLat();
             }
+
             if (coord.getLat() > maxLat) {
                 maxLat = coord.getLat();
             }
+
             if (coord.getLon() < minLon) {
                 minLon = coord.getLon();
             }
+
             if (coord.getLon() > maxLon) {
                 maxLon = coord.getLon();
             }
@@ -171,12 +185,15 @@ public class BoundingBox {
             if (lat < minLat) {
                 minLat = lat;
             }
+
             if (lat > maxLat) {
                 maxLat = lat;
             }
+
             if (lon < minLon) {
                 minLon = lon;
             }
+
             if (lon > maxLon) {
                 maxLon = lon;
             }
@@ -188,32 +205,39 @@ public class BoundingBox {
         this.maxLat = maxLat;
     }
 
-    private void validateAndSetCoords(double minLon, double minLat, double maxLon, double maxLat) throws Exception {
+    private void validateAndSetCoords(double minLon, double minLat, double maxLon, double maxLat) {
         if (minLon > maxLon) {
-            throw new Exception("The minimum longitude must be less than or equal to the maximum longitude.");
+            throw new IllegalArgumentException("The minimum longitude must be less " +
+                    "than or equal to the maximum longitude.");
         }
+
         if (minLat > maxLat) {
-            throw new Exception("The minimum latitude must be less than or equal to the maximum latitude.");
+            throw new IllegalArgumentException("The minimum latitude must be less " +
+                    "than or equal to the maximum latitude.");
         }
 
         if ((minLon < (-1 * LON_LIMIT)) || (minLon > LON_LIMIT)) {
-            throw new Exception("Invalid coordinate.  Invalid minimum longitude value: " + minLon);
+            throw new IllegalArgumentException("Invalid coordinate.  Invalid minimum longitude value: " + minLon);
         }
+
         this.minLon = minLon;
 
         if ((minLat < (-1 * LAT_LIMIT)) || (minLat > LAT_LIMIT)) {
-            throw new Exception("Invalid coordinate.  Invalid minimum latitude value: " + minLat);
+            throw new IllegalArgumentException("Invalid coordinate.  Invalid minimum latitude value: " + minLat);
         }
+
         this.minLat = minLat;
 
         if ((maxLon < (-1 * LON_LIMIT)) || (maxLon > LON_LIMIT)) {
-            throw new Exception("Invalid maximum longitude value: " + maxLon);
+            throw new IllegalArgumentException("Invalid maximum longitude value: " + maxLon);
         }
+
         this.maxLon = maxLon;
 
         if ((maxLat < (-1 * LAT_LIMIT)) || (maxLat > LAT_LIMIT)) {
-            throw new Exception("Invalid maximum latitude value: " + maxLat);
+            throw new IllegalArgumentException("Invalid maximum latitude value: " + maxLat);
         }
+
         this.maxLat = maxLat;
     }
 
@@ -230,11 +254,8 @@ public class BoundingBox {
      * Creates a bounding box from an OSM XML bounds node
      * 
      * @return a bounding box
-     * @throws Exception
-     * @throws DOMException
-     * @throws NumberFormatException
      */
-    public static BoundingBox fromXml(Node xml) throws Exception {
+    public static BoundingBox fromXml(Node xml) {
         NamedNodeMap nodeAttributes = xml.getAttributes();
         return new BoundingBox(Double.parseDouble(nodeAttributes.getNamedItem("minLon").getNodeValue()),
                 Double.parseDouble(nodeAttributes.getNamedItem("minLat").getNodeValue()),
@@ -248,11 +269,10 @@ public class BoundingBox {
      * @param parentXml
      *            parent XML node
      * @return an XML bounds node
-     * @throws Exception
      */
-    public Element toXml(Element parentXml) throws Exception {
+    public Element toXml(Element parentXml) {
         if (!isInitialized()) {
-            throw new Exception("Bounds not initialized.");
+            throw new IllegalStateException("Bounds not initialized.");
         }
 
         Document doc = parentXml.getOwnerDocument();
@@ -272,9 +292,11 @@ public class BoundingBox {
      * @return true if the bounding box consists of only valid values; false
      *         otherwise
      */
-    public boolean isInitialized() {
-        return (minLon != GeoUtils.DEFAULT_COORD_VALUE) && (minLat != GeoUtils.DEFAULT_COORD_VALUE)
-                && (maxLon != GeoUtils.DEFAULT_COORD_VALUE) && (maxLat != GeoUtils.DEFAULT_COORD_VALUE);
+    private boolean isInitialized() {
+        return (minLon != GeoUtils.DEFAULT_COORD_VALUE) &&
+               (minLat != GeoUtils.DEFAULT_COORD_VALUE) &&
+               (maxLon != GeoUtils.DEFAULT_COORD_VALUE) &&
+               (maxLat != GeoUtils.DEFAULT_COORD_VALUE);
     }
 
     /**
@@ -284,8 +306,10 @@ public class BoundingBox {
      * @return true if valid; false otherwise
      */
     public boolean inWorld() {
-        return (minLat >= -90) && (minLat <= 90) && (maxLat >= -90) && (maxLat <= 90) && (minLon >= -180) && (minLon <= 180)
-                && (maxLon >= -180) && (maxLon <= 180);
+        return (minLat >= -90) && (minLat <= 90) &&
+               (maxLat >= -90) && (maxLat <= 90) &&
+               (minLon >= -180) && (minLon <= 180) &&
+               (maxLon >= -180) && (maxLon <= 180);
     }
 
     /**
@@ -319,12 +343,15 @@ public class BoundingBox {
             if (bounds.getMinLon() < minLon) {
                 minLon = Math.max((-1 * LON_LIMIT), (bounds.getMinLon() + (margin * (minLon - maxLon))));
             }
+
             if (bounds.getMinLat() < minLat) {
                 minLat = Math.max((-1 * LAT_LIMIT), (bounds.getMinLat() + (margin * (minLat - maxLat))));
             }
+
             if (bounds.getMaxLon() > maxLon) {
                 maxLon = Math.min(LON_LIMIT, (bounds.getMaxLon() + (margin * (maxLon - minLon))));
             }
+
             if (bounds.getMaxLat() > maxLat) {
                 maxLat = Math.min(LAT_LIMIT, (bounds.getMaxLat() + (margin * (maxLat - minLat))));
             }
@@ -352,14 +379,17 @@ public class BoundingBox {
             if ((minLon - (margin * -1)) >= (LON_LIMIT * -1)) {
                 minLon -= (margin * -1);
             }
+
             minLat = Math.min(bounds.getMinLat(), minLat);
             if ((minLat - (margin * -1)) >= (LAT_LIMIT * -1)) {
                 minLat -= (margin * -1);
             }
+
             maxLon = Math.max(bounds.getMaxLon(), maxLon);
             if ((maxLon + (margin * -1)) <= LON_LIMIT) {
                 maxLon += (margin * -1);
             }
+
             maxLat = Math.max(bounds.getMaxLat(), maxLat);
             if ((maxLat + (margin * -1)) <= LAT_LIMIT) {
                 maxLat += (margin * -1);
@@ -378,12 +408,15 @@ public class BoundingBox {
         if ((minLon - (margin * -1)) >= (LON_LIMIT * -1)) {
             minLon -= (margin * -1);
         }
+
         if ((minLat - (margin * -1)) >= (LAT_LIMIT * -1)) {
             minLat -= (margin * -1);
         }
+
         if ((maxLon + (margin * -1)) <= LON_LIMIT) {
             maxLon += (margin * -1);
         }
+
         if ((maxLat + (margin * -1)) <= LAT_LIMIT) {
             maxLat += (margin * -1);
         }
@@ -450,9 +483,8 @@ public class BoundingBox {
      * @param bounds
      *            the bounds to compute the intersection from
      * @return the bounding box intersection
-     * @throws Exception
      */
-    public BoundingBox intersection(BoundingBox bounds) throws Exception {
+    public BoundingBox intersection(BoundingBox bounds) {
         return new BoundingBox(Math.max(minLon, bounds.getMinLon()), Math.max(minLat, bounds.getMinLat()),
                 Math.min(maxLon, bounds.getMaxLon()), Math.min(maxLat, bounds.getMaxLat()));
     }
@@ -471,9 +503,8 @@ public class BoundingBox {
      *            maximum latitude
      * @return true; if this bounding box interesect the input bounding box
      *         coordinates; false otherwise
-     * @throws Exception
      */
-    public boolean intersects(double minX, double minY, double maxX, double maxY) throws Exception {
+    public boolean intersects(double minX, double minY, double maxX, double maxY) {
         return intersects(new BoundingBox(minX, minY, maxX, maxY));
     }
 
@@ -481,8 +512,7 @@ public class BoundingBox {
      * Determines whether this bounding box intersects the input bounding box
      * 
      * @param bounds
-     *            the bounds to compute the intersection with this bounding box
-     *            from
+     *            the bounds to compute the intersection with this bounding box from
      * @return true if this intersects the input bounding box; false otherwise
      */
     public boolean intersects(BoundingBox bounds) {
@@ -526,14 +556,8 @@ public class BoundingBox {
      * Returns a bounding box that encompasses the entire world
      * 
      * @return a bounding box
-     * @throws Exception
      */
-    public static BoundingBox worldBounds() throws Exception {
+    public static BoundingBox worldBounds() {
         return new BoundingBox(-1 * LON_LIMIT, -1 * LAT_LIMIT, LON_LIMIT, LAT_LIMIT);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }

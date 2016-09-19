@@ -29,12 +29,16 @@ package hoot.services.utils;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
@@ -91,4 +95,33 @@ public final class JsonUtils {
         return null;
     }
 
+    /**
+     *
+     *
+     * @param input
+     * @return String
+     */
+    public static String escapeJson(String input) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(input);
+
+        // Special handling of ADV_OPTIONS
+        String key = "ADV_OPTIONS";
+        if (json.containsKey(key)) {
+            String advopts = json.get(key).toString();
+            String cleanup = advopts
+                    .replaceAll("-D \"", "'")
+                    .replaceAll("=", "': '")
+                    .replaceAll("\"", "',")
+                    .replaceAll("'", "\"");
+
+            // wrap with curly braces and remove trailing comma
+            cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
+
+            JSONObject obj = (JSONObject) parser.parse(cleanup);
+            json.put(key, obj);
+        }
+
+        return JSONObject.escape(json.toString());
+    }
 }

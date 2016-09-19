@@ -84,10 +84,10 @@ Feature: Manage Tab
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset
         And I click the "Add Dataset" context menu item
-        And I select the "File (osm,osm.zip)" option in the "Select Import Type" combobox
+        And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
-        And I fill "importDatasetLayerName" with "dcpoi_clip_manage"
-        Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_manage"
+        And I fill "importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
+        Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_Cucumber_manage"
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
@@ -98,7 +98,7 @@ Feature: Manage Tab
 
         # Delete sub folder and dataset
         And I click the "TestSubFolder" Dataset
-        And I should see "dcpoi_clip_manage"
+        And I should see "dcpoi_clip_Cucumber_manage"
         And I context click the "TestSubFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert

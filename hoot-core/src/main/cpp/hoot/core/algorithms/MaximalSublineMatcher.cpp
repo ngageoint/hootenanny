@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineMatcher.h"
 
@@ -49,7 +49,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map
 {
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
-//  LOG_INFO("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
+//  LOG_WARN("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
 //  assert(_minSplitSize >= 0.0 && _maxAngle >= 0.0 && mrd >= 0.0);
 
   MaximalSubline::ThresholdMatchCriteria* threshold =

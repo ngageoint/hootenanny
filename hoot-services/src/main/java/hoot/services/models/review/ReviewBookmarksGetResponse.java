@@ -28,28 +28,23 @@ package hoot.services.models.review;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import hoot.services.db2.ReviewBookmarks;
+import hoot.services.models.db.ReviewBookmarks;
 
 
-@XmlRootElement
 public class ReviewBookmarksGetResponse {
     private List<ReviewBookmarks> reviewBookmarks;
+
+    public ReviewBookmarksGetResponse() {}
+
+    public ReviewBookmarksGetResponse(List<ReviewBookmarks> reviewBookmarks) {
+        this.reviewBookmarks = reviewBookmarks;
+    }
 
     public List<ReviewBookmarks> getReviewBookmarks() {
         return this.reviewBookmarks;
     }
 
-    public void setReviewBookmarks(List<ReviewBookmarks> rTags) {
-        this.reviewBookmarks = rTags;
-    }
-
-    public ReviewBookmarksGetResponse(List<ReviewBookmarks> rTags) {
-        this.reviewBookmarks = rTags;
-    }
-
-    public ReviewBookmarksGetResponse() {
-
+    public void setReviewBookmarks(List<ReviewBookmarks> reviewBookmarks) {
+        this.reviewBookmarks = reviewBookmarks;
     }
 }

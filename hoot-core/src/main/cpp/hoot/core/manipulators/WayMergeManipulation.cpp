@@ -42,6 +42,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -140,8 +141,8 @@ void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   // insert the new merged way
   newElements.insert(ElementId::way(w->getId()));
 
-  result->removeWay(_left);
-  result->removeWay(_right);
+  RemoveWayOp::removeWay(result, _left);
+  RemoveWayOp::removeWay(result, _right);
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
   {
@@ -308,7 +309,7 @@ void WayMergeManipulation::_removeSpans(shared_ptr<OsmMap> map,
     {
       if (_directConnect(map, w))
       {
-        map->removeWay(eid.getId());
+        RemoveWayOp::removeWay(map, eid.getId());
         impactedElements.erase(eid);
       }
     }
@@ -367,8 +368,8 @@ void WayMergeManipulation::_splitWays(shared_ptr<OsmMap> map, shared_ptr<Way>& l
     }
   }
 
-  result->removeWay(_left);
-  result->removeWay(_right);
+  RemoveWayOp::removeWay(result, _left);
+  RemoveWayOp::removeWay(result, _right);
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
   {

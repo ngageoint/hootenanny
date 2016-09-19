@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 
 // Standard
 #include <iostream>
@@ -94,7 +95,7 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
         //LOG_INFO("Removing node. " << n->toString());
-        map->removeNodeNoCheck(n->getId());
+        RemoveNodeOp::removeNodeNoCheck(map, n->getId());
       }
       else
       {

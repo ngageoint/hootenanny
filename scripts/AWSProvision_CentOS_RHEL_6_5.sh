@@ -383,7 +383,7 @@ EOT
   # this command exactly as written, from the exact directory shown here.  If not,
   # unnecessary updates will be applied, which will result in SQL errors.
   cd ${HOOT_CORE_INSTALL_DIR}/hootenanny-services-${HOOT_VERSION}/WEB-INF
-  sudo liquibase --contexts=default,production --changeLogFile=classes/db/db.changelog-master.xml --promptForNonLocalDatabase=false --defaultsFile=classes/db/liquibase.properties --logLevel=warning --classpath=lib/postgresql-9.1-901-1.jdbc4.jar --url jdbc:postgresql:hoot update #&> /usr/local/test
+  sudo liquibase --contexts=default,production --changeLogFile=classes/db/db.changelog-master.xml --promptForNonLocalDatabase=false --defaultsFile=classes/db/liquibase.properties --logLevel=warning --classpath=lib/postgresql-9.4.1208.jre7.jar --url jdbc:postgresql:hoot update #&> /usr/local/test
   cd ${HOOT_CORE_INSTALL_DIR}/
   sudo rm -rf hootenanny-services-${HOOT_VERSION}
 	

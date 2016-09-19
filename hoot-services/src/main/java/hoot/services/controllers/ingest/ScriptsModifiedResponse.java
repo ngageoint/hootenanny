@@ -26,10 +26,7 @@
  */
 package hoot.services.controllers.ingest;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-
-@XmlRootElement
 public class ScriptsModifiedResponse {
     private String[] scriptsModified;
 

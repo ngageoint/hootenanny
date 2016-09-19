@@ -39,6 +39,11 @@ namespace hoot
 {
 
 /**
+ * The OsmNetwork represents major transportational vertices and edges in the map. These may or
+ * may not have a one to one correlation with nodes, ways and relations. For instance, a vertex
+ * may represent all the ways and nodes in a roundabout, or simply the node at a four way stop.
+ * Though the former has yet to be implemented (as of 2016-07-06).
+ *
  * Why not use boost graphs? Well, I used them for the OsmSchema implementation and in my opinion
  * it is write-once read-never code. While it is likely very efficient it is very difficult to
  * write and understand.
@@ -52,28 +57,37 @@ namespace hoot
 class OsmNetwork
 {
 public:
-  typedef QHash<ElementId, NetworkVertexPtr> VertexMap;
-  typedef QHash<ElementId, NetworkEdgePtr> EdgeMap;
+  typedef QMultiHash<ElementId, ConstNetworkVertexPtr> VertexMap;
+  typedef QMultiHash<ElementId, ConstNetworkEdgePtr> EdgeMap;
   typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
 
   OsmNetwork();
 
   void addEdge(NetworkEdgePtr edge);
 
-  void addVertex(NetworkVertexPtr node);
+  void addVertex(ConstNetworkVertexPtr node);
 
   QList<ConstNetworkEdgePtr> getEdgesFromVertex(ConstNetworkVertexPtr v) const;
 
   const EdgeMap& getEdgeMap() const { return _eidToEdge; }
 
-  NetworkVertexPtr getVertex(ElementId eid) const { return _eidToVertex[eid]; }
+  /**
+   * Returns the single vertex associated with eid. If there is no vertex associated with eid then
+   * a null vertex pointer is returned. If there are multiple vertices associated with eid then
+   * an exception will be thrown.
+   */
+  ConstNetworkVertexPtr getSingleVertex(ElementId eid) const;
 
   const VertexMap& getVertexMap() const { return _eidToVertex; }
+
+  void removeEdge(ConstNetworkEdgePtr e);
+
+  void removeVertex(ConstNetworkVertexPtr v);
 
   QString toString();
 
 private:
-  QList<NetworkEdgePtr> _edges;
+  QList<ConstNetworkEdgePtr> _edges;
   VertexMap _eidToVertex;
   EdgeMap _eidToEdge;
   VertexToEdgeMap _vertexToEdge;
@@ -81,6 +95,9 @@ private:
 
 typedef shared_ptr<OsmNetwork> OsmNetworkPtr;
 typedef shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
+
+// not implemented
+bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);
 
 }
 

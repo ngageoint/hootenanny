@@ -858,6 +858,114 @@ Possible values include:
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
 
+=== network.conflicts.partial.handicap
+
+* Data Type: double
+* Default Value: `0.2`
+
+A larger value will increase the weight of partial matches. A smaller value prefers whole matches
+over partial matches. This value is generally not changed by users. Reasonable range is (0, ~2].
+
+=== network.conflicts.stub.handicap
+
+* Data Type: double
+* Default Value: `.86`
+
+A larger value will increase the weight of stubs. This value is generally not changed by
+users. Reasonable range is (0, ~2].
+
+=== network.conflicts.aggression
+
+* Data Type: double
+* Default Value: `4.4`
+
+A larger value will conflate more aggressively (fewer reviews). Users may want to consider changing
+this value. Reasonable range is [1, ~10].
+
+=== network.conflicts.weight.influence
+
+* Data Type: double
+* Default Value: `0`
+
+A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
+give matches with more support a higher weight. This value is generally not changed by
+users. Reasonable range is [0, 2].
+
+=== network.conflicts.outbound.weighting
+
+* Data Type: double
+* Default Value: `0`
+
+A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor. A value
+of 1 will give approx (1 / n * score * weight) influence to each neighbor.
+Reasonable range is [0, 2].
+
+=== network.conflicts.stub.through.weighting
+
+* Data Type: double
+* Default Value: `0.59`
+
+A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors.
+Higher values will reduce that contribution. Reasonable range is [0, ~10].
+
+=== network.match.threshold
+
+* Data Type: double
+* Default Value: `0.15`
+
+The threshold at which a network match is called a match.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.match.write.debug.maps
+
+* Data Type: bool
+* Default Value: `false`
+
+If true debug maps will be generated at every iteration. This is useful when debugging. The maps
+can be large and slow things down significantly.
+
+=== network.matcher
+
+* Data Type: string
+* Default Value: `hoot::IterativeNetworkMatcher`
+
+An internal option for manipulating the way network matching occurs. This should only be used for
+debug and test. The parameter must be a class that is registered with the factory and subclasses
+`NetworkMatcher`.
+
+=== network.max.stub.length
+
+* Data Type: double
+* Default Value: `20`
+
+The maximum allowable length of a stub connection (way to node match). Value in meters.
+
+=== network.miss.threshold
+
+* Data Type: double
+* Default Value: `0.85`
+
+The threshold at which a network miss is called a miss.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.review.threshold
+
+* Data Type: double
+* Default Value: `0.5`
+
+The threshold at which a network review is called a review. Reviews are also declared in some
+other situations when the relationship is not clear.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === node.matcher.strictness
 
 * Data Type: double
@@ -952,6 +1060,13 @@ script.
 * Default Value: `3`
 
 The number of identical log messages that will be emitted before they're silenced.
+
+=== ogr.partial.translate
+
+* Data Type: bool
+* Default Value: `false`
+
+Write partial translations instead of o2s_[PAL] features.
 
 === ogr.reader.bounding.box
 
@@ -1103,6 +1218,21 @@ from the URL.
 
 Specifies the writer that the OsmMapWriterFactory will use. This overrides any information derived
 from the URL.
+
+=== osm.map.writer.format.xml
+
+* Data Type: bool
+* Default Value: `true`
+
+Turns on autoformatting (line breaks, indentation etc) for XML output.
+
+=== osm.map.writer.schema
+
+* Data Type: string
+* Default Value: ``
+
+Sets the value for a "schema" attribute when writeing a map to OSM XML.
+NOTE: this will only be written if the value is not empty.
 
 === osm2ogr.ops
 
@@ -1582,16 +1712,6 @@ are 0 to 1 for similarity and -1 if there are no names present (null).
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
 
-=== postgresql.dumpfile.writer.cache.size
-
-* Data Type: int
-* Default Value: `10000000`
-
-Maximum number of elements (nodes, ways, and relations) that can be held in memory before the
-system starts using disk-based storage.  Note that this limit applies to each element type
-individually, so worst case is that three times this value of elements can be stored in memory
-at the same time.
-
 === postgresql.dumpfile.writer.auto.calc.ids
 
 * Data Type: bool
@@ -1603,7 +1723,7 @@ write operation.  Enabling this setting precludes a user from having to specify 
 "postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
 must be used in conjunction with the "postgresql.dumpfile.writer.id.aware.url" setting.  IMPORTANT:
 This setting should only be enabled in situations where a single user is writing to the target OSM
-API database (testing environment).  Since the command does not continuallly check for the next
+API database (database is offline).  Since the command does not continuallly check for the next
 available ID (for performance reasons), ID conflict errors may occur if multiple users are writing
 to the database simultaneously when this option is enabled.
 
@@ -1665,6 +1785,24 @@ specified email address to the database.
 
 If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
 database will be assigned the user id set by this field.
+
+=== postgresql.dumpfile.writer.element.status.count.interval
+
+* Data Type: long
+* Default Value: `100000`
+
+Count at which the load status of each element type should be logged.  e.g. With a value of 100000,
+you will see a element load status update message for every 100000 elements parsed.
+
+=== postgresql.dumpfile.writer.add.circular.error.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, then any element being written to an OSM API database via 'hoot convert' will have the
+"error:circular" tag written to the element, if that element has a positive circular error value.
+This operation can be slow for large amounts of data.  This is a temporary setting for holy grail
+that eventually needs to be removed.
 
 === reader.add.source.datetime
 

@@ -107,12 +107,22 @@ public:
   static Geometry* validatePolygon(const Polygon* p);
 
   /**
-   * Converts a bounds in the format used in the hoot options config to an envelope
+   * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
+   * envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
   static Envelope envelopeFromConfigString(const QString boundsStr);
+
+  /**
+   * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
+   * from an envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
+   * @return
+   */
+  static QString envelopeToConfigString(const Envelope& bounds);
 
 };
 

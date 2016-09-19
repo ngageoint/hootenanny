@@ -28,19 +28,21 @@ package hoot.services.controllers.job;
 
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-
 import hoot.services.UnitTest;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.ElementInfo;
+import hoot.services.models.review.ElementInfo;
 import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewRefsResponse;
@@ -52,7 +54,11 @@ import hoot.services.utils.RandomNumberGenerator;
 
 public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
     public ReviewResourceGetReferencesTest() {
-        super("hoot.services.controllers.job");
+    }
+
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(ReviewResource.class);
     }
 
     @Test
@@ -62,11 +68,13 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
         Map<Long, Element> oldNodeIdsToNewNodes = testUtils.parsedElementIdsToElementsByType.get(ElementType.Node);
 
-        ReviewRefsResponses response = resource().path("/review/refs").type(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON).post(ReviewRefsResponses.class,
+        ReviewRefsResponses response = target("/review/refs")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(
                     new ReviewRefsRequest(new ElementInfo[] {
                         new ElementInfo(String.valueOf(mapId), oldNodeIdsToNewNodes.get(-116L).getId(), "node"),
-                        new ElementInfo(String.valueOf(mapId), oldNodeIdsToNewNodes.get(-117L).getId(), "node") }));
+                        new ElementInfo(String.valueOf(mapId), oldNodeIdsToNewNodes.get(-117L).getId(), "node") })),
+                    ReviewRefsResponses.class);
 
         ReviewRefsResponse[] reviewReferenceResponses = response.getReviewRefsResponses();
         Assert.assertEquals(2, reviewReferenceResponses.length);
@@ -141,61 +149,60 @@ public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapDoesntExist() throws Exception {
         try {
-            resource()
-                    .path("/review/refs").type(
-                            MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).post(ReviewRefsResponses.class,
+            target("/review/refs")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(
                             new ReviewRefsRequest(
                                     new ElementInfo[] {
                                             new ElementInfo(
                                                     // map id doesn't exist
                                                     String.valueOf((long) RandomNumberGenerator
-                                                            .nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)),
-                                                    -1, "") }));
+                                                            .nextDouble((mapId + 10) ^ 4, Integer.MAX_VALUE)),
+                                                    -1, "") })), ReviewRefsResponses.class);
         }
-        catch (UniformInterfaceException e) {
+        catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            // System.out.println(e.getResponse().getEntity(String.class));
-            Assert.assertTrue(e.getResponse().getEntity(String.class).contains("No map exists"));
-
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetQueryElementDoesntExist() throws Exception {
         try {
-            resource().path("/review/refs").type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(
-                    ReviewRefsResponses.class,
+            target("/review/refs")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(
                     new ReviewRefsRequest(new ElementInfo[] {
                             // this element doesn't exist
-                            new ElementInfo(String.valueOf(mapId), -1, "node") }));
+                            new ElementInfo(String.valueOf(mapId), -1, "node") })), ReviewRefsResponses.class);
         }
-        catch (UniformInterfaceException e) {
+        catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity(String.class).contains("does not exist"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("does not exist"));
             throw e;
         }
     }
 
-    @Test(expected = UniformInterfaceException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetQueryElementEmptyElementType() throws Exception {
         try {
-            resource().path("/review/refs").type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(
-                    ReviewRefsResponses.class,
+            target("/review/refs")
+                .request(MediaType.APPLICATION_JSON).post(
+                    Entity.json(
                     new ReviewRefsRequest(new ElementInfo[] {
                             // this element has the incorrect type
-                            new ElementInfo(String.valueOf(mapId), -1, "") }));
+                            new ElementInfo(String.valueOf(mapId), -1, "") })), ReviewRefsResponses.class);
         }
-        catch (UniformInterfaceException e) {
+        catch (WebApplicationException e) {
             Assert.assertEquals(Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            Assert.assertTrue(e.getResponse().getEntity(String.class).contains("does not exist"));
+            Assert.assertTrue(e.getResponse().readEntity(String.class).contains("does not exist"));
             throw e;
         }
     }

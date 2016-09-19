@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyRelationsVisitor.h"
 
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
 
 namespace hoot
 {
@@ -46,7 +47,7 @@ void RemoveEmptyRelationsVisitor::visit(const shared_ptr<Element>& e)
 
     if (r->getMembers().size() == 0)
     {
-      _map->removeRelation(r->getId());
+      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

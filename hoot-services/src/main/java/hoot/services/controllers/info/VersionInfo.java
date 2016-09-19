@@ -26,13 +26,10 @@
  */
 package hoot.services.controllers.info;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  * Information about the hoot version
  */
-@XmlRootElement
 public class VersionInfo {
     private String name;
     private String version;

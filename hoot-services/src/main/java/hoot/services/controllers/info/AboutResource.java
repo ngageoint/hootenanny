@@ -36,7 +36,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -89,6 +88,7 @@ public class AboutResource {
     @Produces(MediaType.APPLICATION_JSON)
     public VersionInfo getServicesVersionInfo() {
         VersionInfo versionInfo;
+
         try {
             logger.debug("Retrieving services version...");
 
@@ -100,9 +100,12 @@ public class AboutResource {
 
             logger.debug("Returning response: {} ...", versionInfo);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
-            String message = "Error retrieving services version info: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error retrieving services version info!";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return versionInfo;
@@ -170,6 +173,7 @@ public class AboutResource {
     @Produces(MediaType.APPLICATION_JSON)
     public VersionInfo getCoreVersionInfo() {
         VersionInfo versionInfo;
+
         try {
             logger.debug("Retrieving services version...");
 
@@ -182,9 +186,12 @@ public class AboutResource {
 
             logger.debug("Returning response: {} ...", versionInfo);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
-            String message = "Error retrieving core version info: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error retrieving core version info!";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return versionInfo;
@@ -203,6 +210,7 @@ public class AboutResource {
     @Produces(MediaType.APPLICATION_JSON)
     public CoreDetail getCoreVersionDetail() {
         CoreDetail coreDetail;
+
         try {
             logger.debug("Retrieving services version...");
 
@@ -221,9 +229,12 @@ public class AboutResource {
 
             logger.debug("Returning response: {} ...", coreDetail);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
-            String message = "Error retrieving core version info: " + e.getMessage();
-            throw new WebApplicationException(e, Response.status(Status.INTERNAL_SERVER_ERROR).entity(message).build());
+            String msg = "Error retrieving core version info!";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return coreDetail;

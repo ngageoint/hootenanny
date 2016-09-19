@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveReviewsByEidOp.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -76,7 +77,7 @@ void RemoveReviewsByEidOp::apply(const shared_ptr<OsmMap> &map)
     ++it)
   {
     // just remove the review, not its children.
-    map->removeElement(*it);
+    RemoveElementOp::removeElement(map, *it);
   }
 
   if (_clearAndRemove)

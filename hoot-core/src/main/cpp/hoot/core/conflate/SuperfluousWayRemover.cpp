@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -31,6 +31,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 
 namespace hoot
 {
@@ -87,7 +88,7 @@ void SuperfluousWayRemover::removeWays()
     // if all the nodes in a way are the same or there are zero nodes
     if ((same || w->getTags().size() == 0) && !inRelation)
     {
-      _inputMap->removeWayFully(w->getId());
+      RemoveWayOp::removeWayFully(_inputMap, w->getId());
     }
   }
 }
