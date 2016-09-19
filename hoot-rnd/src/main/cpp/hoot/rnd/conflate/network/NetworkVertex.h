@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,7 +39,7 @@ namespace hoot
  * Why NetworkVertex? To avoid confusion with the OSM Node.
  *
  * A vertex is not necessarily associated with just a single OSM node. A vertex could represent an
- * entire roudabout instead of each of the intersections that make up a roudabout. Whatever makes
+ * entire roudabout instead of each of the intersections that make up a roundabout. Whatever makes
  * the conflation more effective.
  */
 class NetworkVertex

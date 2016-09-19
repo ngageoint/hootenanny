@@ -60,6 +60,19 @@ Feature: OSM/TDS Switcher
         And I append "preset-search-input" input with "l"
         And I append "preset-search-input" input with "d"
         And I wait 10 "seconds" to see "Building Superstructure (AL018)"
+        # Use the searched preset here
+        And I click the "div.label" with text "Building Superstructure (AL018)"
+        # I can add a new tag using a TDSv61 field
+        Then I wait 5 seconds
+        Then I select the "Building Superstructure Type" option labelled "Add field:"
+        Then I select the "Dome" option labelled "Building Superstructure Type"
+        And I click the "map" at "440","425"
+
+        # Add another point with TDSv61 schema
+        When I click the "add-point" button
+        And I hover over "#map"
+        And I click the "map" at "50","270"
+        Then I wait 5 "seconds" to see "Select feature type"
         And I click the "div.label" with text "Building (AL013)"
         And I should see a "g.tag-building" on the map
         # I can add a new tag using a TDSv61 field
