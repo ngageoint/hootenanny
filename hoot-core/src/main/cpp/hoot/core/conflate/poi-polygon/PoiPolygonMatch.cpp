@@ -674,7 +674,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
       {
         //otherParkPolyNameScore = _getNameScore(poi, area);
         //otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-        //shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
+        shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
         //distToOtherParkPoly = areaGeom->distance(gpoly.get());
         //otherParkPolyContainsPoly = areaGeom->contains(gpoly.get());
 
@@ -692,7 +692,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
           {
             polyVeryCloseToAnotherParkPoly = true;
 
-            if (poly->getElementType() == ElementType::Way && area->getElementType() == ElementType::Way)
+            if (poly->getElementType() == ElementType::Way &&
+                area->getElementType() == ElementType::Way)
             {
               //Calc the distance from the poi to the poly line instead of the poly itself.  Calcing
               //distance to the poly itself will always return 0 when the poi is in the poly.
@@ -709,7 +710,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
             }
 
             if (Log::getInstance().getLevel() == Log::Debug &&
-                (poly->getTags().get("uuid") == _testUuid || area->getTags().get("uuid") == _testUuid))
+                (poly->getTags().get("uuid") == _testUuid ||
+                 area->getTags().get("uuid") == _testUuid))
             {
               LOG_DEBUG("poly examined and found very close to a park: " << poly->toString());
               LOG_DEBUG("park it was very close to: " << area->toString());
