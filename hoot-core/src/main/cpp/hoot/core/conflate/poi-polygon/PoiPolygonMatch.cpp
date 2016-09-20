@@ -61,6 +61,8 @@ QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyReviewRefIdsToDistances;
 
+//TODO: reduce these constructors
+
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf) :
@@ -206,6 +208,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   bool addressMatch = false;
   double typeScore = -1.0;
   int evidence = -1;
+
   if (!_triggersParkRule(poi, poly, gpoly, gpoi))
   {
     // calculate the 2 sigma for the distance between the two objects
@@ -635,8 +638,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
 {
   bool triggersParkRule = false;
 
-  const QString poiName = poi->getTags().get("name").toLower();
-  const QString polyName = poi->getTags().get("name").toLower();
+  //const QString poiName = poi->getTags().get("name").toLower();
+  //const QString polyName = poi->getTags().get("name").toLower();
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
@@ -669,9 +672,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
       const bool areaIsAPark = area->getTags().get("leisure") == "park";
       if (areaIsAPark)
       {
-        otherParkPolyNameScore = _getNameScore(poi, area);
-        otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-        shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
+        //otherParkPolyNameScore = _getNameScore(poi, area);
+        //otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
+        //shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
         //distToOtherParkPoly = areaGeom->distance(gpoly.get());
         //otherParkPolyContainsPoly = areaGeom->contains(gpoly.get());
 
@@ -734,9 +737,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     triggersParkRule = true;
   }*/
   //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
-  //to another park poly (as defined above), we want to be more restrictive on type matching,
-  //but only if the poi has any type at all.  If it has no type, then behave as normal (exclude
-  //playgrounds, rec centers, and clubhouses)).  Also, let an exact name match override this rule.
+  //to another park poly, we want to be more restrictive on type matching, but only if the poi has
+  //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
+  //cause a review here, rather than a miss.
   /*else*/ if ((polyIsParkArea || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
                !poiIsParkArea && poiHasType)
   {
@@ -760,8 +763,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     }
     triggersParkRule = true;
   }
-  //If the poi is a park, the poly it is being compared to is not a park, that poly is "very
-  //close" to another park polygon with a name match, then declare a miss (exclude poly playgrounds).
+  //If the poi is a park, the poly it is being compared to is not a park or building, and that poly
+  //is "very close" to another park poly that has a name match with the poi, then declare a miss
+  //(exclude poly playgrounds from this).
   else if (poiIsParkArea && !polyIsParkArea && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
            otherParkPolyNameMatch && !polyIsPlayground)
   {
