@@ -761,8 +761,22 @@ When(/^I click the review item column in the tag table$/) do
   page.all('td.f1').first.click
 end
 
-Then(/^I should see element "([^"]*)" with a highlight$/) do |id|
-  el = find('div.layer-data').all('path[class*=" ' + id + '"]')
-  el.include?('.selected')
+Then(/^I should see a node element "([^"]*)" with a selected highlight$/) do |id|
+  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el[:class].include? '.selected'
 end
 
+And(/^I should see an element with class "([^"]*)" on the map$/) do |id|
+  el = find('div.layer-data')
+  el[:class].include? id
+end
+
+When(/^I click to expand Map Data$/) do
+  el = find('div.map-control.map-data-control')
+  el.click
+end
+
+Then(/^I turn on highlight edited features$/) do
+  el = find('div.highlight-edited')
+  el.click
+end
