@@ -55,7 +55,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
+QString PoiPolygonMatch::_testUuid = "{db8f0c0e-35c2-5657-ac30-811e2c1554de}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -647,7 +647,10 @@ bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
     return false;
   }
   const QString leisureVal = element->getTags().get("leisure").toLower();
-  return leisureVal == "garden" || element->getTags().get("sport") == "tennis";
+  return
+    leisureVal == "garden" || element->getTags().get("sport") == "tennis"/* ||
+      element->getTags().get("name").toLower().contains("playground") ||
+      element->getTags().get("name").toLower().contains("play area")*/;
 }
 
 bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strList) const
@@ -668,17 +671,25 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
 {
   bool triggersParkRule = false;
 
+  const QString poiName = poi->getTags().get("name").toLower();
+  const QString polyName = poly->getTags().get("name").toLower();
+
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   const bool poiIsParkArea = _elementIsPark(poi);
   const bool poiIsParkish = _elementIsParkish(poi);
+  const bool poiIsPlayground =
+    poi->getTags().get("leisure") == "playground" || poiName.contains("play area") ||
+    poiName.contains("playground");
 
   const bool polyHasType =
     OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   const bool polyIsParkArea = _elementIsPark(poly);
-  const bool polyIsPlayground = poly->getTags().get("leisure") == "playground";
+  const bool polyIsPlayground =
+    poly->getTags().get("leisure") == "playground" || polyName.contains("play area") ||
+    polyName.contains("playground");
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
@@ -691,6 +702,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   //double distToOtherParkPoly = -1.0;
   //bool otherParkPolyContainsPoly = false;
   bool otherParkPolyHasName = false;
+
+  const double polyArea = gpoly->getArea();
 
   set<ElementId>::const_iterator it = _areaIds.begin();
   while (it != _areaIds.end() && !polyVeryCloseToAnotherParkPoly)
@@ -810,6 +823,20 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     _class.setMiss();
     triggersParkRule = true;
   }
+  //Play areas areas can get matched to the larger parks they reside within.  We're setting a max
+  //size for play area polys here to prevent that.  Unfortunately, most play areas are tagged as
+  //parked, if tagged at all, so we're scanning the name tag here.
+  else if (poiName.contains("play area") && polyArea > 25000) //TODO: move to config?
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #4...");
+    }
+    _class.setMiss();
+    triggersParkRule = true;
+  }
+
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -829,6 +856,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(poiToPolyNodeDist);
     LOG_VARD(poiToOtherParkPolyNodeDist);
     LOG_VARD(otherParkPolyHasName);
+    LOG_VARD(polyArea);
     //LOG_VARD(distToOtherParkPoly);
     //LOG_VARD(otherParkPolyContainsPoly);
   }
