@@ -252,10 +252,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       _class.setMiss();
     }
   }
-  /*else
-  {
-    _class.setMiss();
-  }*/
 
   if (Log::getInstance().getLevel() == Log::Debug)
   {
@@ -845,9 +841,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     _class.setMiss();
     triggersParkRule = true;
   }
-  //If the poi and poly are parks, the poi is also a rec center, the poly is not a rec center, and
-  //the park poly contains a rec center poly, return a miss to force the rec center poi to match
-  //the contained rec center poly.
+  //If the poi is a rec center and the poly is not a rec center or a building, return a miss.
   else if (poiIsRecCenter && !polyIsRecCenter && !polyIsBuilding)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
