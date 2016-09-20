@@ -162,12 +162,14 @@ private:
 
   bool _getAddressMatch(ConstElementPtr building, ConstElementPtr poi);
 
-  double _getMatchDistanceForType(const QString typeKvp);
-  double _getReviewDistanceForType(const QString typeKvp);
-  double _getMinWayNodeDistance(ConstWayPtr way, shared_ptr<Geometry> poiGeom);
+  double _getMatchDistanceForType(const QString typeKvp) const;
+  double _getReviewDistanceForType(const QString typeKvp) const;
 
   bool _triggersParkRule(ConstElementPtr poi, ConstElementPtr poly, shared_ptr<Geometry> gpoly,
                          shared_ptr<Geometry> gpoi);
+  bool _elementIsPark(ConstElementPtr element) const;
+  bool _containsPartial(const QString key, const QStringList strList) const;
+  bool _elementIsParkish(ConstElementPtr element) const;
 
 };
 

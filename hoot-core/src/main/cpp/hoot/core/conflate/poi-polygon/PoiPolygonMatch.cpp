@@ -492,7 +492,7 @@ QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
   return tagsList;
 }
 
-double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/)
+double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) const
 {
   //dataset c
   /*if (typeKvp == "amenity=clinic")
@@ -511,7 +511,7 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/)
   return _matchDistance;
 }
 
-double PoiPolygonMatch::_getReviewDistanceForType(const QString /*typeKvp*/)
+double PoiPolygonMatch::_getReviewDistanceForType(const QString /*typeKvp*/) const
 {
   /*if (typeKvp == "leisure=park")
   {
@@ -633,25 +633,53 @@ QString PoiPolygonMatch::toString() const
     arg(_polyEid.toString()).arg(_class.toString());
 }
 
+bool PoiPolygonMatch::_elementIsPark(ConstElementPtr element) const
+{
+  return !OsmSchema::getInstance().isBuilding(element) &&
+         (element->getTags().get("leisure") == "park" /*||
+          _containsPartial("park", element->getTags().getNames())*/);
+}
+
+bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
+{
+  if (OsmSchema::getInstance().isBuilding(element))
+  {
+    return false;
+  }
+  const QString leisureVal = element->getTags().get("leisure").toLower();
+  return leisureVal == "garden";
+}
+
+bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strList) const
+{
+  for (QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); it++)
+  {
+    QString val = *it;
+    if (val.contains(key, Qt::CaseInsensitive))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr poly,
                                         shared_ptr<Geometry> gpoly, shared_ptr<Geometry> gpoi)
 {
   bool triggersParkRule = false;
 
-  //const QString poiName = poi->getTags().get("name").toLower();
-  //const QString polyName = poi->getTags().get("name").toLower();
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  const bool poiIsParkArea = _elementIsPark(poi);
+  const bool poiIsParkish = _elementIsParkish(poi);
+
   const bool polyHasType =
     OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-
-  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsParkArea = !polyIsBuilding && poly->getTags().get("leisure") == "park";
-  const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
-  const bool poiIsParkArea = !poiIsBuilding && poi->getTags().get("leisure") == "park";
+  const bool polyIsParkArea = _elementIsPark(poly);
   const bool polyIsPlayground = poly->getTags().get("leisure") == "playground";
+  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -669,11 +697,10 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     ConstElementPtr area = _map->getElement(*it);
     if (area->getElementId() != poly->getElementId())
     {
-      const bool areaIsAPark = area->getTags().get("leisure") == "park";
-      if (areaIsAPark)
+      if (_elementIsPark(area))
       {
-        //otherParkPolyNameScore = _getNameScore(poi, area);
-        //otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
+        otherParkPolyNameScore = _getNameScore(poi, area);
+        otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
         shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
         //distToOtherParkPoly = areaGeom->distance(gpoly.get());
         //otherParkPolyContainsPoly = areaGeom->contains(gpoly.get());
@@ -726,7 +753,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   //If the POI is inside a park poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
   //ring of this park poly.
-  /*if (polyIsParkArea && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
+  if (/*polyIsParkArea*/(poiIsParkArea || poiIsParkish) && polyVeryCloseToAnotherParkPoly &&
+      _distance == 0 &&
       poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
       poiToOtherParkPolyNodeDist != DBL_MAX)
   {
@@ -737,13 +765,13 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     }
     _class.setMiss();
     triggersParkRule = true;
-  }*/
+  }
   //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
   //to another park poly, we want to be more restrictive on type matching, but only if the poi has
   //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
   //cause a review here, rather than a miss.
-  /*else*/ if ((polyIsParkArea || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
-               !poiIsParkArea && poiHasType)
+  else if ((polyIsParkArea || (polyVeryCloseToAnotherParkPoly && !polyHasType)) && !poiIsParkArea &&
+           !poiIsParkish && poiHasType)
   {
     if (_exactNameMatch)
     {
@@ -785,11 +813,11 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   {
     LOG_VARD(poiHasType);
     LOG_VARD(polyHasType);
-    LOG_VARD(polyIsBuilding);
     LOG_VARD(polyIsParkArea);
-    LOG_VARD(poiIsBuilding);
+    LOG_VARD(poiIsParkish);
     LOG_VARD(poiIsParkArea);
     LOG_VARD(polyIsPlayground);
+    LOG_VARD(polyIsBuilding);
     LOG_VARD(polyVeryCloseToAnotherParkPoly);
     LOG_VARD(parkPolyAngleHistVal);
     LOG_VARD(parkPolyOverlapVal);
