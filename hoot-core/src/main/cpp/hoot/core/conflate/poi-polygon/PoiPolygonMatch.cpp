@@ -55,7 +55,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{e067beac-a57f-58d0-86c7-89edcbc82c10}";
+QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -647,7 +647,7 @@ bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
     return false;
   }
   const QString leisureVal = element->getTags().get("leisure").toLower();
-  return leisureVal == "garden";
+  return leisureVal == "garden" || element->getTags().get("sport") == "tennis";
 }
 
 bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strList) const
@@ -690,6 +690,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   double poiToOtherParkPolyNodeDist = DBL_MAX;
   //double distToOtherParkPoly = -1.0;
   //bool otherParkPolyContainsPoly = false;
+  bool otherParkPolyHasName = false;
 
   set<ElementId>::const_iterator it = _areaIds.begin();
   while (it != _areaIds.end() && !polyVeryCloseToAnotherParkPoly)
@@ -699,6 +700,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     {
       if (_elementIsPark(area))
       {
+        //otherParkPolyHasName = area->getTags().getNames().size() > 0;
+        //not sure why the one above didn't work
+        otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
         otherParkPolyNameScore = _getNameScore(poi, area);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
         shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
@@ -750,13 +754,12 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     it++;
   }
 
-  //If the POI is inside a park poly that is very close to another park poly, declare miss if
+  //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
-  //ring of this park poly.
-  if (/*polyIsParkArea*/(poiIsParkArea || poiIsParkish) && polyVeryCloseToAnotherParkPoly &&
-      _distance == 0 &&
+  //ring of this poly and the other park poly has a name.
+  if ((poiIsParkArea || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
       poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
-      poiToOtherParkPolyNodeDist != DBL_MAX)
+      poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -825,6 +828,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(otherParkPolyNameScore);
     LOG_VARD(poiToPolyNodeDist);
     LOG_VARD(poiToOtherParkPolyNodeDist);
+    LOG_VARD(otherParkPolyHasName);
     //LOG_VARD(distToOtherParkPoly);
     //LOG_VARD(otherParkPolyContainsPoly);
   }
