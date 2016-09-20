@@ -55,7 +55,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{db8f0c0e-35c2-5657-ac30-811e2c1554de}";
+QString PoiPolygonMatch::_testUuid = "{8bebf954-3a1f-5923-8b55-ebf2c45f1839}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -640,6 +640,7 @@ bool PoiPolygonMatch::_elementIsPark(ConstElementPtr element) const
           _containsPartial("park", element->getTags().getNames())*/);
 }
 
+//TODO: can hopefully eventually genericize this out to something like leisure=*park*
 bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
 {
   if (OsmSchema::getInstance().isBuilding(element))
@@ -648,9 +649,8 @@ bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
   }
   const QString leisureVal = element->getTags().get("leisure").toLower();
   return
-    leisureVal == "garden" || element->getTags().get("sport") == "tennis"/* ||
-      element->getTags().get("name").toLower().contains("playground") ||
-      element->getTags().get("name").toLower().contains("play area")*/;
+    leisureVal == "garden" || element->getTags().get("sport") == "tennis" ||
+    leisureVal == "dog_park";
 }
 
 bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strList) const
@@ -666,6 +666,12 @@ bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strL
   return false;
 }
 
+bool PoiPolygonMatch::_elementIsRecCenter(ConstElementPtr element) const
+{
+  const QString elementName = element->getTags().get("name").toLower();
+  return elementName.contains("recreation center") || elementName.contains("rec center");
+}
+
 bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr poly,
                                         shared_ptr<Geometry> gpoly, shared_ptr<Geometry> gpoi)
 {
@@ -679,9 +685,10 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   const bool poiIsParkArea = _elementIsPark(poi);
   const bool poiIsParkish = _elementIsParkish(poi);
-  const bool poiIsPlayground =
-    poi->getTags().get("leisure") == "playground" || poiName.contains("play area") ||
-    poiName.contains("playground");
+  //const bool poiIsPlayground =
+    //poi->getTags().get("leisure") == "playground" || poiName.contains("play area") ||
+    //poiName.contains("playground");
+  const bool poiIsRecCenter = _elementIsRecCenter(poi);
 
   const bool polyHasType =
     OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
@@ -691,6 +698,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     poly->getTags().get("leisure") == "playground" || polyName.contains("play area") ||
     polyName.contains("playground");
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+  const bool polyIsRecCenter = _elementIsRecCenter(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -706,6 +714,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   const double polyArea = gpoly->getArea();
 
   set<ElementId>::const_iterator it = _areaIds.begin();
+
   while (it != _areaIds.end() && !polyVeryCloseToAnotherParkPoly)
   {
     ConstElementPtr area = _map->getElement(*it);
@@ -713,12 +722,12 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     {
       if (_elementIsPark(area))
       {
+        shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
         //otherParkPolyHasName = area->getTags().getNames().size() > 0;
         //not sure why the one above didn't work
         otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
         otherParkPolyNameScore = _getNameScore(poi, area);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-        shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
         //distToOtherParkPoly = areaGeom->distance(gpoly.get());
         //otherParkPolyContainsPoly = areaGeom->contains(gpoly.get());
 
@@ -836,7 +845,19 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     _class.setMiss();
     triggersParkRule = true;
   }
-
+  //If the poi and poly are parks, the poi is also a rec center, the poly is not a rec center, and
+  //the park poly contains a rec center poly, return a miss to force the rec center poi to match
+  //the contained rec center poly.
+  else if (poiIsRecCenter && !polyIsRecCenter && !polyIsBuilding)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #5...");
+    }
+    _class.setMiss();
+    triggersParkRule = true;
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -846,6 +867,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(polyIsParkArea);
     LOG_VARD(poiIsParkish);
     LOG_VARD(poiIsParkArea);
+    //LOG_VARD(poiIsPlayground);
     LOG_VARD(polyIsPlayground);
     LOG_VARD(polyIsBuilding);
     LOG_VARD(polyVeryCloseToAnotherParkPoly);
@@ -857,6 +879,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(poiToOtherParkPolyNodeDist);
     LOG_VARD(otherParkPolyHasName);
     LOG_VARD(polyArea);
+    LOG_VARD(poiIsRecCenter);
+    LOG_VARD(polyIsRecCenter);
     //LOG_VARD(distToOtherParkPoly);
     //LOG_VARD(otherParkPolyContainsPoly);
   }

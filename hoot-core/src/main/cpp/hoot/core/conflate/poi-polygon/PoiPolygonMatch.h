@@ -170,6 +170,7 @@ private:
   bool _elementIsPark(ConstElementPtr element) const;
   bool _containsPartial(const QString key, const QStringList strList) const;
   bool _elementIsParkish(ConstElementPtr element) const;
+  bool _elementIsRecCenter(ConstElementPtr element) const;
 
 };
 
