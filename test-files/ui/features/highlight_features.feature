@@ -7,10 +7,10 @@ Feature: Highlight features on click
 
     Scenario: Add Data
         And I press "Add Reference Dataset"
-        And I click the "AllDataTypesMerged" Dataset
+        And I click the "AllDataTypesMergedCucumber" Dataset
         And I press "Add Layer"
         And I accept the alert
-        Then I wait 30 "seconds" to see "AllDataTypesMerged"
+        Then I wait 30 "seconds" to see "AllDataTypesMergedCucumber"
         When I click the "add-point" button
         And I hover over "#map"
         And I click the "map" at "350","300"
