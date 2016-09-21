@@ -26,7 +26,8 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,14 +43,13 @@ import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.QuadTileCalculator;
-import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -58,16 +58,13 @@ import hoot.services.utils.DbUtils.EntityChangeType;
 public class Node extends Element {
     private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
-    public Node(Long mapId, Connection dbConnection) {
-        super(dbConnection);
+    public Node(Long mapId) {
         super.elementType = ElementType.Node;
         super.record = new CurrentNodes();
-
         setMapId(mapId);
     }
 
-    public Node(Long mapId, Connection dbConnection, CurrentNodes record) {
-        super(dbConnection);
+    public Node(Long mapId, CurrentNodes record) {
         super.elementType = ElementType.Node;
 
         CurrentNodes nodeRecord = new CurrentNodes();
@@ -102,7 +99,7 @@ public class Node extends Element {
             nodeRecord = (CurrentNodes) record;
         }
         else {
-            nodeRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+            nodeRecord = createQuery(getMapId())
                     .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(getId()))
@@ -120,15 +117,13 @@ public class Node extends Element {
      *            ID of the map the nodes belong to
      * @param nodeIds
      *            a collection of node IDs
-     * @param dbConn
-     *            JDBC Connection
      * @return a collection of node records
      */
-    static List<CurrentNodes> getNodes(long mapId, Set<Long> nodeIds, Connection dbConn) {
+    static List<CurrentNodes> getNodes(long mapId, Set<Long> nodeIds) {
         // This seems redundant when compared to Element::getElementRecords
 
         if (!nodeIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.in(nodeIds))
@@ -192,8 +187,7 @@ public class Node extends Element {
 
         // From the Rails port of OSM API:
         // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
-        SQLQuery<Long> owningWaysQuery =
-                new SQLQuery<>(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
+        SQLQuery<Long> owningWaysQuery = createQuery(super.getMapId())
                 .select(currentWayNodes.wayId)
                 .distinct()
                 .from(currentWays)
@@ -211,7 +205,7 @@ public class Node extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Node", :member_id => id }).
-        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        SQLQuery<Long> owningRelationsQuery = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelations)
@@ -380,18 +374,16 @@ public class Node extends Element {
      *            longitude coordinate for the node to be inserted
      * @param tags
      *            element tags
-     * @param conn
-     *            JDBC Connection
      * @return ID of the newly created node
      */
     public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) {
+            java.util.Map<String, String> tags) {
 
-        long nextNodeId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
+        long nextNodeId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
                 .fetchOne();
 
-        insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
+        insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags);
 
         return nextNodeId;
     }
@@ -412,13 +404,11 @@ public class Node extends Element {
      *            longitude coordinate for the node to be inserted
      * @param tags
      *            element tags
-     * @param conn
-     *            JDBC Connection
      */
     public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) {
+            java.util.Map<String, String> tags) {
 
-        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
+        createQuery(mapId).insert(currentNodes)
                 .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
                         currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
                 .values(nodeId, latitude, longitude, changesetId,

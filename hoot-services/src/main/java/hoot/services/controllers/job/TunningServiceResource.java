@@ -40,13 +40,21 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.job.JobExecutioner;
+import hoot.services.job.JobStatusManager;
 
 
+@Controller
 @Path("/tunning")
 public class TunningServiceResource {
     private static final Logger logger = LoggerFactory.getLogger(TunningServiceResource.class);
+
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
 
     public TunningServiceResource() {}
 
@@ -68,7 +76,8 @@ public class TunningServiceResource {
             command.put("inputtype", inputType);
             command.put("execImpl", "tunningService");
 
-            (new JobExecutioner(uuid, command)).start();
+            // TODO: Needs to be executed using a thread pool!
+            (new JobExecutioner(uuid, command, jobStatusManager)).start();
         }
         catch (Exception e) {
             String message = "Tuning Service error: " + e.getMessage();

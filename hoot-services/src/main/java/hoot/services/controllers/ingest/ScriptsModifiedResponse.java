@@ -30,15 +30,13 @@ package hoot.services.controllers.ingest;
 public class ScriptsModifiedResponse {
     private String[] scriptsModified;
 
+    public ScriptsModifiedResponse() {}
+
     public String[] getScriptsModified() {
         return scriptsModified;
     }
 
     public void setScriptsModified(String[] scriptsModified) {
         this.scriptsModified = scriptsModified;
-    }
-
-    public ScriptsModifiedResponse() {
-
     }
 }

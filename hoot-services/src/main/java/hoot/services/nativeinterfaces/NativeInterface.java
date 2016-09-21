@@ -45,4 +45,12 @@ public interface NativeInterface {
     JSONObject exec(JSONObject command) throws NativeInterfaceException;
 
     String getJobProgress(String jobId);
+
+    /**
+     * Terminates job
+     *
+     * @param jobId
+     * @throws NativeInterfaceException
+     */
+    void terminate(String jobId) throws NativeInterfaceException;
 }
