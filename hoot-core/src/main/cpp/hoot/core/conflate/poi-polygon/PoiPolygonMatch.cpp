@@ -712,14 +712,13 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   bool triggersParkRule = false;
 
   const QString poiName = poi->getTags().get("name").toLower();
-  const QString polyName = poly->getTags().get("name").toLower();
+  //const QString polyName = poly->getTags().get("name").toLower();
 
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   const bool poiIsPark = _elementIsPark(poi);
   const bool poiIsParkish = _elementIsParkish(poi);
-  //const bool poiIsPlayground = _elementIsPlayground(poi);
   const bool poiIsPlayArea = _elementIsPlayArea(poi);
   const bool poiIsRecCenter = _elementIsRecCenter(poi);
 
@@ -738,11 +737,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   double otherParkPolyNameScore = -1.0;
   double poiToPolyNodeDist = DBL_MAX;
   double poiToOtherParkPolyNodeDist = DBL_MAX;
-  //double distToOtherParkPoly = -1.0;
-  //bool otherParkPolyContainsPoly = false;
   bool otherParkPolyHasName = false;
   bool polyContainsPlayAreaOrPlaygroundPoly = false;
-  //bool parkPoiInContainedInAnotherParkPoly;
+  bool parkPoiInContainedInAnotherParkPoly = false;
 
   const double polyArea = gpoly->getArea();
 
@@ -767,15 +764,12 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
 
       if (_elementIsPark(area))
       {
-        //otherParkPolyHasName = area->getTags().getNames().size() > 0;
         //not sure why the one above didn't work
         otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
         otherParkPolyNameScore = _getNameScore(poi, area);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-        //distToOtherParkPoly = areaGeom->distance(gpoly.get());
-        //otherParkPolyContainsPoly = areaGeom->contains(gpoly.get());
 
-        /*if (areaGeom->contains(gpoi.get()))
+        if (areaGeom->contains(gpoi.get()))
         {
           parkPoiInContainedInAnotherParkPoly = true;
 
@@ -788,7 +782,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
               "comparison: " << poi->toString());
             LOG_DEBUG("park poly it is very close to: " << area->toString());
           }
-        }*/
+        }
 
         if (areaGeom->intersects(gpoly.get()))
         {
@@ -947,7 +941,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     _class.setMiss();
     triggersParkRule = true;
   }
-  /*else if (poiIsPark && _distance > 0 && parkPoiInContainedInAnotherParkPoly)
+  //If a park poi is contained within one park poly, then there's no reason for it to trigger
+  //reviews in one its not contained in.
+  else if (poiIsPark && polyIsPark && _distance > 0 && parkPoiInContainedInAnotherParkPoly)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -956,7 +952,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     }
     _class.setMiss();
     triggersParkRule = true;
-  }*/
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -966,7 +962,6 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(polyIsPark);
     LOG_VARD(poiIsParkish);
     LOG_VARD(poiIsPark);
-    //LOG_VARD(poiIsPlayground);
     LOG_VARD(polyIsPlayground);
     LOG_VARD(polyIsBuilding);
     LOG_VARD(polyVeryCloseToAnotherParkPoly);
@@ -982,9 +977,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
     LOG_VARD(polyIsRecCenter);
     LOG_VARD(polyContainsPlayAreaOrPlaygroundPoly);
     LOG_VARD(poiIsPlayArea);
-    //LOG_VARD(parkPoiInContainedInAnotherParkPoly);
-    //LOG_VARD(distToOtherParkPoly);
-    //LOG_VARD(otherParkPolyContainsPoly);
+    LOG_VARD(parkPoiInContainedInAnotherParkPoly);
   }
 
   return triggersParkRule;
