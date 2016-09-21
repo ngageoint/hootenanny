@@ -7,7 +7,7 @@ Feature: Highlight features on click
 
     Scenario: Add Data
         And I press "Add Reference Dataset"
-        And I click the "AllDataTypesMergedCucumber" Dataset
+        And I click the "AllDataTypesMergedCucumb..." Dataset
         And I press "Add Layer"
         And I accept the alert
         Then I wait 30 "seconds" to see "AllDataTypesMergedCucumber"
@@ -41,4 +41,3 @@ Feature: Highlight features on click
         Then I wait 5 seconds
         Then I click the "trash.map-button" icon
         And I accept the alert
-
