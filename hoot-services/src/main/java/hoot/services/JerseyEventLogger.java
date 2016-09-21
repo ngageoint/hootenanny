@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 
 @Provider
-public class JerseyExceptionLogger implements ApplicationEventListener, RequestEventListener {
-    private static final Logger logger = LoggerFactory.getLogger(JerseyExceptionLogger.class);
+public class JerseyEventLogger implements ApplicationEventListener, RequestEventListener {
+    private static final Logger logger = LoggerFactory.getLogger(JerseyEventLogger.class);
 
     @Context
     private Request request;
@@ -35,9 +35,17 @@ public class JerseyExceptionLogger implements ApplicationEventListener, RequestE
     }
 
     @Override
-    public void onEvent(RequestEvent paramRequestEvent) {
-        if(paramRequestEvent.getType() == RequestEvent.Type.ON_EXCEPTION) {
-            logException(paramRequestEvent.getException());
+    public void onEvent(RequestEvent event) {
+        if(event.getType() == RequestEvent.Type.ON_EXCEPTION) {
+            logException(event.getException());
+        }
+        else if (event.getType() == RequestEvent.Type.RESOURCE_METHOD_START) {
+            logger.debug("Entering {} endpoint's handler {}",
+                    uriInfo.getAbsolutePath(), event.getUriInfo().getMatchedResourceMethod());
+        }
+        else if (event.getType() == RequestEvent.Type.RESOURCE_METHOD_FINISHED) {
+            logger.debug("Exiting {} endpoint's handler {}",
+                    uriInfo.getAbsolutePath(), event.getUriInfo().getMatchedResourceMethod());
         }
     }
 
