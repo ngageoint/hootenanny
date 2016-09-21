@@ -33,4 +33,7 @@ Feature: Highlight features on click
         And I hover over "#map"
         And I click the "map" at "450","300"
         Then I should see element "n-1" with a yellow highlight
+        Then I wait 5 seconds
+        Then I click the "trash.map-button" icon
+        And I accept the alert
 
