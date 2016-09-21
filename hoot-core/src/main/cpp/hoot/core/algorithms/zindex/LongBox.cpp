@@ -32,6 +32,7 @@
 
 //hoot includes
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -44,7 +45,7 @@ LongBox::LongBox(vector<long int> min, vector<long int> max)
 
 shared_ptr<LongBox> LongBox::copy()
 {
-  shared_ptr<LongBox> box(new LongBox(getMin(), getMax()));
+  shared_ptr<LongBox> box = shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
   return box;
 }
 
@@ -119,7 +120,7 @@ QString LongBox::toString()
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
   {
-    result += QString::number(getMin()[i]) + " : " + QString::number(getMax()[i]) + " ";
+    result += "( " + QString::number(getMin()[i]) + " : " + QString::number(getMax()[i]) + ") ";
   }
   result += "}";
   return result;

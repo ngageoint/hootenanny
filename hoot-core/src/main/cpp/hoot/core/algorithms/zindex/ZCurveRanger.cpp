@@ -32,6 +32,7 @@
 
 //Hoot Inlcudes
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 //Boost Includes
 #include <boost/make_shared.hpp>
@@ -116,7 +117,7 @@ struct range_sort
   bool operator() (Range a, Range b) { return (a.getMin() < b.getMin());}
 } range_object;
 
-ZCurveRanger::ZCurveRanger(ZValue& zv)
+ZCurveRanger::ZCurveRanger(const ZValue& zv)
 {
   _zv = zv;
   //completely arbitrary.
@@ -132,8 +133,8 @@ vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)
   // significant binary breaks from min to max.
   for (int d = 0; d < _zv.getDimensions(); d++)
   {
-    long v1 = box->getMin()[d];
-    long v2 = box->getMax()[d];
+    long int v1 = box->getMin()[d];
+    long int v2 = box->getMax()[d];
 
     int maxBit = getMaxBitColumn(v1 ^ v2);
     // the later dimensions have a more significant bits so we'll split
@@ -145,21 +146,25 @@ vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)
      }
    }
 
-   long int splitPoint = 0;//getSplitValue(box.getMin()[bestD], box.getMax()[bestD]);
+   long int splitPoint = getSplitValue(box->getMin()[bestD], box->getMax()[bestD]);
 
    // if there aren't any good splits
    vector<shared_ptr<LongBox> > result;
    if (splitPoint == -1)
    {
-     result[0] = box->copy();
+     result.push_back(box->copy());
    }
    else
    {
      result.reserve(2);
-     result[0] = box->copy();
-     result[0]->getMax()[bestD] = splitPoint - 1;
-     result[1] = box->copy();
-     result[1]->getMin()[bestD] = splitPoint;
+     result.push_back(box->copy());
+     vector<long int> rMax = result[0]->getMax();
+     rMax[bestD] = splitPoint - 1;
+     result[0]->setMax(rMax);
+     result.push_back(box->copy());
+     vector<long int> rMin = result[1]->getMin();
+     rMin[bestD] = splitPoint;
+     result[1]->setMin(rMin);
    }
 
    return result;
@@ -247,13 +252,13 @@ vector<Range> ZCurveRanger::decomposeRange(BBox box, int levels)
 
 vector<Range> ZCurveRanger::decomposeRange(LongBox box, int levels)
 {
-  vector<Range> result;
   vector<shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(_clipBox(box)), levels);
-  result.reserve((boxes.size()));
 
+  vector<Range> result;
+  result.reserve((boxes.size()));
   for (uint i = 0; i < boxes.size(); i++)
   {
-    result[i] = _toRange(boxes[i]);
+    result.push_back(_toRange(boxes[i]));
   }
 
   return _condenseRanges(result);
@@ -385,22 +390,22 @@ LongBox ZCurveRanger::_clipBox(LongBox box)
 
 vector<Range> ZCurveRanger::_condenseRanges(vector<Range> r)
 {
-   sort(r.begin(), r.end(), range_object);
+  sort(r.begin(), r.end(), range_object);
 
-   vector<Range> result;
-   result.push_back(r[0]);
-   for (uint i = 1; i < r.size(); i++)
-   {
-     if ((r[i].getMin() - result[result.size() - 1].getMax()) <= _slop)
-     {
-       result[(result.size() - 1)].set(result[(result.size() - 1)].getMin(), r[i].getMax());
-     }
-     else
-     {
-       result.push_back(r[i]);
-     }
-   }
-   return result;
+  vector<Range> result;
+  result.push_back(r[0]);
+  for (uint i = 1; i < r.size(); i++)
+  {
+    if ((r[i].getMin() - result[result.size() - 1].getMax()) <= _slop)
+    {
+      result[(result.size() - 1)].set(result[(result.size() - 1)].getMin(), r[i].getMax());
+    }
+    else
+    {
+      result.push_back(r[i]);
+    }
+  }
+  return result;
 }
 
 Range ZCurveRanger::_toRange(shared_ptr<LongBox> box)
@@ -411,7 +416,7 @@ Range ZCurveRanger::_toRange(shared_ptr<LongBox> box)
   {
     if (i < (int)box->getMin().size())
     {
-      scratch[i] = box->getMin()[i];
+      scratch.push_back(box->getMin()[i]);
     }
   }
   long int min = _zv.calculate(scratch);
@@ -438,8 +443,8 @@ LongBox ZCurveRanger::_toLongBox(BBox box)
 
   for (int i = 0; i < box.getDimensions(); i++)
   {
-    min[i] = _zv.calculateComponent(box.getMin()[i], i);
-    max[i] = _zv.calculateComponent(box.getMax()[i], i);
+    min.push_back(_zv.calculateComponent(box.getMin()[i], i));
+    max.push_back(_zv.calculateComponent(box.getMax()[i], i));
   }
 
   return LongBox(min, max);

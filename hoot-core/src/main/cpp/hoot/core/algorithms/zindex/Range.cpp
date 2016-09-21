@@ -74,7 +74,7 @@ void Range::setInvalid()
 
 QString Range::toString()
 {
-  return QString::number(_min) + " : " + QString::number(_max);
+  return "[" + QString::number(_min) + " : " + QString::number(_max) + "]";
 }
 
 void Range::set(long int min, long int max)

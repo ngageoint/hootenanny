@@ -52,7 +52,7 @@ public:
 
   static string className() { return "hoot::ZCurveRanger"; }
 
-  ZCurveRanger(ZValue& zv);
+  ZCurveRanger(const ZValue& zv);
 
   ~ZCurveRanger() {}
 

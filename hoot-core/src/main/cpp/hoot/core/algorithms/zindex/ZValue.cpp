@@ -31,6 +31,7 @@
 
 //Hoot Includes
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -43,6 +44,10 @@ ZValue::ZValue(int dimensions, int depth, vector<double> min, vector<double> max
   _max = max;
   _range = (1 << _depth) - 1;
   _b.reserve(dimensions);
+  for (int i = 0; i < dimensions; i++)
+  {
+    _b.push_back(0);;
+  }
 }
 
 ZValue::~ZValue()
@@ -63,20 +68,20 @@ long int ZValue::calculate(vector<double> point)
 
 long int ZValue::calculate(vector<long int> point)
 {
-    long int bitRead = 1 << (_depth - 1);
-    long int result = 0;
-    for (int depth = 0; depth < _depth; depth++)
+  long int bitRead = 1 << (_depth - 1);
+  long int result = 0;
+  for (int depth = 0; depth < _depth; depth++)
+  {
+    // reverse the order so it looks like a "z" and makes it consistent
+    // with the Wikipedia definition.
+    for (int i = _dimensions - 1; i >= 0; i--)
     {
-      // reverse the order so it looks like a "z" and makes it consistent
-      // with the Wikipedia definition.
-      for (int i = _dimensions - 1; i >= 0; i--)
-      {
-        long int bit = ((point[i] & bitRead) != 0) ? 1 : 0;
-        result = (result << 1) | bit;
-      }
-      bitRead = bitRead >> 1;
+      long int bit = ((point[i] & bitRead) != 0) ? 1 : 0;
+      result = (result << 1) | bit;
     }
-    return result;
+    bitRead = bitRead >> 1;
+  }
+  return result;
 }
 
 long int ZValue::calculateComponent(double v, int d)
