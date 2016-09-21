@@ -40,6 +40,12 @@
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 
 // Qt
 #include <QSet>
@@ -192,6 +198,7 @@ void MatchComparator::_clearCache()
   _actualReviewGroups.clear();
   _expectedMatchGroups.clear();
   _expectedReviewGroups.clear();
+  _elementWrongCounts.clear();
 }
 
 bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
@@ -362,7 +369,9 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       //if (Log::getInstance().getLevel() == Log::Debug)
       //{
         //This info from these tags can be misleading if you are conflating the same data type twice
-        //in the same conflation job. e.g. poi to poi AND poi to poly
+        //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
+        //those cases multiple actual/expected states can exist and this logic only records one
+        //of them.
         const MatchType expectedMatchType(expectedIndex);
         const MatchType actualMatchType(actualIndex);
         _tagTestOutcome(
@@ -374,6 +383,8 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
     _confusion[actualIndex][expectedIndex]++;
   }
+
+  _setElementWrongCounts(conflated);
 
   _tp = _confusion[MatchType::Match][MatchType::Match];
   _fn = _confusion[MatchType::Miss][MatchType::Match] +
@@ -672,6 +683,28 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
   }
 }
 
+void MatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
+{
+  _setElementWrongCount(map, ElementType::Node);
+  _setElementWrongCount(map, ElementType::Way);
+  _setElementWrongCount(map, ElementType::Relation);
+}
+
+void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
+                                            const ElementType::Type& elementType)
+{
+  FilteredVisitor elementWrongVisitor(
+    new ChainCriterion(
+      new ElementTypeCriterion(elementType),
+      new HasTagCriterion("hoot:wrong")),
+    new CountVisitor());
+  FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
+  SingleStatistic* singleStat =
+    dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());
+  map->visitRo(filteredVisitor);
+  _elementWrongCounts[elementType] = singleStat->getStat();
+}
+
 QString MatchComparator::toString() const
 {
   QString result;
@@ -711,6 +744,11 @@ QString MatchComparator::toString() const
   result += QString("correct: %1\n").arg(getPercentCorrect());
   result += QString("wrong: %1\n").arg(getPercentWrong());
   result += QString("unnecessary reviews: %1\n").arg(getPercentUnnecessaryReview());
+
+  result += "\n";
+  result += QString("node wrong count: %1\n").arg(_elementWrongCounts[ElementType::Node]);
+  result += QString("way wrong count: %1\n").arg(_elementWrongCounts[ElementType::Way]);
+  result += QString("relation wrong count: %1\n").arg(_elementWrongCounts[ElementType::Relation]);
 
   return result;
 }
