@@ -32,5 +32,5 @@ Feature: Highlight features on click
         Then I turn on highlight edited features
         And I hover over "#map"
         And I click the "map" at "450","300"
-        And I should see an element with class "edited unsaved" on the map
+        Then I should see a node element "n-1" with a selected highlight
 
