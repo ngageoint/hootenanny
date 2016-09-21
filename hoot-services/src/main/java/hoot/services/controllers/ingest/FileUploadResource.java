@@ -170,7 +170,7 @@ public class FileUploadResource extends JobControllerBase {
                     geonamesCnt += (Integer) zipStat.get("geonamescnt");
                 }
 
-                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && geonamesCnt == 1) {
+                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
                     inputFileName = fName + ".geonames";
                     String directory = HOME_FOLDER + "/upload/" + jobId;
                     // we need to rename the file for hoot to ingest
@@ -394,8 +394,8 @@ public class FileUploadResource extends JobControllerBase {
         rasterTilesparam.put("isprimitivetype", "false");
         rasterTilesArgs.add(rasterTilesparam);
 
-        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                "hoot.services.controllers.ingest.RasterToTilesService", "ingestOSMResourceDirect", internalJobId);
+        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
+                "ingestOSMResourceDirect", internalJobId);
 
         jobArgs.add(etlCommand);
         jobArgs.add(ingestOSMResource);

@@ -79,6 +79,7 @@ public class JobCancellationResource extends JobControllerBase {
             String cancelMapId = command.get("mapid").toString();
 
             JSONArray cancelArgs = new JSONArray();
+
             JSONObject param = new JSONObject();
             param.put("value", cancelJobId);
             param.put("paramtype", String.class.getName());
@@ -92,7 +93,7 @@ public class JobCancellationResource extends JobControllerBase {
             cancelArgs.add(param);
 
             JSONObject jobCancellationCommand = createReflectionJobReq(cancelArgs,
-                    "hoot.services.controllers.job.JobResource", "terminateJob");
+                    JobResource.class.getName(), "terminateJob");
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(jobCancellationCommand);
