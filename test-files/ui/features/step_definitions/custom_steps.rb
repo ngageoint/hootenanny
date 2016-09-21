@@ -233,6 +233,18 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the control "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control,  arg1]
+end
+
+When(/^I click the control shift "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :shift, arg1]
+end
+
+When(/^I click the control alt "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :alt, arg1]
+end
+
 When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
   find(el).native.send_keys(key)
 end
@@ -392,6 +404,10 @@ end
 
 When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
+end
+
+When(/^I click the "([^"]*)" preset$/) do |txt|
+  find('div.label', :text=>txt).click
 end
 
 When(/^I press "([^"]*)" big loud link$/) do |cls|
@@ -759,4 +775,20 @@ end
 
 When(/^I click the review item column in the tag table$/) do
   page.all('td.f1').first.click
+end
+
+When(/^I click paste tags, overwrite$/) do
+  page.all('button.col6')[0].click
+end
+
+When(/^I click paste tags, append$/) do
+  page.all('button.col6')[1].click
+end
+
+When(/^I click undo$/) do
+  page.all('button.col6')[2].click
+end
+
+When(/^I click redo$/) do
+  page.all('button.col6')[3].click
 end
