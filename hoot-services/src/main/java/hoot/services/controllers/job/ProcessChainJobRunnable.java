@@ -131,11 +131,13 @@ class ProcessChainJobRunnable implements Runnable {
 
             jobStatusManager.setComplete(jobId, jobInfo.toString());
         }
-        catch (Exception ex) {
+        catch (Exception e) {
+            logger.error("Error during processing command where jobId = {}, jobs = {}", jobId, jobs, e);
+
             if (childJobInfo != null) {
-                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.FAILED.toString(), ex.getMessage());
-                logger.error(ex.getMessage(), ex);
+                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.FAILED.toString(), e.getMessage());
             }
+
             jobStatusManager.setFailed(jobId, jobInfo.toString());
         }
         finally {
@@ -286,9 +288,6 @@ class ProcessChainJobRunnable implements Runnable {
         return jobExecMan.exec(command);
     }
 
-    /**
-     * Return job status
-     */
     private JSONObject getJobStatusObj(String jobId) {
         JSONObject status = new JSONObject();
 
