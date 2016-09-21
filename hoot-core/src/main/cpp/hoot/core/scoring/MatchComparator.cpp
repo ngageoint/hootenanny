@@ -749,6 +749,11 @@ QString MatchComparator::toString() const
   result += QString("node wrong count: %1\n").arg(_elementWrongCounts[ElementType::Node]);
   result += QString("way wrong count: %1\n").arg(_elementWrongCounts[ElementType::Way]);
   result += QString("relation wrong count: %1\n").arg(_elementWrongCounts[ElementType::Relation]);
+  result += QString("total wrong count: %1\n")
+              .arg(_confusion[MatchType::Miss][MatchType::Match] +
+                   _confusion[MatchType::Miss][MatchType::Review] +
+                   _confusion[MatchType::Match][MatchType::Miss] +
+                   _confusion[MatchType::Match][MatchType::Review]);
 
   result += "\n";
   result += QString("total review count: %1\n")
