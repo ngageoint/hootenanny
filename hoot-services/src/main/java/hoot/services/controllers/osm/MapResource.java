@@ -81,9 +81,11 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.controllers.job.JobControllerBase;
+import hoot.services.controllers.job.JobId;
 import hoot.services.geo.BoundingBox;
-import hoot.services.job.JobExecutioner;
 import hoot.services.job.JobStatusManager;
+import hoot.services.job.MapResourcesCleaner;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
@@ -104,13 +106,15 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Controller
 @Path("/api/0.6/map")
 @Transactional
-public class MapResource {
+public class MapResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
     @Autowired
     private JobStatusManager jobStatusManager;
 
-    public MapResource() {}
+    public MapResource() {
+        super(null);
+    }
 
     /**
      * Returns a list of all map layers in the services database
@@ -689,9 +693,9 @@ public class MapResource {
      * Deletes a map
      * 
      * POST hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
-     * 
+     *
      * //TODO: should be an HTTP DELETE
-     * 
+     *
      * @param mapId
      *            ID of map record to be deleted
      * @return id of the deleted map
@@ -700,20 +704,34 @@ public class MapResource {
     @Path("/delete")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteLayers(@QueryParam("mapId") String mapId) {
-        JSONObject command = new JSONObject();
-        command.put("mapId", mapId);
-        command.put("execImpl", "resourcesCleanUtil");
+    public JobId deleteLayers(@QueryParam("mapId") String mapId) {
+        String uuid = UUID.randomUUID().toString();
 
-        String jobId = UUID.randomUUID().toString();
+        try {
+            JSONObject commandParams = new JSONObject();
+            commandParams.put("value", mapId);
+            commandParams.put("paramtype", String.class.getName());
+            commandParams.put("isprimitivetype", "false");
 
-        // TODO: Needs to be executed using a thread pool!
-        (new JobExecutioner(jobId, command, jobStatusManager)).start();
+            JSONArray commandArgs = new JSONArray();
+            commandArgs.add(commandParams);
 
-        JSONObject json = new JSONObject();
-        json.put("jobId", jobId);
+            JSONObject command = createReflectionJobReq(commandArgs, MapResourcesCleaner.class.getName(), "exec");
 
-        return Response.ok(json.toJSONString()).build();
+            JSONArray jobArgs = new JSONArray();
+            jobArgs.add(command);
+
+            super.postChainJobRquest(uuid, jobArgs.toJSONString());
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
+            String msg = "Error submitting delete map request for map with id =  " + mapId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return new JobId(uuid);
     }
 
     /**
@@ -721,9 +739,9 @@ public class MapResource {
      * POST
      * hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&
      * modName='New Dataset'
-     * 
+     *
      * //TODO: should be an HTTP PUT
-     * 
+     *
      * @param mapId
      *            ID of map record or folder to be modified
      * @param modName
@@ -820,7 +838,7 @@ public class MapResource {
      * POST hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}
      * 
      * //TODO: should be an HTTP DELETE
-     * 
+     *
      * @param folderId
      *            Folder Id
      * @return jobId
@@ -866,9 +884,9 @@ public class MapResource {
     /**
      * 
      * POST hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}
-     * 
+     *
      * //TODO: should be an HTTP PUT
-     * 
+     *
      * @param folderId
      *            ID of folder
      * @param parentId
