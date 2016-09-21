@@ -32,5 +32,5 @@ Feature: Highlight features on click
         Then I turn on highlight edited features
         And I hover over "#map"
         And I click the "map" at "450","300"
-        Then I should see a node element "n-1" with a selected highlight
+        Then I should see element "n-1" with a yellow highlight
 

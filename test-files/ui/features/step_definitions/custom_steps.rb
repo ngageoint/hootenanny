@@ -766,6 +766,11 @@ Then(/^I should see a node element "([^"]*)" with a selected highlight$/) do |id
   el[:class].include? '.selected'
 end
 
+Then(/^I should see element "([^"]*)" with a yellow highlight$/) do |id|
+  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el[:class].include? '.edited.unsaved'
+end
+
 And(/^I should see an element with class "([^"]*)" on the map$/) do |id|
   el = find('div.layer-data')
   el[:class].include? id
