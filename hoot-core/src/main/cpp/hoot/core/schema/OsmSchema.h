@@ -140,7 +140,7 @@ struct OsmSchemaCategory {
 
   /**
    * Returns true if any of the categories in c are the same as the categories in this. If one or
-   * both are emtpy then it returns false.
+   * both are empty then it returns false.
    */
   bool intersects(const OsmSchemaCategory& c) const
   {

@@ -48,14 +48,14 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+//#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 
 namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{8bebf954-3a1f-5923-8b55-ebf2c45f1839}";
+QString PoiPolygonMatch::_testUuid = "{30029e90-cba8-58c3-888c-30b705936508}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -140,6 +140,30 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 
 bool PoiPolygonMatch::isPoi(const Element& e)
 {
+  if (Log::getInstance().getLevel() == Log::Debug && e.getTags().get("uuid") == _testUuid)
+  {
+    LOG_DEBUG("poi candidate:");
+    LOG_VARD(e.getTags().get("uuid"));
+    LOG_VARD(e.getTags().getNames().size());
+    LOG_VARD(e.getTags().getNames());\
+    LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).toString());
+    LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).intersects(
+               OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+    LOG_VARD(
+      OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
+    LOG_VARD(
+      OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::poi()));
+    LOG_VARD(e.getTags());
+  }
+
+  //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix.
+  const Tags& tags = e.getTags();
+  if (tags.get("natural") == "tree" || tags.get("amenity") == "drinking_water" ||
+      tags.get("amenity") == "bench")
+  {
+    return false;
+  }
+
   return e.getElementType() == ElementType::Node &&
          (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
            OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
@@ -830,8 +854,9 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   }
   //Play areas areas can get matched to the larger parks they reside within.  We're setting a max
   //size for play area polys here to prevent that.  Unfortunately, most play areas are tagged as
-  //parked, if tagged at all, so we're scanning the name tag here.
-  else if (poiName.contains("play area") && polyArea > 25000) //TODO: move to config?
+  //just parks and not specifically as play areas, if they are tagged at all, so we're just scanning
+  //the name tag here to determine if something is a play area vs actually verifying by its type.
+  else if (poiName.contains("play area") && polyArea > 25000) //TODO: move this value to a config?
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
