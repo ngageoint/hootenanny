@@ -32,15 +32,13 @@ package hoot.services.controllers.osm;
 public class LinkRecords {
     private LinkRecord[] links;
 
+    public LinkRecords() {}
+
     public LinkRecord[] getLinks() {
         return links;
     }
 
     public void setLinks(LinkRecord[] links) {
         this.links = links;
-    }
-
-    public LinkRecords() {
-
     }
 }

@@ -27,8 +27,8 @@
 package hoot.services.models.osm;
 
 import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -77,16 +77,14 @@ public class Way extends Element {
     private Map<Long, Coordinates> nodeCoordsCollection;
 
 
-    public Way(long mapId, Connection dbConn) {
-        super(dbConn);
+    public Way(long mapId) {
         super.elementType = ElementType.Way;
         super.record = new CurrentWays();
 
         setMapId(mapId);
     }
 
-    public Way(long mapId, Connection dbConn, CurrentWays record) {
-        super(dbConn);
+    public Way(long mapId, CurrentWays record) {
         super.elementType = ElementType.Way;
 
         CurrentWays wayRecord = new CurrentWays();
@@ -112,13 +110,11 @@ public class Way extends Element {
      *            ID of the map owning the ways
      * @param wayIds
      *            a collection of way IDs for which to retrieve node records
-     * @param dbConn
-     *            JDBC Connection
      * @return a list of node records
      */
-    static List<CurrentNodes> getNodesForWays(long mapId, Set<Long> wayIds, Connection dbConn) {
+    static List<CurrentNodes> getNodesForWays(long mapId, Set<Long> wayIds) {
         if (!wayIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .select(currentNodes)
                     .from(currentWayNodes, currentNodes)
                     .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
@@ -132,7 +128,7 @@ public class Way extends Element {
      * Returns the nodes associated with this way
      */
     private List<CurrentNodes> getNodes() {
-        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        return createQuery(getMapId())
                 .select(currentNodes)
                 .from(currentWayNodes, currentNodes)
                 .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
@@ -148,7 +144,7 @@ public class Way extends Element {
      * the first and last node ID in the way nodes sequence for closed polygons.
      */
     private List<Long> getNodeIds() {
-        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        return createQuery(getMapId())
                 .select(currentWayNodes.nodeId)
                 .from(currentWayNodes)
                 .where(currentWayNodes.wayId.eq(getId()))
@@ -194,7 +190,7 @@ public class Way extends Element {
         // any way nodes not mentioned in the created/modified in the changeset
         // XML represented by the remainder of the IDs in relatedRecordIds, request must now be
         // retrieved from the database
-        List<?> nodeRecords = Element.getElementRecords(getMapId(), ElementType.Node, modifiedRecordIds, conn);
+        List<?> nodeRecords = Element.getElementRecords(getMapId(), ElementType.Node, modifiedRecordIds);
         for (Object record : nodeRecords) {
             CurrentNodes nodeRecord = (CurrentNodes) record;
             double lat = nodeRecord.getLatitude();
@@ -283,7 +279,7 @@ public class Way extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Way", :member_id => id }).
-        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        SQLQuery<Long> owningRelationsQuery = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelations, currentRelationMembers)
@@ -341,11 +337,10 @@ public class Way extends Element {
             }
 
             List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
-                    ElementType.Node, elementIds, conn);
+                    ElementType.Node, elementIds);
 
             for (Tuple elementRecord : elementRecords) {
-                Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, conn,
-                        getMapId());
+                Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, getMapId());
                 org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
                         modifyingUserDisplayName, false, false);
                 parentXml.appendChild(nodeXml);

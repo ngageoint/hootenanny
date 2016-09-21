@@ -49,7 +49,7 @@ public class ReviewBookmarksSaverTest {
     public void testInsert() throws Exception {
         Connection conn = null;
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 1, null, -1);
-        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
+        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver();
         //QLInsertClause cl = tagsSaver.createInsertClause(req);
         //String actual = cl.toString();
 
@@ -68,7 +68,7 @@ public class ReviewBookmarksSaverTest {
         o.put("test2", "val2");
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 1, o, -1);
         Connection conn = null;
-        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
+        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver();
         //SQLInsertClause cl = tagsSaver.createInsertClause(req);
         //String actual = cl.toString();
 
@@ -96,7 +96,7 @@ public class ReviewBookmarksSaverTest {
         o.put("test4", "val4");
         ReviewBookmarkSaveRequest req = new ReviewBookmarkSaveRequest(1, 2, o, -2);
         Connection conn = null;
-        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver(conn);
+        ReviewBookmarksSaver tagsSaver = new ReviewBookmarksSaver();
 
         //tagsSaver.getUpdateQuery(req, dto);
 

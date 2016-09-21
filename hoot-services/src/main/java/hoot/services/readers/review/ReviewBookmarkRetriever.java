@@ -27,31 +27,28 @@
 package hoot.services.readers.review;
 
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.db.ReviewBookmarks;
-import hoot.services.utils.DbUtils;
 
 
+@Component
 public class ReviewBookmarkRetriever {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkRetriever.class);
 
-    private final Connection connection;
-
-    public ReviewBookmarkRetriever(Connection connection) {
-        this.connection = connection;
-    }
+    public ReviewBookmarkRetriever() {}
 
     public List<ReviewBookmarks> retrieve(long mapId, long relationId) {
-        return new SQLQuery<>(this.connection, DbUtils.getConfiguration())
+        return createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
                 .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)))
@@ -59,7 +56,7 @@ public class ReviewBookmarkRetriever {
     }
 
     public List<ReviewBookmarks> retrieve(long bookmarkId) {
-        return new SQLQuery<>(this.connection, DbUtils.getConfiguration())
+        return createQuery()
                 .select(reviewBookmarks)
                 .from(reviewBookmarks)
                 .where(reviewBookmarks.id.eq(bookmarkId))
@@ -81,8 +78,8 @@ public class ReviewBookmarkRetriever {
      */
     public List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
             long offset, Long[] creatorArray, Long[] layerArray) {
-        SQLQuery<ReviewBookmarks> query = new SQLQuery<>(this.connection, DbUtils.getConfiguration());
-        query.select(reviewBookmarks).from(reviewBookmarks);
+        SQLQuery<ReviewBookmarks> query = createQuery().query()
+                .select(reviewBookmarks).from(reviewBookmarks);
 
         if ((creatorArray != null) && (layerArray != null)) {
             query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
@@ -117,9 +114,7 @@ public class ReviewBookmarkRetriever {
      * @return - numbers of toal count
      */
     public long getBookmarksCount() {
-        return new SQLQuery(this.connection, DbUtils.getConfiguration())
-                .from(reviewBookmarks)
-                .fetchCount();
+        return createQuery().from(reviewBookmarks).fetchCount();
     }
 
 

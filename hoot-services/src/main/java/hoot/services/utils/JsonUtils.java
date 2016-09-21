@@ -28,7 +28,10 @@ package hoot.services.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -123,5 +126,22 @@ public final class JsonUtils {
         }
 
         return JSONObject.escape(json.toString());
+    }
+
+    public static Map<String, String> paramsToMap(JSONObject command) {
+        JSONArray paramsList = (JSONArray) command.get("params");
+
+        Map<String, String> paramsMap = new HashMap<>();
+        for (Object aParamsList : paramsList) {
+            JSONObject o = (JSONObject) aParamsList;
+            for (Object o1 : o.entrySet()) {
+                Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o1;
+                String key = (String) mEntry.getKey();
+                String val = (String) mEntry.getValue();
+                paramsMap.put(key, val);
+            }
+        }
+
+        return paramsMap;
     }
 }

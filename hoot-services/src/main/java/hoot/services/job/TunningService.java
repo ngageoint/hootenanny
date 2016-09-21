@@ -28,9 +28,14 @@ package hoot.services.job;
 
 import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWays.currentWays;
+import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.DbUtils.getMapIdsByName;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,14 +57,21 @@ import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.types.Expression;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.CommandRunner;
 import hoot.services.command.CommandRunnerImpl;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
 
 
+@Scope(SCOPE_PROTOTYPE)
+@Service("tunningService")
+@Transactional
 public class TunningService implements Executable {
     private static final Logger logger = LoggerFactory.getLogger(TunningService.class);
 
@@ -80,12 +92,12 @@ public class TunningService implements Executable {
         String inputType = command.get("inputtype").toString();
         long startTime = new Date().getTime();
 
-        try (Connection connection = DbUtils.createConnection()) {
+        try {
             String tempOutputPath;
             if (inputType.equalsIgnoreCase("db")) {
-                DbUtils.getNodesCountByName(connection, input);
-                DbUtils.getWayCountByName(connection, input);
-                DbUtils.getRelationCountByName(connection, input);
+                getNodesCountByName(input);
+                getWayCountByName(input);
+                getRelationCountByName(input);
 
                 // if the count is greater than threshold then just use it and tell it too big
                 CommandRunner cmdRunner = new CommandRunnerImpl();
@@ -237,5 +249,46 @@ public class TunningService implements Executable {
                 totalRelationCnt++;
             }
         }
+    }
+
+    private long getNodeCountByMapName(String mapName, Expression<?> table) {
+        long recordCount = 0;
+
+        List<Long> mapIds = getMapIdsByName(mapName);
+        for (Long mapId : mapIds) {
+            recordCount += createQuery(mapId).from(table).fetchCount();
+        }
+
+        return recordCount;
+    }
+
+    /**
+     * Get current_nodes record count by map name
+     *
+     * @param mapName map name
+     * @return count of nodes record
+     */
+    private long getNodesCountByName(String mapName) {
+        return getNodeCountByMapName(mapName, currentNodes);
+    }
+
+    /**
+     * Get current_ways record count by map name
+     *
+     * @param mapName map name
+     * @return current_ways record count
+     */
+    private long getWayCountByName(String mapName) {
+        return getNodeCountByMapName(mapName, currentWays);
+    }
+
+    /**
+     * Get current_relations record count by map name
+     *
+     * @param mapName map name
+     * @return current_relations record count
+     */
+    private long getRelationCountByName(String mapName) {
+        return getNodeCountByMapName(mapName, currentRelations);
     }
 }
