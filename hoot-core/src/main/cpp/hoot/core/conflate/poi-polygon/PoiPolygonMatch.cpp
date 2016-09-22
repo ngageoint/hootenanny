@@ -51,7 +51,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{031cad22-db0c-5d67-9388-9657163ab8ae}";
+QString PoiPolygonMatch::_testUuid = "{c254d8ab-3f1a-539f-91b7-98b485c5c129}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -218,13 +218,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   shared_ptr<Geometry> poiGeom = ElementConverter(_map).convertToGeometry(poi);
 
   _distance = polyGeom->distance(poiGeom.get());
+
   _nameScore = _getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = _getExactNameScore(poi, poly) == 1.0;
 
   double ce = -1.0;
-  double matchDistance = -1.0;
-  double reviewDistance = -1.0;
+  //double matchDistance = -1.0;
+  //double reviewDistance = -1.0;
   double reviewDistancePlusCe = -1.0;
   bool closeMatch = false;
   bool typeMatch = false;
@@ -235,7 +236,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   MatchClassification parkMatchClass;
   const bool parkRuleTriggered =
     PoiPolygonParkRuleApplier(
-      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch, "")
+      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch, _testUuid)
       .applyRules(poi, poly, parkMatchClass);
   if (!parkRuleTriggered)
   {
@@ -244,24 +245,24 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     const double sigma2 = e1->getCircularError() / 2.0;
     ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-    matchDistance =
-      max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
-    reviewDistance =
-      max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
-    reviewDistancePlusCe = reviewDistance + ce;
-    closeMatch = _distance <= reviewDistancePlusCe;
-
     typeScore = _getTypeScore(poi, poly);
     typeMatch = typeScore >= _typeScoreThreshold;
     //const bool exactTypeMatch = typeScore == 1.0;
 
     addressMatch = _getAddressMatch(poly, poi);
 
+    _matchDistance =
+      max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
+    _reviewDistance =
+      max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
+    reviewDistancePlusCe = _reviewDistance + ce;
+    closeMatch = _distance <= reviewDistancePlusCe;
+
     evidence = 0;
     evidence += typeMatch ? 1 : 0;
     evidence += _nameMatch ? 1 : 0;
     evidence += addressMatch ? 1 : 0;
-    evidence += _distance <= matchDistance ? 2 : 0;
+    evidence += _distance <= _matchDistance ? 2 : 0;
 
     if (!closeMatch)
     {
@@ -341,6 +342,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     LOG_VARD(ce);
     LOG_VARD(e1->getCircularError());
     LOG_VARD(e2->getCircularError());
+    LOG_VARD(_t1BestKvp);
+    LOG_VARD(_t2BestKvp);
     LOG_VARD(evidence);
     LOG_VARD(_class);
     LOG_DEBUG("**************************");
@@ -539,13 +542,13 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) cons
   return _matchDistance;
 }
 
-double PoiPolygonMatch::_getReviewDistanceForType(const QString /*typeKvp*/) const
+double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
 {
-  /*if (typeKvp == "leisure=park")
+  if (typeKvp == "leisure=park")
   {
     return 20.0;
   }
-  else if (typeKvp == "leisure=playground")
+  /*else if (typeKvp == "leisure=playground")
   {
     return 20.0;
   }
