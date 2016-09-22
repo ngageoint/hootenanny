@@ -763,17 +763,13 @@ end
 
 Then(/^I should see a node element "([^"]*)" with a selected highlight$/) do |id|
   el = find('div.layer-data').first('g[class*=" ' + id + '"]')
-  el[:class].include? '.selected'
+  el[:class].include?('selected').should eq true
 end
 
 Then(/^I should see element "([^"]*)" with a yellow highlight$/) do |id|
   el = find('div.layer-data').first('g[class*=" ' + id + '"]')
-  el[:class].include? '.edited.unsaved'
-end
-
-And(/^I should see an element with class "([^"]*)" on the map$/) do |id|
-  el = find('div.layer-data')
-  el[:class].include? id
+  el[:class].include?('edited').should eq true
+  el[:class].include?('unsaved').should eq true
 end
 
 When(/^I click to expand Map Data$/) do
