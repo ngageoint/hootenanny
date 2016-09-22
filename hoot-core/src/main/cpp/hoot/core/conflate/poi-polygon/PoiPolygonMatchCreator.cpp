@@ -41,6 +41,7 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h>
 
 // Standard
 #include <fstream>
@@ -106,7 +107,8 @@ public:
         if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
           // score each candidate and push it on the result vector
-          PoiPolygonMatch* m = new PoiPolygonMatch(_map, from, *it, _threshold, _rf, _areaIds);
+          PoiPolygonMatch* m =
+            new PoiPolygonMatch(_map, from, *it, _threshold, _rf, _areaIds, _poiIds);
 
           // if we're confident this is a miss
           if (m->getType() == MatchType::Miss)
@@ -139,9 +141,6 @@ public:
                                                                    getMap());
     ElementId from(e->getElementType(), e->getId());
 
-    //_elementsEvaluated++;
-    //int neighborCount = 0;
-
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       if (from != *it)
@@ -151,6 +150,33 @@ public:
         if (n->isUnknown() && PoiPolygonMatch::isArea(*n))
         {
           _areaIds.insert(*it);
+        }
+      }
+    }
+  }
+
+  void collectPoiIds(const shared_ptr<const Element>& e)
+  {
+    _poiIds.clear();
+    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    env->expandBy(e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
+
+    // find other nearby candidates
+    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                   getPoiIndex(),
+                                                                   _poiIndexToEid,
+                                                                   getMap());
+    ElementId from(e->getElementType(), e->getId());
+
+    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    {
+      if (from != *it)
+      {
+        const shared_ptr<const Element>& n = _map->getElement(*it);
+
+        if (n->isUnknown() && PoiPolygonMatch::isPoi(*n))
+        {
+          _poiIds.insert(*it);
         }
       }
     }
@@ -171,6 +197,7 @@ public:
     if (isMatchCandidate(e))
     {
       collectAreaIds(e);
+      collectPoiIds(e);
       checkForMatch(e);
     }
   }
@@ -210,14 +237,11 @@ public:
   {
     if (!_areaIndex)
     {
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _areaIndex.reset(new HilbertRTree(mps, 2));
 
       shared_ptr<PoiPolygonAreaCriterion> crit(new PoiPolygonAreaCriterion());
 
-      // Instantiate our visitor
       IndexElementsVisitor v(_areaIndex,
                              _areaIndexToEid,
                              crit,
@@ -230,6 +254,28 @@ public:
     }
 
     return _areaIndex;
+  }
+
+  shared_ptr<HilbertRTree>& getPoiIndex()
+  {
+    if (!_poiIndex)
+    {
+      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      _poiIndex.reset(new HilbertRTree(mps, 2));
+
+      shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
+
+      IndexElementsVisitor v(_poiIndex,
+                             _poiIndexToEid,
+                             crit,
+                             boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
+                             getMap());
+
+      getMap()->visitNodesRo(v);
+      v.finalizeIndex();
+    }
+
+    return _poiIndex;
   }
 
   ConstOsmMapPtr getMap() { return _map; }
@@ -252,6 +298,10 @@ private:
   shared_ptr<HilbertRTree> _areaIndex;
   deque<ElementId> _areaIndexToEid;
   set<ElementId> _areaIds;
+  // used for finding surrounding poi's
+  shared_ptr<HilbertRTree> _poiIndex;
+  deque<ElementId> _poiIndexToEid;
+  set<ElementId> _poiIds;
 
   shared_ptr<PoiPolygonRfClassifier> _rf;
 };
@@ -260,8 +310,6 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
-//TODO: This logic isn't consistent with the logic creating a PoiPolygonMatch in
-//PoiPolygonMatchVisitor::checkForMatch...is that a problem?
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
   ElementId eid2)
 {

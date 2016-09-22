@@ -54,7 +54,7 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
-    set<ElementId> areaIds);
+    const set<ElementId>& areaIds, const set<ElementId>& poiIds);
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
@@ -139,6 +139,7 @@ private:
   QString _t2BestKvp;
 
   set<ElementId> _areaIds;
+  set<ElementId> _poiIds;
 
   static void _printMatchDistanceInfo(const QString matchType,
                                       const QMultiMap<QString, double>& distanceInfo);
