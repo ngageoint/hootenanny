@@ -1,5 +1,8 @@
 [
     {
+        "categories": [
+            "use"
+        ],
         "dataType": "enumeration",
         "geometries": [
             "node",

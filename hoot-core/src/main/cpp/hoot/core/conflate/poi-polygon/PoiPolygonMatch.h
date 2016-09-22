@@ -146,21 +146,6 @@ private:
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  /**
-   * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
-   * means one or both of the features have no names.
-   */
-  double _getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
-  double _getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
-
-  /**
-   * Returns a score from 0 to 1 representing the similarity of the feature types.
-   */
-  double _getTypeScore(ConstElementPtr e1, ConstElementPtr e2);
-
-  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2);
-  QStringList _getRelatedTags(const Tags& tags) const;
-
   bool _getAddressMatch(ConstElementPtr building, ConstElementPtr poi);
 
   double _getMatchDistanceForType(const QString typeKvp) const;

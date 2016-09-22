@@ -69,8 +69,7 @@ private:
   bool _elementIsRecCenter(ConstElementPtr element) const;
   bool _elementIsPlayground(ConstElementPtr element) const;
   bool _elementIsPlayArea(ConstElementPtr element) const;
-
-  double _getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  bool _elementIsSport(ConstElementPtr element) const;
 
 };
 

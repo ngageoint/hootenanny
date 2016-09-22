@@ -26,32 +26,26 @@
  */
 #include "PoiPolygonMatch.h"
 
-// gdal
-//#include <ogr_geometry.h>
-
 // geos
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/algorithms/ExactStringDistance.h>
 
 #include "PoiPolygonParkRuleApplier.h"
+#include "PoiPolygonScorer.h"
 
 namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{c254d8ab-3f1a-539f-91b7-98b485c5c129}";
+QString PoiPolygonMatch::_testUuid = "{8f74dd78-5728-5ea3-98d1-c63311d077f3}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -219,9 +213,11 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   _distance = polyGeom->distance(poiGeom.get());
 
-  _nameScore = _getNameScore(poi, poly);
+  PoiPolygonScorer scorer(_testUuid);
+
+  _nameScore = scorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
-  _exactNameMatch = _getExactNameScore(poi, poly) == 1.0;
+  _exactNameMatch = scorer.getExactNameScore(poi, poly) == 1.0;
 
   double ce = -1.0;
   //double matchDistance = -1.0;
@@ -245,7 +241,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     const double sigma2 = e1->getCircularError() / 2.0;
     ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
 
-    typeScore = _getTypeScore(poi, poly);
+    typeScore = scorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
     typeMatch = typeScore >= _typeScoreThreshold;
     //const bool exactTypeMatch = typeScore == 1.0;
 
@@ -403,124 +399,6 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       LOG_DEBUG("**************************");
     }
   }
-}
-
-double PoiPolygonMatch::_getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
-   .extract(e1, e2);
-}
-
-double PoiPolygonMatch::_getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  //TODO: fix
-  /*return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new ExactStringDistance())))
-   .extract(e1, e2);*/
-   return ExactStringDistance().compare(e1->getTags().get("name"), e2->getTags().get("name"));
-}
-
-double PoiPolygonMatch::_getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
-{
-  const Tags& t1 = e1->getTags();
-  const Tags& t2 = e2->getTags();
-
-  //be a little more restrictive with restaurants
-  if (t1.get("amenity") == "restaurant" &&
-      t2.get("amenity") == "restaurant" &&
-      t1.contains("cuisine") && t2.contains("cuisine"))
-  {
-    const QString t1Cuisine = t1.get("cuisine").toLower();
-    const QString t2Cuisine = t2.get("cuisine").toLower();
-    if (t1Cuisine != t2Cuisine &&
-        //Don't return false on regional, since its location dependent and we don't take that into
-        //account.
-        t1Cuisine != "regional" && t2Cuisine != "regional")
-    {
-      return false;
-    }
-  }
-
-  const double typeScore = _getTagScore(e1, e2);
-
-  if (e1->getTags().get("uuid") == _testUuid ||
-      e2->getTags().get("uuid") == _testUuid)
-  {
-    LOG_VARD(typeScore);
-  }
-
-  return typeScore;
-}
-
-double PoiPolygonMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2)
-{
-  double result = 0.0;
-  _t1BestKvp = "";
-  _t2BestKvp = "";
-
-  const QStringList t1List = _getRelatedTags(e1->getTags());
-  const QStringList t2List = _getRelatedTags(e2->getTags());
-
-  for (int i = 0; i < t1List.size(); i++)
-  {
-    for (int j = 0; j < t2List.size(); j++)
-    {
-      const QString t1Kvp = t1List.at(i);
-      const QString t2Kvp = t2List.at(j);
-      const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
-      if (score >= result)
-      {
-        if (!t1Kvp.isEmpty() && t1Kvp != "building=yes" && t1Kvp != "poi=yes")
-        {
-          _t1BestKvp = t1Kvp;
-        }
-        if (!t2Kvp.isEmpty() && t2Kvp != "building=yes" && t2Kvp != "poi=yes")
-        {
-          _t2BestKvp = t2Kvp;
-        }
-      }
-      result = max(score, result);
-
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
-      {
-        LOG_VARD(t1List.at(i));
-        LOG_VARD(t2List.at(j));
-        LOG_VARD(result);
-      }
-    }
-  }
-
-  return result;
-}
-
-QStringList PoiPolygonMatch::_getRelatedTags(const Tags& tags) const
-{
-  QStringList tagsList;
-
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
-  {
-    //TODO: hack - not sure the correct way to handle these concatenated values yet
-    const QStringList values = it.value().split(";");
-    for (int i = 0; i < values.size(); i++)
-    {
-      if ((OsmSchema::getInstance().getCategories(it.key(), it.value()) &
-           (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
-             != OsmSchemaCategory::Empty)
-      {
-        tagsList.append(it.key() + "=" + values.at(i));
-      }
-    }
-  }
-
-  return tagsList;
 }
 
 double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) const

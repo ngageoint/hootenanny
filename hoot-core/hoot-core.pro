@@ -531,7 +531,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonParkRuleApplier.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonParkRuleApplier.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1068,5 +1069,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonParkRuleApplier.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonParkRuleApplier.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.cpp
 
