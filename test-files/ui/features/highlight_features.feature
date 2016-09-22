@@ -7,10 +7,22 @@ Feature: Highlight features on click
 
     Scenario: Add Data
         And I press "Add Reference Dataset"
-        And I click the "AllDataTypesMergedCucumber" Dataset
+        And I click the "AllDataTypesACucumber" Dataset
         And I press "Add Layer"
-        And I accept the alert
-        Then I wait 30 "seconds" to see "AllDataTypesMergedCucumber"
+        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+        And I press "Add Secondary Dataset"
+        And I click the "AllDataTypesBCucumber" Dataset
+        And I press "Add Layer"
+        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+        Then I should see "Conflate"
+        And I press "Conflate"
+        And I fill "saveAs" input with "AllDataTypes_Highlight"
+        And I scroll element into view and press "conflate2"
+        Then I wait 30 "seconds" to see "Conflating …"
+        Then I wait 3 "minutes" to see "AllDataTypes_Highlight"
+        And I wait 30 "seconds" to not see "Please wait while panning to review item."
+
+    Scenario: I add a point to the map
         When I click the "add-point" button
         And I hover over "#map"
         And I click the "map" at "350","300"
