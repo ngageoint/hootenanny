@@ -26,16 +26,14 @@
  */
 package hoot.services.job;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 
-import hoot.services.HootProperties;
-import hoot.services.utils.DbUtils;
+import hoot.services.ApplicationContextUtils;
 
 
 /**
@@ -44,12 +42,14 @@ import hoot.services.utils.DbUtils;
 public class JobExecutioner extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutioner.class);
 
+    private final JobStatusManager jobStatusManager;
     private final JSONObject command;
     private final String jobId;
 
-    public JobExecutioner(String jobId, JSONObject command) {
+    public JobExecutioner(String jobId, JSONObject command, JobStatusManager jobStatusManager) {
         this.command = command;
         this.jobId = jobId;
+        this.jobStatusManager = jobStatusManager;
     }
 
     /**
@@ -59,27 +59,36 @@ public class JobExecutioner extends Thread {
     public void run() {
         logger.debug("Handling job exec request...");
 
-        try (Connection connection = DbUtils.createConnection()) {
-            JobStatusManager jobStatusManager = new JobStatusManager(connection);
-            command.put("jobId", jobId);
+        try {
+            ApplicationContext appContext = ApplicationContextUtils.getApplicationContext();
+            PlatformTransactionManager tm = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            Executable executable = appContext.getBean((String) command.get("execImpl"), Executable.class);
+
+            TransactionStatus transactionStatus = null;
 
             try {
-                jobStatusManager.addJob(jobId);
+                transactionStatus = tm.getTransaction(null);
 
-                ApplicationContext applicationContext = HootProperties.getSpringContext();
-                Executable executable = (Executable) applicationContext.getBean((String) command.get("execImpl"));
+                command.put("jobId", jobId);
+                jobStatusManager.addJob(jobId);
 
                 executable.exec(command);
 
                 jobStatusManager.setComplete(jobId, executable.getFinalStatusDetail());
+
+                tm.commit(transactionStatus);
             }
             catch (Exception e) {
+                if ((transactionStatus != null) && !transactionStatus.isCompleted()) {
+                    tm.rollback(transactionStatus);
+                }
+
                 logger.error("Error executing job with ID = {}", jobId, e);
                 jobStatusManager.setFailed(jobId, e.getMessage());
             }
         }
-        catch (SQLException sqle) {
-            logger.error("Error executing job with ID = {}", jobId, sqle);
+        catch (Exception e) {
+            logger.error("Error executing job with ID = {}", jobId, e);
         }
     }
 }

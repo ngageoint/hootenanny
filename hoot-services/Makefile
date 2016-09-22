@@ -13,14 +13,11 @@ endif
 
 default: build
 
-src/main/resources/db/spring-database.xml: src/main/resources/db/spring-database.xml.in ../conf/DatabaseConfig.sh
-	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/spring-database.xml.in src/main/resources/db/spring-database.xml
-
 src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 
-db.properties: db.properties.in ../conf/DatabaseConfig.sh
-	../scripts/ReplaceEnvironmentVariables.sh db.properties.in db.properties
+src/main/resources/db/db.properties: src/main/resources/db/db.properties.in ../conf/DatabaseConfig.sh
+	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/db.properties.in src/main/resources/db/db.properties
 
 src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/conf/hoot-services.conf.in src/main/resources/conf/hoot-services.conf
@@ -28,7 +25,7 @@ src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-service
 build-info:
 	../scripts/GenerateBuildInfoFiles.sh
 
-config: src/main/resources/db/spring-database.xml src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml db.properties src/main/resources/conf/hoot-services.conf
+config: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf
 
 run-liquibase:
 	rm -f ./src/main/resources/db/liquibase.properties
@@ -49,8 +46,9 @@ docs: config
 clean: config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
 	rm -f db.properties
-	rm -rf target/site/apidocs
 	rm -rf ./src/main/java/hoot/services/db2
+	rm -f src/main/resources/db/db.properties
+	rm -rf target/site/apidocs
 
 # Both commands now do the same thing.
 clean-db: clean-db-force

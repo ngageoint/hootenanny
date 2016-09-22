@@ -26,41 +26,36 @@
  */
 package hoot.services.controllers.job;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
 
 import hoot.services.UnitTest;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 
 public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
-    public ReviewResourceResolveAllTest() {
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ReviewResource.class);
-    }
+    public ReviewResourceResolveAllTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testSetAllReviewsResolved() throws Exception {
+        Connection conn = DbUtils.getConnection();
+
         ReviewTestUtils testUtils = new ReviewTestUtils();
         /* final long changesetId = */ testUtils.populateReviewDataForAllDataTypes(mapId, userId);
 

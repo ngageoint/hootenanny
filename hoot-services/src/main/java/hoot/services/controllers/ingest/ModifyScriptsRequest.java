@@ -29,15 +29,13 @@ package hoot.services.controllers.ingest;
 public class ModifyScriptsRequest {
     private Script[] scripts;
 
+    public ModifyScriptsRequest() {}
+
     public Script[] getScripts() {
         return scripts;
     }
 
     public void setScripts(Script[] scripts) {
         this.scripts = scripts;
-    }
-
-    public ModifyScriptsRequest() {
-
     }
 }
