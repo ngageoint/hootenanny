@@ -16,10 +16,10 @@ Feature: Highlight features on click
         Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
         Then I should see "Conflate"
         And I press "Conflate"
-        And I fill "saveAs" input with "AllDataTypes_Highlight"
+        And I fill "saveAs" input with "AllDataTypes_HighlightCucumber"
         And I scroll element into view and press "conflate2"
         Then I wait 30 "seconds" to see "Conflating …"
-        Then I wait 3 "minutes" to see "AllDataTypes_Highlight"
+        Then I wait 3 "minutes" to see "AllDataTypes_HighlightCucumber"
         And I wait 30 "seconds" to not see "Please wait while panning to review item."
 
     Scenario: I add a point to the map
