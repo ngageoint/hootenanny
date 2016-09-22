@@ -39,13 +39,14 @@
 
 #include "PoiPolygonParkRuleApplier.h"
 #include "PoiPolygonScorer.h"
+#include "PoiPolygonAddressMatch.h"
 
 namespace hoot
 {
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{8f74dd78-5728-5ea3-98d1-c63311d077f3}";
+QString PoiPolygonMatch::_testUuid = "{f69d74b4-9285-51c8-99b1-6160c121650f}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -213,7 +214,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   _distance = polyGeom->distance(poiGeom.get());
 
-  PoiPolygonScorer scorer(_testUuid);
+  PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
 
   _nameScore = scorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
@@ -229,12 +230,13 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   double typeScore = -1.0;
   int evidence = -1;
 
-  MatchClassification parkMatchClass;
-  const bool parkRuleTriggered =
+  MatchClassification externalMatchClass;
+  const bool externalRuleTriggered =
     PoiPolygonParkRuleApplier(
-      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch, _testUuid)
-      .applyRules(poi, poly, parkMatchClass);
-  if (!parkRuleTriggered)
+      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch,
+      _typeScoreThreshold, _matchDistance, _testUuid)
+      .applyRules(poi, poly, externalMatchClass);
+  if (!externalRuleTriggered)
   {
     // calculate the 2 sigma for the distance between the two objects
     const double sigma1 = e1->getCircularError() / 2.0;
@@ -245,7 +247,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     typeMatch = typeScore >= _typeScoreThreshold;
     //const bool exactTypeMatch = typeScore == 1.0;
 
-    addressMatch = _getAddressMatch(poly, poi);
+    addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
 
     _matchDistance =
       max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
@@ -279,7 +281,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   }
   else
   {
-    _class = parkMatchClass;
+    _class = externalMatchClass;
   }
 
   if (Log::getInstance().getLevel() == Log::Debug)
@@ -436,92 +438,6 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
   }*/
 
   return _reviewDistance;
-}
-
-bool PoiPolygonMatch::_getAddressMatch(ConstElementPtr building, ConstElementPtr poi)
-{
-  Tags buildingTags = building->getTags();
-  QString buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
-  QString buildingStreet =
-    Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
-  QString buildingAddrComb;
-  if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
-  {
-    buildingAddrComb = buildingHouseNum + " " + buildingStreet;
-  }
-  QString buildingAddrTag =
-    Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
-  if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
-  {
-    //try to find the address from a building way node instead
-    if (building->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr wayBuilding = dynamic_pointer_cast<const Way>(building);
-      const vector<long> wayNodeIds = wayBuilding->getNodeIds();
-      for (size_t i = 0; i < wayNodeIds.size(); i++)
-      {
-        ConstElementPtr buildingWayNode = _map->getElement(ElementType::Node, wayNodeIds.at(i));
-        buildingTags = buildingWayNode->getTags();
-        buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
-        buildingStreet =
-          Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
-        buildingAddrTag =
-          Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
-        if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
-        {
-          buildingAddrComb = buildingHouseNum + " " + buildingStreet;
-        }
-        if (!buildingAddrComb.isEmpty() || !buildingAddrTag.isEmpty())
-        {
-          break;
-        }
-      }
-    }
-    //haven't seen addresses yet in building relation node members
-    /*else if (e2->getElementType() == ElementType::Relation)
-      {
-      }*/
-  }
-  if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
-  {
-    return false;
-  }
-
-  const Tags poiTags = poi->getTags();
-  const QString poiHouseNum = poiTags.get("addr:housenumber").trimmed();
-  const QString poiStreet =
-    Translator::getInstance().toEnglish(poiTags.get("addr:street")).trimmed().toLower();
-  QString poiAddrComb;
-  if (!poiHouseNum.isEmpty() && !poiStreet.isEmpty())
-  {
-    poiAddrComb = poiHouseNum + " " + poiStreet;
-  }
-  const QString poiAddrTag =
-    Translator::getInstance().toEnglish(poiTags.get("address")).trimmed().toLower();
-  if (poiAddrComb.isEmpty() && poiAddrTag.isEmpty())
-  {
-    return false;
-  }
-
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (buildingTags.get("uuid") == _testUuid || poiTags.get("uuid") == _testUuid))
-  {
-    LOG_VARD(buildingAddrComb);
-    LOG_VARD(poiAddrComb);
-    LOG_VARD(buildingAddrTag);
-    LOG_VARD(poiAddrTag);
-  }
-
-  ExactStringDistance addrComp;
-  return
-    (!buildingAddrTag.isEmpty() && !poiAddrTag.isEmpty() &&
-       addrComp.compare(buildingAddrTag, poiAddrTag) == 1.0) ||
-    (!buildingAddrComb.isEmpty() && !poiAddrTag.isEmpty() &&
-       addrComp.compare(buildingAddrComb, poiAddrTag) == 1.0) ||
-    (!poiAddrComb.isEmpty() && !buildingAddrTag.isEmpty() &&
-       addrComp.compare(poiAddrComb, buildingAddrTag) == 1.0) ||
-    (!buildingAddrComb.isEmpty() && !poiAddrComb.isEmpty() &&
-       addrComp.compare(buildingAddrComb, poiAddrComb) == 1.0);
 }
 
 set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const

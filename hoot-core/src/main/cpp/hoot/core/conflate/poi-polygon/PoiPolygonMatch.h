@@ -146,8 +146,6 @@ private:
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  bool _getAddressMatch(ConstElementPtr building, ConstElementPtr poi);
-
   double _getMatchDistanceForType(const QString typeKvp) const;
   double _getReviewDistanceForType(const QString typeKvp) const;
 

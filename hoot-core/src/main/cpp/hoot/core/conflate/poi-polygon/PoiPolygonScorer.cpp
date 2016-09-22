@@ -39,7 +39,10 @@
 namespace hoot
 {
 
-PoiPolygonScorer::PoiPolygonScorer(const QString testUuid = "") :
+PoiPolygonScorer::PoiPolygonScorer(double nameScoreThreshold, double typeScoreThreshold,
+                                   const QString testUuid = "") :
+_nameScoreThreshold(nameScoreThreshold),
+_typeScoreThreshold(typeScoreThreshold),
 _testUuid(testUuid)
 {
 
@@ -57,6 +60,11 @@ double PoiPolygonScorer::getNameScore(ConstElementPtr e1, ConstElementPtr e2) co
 
 double PoiPolygonScorer::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
+  if (e1->getTags().get("name").trimmed().isEmpty() &&
+      e2->getTags().get("name").trimmed().isEmpty())
+  {
+    return 0.0;
+  }
   //TODO: fix
   /*return
     NameExtractor(
@@ -106,13 +114,25 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp);
 }
 
-bool PoiPolygonScorer::exactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+bool PoiPolygonScorer::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+                                      QString& t2BestKvp)
+{
+  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
+}
+
+bool PoiPolygonScorer::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
+{
+  QString t1BestKvp, t2BestKvp;
+  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
+}
+
+bool PoiPolygonScorer::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                       QString& t2BestKvp)
 {
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;
 }
 
-bool PoiPolygonScorer::exactTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
+bool PoiPolygonScorer::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
   QString t1BestKvp, t2BestKvp;
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;

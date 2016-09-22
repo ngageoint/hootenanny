@@ -47,7 +47,9 @@ public:
 
   PoiPolygonParkRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance,
-                            double nameScoreThreshold, bool exactNameMatch, const QString testUuid);
+                            double nameScoreThreshold, bool exactNameMatch,
+                            double typeScoreThreshold, double matchDistance,
+                            const QString testUuid);
 
   bool applyRules(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
 
@@ -61,6 +63,8 @@ private:
   double _distance;
   double _nameScoreThreshold;
   bool _exactNameMatch;
+  double _typeScoreThreshold;
+  double _matchDistance;
 
   QString _testUuid;
 

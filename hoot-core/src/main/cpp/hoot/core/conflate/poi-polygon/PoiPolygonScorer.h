@@ -40,7 +40,7 @@ class PoiPolygonScorer
 {
 public:
 
-  PoiPolygonScorer(const QString testUuid);
+  PoiPolygonScorer(double nameScoreThreshold, double typeScoreThreshold, const QString testUuid);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
@@ -55,17 +55,23 @@ public:
   double getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);
   double getTypeScore(ConstElementPtr e1, ConstElementPtr e2);
-  bool exactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+  bool isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);
-  bool exactTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
+  bool isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
+  bool isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+                   QString& t2BestKvp);
+  bool isTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
 private:
+
+  double _nameScoreThreshold;
+  double _typeScoreThreshold;
+
+  QString _testUuid;
 
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);
   QStringList _getRelatedTags(const Tags& tags) const;
-
-  QString _testUuid;
 
 };
 

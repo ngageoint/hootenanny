@@ -1741,6 +1741,10 @@
             {
                 "name": "amenity=education",
                 "weight": 0.7
+            },
+            {
+                "name": "amenity=university",
+                "weight": 0.7
             }
         ]
     },

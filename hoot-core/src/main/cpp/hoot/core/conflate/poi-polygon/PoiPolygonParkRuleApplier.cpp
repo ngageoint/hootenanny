@@ -56,6 +56,8 @@ PoiPolygonParkRuleApplier::PoiPolygonParkRuleApplier(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance, double nameScoreThreshold,
                                                      bool exactNameMatch,
+                                                     double typeScoreThreshold,
+                                                     double matchDistance,
                                                      const QString testUuid = "") :
 _map(map),
 _areaNeighborIds(areaNeighborIds),
@@ -63,6 +65,8 @@ _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
 _exactNameMatch(exactNameMatch),
+_typeScoreThreshold(typeScoreThreshold),
+_matchDistance(matchDistance),
 _testUuid(testUuid)
 {
 }
@@ -95,6 +99,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsPlayground = _elementIsPlayground(poly);
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
   const bool polyIsRecCenter = _elementIsRecCenter(poly);
+  const bool polyIsSport = _elementIsSport(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -109,10 +114,12 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
   bool polyContainsAnotherParkOrPlaygroundPoi = false;
   bool containedOtherParkOrPlaygroundPoiHasName = false;
   bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
+  bool anotherPolyContainsPoiWithTypeMatch = false;
+  bool poiCloseToAnotherPolyWithTypeMatch = false;
 
   const double polyArea = polyGeom->getArea();
 
-  PoiPolygonScorer scorer(_testUuid);
+  PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
 
   set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
   while (poiNeighborItr != _poiNeighborIds.end())
@@ -188,7 +195,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
           LOG_VARD(_elementIsSport(area));
           LOG_VARD(poiIsSport);
           LOG_VARD(areaGeom->contains(poiGeom.get()));
-          LOG_VARD(scorer.exactTypeMatch(poi, area));
+          LOG_VARD(scorer.isExactTypeMatch(poi, area));
           QString t1, t2;
           LOG_VARD(scorer.getTypeScore(poi, area, t1, t2));
           LOG_VARD(t1);
@@ -274,16 +281,23 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
         }
         else if (poiIsSport)
         {
-          /*if (_elementIsPark(area) && areaGeom->contains(poiGeom.get()))
-          {
-            sportPoiInPark = true;
-          }*/
-
           //this is a little lose, b/c there could be more than one type match set of tags...
           if (_elementIsSport(area) && areaGeom->contains(poiGeom.get()) &&
-              scorer.exactTypeMatch(poi, area))
+              scorer.isExactTypeMatch(poi, area))
           {
             sportPoiOnOtherSportPolyWithExactTypeMatch = true;
+          }
+        }
+        //type generic rules
+        else if (scorer.isTypeMatch(poi, area))
+        {
+          if (areaGeom->contains(poiGeom.get()))
+          {
+            anotherPolyContainsPoiWithTypeMatch = true;
+          }
+          else if (areaGeom->distance(poiGeom.get()) <= _matchDistance)
+          {
+            poiCloseToAnotherPolyWithTypeMatch = true;
           }
         }
       }
@@ -445,8 +459,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
   }
   //If a sport poi is contained within an exact type match sport poi poly, don't let it be
   //matched against anything else.
-  else if (poiIsSport && /*poiContainedInAnotherParkPoly*/poiContainedInParkPoly &&
-           sportPoiOnOtherSportPolyWithExactTypeMatch)
+  else if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithExactTypeMatch)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -456,6 +469,81 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Don't match a park poi to a sport poly.  Simpler version of some rules above.
+  //TODO: may make some previous rules obsolete
+  else if (poiIsPark && polyIsSport)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #12...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  /*else if (poiIsPark && polyIsPlayground && polyContainsAnotherParkOrPlaygroundPoi)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #13...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  //Don't match a poi park to any poly that doesn't fall in the leisure category.
+  //TODO: may be redundant with other rules
+  /*else if (poiIsPark && !poly->getTags().contains("leisure"))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #14...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  //Don't match non-sport pois and polys.  This may be too simplistic.
+  //TODO: may be redundant with other rules
+  //TODO: this is actually sport specific
+  /*else if (polyIsSport && !poiIsSport && poiHasType)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #15...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  //An attempt at a very generic version of some of the stuff from above...simply, if comparing a
+  //typed poi to a non-typed poly and another poly exists nearby that actually contains the poi
+  //and has a type match with it, then skip this one.
+  //TODO: could also try the poi/poly reverse
+  //TODO: if works, some above rules may be able to be eliminated and then needs refactoring
+  /*else if (!polyHasType && poiHasType && anotherPolyContainsPoiWithTypeMatch)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #16...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  //similar to previous but reversed and looking for polys within the match distance instead of
+  //distance = 0.
+  //TODO: if works, some above rules may be able to be eliminated and then needs refactoring
+  /*else if (poiHasType && !polyHasType && poiCloseToAnotherPolyWithTypeMatch)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #17...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -487,6 +575,8 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     LOG_VARD(sportPoiOnOtherSportPolyWithExactTypeMatch);
     LOG_VARD(poiIsSport);
     LOG_VARD(poiContainedInParkPoly);
+    LOG_VARD(polyIsSport);
+    LOG_VARD(anotherPolyContainsPoiWithTypeMatch);
   }
 
   return triggersParkRule;
@@ -529,9 +619,7 @@ bool PoiPolygonParkRuleApplier::_elementIsParkish(ConstElementPtr element) const
     return false;
   }
   const QString leisureVal = element->getTags().get("leisure").toLower();
-  return
-    leisureVal == "garden" || /*element->getTags().get("sport") == "tennis" ||*/
-    leisureVal == "dog_park";
+  return leisureVal == "garden" || leisureVal == "dog_park";
 }
 
 bool PoiPolygonParkRuleApplier::_elementIsSport(ConstElementPtr element) const
