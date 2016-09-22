@@ -672,7 +672,7 @@ bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
   }
   const QString leisureVal = element->getTags().get("leisure").toLower();
   return
-    leisureVal == "garden" || element->getTags().get("sport") == "tennis" ||
+    leisureVal == "garden" || /*element->getTags().get("sport") == "tennis" ||*/
     leisureVal == "dog_park";
 }
 
@@ -688,6 +688,8 @@ bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strL
   }
   return false;
 }
+
+//TODO: make all this park name logic be translated
 
 bool PoiPolygonMatch::_elementIsRecCenter(ConstElementPtr element) const
 {
@@ -992,8 +994,8 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   //"playground", which makes this confusing.  Here, we're differentiating between playgrounds,
   //parks, and play areas and attempting to match play area poi's to play area or playground polys.
   //We're not, however, trying to match playground poi's to play area or playground poly, b/c
-  //sometimes those need to be matched to the surrounding park polys...that situation will should
-  //at least end up as a review.
+  //sometimes those need to be matched to the surrounding park polys...that situation should
+  //at the very least end up as a review.
   else if (poiIsPlayArea && polyIsPark && polyContainsPlayAreaOrPlaygroundPoly)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -1018,7 +1020,7 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
   }
   //If this isn't a park or playground poi, then don't match it to any park poly that contains
   //another park or playground poi.
-  //TODO: could this be simplified with a simple park type restriction?
+  //TODO: does rule 9 render this obsolete?
   else if (poiIsPlayArea && !poiIsPlayground && polyIsPark && _distance == 0 &&
            polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
   {
@@ -1026,6 +1028,16 @@ bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr pol
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
       LOG_DEBUG("Returning miss per park rule #8...");
+    }
+    _class.setMiss();
+    triggersParkRule = true;
+  }
+  else if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #9...");
     }
     _class.setMiss();
     triggersParkRule = true;
