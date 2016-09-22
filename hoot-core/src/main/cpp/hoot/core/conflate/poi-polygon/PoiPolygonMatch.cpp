@@ -27,13 +27,10 @@
 #include "PoiPolygonMatch.h"
 
 // gdal
-#include <ogr_geometry.h>
+//#include <ogr_geometry.h>
 
 // geos
 #include <geos/geom/Geometry.h>
-//#include <geos/geom/Polygon.h>
-#include <geos/geom/LineString.h>
-//using namespace geos::geom;
 
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
@@ -46,9 +43,8 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/Translator.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-//#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+
+#include "PoiPolygonParkRuleApplier.h"
 
 namespace hoot
 {
@@ -87,8 +83,8 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 const set<ElementId>& areaIds = set<ElementId>(),
-                                 const set<ElementId>& poiIds = set<ElementId>()) :
+                                 const set<ElementId>& areaNeighborIds = set<ElementId>(),
+                                 const set<ElementId>& poiNeighborIds = set<ElementId>()) :
 Match(threshold),
 _eid1(eid1),
 _eid2(eid2),
@@ -103,8 +99,8 @@ _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
-_areaIds(areaIds),
-_poiIds(poiIds)
+_areaNeighborIds(areaNeighborIds),
+_poiNeighborIds(poiNeighborIds)
 {
   _calculateMatch(eid1, eid2);
 }
@@ -207,21 +203,21 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
                                    eid2.toString());
   }
 
-  shared_ptr<Geometry> gpoly = ElementConverter(_map).convertToGeometry(poly);
+  shared_ptr<Geometry> polyGeom = ElementConverter(_map).convertToGeometry(poly);
   //may need a better way to handle this...(already tried using isValid())
-  if (QString::fromStdString(gpoly->toString()).toUpper().contains("EMPTY"))
+  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      LOG_WARN("Invalid polygon passed to PoiPolygonMatchCreator: " << gpoly->toString());
+      LOG_WARN("Invalid polygon passed to PoiPolygonMatchCreator: " << polyGeom->toString());
       _badGeomCount++;
     }
     _class.setMiss();
     return;
   }
-  shared_ptr<Geometry> gpoi = ElementConverter(_map).convertToGeometry(poi);
+  shared_ptr<Geometry> poiGeom = ElementConverter(_map).convertToGeometry(poi);
 
-  _distance = gpoly->distance(gpoi.get());
+  _distance = polyGeom->distance(poiGeom.get());
   _nameScore = _getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = _getExactNameScore(poi, poly) == 1.0;
@@ -236,7 +232,12 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   double typeScore = -1.0;
   int evidence = -1;
 
-  if (!_triggersParkRule(poi, poly, gpoly, gpoi))
+  MatchClassification parkMatchClass;
+  const bool parkRuleTriggered =
+    PoiPolygonParkRuleApplier(
+      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch, "")
+      .applyRules(poi, poly, parkMatchClass);
+  if (!parkRuleTriggered)
   {
     // calculate the 2 sigma for the distance between the two objects
     const double sigma1 = e1->getCircularError() / 2.0;
@@ -278,6 +279,10 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     {
       _class.setMiss();
     }
+  }
+  else
+  {
+    _class = parkMatchClass;
   }
 
   if (Log::getInstance().getLevel() == Log::Debug)
@@ -654,425 +659,6 @@ QString PoiPolygonMatch::toString() const
 {
   return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
     arg(_polyEid.toString()).arg(_class.toString());
-}
-
-bool PoiPolygonMatch::_elementIsPark(ConstElementPtr element) const
-{
-  return !OsmSchema::getInstance().isBuilding(element) &&
-         (element->getTags().get("leisure") == "park" /*||
-          _containsPartial("park", element->getTags().getNames())*/);
-}
-
-//TODO: can hopefully eventually genericize this out to something like leisure=*park*
-bool PoiPolygonMatch::_elementIsParkish(ConstElementPtr element) const
-{
-  if (OsmSchema::getInstance().isBuilding(element))
-  {
-    return false;
-  }
-  const QString leisureVal = element->getTags().get("leisure").toLower();
-  return
-    leisureVal == "garden" || /*element->getTags().get("sport") == "tennis" ||*/
-    leisureVal == "dog_park";
-}
-
-bool PoiPolygonMatch::_containsPartial(const QString key, const QStringList strList) const
-{
-  for (QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); it++)
-  {
-    QString val = *it;
-    if (val.contains(key, Qt::CaseInsensitive))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-//TODO: make all this park name logic be translated
-
-bool PoiPolygonMatch::_elementIsRecCenter(ConstElementPtr element) const
-{
-  const QString elementName = element->getTags().get("name").toLower();
-  return elementName.contains("recreation center") || elementName.contains("rec center");
-}
-
-bool PoiPolygonMatch::_elementIsPlayground(ConstElementPtr element) const
-{
-  const Tags& tags = element->getTags();
-  const QString elementName = tags.get("name").toLower();
-  return
-    tags.get("leisure") == "playground" || /*elementName.contains("play area") ||*/
-    elementName.contains("playground");
-}
-
-bool PoiPolygonMatch::_elementIsPlayArea(ConstElementPtr element) const
-{
-  return element->getTags().get("name").toLower().contains("play area");
-}
-
-bool PoiPolygonMatch::_triggersParkRule(ConstElementPtr poi, ConstElementPtr poly,
-                                        shared_ptr<Geometry> gpoly, shared_ptr<Geometry> gpoi)
-{
-  bool triggersParkRule = false;
-
-  const QString poiName = poi->getTags().get("name").toLower();
-  //const QString polyName = poly->getTags().get("name").toLower();
-
-  const bool poiHasType =
-    OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool poiIsPark = _elementIsPark(poi);
-  const bool poiIsParkish = _elementIsParkish(poi);
-  const bool poiIsPlayArea = _elementIsPlayArea(poi);
-  const bool poiIsPlayground = _elementIsPlayground(poi);
-  const bool poiIsRecCenter = _elementIsRecCenter(poi);
-
-  const bool polyHasType =
-    OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool polyIsPark = _elementIsPark(poly);
-  const bool polyIsPlayground = _elementIsPlayground(poly);
-  const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsRecCenter = _elementIsRecCenter(poly);
-
-  bool polyVeryCloseToAnotherParkPoly = false;
-  double parkPolyAngleHistVal = -1.0;
-  double parkPolyOverlapVal = -1.0;
-  bool otherParkPolyNameMatch = false;
-  double otherParkPolyNameScore = -1.0;
-  double poiToPolyNodeDist = DBL_MAX;
-  double poiToOtherParkPolyNodeDist = DBL_MAX;
-  bool otherParkPolyHasName = false;
-  bool polyContainsPlayAreaOrPlaygroundPoly = false;
-  bool parkPoiInContainedInAnotherParkPoly = false;
-  bool polyContainsAnotherParkOrPlaygroundPoi = false;
-  bool containedOtherParkOrPlaygroundPoiHasName = false;
-
-  const double polyArea = gpoly->getArea();
-
-  set<ElementId>::const_iterator poiNeighborItr = _poiIds.begin();
-  while (poiNeighborItr != _poiIds.end())
-  {
-    ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-    if (poiNeighbor->getElementId() != poi->getElementId())
-    {
-      shared_ptr<Geometry> poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid ||
-           poly->getTags().get("uuid") == _testUuid))
-      {
-        LOG_VARD(poiNeighbor->getTags().get("uuid"))
-        LOG_VARD(_elementIsPark(poiNeighbor));
-        LOG_VARD(_elementIsPlayground(poiNeighbor));
-        LOG_VARD(_elementIsPlayArea(poiNeighbor))
-        LOG_VARD(gpoly->contains(poiNeighborGeom.get()));
-      }
-
-      if ((_elementIsPark(poiNeighbor) || _elementIsPlayground(poiNeighbor)) &&
-          !_elementIsPlayArea(poiNeighbor) && gpoly->contains(poiNeighborGeom.get()))
-      {
-        polyContainsAnotherParkOrPlaygroundPoi = true;
-        if (!containedOtherParkOrPlaygroundPoiHasName)
-        {
-          containedOtherParkOrPlaygroundPoiHasName =
-            !poiNeighbor->getTags().get("name").trimmed().isEmpty();
-        }
-
-        if (Log::getInstance().getLevel() == Log::Debug &&
-            (poly->getTags().get("uuid") == _testUuid ||
-             poi->getTags().get("uuid") == _testUuid))
-        {
-          LOG_DEBUG(
-            "poly examined and found to contain another park or playground poi " <<
-            poly->toString());
-          LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
-        }
-        //break;
-      }
-    }
-    poiNeighborItr++;
-  }
-
-  set<ElementId>::const_iterator areaItr = _areaIds.begin();
-  while (areaItr != _areaIds.end())
-  {
-    ConstElementPtr area = _map->getElement(*areaItr);
-    if (area->getElementId() != poly->getElementId())
-    {
-      shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
-
-      if (QString::fromStdString(areaGeom->toString()).toUpper().contains("EMPTY"))
-      {
-        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-        {
-          LOG_WARN(
-            "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-            areaGeom->toString());
-          _badGeomCount++;
-        }
-      }
-      else
-      {
-        /*if (Log::getInstance().getLevel() == Log::Debug &&
-            (poi->getTags().get("uuid") == _testUuid ||
-             poly->getTags().get("uuid") == _testUuid))
-        {
-          LOG_VARD(area->getTags().get("uuid"))
-          LOG_VARD(_elementIsPlayground(area));
-          LOG_VARD(_elementIsPlayArea(area));
-          LOG_VARD(gpoly->contains(areaGeom.get()));
-        }*/
-
-        if (_elementIsPark(area))
-        {
-          otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
-          otherParkPolyNameScore = _getNameScore(poi, area);
-          otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-
-          if (areaGeom->contains(gpoi.get()))
-          {
-            parkPoiInContainedInAnotherParkPoly = true;
-
-            if (Log::getInstance().getLevel() == Log::Debug &&
-                (poly->getTags().get("uuid") == _testUuid ||
-                 poi->getTags().get("uuid") == _testUuid))
-            {
-              LOG_DEBUG(
-                "poi examined and found to be contained within a park poly outside of this match " <<
-                "comparison: " << poi->toString());
-              LOG_DEBUG("park poly it is very close to: " << area->toString());
-            }
-          }
-
-          if (areaGeom->intersects(gpoly.get()))
-          {
-            parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
-            parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
-
-            //When just using intersection as the criteria, only found one instance when something
-            //was considered as "very close" to a park poly when I didn't want it to be...so these
-            //values set very low to weed that instance out...overlap at least.
-            //TODO: not sure angle hist is actually doing much here.  Maybe I need to pull the
-            //area to area search dist down even more...or bring back in edge dist?
-            if (parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
-            {
-              polyVeryCloseToAnotherParkPoly = true;
-
-              if (poly->getElementType() == ElementType::Way &&
-                  area->getElementType() == ElementType::Way)
-              {
-                //Calc the distance from the poi to the poly line instead of the poly itself.
-                //Calcing distance to the poly itself will always return 0 when the poi is in the
-                //poly.
-                ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
-                shared_ptr<const LineString> polyLineStr =
-                  dynamic_pointer_cast<const LineString>(
-                    ElementConverter(_map).convertToLineString(polyWay));
-                poiToPolyNodeDist = polyLineStr->distance(gpoi.get());
-                ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);;
-                shared_ptr<const LineString> areaLineStr =
-                  dynamic_pointer_cast<const LineString>(
-                    ElementConverter(_map).convertToLineString(areaWay));
-                poiToOtherParkPolyNodeDist = areaLineStr->distance(gpoi.get());
-              }
-
-              if (Log::getInstance().getLevel() == Log::Debug &&
-                  (poi->getTags().get("uuid") == _testUuid ||
-                   poly->getTags().get("uuid") == _testUuid))
-              {
-                LOG_DEBUG(
-                  "poly examined and found very close to a another park poly: " << poly->toString());
-                LOG_DEBUG("park poly it is very close to: " << area->toString());
-              }
-            }
-          }
-        }
-        else if ((_elementIsPlayground(area) || _elementIsPlayArea(area)) &&
-                 gpoly->contains(areaGeom.get()))
-        {
-          polyContainsPlayAreaOrPlaygroundPoly = true;
-
-          if (Log::getInstance().getLevel() == Log::Debug &&
-              (poi->getTags().get("uuid") == _testUuid ||
-               poly->getTags().get("uuid") == _testUuid))
-          {
-            LOG_DEBUG("poly examined and found to contain a playground poly: " << poly->toString());
-            LOG_DEBUG("playground poly it contains: " << area->toString());
-          }
-        }
-      }
-    }
-    areaItr++;
-  }
-
-  //If the POI is inside a poly that is very close to another park poly, declare miss if
-  //the distance to the outer ring of the other park poly is shorter than the distance to the outer
-  //ring of this poly and the other park poly has a name.
-  if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
-      poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
-      poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #1...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
-  //to another park poly, we want to be more restrictive on type matching, but only if the poi has
-  //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
-  //cause a review here, rather than a miss.
-  else if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) && !poiIsPark &&
-           !poiIsParkish && poiHasType)
-  {
-    if (_exactNameMatch)
-    {
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-      {
-        LOG_DEBUG("Returning review per park rule #2...");
-      }
-      _class.setReview();
-    }
-    else
-    {
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-      {
-        LOG_DEBUG("Returning miss per park rule #2...");
-      }
-      _class.setMiss();
-    }
-    triggersParkRule = true;
-  }
-  //If the poi is a park, the poly it is being compared to is not a park or building, and that poly
-  //is "very close" to another park poly that has a name match with the poi, then declare a miss
-  //(exclude poly playgrounds from this).
-  else if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-           otherParkPolyNameMatch && !polyIsPlayground)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #3...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //Play areas areas can get matched to the larger parks they reside within.  We're setting a max
-  //size for play area polys here to prevent that.  Unfortunately, most play areas are tagged as
-  //just parks and not specifically as play areas, if they are tagged at all, so we're just scanning
-  //the name tag here to determine if something is a play area vs actually verifying that face by
-  //looking at its type.
-  else if (poiName.contains("play area") && polyArea > 25000) //TODO: move this value to a config?
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #4...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //If the poi is a rec center and the poly is not a rec center or a building, return a miss.
-  else if (poiIsRecCenter && !polyIsRecCenter && !polyIsBuilding)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #5...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //Commonly, parks will contain play areas along with other entities (basketball courts, etc.).
-  //The play area is considered to be a subpart of the park polygon.  Sometimes parks are named with
-  //"playground", which makes this confusing.  Here, we're differentiating between playgrounds,
-  //parks, and play areas and attempting to match play area poi's to play area or playground polys.
-  //We're not, however, trying to match playground poi's to play area or playground poly, b/c
-  //sometimes those need to be matched to the surrounding park polys...that situation should
-  //at the very least end up as a review.
-  else if (poiIsPlayArea && polyIsPark && polyContainsPlayAreaOrPlaygroundPoly)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #6...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //If a park poi is contained within one park poly, then there's no reason for it to trigger
-  //reviews in another one that its not contained in.
-  else if (poiIsPark && polyIsPark && _distance > 0 && parkPoiInContainedInAnotherParkPoly)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #7...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  //If this isn't a park or playground poi, then don't match it to any park poly that contains
-  //another park or playground poi.
-  //TODO: does rule 9 render this obsolete?
-  else if (poiIsPlayArea && !poiIsPlayground && polyIsPark && _distance == 0 &&
-           polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #8...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-  else if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #9...");
-    }
-    _class.setMiss();
-    triggersParkRule = true;
-  }
-
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-  {
-    LOG_VARD(poiHasType);
-    LOG_VARD(polyHasType);
-    LOG_VARD(polyIsPark);
-    LOG_VARD(poiIsParkish);
-    LOG_VARD(poiIsPark);
-    LOG_VARD(poiIsPlayground);
-    LOG_VARD(polyIsPlayground);
-    LOG_VARD(polyIsBuilding);
-    LOG_VARD(polyVeryCloseToAnotherParkPoly);
-    LOG_VARD(parkPolyAngleHistVal);
-    LOG_VARD(parkPolyOverlapVal);
-    LOG_VARD(otherParkPolyNameMatch);
-    LOG_VARD(otherParkPolyNameScore);
-    LOG_VARD(poiToPolyNodeDist);
-    LOG_VARD(poiToOtherParkPolyNodeDist);
-    LOG_VARD(otherParkPolyHasName);
-    LOG_VARD(polyArea);
-    LOG_VARD(poiIsRecCenter);
-    LOG_VARD(polyIsRecCenter);
-    LOG_VARD(polyContainsPlayAreaOrPlaygroundPoly);
-    LOG_VARD(poiIsPlayArea);
-    LOG_VARD(parkPoiInContainedInAnotherParkPoly);
-    LOG_VARD(polyContainsAnotherParkOrPlaygroundPoi);
-    LOG_VARD(containedOtherParkOrPlaygroundPoiHasName);
-  }
-
-  return triggersParkRule;
 }
 
 }

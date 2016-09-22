@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -138,8 +137,8 @@ private:
   QString _t1BestKvp;
   QString _t2BestKvp;
 
-  set<ElementId> _areaIds;
-  set<ElementId> _poiIds;
+  set<ElementId> _areaNeighborIds;
+  set<ElementId> _poiNeighborIds;
 
   static void _printMatchDistanceInfo(const QString matchType,
                                       const QMultiMap<QString, double>& distanceInfo);
@@ -165,15 +164,6 @@ private:
 
   double _getMatchDistanceForType(const QString typeKvp) const;
   double _getReviewDistanceForType(const QString typeKvp) const;
-
-  bool _triggersParkRule(ConstElementPtr poi, ConstElementPtr poly, shared_ptr<Geometry> gpoly,
-                         shared_ptr<Geometry> gpoi);
-  bool _elementIsPark(ConstElementPtr element) const;
-  bool _containsPartial(const QString key, const QStringList strList) const;
-  bool _elementIsParkish(ConstElementPtr element) const;
-  bool _elementIsRecCenter(ConstElementPtr element) const;
-  bool _elementIsPlayground(ConstElementPtr element) const;
-  bool _elementIsPlayArea(ConstElementPtr element) const;
 
 };
 
