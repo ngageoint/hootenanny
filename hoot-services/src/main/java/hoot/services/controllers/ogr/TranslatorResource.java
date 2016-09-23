@@ -38,10 +38,12 @@ import javax.ws.rs.core.Response;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.nodejs.ServerControllerBase;
 
 
+@Controller
 @Path("")
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);

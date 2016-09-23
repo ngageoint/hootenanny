@@ -29,6 +29,7 @@ package hoot.services.nativeinterfaces;
 import org.json.simple.JSONObject;
 
 
+//@Component
 public class INativeInterfaceStubImpl implements NativeInterface {
     @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
@@ -52,5 +53,10 @@ public class INativeInterfaceStubImpl implements NativeInterface {
     @Override
     public String getJobProgress(String jobId) {
         return null;
+    }
+
+    @Override
+    public void terminate(String jobId) throws NativeInterfaceException {
+
     }
 }

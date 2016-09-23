@@ -26,11 +26,16 @@
  */
 package hoot.services.controllers.info;
 
+import static hoot.services.HootProperties.ERROR_LOG_PATH;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.annotation.PreDestroy;
 import javax.ws.rs.GET;
@@ -42,19 +47,26 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/logging")
 public class ErrorLogResource {
     private static final Logger logger = LoggerFactory.getLogger(ErrorLogResource.class);
 
+    @Autowired
+    private AboutResource aboutResource;
+
     private String exportLogPath;
 
-    public ErrorLogResource() {
-    }
+
+    public ErrorLogResource() {}
 
     @PreDestroy
     public void preDestroy() throws IOException {
@@ -77,7 +89,7 @@ public class ErrorLogResource {
         String errorLog;
         try {
             // 50k Length
-            errorLog = ErrorLog.getErrorlog(50000);
+            errorLog = getErrorLog(50000);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -106,8 +118,9 @@ public class ErrorLogResource {
     public Response exportLog() {
         File out;
         try {
-            String outputPath = ErrorLog.generateExportLog();
+            String outputPath = generateExportLog();
             out = new File(outputPath);
+
             // TODO: Really not sure about the line below.  Will the be always a single export?  Probably not.
             exportLogPath = outputPath;
         }
@@ -127,5 +140,55 @@ public class ErrorLogResource {
         responseBuilder.header("Content-Disposition", "attachment; filename=hootlog_" + dtStr + ".logger");
 
         return responseBuilder.build();
+    }
+
+    private static String getErrorLog(int maxLength) throws IOException {
+        File file = new File(ERROR_LOG_PATH);
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            long fileLength = file.length();
+
+            long startOffset = 0;
+            if (fileLength > maxLength) {
+                startOffset = fileLength - maxLength;
+            }
+
+            randomAccessFile.seek(startOffset);
+
+            byte[] buffer = new byte[maxLength];
+            randomAccessFile.read(buffer, 0, maxLength);
+
+            return new String(buffer);
+        }
+    }
+
+    private String generateExportLog() throws IOException {
+        String fileId = UUID.randomUUID().toString();
+
+        VersionInfo vInfo = this.aboutResource.getCoreVersionInfo();
+        String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
+        data += vInfo.toString();
+
+        CoreDetail cd = this.aboutResource.getCoreVersionDetail();
+        data += System.lineSeparator() + "************ CORE ENVIRONMENT ***********" + System.lineSeparator();
+
+        if (cd != null) {
+            data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
+        }
+
+        data += System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
+        data += this.aboutResource.getServicesVersionInfo().toString();
+        data += System.lineSeparator() + "************ CATALINA LOG ***********" + System.lineSeparator();
+
+        // 5MB Max
+        int maxSize = 5000000;
+
+        String logStr = getErrorLog(maxSize);
+
+        String outputPath = TEMP_OUTPUT_PATH + File.separator + fileId;
+        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
+            raf.writeBytes(data + System.lineSeparator() + logStr);
+            return outputPath;
+        }
     }
 }

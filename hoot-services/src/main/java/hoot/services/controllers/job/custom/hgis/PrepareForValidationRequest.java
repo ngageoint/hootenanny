@@ -29,6 +29,7 @@ package hoot.services.controllers.job.custom.hgis;
 
 public class PrepareForValidationRequest {
     private String sourceMap;
+    private String outputMap;
 
     public String getSourceMap() {
         return this.sourceMap;
@@ -37,8 +38,6 @@ public class PrepareForValidationRequest {
     public void setSourceMap(String srcMap) {
         this.sourceMap = srcMap;
     }
-
-    private String outputMap;
 
     public String getOutputMap() {
         return this.outputMap;

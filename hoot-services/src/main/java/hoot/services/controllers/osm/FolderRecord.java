@@ -32,6 +32,10 @@ package hoot.services.controllers.osm;
 
 public class FolderRecord {
     private long id;
+    private long parentId;
+    private String name;
+
+    public FolderRecord() {}
 
     public long getId() {
         return id;
@@ -41,8 +45,6 @@ public class FolderRecord {
         this.id = id;
     }
 
-    private long parentId;
-
     public long getParentId() {
         return parentId;
     }
@@ -51,17 +53,11 @@ public class FolderRecord {
         this.parentId = parentId;
     }
 
-    private String name;
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public FolderRecord() {
-
     }
 }

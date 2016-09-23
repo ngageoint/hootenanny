@@ -33,15 +33,13 @@ package hoot.services.controllers.osm;
 public class FolderRecords {
     private FolderRecord[] folders;
 
+    public FolderRecords() {}
+
     public FolderRecord[] getFolders() {
         return folders;
     }
 
     public void setFolders(FolderRecord[] folders) {
         this.folders = folders;
-    }
-
-    public FolderRecords() {
-
     }
 }

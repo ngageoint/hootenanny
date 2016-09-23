@@ -14,6 +14,16 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <listener>
         <listener-class>hoot.services.HootServletContext</listener-class>
     </listener>
@@ -66,6 +76,8 @@
         <url-pattern>/config/*</url-pattern>
     </servlet-mapping>
 
+    <!-- GBM - DG's Global Base Map service for commercial clients.
+         As of 09/16/2016 this proxy is still needed by the GUI tier. -->
     <servlet>
         <servlet-name>gbm</servlet-name>
         <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
@@ -83,6 +95,8 @@
         <url-pattern>/gbm/*</url-pattern>
     </servlet-mapping>
 
+    <!-- EGD - DG's Global Base Map service for non-commercial clients.
+         As of 09/16/2016 this proxy is still needed by the GUI tier. -->
     <servlet>
         <servlet-name>egd</servlet-name>
         <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
