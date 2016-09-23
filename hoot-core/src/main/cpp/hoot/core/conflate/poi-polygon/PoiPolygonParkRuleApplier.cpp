@@ -308,6 +308,8 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
 
+  //TODO: reduce these rules down to something reasonable
+
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
   //ring of this poly and the other park poly has a name.
@@ -486,13 +488,23 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #13...");
+      LOG_DEBUG("Returning miss per park rule #13a...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }*/
   //Don't match a poi park to any poly that doesn't fall in the leisure category.
   //TODO: may be redundant with other rules
+  /*else if (poiIsPark && !poiIsPlayArea && !poiIsPlayground && polyIsPlayground)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #13b...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
   /*else if (poiIsPark && !poly->getTags().contains("leisure"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -511,7 +523,17 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #15...");
+      LOG_DEBUG("Returning miss per park rule #15a...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  /*else if (poi->getTags().get("amenity") == "school" && poly->getTags().contains("sport"))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #15b...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
