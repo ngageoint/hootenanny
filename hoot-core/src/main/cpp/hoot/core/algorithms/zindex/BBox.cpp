@@ -44,21 +44,15 @@ BBox::BBox(vector<double> min, vector<double> max)
   _check();
 }
 
-BBox::BBox(int d)
-{
-  _min.reserve(d);
-  _max.reserve(d);
-}
-
 BBox::BBox(Envelope envelope)
 {
   _min.reserve(2);
   _max.reserve(2);
 
-  _min[0] = envelope.getMinX();
-  _min[1] = envelope.getMinY();
-  _max[0] = envelope.getMaxX();
-  _max[1] = envelope.getMaxY();
+  _min.push_back(envelope.getMinX());
+  _min.push_back(envelope.getMinY());
+  _max.push_back(envelope.getMaxX());
+  _max.push_back(envelope.getMaxY());
 }
 
 BBox::~BBox()

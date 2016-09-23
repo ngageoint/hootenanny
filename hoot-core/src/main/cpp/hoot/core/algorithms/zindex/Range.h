@@ -51,8 +51,6 @@ public:
 
   virtual ~Range() {}
 
-  bool equals(hoot::Range range);
-
   bool hashCode();
 
   bool operator>(Range r) { return (_min - r.getMin()) > 0; }

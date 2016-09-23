@@ -45,8 +45,6 @@ public:
 
   BBox(vector<double> min, vector<double> max);
 
-  BBox(int d);
-
   BBox(Envelope envelope);
 
   virtual ~BBox();

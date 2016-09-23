@@ -59,7 +59,7 @@ public:
 
   virtual ~LongBox();
 
-  long calculateVolume();
+  long int calculateVolume();
 
   /**
     * Returns true if at least one edge overlaps with one of the other boxes

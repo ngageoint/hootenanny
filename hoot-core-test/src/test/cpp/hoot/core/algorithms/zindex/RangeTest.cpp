@@ -22,61 +22,54 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "Range.h"
 
-//std includes
-#include <stdio.h>
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
-//hoot includes
-#include <hoot/core/util/HootException.h>
+// geos
+#include <geos/geom/Coordinate.h>
+
+// Hoot
+#include <hoot/core/algorithms/zindex/Range.h>
+
+#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-Range::Range(long int min, long int max)
+class RangeTest : public CppUnit::TestFixture
 {
-  set(min,max);
-}
+  CPPUNIT_TEST_SUITE(RangeTest);
+  CPPUNIT_TEST(testBasics);
+  CPPUNIT_TEST_SUITE_END();
 
-bool Range::hashCode()
-{
-  int result = (int) (_max ^ (_max >> 32));
-  result = (31 * result) + (int) (_min ^ (_min >> 32));
-  return result;
-}
+public:
 
-bool Range::in(long int l)
-{
-  return (l >= _min) && (l <= _max);
-}
-
-bool Range::isValid()
-{
-  return (_min >= 0) && (_max >= 0);
-}
-
-void Range::setInvalid()
-{
-  _min = -1;
-  _max = -1;
-}
-
-QString Range::toString()
-{
-  return "[" + QString::number(_min) + " : " + QString::number(_max) + "]";
-}
-
-void Range::set(long int min, long int max)
-{
-  if (min > max)
+  void testBasics()
   {
-    throw HootException("min is greater than max: " + QString::number(min) + " " +  QString::number(max));
+    Range r(2, 10);
+    Range r1(2, 10);
+    Range r2(3, 8);
+
+    CPPUNIT_ASSERT_EQUAL((long int)9, r.calculateSize());
+    CPPUNIT_ASSERT_EQUAL(true, r=r1);
+    CPPUNIT_ASSERT_EQUAL(false, r1>r2);
+    CPPUNIT_ASSERT_EQUAL(true, r1<r2);
+    CPPUNIT_ASSERT_EQUAL(true, r.in(5));
+    CPPUNIT_ASSERT_EQUAL(false, r.in(11));
+
+    CPPUNIT_ASSERT_EQUAL(true, r.isValid());
+    r.setInvalid();
+    CPPUNIT_ASSERT_EQUAL(false, r.isValid());
   }
-  _min = min;
-  _max = max;
-}
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RangeTest, "quick");
 
 }
 
