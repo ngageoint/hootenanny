@@ -124,6 +124,8 @@ private:
   double _nameScore;
   bool _nameMatch;
   bool _exactNameMatch;
+  double _typeScore;
+  bool _typeMatch;
 
   double _matchDistance;
   double _reviewDistance;

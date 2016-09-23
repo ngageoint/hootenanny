@@ -50,7 +50,7 @@ public:
   PoiPolygonRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance,
                             double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
-                            double typeScoreThreshold, double matchDistance,
+                            double typeScoreThreshold, double typeScore, double matchDistance,
                             shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
                             const QString testUuid);
 
@@ -68,6 +68,7 @@ private:
   bool _nameMatch;
   bool _exactNameMatch;
   double _typeScoreThreshold;
+  double _typeScore;
   double _matchDistance;
 
   shared_ptr<Geometry> _polyGeom;
@@ -77,12 +78,14 @@ private:
 
   QString _testUuid;
 
-  bool _elementIsPark(ConstElementPtr element) const;
-  bool _elementIsParkish(ConstElementPtr element) const;
-  bool _elementIsRecCenter(ConstElementPtr element) const;
-  bool _elementIsPlayground(ConstElementPtr element) const;
-  bool _elementIsPlayArea(ConstElementPtr element) const;
-  bool _elementIsSport(ConstElementPtr element) const;
+  bool _isPark(ConstElementPtr element) const;
+  bool _isParkish(ConstElementPtr element) const;
+  bool _isRecCenter(ConstElementPtr element) const;
+  bool _isRecCenter2(ConstElementPtr element) const;
+  bool _isPlayground(ConstElementPtr element) const;
+  bool _isPlayArea(ConstElementPtr element) const;
+  bool _isSport(ConstElementPtr element) const;
+  bool _isBuildingIsh(ConstElementPtr element) const;
 
 };
 

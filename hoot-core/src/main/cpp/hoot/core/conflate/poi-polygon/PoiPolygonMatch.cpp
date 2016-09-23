@@ -68,6 +68,8 @@ _distance(-1.0),
 _nameScore(-1.0),
 _nameMatch(false),
 _exactNameMatch(false),
+_typeScore(-1.0),
+_typeMatch(false),
 _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
@@ -91,6 +93,8 @@ _distance(-1.0),
 _nameScore(-1.0),
 _nameMatch(false),
 _exactNameMatch(false),
+_typeScore(-1.0),
+_typeMatch(false),
 _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
@@ -116,6 +120,8 @@ _distance(-1.0),
 _nameScore(-1.0),
 _nameMatch(false),
 _exactNameMatch(false),
+_typeScore(-1.0),
+_typeMatch(false),
 _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
 _nameScoreThreshold(nameScoreThreshold),
@@ -246,19 +252,21 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = scorer.getExactNameScore(poi, poly) == 1.0;
 
+  _typeScore = scorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
+  _typeMatch = _typeScore >= _typeScoreThreshold;
+  //const bool exactTypeMatch = typeScore == 1.0;
+
   double ce = -1.0;
   double reviewDistancePlusCe = -1.0;
   bool closeMatch = false;
-  bool typeMatch = false;
   bool addressMatch = false;
-  double typeScore = -1.0;
   int evidence = -1;
 
   MatchClassification externalMatchClass;
   const bool externalRuleTriggered =
     PoiPolygonRuleApplier(
       _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
-      _typeScoreThreshold, _matchDistance, polyGeom, poiGeom, _testUuid)
+      _typeScoreThreshold, _typeScore, _matchDistance, polyGeom, poiGeom, _testUuid)
       .applyRules(poi, poly, externalMatchClass);
   if (!externalRuleTriggered)
   {
@@ -266,10 +274,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     const double sigma1 = e1->getCircularError() / 2.0;
     const double sigma2 = e1->getCircularError() / 2.0;
     ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
-
-    typeScore = scorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
-    typeMatch = typeScore >= _typeScoreThreshold;
-    //const bool exactTypeMatch = typeScore == 1.0;
 
     addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
 
@@ -281,7 +285,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     closeMatch = _distance <= reviewDistancePlusCe;
 
     evidence = 0;
-    evidence += typeMatch ? 1 : 0;
+    evidence += _typeMatch ? 1 : 0;
     evidence += _nameMatch ? 1 : 0;
     evidence += addressMatch ? 1 : 0;
     evidence += _distance <= _matchDistance ? 2 : 0;
@@ -350,8 +354,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     LOG_VARD(_eid2);
     LOG_VARD(e2->getTags().get("uuid"));
     LOG_VARD(e2->getTags());
-    LOG_VARD(typeScore);
-    LOG_VARD(typeMatch);
+    LOG_VARD(_typeScore);
+    LOG_VARD(_typeMatch);
     LOG_VARD(_nameMatch);
     LOG_VARD(_exactNameMatch);
     LOG_VARD(_nameScore);

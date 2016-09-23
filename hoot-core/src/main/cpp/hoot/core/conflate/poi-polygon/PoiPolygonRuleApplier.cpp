@@ -43,6 +43,7 @@ using namespace geos;
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 //#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/algorithms/Translator.h>
 
 #include "PoiPolygonScorer.h"
 
@@ -59,6 +60,7 @@ PoiPolygonRuleApplier::PoiPolygonRuleApplier(const ConstOsmMapPtr& map,
                                                      bool nameMatch,
                                                      bool exactNameMatch,
                                                      double typeScoreThreshold,
+                                                     double typeScore,
                                                      double matchDistance,
                                                      shared_ptr<Geometry> polyGeom,
                                                      shared_ptr<Geometry> poiGeom,
@@ -71,6 +73,7 @@ _nameScoreThreshold(nameScoreThreshold),
 _nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
 _typeScoreThreshold(typeScoreThreshold),
+_typeScore(typeScore),
 _matchDistance(matchDistance),
 _polyGeom(polyGeom),
 _poiGeom(poiGeom),
@@ -90,21 +93,21 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool poiIsPark = _elementIsPark(poi);
-  const bool poiIsParkish = _elementIsParkish(poi);
-  const bool poiIsPlayArea = _elementIsPlayArea(poi);
-  const bool poiIsPlayground = _elementIsPlayground(poi);
-  const bool poiIsRecCenter = _elementIsRecCenter(poi);
-  const bool poiIsSport = _elementIsSport(poi);
+  const bool poiIsPark = _isPark(poi);
+  const bool poiIsParkish = _isParkish(poi);
+  const bool poiIsPlayArea = _isPlayArea(poi);
+  const bool poiIsPlayground = _isPlayground(poi);
+  const bool poiIsRecCenter = _isRecCenter(poi);
+  const bool poiIsSport = _isSport(poi);
 
   const bool polyHasType =
     OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool polyIsPark = _elementIsPark(poly);
-  const bool polyIsPlayground = _elementIsPlayground(poly);
+  const bool polyIsPark = _isPark(poly);
+  const bool polyIsPlayground = _isPlayground(poly);
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsRecCenter = _elementIsRecCenter(poly);
-  const bool polyIsSport = _elementIsSport(poly);
+  const bool polyIsRecCenter = _isRecCenter(poly);
+  const bool polyIsSport = _isSport(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -121,6 +124,9 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
   bool anotherPolyContainsPoiWithTypeMatch = false;
   bool poiCloseToAnotherPolyWithTypeMatch = false;
+
+  bool poiOnBuilding = false;
+  //int numOtherBuildingsCloseToPoi = -1;
 
   const double polyArea = _polyGeom->getArea();
 
@@ -145,8 +151,8 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
         LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
       }*/
 
-      if ((_elementIsPark(poiNeighbor) || _elementIsPlayground(poiNeighbor)) &&
-          !_elementIsPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
+      if ((_isPark(poiNeighbor) || _isPlayground(poiNeighbor)) &&
+          !_isPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
       {
         polyContainsAnotherParkOrPlaygroundPoi = true;
         if (!containedOtherParkOrPlaygroundPoiHasName)
@@ -205,15 +211,15 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
       }
       else if (!topologyError)
       {
-        if (Log::getInstance().getLevel() == Log::Debug &&
+        /*if (Log::getInstance().getLevel() == Log::Debug &&
             (poi->getTags().get("uuid") == _testUuid ||
              poly->getTags().get("uuid") == _testUuid))
         {
           LOG_VARD(area->getTags().get("uuid"))
-          LOG_VARD(_elementIsPlayground(area));
-          LOG_VARD(_elementIsPlayArea(area));
+          LOG_VARD(_isPlayground(area));
+          LOG_VARD(_isPlayArea(area));
           LOG_VARD(_polyGeom->contains(areaGeom.get()));
-          LOG_VARD(_elementIsSport(area));
+          LOG_VARD(_isSport(area));
           LOG_VARD(poiIsSport);
           LOG_VARD(areaGeom->contains(_poiGeom.get()));
           LOG_VARD(scorer.isExactTypeMatch(poi, area));
@@ -221,9 +227,9 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
           LOG_VARD(scorer.getTypeScore(poi, area, t1, t2));
           LOG_VARD(t1);
           LOG_VARD(t2);
-        }
+        }*/
 
-        if (_elementIsPark(area))
+        if (_isPark(area))
         {
           otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
           otherParkPolyNameScore = scorer.getNameScore(poi, area);
@@ -301,8 +307,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
             }
           }
         }
-        else if ((_elementIsPlayground(area) || _elementIsPlayArea(area)) &&
-                 _polyGeom->contains(areaGeom.get()))
+        else if ((_isPlayground(area) || _isPlayArea(area)) && _polyGeom->contains(areaGeom.get()))
         {
           polyContainsPlayAreaOrPlaygroundPoly = true;
 
@@ -317,11 +322,20 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
         else if (poiIsSport)
         {
           //this is a little lose, b/c there could be more than one type match set of tags...
-          if (_elementIsSport(area) && areaGeom->contains(_poiGeom.get()) &&
+          if (_isSport(area) && areaGeom->contains(_poiGeom.get()) &&
               scorer.isExactTypeMatch(poi, area))
           {
             sportPoiOnOtherSportPolyWithExactTypeMatch = true;
           }
+        }
+        else if (OsmSchema::getInstance().isBuilding(area))
+        {
+          if (areaGeom->contains(_poiGeom.get()))
+          {
+            poiOnBuilding = true;
+          }
+          //numOtherBuildingsCloseToPoi
+          //else if (areaGeom->distance(_poiGeom.get()) <= )
         }
         //type generic rules
         else if (scorer.isTypeMatch(poi, area))
@@ -343,7 +357,8 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
 
-  //TODO: reduce these rules down to something reasonable
+  //TODO: CONVERT ALL THESE RULES TO EXTRACTORS GENERATING SPECIFIC SCORES AND MOVE TO A CLASSIFIER
+  //TYPE CLASS WHICH POIPOLYGONMATCH USES IN PLACE OF THE CURRENT EVIDENCE VALUE
 
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
@@ -355,7 +370,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #1...");
+      LOG_DEBUG("Returning miss per rule #1...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -550,19 +565,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }*/
-  //Don't match non-sport pois and polys.  This may be too simplistic.
-  //TODO: may be redundant with other rules
-  //TODO: this is actually sport specific
-  /*else if (polyIsSport && !poiIsSport && poiHasType)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per park rule #15a...");
-    }
-    matchClass.setMiss();
-    triggersParkRule = true;
-  }*/
   else if (poi->getTags().get("amenity") == "school" && poly->getTags().contains("sport"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -641,6 +643,82 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  /*//else if (OsmSchema::getInstance().isBuilding(poi) && _isPark(poly))
+  else if (OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
+             OsmSchemaCategory::building()) && _isPark(poly))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #21...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  /*else if (poiHasType && polyHasType && !_nameMatch && _typeScore <= 0.6)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #22...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+//  else if (polyIsPark && _distance == 0 && poiOnBuilding && _isRecCenter2(poi)
+//           /*&& numOtherBuildingsInParkAndCloseToPoi == 0*/)
+//  {
+//    if (Log::getInstance().getLevel() == Log::Debug &&
+//        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+//    {
+//      LOG_DEBUG("Returning miss per park rule #23...");
+//    }
+//    matchClass.setMiss();
+//    triggersParkRule = true;
+//  }
+  /*else if ((poi->getTags().get("natural") == "bay" && poly->getTags().get("waterway") == "dock") ||
+           (poly->getTags().get("natural") == "bay" && poi->getTags().get("waterway") == "dock"))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #24...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  /*else if (poi->getTags().get("barrier") == "gate" && poly->getTags().get("amenity") == "parking")
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #25...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
+  else if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #26...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  /*else if (poiHasType && polyHasType && poi->getTags().get("amenity") == "toilet" &&
+           !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
+             OsmSchemaCategory::building()))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #27...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }*/
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -674,6 +752,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     LOG_VARD(poiContainedInParkPoly);
     LOG_VARD(polyIsSport);
     LOG_VARD(anotherPolyContainsPoiWithTypeMatch);
+    LOG_VARD(poiOnBuilding);
   }
 
   return triggersParkRule;
@@ -681,32 +760,41 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
 
 //TODO: make all this park name logic be translated
 
-bool PoiPolygonRuleApplier::_elementIsRecCenter(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isRecCenter(ConstElementPtr element) const
 {
-  const QString elementName = element->getTags().get("name").toLower();
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
   return elementName.contains("recreation center") || elementName.contains("rec center");
 }
 
-bool PoiPolygonRuleApplier::_elementIsPlayground(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isRecCenter2(ConstElementPtr element) const
+{
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+  return elementName.contains("recreation center") || elementName.contains("rec center") ||
+    elementName.contains("clubhouse") || elementName.contains("fieldhouse");
+}
+
+bool PoiPolygonRuleApplier::_isPlayground(ConstElementPtr element) const
 {
   const Tags& tags = element->getTags();
-  const QString elementName = tags.get("name").toLower();
+  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
   return tags.get("leisure") == "playground" || elementName.contains("playground");
 }
 
-bool PoiPolygonRuleApplier::_elementIsPlayArea(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isPlayArea(ConstElementPtr element) const
 {
   return element->getTags().get("name").toLower().contains("play area");
 }
 
-bool PoiPolygonRuleApplier::_elementIsPark(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isPark(ConstElementPtr element) const
 {
   return !OsmSchema::getInstance().isBuilding(element) &&
          (element->getTags().get("leisure") == "park");
 }
 
 //TODO: can hopefully eventually genericize this out to something like leisure=*park*
-bool PoiPolygonRuleApplier::_elementIsParkish(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isParkish(ConstElementPtr element) const
 {
   if (OsmSchema::getInstance().isBuilding(element))
   {
@@ -716,9 +804,17 @@ bool PoiPolygonRuleApplier::_elementIsParkish(ConstElementPtr element) const
   return leisureVal == "garden" || leisureVal == "dog_park";
 }
 
-bool PoiPolygonRuleApplier::_elementIsSport(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_isSport(ConstElementPtr element) const
 {
   return element->getTags().contains("sport");
+}
+
+bool PoiPolygonRuleApplier::_isBuildingIsh(ConstElementPtr element) const
+{
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+  return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
+    elementName.contains("bldg");
 }
 
 }
