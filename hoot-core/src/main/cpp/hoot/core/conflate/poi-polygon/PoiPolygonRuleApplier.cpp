@@ -563,7 +563,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }*/
-  /*else if (poi->getTags().get("amenity") == "school" && poly->getTags().contains("sport"))
+  else if (poi->getTags().get("amenity") == "school" && poly->getTags().contains("sport"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -572,7 +572,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     }
     matchClass.setMiss();
     triggersParkRule = true;
-  }*/
+  }
   //An attempt at a very generic version of some of the stuff from above...simply, if comparing a
   //typed poi to a non-typed poly and another poly exists nearby that actually contains the poi
   //and has a type match with it, then skip this one.
