@@ -143,8 +143,7 @@ public class HGISReviewResource extends HGISResource {
         param.put("isprimitivetype", "false");
         reviewArgs.add(param);
 
-        return createReflectionJobReq(reviewArgs, "hoot.services.controllers.job.custom.hgis.HGISReviewResource",
-                "updateMapsTag");
+        return createReflectionJobReq(reviewArgs, HGISReviewResource.class.getName(), "updateMapsTag");
     }
 
     // Warning: do not remove this method even though it will appear as unused in your IDE of choice.

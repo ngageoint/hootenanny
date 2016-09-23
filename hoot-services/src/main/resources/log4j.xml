@@ -49,10 +49,16 @@
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
+    <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to 'info' for detailed
+      logging of HTTP request/response messages received and sent by the Jersey Framework -->
     <logger name="hoot.services.HootServicesJerseyApplication" additivity="false">
-        <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to INFO for detailed
-             logging of HTTP request/response messages received and sent by the Jersey Framework -->
         <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
+    <logger name="hoot.services.JerseyEventLogger" additivity="false">
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
@@ -80,6 +86,5 @@
         <level value="info" />
         <appender-ref ref="ConsoleAppender" />
     </root>
-
 
 </log4j:configuration>

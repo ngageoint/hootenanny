@@ -26,54 +26,49 @@
  */
 package hoot.services.job;
 
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import java.util.UUID;
 
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.utils.DbUtils;
 
 
-@Scope(SCOPE_PROTOTYPE)
-@Service("resourcesCleanUtil")
+@Service
 @Transactional
-public class ResourcesCleanUtil implements Executable {
-    private static final Logger logger = LoggerFactory.getLogger(ResourcesCleanUtil.class);
+public class MapResourcesCleaner {
+    private static final Logger logger = LoggerFactory.getLogger(MapResourcesCleaner.class);
 
-    private String finalStatusDetail;
+    @Autowired
+    private JobStatusManager jobStatusManager;
 
-    @Override
-    public String getFinalStatusDetail() {
-        return finalStatusDetail;
+    public MapResourcesCleaner() {}
+
+    public String exec(String mapId) {
+        return deleteLayers(mapId);
     }
 
-    public ResourcesCleanUtil() {}
+    private String deleteLayers(String mapId) {
+        String jobId = UUID.randomUUID().toString();
 
-    @Override
-    public void exec(JSONObject command) {
-        JSONObject json = deleteLayers(command.get("mapId").toString());
-        this.finalStatusDetail = json.toJSONString();
-    }
-
-    private JSONObject deleteLayers(String mapId) {
         try {
+            jobStatusManager.addJob(jobId);
+
             DbUtils.deleteBookmarksById(mapId);
             DbUtils.deleteRenderDb(mapId);
             DbUtils.deleteOSMRecordByName(mapId);
+
+            jobStatusManager.setComplete(jobId);
         }
         catch (Exception e) {
-            String msg = "Error deleting layer with mapId = " +  mapId;
+            jobStatusManager.setFailed(jobId, e.getMessage());
+            String msg = "Error deleting layers for map with mapId = " +  mapId;
             throw new RuntimeException(msg, e);
         }
 
-        JSONObject json = new JSONObject();
-        json.put("mapId", mapId);
-        json.put("result", "success");
-
-        return json;
+        return jobId;
     }
 }
