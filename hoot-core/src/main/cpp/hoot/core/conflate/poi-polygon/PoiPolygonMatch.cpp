@@ -28,6 +28,7 @@
 
 // geos
 #include <geos/geom/Geometry.h>
+#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
@@ -37,7 +38,7 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 
-#include "PoiPolygonParkRuleApplier.h"
+#include "PoiPolygonRuleApplier.h"
 #include "PoiPolygonScorer.h"
 #include "PoiPolygonAddressMatch.h"
 
@@ -150,9 +151,11 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   }*/
 
   //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix.
+  //TODO: replace logic in rule applier with commented out ones
   const Tags& tags = e.getTags();
   if (tags.get("natural") == "tree" || tags.get("amenity") == "drinking_water" ||
-      tags.get("amenity") == "bench")
+      tags.get("amenity") == "bench" /*|| tags.get("highway") == "traffic_signals",
+      tags.get("amenity") == "atm"*/)
   {
     return false;
   }
@@ -165,7 +168,14 @@ bool PoiPolygonMatch::isPoi(const Element& e)
 
 bool PoiPolygonMatch::isArea(const Element& e)
 {
-  return isPoly(e) && !OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType());
+  //TODO: make this work instead of the logic in the rule applier
+  const Tags& tags = e.getTags();
+  /*if (tags.get("natural") == "coastline")
+  {
+    return false;
+  }*/
+
+  return isPoly(e) && !OsmSchema::getInstance().isBuilding(tags, e.getElementType());
 }
 
 void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
@@ -198,7 +208,23 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
                                    eid2.toString());
   }
 
-  shared_ptr<Geometry> polyGeom = ElementConverter(_map).convertToGeometry(poly);
+  shared_ptr<Geometry> polyGeom;
+  try
+  {
+    polyGeom = ElementConverter(_map).convertToGeometry(poly);
+  }
+  catch (const /*Topology*/Exception& e)
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN(
+        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+        "geometry: " << polyGeom->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+    _class.setMiss();
+    return;
+  }
   //may need a better way to handle this...(already tried using isValid())
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
@@ -230,9 +256,9 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   MatchClassification externalMatchClass;
   const bool externalRuleTriggered =
-    PoiPolygonParkRuleApplier(
-      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _exactNameMatch,
-      _typeScoreThreshold, _matchDistance, _testUuid)
+    PoiPolygonRuleApplier(
+      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
+      _typeScoreThreshold, _matchDistance, polyGeom, poiGeom, _testUuid)
       .applyRules(poi, poly, externalMatchClass);
   if (!externalRuleTriggered)
   {

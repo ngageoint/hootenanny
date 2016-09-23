@@ -261,5 +261,10 @@
         "isA": "man_made",
         "name": "man_made=water_tower",
         "objectType": "tag"
+    },
+    {
+        "isA": "man_made",
+        "name": "man_made=surveillance",
+        "objectType": "tag"
     }
 ]

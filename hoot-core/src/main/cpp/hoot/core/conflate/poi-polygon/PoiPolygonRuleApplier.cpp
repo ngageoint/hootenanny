@@ -24,11 +24,12 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonParkRuleApplier.h"
+#include "PoiPolygonRuleApplier.h"
 
 // geos
-#include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
+#include <geos/util/TopologyException.h>
+using namespace geos;
 
 // hoot
 #include <hoot/core/conflate/MatchClassification.h>
@@ -51,33 +52,37 @@
 namespace hoot
 {
 
-PoiPolygonParkRuleApplier::PoiPolygonParkRuleApplier(const ConstOsmMapPtr& map,
+PoiPolygonRuleApplier::PoiPolygonRuleApplier(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& areaNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance, double nameScoreThreshold,
+                                                     bool nameMatch,
                                                      bool exactNameMatch,
                                                      double typeScoreThreshold,
                                                      double matchDistance,
+                                                     shared_ptr<Geometry> polyGeom,
+                                                     shared_ptr<Geometry> poiGeom,
                                                      const QString testUuid = "") :
 _map(map),
 _areaNeighborIds(areaNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
+_nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
 _typeScoreThreshold(typeScoreThreshold),
 _matchDistance(matchDistance),
+_polyGeom(polyGeom),
+_poiGeom(poiGeom),
+_badGeomCount(0),
 _testUuid(testUuid)
 {
 }
 
-bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly,
+bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly,
                                            MatchClassification& matchClass)
 {
   bool triggersParkRule = false;
-
-  shared_ptr<Geometry> polyGeom = ElementConverter(_map).convertToGeometry(poly);
-  shared_ptr<Geometry> poiGeom = ElementConverter(_map).convertToGeometry(poi);
 
   const QString poiName = poi->getTags().get("name").toLower();
   //const QString polyName = poly->getTags().get("name").toLower();
@@ -117,7 +122,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
   bool anotherPolyContainsPoiWithTypeMatch = false;
   bool poiCloseToAnotherPolyWithTypeMatch = false;
 
-  const double polyArea = polyGeom->getArea();
+  const double polyArea = _polyGeom->getArea();
 
   PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
 
@@ -141,7 +146,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
       }*/
 
       if ((_elementIsPark(poiNeighbor) || _elementIsPlayground(poiNeighbor)) &&
-          !_elementIsPlayArea(poiNeighbor) && polyGeom->contains(poiNeighborGeom.get()))
+          !_elementIsPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
       {
         polyContainsAnotherParkOrPlaygroundPoi = true;
         if (!containedOtherParkOrPlaygroundPoiHasName)
@@ -170,19 +175,35 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     ConstElementPtr area = _map->getElement(*areaNeighborItr);
     if (area->getElementId() != poly->getElementId())
     {
-      shared_ptr<Geometry> areaGeom = ElementConverter(_map).convertToGeometry(area);
+      shared_ptr<Geometry> areaGeom;
+      bool topologyError = false;
+      try
+      {
+        areaGeom = ElementConverter(_map).convertToGeometry(area);
+      }
+      catch (const /*Topology*/Exception& e)
+      {
+        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        {
+          LOG_WARN(
+            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+            "geometry: " << areaGeom->toString() << "\n" << e.what());
+          _badGeomCount++;
+        }
+        topologyError = true;
+      }
 
       if (QString::fromStdString(areaGeom->toString()).toUpper().contains("EMPTY"))
       {
-        //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-        //{
+        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        {
           LOG_WARN(
             "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
             areaGeom->toString());
-          //_badGeomCount++;
-        //}
+          _badGeomCount++;
+        }
       }
-      else
+      else if (!topologyError)
       {
         if (Log::getInstance().getLevel() == Log::Debug &&
             (poi->getTags().get("uuid") == _testUuid ||
@@ -191,10 +212,10 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
           LOG_VARD(area->getTags().get("uuid"))
           LOG_VARD(_elementIsPlayground(area));
           LOG_VARD(_elementIsPlayArea(area));
-          LOG_VARD(polyGeom->contains(areaGeom.get()));
+          LOG_VARD(_polyGeom->contains(areaGeom.get()));
           LOG_VARD(_elementIsSport(area));
           LOG_VARD(poiIsSport);
-          LOG_VARD(areaGeom->contains(poiGeom.get()));
+          LOG_VARD(areaGeom->contains(_poiGeom.get()));
           LOG_VARD(scorer.isExactTypeMatch(poi, area));
           QString t1, t2;
           LOG_VARD(scorer.getTypeScore(poi, area, t1, t2));
@@ -208,7 +229,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
           otherParkPolyNameScore = scorer.getNameScore(poi, area);
           otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
-          if (areaGeom->contains(poiGeom.get()))
+          if (areaGeom->contains(_poiGeom.get()))
           {
             poiContainedInAnotherParkPoly = true;
 
@@ -223,7 +244,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
             }
           }
 
-          if (areaGeom->intersects(polyGeom.get()))
+          if (areaGeom->intersects(_polyGeom.get()))
           {
             parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
             parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
@@ -243,16 +264,30 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
                 //Calc the distance from the poi to the poly line instead of the poly itself.
                 //Calcing distance to the poly itself will always return 0 when the poi is in the
                 //poly.
-                ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
-                shared_ptr<const LineString> polyLineStr =
-                  dynamic_pointer_cast<const LineString>(
-                    ElementConverter(_map).convertToLineString(polyWay));
-                poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
-                ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);;
-                shared_ptr<const LineString> areaLineStr =
-                  dynamic_pointer_cast<const LineString>(
-                    ElementConverter(_map).convertToLineString(areaWay));
-                poiToOtherParkPolyNodeDist = areaLineStr->distance(poiGeom.get());
+                try
+                {
+                  ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
+                  shared_ptr<const LineString> polyLineStr =
+                    dynamic_pointer_cast<const LineString>(
+                      ElementConverter(_map).convertToLineString(polyWay));
+                  poiToPolyNodeDist = polyLineStr->distance(_poiGeom.get());
+                  ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);
+                  shared_ptr<const LineString> areaLineStr =
+                    dynamic_pointer_cast<const LineString>(
+                      ElementConverter(_map).convertToLineString(areaWay));
+                  poiToOtherParkPolyNodeDist = areaLineStr->distance(_poiGeom.get());
+                }
+                catch (const /*Topology*/Exception& e)
+                {
+                  if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+                  {
+                    LOG_WARN(
+                      "Feature passed to PoiPolygonMatchCreator caused topology exception on " <<
+                      "conversion to a geometry: " << areaGeom->toString() << "\n" << e.what());
+                    _badGeomCount++;
+                  }
+                  topologyError = true;
+                }
               }
 
               if (Log::getInstance().getLevel() == Log::Debug &&
@@ -267,7 +302,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
           }
         }
         else if ((_elementIsPlayground(area) || _elementIsPlayArea(area)) &&
-                 polyGeom->contains(areaGeom.get()))
+                 _polyGeom->contains(areaGeom.get()))
         {
           polyContainsPlayAreaOrPlaygroundPoly = true;
 
@@ -282,7 +317,7 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
         else if (poiIsSport)
         {
           //this is a little lose, b/c there could be more than one type match set of tags...
-          if (_elementIsSport(area) && areaGeom->contains(poiGeom.get()) &&
+          if (_elementIsSport(area) && areaGeom->contains(_poiGeom.get()) &&
               scorer.isExactTypeMatch(poi, area))
           {
             sportPoiOnOtherSportPolyWithExactTypeMatch = true;
@@ -291,11 +326,11 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
         //type generic rules
         else if (scorer.isTypeMatch(poi, area))
         {
-          if (areaGeom->contains(poiGeom.get()))
+          if (areaGeom->contains(_poiGeom.get()))
           {
             anotherPolyContainsPoiWithTypeMatch = true;
           }
-          else if (areaGeom->distance(poiGeom.get()) <= _matchDistance)
+          else if (areaGeom->distance(_poiGeom.get()) <= _matchDistance)
           {
             poiCloseToAnotherPolyWithTypeMatch = true;
           }
@@ -566,6 +601,46 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
     matchClass.setMiss();
     triggersParkRule = true;
   }*/
+  else if (poiHasType && polyHasType && !_nameMatch &&
+           (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
+           (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
+           poly->getTags().get("leisure") == "common") ||
+           (poly->getTags().get("place") == "neighborhood" ||
+            poly->getTags().get("place") == "neighbourhood")) &&
+           polyArea > 50000)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #18...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  else if (poi->getTags().get("place") == "neighbourhood" && !poly->getTags().contains("place"))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #19...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  //TODO: replace with isArea/isPoi changes...tried already once and didn't seem to work
+  else if (poly->getTags().get("natural") == "coastline" ||
+           poi->getTags().get("highway") == "traffic_signals" ||
+           poi->getTags().get("amenity") == "atm" ||
+           poi->getTags().get("man_made") == "surveillance")
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per park rule #20...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -606,35 +681,32 @@ bool PoiPolygonParkRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr 
 
 //TODO: make all this park name logic be translated
 
-bool PoiPolygonParkRuleApplier::_elementIsRecCenter(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsRecCenter(ConstElementPtr element) const
 {
   const QString elementName = element->getTags().get("name").toLower();
   return elementName.contains("recreation center") || elementName.contains("rec center");
 }
 
-bool PoiPolygonParkRuleApplier::_elementIsPlayground(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsPlayground(ConstElementPtr element) const
 {
   const Tags& tags = element->getTags();
   const QString elementName = tags.get("name").toLower();
-  return
-    tags.get("leisure") == "playground" || /*elementName.contains("play area") ||*/
-    elementName.contains("playground");
+  return tags.get("leisure") == "playground" || elementName.contains("playground");
 }
 
-bool PoiPolygonParkRuleApplier::_elementIsPlayArea(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsPlayArea(ConstElementPtr element) const
 {
   return element->getTags().get("name").toLower().contains("play area");
 }
 
-bool PoiPolygonParkRuleApplier::_elementIsPark(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsPark(ConstElementPtr element) const
 {
   return !OsmSchema::getInstance().isBuilding(element) &&
-         (element->getTags().get("leisure") == "park" /*||
-          _containsPartial("park", element->getTags().getNames())*/);
+         (element->getTags().get("leisure") == "park");
 }
 
 //TODO: can hopefully eventually genericize this out to something like leisure=*park*
-bool PoiPolygonParkRuleApplier::_elementIsParkish(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsParkish(ConstElementPtr element) const
 {
   if (OsmSchema::getInstance().isBuilding(element))
   {
@@ -644,7 +716,7 @@ bool PoiPolygonParkRuleApplier::_elementIsParkish(ConstElementPtr element) const
   return leisureVal == "garden" || leisureVal == "dog_park";
 }
 
-bool PoiPolygonParkRuleApplier::_elementIsSport(ConstElementPtr element) const
+bool PoiPolygonRuleApplier::_elementIsSport(ConstElementPtr element) const
 {
   return element->getTags().contains("sport");
 }

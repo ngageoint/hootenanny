@@ -24,12 +24,13 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPARKRULEAPPLIER_H
-#define POIPOLYGONPARKRULEAPPLIER_H
+#ifndef POIPOLYGONRULEAPPLIER_H
+#define POIPOLYGONRULEAPPLIER_H
 
+// geos
+#include <geos/geom/Geometry.h>
 
 // Hoot
-//#include <hoot/core/elements/Element.h>
 #include <hoot/core/OsmMap.h>
 
 namespace hoot
@@ -38,17 +39,19 @@ namespace hoot
 class MatchClassification;
 
 /**
- * A custom set of rules intended to reduce unnecessary reviews when matching park related features.
+ * A custom set of rules intended to prevent bad matches and reduce unnecessary reviews during
+ * poi to poly conflation.
  */
-class PoiPolygonParkRuleApplier
+class PoiPolygonRuleApplier
 {
 
 public:
 
-  PoiPolygonParkRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
+  PoiPolygonRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance,
-                            double nameScoreThreshold, bool exactNameMatch,
+                            double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                             double typeScoreThreshold, double matchDistance,
+                            shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
                             const QString testUuid);
 
   bool applyRules(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
@@ -62,9 +65,15 @@ private:
 
   double _distance;
   double _nameScoreThreshold;
+  bool _nameMatch;
   bool _exactNameMatch;
   double _typeScoreThreshold;
   double _matchDistance;
+
+  shared_ptr<Geometry> _polyGeom;
+  shared_ptr<Geometry> _poiGeom;
+
+  int _badGeomCount;
 
   QString _testUuid;
 
@@ -79,4 +88,4 @@ private:
 
 }
 
-#endif // POIPOLYGONPARKRULEAPPLIER_H
+#endif // POIPOLYGONPARKAPPLIER_H
