@@ -221,8 +221,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _exactNameMatch = scorer.getExactNameScore(poi, poly) == 1.0;
 
   double ce = -1.0;
-  //double matchDistance = -1.0;
-  //double reviewDistance = -1.0;
   double reviewDistancePlusCe = -1.0;
   bool closeMatch = false;
   bool typeMatch = false;
