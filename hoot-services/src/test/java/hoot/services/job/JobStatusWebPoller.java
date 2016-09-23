@@ -27,6 +27,7 @@
 package hoot.services.job;
 
 import static hoot.services.HootProperties.TEST_JOB_STATUS_POLLER_TIMEOUT;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -41,12 +42,9 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import com.querydsl.sql.SQLQuery;
-
 import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QJobStatus;
-import hoot.services.utils.DbUtils;
 
 
 /**
@@ -145,7 +143,7 @@ public class JobStatusWebPoller {
      */
     private void verifyJobStatusInDb(String jobId, JOB_STATUS status) {
         QJobStatus jobStatus = QJobStatus.jobStatus;
-        JobStatus finalJobStatus = new SQLQuery<>(conn, DbUtils.getConfiguration())
+        JobStatus finalJobStatus = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))

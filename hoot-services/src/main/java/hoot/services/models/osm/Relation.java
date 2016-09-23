@@ -26,7 +26,8 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -68,16 +69,13 @@ public class Relation extends Element {
 
     private List<RelationMember> membersCache = new ArrayList<>();
 
-    public Relation(long mapId, Connection dbConn) {
-        super(dbConn);
+    public Relation(long mapId) {
         super.elementType = ElementType.Relation;
         super.record = new CurrentRelations();
-
         setMapId(mapId);
     }
 
-    public Relation(long mapId, Connection dbConn, CurrentRelations record) {
-        super(dbConn);
+    public Relation(long mapId, CurrentRelations record) {
         super.elementType = ElementType.Relation;
 
         CurrentRelations relationRecord = new CurrentRelations();
@@ -134,7 +132,7 @@ public class Relation extends Element {
         // From the Rails port of OSM API:
         // RelationMember.joins(:relation).find_by("visible = ? AND member_type
         // = 'Relation' and member_id = ? ", true, id)
-        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        SQLQuery<Long> owningRelationsQuery = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelationMembers)
@@ -307,8 +305,8 @@ public class Relation extends Element {
      * then computes the combined bounds for all the elements
      */
     private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) {
-        ArrayList<CurrentNodes> nodes = new ArrayList<>(Node.getNodes(getMapId(), dbNodeIds, conn));
-        nodes.addAll(Way.getNodesForWays(getMapId(), dbWayIds, conn));
+        ArrayList<CurrentNodes> nodes = new ArrayList<>(Node.getNodes(getMapId(), dbNodeIds));
+        nodes.addAll(Way.getNodesForWays(getMapId(), dbWayIds));
         BoundingBox bounds = null;
         if (!nodes.isEmpty()) {
             BoundingBox nodeBounds = new BoundingBox(nodes);
@@ -318,14 +316,14 @@ public class Relation extends Element {
     }
 
     private BoundingBox getBoundsForNodesAndWays() {
-        List<Long> nodeIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> nodeIds = createQuery(getMapId())
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
                 .fetch();
 
-        List<Long> wayIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> wayIds = createQuery(getMapId())
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
@@ -364,7 +362,7 @@ public class Relation extends Element {
      * Retrieves this relation's members from the services database
      */
     private List<CurrentRelationMembers> getMembers() {
-        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        return createQuery(getMapId())
                 .select(currentRelationMembers)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId()))
@@ -441,7 +439,7 @@ public class Relation extends Element {
         // element not referenced in this request, so should already exist in
         // the db and its info up to date
         else {
-            memberElement = ElementFactory.create(getMapId(), elementType, conn);
+            memberElement = ElementFactory.create(getMapId(), elementType);
         }
 
         // role is allowed to be empty

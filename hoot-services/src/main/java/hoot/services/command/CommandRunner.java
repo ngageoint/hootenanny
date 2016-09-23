@@ -48,4 +48,6 @@ public interface CommandRunner {
     CommandResult exec(String[] command) throws IOException;
 
     String getStdout();
+
+    void terminate();
 }

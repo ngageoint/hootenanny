@@ -41,8 +41,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-import hoot.services.HootProperties;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
 
@@ -50,18 +51,21 @@ import hoot.services.nativeinterfaces.NativeInterfaceException;
 /**
  * Endpoint for returning information about Hootenanny core and services
  */
+@Controller
 @Path("/about")
 public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
-    public AboutResource() {
-    }
+    @Autowired
+    private JobExecutionManager jobExecutionManager;
+
+    public AboutResource() {}
 
     private static Properties getBuildInfo() {
         Properties buildInfo;
 
         try {
-            buildInfo = BuildInfo.getInstance();
+            buildInfo = BuildInfo.getInfo();
         }
         catch (Exception e) {
             logger.warn("About Resource unable to find the services build.info file.  "
@@ -111,7 +115,7 @@ public class AboutResource {
         return versionInfo;
     }
 
-    private static String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
+    private String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
         JSONObject command = new JSONObject();
         command.put("exectype", "hoot");
         command.put("exec", "version");
@@ -127,10 +131,7 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        JobExecutionManager jobExecutionManager = ((JobExecutionManager) HootProperties.getSpringContext()
-                .getBean("jobExecutionManagerNative"));
-
-        String output = jobExecutionManager.execWithResult(command).get("stdout").toString();
+        String output = this.jobExecutionManager.exec(command).get("stdout").toString();
 
         return parseCoreVersionOutOf(output, withDetails);
     }
@@ -177,7 +178,7 @@ public class AboutResource {
         try {
             logger.debug("Retrieving services version...");
 
-            String versionStr = getCoreInfo(false);
+            String versionStr = this.getCoreInfo(false);
             String[] versionInfoParts = versionStr.split(" ");
             versionInfo = new VersionInfo();
             versionInfo.setName("Hootenanny Core");
@@ -214,7 +215,7 @@ public class AboutResource {
         try {
             logger.debug("Retrieving services version...");
 
-            String versionStr = getCoreInfo(true);
+            String versionStr = this.getCoreInfo(true);
 
             // get rid of the first line that has the hoot core version info in it; call coreVersionInfo for that
             String[] versionInfoParts = versionStr.split(System.lineSeparator());
