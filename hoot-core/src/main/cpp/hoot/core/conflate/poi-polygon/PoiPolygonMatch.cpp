@@ -219,13 +219,13 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     polyGeom = ElementConverter(_map).convertToGeometry(poly);
   }
-  catch (const /*Topology*/Exception& e)
+  catch (const geos::util::TopologyException& e)
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
       LOG_WARN(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << polyGeom->toString() << "\n" << e.what());
+        "geometry: " << poly->toString() << "\n" << e.what());
       _badGeomCount++;
     }
     _class.setMiss();

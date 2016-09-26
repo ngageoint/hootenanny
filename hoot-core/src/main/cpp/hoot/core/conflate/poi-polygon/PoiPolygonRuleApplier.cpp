@@ -29,7 +29,6 @@
 // geos
 #include <geos/geom/LineString.h>
 #include <geos/util/TopologyException.h>
-using namespace geos;
 
 // hoot
 #include <hoot/core/conflate/MatchClassification.h>
@@ -80,11 +79,18 @@ _poiGeom(poiGeom),
 _badGeomCount(0),
 _testUuid(testUuid)
 {
+
 }
 
 bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly,
-                                           MatchClassification& matchClass)
+                                       MatchClassification& matchClass)
 {
+  if (!_polyGeom.get())
+  {
+    LOG_WARN("Invalid poly geometry.");
+    return false;
+  }
+
   bool triggersParkRule = false;
 
   const QString poiName = poi->getTags().get("name").toLower();
@@ -182,173 +188,172 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (area->getElementId() != poly->getElementId())
     {
       shared_ptr<Geometry> areaGeom;
-      bool topologyError = false;
+      //bool topologyError = false;
       try
       {
         areaGeom = ElementConverter(_map).convertToGeometry(area);
-      }
-      catch (const /*Topology*/Exception& e)
-      {
-        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+
+        if (areaGeom.get() &&
+            QString::fromStdString(areaGeom->toString()).toUpper().contains("EMPTY"))
         {
-          LOG_WARN(
-            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-            "geometry: " << areaGeom->toString() << "\n" << e.what());
-          _badGeomCount++;
+          //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+          //{
+            LOG_WARN(
+              "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
+              areaGeom->toString());
+            _badGeomCount++;
+          //}
         }
-        topologyError = true;
-      }
-
-      if (QString::fromStdString(areaGeom->toString()).toUpper().contains("EMPTY"))
-      {
-        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        else if (/*!topologyError && */areaGeom.get())
         {
-          LOG_WARN(
-            "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-            areaGeom->toString());
-          _badGeomCount++;
-        }
-      }
-      else if (!topologyError)
-      {
-        /*if (Log::getInstance().getLevel() == Log::Debug &&
-            (poi->getTags().get("uuid") == _testUuid ||
-             poly->getTags().get("uuid") == _testUuid))
-        {
-          LOG_VARD(area->getTags().get("uuid"))
-          LOG_VARD(_isPlayground(area));
-          LOG_VARD(_isPlayArea(area));
-          LOG_VARD(_polyGeom->contains(areaGeom.get()));
-          LOG_VARD(_isSport(area));
-          LOG_VARD(poiIsSport);
-          LOG_VARD(areaGeom->contains(_poiGeom.get()));
-          LOG_VARD(scorer.isExactTypeMatch(poi, area));
-          QString t1, t2;
-          LOG_VARD(scorer.getTypeScore(poi, area, t1, t2));
-          LOG_VARD(t1);
-          LOG_VARD(t2);
-        }*/
-
-        if (_isPark(area))
-        {
-          otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
-          otherParkPolyNameScore = scorer.getNameScore(poi, area);
-          otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-
-          if (areaGeom->contains(_poiGeom.get()))
-          {
-            poiContainedInAnotherParkPoly = true;
-
-            if (Log::getInstance().getLevel() == Log::Debug &&
-                (poly->getTags().get("uuid") == _testUuid ||
-                 poi->getTags().get("uuid") == _testUuid))
-            {
-              LOG_DEBUG(
-                "poi examined and found to be contained within a park poly outside of this match " <<
-                "comparison: " << poi->toString());
-              LOG_DEBUG("park poly it is very close to: " << area->toString());
-            }
-          }
-
-          if (areaGeom->intersects(_polyGeom.get()))
-          {
-            parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
-            parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
-
-            //When just using intersection as the criteria, only found one instance when something
-            //was considered as "very close" to a park poly when I didn't want it to be...so these
-            //values set very low to weed that instance out...overlap at least.
-            //TODO: not sure angle hist is actually doing much here.  Maybe I need to pull the
-            //area to area search dist down even more...or bring back in edge dist?
-            if (parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
-            {
-              polyVeryCloseToAnotherParkPoly = true;
-
-              if (poly->getElementType() == ElementType::Way &&
-                  area->getElementType() == ElementType::Way)
-              {
-                //Calc the distance from the poi to the poly line instead of the poly itself.
-                //Calcing distance to the poly itself will always return 0 when the poi is in the
-                //poly.
-                try
-                {
-                  ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
-                  shared_ptr<const LineString> polyLineStr =
-                    dynamic_pointer_cast<const LineString>(
-                      ElementConverter(_map).convertToLineString(polyWay));
-                  poiToPolyNodeDist = polyLineStr->distance(_poiGeom.get());
-                  ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);
-                  shared_ptr<const LineString> areaLineStr =
-                    dynamic_pointer_cast<const LineString>(
-                      ElementConverter(_map).convertToLineString(areaWay));
-                  poiToOtherParkPolyNodeDist = areaLineStr->distance(_poiGeom.get());
-                }
-                catch (const /*Topology*/Exception& e)
-                {
-                  if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-                  {
-                    LOG_WARN(
-                      "Feature passed to PoiPolygonMatchCreator caused topology exception on " <<
-                      "conversion to a geometry: " << areaGeom->toString() << "\n" << e.what());
-                    _badGeomCount++;
-                  }
-                  topologyError = true;
-                }
-              }
-
-              if (Log::getInstance().getLevel() == Log::Debug &&
-                  (poi->getTags().get("uuid") == _testUuid ||
-                   poly->getTags().get("uuid") == _testUuid))
-              {
-                LOG_DEBUG(
-                  "poly examined and found very close to a another park poly: " << poly->toString());
-                LOG_DEBUG("park poly it is very close to: " << area->toString());
-              }
-            }
-          }
-        }
-        else if ((_isPlayground(area) || _isPlayArea(area)) && _polyGeom->contains(areaGeom.get()))
-        {
-          polyContainsPlayAreaOrPlaygroundPoly = true;
-
-          if (Log::getInstance().getLevel() == Log::Debug &&
+          /*if (Log::getInstance().getLevel() == Log::Debug &&
               (poi->getTags().get("uuid") == _testUuid ||
                poly->getTags().get("uuid") == _testUuid))
           {
-            LOG_DEBUG("poly examined and found to contain a playground poly: " << poly->toString());
-            LOG_DEBUG("playground poly it contains: " << area->toString());
+            LOG_VARD(area->getTags().get("uuid"))
+            LOG_VARD(_isPlayground(area));
+            LOG_VARD(_isPlayArea(area));
+            LOG_VARD(_polyGeom->contains(areaGeom.get()));
+            LOG_VARD(_isSport(area));
+            LOG_VARD(poiIsSport);
+            LOG_VARD(areaGeom->contains(_poiGeom.get()));
+            LOG_VARD(scorer.isExactTypeMatch(poi, area));
+            QString t1, t2;
+            LOG_VARD(scorer.getTypeScore(poi, area, t1, t2));
+            LOG_VARD(t1);
+            LOG_VARD(t2);
+          }*/
+
+          if (_isPark(area))
+          {
+            otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
+            otherParkPolyNameScore = scorer.getNameScore(poi, area);
+            otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
+
+            if (areaGeom->contains(_poiGeom.get()))
+            {
+              poiContainedInAnotherParkPoly = true;
+
+              if (Log::getInstance().getLevel() == Log::Debug &&
+                  (poly->getTags().get("uuid") == _testUuid ||
+                   poi->getTags().get("uuid") == _testUuid))
+              {
+                LOG_DEBUG(
+                  "poi examined and found to be contained within a park poly outside of this match " <<
+                  "comparison: " << poi->toString());
+                LOG_DEBUG("park poly it is very close to: " << area->toString());
+              }
+            }
+
+            if (areaGeom->intersects(_polyGeom.get()))
+            {
+              parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
+              parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
+
+              //When just using intersection as the criteria, only found one instance when something
+              //was considered as "very close" to a park poly when I didn't want it to be...so these
+              //values set very low to weed that instance out...overlap at least.
+              //TODO: not sure angle hist is actually doing much here.  Maybe I need to pull the
+              //area to area search dist down even more...or bring back in edge dist?
+              if (parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
+              {
+                polyVeryCloseToAnotherParkPoly = true;
+
+                if (poly->getElementType() == ElementType::Way &&
+                    area->getElementType() == ElementType::Way)
+                {
+                  //Calc the distance from the poi to the poly line instead of the poly itself.
+                  //Calcing distance to the poly itself will always return 0 when the poi is in the
+                  //poly.
+                  try
+                  {
+                    ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
+                    shared_ptr<const LineString> polyLineStr =
+                      dynamic_pointer_cast<const LineString>(
+                        ElementConverter(_map).convertToLineString(polyWay));
+                    poiToPolyNodeDist = polyLineStr->distance(_poiGeom.get());
+                    ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);
+                    shared_ptr<const LineString> areaLineStr =
+                      dynamic_pointer_cast<const LineString>(
+                        ElementConverter(_map).convertToLineString(areaWay));
+                    poiToOtherParkPolyNodeDist = areaLineStr->distance(_poiGeom.get());
+                  }
+                  catch (const geos::util::TopologyException& e)
+                  {
+                    //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+                    //{
+                      LOG_WARN(
+                        "Feature passed to PoiPolygonMatchCreator caused topology exception on " <<
+                        "conversion to a geometry: " << area->toString() << "\n" << e.what());
+                      _badGeomCount++;
+                    //}
+                    //topologyError = true;
+                  }
+                }
+
+                if (Log::getInstance().getLevel() == Log::Debug &&
+                    (poi->getTags().get("uuid") == _testUuid ||
+                     poly->getTags().get("uuid") == _testUuid))
+                {
+                  LOG_DEBUG(
+                    "poly examined and found very close to a another park poly: " << poly->toString());
+                  LOG_DEBUG("park poly it is very close to: " << area->toString());
+                }
+              }
+            }
+          }
+          else if ((_isPlayground(area) || _isPlayArea(area)) && _polyGeom->contains(areaGeom.get()))
+          {
+            polyContainsPlayAreaOrPlaygroundPoly = true;
+
+            if (Log::getInstance().getLevel() == Log::Debug &&
+                (poi->getTags().get("uuid") == _testUuid ||
+                 poly->getTags().get("uuid") == _testUuid))
+            {
+              LOG_DEBUG("poly examined and found to contain a playground poly: " << poly->toString());
+              LOG_DEBUG("playground poly it contains: " << area->toString());
+            }
+          }
+          else if (poiIsSport)
+          {
+            //this is a little lose, b/c there could be more than one type match set of tags...
+            if (_isSport(area) && areaGeom->contains(_poiGeom.get()) &&
+                scorer.isExactTypeMatch(poi, area))
+            {
+              sportPoiOnOtherSportPolyWithExactTypeMatch = true;
+            }
+          }
+          else if (OsmSchema::getInstance().isBuilding(area))
+          {
+            if (areaGeom->contains(_poiGeom.get()))
+            {
+              poiOnBuilding = true;
+            }
+          }
+          //type generic rules
+          else if (scorer.isTypeMatch(poi, area))
+          {
+            if (areaGeom->contains(_poiGeom.get()))
+            {
+              anotherPolyContainsPoiWithTypeMatch = true;
+            }
+            else if (areaGeom->distance(_poiGeom.get()) <= _matchDistance)
+            {
+              poiCloseToAnotherPolyWithTypeMatch = true;
+            }
           }
         }
-        else if (poiIsSport)
-        {
-          //this is a little lose, b/c there could be more than one type match set of tags...
-          if (_isSport(area) && areaGeom->contains(_poiGeom.get()) &&
-              scorer.isExactTypeMatch(poi, area))
-          {
-            sportPoiOnOtherSportPolyWithExactTypeMatch = true;
-          }
-        }
-        else if (OsmSchema::getInstance().isBuilding(area))
-        {
-          if (areaGeom->contains(_poiGeom.get()))
-          {
-            poiOnBuilding = true;
-          }
-          //numOtherBuildingsCloseToPoi
-          //else if (areaGeom->distance(_poiGeom.get()) <= )
-        }
-        //type generic rules
-        else if (scorer.isTypeMatch(poi, area))
-        {
-          if (areaGeom->contains(_poiGeom.get()))
-          {
-            anotherPolyContainsPoiWithTypeMatch = true;
-          }
-          else if (areaGeom->distance(_poiGeom.get()) <= _matchDistance)
-          {
-            poiCloseToAnotherPolyWithTypeMatch = true;
-          }
-        }
+      }
+      catch (const geos::util::TopologyException& e)
+      {
+        //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        //{
+          LOG_WARN(
+            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+            "geometry: " << area->toString() << "\n" << e.what());
+          _badGeomCount++;
+        //}
+        //topologyError = true;
       }
     }
     areaNeighborItr++;
