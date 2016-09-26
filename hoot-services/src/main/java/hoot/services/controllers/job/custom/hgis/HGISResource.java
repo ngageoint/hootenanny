@@ -28,8 +28,6 @@ package hoot.services.controllers.job.custom.hgis;
 
 import static hoot.services.HootProperties.*;
 
-import java.sql.Connection;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -38,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.DbUtils;
 
 
 /**
@@ -61,8 +58,8 @@ public class HGISResource extends JobControllerBase {
     boolean mapExists(String mapName) {
         boolean exists;
 
-        try (Connection connection = DbUtils.createConnection()) {
-            exists = (verifyMapExists(mapName, connection) > -1);
+        try {
+            exists = (verifyMapExists(mapName) > -1);
         }
         catch (Exception e) {
             throw new RuntimeException("Error verifying that map '" + mapName + "' exists!", e);
@@ -111,12 +108,12 @@ public class HGISResource extends JobControllerBase {
      *            map ID; may be a map ID or unique map name
      * @return the map's numeric ID
      */
-    private static long verifyMapExists(String mapIdStr, Connection connection) {
+    private static long verifyMapExists(String mapIdStr) {
         logger.debug("Checking maps table for map with ID: {} ...", mapIdStr);
 
         QMaps maps = QMaps.maps;
 
         // this will throw if it doesn't find the map
-        return ModelDaoUtils.getRecordIdForInputString(mapIdStr, connection, maps, maps.id, maps.displayName);
+        return ModelDaoUtils.getRecordIdForInputString(mapIdStr, maps, maps.id, maps.displayName);
     }
 }

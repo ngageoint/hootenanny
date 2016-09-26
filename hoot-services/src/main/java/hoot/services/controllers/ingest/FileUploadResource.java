@@ -57,11 +57,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
 
+@Controller
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
@@ -168,7 +170,7 @@ public class FileUploadResource extends JobControllerBase {
                     geonamesCnt += (Integer) zipStat.get("geonamescnt");
                 }
 
-                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && geonamesCnt == 1) {
+                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
                     inputFileName = fName + ".geonames";
                     String directory = HOME_FOLDER + "/upload/" + jobId;
                     // we need to rename the file for hoot to ingest
@@ -392,8 +394,8 @@ public class FileUploadResource extends JobControllerBase {
         rasterTilesparam.put("isprimitivetype", "false");
         rasterTilesArgs.add(rasterTilesparam);
 
-        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                "hoot.services.controllers.ingest.RasterToTilesService", "ingestOSMResourceDirect", internalJobId);
+        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
+                "ingestOSMResourceDirect", internalJobId);
 
         jobArgs.add(etlCommand);
         jobArgs.add(ingestOSMResource);

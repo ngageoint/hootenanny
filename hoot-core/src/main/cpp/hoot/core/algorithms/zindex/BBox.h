@@ -22,29 +22,65 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+#ifndef BBOX_H
+#define BBOX_H
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+#include <QString>
+#include <geos/geom/Envelope.h>
 
-import javax.servlet.ServletOutputStream;
+namespace hoot
+{
 
+using namespace std;
 
-/**
- * Used for mocking servlet response output with Mockito
- */
-public class MockServletOutputStream extends ServletOutputStream {
-    public ByteArrayOutputStream baos = new ByteArrayOutputStream();
+using namespace geos::geom;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.io.OutputStream#write(int)
-     */
-    @Override
-    public void write(int i) throws IOException {
-        baos.write(i);
-    }
+class BBox
+{
+public:
+
+  static string className() { return "hoot::BBox"; }
+
+  BBox(vector<double> min, vector<double> max);
+
+  BBox(Envelope envelope);
+
+  virtual ~BBox();
+
+  int getDimensions() { return _max.size(); }
+
+  vector<double> getMax() { return _max; }
+
+  vector<double> getMin() { return _min; }
+
+  bool in(vector<double> p);
+
+  bool in(BBox container);
+
+  bool intersects(BBox b);
+
+  /**
+  * Returns the minimum distance in any one dimension. This is not
+  * necessarily the Euclidean distance.
+  */
+  double manhattanDistance(BBox b);
+
+  /**
+   * @brief toString
+   * @return QString
+   */
+  QString toString();
+
+  double getWidth(int d);
+
+private:
+  void _check();
+  vector<double> _min;
+  vector<double> _max;
+};
+
 }
+
+#endif // BBOX_H

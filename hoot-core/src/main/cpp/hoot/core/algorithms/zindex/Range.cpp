@@ -22,28 +22,61 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+#include "Range.h"
 
-import org.json.simple.JSONObject;
+//std includes
+#include <stdio.h>
 
+//hoot includes
+#include <hoot/core/util/HootException.h>
 
-/**
- * Interface for classes executing commands
- */
-public interface Executable {
-    /**
-     * Performs execution. All required meta data should be in command parameter.
-     * 
-     * @param command
-     */
-    void exec(JSONObject command);
+namespace hoot
+{
 
-    /**
-     * Returns the final job status detail
-     * 
-     * @return a status detail string
-     */
-    String getFinalStatusDetail();
+Range::Range(long int min, long int max)
+{
+  set(min,max);
 }
+
+bool Range::hashCode()
+{
+  int result = (int) (_max ^ (_max >> 32));
+  result = (31 * result) + (int) (_min ^ (_min >> 32));
+  return result;
+}
+
+bool Range::in(long int l)
+{
+  return (l >= _min) && (l <= _max);
+}
+
+bool Range::isValid()
+{
+  return (_min >= 0) && (_max >= 0);
+}
+
+void Range::setInvalid()
+{
+  _min = -1;
+  _max = -1;
+}
+
+QString Range::toString()
+{
+  return "[" + QString::number(_min) + " : " + QString::number(_max) + "]";
+}
+
+void Range::set(long int min, long int max)
+{
+  if (min > max)
+  {
+    throw HootException("min is greater than max: " + QString::number(min) + " " +  QString::number(max));
+  }
+  _min = min;
+  _max = max;
+}
+
+}
+
