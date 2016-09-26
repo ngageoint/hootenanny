@@ -692,7 +692,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }*/
-  /*else if (poi->getTags().get("barrier") == "gate" && poly->getTags().get("amenity") == "parking")
+  else if (poi->getTags().get("barrier") == "gate" && poly->getTags().get("amenity") == "parking")
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -701,7 +701,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     }
     matchClass.setMiss();
     triggersParkRule = true;
-  }*/
+  }
   else if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
