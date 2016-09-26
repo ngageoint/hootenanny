@@ -792,3 +792,12 @@ end
 When(/^I click redo$/) do
   page.all('button.col6')[3].click
 end
+
+When(/^I click the tag list toggle$/) do
+  page.all('a.hide-toggle')[1].click
+end
+
+Then(/^I should see "([^"]*)" as the last tag value$/) do |value|
+  tg = page.all('input.value.combobox-input').last
+  tg.value.should eq value
+end
