@@ -681,7 +681,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
 //    matchClass.setMiss();
 //    triggersParkRule = true;
 //  }
-  /*else if ((poi->getTags().get("natural") == "bay" && poly->getTags().get("waterway") == "dock") ||
+  else if ((poi->getTags().get("natural") == "bay" && poly->getTags().get("waterway") == "dock") ||
            (poly->getTags().get("natural") == "bay" && poi->getTags().get("waterway") == "dock"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -691,7 +691,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     }
     matchClass.setMiss();
     triggersParkRule = true;
-  }*/
+  }
   else if (poi->getTags().get("barrier") == "gate" && poly->getTags().get("amenity") == "parking")
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -712,7 +712,8 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  /*else if (poiHasType && polyHasType && poi->getTags().get("amenity") == "toilet" &&
+  else if (poiHasType && polyHasType && !_typeScore == 1.0 &&
+           poi->getTags().get("amenity") == "toilets" &&
            !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
              OsmSchemaCategory::building()))
   {
@@ -723,7 +724,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     }
     matchClass.setMiss();
     triggersParkRule = true;
-  }*/
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
