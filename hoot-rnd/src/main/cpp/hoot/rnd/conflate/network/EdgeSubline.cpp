@@ -37,10 +37,23 @@ EdgeSubline::EdgeSubline(ConstEdgeLocationPtr start, ConstEdgeLocationPtr end) :
   assert(start->getEdge() == _end->getEdge());
 }
 
+EdgeSubline::EdgeSubline(EdgeLocationPtr start, EdgeLocationPtr end) :
+  _start(start),
+  _end(end)
+{
+  assert(start->getEdge() == _end->getEdge());
+}
+
 EdgeSubline::EdgeSubline(ConstNetworkEdgePtr e, double start, double end) :
   _start(new EdgeLocation(e, start)),
   _end(new EdgeLocation(e, end))
 {
+}
+
+Meters EdgeSubline::calculateLength(const ConstElementProviderPtr& provider) const
+{
+  Meters l = getEdge()->calculateLength(provider);
+  return (getLatter()->getPortion() - getFormer()->getPortion()) * l;
 }
 
 shared_ptr<EdgeSubline> EdgeSubline::clone() const
@@ -64,9 +77,55 @@ bool EdgeSubline::contains(ConstNetworkVertexPtr v) const
   return result;
 }
 
+bool EdgeSubline::contains(shared_ptr<const EdgeSubline> es) const
+{
+  bool result = false;
+
+  if (es->getEdge() == getEdge())
+  {
+    if (getFormer() <= es->getFormer() && getLatter() >= es->getLatter())
+    {
+      result = true;
+    }
+  }
+
+  return result;
+}
+
+bool EdgeSubline::contains(ConstEdgeLocationPtr el) const
+{
+  return el->getEdge() == _start->getEdge() && el >= _start && el <= _end;
+}
+
 shared_ptr<EdgeSubline> EdgeSubline::createFullSubline(ConstNetworkEdgePtr e)
 {
   return shared_ptr<EdgeSubline>(new EdgeSubline(e, 0.0, 1.0));
+}
+
+bool EdgeSubline::intersects(shared_ptr<const EdgeSubline> other) const
+{
+  bool result;
+
+  if (other->getEdge() != getEdge())
+  {
+    result = false;
+  }
+  else if (intersects(other->getFormer()) || intersects(other->getLatter()) ||
+    other->intersects(getFormer()) || other->intersects(getLatter()))
+  {
+    result = true;
+  }
+  else
+  {
+    result = false;
+  }
+
+  return result;
+}
+
+bool EdgeSubline::intersects(ConstEdgeLocationPtr el) const
+{
+  return el->getEdge() == getEdge() && getFormer() <= el && getLatter() >= el;
 }
 
 bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
@@ -95,6 +154,27 @@ bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
 QString EdgeSubline::toString() const
 {
   return QString("{ _start: %1, _end: %2 }").arg(hoot::toString(_start)).arg(hoot::toString(_end));
+}
+
+shared_ptr<EdgeSubline> EdgeSubline::unionSubline(shared_ptr<const EdgeSubline> other) const
+{
+  if (!intersects(other))
+  {
+    LOG_VARW(*this);
+    LOG_VARW(other);
+    throw IllegalArgumentException("Expected 'other' to touch and go in the same direction.");
+  }
+
+  EdgeSublinePtr result(new EdgeSubline(
+    std::min(getFormer(), other->getFormer()),
+    std::max(getLatter(), other->getLatter())));
+
+  if (isBackwards())
+  {
+    result->reverse();
+  }
+
+  return result;
 }
 
 }

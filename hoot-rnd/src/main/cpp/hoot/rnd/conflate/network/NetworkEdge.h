@@ -49,7 +49,8 @@ class NetworkEdge
 public:
   NetworkEdge();
 
-  NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed);
+  NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed = false,
+    ConstElementPtr member = ConstElementPtr());
 
   void addMember(ConstElementPtr e) { _members.append(e); }
 
@@ -88,6 +89,11 @@ typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
+
+inline bool operator==(const ConstNetworkEdgePtr& a, const ConstNetworkEdgePtr& b)
+{
+  return *a == *b;
+}
 
 inline uint qHash(const ConstNetworkEdgePtr& v)
 {

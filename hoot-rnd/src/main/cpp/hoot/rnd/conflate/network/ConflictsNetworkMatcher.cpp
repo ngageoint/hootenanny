@@ -352,8 +352,10 @@ void ConflictsNetworkMatcher::_iterateSimple()
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     PROGRESS_INFO(++count << "/" << _scores.size());
-
-    double handicap = em->containsPartial() ? partialHandicap : 1.0;
+    double handicap = pow(partialHandicap, em->countPartialMatches());
+    LOG_VART(em);
+    LOG_VART(handicap);
+    LOG_VART(em->countPartialMatches());
     if (em->containsStub())
     {
       handicap = stubHandicap;
@@ -368,10 +370,25 @@ void ConflictsNetworkMatcher::_iterateSimple()
 
     foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
-      double childHandicap = r->getEdge()->containsPartial() ? partialHandicap : 1.0;
+      double childHandicap = pow(partialHandicap, r->getEdge()->countPartialMatches());
+      LOG_VART(r->getEdge());
+      LOG_VART(r->getEdge()->countPartialMatches());
+      LOG_VART(childHandicap);
       if (r->getEdge()->containsStub())
       {
         childHandicap = stubHandicap;
+      }
+
+      LOG_VART(r->getEdge()->getString1()->contains(em->getString1()));
+      LOG_VART(r->getEdge()->getString2()->contains(em->getString2()));
+      // if r contains at least one line in em and em doesn't contain an edge string in r
+      if ((r->getEdge()->getString1()->contains(em->getString1()) ||
+        r->getEdge()->getString2()->contains(em->getString2())) &&
+        !(em->getString1()->contains(r->getEdge()->getString1()) ||
+        em->getString2()->contains(r->getEdge()->getString2())))
+      {
+        childHandicap *= 1.5;
+        LOG_VART(childHandicap);
       }
 
 //      if (r->getEdge()->containsStub() && r->isConflict())

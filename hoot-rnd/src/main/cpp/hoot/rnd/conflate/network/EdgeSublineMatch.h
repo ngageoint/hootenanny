@@ -20,6 +20,8 @@ public:
 
   const ConstEdgeSublinePtr& getSubline2() const { return _es2; }
 
+  bool isReversed() const { return getSubline1()->isBackwards() != getSubline2()->isBackwards(); }
+
   QString toString() const;
 
 private:

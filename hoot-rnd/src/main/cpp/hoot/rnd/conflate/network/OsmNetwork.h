@@ -67,6 +67,8 @@ public:
 
   void addVertex(ConstNetworkVertexPtr node);
 
+  bool contains(ConstNetworkVertexPtr v) const { return _vertexToEdge.contains(v); }
+
   QList<ConstNetworkEdgePtr> getEdgesFromVertex(ConstNetworkVertexPtr v) const;
 
   const EdgeMap& getEdgeMap() const { return _eidToEdge; }

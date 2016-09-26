@@ -183,6 +183,12 @@ private:
   void _rebuildWayString1();
   void _rebuildWayString2();
 
+  /**
+   * Using WayLocation::SLOPPY_EPSILON snap locations that are nearly at the end of a way to the
+   * end of a way.
+   */
+  WayLocation _snapToEnd(const WayLocation& wl) const;
+
   void _splitPrimary();
 };
 

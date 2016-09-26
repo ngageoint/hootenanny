@@ -97,7 +97,6 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
       }
     }
 
-    LOG_VAR(w1.get());
     LOG_VAR(wls);
     vector<WayPtr> splits = WaySplitter(map, w1).createSplits(wls);
 
@@ -193,7 +192,6 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
 
     assert((int)splits.size() == sm.size() * 2 + 1);
 
-    LOG_VAR(w2.get());
     LOG_VAR(wls);
     LOG_VAR(splits);
 

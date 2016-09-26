@@ -76,9 +76,6 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   ExtractNodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
   shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
-  LOG_VAR(str2);
-  LOG_VAR(scrapNodeList);
-  LOG_VAR(n2w->getWaysByNode(-36));
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
   foreach (ConstNodePtr n, scrapNodeSet)
   {
@@ -149,6 +146,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       throw IllegalArgumentException("Didn't expect a stub in a full match.");
     }
   }
+  LOG_VART(_edgeMatches);
 
   ///
   /// This approach may seem a little odd at first. We need to accomodate the following problems:

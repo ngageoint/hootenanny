@@ -82,12 +82,14 @@ void EdgeString::addFirstEdge(ConstNetworkEdgePtr e)
 {
   assert(_edges.size() == 0);
   _edges.append(EdgeEntry(EdgeSubline::createFullSubline(e)));
+  assert(validate());
 }
 
 void EdgeString::addFirstEdge(ConstEdgeSublinePtr subline)
 {
   assert(_edges.size() == 0);
   _edges.append(EdgeEntry(subline));
+  assert(validate());
 }
 
 void EdgeString::appendEdge(ConstNetworkEdgePtr e)
@@ -99,12 +101,6 @@ void EdgeString::appendEdge(ConstNetworkEdgePtr e)
   else
   {
     assert(isStub() == false);
-
-    if (isEdgeClosed() == true)
-    {
-      throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
-        "string that is already closed. Ends in a partial match?");
-    }
 
     double fromPortion = 0.0;
     double toPortion = 1.0;
@@ -124,6 +120,7 @@ void EdgeString::appendEdge(ConstNetworkEdgePtr e)
 
     _edges.append(ConstEdgeSublinePtr(new EdgeSubline(e, fromPortion, toPortion)));
   }
+  assert(validate());
 }
 
 void EdgeString::appendEdge(ConstEdgeSublinePtr subline)
@@ -135,41 +132,48 @@ void EdgeString::appendEdge(ConstEdgeSublinePtr subline)
   else
   {
     assert(isStub() == false);
-    if (isEdgeClosed() == true)
-    {
-      throw IllegalArgumentException("Illegal argument, you attempted to add an edge to an edge "
-        "string that is already closed. Ends in a partial match?");
-    }
 
     ConstEdgeSublinePtr newEntry;
     if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
       subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       newEntry = subline;
     }
     else if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
       subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getToVertex())
     {
       EdgeSublinePtr copy = subline->clone();
       copy->reverse();
       newEntry = copy;
     }
+    else if (subline->intersects(_edges.back().getSubline()))
+    {
+      LOG_VART(_edges);
+      // replace the last entry with the union of the last and the new subline.
+      newEntry = subline->unionSubline(_edges.back().getSubline());
+      _edges.removeLast();
+    }
     else
     {
-      throw HootException("Error attempting to append an edge that isn't connected.");
+      LOG_VARW(subline);
+      LOG_VARW(_edges.back().getSubline());
+      throw HootException("Error attempting to append a subline that isn't connected.");
     }
 
     _edges.append(EdgeEntry(newEntry));
   }
+  assert(validate());
 }
 
 Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) const
 {
   Meters result = 0.0;
 
-  for (int i = 0; i < _edges.size(); ++i)
+  foreach (const EdgeEntry& ee, _edges)
   {
-    result += _edges[i].getEdge()->calculateLength(provider);
+    result += ee.getSubline()->calculateLength(provider);
   }
 
   return result;
@@ -186,7 +190,7 @@ bool EdgeString::contains(const shared_ptr<const EdgeString> other) const
 {
   foreach (const EdgeEntry& ee, other->_edges)
   {
-    if (contains(ee.getEdge()) == false)
+    if (contains(ee.getSubline()) == false)
     {
       return false;
     }
@@ -208,11 +212,37 @@ bool EdgeString::contains(ConstNetworkEdgePtr e) const
   return false;
 }
 
+bool EdgeString::contains(const ConstEdgeSublinePtr& e) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->contains(e))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool EdgeString::contains(ConstNetworkVertexPtr v) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
     if (_edges[i].getSubline()->contains(v))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
+{
+  foreach (const EdgeEntry& ee, _edges)
+  {
+    if (ee.getSubline()->intersects(el))
     {
       return true;
     }
@@ -263,6 +293,44 @@ ConstNetworkVertexPtr EdgeString::getFromVertex() const
   return getFrom()->getVertex(EdgeLocation::SLOPPY_EPSILON);
 }
 
+ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map,
+  Meters offset) const
+{
+  Meters d = 0.0;
+
+  if (offset <= 0)
+  {
+    return getFrom();
+  }
+
+  LOG_VAR(offset);
+  foreach (EdgeEntry ee, _edges)
+  {
+    Meters l = ee.getSubline()->calculateLength(map);
+    LOG_VAR(l);
+    LOG_VAR(ee.getSubline()->getStart());
+
+    if (d + l >= offset)
+    {
+      if (ee.getSubline()->isBackwards())
+      {
+        return ee.getSubline()->getStart()->move(map, -(offset - d));
+      }
+      else
+      {
+        return ee.getSubline()->getStart()->move(map, offset - d);
+      }
+    }
+
+    d += l;
+  }
+  LOG_VAR(d);
+
+  assert(offset > calculateLength(map));
+
+  return getTo();
+}
+
 QList<ConstElementPtr> EdgeString::getMembers() const
 {
   QList<ConstElementPtr> result;
@@ -283,20 +351,6 @@ ConstEdgeLocationPtr EdgeString::getTo() const
 ConstNetworkVertexPtr EdgeString::getToVertex() const
 {
   return getTo()->getVertex(EdgeLocation::SLOPPY_EPSILON);
-}
-
-bool EdgeString::isEdgeClosed() const
-{
-  bool result = false;
-
-  // if the end of the subline isn't at a vertex.
-  if (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
-    _edges.back().getSubline()->isZeroLength())
-  {
-    result = true;
-  }
-
-  return result;
 }
 
 bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
@@ -353,27 +407,49 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
   return false;
 }
 
-void EdgeString::prependEdge(ConstNetworkEdgePtr e)
+void EdgeString::prependEdge(ConstEdgeSublinePtr subline)
 {
-  assert(_edges.size() > 0);
-
-  double start, end;
-  if (e->getFrom() == getFromVertex())
+  if (_edges.size() == 0)
   {
-    start = 1.0;
-    end = 0.0;
-  }
-  else if (e->getTo() == getFromVertex())
-  {
-    start = 0.0;
-    end = 1.0;
+    addFirstEdge(subline);
   }
   else
   {
-    throw HootException("Error attempting to append an edge that isn't connected.");
-  }
+    assert(isStub() == false);
 
-  _edges.prepend(ConstEdgeSublinePtr(new EdgeSubline(e, start, end)));
+    ConstEdgeSublinePtr newEntry;
+    if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
+    {
+      newEntry = subline;
+    }
+    else if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+      subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
+    {
+      EdgeSublinePtr copy = subline->clone();
+      copy->reverse();
+      newEntry = copy;
+    }
+    else if (subline->intersects(_edges.front().getSubline()))
+    {
+      LOG_VART(_edges);
+      // replace the last entry with the union of the last and the new subline.
+      newEntry = subline->unionSubline(_edges.front().getSubline());
+      _edges.removeFirst();
+    }
+    else
+    {
+      LOG_VARW(subline->intersects(_edges.front().getSubline()));
+      LOG_VARW(subline);
+      LOG_VARW(_edges.front().getSubline());
+      throw HootException("Error attempting to prepend an edge that isn't connected.");
+    }
+
+    _edges.prepend(EdgeEntry(newEntry));
+  }
+  assert(validate());
 }
 
 void EdgeString::reverse()
@@ -383,11 +459,120 @@ void EdgeString::reverse()
   {
     _edges[i].reverse();
   }
+  assert(validate());
 }
 
 QString EdgeString::toString() const
 {
   return hoot::toString(_edges);
+}
+
+bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
+{
+  if (getFrom()->isExtreme())
+  {
+    if (es->getStart()->isExtreme() && getFrom()->getVertex() == es->getStart()->getVertex())
+    {
+      return true;
+    }
+    if (es->getEnd()->isExtreme() && getFrom()->getVertex() == es->getEnd()->getVertex())
+    {
+      return true;
+    }
+  }
+  if (getTo()->isExtreme())
+  {
+    if (es->getStart()->isExtreme() && getTo()->getVertex() == es->getStart()->getVertex())
+    {
+      return true;
+    }
+    if (es->getEnd()->isExtreme() && getTo()->getVertex() == es->getEnd()->getVertex())
+    {
+      return true;
+    }
+  }
+
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->intersects(es))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOffset,
+  Meters newEndOffset)
+{
+  assert(newStartOffset < newEndOffset);
+
+  Meters offset = 0.0;
+  // find the new start and end locations
+  ConstEdgeLocationPtr newStart = getLocationAtOffset(provider, newStartOffset);
+  ConstEdgeLocationPtr newEnd = getLocationAtOffset(provider, newEndOffset);
+
+  QList<EdgeEntry> newEdges;
+
+  // handle this edge case early which simplifies the loop
+  if (newStart->getEdge() == newEnd->getEdge())
+  {
+    newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, newEnd))));
+  }
+  else
+  {
+    foreach (const EdgeEntry& ee, _edges)
+    {
+      ConstEdgeSublinePtr s = ee.getSubline();
+      Meters l = s->calculateLength(provider);
+
+      if (s->getEdge() == newStart->getEdge() && newStart != s->getEnd())
+      {
+        assert(newEdges.size() == 0);
+        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, s->getEnd()))));
+      }
+      else if (s->getEdge() == newEnd->getEdge() && s->getStart() != newEnd)
+      {
+        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(s->getStart(), newEnd))));
+        break;
+      }
+      else if (offset >= newStartOffset && offset + l <= newEndOffset)
+      {
+        newEdges.append(EdgeEntry(s));
+      }
+
+      offset += l;
+    }
+  }
+
+  _edges = newEdges;
+  assert(validate());
+}
+
+bool EdgeString::validate() const
+{
+  bool result = true;
+
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    ConstEdgeSublinePtr esi = _edges[i].getSubline();
+    if (esi->isZeroLength())
+    {
+      LOG_WARN("EdgeString contains a zero length subline: " << esi);
+      result = false;
+    }
+    for (int j = i + 1; j < _edges.size(); ++j)
+    {
+      ConstEdgeSublinePtr esj = _edges[j].getSubline();
+      if (esi->overlaps(esj))
+      {
+        LOG_WARN("Two edges overlap that shouldn't: " << esi << " and " << esj);
+        result = false;
+      }
+    }
+  }
+  return result;
 }
 
 }

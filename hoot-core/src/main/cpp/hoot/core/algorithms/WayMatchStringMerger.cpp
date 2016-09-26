@@ -118,8 +118,8 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
     {
       lastSm->setEnd1(splitEnd);
       lastSm->setSubline2(WaySubline(
-        _mapping->map1To2(lastSm->getStart1(), way2->getElementId()),
-        _mapping->map1To2(lastSm->getEnd1(), way2->getElementId())));
+        _snapToEnd(_mapping->map1To2(lastSm->getStart1(), way2->getElementId())),
+        _snapToEnd(_mapping->map1To2(lastSm->getEnd1(), way2->getElementId()))));
       _addSublineMapping(lastSm);
       foundEnd = true;
     }
@@ -129,8 +129,8 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
       // add the rest of the subline to the mapping
       lastSm->setEnd1(ws1->at(i).getEnd());
       lastSm->setSubline2(WaySubline(
-        _mapping->map1To2(lastSm->getStart1(), way2->getElementId()),
-        _mapping->map1To2(lastSm->getEnd1(), way2->getElementId())));
+        _snapToEnd(_mapping->map1To2(lastSm->getStart1(), way2->getElementId())),
+        _snapToEnd(_mapping->map1To2(lastSm->getEnd1(), way2->getElementId()))));
       _addSublineMapping(lastSm);
     }
     lastSm.reset();
@@ -317,6 +317,8 @@ void WayMatchStringMerger::_rebuildWayString2()
 {
   WayStringPtr ws2(new WayString());
 
+  LOG_VART(_sublineMappingOrder);
+
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
     WayPtr w2 = _sublineMappingOrder[i]->getNewWay2();
@@ -331,8 +333,7 @@ void WayMatchStringMerger::_rebuildWayString2()
     }
   }
 
-  LOG_VAR(_sublineMappingOrder);
-  LOG_VAR(ws2);
+  LOG_VART(ws2);
 
   _mapping->setWayString2(ws2);
 }
@@ -382,6 +383,27 @@ void WayMatchStringMerger::setKeeperStatus(Status s)
     // set the new status.
     sm->newWay1->setStatus(s);
   }
+}
+
+WayLocation WayMatchStringMerger::_snapToEnd(const WayLocation& wl) const
+{
+  WayLocation result;
+
+  if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() <= WayLocation::SLOPPY_EPSILON)
+  {
+    result = WayLocation(wl.getMap(), wl.getWay(), 0, 0.0);
+  }
+  else if (wl.getSegmentIndex() == wl.getWay()->getNodeCount() - 1 &&
+    wl.getSegmentFraction() >= 1 - WayLocation::SLOPPY_EPSILON)
+  {
+    result = WayLocation(wl.getMap(), wl.getWay(), wl.getWay()->getNodeCount() - 1, 1.0);
+  }
+  else
+  {
+    result = wl;
+  }
+
+  return result;
 }
 
 void WayMatchStringMerger::_splitPrimary()

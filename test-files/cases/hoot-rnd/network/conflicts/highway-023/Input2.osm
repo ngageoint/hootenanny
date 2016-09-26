@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-6044' action='modify' visible='true' lat='-0.29122386014' lon='3.86626141629' />
+  <node id='-6045' action='modify' visible='true' lat='-0.2909341853' lon='3.86623995862' />
+  <node id='-6047' action='modify' visible='true' lat='-0.2903977504' lon='3.86619704327' />
+  <node id='-6049' action='modify' visible='true' lat='-0.28978621458' lon='3.86626141629' />
+  <node id='-6051' action='modify' visible='true' lat='-0.28916395003' lon='3.86630433163' />
+  <node id='-6053' action='modify' visible='true' lat='-0.28863824375' lon='3.86652963719' />
+  <node id='-6055' action='modify' visible='true' lat='-0.28800525044' lon='3.86681931576' />
+  <node id='-6057' action='modify' visible='true' lat='-0.28735079969' lon='3.86711972317' />
+  <node id='-6059' action='modify' visible='true' lat='-0.28678217851' lon='3.86710899434' />
+  <node id='-6061' action='modify' visible='true' lat='-0.28639594525' lon='3.86669056973' />
+  <node id='-6063' action='modify' visible='true' lat='-0.28632084433' lon='3.86649745068' />
+  <node id='-6065' action='modify' visible='true' lat='-0.28585951013' lon='3.86639016232' />
+  <node id='-6067' action='modify' visible='true' lat='-0.28529893541' lon='3.86641966662' />
+  <node id='-6575' action='modify' visible='true' lat='-0.28617064218' lon='3.86640893778' />
+  <way id='-6046' action='modify' visible='true'>
+    <nd ref='-6044' />
+    <nd ref='-6045' />
+    <nd ref='-6047' />
+    <nd ref='-6049' />
+    <nd ref='-6051' />
+    <nd ref='-6053' />
+    <nd ref='-6055' />
+    <nd ref='-6057' />
+    <nd ref='-6059' />
+    <nd ref='-6061' />
+    <nd ref='-6063' />
+    <nd ref='-6575' />
+    <nd ref='-6065' />
+    <nd ref='-6067' />
+    <tag k='highway' v='road' />
+  </way>
+</osm>

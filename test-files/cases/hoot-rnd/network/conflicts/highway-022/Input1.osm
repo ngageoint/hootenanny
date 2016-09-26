@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-17' action='modify' visible='true' lat='4.15989800209' lon='4.4781113516'>
+    <tag k='error:circular' v='10.08' />
+  </node>
+  <node id='-19' action='modify' visible='true' lat='4.15949421592' lon='4.478109559' />
+  <node id='-21' action='modify' visible='true' lat='4.15925177719' lon='4.478062059' />
+  <node id='-23' action='modify' visible='true' lat='4.15886724908' lon='4.478056938' />
+  <node id='-55' action='modify' visible='true' lat='4.16024983235' lon='4.47799748716' />
+  <node id='-57' action='modify' visible='true' lat='4.16034872259' lon='4.47758808742' />
+  <node id='-59' action='modify' visible='true' lat='4.16046675285' lon='4.47703795651' />
+  <node id='-820' action='modify' visible='true' lat='4.15839748945' lon='4.47803823529' />
+  <node id='-822' action='modify' visible='true' lat='4.15802542415' lon='4.47748963632' />
+  <node id='-836' action='modify' visible='true' lat='4.16030888095' lon='4.47661553531' />
+  <way id='-25' action='modify' visible='true'>
+    <nd ref='-836' />
+    <nd ref='-59' />
+    <nd ref='-57' />
+    <nd ref='-55' />
+    <nd ref='-17' />
+    <nd ref='-19' />
+    <nd ref='-21' />
+    <nd ref='-23' />
+    <nd ref='-820' />
+    <nd ref='-822' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+    <tag k='width' v='2.5' />
+  </way>
+</osm>

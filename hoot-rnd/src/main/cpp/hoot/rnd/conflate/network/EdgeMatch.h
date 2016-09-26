@@ -70,6 +70,11 @@ public:
 
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
+  /**
+   * Returns the number of terminals that do not fall on a vertex. Possible count is 0 to 4.
+   */
+  int countPartialMatches() const;
+
   EdgeStringPtr getString1() { return _edges1; _resetHash(); }
 
   EdgeStringPtr getString2() { return _edges2; _resetHash(); }

@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-973" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7747308266672586" lon="-3.5859620056517265">
-        <tag k="hoot:id" v="-973"/>
+    <node visible="true" id="-855" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7747308266672586" lon="-3.5859620056517265">
+        <tag k="hoot:id" v="-855"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-972" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7754543958362090" lon="-3.5856656307314658">
-        <tag k="hoot:id" v="-972"/>
+    <node visible="true" id="-854" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7754543958362090" lon="-3.5856656307314658">
+        <tag k="hoot:id" v="-854"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-971" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7755061298383914" lon="-3.5856497051499252">
-        <tag k="hoot:id" v="-971"/>
+    <node visible="true" id="-853" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7755061298383914" lon="-3.5856497051499252">
+        <tag k="hoot:id" v="-853"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-970" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7766520138506314" lon="-3.5858920831871153">
-        <tag k="hoot:id" v="-970"/>
+    <node visible="true" id="-852" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7766520138506314" lon="-3.5858920831871153">
+        <tag k="hoot:id" v="-852"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7766918727396017" lon="-3.5859114692426717">
-        <tag k="hoot:id" v="-969"/>
+    <node visible="true" id="-851" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7766918727396017" lon="-3.5859114692426717">
+        <tag k="hoot:id" v="-851"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-968" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7769910985048747" lon="-3.5860529972774229">
-        <tag k="hoot:id" v="-968"/>
+    <node visible="true" id="-850" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7769910985048747" lon="-3.5860529972774229">
+        <tag k="hoot:id" v="-850"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-967" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7778090213299209" lon="-3.5863157533286114">
-        <tag k="hoot:id" v="-967"/>
+    <node visible="true" id="-849" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7778090213299209" lon="-3.5863157533286114">
+        <tag k="hoot:id" v="-849"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-966" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7786376800694319" lon="-3.5861634737394641">
-        <tag k="hoot:id" v="-966"/>
+    <node visible="true" id="-848" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7786376800694319" lon="-3.5861634737394641">
+        <tag k="hoot:id" v="-848"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-965" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7789382111013183" lon="-3.5855816420545450">
-        <tag k="hoot:id" v="-965"/>
+    <node visible="true" id="-847" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7789382111013183" lon="-3.5855816420545450">
+        <tag k="hoot:id" v="-847"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-964" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7792500605142729" lon="-3.5851454197191295">
-        <tag k="hoot:id" v="-964"/>
+    <node visible="true" id="-846" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7792500605142729" lon="-3.5851454197191295">
+        <tag k="hoot:id" v="-846"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-1.7794868872000000" lon="-3.5849001728300003">
@@ -239,8 +239,8 @@
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-961" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-973"/>
+    <way visible="true" id="-833" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-855"/>
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="width" v="5"/>
@@ -252,13 +252,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-961"/>
+        <tag k="hoot:id" v="-833"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-960" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-972"/>
+    <way visible="true" id="-832" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-854"/>
         <nd ref="-12"/>
-        <nd ref="-973"/>
+        <nd ref="-855"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA"/>
@@ -268,12 +268,12 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-960"/>
+        <tag k="hoot:id" v="-832"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-959" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-971"/>
-        <nd ref="-972"/>
+    <way visible="true" id="-831" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-853"/>
+        <nd ref="-854"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="PALMERAH BARAT 9"/>
@@ -283,14 +283,14 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-959"/>
+        <tag k="hoot:id" v="-831"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-958" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-970"/>
+    <way visible="true" id="-830" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-852"/>
         <nd ref="-10"/>
         <nd ref="-11"/>
-        <nd ref="-971"/>
+        <nd ref="-853"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
@@ -300,12 +300,12 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-958"/>
+        <tag k="hoot:id" v="-830"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-957" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-969"/>
-        <nd ref="-970"/>
+    <way visible="true" id="-829" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-851"/>
+        <nd ref="-852"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="PALMERAH BARAT 9"/>
@@ -315,13 +315,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-957"/>
+        <tag k="hoot:id" v="-829"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-956" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-968"/>
+    <way visible="true" id="-828" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-850"/>
         <nd ref="-9"/>
-        <nd ref="-969"/>
+        <nd ref="-851"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
@@ -331,13 +331,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-956"/>
+        <tag k="hoot:id" v="-828"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-955" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-967"/>
+    <way visible="true" id="-827" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-849"/>
         <nd ref="-8"/>
-        <nd ref="-968"/>
+        <nd ref="-850"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
@@ -347,13 +347,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-955"/>
+        <tag k="hoot:id" v="-827"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-954" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-966"/>
+    <way visible="true" id="-826" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-848"/>
         <nd ref="-7"/>
-        <nd ref="-967"/>
+        <nd ref="-849"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
@@ -363,13 +363,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-954"/>
+        <tag k="hoot:id" v="-826"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-953" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-965"/>
+    <way visible="true" id="-825" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-847"/>
         <nd ref="-6"/>
-        <nd ref="-966"/>
+        <nd ref="-848"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
@@ -379,13 +379,13 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-953"/>
+        <tag k="hoot:id" v="-825"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-952" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-964"/>
+    <way visible="true" id="-824" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-846"/>
         <nd ref="-5"/>
-        <nd ref="-965"/>
+        <nd ref="-847"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
@@ -395,15 +395,15 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-952"/>
+        <tag k="hoot:id" v="-824"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-951" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-823" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <nd ref="-964"/>
+        <nd ref="-846"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
@@ -413,11 +413,11 @@
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-951"/>
+        <tag k="hoot:id" v="-823"/>
         <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-964"/>
+        <nd ref="-846"/>
         <nd ref="-90"/>
         <nd ref="-91"/>
         <nd ref="-86"/>
@@ -463,7 +463,7 @@
         <nd ref="-78"/>
         <nd ref="-79"/>
         <nd ref="-80"/>
-        <nd ref="-967"/>
+        <nd ref="-849"/>
         <tag k="width" v="2.5"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="unclassified"/>
@@ -480,7 +480,7 @@
         <nd ref="-66"/>
         <nd ref="-67"/>
         <nd ref="-68"/>
-        <nd ref="-967"/>
+        <nd ref="-849"/>
         <tag k="width" v="2.5"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="unclassified"/>

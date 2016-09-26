@@ -16,11 +16,19 @@ class EdgeSubline
 public:
   EdgeSubline(ConstEdgeLocationPtr start, ConstEdgeLocationPtr end);
 
+  EdgeSubline(EdgeLocationPtr start, EdgeLocationPtr end);
+
   EdgeSubline(ConstNetworkEdgePtr e, double start, double end);
+
+  Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
   shared_ptr<EdgeSubline> clone() const;
 
   bool contains(ConstNetworkVertexPtr v) const;
+
+  bool contains(shared_ptr<const EdgeSubline> es) const;
+
+  bool contains(ConstEdgeLocationPtr el) const;
 
   static shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
 
@@ -42,6 +50,12 @@ public:
 
   const ConstEdgeLocationPtr& getStart() const { return _start; }
 
+  /**
+   * Returns true if the sublines share any points.
+   */
+  bool intersects(shared_ptr<const EdgeSubline> other) const;
+  bool intersects(ConstEdgeLocationPtr el) const;
+
   bool isBackwards() const { return _end < _start; }
 
   bool isValid() const { return _start->isValid() && _end->isValid(); }
@@ -60,6 +74,12 @@ public:
   void reverse() { std::swap(_start, _end); }
 
   QString toString() const;
+
+  /**
+   * Returns a new subline that combines this and other. This and other must touch. If they are
+   * going in different directions then the direction of this will be maintained.
+   */
+  shared_ptr<EdgeSubline> unionSubline(shared_ptr<const EdgeSubline> other) const;
 
 private:
   ConstEdgeLocationPtr _start, _end;

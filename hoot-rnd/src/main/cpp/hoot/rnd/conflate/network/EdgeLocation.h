@@ -30,7 +30,15 @@ public:
 
   const ConstNetworkEdgePtr& getEdge() const { return _e; }
 
+  Meters getOffset(const ConstElementProviderPtr& provider) const;
+
   double getPortion() const { return _portion; }
+
+  /**
+   * Returns the vertex at this location if isExtreme(epsilon) == true. Otherwise an exception is
+   * thrown.
+   */
+  ConstNetworkVertexPtr getVertex(double epsilon = 0.0) const;
 
   /**
    * Returns true if the location is either at the start or end of an edge.
@@ -43,11 +51,7 @@ public:
 
   bool isValid() const { return _portion >= 0.0 && _portion <= 1.0; }
 
-  /**
-   * Returns the vertex at this location if isExtreme(epsilon) == true. Otherwise an exception is
-   * thrown.
-   */
-  ConstNetworkVertexPtr getVertex(double epsilon = 0.0) const;
+  shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
 
   QString toString() const;
 
@@ -63,6 +67,11 @@ typedef shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
 inline bool operator==(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
 {
   return a->getEdge() == b->getEdge() && a->getPortion() == b->getPortion();
+}
+
+inline bool operator!=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
+{
+  return !(a == b);
 }
 
 inline bool operator<(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)

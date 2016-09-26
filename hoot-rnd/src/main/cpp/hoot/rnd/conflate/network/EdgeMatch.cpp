@@ -90,6 +90,30 @@ bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
   return getString1()->contains(v) || getString2()->contains(v);
 }
 
+int EdgeMatch::countPartialMatches() const
+{
+  int count = 0;
+
+  if (getString1()->isFromOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString1()->isToOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString2()->isFromOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString2()->isToOnVertex() == false)
+  {
+    count++;
+  }
+
+  return count;
+}
+
 bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
   if (other->getString1()->overlaps(getString1()))
