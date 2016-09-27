@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{6c7860d4-89bf-5437-b23f-3d82bc8fdb44}";
+QString PoiPolygonMatch::_testUuid = "{d25f6c43-3601-5a97-9b96-d72a04d83607}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -132,10 +132,15 @@ _typeScoreThreshold(typeScoreThreshold)
 
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
-  return OsmSchema::getInstance().isArea(e.getTags(), e.getElementType()) &&
-         (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
+  const Tags& tags = e.getTags();
+  if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier") == "fence")
+  {
+    return false;
+  }
+  return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
+         (OsmSchema::getInstance().getCategories(tags).intersects(
            OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-          e.getTags().getNames().size() > 0);
+          tags.getNames().size() > 0);
 }
 
 bool PoiPolygonMatch::isPoi(const Element& e)

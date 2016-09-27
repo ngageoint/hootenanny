@@ -82,8 +82,8 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QS
   const Tags& t2 = e2->getTags();
 
   //be a little more restrictive with restaurants
-  if (t1.get("amenity") == "restaurant" &&
-      t2.get("amenity") == "restaurant" &&
+  if (t1.get("amenity").toLower() == "restaurant" &&
+      t2.get("amenity").toLower() == "restaurant" &&
       t1.contains("cuisine") && t2.contains("cuisine"))
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
@@ -93,9 +93,19 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QS
         //account.
         t1Cuisine != "regional" && t2Cuisine != "regional")
     {
+      LOG_DEBUG("Failed type match on different cuisines.");
       return false;
     }
   }
+
+  /*const QString religion1Val = t1.get("religion").toLower().trimmed();
+  const QString religion2Val = t2.get("religion").toLower().trimmed();
+  if (!religion1Val.isEmpty() && !religion1Val.isEmpty() &&
+      OsmSchema::getInstance().score("religion=" + religion1Val, "religion=" + religion2Val) == 0.0)
+  {
+    LOG_DEBUG("Failed type match on different religions.");
+    return false;
+  }*/
 
   const double typeScore = _getTagScore(e1, e2, t1BestKvp, t2BestKvp);
 
@@ -152,8 +162,8 @@ double PoiPolygonScorer::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QS
   {
     for (int j = 0; j < t2List.size(); j++)
     {
-      const QString t1Kvp = t1List.at(i);
-      const QString t2Kvp = t2List.at(j);
+      const QString t1Kvp = t1List.at(i).toLower();
+      const QString t2Kvp = t2List.at(j).toLower();
       const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
       if (score >= result)
       {

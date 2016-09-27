@@ -224,6 +224,9 @@
             "poi",
             "hgispoi"
         ],
+        "aliases": [
+            "amenity=mosque"
+        ],
         "isA": "abstract_building_place_of_worship",
         "name": "building=mosque",
         "objectType": "tag",
