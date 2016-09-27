@@ -752,9 +752,16 @@ QString MatchComparator::toString() const
                    _confusion[MatchType::Miss][MatchType::Review] +
                    _confusion[MatchType::Match][MatchType::Miss] +
                    _confusion[MatchType::Match][MatchType::Review]);
-  result += QString("total unnecessary review count: %1")
+  result += QString("total unnecessary review count: %1\n")
               .arg(_confusion[MatchType::Review][MatchType::Miss] +
                    _confusion[MatchType::Review][MatchType::Match]);
+  result += QString("total manual matches: %1")
+              .arg(_confusion[MatchType::Match][MatchType::Miss] +
+                   _confusion[MatchType::Review][MatchType::Miss] +
+                   _confusion[MatchType::Match][MatchType::Match] +
+                   _confusion[MatchType::Review][MatchType::Match] +
+                   _confusion[MatchType::Match][MatchType::Review] +
+                   _confusion[MatchType::Review][MatchType::Review]);
   result += "\n";
 
   return result;
