@@ -660,7 +660,7 @@ When(/^I select "([^"]*)" basemap/) do |file|
   end
 end
 
-When(/^I click the map background button$/) do
+When(/^I click the Background settings button$/) do
   find('div.background-control').find('button').click
 end
 
@@ -779,10 +779,5 @@ end
 
 Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
-  el.click
-end
-
-When(/^I click to expand Background settings$/) do
-  el = find('div.map-control.background-control')
   el.click
 end
