@@ -85,6 +85,11 @@ _testUuid(testUuid)
 bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly,
                                        MatchClassification& matchClass)
 {
+  if (!_poiGeom.get())
+  {
+    LOG_WARN("Invalid poi geometry.");
+    return false;
+  }
   if (!_polyGeom.get())
   {
     LOG_WARN("Invalid poly geometry.");
@@ -134,7 +139,21 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   bool poiOnBuilding = false;
   //int numOtherBuildingsCloseToPoi = -1;
 
-  const double polyArea = _polyGeom->getArea();
+  double polyArea = -1.0;
+  try
+  {
+    polyArea = _polyGeom->getArea();
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN(
+        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+        "geometry: " << _polyGeom->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+  }
 
   PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
 
@@ -144,37 +163,51 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
     if (poiNeighbor->getElementId() != poi->getElementId())
     {
-      shared_ptr<Geometry> poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
-      /*if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid ||
-           poly->getTags().get("uuid") == _testUuid))
+      shared_ptr<Geometry> poiNeighborGeom ;
+      try
       {
-        LOG_VARD(poiNeighbor->getTags().get("uuid"))
-        LOG_VARD(_elementIsPark(poiNeighbor));
-        LOG_VARD(_elementIsPlayground(poiNeighbor));
-        LOG_VARD(_elementIsPlayArea(poiNeighbor))
-        LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
-      }*/
+        poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
 
-      if ((_isPark(poiNeighbor) || _isPlayground(poiNeighbor)) &&
-          !_isPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
-      {
-        polyContainsAnotherParkOrPlaygroundPoi = true;
-        if (!containedOtherParkOrPlaygroundPoiHasName)
+        /*if (Log::getInstance().getLevel() == Log::Debug &&
+            (poi->getTags().get("uuid") == _testUuid ||
+             poly->getTags().get("uuid") == _testUuid))
         {
-          containedOtherParkOrPlaygroundPoiHasName =
-            !poiNeighbor->getTags().get("name").trimmed().isEmpty();
+          LOG_VARD(poiNeighbor->getTags().get("uuid"))
+          LOG_VARD(_elementIsPark(poiNeighbor));
+          LOG_VARD(_elementIsPlayground(poiNeighbor));
+          LOG_VARD(_elementIsPlayArea(poiNeighbor))
+          LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
+        }*/
+
+        if ((_isPark(poiNeighbor) || _isPlayground(poiNeighbor)) &&
+            !_isPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
+        {
+          polyContainsAnotherParkOrPlaygroundPoi = true;
+          if (!containedOtherParkOrPlaygroundPoiHasName)
+          {
+            containedOtherParkOrPlaygroundPoiHasName =
+              !poiNeighbor->getTags().get("name").trimmed().isEmpty();
+          }
+
+          if (Log::getInstance().getLevel() == Log::Debug &&
+              (poly->getTags().get("uuid") == _testUuid ||
+               poi->getTags().get("uuid") == _testUuid))
+          {
+            LOG_DEBUG(
+              "poly examined and found to contain another park or playground poi " <<
+              poly->toString());
+            LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
+          }
         }
-
-        if (Log::getInstance().getLevel() == Log::Debug &&
-            (poly->getTags().get("uuid") == _testUuid ||
-             poi->getTags().get("uuid") == _testUuid))
+      }
+      catch (const geos::util::TopologyException& e)
+      {
+        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
         {
-          LOG_DEBUG(
-            "poly examined and found to contain another park or playground poi " <<
-            poly->toString());
-          LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
+          LOG_WARN(
+            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+            "geometry: " << poiNeighbor->toString() << "\n" << e.what());
+          _badGeomCount++;
         }
       }
     }

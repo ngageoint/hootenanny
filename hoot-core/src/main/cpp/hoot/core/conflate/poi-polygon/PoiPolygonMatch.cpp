@@ -242,9 +242,24 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     _class.setMiss();
     return;
   }
-  shared_ptr<Geometry> poiGeom = ElementConverter(_map).convertToGeometry(poi);
-
-  _distance = polyGeom->distance(poiGeom.get());
+  shared_ptr<Geometry> poiGeom;
+  try
+  {
+    poiGeom = ElementConverter(_map).convertToGeometry(poi);
+    _distance = polyGeom->distance(poiGeom.get());
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN(
+        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+        "geometry: " << poi->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+    _class.setMiss();
+    return;
+  }
 
   PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
 
