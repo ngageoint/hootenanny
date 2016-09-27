@@ -42,23 +42,23 @@ Feature: Paste Attributes
         Then I select a node map feature with OSM id "n2"
         And I click the control shift "v" key
         Then I should see element "#preset-input-name" with value "KALORAMA PARK"
-        Then I should see "park" as the last tag value
+        Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I append paste attributes with keyboard shortcut
         Then I click the control alt "v" key
         Then I should see element "#preset-input-name" with value "KALORAMA RECREATION CENTER;KALORAMA PARK"
-        Then I should see "park" as the last tag value
+        Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I overwrite paste attributes with UI button
         Then I click paste tags, overwrite
         Then I should see element "#preset-input-name" with value "KALORAMA PARK"
-        Then I should see "park" as the last tag value
+        Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I append paste attributes with UI button
         Then I click paste tags, append
         Then I should see element "#preset-input-name" with value "KALORAMA RECREATION CENTER;KALORAMA PARK"
-        Then I should see "park" as the last tag value
+        Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
