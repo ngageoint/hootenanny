@@ -30,7 +30,7 @@ echo "Building core coverage reports..."
 make -sj`nproc` core-coverage
 
 echo "Building services coverage reports..."
-make -sj`nproc` services-coverage
+make -s services-coverage
 
 echo "Building UI coverage reports..."
 make ui-coverage
