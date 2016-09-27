@@ -781,3 +781,8 @@ Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
   el.click
 end
+
+When(/^I click to expand Background settings$/) do
+  el = find('div.map-control.background-control')
+  el.click
+end
