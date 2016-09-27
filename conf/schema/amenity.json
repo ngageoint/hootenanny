@@ -1452,6 +1452,9 @@
             "amenity=religion",
             "amenity=religious_activities"
         ],
+        "categories": [
+            "building"
+        ],
         "isA": "amenity",
         "name": "amenity=place_of_worship",
         "objectType": "tag"
