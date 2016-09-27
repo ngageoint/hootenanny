@@ -781,3 +781,8 @@ Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
   el.click
 end
+
+When(/^I expand the sidebar$/) do
+  resizer = page.find('#resizer')
+  resizer.drag_by(350, 0)
+end
