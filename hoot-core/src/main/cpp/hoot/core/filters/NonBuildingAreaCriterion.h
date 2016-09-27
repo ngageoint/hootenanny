@@ -24,49 +24,32 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
-
-#include "ChainCriterion.h"
+#ifndef NONBUILDINGAREACRITERION_H
+#define NONBUILDINGAREACRITERION_H
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
 /**
- * Filters an element if any of the child filters return true.
+ * A filter that will either keep or remove areas, but not if the areas are also buildings.
  */
-class OrCriterion : public ChainCriterion
+class NonBuildingAreaCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::OrCriterion"; }
+  static string className() { return "hoot::NonBuildingAreaCriterion"; }
 
-  OrCriterion() {}
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
-    ChainCriterion(child1, child2)
-  {
-  }
+  NonBuildingAreaCriterion();
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    for (/*size_t*/int i = 0; i < _filters.size(); i++)
-    {
-      if (_filters[i]->isSatisfied(e))
-      {
-        return true;
-      }
-    }
+  bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-    return false;
-  }
-
-  virtual ElementCriterion* clone() { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }
+  virtual ElementCriterion* clone() { return new NonBuildingAreaCriterion(); }
 
 };
 
 }
 
-#endif // ORCRITERION_H
+#endif // NONBUILDINGAREACRITERION_H

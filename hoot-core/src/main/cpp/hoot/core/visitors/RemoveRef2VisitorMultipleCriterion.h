@@ -24,49 +24,46 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
-
-#include "ChainCriterion.h"
+#ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
+#define REMOVEREF2VISITORMULTIPLECRITERION_H
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+
+#include "RemoveRef2Visitor.h"
 
 namespace hoot
 {
 
 /**
- * Filters an element if any of the child filters return true.
+ * If one specified criterion meets for REF1 and another for REF2 elements, then the REF2 tag is
+ * removed.
+ *
+ * This class is re-entrant, but not thread safe.
  */
-class OrCriterion : public ChainCriterion
+class RemoveRef2VisitorMultipleCriterion : public RemoveRef2Visitor
 {
+
 public:
 
-  static string className() { return "hoot::OrCriterion"; }
+  static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
-  OrCriterion() {}
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
-    ChainCriterion(child1, child2)
-  {
-  }
+  RemoveRef2VisitorMultipleCriterion();
+  virtual ~RemoveRef2VisitorMultipleCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    for (/*size_t*/int i = 0; i < _filters.size(); i++)
-    {
-      if (_filters[i]->isSatisfied(e))
-      {
-        return true;
-      }
-    }
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
-    return false;
-  }
+  virtual void visit(const ConstElementPtr& e);
 
-  virtual ElementCriterion* clone() { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }
+  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
+  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
+
+private:
+
+  ElementCriterionPtr _ref1Criterion;
+  ElementCriterionPtr _ref2Criterion;
 
 };
 
 }
 
-#endif // ORCRITERION_H
+#endif // REMOVEREF2VISITORMULTIPLECRITERION_H

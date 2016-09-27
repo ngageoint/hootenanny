@@ -182,7 +182,8 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterionTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \

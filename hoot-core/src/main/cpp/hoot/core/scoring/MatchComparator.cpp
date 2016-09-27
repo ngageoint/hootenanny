@@ -366,19 +366,16 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       _tagError(conflated, it->first, "1");
       _tagError(conflated, it->second, "2");
 
-      //if (Log::getInstance().getLevel() == Log::Debug)
-      //{
-        //This info from these tags can be misleading if you are conflating the same data type twice
-        //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
-        //those cases multiple actual/expected states can exist and this logic only records one
-        //of them.
-        const MatchType expectedMatchType(expectedIndex);
-        const MatchType actualMatchType(actualIndex);
-        _tagTestOutcome(
-          conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
-        _tagTestOutcome(
-          conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
-      //}
+      //This info from these tags can be misleading if you are conflating the same data type twice
+      //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
+      //those cases multiple actual/expected states can exist and this logic only records one
+      //of them.
+      const MatchType expectedMatchType(expectedIndex);
+      const MatchType actualMatchType(actualIndex);
+      _tagTestOutcome(
+            conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(
+            conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
     }
 
     _confusion[actualIndex][expectedIndex]++;
@@ -755,11 +752,10 @@ QString MatchComparator::toString() const
                    _confusion[MatchType::Miss][MatchType::Review] +
                    _confusion[MatchType::Match][MatchType::Miss] +
                    _confusion[MatchType::Match][MatchType::Review]);
-
-  result += "\n";
-  result += QString("total unnecessary review count: %1\n")
+  result += QString("total unnecessary review count: %1")
               .arg(_confusion[MatchType::Review][MatchType::Miss] +
                    _confusion[MatchType::Review][MatchType::Match]);
+  result += "\n";
 
   return result;
 }

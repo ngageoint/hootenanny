@@ -118,7 +118,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     ElementPtr e = _map->getElement(eid);
     // if the REF1 element meets the criterion.
-    if (_criterion->isSatisfied(e))
+    if (ref1CriterionSatisfied(e))
     {
       // remove the specified REF2 from the appropriate REF2 field.
       refs.removeAll(r);
@@ -178,7 +178,7 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
   ElementPtr ee = _map->getElement(ElementId(type, id));
 
   // if e has a REF2 and meets the criterion
-  if (_hasRef2Tag(ee) && _criterion->isSatisfied(ee))
+  if (_hasRef2Tag(ee) && ref2CriterionSatisfied(ee))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
@@ -186,6 +186,16 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
       _checkAndDeleteRef2(ee, _ref2Keys[i]);
     }
   }
+}
+
+bool RemoveRef2Visitor::ref1CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return _criterion->isSatisfied(e);
+}
+
+bool RemoveRef2Visitor::ref2CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return ref1CriterionSatisfied(e);
 }
 
 }

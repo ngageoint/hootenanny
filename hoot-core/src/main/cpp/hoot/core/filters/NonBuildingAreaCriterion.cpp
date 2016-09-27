@@ -22,51 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
-
-#include "ChainCriterion.h"
+#include "NonBuildingAreaCriterion.h"
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Filters an element if any of the child filters return true.
- */
-class OrCriterion : public ChainCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, NonBuildingAreaCriterion)
+
+NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 {
-public:
-
-  static string className() { return "hoot::OrCriterion"; }
-
-  OrCriterion() {}
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
-    ChainCriterion(child1, child2)
-  {
-  }
-
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    for (/*size_t*/int i = 0; i < _filters.size(); i++)
-    {
-      if (_filters[i]->isSatisfied(e))
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  virtual ElementCriterion* clone() { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }
-
-};
-
 }
 
-#endif // ORCRITERION_H
+bool NonBuildingAreaCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  return OsmSchema::getInstance().isArea(e) && !OsmSchema::getInstance().isBuilding(e);
+}
+
+}

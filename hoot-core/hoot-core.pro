@@ -538,7 +538,10 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRuleApplier.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.cpp \
+    src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.cpp \
+    src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
+    src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1082,5 +1085,7 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRuleApplier.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.h \
+    src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
+    src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h
 
