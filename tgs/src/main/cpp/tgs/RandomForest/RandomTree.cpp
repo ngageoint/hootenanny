@@ -47,6 +47,8 @@ namespace Tgs
 {
   unsigned int RandomTree::_idCtr = 0;
 
+  unsigned int RandomTree::idCtr = 0; //id for TreeNode
+
   RandomTree::RandomTree()
   {
     try
@@ -148,7 +150,7 @@ namespace Tgs
     }
   }
 
-  double RandomTree::computeErrorRate(boost::shared_ptr<DataFrame> data)
+  double RandomTree::computeErrorRate(boost::shared_ptr<const DataFrame> data)
   {
     try
     {
@@ -382,7 +384,6 @@ namespace Tgs
       //Warning suppression
       posClass = posClass;
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -402,7 +403,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -411,14 +411,13 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainMulticlass(const shared_ptr<const DataFrame>& data, unsigned int numFactors,
     unsigned int nodeSize, bool balanced)
   {
     try
     {
       Tgs::Random::instance()->seed((unsigned int)_treeId);
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -426,11 +425,11 @@ namespace Tgs
 
       if(balanced)
       {
-        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
+        data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet, _treeId);
       }
       else
       {
-        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
+        data->makeBoostrapAndOobSets(bootstrapSet, _oobSet, _treeId);
       }
 
       _root = boost::shared_ptr<TreeNode>(new TreeNode());
@@ -438,7 +437,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -455,7 +453,6 @@ namespace Tgs
       //Warning suppression
       balanced = balanced;
 
-      //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
       //Build bootstrap and oob sets (on data vector indices)
@@ -468,7 +465,6 @@ namespace Tgs
       _root->rightChild.reset();
       _root->isPure = false;
 
-      //std::cout << "Build Tree" << std::endl;
       _build(data, bootstrapSet, _root, nodeSize);
     }
     catch(const Tgs::Exception & e)
@@ -478,12 +474,11 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
-    boost::shared_ptr<TreeNode> & node, unsigned int nodeSize)
+  void RandomTree::_build(const shared_ptr<const DataFrame>& data,
+    std::vector<unsigned int> & dataSet, boost::shared_ptr<TreeNode> & node, unsigned int nodeSize)
   {
     try
     {
-      static unsigned int idCtr = 0;
       node->leftChild.reset();
       node->rightChild.reset();
 
@@ -498,8 +493,7 @@ namespace Tgs
         node->rangeMin = node->rangeMax = 0;
 
         node->dataList = dataSet;
-        idCtr++;
-        node->nodeId = idCtr;
+
       }
       else  //Data is not pure
       {
@@ -509,7 +503,7 @@ namespace Tgs
         double splitVal = 0.0;
         double purityDelta = 0.0;
 
-        data->selectRandomFactors(_factPerNode, factors);
+        data->selectRandomFactors(_factPerNode, factors, _treeId);
 
         bool splitPossible = _igc.findDataSplit(*data, factors, dataSet, splitIdx, fIdx, splitVal,
           purityDelta);
@@ -568,8 +562,6 @@ namespace Tgs
           node->purityDelta = 0;
 
           node->dataList = dataSet;
-          idCtr++;
-          node->nodeId = idCtr;
         }
       }
     }
@@ -674,8 +666,9 @@ namespace Tgs
       if(node)
       {
         QDomElement treeDomNode = modelDoc.createElement("TreeNode");
-
-        treeDomNode.setAttribute("id", node->nodeId);
+        //use static id here to make sure the output ids in consistant order when using muilti-threads
+        idCtr++;
+        treeDomNode.setAttribute("id", idCtr);
 
         if(node->isPure)
         {

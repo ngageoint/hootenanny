@@ -147,12 +147,12 @@ namespace Tgs
     }
   }
 
-  void RandomForest::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+  void RandomForest::trainMulticlass(const shared_ptr<DataFrame>& data, unsigned int numTrees,
     unsigned int numFactors, unsigned int nodeSize, double retrain, bool balanced)
   {
     try
     {
-      data->validateData();
+      data->checkData();
 
       _factorLabels = data->getFactorLabels();
       _forest.clear();

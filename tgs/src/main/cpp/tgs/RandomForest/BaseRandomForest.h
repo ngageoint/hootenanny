@@ -52,7 +52,7 @@ namespace Tgs
       balanced = false;
     }
 
-    boost::shared_ptr<DataFrame> data;
+    boost::shared_ptr<const DataFrame> data;
     unsigned int numFactors;
     unsigned int nodeSize;
     bool balanced;
@@ -122,7 +122,7 @@ namespace Tgs
     * @param average variable to hold the computed average error
     * @param stdDev variable to hold the computed standard deviation
     */
-    void findAverageError(boost::shared_ptr<DataFrame> data, double & average, double & stdDev);
+    void findAverageError(boost::shared_ptr<const DataFrame> data, double& average, double& stdDev);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the
@@ -147,7 +147,7 @@ namespace Tgs
     *  @param data the original data set
     *  @param factorImportance a map of factor labels to purity improvement
     */
-    void getFactorImportance(boost::shared_ptr<DataFrame> data,
+    void getFactorImportance(const shared_ptr<const DataFrame> &data,
       std::map<std::string, double> & factorImportance);
 
     /**
@@ -209,7 +209,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainMulticlass(const shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
       bool balanced = false) = 0;
 

@@ -56,8 +56,11 @@ namespace Tgs
   {
     try
     {
+      cout << qHash(_trainInputs.data->toXmlString()) << endl;
+
       tree->trainMulticlass(_trainInputs.data, _trainInputs.numFactors, _trainInputs.nodeSize,
         _trainInputs.balanced);
+      cout << qHash(_trainInputs.data->toXmlString()) << endl;
 
       return tree;
     }
@@ -81,15 +84,13 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainMulticlass(boost::shared_ptr<DataFrame> data,
+  void MultithreadedRandomForest::trainMulticlass(const shared_ptr<DataFrame> &data,
     unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
     bool balanced)
   {
     try
     {
-      std::cerr << "DEBUG MTRF TRAINMULTI" << std::endl;
-
-      data->validateData();
+      data->checkData();
 
       _trainInputs.data = data;
       _trainInputs.numFactors = numFactors;

@@ -52,7 +52,7 @@ namespace Tgs
     return (-n * (log(n)/log((double)2.0)));
   }
 
-  double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 
+  double InfoGainCalculator::computeEntropyByClass(const DataFrame & df,
     std::vector<unsigned int> & indices)
   {
 //     double entSum = 0;
@@ -79,7 +79,8 @@ namespace Tgs
     return entSum;
   }
  
-  void InfoGainCalculator::_findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, unsigned int fIdx, 
+  void InfoGainCalculator::_findCandidateSplits(const DataFrame & df,
+    std::vector<unsigned int> & indices, unsigned int fIdx,
     std::vector<unsigned int> & splits)
   {
      splits.clear();
@@ -98,7 +99,7 @@ namespace Tgs
      }
    }
 
-  bool InfoGainCalculator::findDataSplit(DataFrame & df, std::vector<unsigned int> & fIndices, 
+  bool InfoGainCalculator::findDataSplit(const DataFrame& df, std::vector<unsigned int> & fIndices,
     std::vector<unsigned int> & indices, unsigned int & splitIdx, unsigned int & fIdx, 
     double & splitVal, double & purityDelta)
   {
@@ -165,7 +166,7 @@ namespace Tgs
     }
   }
 
-  double InfoGainCalculator::getMaxInfoGainByFactor(DataFrame & df, 
+  double InfoGainCalculator::getMaxInfoGainByFactor(const DataFrame & df,
     std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
     unsigned int & bestSplit)
   {

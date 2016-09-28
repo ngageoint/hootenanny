@@ -42,8 +42,8 @@
 #include <iostream>
 
 // Tgs
-#include <tgs/RandomForest/RandomForest.h>
-#include <tgs/Statistics/Random.h>
+#include <tgs/RandomForest/RandomForestUtilities.h>
+#include <tgs/RandomForest/MultithreadedRandomForestManager.h>
 #include <tgs/System/DisableCout.h>
 
 namespace hoot
@@ -75,9 +75,14 @@ public:
 
     shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
 
-    Tgs::Random::instance()->seed(0);
+    srand(0);
+
+    #warning remove these qHash log messages.
+    LOG_VAR(qHash(df->toXmlString()));
+
     LOG_DEBUG("Building Random Forest");
-    RandomForest rf;
+    MultithreadedRandomForest mrf;
+
     auto_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
     {
@@ -85,17 +90,22 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    rf.trainMulticlass(df, 40, numFactors);
+
+    LOG_VAR(qHash(df->toXmlString()));
+
+    mrf.trainMulticlass(df, 40, numFactors);
+    LOG_VAR(qHash(df->toXmlString()));
     dc.reset();
 
     double error;
     double sigma;
-    rf.findAverageError(df, error, sigma);
+    mrf.findAverageError(df, error, sigma);
+    LOG_VAR(qHash(df->toXmlString()));
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
     ofstream fileStream;
     fileStream.open((output).toStdString().data());
-    rf.exportModel(fileStream);
+    mrf.exportModel(fileStream);
     fileStream.close();
 
     return 0;
