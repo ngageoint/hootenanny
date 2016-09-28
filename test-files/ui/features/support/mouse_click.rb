@@ -9,4 +9,7 @@ Capybara::Node::Element.class_eval do
   def context_click
     driver.browser.action.context_click(self.native).perform
   end
+  def drag_by(right_by, down_by)
+      native.drag_and_drop_by(right_by, down_by)
+  end
 end
