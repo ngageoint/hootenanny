@@ -6,17 +6,17 @@ Feature: Paste Attributes
         And I resize the window
         And I click Get Started
 
-    # Scenario: Import Dataset
-    # 	Then I select the "sprocket" div
-    #     When I click on the "Datasets" option in the "settingsSidebar"
-    #     And I press "Add Dataset"
-    #     And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
-    #     And I select "/test-files/dcpoi_clip.osm" dataset
-    #     Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
-    #     Then I type "dcpoi_clip_paste_attributes_Cucumber" in input "importDatasetLayerName"
-    #     When I press "big.loud" span with text "Import"
-    #     Then I wait 30 "seconds" to see "dcpoi_clip_paste_attributes_Cucumber"
-    #     Then I select the "sprocket" div
+    Scenario: Import Dataset
+    	Then I select the "sprocket" div
+        When I click on the "Datasets" option in the "settingsSidebar"
+        And I press "Add Dataset"
+        And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
+        And I select "/test-files/dcpoi_clip.osm" dataset
+        Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"
+        Then I type "dcpoi_clip_paste_attributes_Cucumber" in input "importDatasetLayerName"
+        When I press "big.loud" span with text "Import"
+        Then I wait 30 "seconds" to see "dcpoi_clip_paste_attributes_Cucumber"
+        Then I select the "sprocket" div
 
     Scenario: Copy and Paste Attributes
         And I press "Add Reference Dataset"
