@@ -35,7 +35,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -84,7 +83,6 @@ public class ProcessStreamInterfaceTest {
     }
 
     //either needs to be re-written to not use Processlet code or possibly be removed
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testcreateScriptCmd() throws Exception {

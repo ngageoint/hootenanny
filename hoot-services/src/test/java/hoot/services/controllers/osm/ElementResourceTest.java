@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static org.junit.Assert.*;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -41,7 +43,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -69,19 +70,19 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         String data = XmlDocumentBuilder.toString(responseData);
 
-        Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
         OsmTestUtils.verifyNode(responseData, 1, id, changesetId, bounds.getMinLat(), bounds.getMinLon(),
                 id.contains("_"));
 
-        Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-        Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1",
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1",
                 URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-        Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2",
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2",
                 URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
     }
 
@@ -94,56 +95,54 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         // TODO: needed?
         // Assert.assertEquals(0, XPathAPI.selectNodeList(responseData,
         // "//osm/node").getLength());
-        Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
         OsmTestUtils.verifyWay(responseData, 1, id, changesetId, wayNodeIds, id.contains("_"));
-        Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
-        Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1",
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
+        assertEquals("val 1",
                 URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
-        Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-        Assert.assertEquals("val 2",
+        assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
+        assertEquals("val 2",
                 URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
         if (wayNodeIds != null) {
-            Assert.assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way[1]/nd").getLength());
+            assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way[1]/nd").getLength());
             Long[] wayNodeIdsArr = wayNodeIds.toArray(new Long[wayNodeIds.size()]);
-            Assert.assertEquals(String.valueOf(wayNodeIdsArr[0]),
+            assertEquals(String.valueOf(wayNodeIdsArr[0]),
                     xpath.evaluate("//osm/way[1]/nd[1]/@ref", responseData));
-            Assert.assertEquals(String.valueOf(wayNodeIdsArr[1]),
+            assertEquals(String.valueOf(wayNodeIdsArr[1]),
                     xpath.evaluate("//osm/way[1]/nd[2]/@ref", responseData));
-            Assert.assertEquals(String.valueOf(wayNodeIdsArr[2]),
+            assertEquals(String.valueOf(wayNodeIdsArr[2]),
                     xpath.evaluate("//osm/way[1]/nd[3]/@ref", responseData));
         }
     }
 
     private static void verifyFirstRelationWasReturned(Document responseData, String id, long changesetId,
-            List<RelationMember> relationMembers)
-            throws TransformerException, XPathExpressionException, UnsupportedEncodingException {
+            List<RelationMember> relationMembers) throws Exception {
         XPath xpath = XmlUtils.createXPath();
 
         OsmTestUtils.verifyOsmHeader(responseData);
 
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-        Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
         OsmTestUtils.verifyRelation(responseData, 1, id, changesetId, relationMembers, id.contains("_"));
 
-        Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
-        Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-        Assert.assertEquals("val 1",
-                URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
 
         if (relationMembers != null) {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/member").getLength());
-            Assert.assertEquals(String.valueOf(relationMembers.get(0).getId()),
+            assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/member").getLength());
+            assertEquals(String.valueOf(relationMembers.get(0).getId()),
                     xpath.evaluate("//osm/relation[1]/member[1]/@ref", responseData));
-            Assert.assertEquals(String.valueOf(relationMembers.get(1).getId()),
+            assertEquals(String.valueOf(relationMembers.get(1).getId()),
                     xpath.evaluate("//osm/relation[1]/member[2]/@ref", responseData));
-            Assert.assertEquals(String.valueOf(relationMembers.get(2).getId()),
+            assertEquals(String.valueOf(relationMembers.get(2).getId()),
                     xpath.evaluate("//osm/relation[1]/member[3]/@ref", responseData));
-            Assert.assertEquals(String.valueOf(relationMembers.get(3).getId()),
+            assertEquals(String.valueOf(relationMembers.get(3).getId()),
                     xpath.evaluate("//osm/relation[1]/member[4]/@ref", responseData));
         }
     }
@@ -158,18 +157,13 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/node/" + nodeIdsArr[0])
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/node/" + nodeIdsArr[0])
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
+
         verifyFirstNodeWasReturned(responseData, String.valueOf(nodeIdsArr[0]), changesetId, originalBounds);
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -184,21 +178,14 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/way/" + wayIdsArr[0])
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/way/" + wayIdsArr[0])
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
 
         verifyFirstWayWasReturned(responseData, String.valueOf(wayIdsArr[0]), changesetId, null);
-
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
@@ -212,18 +199,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/relation/" + relationIdsArr[0])
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/relation/" + relationIdsArr[0])
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
         verifyFirstRelationWasReturned(responseData, String.valueOf(relationIdsArr[0]), changesetId, null);
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -238,17 +219,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        Document responseData = null;
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
+        Document responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
 
-        try {
-            responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
-
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
         verifyFirstNodeWasReturned(responseData, uniqueElementId, changesetId, originalBounds);
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -263,19 +237,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
-        try {
-            responseData = target("api/0.6/element/" + uniqueElementId)
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/element/" + uniqueElementId)
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
         verifyFirstWayWasReturned(responseData, uniqueElementId, changesetId, null);
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -290,17 +257,10 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-        Document responseData = null;
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
+        Document responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
 
-        try {
-            responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
-
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
         verifyFirstRelationWasReturned(responseData, uniqueElementId, changesetId, null);
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -316,18 +276,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/way/" + wayIdsArr[0] + "/full")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/way/" + wayIdsArr[0] + "/full")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
 
         Set<Long> wayNodes = new LinkedHashSet<>();
         wayNodes.add(nodeIdsArr[0]);
@@ -350,18 +304,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/relation/" + relationIdsArr[0] + "/full")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/relation/" + relationIdsArr[0] + "/full")
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
 
         List<RelationMember> members = new ArrayList<>();
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
@@ -386,17 +334,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         Document responseData = null;
         String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
-        try {
-            responseData = target()
-                    .path("api/0.6/element/" + uniqueElementId + "/full")
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        responseData = target()
+                .path("api/0.6/element/" + uniqueElementId + "/full")
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
 
         Set<Long> wayNodes = new LinkedHashSet<>();
         wayNodes.add(nodeIdsArr[0]);
@@ -419,18 +362,12 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-        Document responseData = null;
         String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
-        try {
-            responseData = target("api/0.6/element/" + uniqueElementId + "/full")
+        Document responseData = target("api/0.6/element/" + uniqueElementId + "/full")
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
 
-        Assert.assertNotNull(responseData);
+        assertNotNull(responseData);
 
         List<RelationMember> members = new ArrayList<>();
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
@@ -461,10 +398,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
 
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -485,8 +421,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -510,10 +446,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -534,8 +469,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -559,8 +494,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -582,8 +517,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -607,10 +542,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -631,10 +565,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -657,10 +590,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -681,10 +613,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("does not exist"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("does not exist"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -709,10 +640,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -734,10 +664,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -760,8 +689,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -784,8 +713,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("No map exists"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -807,7 +736,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -829,9 +758,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -853,8 +781,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -877,8 +805,8 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -906,7 +834,7 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
+            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -926,13 +854,14 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
+
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }

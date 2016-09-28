@@ -29,28 +29,45 @@ package hoot.services.utils;
 import static hoot.services.HootProperties.HOME_FOLDER;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.ReaderInterceptor;
+import javax.ws.rs.ext.WriterInterceptor;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
+import org.glassfish.jersey.internal.PropertiesDelegate;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import org.glassfish.jersey.message.MessageBodyWorkers;
+import org.glassfish.jersey.message.ReaderModel;
+import org.glassfish.jersey.message.WriterModel;
+import org.glassfish.jersey.message.internal.InputStreamProvider;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.jvnet.mimepull.MIMEMessage;
+import org.jvnet.mimepull.MIMEPart;
 
 import hoot.services.UnitTest;
 
@@ -77,101 +94,203 @@ public class MultipartSerializerTest {
     @Ignore
     @Test
     @Category(UnitTest.class)
-    public void TestserializeFGDB() throws Exception {
-        String jobId = "123-456-789";
-        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
-        File workingDir = new File(wkdirpath);
+    public void testSerializeFGDB() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+        File workingDir = new File(HOME_FOLDER + "/upload/" + jobId);
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 
-        String textFieldValue = "0123456789";
-        File out = new File(wkdirpath + "/fgdbTest.gdb");
-        FileUtils.write(out, textFieldValue);
+        try {
+            String fileName = "fgdbTest.gdb";
+            String textFieldValue = "GDB content is ignored";
+            File out = new File(workingDir, fileName);
+            FileUtils.write(out, textFieldValue);
 
-        // MediaType of the body part will be derived from the file.
-        FileDataBodyPart filePart = new FileDataBodyPart("", out, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        FormDataContentDisposition formDataContentDisposition =
-                new FormDataContentDisposition("form-data; name=\"eltuploadfile0\"; filename=\"fgdbTest.gdb\"");
-        filePart.setContentDisposition(formDataContentDisposition);
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(filePart);
+            // MediaType of the body part will be derived from the file.
+//            FileDataBodyPart filePart = new FileDataBodyPart();
+//            filePart.setName("fgdbtest");
+//            filePart.setFileEntity(out, MediaType.APPLICATION_OCTET_STREAM_TYPE);
 
-        Map<String, String> uploadedFiles = new HashMap<>();
-        Map<String, String> uploadedFilesPaths = new HashMap<>();
+            MIMEMessage mimeMessage = new MIMEMessage(new FileInputStream(out), "");
+            MIMEPart mimePart = mimeMessage.getPart(0);
+            BodyPartEntity bodyPartEntity = new BodyPartEntity(mimePart);
 
-        MultipartSerializer.serializeUpload(jobId, "DIR", uploadedFiles, uploadedFilesPaths, multiPart);
+            BodyPart bodyPart = new BodyPart(bodyPartEntity, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+            FormDataContentDisposition formDataContentDisposition =
+                    new FormDataContentDisposition("form-data; name=\"eltuploadfile0\"; filename=\"" + fileName + "\"");
+            bodyPart.setContentDisposition(formDataContentDisposition);
+            MessageBodyWorkers messageBodyWorkers = new MessageBodyWorkers() {
+                @Override
+                public Map<MediaType, List<MessageBodyReader>> getReaders(MediaType mediaType) {
+                    return null;
+                }
 
-        Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
-        Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
+                @Override
+                public Map<MediaType, List<MessageBodyWriter>> getWriters(MediaType mediaType) {
+                    return null;
+                }
 
-        File fgdbpath = new File(wkdirpath + "/fgdbTest.gdb");
-        Assert.assertTrue(fgdbpath.exists());
+                @Override
+                public String readersToString(Map<MediaType, List<MessageBodyReader>> readers) {
+                    return null;
+                }
 
-        File content = new File(wkdirpath + "/fgdbTest.gdb/dummy1.gdbtable");
-        Assert.assertTrue(content.exists());
+                @Override
+                public String writersToString(Map<MediaType, List<MessageBodyWriter>> writers) {
+                    return null;
+                }
 
-        FileUtils.forceDelete(workingDir);
+                @Override
+                public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+                    return (MessageBodyReader<T>) new InputStreamProvider();
+                }
+
+                @Override
+                public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType, Annotation[] annotations, MediaType mediaType, PropertiesDelegate propertiesDelegate) {
+                    return null;
+                }
+
+                @Override
+                public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+                    return null;
+                }
+
+                @Override
+                public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType, Annotation[] annotations, MediaType mediaType, PropertiesDelegate propertiesDelegate) {
+                    return null;
+                }
+
+                @Override
+                public List<MediaType> getMessageBodyReaderMediaTypes(Class<?> type, Type genericType, Annotation[] annotations) {
+                    return null;
+                }
+
+                @Override
+                public List<MediaType> getMessageBodyReaderMediaTypesByType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public List<MessageBodyReader> getMessageBodyReadersForType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public List<ReaderModel> getReaderModelsForType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public List<MediaType> getMessageBodyWriterMediaTypes(Class<?> type, Type genericType, Annotation[] annotations) {
+                    return null;
+                }
+
+                @Override
+                public List<MediaType> getMessageBodyWriterMediaTypesByType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public List<MessageBodyWriter> getMessageBodyWritersForType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public List<WriterModel> getWritersModelsForType(Class<?> type) {
+                    return null;
+                }
+
+                @Override
+                public MediaType getMessageBodyWriterMediaType(Class<?> type, Type genericType, Annotation[] annotations, List<MediaType> acceptableMediaTypes) {
+                    return null;
+                }
+
+                @Override
+                public Object readFrom(Class<?> rawType, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, PropertiesDelegate propertiesDelegate, InputStream entityStream, Iterable<ReaderInterceptor> readerInterceptors, boolean translateNce) throws WebApplicationException, IOException {
+                    return null;
+                }
+
+                @Override
+                public OutputStream writeTo(Object entity, Class<?> rawType, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, PropertiesDelegate propertiesDelegate, OutputStream entityStream, Iterable<WriterInterceptor> writerInterceptors) throws IOException, WebApplicationException {
+                    return null;
+                }
+            };
+            bodyPart.setMessageBodyWorkers(messageBodyWorkers);
+
+            FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+            formDataMultiPart.bodyPart(bodyPart);
+
+            Map<String, String> uploadedFiles = new HashMap<>();
+            Map<String, String> uploadedFilesPaths = new HashMap<>();
+
+            MultipartSerializer.serializeUpload(jobId, "DIR", uploadedFiles, uploadedFilesPaths, formDataMultiPart);
+
+            Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
+            Assert.assertEquals("fgdbTest.gdb", uploadedFilesPaths.get("fgdbTest"));
+
+            File fgdbpath = new File(workingDir, "fgdbTest.gdb");
+            Assert.assertTrue(fgdbpath.exists());
+
+            File content = new File(workingDir, "/fgdbTest.gdb/dummy1.gdbtable");
+            Assert.assertTrue(content.exists());
+        }
+        finally {
+            FileUtils.forceDelete(workingDir);
+        }
     }
 
     @Ignore
     @Test
     @Category(UnitTest.class)
-    public void TestserializeUploadedFiles() throws Exception {
-        // homeFolder + "/upload/" + jobId + "/" + relPath;
-        // Create dummy FGDB
-
-        String jobId = "123-456-789-testosm";
-        String wkdirpath = HOME_FOLDER + "/upload/" + jobId;
-        File workingDir = new File(wkdirpath);
+    public void testSerializeUploadedFiles() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+        File workingDir = new File(HOME_FOLDER + "/upload/" + jobId);
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 
-        FileItemFactory factory = new DiskFileItemFactory(16, null);
-        String textFieldName = "textField";
+        try {
+            String fileName = "test.osm";
+            String someValue = "OSM content is ignored";
+            File out = new File(workingDir, fileName);
+            FileUtils.write(out, someValue);
 
-        FileItem item = factory.createItem(textFieldName, "application/octet-stream", true, "dummy1.osm");
+            // MediaType of the body part will be derived from the file.
+            FileDataBodyPart filePart = new FileDataBodyPart("", out, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+            FormDataContentDisposition formDataContentDisposition =
+                    new FormDataContentDisposition("form-data; name=\"eltuploadfile0\"; filename=\"" + fileName + "\"");
+            filePart.setContentDisposition(formDataContentDisposition);
+            FormDataMultiPart multiPart = new FormDataMultiPart();
+            multiPart.bodyPart(filePart);
 
-        String textFieldValue = "0123456789";
-        byte[] testFieldValueBytes = textFieldValue.getBytes();
+            Map<String, String> uploadedFiles = new HashMap<>();
+            Map<String, String> uploadedFilesPaths = new HashMap<>();
 
-        try (OutputStream os = item.getOutputStream()) {
-            os.write(testFieldValueBytes);
+            MultipartSerializer.serializeUpload(jobId, "FILE", uploadedFiles, uploadedFilesPaths, multiPart);
+
+            Assert.assertEquals("OSM", uploadedFiles.get("test"));
+            Assert.assertEquals("test.osm", uploadedFilesPaths.get("test"));
         }
-
-        File out = new File(wkdirpath + "/buffer.tmp");
-        item.write(out);
-
-        List<FileItem> fileItemsList = new ArrayList<>();
-        fileItemsList.add(item);
-        Assert.assertTrue(out.exists());
-
-        Map<String, String> uploadedFiles = new HashMap<>();
-        Map<String, String> uploadedFilesPaths = new HashMap<>();
-
-//        MultipartSerializer.serializeUploadedFiles(fileItemsList, uploadedFiles, uploadedFilesPaths, wkdirpath);
-
-        Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
-        Assert.assertEquals("dummy1.osm", uploadedFilesPaths.get("dummy1"));
-
-        File content = new File(wkdirpath + "/dummy1.osm");
-        Assert.assertTrue(content.exists());
-
-        FileUtils.forceDelete(workingDir);
+        finally {
+            FileUtils.forceDelete(workingDir);
+        }
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
-    public void TestValidatePath() throws Exception {
+    public void testValidatePath() throws Exception {
         Method m = MultipartSerializer.class.getDeclaredMethod("validatePath", String.class, String.class);
         m.setAccessible(true);
 
         boolean isValid = (Boolean) m.invoke(null, //use null if the method is static
                 "/projects/hoot/upload/123456", "/projects/hoot/upload/123456/DcGisRoads.gdb");
         Assert.assertTrue(isValid);
+
         isValid = (Boolean) m.invoke(null, //use null if the method is static
                 "/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
         Assert.assertFalse(isValid);
-        isValid =(Boolean) m.invoke(null, //use null if the method is static
+
+        isValid = (Boolean) m.invoke(null, //use null if the method is static
                 "/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
         Assert.assertFalse(isValid);
     }

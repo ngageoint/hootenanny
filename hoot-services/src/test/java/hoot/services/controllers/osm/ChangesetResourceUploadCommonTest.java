@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.osm;
 
+import static org.junit.Assert.*;
+
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
@@ -33,7 +35,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -51,21 +52,12 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadPreflight() throws Exception {
-        String responseData = null;
-        try {
-            String changesetId = "1";
-            responseData =
-                target("api/0.6/changeset/" + changesetId + "/upload")
-                    .queryParam("mapId", "1")
-                    //.type(MediaType.APPLICATION_FORM_URLENCODED)
-                    .request(MediaType.TEXT_PLAIN)
-                    .options(String.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        String responseData = target("api/0.6/changeset/1/upload")
+                .queryParam("mapId", "1")
+                .request(MediaType.TEXT_PLAIN)
+                .options(String.class);
 
-        Assert.assertEquals("", responseData);
+        assertEquals("", responseData);
     }
 
     @Test(expected = WebApplicationException.class)
@@ -119,8 +111,8 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Only one changeset may be uploaded at a time"));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Only one changeset may be uploaded at a time"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -132,8 +124,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
         long changesetId = OsmTestUtils.createTestChangeset(null);
 
-        // Upload a changeset with malformed XML. A failure should occur and no
-        // data in the system should be modified.
+        // Upload a changeset with malformed XML. A failure should occur and no data in the system should be modified.
         try {
             target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
@@ -157,10 +148,10 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
+            assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
     }
@@ -170,8 +161,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     public void testUploadEmptyChangeset() throws Exception {
         long changesetId = OsmTestUtils.createTestChangeset(null);
 
-        // Upload a changeset with no items in it. A failure should occur and no
-        // data in the system should be modified.
+        // Upload a changeset with no items in it. A failure should occur and no data in the system should be modified.
         try {
             target("api/0.6/changeset/" + changesetId + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
@@ -185,9 +175,9 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));
+            assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
     }

@@ -28,6 +28,8 @@ package hoot.services.osm;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +140,7 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
             AND table_name = 'table_name'
             );
          */
+
         tables.add("current_way_nodes_" + mapId);
         tables.add("current_relation_members_" + mapId);
         tables.add("current_nodes_" + mapId);
@@ -164,5 +167,19 @@ public abstract class OsmResourceTestAbstract extends JerseyTest {
     protected Application configure() {
         HootServicesJerseyApplication.setSpringConfigationClass(HootServicesSpringTestConfig.class);
         return new HootServicesJerseyApplication();
+    }
+
+    protected Timestamp getCurrentDBTime() throws Exception {
+        BasicDataSource dbcpDatasource = appContext.getBean("dataSource", BasicDataSource.class);
+
+        //SELECT now()
+        try (Connection conn = dbcpDatasource.getConnection()) {
+            String sql = "SELECT now()";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                return rs.getTimestamp(1);
+            }
+        }
     }
 }

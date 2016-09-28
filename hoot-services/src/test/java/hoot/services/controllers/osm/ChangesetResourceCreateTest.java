@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.utils.DbUtils.createQuery;
+import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -36,7 +37,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -51,33 +51,43 @@ import hoot.services.osm.OsmTestUtils;
 
 
 public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
-    public ChangesetResourceCreateTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testCreatePreflight() throws Exception {
-        String responseData = null;
-        try {
-            responseData = target("api/0.6/changeset/create")
+        String responseData = target("api/0.6/changeset/create")
                     .queryParam("mapId", "1")
-                    //.type(MediaType.APPLICATION_FORM_URLENCODED)
                     .request(MediaType.TEXT_PLAIN)
                     .options(String.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
 
-        Assert.assertEquals("", responseData);
+        assertEquals("", responseData);
     }
 
     @Test
     @Category(UnitTest.class)
-    public void testCreateSendingMapId() throws Exception {
-        // Create a changeset, specifying the its map by ID.
-        try {
-            String responseData = target("api/0.6/changeset/create")
-                .queryParam("mapId", String.valueOf(mapId))
+    public void testCreateByMapId() throws Exception {
+        String responseData = target("api/0.6/changeset/create")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_PLAIN)
+            .put(Entity.entity(
+                "<osm>" +
+                    "<changeset version=\"0.3\" generator=\"iD\">" +
+                        "<tag k=\"imagery_used\" v=\"Bing\"/>" +
+                        "<tag k=\"created_by\" v=\"iD 1.1.6\"/>" +
+                        "<tag k=\"comment\" v=\"my edit\"/>" +
+                    "</changeset>" +
+                "</osm>", MediaType.TEXT_XML_TYPE), String.class);
+
+        assertNotNull(responseData);
+        Long changesetId = Long.parseLong(responseData);
+        OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testCreateByMapName() throws Exception {
+        String responseData = target("api/0.6/changeset/create")
+                .queryParam("mapId", "map-with-id-" + mapId)
                 .request(MediaType.TEXT_PLAIN)
                 .put(Entity.entity(
                     "<osm>" +
@@ -88,38 +98,10 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
 
-            Assert.assertNotNull(responseData);
-            Long changesetId = Long.parseLong(responseData);
-            OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
-    }
+        assertNotNull(responseData);
 
-    @Test
-    @Category(UnitTest.class)
-    public void testCreateSendingMapName() throws Exception {
-        // Create a changeset, specifying its map by name.
-        try {
-            String responseData = target("api/0.6/changeset/create")
-                    .queryParam("mapId", "map-with-id-" + mapId)
-                    .request(MediaType.TEXT_PLAIN)
-                    .put(Entity.entity(
-                        "<osm>" +
-                            "<changeset version=\"0.3\" generator=\"iD\">" +
-                                "<tag k=\"imagery_used\" v=\"Bing\"/>" +
-                                "<tag k=\"created_by\" v=\"iD 1.1.6\"/>" +
-                                "<tag k=\"comment\" v=\"my edit\"/>" +
-                            "</changeset>" +
-                        "</osm>", MediaType.TEXT_XML_TYPE), String.class);
-            Assert.assertNotNull(responseData);
-            Long changesetId = Long.parseLong(responseData);
-            OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Long changesetId = Long.parseLong(responseData);
+        OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
     }
 
     @Test(expected = WebApplicationException.class)
@@ -128,12 +110,10 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         // insert another map with the same name as the test map
         Maps map = new Maps();
 
-        long nextMapId = createQuery(mapId)
-                .select(SQLExpressions.nextval(Long.class, "maps_id_seq"))
-                .from()
-                .fetchOne();
+        long nextMapId = createQuery(mapId).select(SQLExpressions.nextval(Long.class, "maps_id_seq")).from().fetchOne();
 
         map.setId(nextMapId);
+
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         map.setCreatedAt(now);
         map.setDisplayName("map-with-id-" + mapId);
@@ -161,8 +141,8 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
+            assertEquals(404, r.getStatus());
+            assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
 
             throw e;
         }
@@ -190,9 +170,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
-            Assert.assertFalse(changesetDataExistsInServicesDb());
+            assertEquals(404, r.getStatus());
+            assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
+            assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -217,9 +197,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
-            Assert.assertFalse(changesetDataExistsInServicesDb());
+            assertEquals(404, r.getStatus());
+            assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
+            assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -244,8 +224,8 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
+            assertEquals(404, r.getStatus());
+            assertTrue(r.readEntity(String.class).contains("No map exists"));
             throw e;
         }
     }
@@ -270,9 +250,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset XML"));
-            Assert.assertFalse(changesetDataExistsInServicesDb());
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Error parsing changeset XML"));
+            assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -297,9 +277,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
-            Assert.assertFalse(changesetDataExistsInServicesDb());
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
+            assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -324,9 +304,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
-            Assert.assertFalse(changesetDataExistsInServicesDb());
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
+            assertFalse(changesetDataExistsInServicesDb());
             throw e;
         }
     }
@@ -337,9 +317,6 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
      * @return true if changeset data exists; false otherwise
      */
     private static boolean changesetDataExistsInServicesDb() {
-        long recordCtr = createQuery()
-                .from(QChangesets.changesets)
-                .fetchCount();
-        return (recordCtr > 0);
+        return createQuery().from(QChangesets.changesets).fetchCount() > 0;
     }
 }

@@ -38,7 +38,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalMatchers;
@@ -176,7 +175,6 @@ public class ConflationResourceTest {
         }
     }
 
-    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {

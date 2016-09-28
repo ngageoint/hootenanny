@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm;
 
-import static hoot.services.HootProperties.MAX_QUERY_AREA_DEGREES;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -34,7 +33,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +44,6 @@ import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -94,34 +91,29 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // create a way completely outside the query bounds
         long oobWayId = OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(oobNodeIds), null);
 
-        // create a way with some nodes inside the query bounds and some
-        // outside; The way and the
-        // out of bounds nodes it owns should be returned by the query since
-        // at least one of the added
-        // way nodes is within the bounds.
+        // Create a way with some nodes inside the query bounds and some
+        // outside; The way and the out of bounds nodes it owns should be returned by the query since
+        // at least one of the added way nodes is within the bounds.
         Set<Long> partiallyOobNodeIds = new LinkedHashSet<>();
         partiallyOobNodeIds.add(nodeIdsArr[0]);
         partiallyOobNodeIds.add(oobNodeIdsArr[0]);
         wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, new ArrayList<>(partiallyOobNodeIds), null));
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
-        // create a relation where all members are completely outside of the
-        // query bounds
+        // create a relation where all members are completely outside of the query bounds
         List<RelationMember> members = new ArrayList<>();
+
         // Only oobNodeIdsArr[1] will make this relation out of bounds, b/c
-        // oobNodeIdsArr[0] is used
-        // by a way which is partially in bounds and will be returned by the
-        // query and, thus, any
-        // relations which reference that way and/or its nodes will also be
-        // returned.
+        // oobNodeIdsArr[0] is used by a way which is partially in bounds and will be returned by the
+        // query and, thus, any relations which reference that way and/or its nodes will also be returned.
         members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
         members.add(new RelationMember(oobWayId, ElementType.Way, "role1"));
         OsmTestUtils.insertNewRelation(changesetId, mapId, members, null);
 
-        // create a relation where some members are inside the query bounds
-        // and some are not
+        // create a relation where some members are inside the query bounds and some are not
         members = new ArrayList<>();
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+
         // see note above for why oobNodeIdsArr[1] is used here
         members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
         members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role1"));
@@ -130,8 +122,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Query the elements back out geospatially. All but one of the
-        // nodes, one of the ways, and
-        // one of the relations should be returned.
+        // nodes, one of the ways, and one of the relations should be returned.
         Document responseData = null;
         try {
             if (useMultiLayerUniqueElementIdsParameter) {
@@ -153,6 +144,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Assert.fail("Unexpected response: " + e.getResponse());
         }
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
@@ -447,30 +439,26 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         Set<Long> oobNodeIds = OsmTestUtils.createNodesOutsideOfQueryBounds(changesetId, queryBounds);
         Long[] oobNodeIdsArr = oobNodeIds.toArray(new Long[oobNodeIds.size()]);
 
-        // create a relation where all members are completely outside of the
-        // query bounds
-        List<RelationMember> members = new ArrayList<RelationMember>();
-        // Only oobNodeIdsArr[1] will make this relation out of bounds, b/c
-        // oobNodeIdsArr[0] is used
-        // by a way which is partially in bounds and will be returned by the
-        // query and, thus, any
-        // relations which reference that way and/or its nodes will also be
-        // returned.
+        // create a relation where all members are completely outside of the query bounds
+        List<RelationMember> members = new ArrayList<>();
+
+        // Only oobNodeIdsArr[1] will make this relation out of bounds, b/c oobNodeIdsArr[0] is used
+        // by a way which is partially in bounds and will be returned by the query and, thus, any
+        // relations which reference that way and/or its nodes will also be returned.
         members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
         OsmTestUtils.insertNewRelation(changesetId, mapId, members, null);
 
-        // create a relation where some members are inside the query bounds
-        // and some are not
-        members = new ArrayList<RelationMember>();
+        // create a relation where some members are inside the query bounds and some are not
+        members = new ArrayList<>();
         members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+
         // see note above for why oobNodeIdsArr[1] is used here
         members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
         relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null));
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Query the elements back out geospatially. All but one of the
-        // nodes, one of the ways, and
-        // one of the relations should be returned.
+        // nodes, one of the ways, and one of the relations should be returned.
         Document responseData = null;
         try {
             responseData = target("api/0.6/map")
@@ -964,7 +952,6 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
-    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
@@ -978,7 +965,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // use a lower number of max query nodes than default for efficiency
-            HootCustomPropertiesSetter.setProperty("maxQueryNodes", "3");
+            HootCustomPropertiesSetter.setProperty("MAX_QUERY_NODES", "3");
 
             long maxQueryNumberOfNodes = 3;
 
@@ -1010,7 +997,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             }
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("maxQueryNodes", originalMaxQueryNodes);
+            HootCustomPropertiesSetter.setProperty("MAX_QUERY_NODES", originalMaxQueryNodes);
         }
     }
 
@@ -1114,7 +1101,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .fetchFirst();
 
         map.setId(nextMapId);
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = super.getCurrentDBTime();
         map.setCreatedAt(now);
         String duplicatedMapName = "map-with-id-" + mapId;
         map.setDisplayName(duplicatedMapName);
@@ -1171,8 +1158,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Ignore
-    @Test(expected = WebApplicationException.class)
+    @Test
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
@@ -1181,59 +1167,16 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
         Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        try {
-            // try to query nodes with an invalid bounds
-            target("api/0.6/map")
+        // Try to query nodes with invalid bounds.
+        // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
+        // Therefore, the call should not fail because of invalid coordinates
+        Document doc = target("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", "-181,-90,180,90")
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
 
-            // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
-            // Therefore, the call should not fail because of invalid coordiates
-            Assert.assertFalse(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
-
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
-            throw e;
-        }
-    }
-
-    @Ignore
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
-    public void testGetMapBoundsTooLarge() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        BoundingBox queryBounds = new BoundingBox(-79.02265434416296, 37.90089748801109,
-                                                  -77.9224564416296, 39.00085678801109);
-
-        Assert.assertTrue(queryBounds.getArea() > Double.parseDouble(MAX_QUERY_AREA_DEGREES));
-
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        try {
-            // try to query nodes with a bounds that's too large
-            target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            Assert.assertTrue(r.readEntity(String.class).contains("The maximum bbox size is"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
+        Assert.assertNotNull(doc);
     }
 
     @Test
@@ -1260,9 +1203,11 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         List<Long> mapIds = new ArrayList<>();
         // existing test layer
         mapIds.add(mapId);
+
         // create some more maps
         long mapId2 = MapUtils.insertMap(userId);
         mapIds.add(mapId2);
+
         long mapId3 = MapUtils.insertMap(userId);
         mapIds.add(mapId3);
 
@@ -1276,6 +1221,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         boolean foundFirstId = false;
         boolean foundSecondId = false;
         boolean foundThirdId = false;
+
         for (int i = 0; i < mapLayers.getLayers().length; i++) {
             MapLayer layer = mapLayers.getLayers()[i];
             int mapIdsIndex = -1;
@@ -1295,13 +1241,10 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 Assert.assertEquals("map-with-id-" + mapIds.get(mapIdsIndex), layer.getName());
             }
         }
-        Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
 
-        MapUtils.deleteOSMRecord(mapId2);
-        MapUtils.deleteOSMRecord(mapId3);
+        Assert.assertTrue(foundFirstId && foundSecondId && foundThirdId);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetDeletedLayer() throws Exception {
