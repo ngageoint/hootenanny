@@ -642,37 +642,37 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poiHasType && polyHasType && poly->getTags().contains("place") &&
-           !poi->getTags().contains("place"))
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per rule #20...");
-    }
-    matchClass.setMiss();
-    triggersParkRule = true;
-  }
-  //TODO: come up with a definitive list for this ??
-  //good: public transport, tunnel
-  else if (poiHasType && (poi->getTags().get("amenity").toLower() == "restaurant" ||
-                          poi->getTags().get("shop").toLower() == "car") &&
-           ((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
-           (poly->getTags().contains("public_transport") && !poi->getTags().contains("public_transport")) ||
-           (poly->getTags().get("tunnel").toLower() == "yes" && poi->getTags().get("tunnel").toLower() != "yes") ||
-           (poly->getTags().get("amenity").toLower() == "parking" && poi->getTags().get("amenity").toLower() != "parking") ||
-           (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
-           (poly->getTags().contains("highway") && !poi->getTags().contains("highway"))) /*&&
-           _typeScore < 0.2*/)
-  {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-    {
-      LOG_DEBUG("Returning miss per rule #21...");
-    }
-    matchClass.setMiss();
-    triggersParkRule = true;
-  }
+//  else if (poiHasType && polyHasType && poly->getTags().contains("place") &&
+//           !poi->getTags().contains("place"))
+//  {
+//    if (Log::getInstance().getLevel() == Log::Debug &&
+//        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+//    {
+//      LOG_DEBUG("Returning miss per rule #20...");
+//    }
+//    matchClass.setMiss();
+//    triggersParkRule = true;
+//  }
+//  //TODO: come up with a definitive list for this ??
+//  //good: public transport, tunnel
+//  else if (poiHasType && (poi->getTags().get("amenity").toLower() == "restaurant" ||
+//                          poi->getTags().get("shop").toLower() == "car") &&
+//           ((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
+//           (poly->getTags().contains("public_transport") && !poi->getTags().contains("public_transport")) ||
+//           (poly->getTags().get("tunnel").toLower() == "yes" && poi->getTags().get("tunnel").toLower() != "yes") ||
+//           (poly->getTags().get("amenity").toLower() == "parking" && poi->getTags().get("amenity").toLower() != "parking") ||
+//           (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
+//           (poly->getTags().contains("highway") && !poi->getTags().contains("highway"))) /*&&
+//           _typeScore < 0.2*/)
+//  {
+//    if (Log::getInstance().getLevel() == Log::Debug &&
+//        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+//    {
+//      LOG_DEBUG("Returning miss per rule #21...");
+//    }
+//    matchClass.setMiss();
+//    triggersParkRule = true;
+//  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
