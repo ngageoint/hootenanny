@@ -269,6 +269,14 @@
     },
     {
         "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=university",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
             "poi",
             "hgispoi"
         ],

@@ -1673,6 +1673,10 @@
         "similarTo": {
             "name": "amenity=pub",
             "weight": 0.8
+        },
+        "similarTo": {
+            "name": "amenity=biergarten",
+            "weight": 0.6
         }
     },
     {
@@ -1747,6 +1751,10 @@
             },
             {
                 "name": "amenity=university",
+                "weight": 0.7
+            },
+            {
+                "name": "building=university",
                 "weight": 0.7
             }
         ]

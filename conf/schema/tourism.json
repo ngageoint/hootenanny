@@ -66,7 +66,16 @@
             {
                 "name": "tourism=zoo",
                 "weight": 0.8
+            },
+            {
+                "name": "tourism=theme_park",
+                "weight": 0.8
             }
         ]
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=theme_park",
+        "objectType": "tag"
     }
 ]

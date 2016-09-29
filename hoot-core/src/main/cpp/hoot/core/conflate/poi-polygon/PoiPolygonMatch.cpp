@@ -133,7 +133,8 @@ _typeScoreThreshold(typeScoreThreshold)
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
-  if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier") == "fence")
+  if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier").toLower() == "fence" ||
+      tags.get("landuse").toLower() == "grass")
   {
     return false;
   }
@@ -150,7 +151,7 @@ bool PoiPolygonMatch::isPoi(const Element& e)
     LOG_DEBUG("poi candidate:");
     LOG_VARD(e.getTags().get("uuid"));
     LOG_VARD(e.getTags().getNames().size());
-    LOG_VARD(e.getTags().getNames());\
+    LOG_VARD(e.getTags().getNames());
     LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).toString());
     LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).intersects(
                OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
@@ -164,9 +165,11 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix.
   //TODO: replace logic in rule applier with commented out ones
   const Tags& tags = e.getTags();
-  if (tags.get("natural") == "tree" || tags.get("amenity") == "drinking_water" ||
-      tags.get("amenity") == "bench" /*|| tags.get("highway") == "traffic_signals",
-      tags.get("amenity") == "atm"*/)
+  if (tags.get("natural").toLower() == "tree" || tags.get("amenity").toLower() == "drinking_water" ||
+      tags.get("amenity").toLower() == "bench" || tags.contains("traffic_sign") ||
+      tags.get("amenity").toLower() == "recycling"
+      /*|| tags.get("highway").toLower() == "traffic_signals",
+      tags.get("amenity").toLower() == "atm"*/)
   {
     return false;
   }
@@ -500,6 +503,7 @@ map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>
   return _rf->getFeatures(m, _eid1, _eid2);
 }
 
+//TODO: add back in more description
 QString PoiPolygonMatch::toString() const
 {
   return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).

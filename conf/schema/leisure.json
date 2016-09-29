@@ -117,6 +117,10 @@
                 "weight": 0.8
             },
             {
+                "name": "leisure=track",
+                "weight": 0.8
+            },
+            {
                 "name": "sport=*",
                 "weight": 0.1
             }

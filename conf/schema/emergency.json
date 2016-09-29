@@ -1,0 +1,15 @@
+[
+    {
+        "isA": "emergency",
+        "name": "emergency=*",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=fire_hydrant",
+        "objectType": "tag"
+    }
+]

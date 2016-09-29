@@ -60,8 +60,9 @@ double PoiPolygonScorer::getNameScore(ConstElementPtr e1, ConstElementPtr e2) co
 
 double PoiPolygonScorer::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
-  if (e1->getTags().get("name").trimmed().isEmpty() &&
-      e2->getTags().get("name").trimmed().isEmpty())
+  const QString e1Name = e1->getTags().get("name");
+  const QString e2Name = e2->getTags().get("name");
+  if (e1Name.trimmed().isEmpty() && e2Name.trimmed().isEmpty())
   {
     return 0.0;
   }
@@ -72,7 +73,7 @@ double PoiPolygonScorer::getExactNameScore(ConstElementPtr e1, ConstElementPtr e
         new MeanWordSetDistance(
           new ExactStringDistance())))
    .extract(e1, e2);*/
-   return ExactStringDistance().compare(e1->getTags().get("name"), e2->getTags().get("name"));
+   return ExactStringDistance().compare(e1Name.toLower(), e2Name.toLower());
 }
 
 double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
@@ -88,10 +89,14 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QS
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
     const QString t2Cuisine = t2.get("cuisine").toLower();
-    if (t1Cuisine != t2Cuisine &&
+    //TODO: test this again
+    if (/*t1Cuisine != t2Cuisine*/
+        OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
         //Don't return false on regional, since its location dependent and we don't take that into
         //account.
-        t1Cuisine != "regional" && t2Cuisine != "regional")
+        t1Cuisine != "regional" && t2Cuisine != "regional" &&
+        //Don't fail on "other", since that's not very descriptive.
+        t1Cuisine != "other" && t2Cuisine != "other")
     {
       LOG_DEBUG("Failed type match on different cuisines.");
       return false;
@@ -167,6 +172,7 @@ double PoiPolygonScorer::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QS
       const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
       if (score >= result)
       {
+        //TODO: convert these to a list
         if (!t1Kvp.isEmpty() && t1Kvp != "building=yes" && t1Kvp != "poi=yes")
         {
           t1BestKvp = t1Kvp;

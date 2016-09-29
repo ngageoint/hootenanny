@@ -411,7 +411,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
       if (Log::getInstance().getLevel() == Log::Debug &&
           (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
       {
-        LOG_DEBUG("Returning review per park rule #2...");
+        LOG_DEBUG("Returning review per rule #2...");
       }
       matchClass.setReview();
     }
@@ -420,7 +420,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
       if (Log::getInstance().getLevel() == Log::Debug &&
           (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
       {
-        LOG_DEBUG("Returning miss per park rule #2...");
+        LOG_DEBUG("Returning miss per rule #2...");
       }
       matchClass.setMiss();
     }
@@ -435,7 +435,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #3...");
+      LOG_DEBUG("Returning miss per rule #3...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -450,7 +450,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #4...");
+      LOG_DEBUG("Returning miss per rule #4...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -461,7 +461,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #5...");
+      LOG_DEBUG("Returning miss per rule #5...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -478,7 +478,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #6...");
+      LOG_DEBUG("Returning miss per rule #6...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -490,7 +490,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #7...");
+      LOG_DEBUG("Returning miss per rule #7...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -503,7 +503,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #8...");
+      LOG_DEBUG("Returning miss per rule #8...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -515,7 +515,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #9...");
+      LOG_DEBUG("Returning miss per rule #9...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -528,7 +528,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #10...");
+      LOG_DEBUG("Returning miss per rule #10...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -540,7 +540,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #11...");
+      LOG_DEBUG("Returning miss per rule #11...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -552,17 +552,17 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #12...");
+      LOG_DEBUG("Returning miss per rule #12...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poi->getTags().get("amenity") == "school" && poly->getTags().contains("sport"))
+  else if (poi->getTags().get("amenity").toLower() == "school" && poly->getTags().contains("sport"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #13...");
+      LOG_DEBUG("Returning miss per rule #13...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -570,49 +570,51 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   else if (poiHasType && polyHasType && !_nameMatch &&
            (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
            (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
-           poly->getTags().get("leisure") == "common") ||
-           (poly->getTags().get("place") == "neighborhood" ||
-            poly->getTags().get("place") == "neighbourhood")) &&
+           poly->getTags().get("leisure").toLower() == "common") ||
+           (poly->getTags().get("place").toLower() == "neighborhood" ||
+            poly->getTags().get("place").toLower() == "neighbourhood")) &&
            polyArea > 50000)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #14...");
+      LOG_DEBUG("Returning miss per rule #14...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poi->getTags().get("place") == "neighbourhood" && !poly->getTags().contains("place"))
+  else if (poi->getTags().get("place").toLower() == "neighbourhood" &&
+           !poly->getTags().contains("place"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #15...");
+      LOG_DEBUG("Returning miss per rule #15...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }
   //TODO: replace with isArea/isPoi changes...tried already once and didn't seem to work
-  else if (poly->getTags().get("natural") == "coastline" ||
-           poi->getTags().get("highway") == "traffic_signals" ||
-           poi->getTags().get("amenity") == "atm" ||
-           poi->getTags().get("man_made") == "surveillance")
+  else if (poly->getTags().get("natural").toLower() == "coastline" ||
+           poi->getTags().get("highway").toLower() == "traffic_signals" ||
+           poi->getTags().get("amenity").toLower() == "atm" ||
+           poi->getTags().get("man_made").toLower() == "surveillance")
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #16...");
+      LOG_DEBUG("Returning miss per rule #16...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poi->getTags().get("barrier") == "gate" && poly->getTags().get("amenity") == "parking")
+  else if (poi->getTags().get("barrier").toLower() == "gate" &&
+           poly->getTags().get("amenity").toLower() == "parking")
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #17...");
+      LOG_DEBUG("Returning miss per rule #17...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -622,20 +624,51 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #18...");
+      LOG_DEBUG("Returning miss per rule #18...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
   }
   else if (poiHasType && polyHasType && !_typeScore == 1.0 &&
-           poi->getTags().get("amenity") == "toilets" &&
+           poi->getTags().get("amenity").toLower() == "toilets" &&
            !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
              OsmSchemaCategory::building()))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per park rule #19...");
+      LOG_DEBUG("Returning miss per rule #19...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  else if (poiHasType && polyHasType && poly->getTags().contains("place") &&
+           !poi->getTags().contains("place"))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #20...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  //TODO: come up with a definitive list for this ??
+  //good: public transport, tunnel
+  else if (poiHasType && (poi->getTags().get("amenity").toLower() == "restaurant" ||
+                          poi->getTags().get("shop").toLower() == "car") &&
+           ((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
+           (poly->getTags().contains("public_transport") && !poi->getTags().contains("public_transport")) ||
+           (poly->getTags().get("tunnel").toLower() == "yes" && poi->getTags().get("tunnel").toLower() != "yes") ||
+           (poly->getTags().get("amenity").toLower() == "parking" && poi->getTags().get("amenity").toLower() != "parking") ||
+           (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
+           (poly->getTags().contains("highway") && !poi->getTags().contains("highway"))) /*&&
+           _typeScore < 0.2*/)
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #21...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
