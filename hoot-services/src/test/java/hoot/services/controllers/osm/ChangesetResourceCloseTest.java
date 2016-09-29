@@ -102,7 +102,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         // close the changeset
         OsmTestUtils.closeChangeset(mapId, changesetId);
 
-        //ClientResponse response = null;
         try {
             // Try to close an already closed changeset. A failure should occur
             // and no data in the system should be modified.
@@ -141,7 +140,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
         }
     }
 
-    @Test
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToEmptyChangeset() throws Exception {
         String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
@@ -207,6 +206,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 // automatically, so the changeset's bounds should be no larger than that
                 defaultBounds.expand(originalBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
                 assertEquals(defaultBounds, changesetBounds);
+                throw e;
             }
         }
         finally {
@@ -295,23 +295,26 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             assertNotNull(responseData);
 
             XPath xpath = XmlUtils.createXPath();
-            Set<Long> nodeIds = new LinkedHashSet<>();
-            Set<Long> wayIds = new LinkedHashSet<>();
-            Set<Long> relationIds = new LinkedHashSet<>();
+
             NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
             assertEquals(5, returnedNodes.getLength());
 
             long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
             assertEquals(-1, oldElementId);
+
             long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
             assertNotSame(-1, newElementId);
+
+            Set<Long> nodeIds = new LinkedHashSet<>();
             nodeIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
             assertEquals(-2, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
             assertNotSame(-2, newElementId);
+
             nodeIds.add(newElementId);
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
                          newElementId);
@@ -319,8 +322,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
             assertEquals(-3, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
             assertNotSame(-3, newElementId);
+
             nodeIds.add(newElementId);
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
                          newElementId);
@@ -328,8 +333,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
             assertEquals(-4, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
             assertNotSame(-4, newElementId);
+
             nodeIds.add(newElementId);
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
                          newElementId);
@@ -337,8 +344,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
             assertEquals(-5, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
             assertNotSame(-5, newElementId);
+
             nodeIds.add(newElementId);
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
                          newElementId);
@@ -349,22 +358,29 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
             assertEquals(-6, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
             assertNotSame(-6, newElementId);
+
+            Set<Long> wayIds = new LinkedHashSet<>();
             wayIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
             assertEquals(-7, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
             assertNotSame(-7, newElementId);
+
             wayIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
             assertEquals(-8, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
             assertNotSame(-8, newElementId);
+
             wayIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
 
@@ -373,29 +389,38 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
             assertEquals(-9, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
             assertNotSame(-9, newElementId);
+
+            Set<Long> relationIds = new LinkedHashSet<>();
             relationIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
             assertEquals(-10, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
             assertNotSame(-10, newElementId);
+
             relationIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
             assertEquals(-11, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
             assertNotSame(-11, newElementId);
+
             relationIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
 
             oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
             assertEquals(-12, oldElementId);
+
             newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
             assertNotSame(-12, newElementId);
+
             relationIds.add(newElementId);
             assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
 
@@ -494,8 +519,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int maximumChangesetElements = 18;
             HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            assertEquals(maximumChangesetElements, Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
-
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
             Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
@@ -558,30 +581,37 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
             assertEquals((long) nodeIdsArr[0],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)));
+
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)),
                          Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)));
+
             assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
             assertEquals((long) nodeIdsArr[1],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData)));
+
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData)),
                     Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)));
-            assertEquals(2,
-                    Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+
+            assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
             NodeList returnedWays = XPathAPI.selectNodeList(responseData, "//osm/diffResult/way");
             assertEquals(2, returnedWays.getLength());
 
             assertEquals((long) wayIdsArr[0],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData)));
+
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData)),
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData)));
+
             assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
             assertEquals((long) wayIdsArr[1],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData)));
+
             assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData)),
                     Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData)));
+
             assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
 
             NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
@@ -590,16 +620,19 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // check the modified relations
             assertEquals((long) relationIdsArr[0],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)));
-            assertEquals(
-                    Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)),
+
+            assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)),
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData)));
+
             assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
 
             assertEquals((long) relationIdsArr[1],
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData)));
+
             assertEquals(
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData)),
                     Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData)));
+
             assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
 
             Timestamp now = super.getCurrentDBTime();
@@ -617,19 +650,19 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             assertEquals(5, nodes.size());
 
             CurrentNodes nodeRecord = nodes.get(nodeIdsArr[0]);
+
             assertEquals(new Long(changesetId), nodeRecord.getChangesetId());
             assertEquals(new Double((updatedBounds.getMinLat())), nodeRecord.getLatitude());
             assertEquals(new Double((updatedBounds.getMinLon())), nodeRecord.getLongitude());
             assertEquals(nodeIdsArr[0], nodeRecord.getId());
-            assertEquals(
-                    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+            assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                     nodeRecord.getTile());
-
             assertTrue(nodeRecord.getTimestamp().before(now));
-
             assertEquals(new Long(2), nodeRecord.getVersion());
             assertTrue(nodeRecord.getVisible());
+
             Map<String, String> tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(2, tags.size());
             assertEquals("val 1b", tags.get("key 1b"));
@@ -640,32 +673,35 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             assertEquals(new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
             assertEquals(new Double(updatedBounds.getMaxLon()), nodeRecord.getLongitude());
             assertEquals(nodeIdsArr[1], nodeRecord.getId());
-            assertEquals(
-                    new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+            assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                     nodeRecord.getTile());
             assertTrue(nodeRecord.getTimestamp().before(now));
             assertEquals(new Long(2), nodeRecord.getVersion());
             assertEquals(true, nodeRecord.getVisible());
+
             tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(1, tags.size());
             assertEquals("val 3b", tags.get("key 3b"));
 
             nodeRecord = nodes.get(nodeIdsArr[3]);
             tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(1, tags.size());
             assertEquals("val 3", tags.get("key 3"));
 
             nodeRecord = nodes.get(nodeIdsArr[4]);
             tags = PostgresUtils.postgresObjToHStore(nodeRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(1, tags.size());
             assertEquals("val 4", tags.get("key 4"));
 
             Map<Long, CurrentWays> ways = createQuery(mapId)
-                            .from(currentWays)
-                            .transform(groupBy(currentWays.id).as(currentWays));
+                    .from(currentWays)
+                    .transform(groupBy(currentWays.id).as(currentWays));
 
             assertEquals(3, ways.size());
 
@@ -684,10 +720,12 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(2, wayNodes.size());
+
             CurrentWayNodes wayNode = wayNodes.get(0);
             assertEquals(nodeIdsArr[0], wayNode.getNodeId());
             assertEquals(new Long(1), wayNode.getSequenceId());
             assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             wayNode = wayNodes.get(1);
             assertEquals(nodeIdsArr[4], wayNode.getNodeId());
             assertEquals(new Long(2), wayNode.getSequenceId());
@@ -714,14 +752,17 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(2, wayNodes.size());
+
             wayNode = wayNodes.get(0);
             assertEquals(nodeIdsArr[4], wayNode.getNodeId());
             assertEquals(new Long(1), wayNode.getSequenceId());
             assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             wayNode = wayNodes.get(1);
             assertEquals(nodeIdsArr[2], wayNode.getNodeId());
             assertEquals(new Long(2), wayNode.getSequenceId());
             assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             // verify the way with no tags
             assertTrue((wayRecord.getTags() == null)
                     || PostgresUtils.postgresObjToHStore(wayRecord.getTags()).isEmpty());
@@ -742,16 +783,20 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(2, wayNodes.size());
+
             wayNode = wayNodes.get(0);
             assertEquals(nodeIdsArr[0], wayNode.getNodeId());
             assertEquals(new Long(1), wayNode.getSequenceId());
             assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             wayNode = wayNodes.get(1);
             assertEquals(nodeIdsArr[1], wayNode.getNodeId());
             assertEquals(new Long(2), wayNode.getSequenceId());
             assertEquals(wayRecord.getId(), wayNode.getWayId());
+
             // verify the created tags
             tags = PostgresUtils.postgresObjToHStore(wayRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(1, tags.size());
             assertEquals("val 3", tags.get("key 3"));
@@ -779,28 +824,30 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                             .fetch();
 
             assertEquals(3, members.size());
+
             CurrentRelationMembers member = members.get(0);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
             assertEquals("role4", member.getMemberRole());
             assertEquals(new Integer(1), member.getSequenceId());
-
             assertEquals(wayIdsArr[1], member.getMemberId());
+
             member = members.get(1);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
             assertEquals("role2", member.getMemberRole());
             assertEquals(new Integer(2), member.getSequenceId());
-
             assertEquals(wayIdsArr[0], member.getMemberId());
+
             member = members.get(2);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
             assertEquals("", member.getMemberRole());
             assertEquals(new Integer(3), member.getSequenceId());
-
             assertEquals(nodeIdsArr[2], member.getMemberId());
+
             tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
+
             assertTrue((tags == null) || tags.isEmpty());
 
             relationRecord = relations.get(relationIdsArr[1]);
@@ -818,20 +865,21 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(2, members.size());
+
             member = members.get(0);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.relation, member.getMemberType());
             assertEquals("role1", member.getMemberRole());
             assertEquals(new Integer(1), member.getSequenceId());
-
             assertEquals(relationIdsArr[0], member.getMemberId());
+
             member = members.get(1);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
             assertEquals("", member.getMemberRole());
             assertEquals(new Integer(2), member.getSequenceId());
-
             assertEquals(nodeIdsArr[4], member.getMemberId());
+
             tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
             assertNotNull(tags);
             assertEquals(2, tags.size());
@@ -853,19 +901,22 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(1, members.size());
+
             member = members.get(0);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
             assertEquals("", member.getMemberRole());
             assertEquals(new Integer(1), member.getSequenceId());
-
             assertEquals(wayIdsArr[1], member.getMemberId());
+
             tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
+
             assertNotNull(tags);
             assertEquals(1, tags.size());
             assertEquals("val 4", tags.get("key 4"));
 
             relationRecord = relations.get(relationIdsArr[3]);
+
             assertEquals(new Long(changesetId), relationRecord.getChangesetId());
             assertEquals(relationIdsArr[3], relationRecord.getId());
             assertTrue(relationRecord.getTimestamp().before(now));
@@ -880,6 +931,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                     .fetch();
 
             assertEquals(1, members.size());
+
             member = members.get(0);
             assertEquals(relationRecord.getId(), member.getRelationId());
             assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
@@ -919,12 +971,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // should auto-close once changesetIdleTimeoutMinutes time has passed, since that's when
             // the changeset is set to auto-close upon its creation.
 
-            // set these props at the beginning, since they are read by
-            // OsmResourceTestUtils.createTestChangeset
+            // Set these props at the beginning, since they are read by OsmResourceTestUtils.createTestChangeset
 
             // Toggle the var that allows for testing changeset auto-closing.
-            // This will change the service
-            // to temporarily interpret changesetIdleTimeoutMinutes as a value
+            // This will change the service to temporarily interpret changesetIdleTimeoutMinutes as a value
             // in seconds instead of minutes to enable a faster runtime for this test.
             HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", String.valueOf(true));
 
@@ -933,9 +983,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES",
                     String.valueOf(changesetIdleTimeoutSeconds));
 
-            assertTrue(Boolean.parseBoolean(TEST_CHANGESET_AUTO_CLOSE));
-            assertEquals(changesetIdleTimeoutSeconds, Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES));
-
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
 
@@ -943,8 +990,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Thread.sleep(2000);
 
             // Access the changeset with a create request. This will trigger
-            // closing the changeset, and
-            // No data in the system should be modified by the create request.
+            // closing the changeset, and no data in the system should be modified by the create request.
             try {
                 target("api/0.6/changeset/" + changesetId + "/upload")
                     .queryParam("mapId", String.valueOf(mapId))
@@ -994,12 +1040,10 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // more elements to it. A changeset's expiration increases from changesetIdleTimeoutMinutes
             // to changesetMaxOpenTimeHours after a single element is written to it. The changeset should auto-close.
 
-            // set these props at the beginning, since they are read by
-            // OsmResourceTestUtils.createTestChangeset
+            // Set these props at the beginning, since they are read by OsmResourceTestUtils.createTestChangeset
 
             // Toggle the var that allows for testing changeset auto-closing.
-            // This will change the service
-            // to temporarily interpret changesetIdleTimeoutMinutes as a value
+            // This will change the serviceto temporarily interpret changesetIdleTimeoutMinutes as a value
             // in seconds instead of minutes to enable a faster runtime for this test.
             HootCustomPropertiesSetter.setProperty("TEST_CHANGESET_AUTO_CLOSE", String.valueOf(true));
 
@@ -1011,10 +1055,6 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int changesetMaxOpenTimeSeconds = 2;
             HootCustomPropertiesSetter.setProperty("CHANGESET_MAX_OPEN_TIME_HOURS",
                     String.valueOf(changesetMaxOpenTimeSeconds));
-
-            assertTrue(Boolean.parseBoolean(TEST_CHANGESET_AUTO_CLOSE));
-            assertEquals(changesetIdleTimeoutSeconds, Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES));
-            assertEquals(changesetMaxOpenTimeSeconds, Integer.parseInt(CHANGESET_MAX_OPEN_TIME_HOURS));
 
             BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
             long changesetId = OsmTestUtils.createTestChangeset(originalBounds);

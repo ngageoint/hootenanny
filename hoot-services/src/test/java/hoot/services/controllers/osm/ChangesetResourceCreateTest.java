@@ -56,9 +56,9 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
     @Category(UnitTest.class)
     public void testCreatePreflight() throws Exception {
         String responseData = target("api/0.6/changeset/create")
-                    .queryParam("mapId", "1")
-                    .request(MediaType.TEXT_PLAIN)
-                    .options(String.class);
+                .queryParam("mapId", "1")
+                .request(MediaType.TEXT_PLAIN)
+                .options(String.class);
 
         assertEquals("", responseData);
     }
@@ -79,6 +79,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
                 "</osm>", MediaType.TEXT_XML_TYPE), String.class);
 
         assertNotNull(responseData);
+
         Long changesetId = Long.parseLong(responseData);
         OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
     }
@@ -143,7 +144,6 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
-
             throw e;
         }
         finally {

@@ -75,8 +75,6 @@ import hoot.services.utils.XmlUtils;
 
 public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
-    public ChangesetResourceUploadCreateTest() {}
-
     @Test
     @Category(UnitTest.class)
     public void testUploadCreate() throws Exception {
@@ -148,9 +146,6 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
-        Set<Long> nodeIds = new LinkedHashSet<>();
-        Set<Long> wayIds = new LinkedHashSet<>();
-        Set<Long> relationIds = new LinkedHashSet<>();
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         assertEquals(5, returnedNodes.getLength());
 
@@ -158,50 +153,43 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(-1, oldElementId);
         long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
         assertNotSame(-1, newElementId);
+        Set<Long> nodeIds = new LinkedHashSet<>();
         nodeIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
         assertEquals(-2, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
         assertNotSame(-2, newElementId);
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
                 newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
         assertEquals(-3, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
         assertNotSame(-3, newElementId);
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
                 newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
         assertEquals(-4, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
         assertNotSame(-4, newElementId);
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
                 newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
         assertEquals(-5, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
         assertNotSame(-5, newElementId);
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
                 newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
 
@@ -212,6 +200,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(-6, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
         assertNotSame(-6, newElementId);
+        Set<Long> wayIds = new LinkedHashSet<>();
         wayIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
@@ -220,16 +209,14 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
         assertNotSame(-7, newElementId);
         wayIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
         assertEquals(-8, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
         assertNotSame(-8, newElementId);
         wayIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
 
         NodeList returnedRelations = XPathAPI.selectNodeList(responseData, "//osm/diffResult/relation");
         assertEquals(4, returnedRelations.getLength());
@@ -238,33 +225,30 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(-9, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
         assertNotSame(-9, newElementId);
+        Set<Long> relationIds = new LinkedHashSet<>();
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
         assertEquals(-10, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
         assertNotSame(-10, newElementId);
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
         assertEquals(-11, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
         assertNotSame(-11, newElementId);
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
         assertEquals(-12, oldElementId);
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
         assertNotSame(-12, newElementId);
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
 
         // changes have actually occurred with the upload of the
         // changeset...what's actually being done here is to compare the state of the default test data set
@@ -305,30 +289,35 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
-        List<Long> nodeIds = new ArrayList<>();
-        Set<Long> wayIds = new LinkedHashSet<>();
 
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         assertEquals(3, returnedNodes.getLength());
 
         long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
         assertEquals(-1, oldElementId);
+
         long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
         assertNotSame(-1, newElementId);
+
+        List<Long> nodeIds = new ArrayList<>();
         nodeIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
         assertEquals(-2, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
         assertNotSame(-2, newElementId);
+
         nodeIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
         assertEquals(-3, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
         assertNotSame(-3, newElementId);
+
         nodeIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
 
@@ -337,8 +326,11 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
         assertEquals(-1, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
         assertNotSame(-1, newElementId);
+
+        Set<Long> wayIds = new LinkedHashSet<>();
         wayIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
@@ -364,8 +356,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -376,8 +367,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -388,8 +378,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat() - .001), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon() - .001), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -400,6 +389,7 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .transform(groupBy(currentWays.id).as(currentWays));
 
         assertEquals(1, ways.size());
+
         CurrentWays wayRecord = ways.get(wayIdsArr[0]);
         assertEquals(new Long(changesetId), wayRecord.getChangesetId());
         assertEquals(wayIdsArr[0], wayRecord.getId());
@@ -415,23 +405,26 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(4, wayNodes.size());
+
         CurrentWayNodes wayNode = wayNodes.get(0);
         assertEquals(nodeIdsArr[0], wayNode.getNodeId());
         assertEquals(new Long(1), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(1);
         assertEquals(nodeIdsArr[1], wayNode.getNodeId());
         assertEquals(new Long(2), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(2);
         assertEquals(nodeIdsArr[2], wayNode.getNodeId());
         assertEquals(new Long(3), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(3);
         assertEquals(nodeIdsArr[0], wayNode.getNodeId());
         assertEquals(new Long(4), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
-
         assertNotNull(changeset);
         assertTrue(changeset.getCreatedAt().before(now));
         assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));
@@ -508,60 +501,61 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
         assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
-        Set<Long> nodeIds = new LinkedHashSet<>();
-        Set<Long> wayIds = new LinkedHashSet<>();
-        Set<Long> relationIds = new LinkedHashSet<>();
 
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         assertEquals(5, returnedNodes.getLength());
 
         long oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData));
         assertEquals(-1, oldElementId);
+
         long newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
         assertNotSame(-1, newElementId);
+
+        Set<Long> nodeIds = new LinkedHashSet<>();
         nodeIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData));
         assertEquals(-2, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
         assertNotSame(-2, newElementId);
+
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)) + 1,
                 newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData));
         assertEquals(-3, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData));
         assertNotSame(-3, newElementId);
+
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData)) + 1,
                 newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData));
         assertEquals(-4, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData));
         assertNotSame(-4, newElementId);
+
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)) + 1,
                 newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@old_id", responseData));
         assertEquals(-5, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_id", responseData));
         assertNotSame(-5, newElementId);
+
         nodeIds.add(newElementId);
-        assertEquals(
-                Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@new_id", responseData)) + 1,
                 newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[5]/@new_version", responseData)));
 
@@ -570,22 +564,29 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@old_id", responseData));
         assertEquals(-6, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_id", responseData));
         assertNotSame(-6, newElementId);
+
+        Set<Long> wayIds = new LinkedHashSet<>();
         wayIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@old_id", responseData));
         assertEquals(-7, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_id", responseData));
         assertNotSame(-7, newElementId);
+
         wayIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@old_id", responseData));
         assertEquals(-8, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_id", responseData));
         assertNotSame(-8, newElementId);
+
         wayIds.add(newElementId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/way[3]/@new_version", responseData)));
 
@@ -594,35 +595,40 @@ public class ChangesetResourceUploadCreateTest extends OsmResourceTestAbstract {
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData));
         assertEquals(-9, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
         assertNotSame(-9, newElementId);
+
+        Set<Long> relationIds = new LinkedHashSet<>();
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData));
         assertEquals(-10, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
         assertNotSame(-10, newElementId);
+
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData));
         assertEquals(-11, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
         assertNotSame(-11, newElementId);
+
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_version", responseData)));
 
         oldElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData));
         assertEquals(-12, oldElementId);
+
         newElementId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData));
         assertNotSame(-12, newElementId);
+
         relationIds.add(newElementId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
 
         // see notes by similar call in testUploadCreate
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, false);

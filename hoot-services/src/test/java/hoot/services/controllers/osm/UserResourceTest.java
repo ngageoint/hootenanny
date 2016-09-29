@@ -27,8 +27,7 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.utils.DbUtils.createQuery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -40,7 +39,6 @@ import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -161,7 +159,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
-            Assert.assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
+            assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
             throw e;
         }
     }
@@ -208,7 +206,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
 
         // probably need a better check than this
-        Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
+        assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
         assertEquals(DbUtils.getTestUserId(), Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
 
         // TODO: fix

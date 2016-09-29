@@ -47,7 +47,6 @@ import hoot.services.utils.MapUtils;
 
 
 public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
-    public ChangesetResourceUploadCommonTest() {}
 
     @Test
     @Category(UnitTest.class)

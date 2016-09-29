@@ -29,6 +29,7 @@ package hoot.services.controllers.osm;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URLDecoder;
 import java.sql.Timestamp;
@@ -71,7 +72,6 @@ import hoot.services.utils.XmlUtils;
 
 
 public class MapResourceTest extends OsmResourceTestAbstract {
-    public MapResourceTest() {}
 
     private void getMap(String idOrName, String multiLayerUniqueElementIdsStr,
         boolean useMultiLayerUniqueElementIdsParameter) throws Exception {
@@ -124,25 +124,20 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and one of the relations should be returned.
         Document responseData = null;
-        try {
-            if (useMultiLayerUniqueElementIdsParameter) {
-                responseData = target("api/0.6/map")
-                        .queryParam("mapId", idOrName)
-                        .queryParam("bbox", queryBounds.toServicesString())
-                        .queryParam("multiLayerUniqueElementIds", multiLayerUniqueElementIdsStr)
-                        .request(MediaType.TEXT_XML)
-                        .get(Document.class);
-            }
-            else {
-                responseData = target("api/0.6/map")
-                        .queryParam("mapId", idOrName)
-                        .queryParam("bbox", queryBounds.toServicesString())
-                        .request(MediaType.TEXT_XML)
-                        .get(Document.class);
-            }
+        if (useMultiLayerUniqueElementIdsParameter) {
+            responseData = target("api/0.6/map")
+                    .queryParam("mapId", idOrName)
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .queryParam("multiLayerUniqueElementIds", multiLayerUniqueElementIdsStr)
+                    .request(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
+        else {
+            responseData = target("api/0.6/map")
+                    .queryParam("mapId", idOrName)
+                    .queryParam("bbox", queryBounds.toServicesString())
+                    .request(MediaType.TEXT_XML)
+                    .get(Document.class);
         }
 
         Assert.assertNotNull(responseData);
@@ -153,230 +148,200 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         XPath xpath = XmlUtils.createXPath();
 
         boolean multiLayerUniqueElementIds = multiLayerUniqueElementIdsStr.toLowerCase().equals("true");
-        try {
-            Assert.assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-                OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
-                        originalBounds.getMaxLat(), originalBounds.getMaxLon(), false);
-                OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[2]), changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-                OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[3]), changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-                OsmTestUtils.verifyNode(responseData, 5, String.valueOf(nodeIdsArr[4]), changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-                OsmTestUtils.verifyNode(responseData, 6, String.valueOf(oobNodeIdsArr[0]), changesetId,
-                        queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, false);
-            }
-            else {
-                OsmTestUtils.verifyNode(responseData, 1, mapId + "_n_" + nodeIdsArr[0], changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), true);
-                OsmTestUtils.verifyNode(responseData, 2, mapId + "_n_" + nodeIdsArr[1], changesetId,
-                        originalBounds.getMaxLat(), originalBounds.getMaxLon(), true);
-                OsmTestUtils.verifyNode(responseData, 3, mapId + "_n_" + nodeIdsArr[2], changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), true);
-                OsmTestUtils.verifyNode(responseData, 4, mapId + "_n_" + nodeIdsArr[3], changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), true);
-                OsmTestUtils.verifyNode(responseData, 5, mapId + "_n_" + nodeIdsArr[4], changesetId,
-                        originalBounds.getMinLat(), originalBounds.getMinLon(), true);
-                OsmTestUtils.verifyNode(responseData, 6, mapId + "_n_" + oobNodeIdsArr[0], changesetId,
-                        queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, true);
-            }
+        assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+            OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
+                    originalBounds.getMaxLat(), originalBounds.getMaxLon(), false);
+            OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[2]), changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+            OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[3]), changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+            OsmTestUtils.verifyNode(responseData, 5, String.valueOf(nodeIdsArr[4]), changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+            OsmTestUtils.verifyNode(responseData, 6, String.valueOf(oobNodeIdsArr[0]), changesetId,
+                    queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing nodes from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyNode(responseData, 1, mapId + "_n_" + nodeIdsArr[0], changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), true);
+            OsmTestUtils.verifyNode(responseData, 2, mapId + "_n_" + nodeIdsArr[1], changesetId,
+                    originalBounds.getMaxLat(), originalBounds.getMaxLon(), true);
+            OsmTestUtils.verifyNode(responseData, 3, mapId + "_n_" + nodeIdsArr[2], changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), true);
+            OsmTestUtils.verifyNode(responseData, 4, mapId + "_n_" + nodeIdsArr[3], changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), true);
+            OsmTestUtils.verifyNode(responseData, 5, mapId + "_n_" + nodeIdsArr[4], changesetId,
+                    originalBounds.getMinLat(), originalBounds.getMinLon(), true);
+            OsmTestUtils.verifyNode(responseData, 6, mapId + "_n_" + oobNodeIdsArr[0], changesetId,
+                    queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, true);
         }
 
-        try {
-            Assert.assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1",
+                URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2",
+                URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
+        assertEquals("val 3",
+                URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
+        assertEquals("val 4",
+                URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
+
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        Set<Long> wayNodeIds = new LinkedHashSet<>();
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(nodeIdsArr[1]);
+        wayNodeIds.add(nodeIdsArr[4]);
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyWay(responseData, 1, String.valueOf(wayIdsArr[0]), changesetId, wayNodeIds,
+                    false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing node tags from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyWay(responseData, 1, mapId + "_w_" + wayIdsArr[0], changesetId, wayNodeIds,
+                    true);
         }
-
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-            Set<Long> wayNodeIds = new LinkedHashSet<>();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            wayNodeIds.add(nodeIdsArr[4]);
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyWay(responseData, 1, String.valueOf(wayIdsArr[0]), changesetId, wayNodeIds,
-                        false);
-            }
-            else {
-                OsmTestUtils.verifyWay(responseData, 1, mapId + "_w_" + wayIdsArr[0], changesetId, wayNodeIds,
-                        true);
-            }
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[2]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyWay(responseData, 2, String.valueOf(wayIdsArr[1]), changesetId, wayNodeIds,
-                        false);
-            }
-            else {
-                OsmTestUtils.verifyWay(responseData, 2, mapId + "_w_" + wayIdsArr[1], changesetId, wayNodeIds,
-                        true);
-            }
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyWay(responseData, 3, String.valueOf(wayIdsArr[2]), changesetId, wayNodeIds,
-                        false);
-            }
-            else {
-                OsmTestUtils.verifyWay(responseData, 3, mapId + "_w_" + wayIdsArr[2], changesetId, wayNodeIds,
-                        true);
-            }
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(oobNodeIdsArr[0]);
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyWay(responseData, 4, String.valueOf(wayIdsArr[3]), changesetId, wayNodeIds,
-                        false);
-            }
-            else {
-                OsmTestUtils.verifyWay(responseData, 4, mapId + "_w_" + wayIdsArr[3], changesetId, wayNodeIds,
-                        true);
-            }
-            wayNodeIds.clear();
+        wayNodeIds.clear();
+        wayNodeIds.add(nodeIdsArr[2]);
+        wayNodeIds.add(nodeIdsArr[1]);
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyWay(responseData, 2, String.valueOf(wayIdsArr[1]), changesetId, wayNodeIds,
+                    false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing ways from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyWay(responseData, 2, mapId + "_w_" + wayIdsArr[1], changesetId, wayNodeIds,
+                    true);
         }
-
-        try {
-            Assert.assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
+        wayNodeIds.clear();
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(nodeIdsArr[1]);
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyWay(responseData, 3, String.valueOf(wayIdsArr[2]), changesetId, wayNodeIds,
+                    false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing way tags from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyWay(responseData, 3, mapId + "_w_" + wayIdsArr[2], changesetId, wayNodeIds,
+                    true);
         }
-
-        try {
-            Assert.assertEquals(5, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
-            members = new ArrayList<>();
-
-            members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
-            members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
-            members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
-            members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
-
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyRelation(responseData, 1, String.valueOf(relationIdsArr[0]), changesetId,
-                        members, false);
-            }
-            else {
-                OsmTestUtils.verifyRelation(responseData, 1, mapId + "_r_" + relationIdsArr[0], changesetId,
-                        members, true);
-            }
-
-            members.clear();
-
-            members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
-            members.add(new RelationMember(relationIdsArr[0], ElementType.Relation, "role1"));
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyRelation(responseData, 2, String.valueOf(relationIdsArr[1]), changesetId,
-                        members, false);
-            }
-            else {
-                OsmTestUtils.verifyRelation(responseData, 2, mapId + "_r_" + relationIdsArr[1], changesetId,
-                        members, true);
-            }
-            members.clear();
-
-            members.add(new RelationMember(wayIdsArr[1], ElementType.Way));
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyRelation(responseData, 3, String.valueOf(relationIdsArr[2]), changesetId,
-                        members, false);
-            }
-            else {
-                OsmTestUtils.verifyRelation(responseData, 3, mapId + "_r_" + relationIdsArr[2], changesetId,
-                        members, true);
-            }
-            members.clear();
-
-            members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyRelation(responseData, 4, String.valueOf(relationIdsArr[3]), changesetId,
-                        members, false);
-            }
-            else {
-                OsmTestUtils.verifyRelation(responseData, 4, mapId + "_r_" + relationIdsArr[3], changesetId,
-                        members, true);
-            }
-            members.clear();
-
-            members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
-            members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
-            members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role1"));
-            members.add(new RelationMember(oobWayId, ElementType.Way, "role1"));
-            if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
-                OsmTestUtils.verifyRelation(responseData, 5, String.valueOf(relationIdsArr[4]), changesetId,
-                        members, false);
-            }
-            else {
-                OsmTestUtils.verifyRelation(responseData, 5, mapId + "_r_" + relationIdsArr[4], changesetId,
-                        members, true);
-            }
-            members.clear();
+        wayNodeIds.clear();
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(oobNodeIdsArr[0]);
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyWay(responseData, 4, String.valueOf(wayIdsArr[3]), changesetId, wayNodeIds,
+                    false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing relations from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyWay(responseData, 4, mapId + "_w_" + wayIdsArr[3], changesetId, wayNodeIds,
+                    true);
+        }
+        wayNodeIds.clear();
+
+        assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
+        assertEquals("val 1",
+                URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
+        assertEquals("val 2",
+                URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
+        assertEquals("val 3",
+                URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
+
+        assertEquals(5, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        members = new ArrayList<>();
+
+        members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+        members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
+        members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
+        members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyRelation(responseData, 1, String.valueOf(relationIdsArr[0]), changesetId,
+                    members, false);
+        }
+        else {
+            OsmTestUtils.verifyRelation(responseData, 1, mapId + "_r_" + relationIdsArr[0], changesetId,
+                    members, true);
         }
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
+        members.clear();
+
+        members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
+        members.add(new RelationMember(relationIdsArr[0], ElementType.Relation, "role1"));
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyRelation(responseData, 2, String.valueOf(relationIdsArr[1]), changesetId,
+                    members, false);
         }
-        catch (Exception e) {
-            Assert.fail("Error parsing relation tags from response document: " + e.getMessage());
+        else {
+            OsmTestUtils.verifyRelation(responseData, 2, mapId + "_r_" + relationIdsArr[1], changesetId,
+                    members, true);
         }
+        members.clear();
+
+        members.add(new RelationMember(wayIdsArr[1], ElementType.Way));
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyRelation(responseData, 3, String.valueOf(relationIdsArr[2]), changesetId,
+                    members, false);
+        }
+        else {
+            OsmTestUtils.verifyRelation(responseData, 3, mapId + "_r_" + relationIdsArr[2], changesetId,
+                    members, true);
+        }
+        members.clear();
+
+        members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyRelation(responseData, 4, String.valueOf(relationIdsArr[3]), changesetId,
+                    members, false);
+        }
+        else {
+            OsmTestUtils.verifyRelation(responseData, 4, mapId + "_r_" + relationIdsArr[3], changesetId,
+                    members, true);
+        }
+        members.clear();
+
+        members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+        members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
+        members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role1"));
+        members.add(new RelationMember(oobWayId, ElementType.Way, "role1"));
+        if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
+            OsmTestUtils.verifyRelation(responseData, 5, String.valueOf(relationIdsArr[4]), changesetId,
+                    members, false);
+        }
+        else {
+            OsmTestUtils.verifyRelation(responseData, 5, mapId + "_r_" + relationIdsArr[4], changesetId,
+                    members, true);
+        }
+        members.clear();
+
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
+        assertEquals("val 1",
+                URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
+        assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
+        assertEquals("val 2",
+                URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
+        assertEquals("val 3",
+                URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
+        assertEquals("val 4",
+                URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
     }
 
     @Test
@@ -403,25 +368,20 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         BoundingBox queryBounds = OsmTestUtils.createTestQueryBounds();
 
         // Query an empty map. No elements should be returned.
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/map")
+        Document responseData = target("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
         OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
     }
 
     @Test
@@ -459,17 +419,12 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and one of the relations should be returned.
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/map")
+                .queryParam("mapId", String.valueOf(mapId))
+                .queryParam("bbox", queryBounds.toServicesString())
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
@@ -477,98 +432,65 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         XPath xpath = XmlUtils.createXPath();
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-            OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[2]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[3]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing nodes from response document: " + e.getMessage());
-        }
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[2]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[3]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing node tags from response document: " + e.getMessage());
-        }
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
+        assertEquals("val 4", URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        members = new ArrayList<>();
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
-            members = new ArrayList<>();
+        members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+        members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+        OsmTestUtils.verifyRelation(responseData, 1, String.valueOf(relationIdsArr[0]), changesetId, members, false);
+        members.clear();
 
-            members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
-            members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
-            OsmTestUtils.verifyRelation(responseData, 1, String.valueOf(relationIdsArr[0]), changesetId, members,
-                    false);
-            members.clear();
+        members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
+        members.add(new RelationMember(relationIdsArr[0], ElementType.Relation, "role1"));
+        OsmTestUtils.verifyRelation(responseData, 2, String.valueOf(relationIdsArr[1]), changesetId, members, false);
+        members.clear();
 
-            members.add(new RelationMember(nodeIdsArr[4], ElementType.Node, "role1"));
-            members.add(new RelationMember(relationIdsArr[0], ElementType.Relation, "role1"));
-            OsmTestUtils.verifyRelation(responseData, 2, String.valueOf(relationIdsArr[1]), changesetId, members,
-                    false);
-            members.clear();
+        members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
+        OsmTestUtils.verifyRelation(responseData, 3, String.valueOf(relationIdsArr[2]), changesetId, members, false);
+        members.clear();
 
-            members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
-            OsmTestUtils.verifyRelation(responseData, 3, String.valueOf(relationIdsArr[2]), changesetId, members,
-                    false);
-            members.clear();
+        members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+        members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
+        OsmTestUtils.verifyRelation(responseData, 4, String.valueOf(relationIdsArr[3]), changesetId, members, false);
+        members.clear();
 
-            members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
-            members.add(new RelationMember(oobNodeIdsArr[1], ElementType.Node, "role1"));
-            OsmTestUtils.verifyRelation(responseData, 4, String.valueOf(relationIdsArr[3]), changesetId, members,
-                    false);
-            members.clear();
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing relations from response document: " + e.getMessage());
-        }
-
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing relation tags from response document: " + e.getMessage());
-        }
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/relation/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/relation[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/relation[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/relation[2]/tag").getLength());
+        assertEquals("key 2", xpath.evaluate("//osm/relation[2]/tag[1]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 3", xpath.evaluate("//osm/relation[2]/tag[2]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/relation[2]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation[3]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/relation[3]/tag[1]/@k", responseData));
+        assertEquals("val 4", URLDecoder.decode(xpath.evaluate("//osm/relation[3]/tag[1]/@v", responseData), "UTF-8"));
     }
 
     @Test
@@ -604,18 +526,13 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and
         // one of the relations should be returned.
-        Document responseData = null;
-        try {
-            responseData = target()
+        Document responseData = target()
                     .path("api/0.6/map")
                     .queryParam("mapId", String.valueOf(mapId))
                     .queryParam("bbox", queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
@@ -623,94 +540,77 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         XPath xpath = XmlUtils.createXPath();
 
-        try {
-            Assert.assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-            OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
-                    originalBounds.getMaxLat(), originalBounds.getMaxLon(), false);
-            OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[2]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[3]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 5, String.valueOf(nodeIdsArr[4]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 6, String.valueOf(oobNodeIdsArr[0]), changesetId,
-                    queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, false);
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing nodes from response document: " + e.getMessage());
-        }
+        assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
+                originalBounds.getMaxLat(), originalBounds.getMaxLon(), false);
+        OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[2]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[3]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 5, String.valueOf(nodeIdsArr[4]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 6, String.valueOf(oobNodeIdsArr[0]), changesetId,
+                queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, false);
 
-        try {
-            Assert.assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing node tags from response document: " + e.getMessage());
-        }
+        assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[5]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/node[5]/tag[1]/@k", responseData));
+        assertEquals("val 4", URLDecoder.decode(xpath.evaluate("//osm/node[5]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-            Set<Long> wayNodeIds = new LinkedHashSet<>();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            wayNodeIds.add(nodeIdsArr[4]);
-            OsmTestUtils.verifyWay(responseData, 1, String.valueOf(wayIdsArr[0]), changesetId, wayNodeIds, false);
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[2]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            OsmTestUtils.verifyWay(responseData, 2, String.valueOf(wayIdsArr[1]), changesetId, wayNodeIds, false);
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(nodeIdsArr[1]);
-            OsmTestUtils.verifyWay(responseData, 3, String.valueOf(wayIdsArr[2]), changesetId, wayNodeIds, false);
-            wayNodeIds.clear();
-            wayNodeIds.add(nodeIdsArr[0]);
-            wayNodeIds.add(oobNodeIdsArr[0]);
-            OsmTestUtils.verifyWay(responseData, 4, String.valueOf(wayIdsArr[3]), changesetId, wayNodeIds, false);
-            wayNodeIds.clear();
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing ways from response document: " + e.getMessage());
-        }
+        Set<Long> wayNodeIds = new LinkedHashSet<>();
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(nodeIdsArr[1]);
+        wayNodeIds.add(nodeIdsArr[4]);
 
-        try {
-            Assert.assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing way tags from response document: " + e.getMessage());
-        }
+        OsmTestUtils.verifyWay(responseData, 1, String.valueOf(wayIdsArr[0]), changesetId, wayNodeIds, false);
 
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        wayNodeIds.clear();
+
+        wayNodeIds.add(nodeIdsArr[2]);
+        wayNodeIds.add(nodeIdsArr[1]);
+
+        OsmTestUtils.verifyWay(responseData, 2, String.valueOf(wayIdsArr[1]), changesetId, wayNodeIds, false);
+
+        wayNodeIds.clear();
+
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(nodeIdsArr[1]);
+
+        OsmTestUtils.verifyWay(responseData, 3, String.valueOf(wayIdsArr[2]), changesetId, wayNodeIds, false);
+
+        wayNodeIds.clear();
+
+        wayNodeIds.add(nodeIdsArr[0]);
+        wayNodeIds.add(oobNodeIdsArr[0]);
+
+        OsmTestUtils.verifyWay(responseData, 4, String.valueOf(wayIdsArr[3]), changesetId, wayNodeIds, false);
+
+        wayNodeIds.clear();
+
+        assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[3]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/way[3]/tag[1]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/way[3]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
     }
 
     @Test
@@ -727,19 +627,13 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         OsmTestUtils.createNodesOutsideOfQueryBounds(changesetId, queryBounds);
 
         // Query the elements back out geospatially. All but one of the
-        // nodes, one of the ways, and
-        // one of the relations should be returned.
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        // nodes, one of the ways, and one of the relations should be returned.
+        Document responseData = target("api/0.6/map")
+                .queryParam("mapId", String.valueOf(mapId))
+                .queryParam("bbox", queryBounds.toServicesString())
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
@@ -747,46 +641,31 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         XPath xpath = XmlUtils.createXPath();
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-            OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[2]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[3]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-            OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId,
-                    originalBounds.getMinLat(), originalBounds.getMinLon(), false);
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing nodes from response document: " + e.getMessage());
-        }
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[2]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 3, String.valueOf(nodeIdsArr[3]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
+        OsmTestUtils.verifyNode(responseData, 4, String.valueOf(nodeIdsArr[4]), changesetId,
+                originalBounds.getMinLat(), originalBounds.getMinLon(), false);
 
-        try {
-            Assert.assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing node tags from response document: " + e.getMessage());
-        }
-
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-        Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/node[3]/tag[1]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/node[3]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
+        assertEquals("val 4", URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
     }
 
     @Test
@@ -819,9 +698,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .set(currentNodes.visible, false)
                 .execute();
 
-        Assert.assertEquals(1, success);
+        assertEquals(1, success);
 
-        Assert.assertEquals(false, createQuery(mapId)
+        assertEquals(false, createQuery(mapId)
                 .select(currentNodes.visible)
                 .from(currentNodes)
                 .where(currentNodes.id.eq(nodeIdsArr[3]))
@@ -844,9 +723,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .set(currentWays.visible, false)
                 .execute();
 
-        Assert.assertEquals(1, success);
+        assertEquals(1, success);
 
-        Assert.assertEquals(false, createQuery(mapId)
+        assertEquals(false, createQuery(mapId)
                 .select(currentWays.visible)
                 .from(currentWays)
                 .where(currentWays.id.eq(wayIdsArr[0]))
@@ -869,9 +748,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .set(currentRelations.visible, false)
                 .execute();
 
-        Assert.assertEquals(1, success);
+        assertEquals(1, success);
 
-        Assert.assertEquals(false, createQuery(mapId)
+        assertEquals(false, createQuery(mapId)
                 .select(currentRelations.visible)
                 .from(currentRelations)
                 .where(currentRelations.id.eq(relationIdsArr[0]))
@@ -879,23 +758,18 @@ public class MapResourceTest extends OsmResourceTestAbstract {
 
         // Query the elements back out geospatially and ensure the invisible
         // node and way do not come back in the results.
-        Document responseData = null;
-        try {
-            responseData = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        Document responseData = target("api/0.6/map")
+                .queryParam("mapId", String.valueOf(mapId))
+                .queryParam("bbox", queryBounds.toServicesString())
+                .request(MediaType.TEXT_XML)
+                .get(Document.class);
+
         Assert.assertNotNull(responseData);
 
         OsmTestUtils.verifyOsmHeader(responseData);
         OsmTestUtils.verifyBounds(responseData, queryBounds);
 
-        Assert.assertEquals(8, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(8, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         OsmTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
                 originalBounds.getMinLat(), originalBounds.getMinLon(), false);
         OsmTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
@@ -906,48 +780,38 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 originalBounds.getMinLat(), originalBounds.getMinLon(), false);
 
         XPath xpath = XmlUtils.createXPath();
-        try {
-            Assert.assertEquals(5, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
-            Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
-            Assert.assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 1",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
-            Assert.assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-            Assert.assertEquals("val 2",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
-            Assert.assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 4",
-                    URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing node tags from response document: " + e.getMessage());
-        }
+        assertEquals(5, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
+        assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[2]/tag").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node[3]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/node[4]/tag").getLength());
+        assertEquals("key 4", xpath.evaluate("//osm/node[4]/tag[1]/@k", responseData));
+        assertEquals("val 4", URLDecoder.decode(xpath.evaluate("//osm/node[4]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
 
-        Assert.assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
         Set<Long> wayNodeIds = new LinkedHashSet<>();
         wayNodeIds.add(nodeIdsArr[2]);
         wayNodeIds.add(nodeIdsArr[1]);
+
         OsmTestUtils.verifyWay(responseData, 1, String.valueOf(wayIdsArr[1]), changesetId, wayNodeIds, false);
+
         wayNodeIds.clear();
+
         wayNodeIds.add(nodeIdsArr[0]);
         wayNodeIds.add(nodeIdsArr[1]);
+
         OsmTestUtils.verifyWay(responseData, 2, String.valueOf(wayIdsArr[2]), changesetId, wayNodeIds, false);
         wayNodeIds.clear();
 
-        try {
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
-            Assert.assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
-            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
-            Assert.assertEquals("key 3", xpath.evaluate("//osm/way[2]/tag[1]/@k", responseData));
-            Assert.assertEquals("val 3",
-                    URLDecoder.decode(xpath.evaluate("//osm/way[2]/tag[1]/@v", responseData), "UTF-8"));
-        }
-        catch (Exception e) {
-            Assert.fail("Error parsing way tags from response document: " + e.getMessage());
-        }
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way/tag").getLength());
+        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/way[2]/tag").getLength());
+        assertEquals("key 3", xpath.evaluate("//osm/way[2]/tag[1]/@k", responseData));
+        assertEquals("val 3", URLDecoder.decode(xpath.evaluate("//osm/way[2]/tag[1]/@v", responseData), "UTF-8"));
 
         OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
@@ -985,7 +849,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
             }
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
-                Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+                assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
                 Assert.assertTrue(r.readEntity(String.class)
                         .contains("The maximum number of nodes that may be returned in a map query is "
                                 + maxQueryNumberOfNodes + ".  This query returned " + (maxQueryNumberOfNodes + 1)
@@ -1021,11 +885,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("No map exists"));
-
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -1049,7 +911,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID: null"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
@@ -1076,7 +938,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("No map exists with ID:"));
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
@@ -1101,7 +963,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 .fetchFirst();
 
         map.setId(nextMapId);
+
         Timestamp now = super.getCurrentDBTime();
+
         map.setCreatedAt(now);
         String duplicatedMapName = "map-with-id-" + mapId;
         map.setDisplayName(duplicatedMapName);
@@ -1119,9 +983,8 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            assertEquals(404, r.getStatus());
             Assert.assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
-
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1149,11 +1012,9 @@ public class MapResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
+            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
-
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-
             throw e;
         }
     }
@@ -1238,7 +1099,7 @@ public class MapResourceTest extends OsmResourceTestAbstract {
                 mapIdsIndex = 2;
             }
             if (mapIdsIndex != -1) {
-                Assert.assertEquals("map-with-id-" + mapIds.get(mapIdsIndex), layer.getName());
+                assertEquals("map-with-id-" + mapIds.get(mapIdsIndex), layer.getName());
             }
         }
 

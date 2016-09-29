@@ -79,11 +79,9 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
 
         assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
-        assertEquals("val 1",
-                URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
         assertEquals("key 2", xpath.evaluate("//osm/node[1]/tag[2]/@k", responseData));
-        assertEquals("val 2",
-                URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[2]/@v", responseData), "UTF-8"));
     }
 
     private static void verifyFirstWayWasReturned(Document responseData, String id, long changesetId,
@@ -101,20 +99,16 @@ public class ElementResourceTest extends OsmResourceTestAbstract {
         OsmTestUtils.verifyWay(responseData, 1, id, changesetId, wayNodeIds, id.contains("_"));
         assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way[1]/tag").getLength());
         assertEquals("key 1", xpath.evaluate("//osm/way[1]/tag[1]/@k", responseData));
-        assertEquals("val 1",
-                URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
+        assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[1]/@v", responseData), "UTF-8"));
         assertEquals("key 2", xpath.evaluate("//osm/way[1]/tag[2]/@k", responseData));
-        assertEquals("val 2",
-                URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
+        assertEquals("val 2", URLDecoder.decode(xpath.evaluate("//osm/way[1]/tag[2]/@v", responseData), "UTF-8"));
+
         if (wayNodeIds != null) {
             assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/way[1]/nd").getLength());
             Long[] wayNodeIdsArr = wayNodeIds.toArray(new Long[wayNodeIds.size()]);
-            assertEquals(String.valueOf(wayNodeIdsArr[0]),
-                    xpath.evaluate("//osm/way[1]/nd[1]/@ref", responseData));
-            assertEquals(String.valueOf(wayNodeIdsArr[1]),
-                    xpath.evaluate("//osm/way[1]/nd[2]/@ref", responseData));
-            assertEquals(String.valueOf(wayNodeIdsArr[2]),
-                    xpath.evaluate("//osm/way[1]/nd[3]/@ref", responseData));
+            assertEquals(String.valueOf(wayNodeIdsArr[0]), xpath.evaluate("//osm/way[1]/nd[1]/@ref", responseData));
+            assertEquals(String.valueOf(wayNodeIdsArr[1]), xpath.evaluate("//osm/way[1]/nd[2]/@ref", responseData));
+            assertEquals(String.valueOf(wayNodeIdsArr[2]), xpath.evaluate("//osm/way[1]/nd[3]/@ref", responseData));
         }
     }
 

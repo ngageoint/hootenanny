@@ -250,18 +250,20 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
 
         NodeList returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
         assertEquals(5, returnedNodes.getLength());
-
         // check the created nodes
         assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)));
+
         long newId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData));
         assertThat(newId, is(greaterThan(0L)));
+
         Set<Long> createdNodeIds = new LinkedHashSet<>();
         createdNodeIds.add(newId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
-
         assertEquals(-2, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@old_id", responseData)));
+
         newId = Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_id", responseData));
         assertThat(newId, is(greaterThan(0L)));
+
         createdNodeIds.add(newId);
         assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/node[2]/@new_version", responseData)));
 
@@ -271,7 +273,6 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@old_id", responseData)),
                 Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_id", responseData)));
         assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/node[3]/@new_version", responseData)));
-
         assertEquals((long) nodeIdsArr[1],
                 Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData)));
         assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[4]/@old_id", responseData)),
@@ -329,23 +330,22 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(xml, 6, returnedRelations.getLength());
 
         // check the created relations
-        assertEquals(-5,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)));
+        assertEquals(-5, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@old_id", responseData)));
         newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_id", responseData));
         assertThat(newId, is(greaterThan(0L)));
+
         Set<Long> createdRelationIds = new LinkedHashSet<>();
         createdRelationIds.add(newId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
-        assertEquals(-6,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[1]/@new_version", responseData)));
+        assertEquals(-6, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@old_id", responseData)));
+
         newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_id", responseData));
         assertThat(newId, is(greaterThan(0L)));
+
         createdRelationIds.add(newId);
-        assertEquals(1,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
-        assertEquals(-7,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData)));
+        assertEquals(1, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[2]/@new_version", responseData)));
+        assertEquals(-7, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@old_id", responseData)));
+
         newId = Long.parseLong(xpath.evaluate("//osm/diffResult/relation[3]/@new_id", responseData));
         assertThat(newId, is(greaterThan(0L)));
         createdRelationIds.add(newId);
@@ -357,19 +357,17 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData)));
         assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@old_id", responseData)),
                 Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_id", responseData)));
-        assertEquals(2,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
+        assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[4]/@new_version", responseData)));
         assertEquals((long) relationIdsArr[1],
                 Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@old_id", responseData)));
         assertEquals(
                 Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@old_id", responseData)),
                 Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@new_id", responseData)));
-        assertEquals(2,
-                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@new_version", responseData)));
+        assertEquals(2, Long.parseLong(xpath.evaluate("//osm/diffResult/relation[5]/@new_version", responseData)));
 
         // check the deleted relation
         assertEquals((long)relationIdsArr[2],
-                            Long.parseLong(xpath.evaluate("//osm/diffResult/relation[6]/@old_id", responseData)));
+                Long.parseLong(xpath.evaluate("//osm/diffResult/relation[6]/@old_id", responseData)));
         deletedXml = XPathAPI.selectSingleNode(responseData, "//osm/diffResult/relation[6]");
         assertNull(deletedXml.getAttributes().getNamedItem("new_id"));
         assertNull(deletedXml.getAttributes().getNamedItem("new_version"));
@@ -392,8 +390,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(updatedBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(2), nodeRecord.getVersion());
@@ -411,8 +408,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(updatedBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(2), nodeRecord.getVersion());
@@ -432,8 +428,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(createdNodeIdsArr[0], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -452,8 +447,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(createdNodeIdsArr[1], nodeRecord.getId());
-        assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -471,8 +465,8 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals("val 4", tags.get("key 4"));
 
         Map<Long, CurrentWays> ways = createQuery(mapId)
-                        .from(currentWays)
-                        .transform(groupBy(currentWays.id).as(currentWays));
+                .from(currentWays)
+                .transform(groupBy(currentWays.id).as(currentWays));
 
         assertEquals(4, ways.size());
 
@@ -496,6 +490,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(nodeIdsArr[0], wayNode.getNodeId());
         assertEquals(new Long(1), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(1);
         assertEquals(nodeIdsArr[4], wayNode.getNodeId());
         assertEquals(new Long(2), wayNode.getSequenceId());
@@ -522,10 +517,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(2, wayNodes.size());
+
         wayNode = wayNodes.get(0);
         assertEquals(nodeIdsArr[4], wayNode.getNodeId());
         assertEquals(new Long(1), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(1);
         assertEquals(nodeIdsArr[2], wayNode.getNodeId());
         assertEquals(new Long(2), wayNode.getSequenceId());
@@ -548,10 +545,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(2, wayNodes.size());
+
         wayNode = wayNodes.get(0);
         assertEquals(nodeIdsArr[0], wayNode.getNodeId());
         assertEquals(new Long(1), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(1);
         assertEquals(nodeIdsArr[4], wayNode.getNodeId());
         assertEquals(new Long(2), wayNode.getSequenceId());
@@ -582,10 +581,12 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
         assertEquals(nodeIdsArr[0], wayNode.getNodeId());
         assertEquals(new Long(1), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(1);
         assertEquals(nodeIdsArr[2], wayNode.getNodeId());
         assertEquals(new Long(2), wayNode.getSequenceId());
         assertEquals(wayRecord.getId(), wayNode.getWayId());
+
         wayNode = wayNodes.get(2);
         assertEquals(nodeIdsArr[4], wayNode.getNodeId());
         assertEquals(new Long(3), wayNode.getSequenceId());
@@ -623,20 +624,21 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                         .fetch();
 
         assertEquals(3, members.size());
+
         CurrentRelationMembers member = members.get(0);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
         assertEquals("role4", member.getMemberRole());
         assertEquals(new Integer(1), member.getSequenceId());
-
         assertEquals(wayIdsArr[1], member.getMemberId());
+
         member = members.get(1);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
         assertEquals("role2", member.getMemberRole());
         assertEquals(new Integer(2), member.getSequenceId());
-
         assertEquals(wayIdsArr[0], member.getMemberId());
+
         member = members.get(2);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
@@ -701,6 +703,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(1, members.size());
+
         member = members.get(0);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
@@ -727,26 +730,26 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(3, members.size());
+
         member = members.get(0);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.way, member.getMemberType());
         assertEquals("role2", member.getMemberRole());
         assertEquals(new Integer(1), member.getSequenceId());
-
         assertEquals(wayIdsArr[1], member.getMemberId());
+
         member = members.get(1);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
         assertEquals("role3", member.getMemberRole());
         assertEquals(new Integer(2), member.getSequenceId());
-
         assertEquals(nodeIdsArr[2], member.getMemberId());
+
         member = members.get(2);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
         assertEquals("", member.getMemberRole());
         assertEquals(new Integer(3), member.getSequenceId());
-
         assertEquals(nodeIdsArr[4], member.getMemberId());
         assertTrue((relationRecord.getTags() == null)
                 || PostgresUtils.postgresObjToHStore(relationRecord.getTags()).isEmpty());
@@ -766,20 +769,21 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
                 .fetch();
 
         assertEquals(2, members.size());
+
         member = members.get(0);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.node, member.getMemberType());
         assertEquals("role1", member.getMemberRole());
         assertEquals(new Integer(1), member.getSequenceId());
-
         assertEquals(nodeIdsArr[0], member.getMemberId());
+
         member = members.get(1);
         assertEquals(relationRecord.getId(), member.getRelationId());
         assertEquals(DbUtils.nwr_enum.relation, member.getMemberType());
         assertEquals("", member.getMemberRole());
         assertEquals(new Integer(2), member.getSequenceId());
-
         assertEquals(createdRelationIdsArr[0], member.getMemberId());
+
         // verify the created tags
         tags = PostgresUtils.postgresObjToHStore(relationRecord.getTags());
         assertNotNull(tags);
