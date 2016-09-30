@@ -106,7 +106,7 @@ private:
   /**
   * Condense ranges that overlap or are within "slop" cells of each other.
   */
-  vector<Range> _condenseRanges(vector<Range> r);
+  vector<Range> _condenseRanges(vector<Range>& r);
 
   Range _toRange(shared_ptr<LongBox> box);
 
