@@ -70,8 +70,6 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.PostgresUtils;
@@ -80,22 +78,22 @@ import hoot.services.utils.RandomNumberGenerator;
 import hoot.services.utils.XmlUtils;
 
 
-public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
+public class ChangesetResourceUploadModifyTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
     public void testUploadModify() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now, update some of the elements and their tags.
-        BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
         Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
             .queryParam("mapId", String.valueOf(mapId))
             .request(MediaType.TEXT_XML)
@@ -515,17 +513,17 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadModifyClosedPolygon() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
         // Now, update some of the elements and their tags.
         // TODO: why was this disabled?
         // final BoundingBox updatedBounds =
-        // OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        // OSMTestUtils.createAfterModifiedTestChangesetBounds();
         Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
             .queryParam("mapId", String.valueOf(mapId))
             .request(MediaType.TEXT_XML)
@@ -627,12 +625,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateNodeIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to create two nodes with the same ID. A failure should occur and
         // no data in the system should be modified.
@@ -661,7 +659,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -669,9 +667,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetSpecifiedInUrl() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(null);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(null);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
 
         // Upload a changeset where the changeset specified in the URL doesn't
@@ -701,7 +699,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
-            OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
+            OSMTestUtils.verifyTestChangesetUnmodified(changesetId);
             throw e;
         }
     }
@@ -723,12 +721,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     }
 
     private void uploadModifyNodeCoords(String lat, String lon) throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Now update the changeset via the service where one of the nodes has a
         // empty coords. A ailure should occur and no data in the system should be modified.
@@ -757,7 +755,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error uploading changeset with ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -765,20 +763,20 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadModifyNoTags() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now update the changeset with elements that have no tags in them,
         // which is allowed. The existing tags for the specified elements will be deleted, since
         // every request must specify all the tags it wants retained for each element. The elements not
         // referenced in this modify request should retain their tags.
-        BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
         Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
             .queryParam("mapId", String.valueOf(mapId))
             .request(MediaType.TEXT_XML)
@@ -1198,21 +1196,21 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInNode() throws Exception {
-        BoundingBox changeset1Bounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId1 = OsmTestUtils.createTestChangeset(changeset1Bounds);
-        BoundingBox changeset2Bounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId2 = OsmTestUtils.createTestChangeset(changeset2Bounds);
+        BoundingBox changeset1Bounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId1 = OSMTestUtils.createTestChangeset(changeset1Bounds);
+        BoundingBox changeset2Bounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId2 = OSMTestUtils.createTestChangeset(changeset2Bounds);
 
         // link some nodes to the changesets
-        Set<Long> nodeIds1 = OsmTestUtils.createTestNodes(changesetId1, changeset1Bounds);
+        Set<Long> nodeIds1 = OSMTestUtils.createTestNodes(changesetId1, changeset1Bounds);
         Long[] nodeIds1Arr = nodeIds1.toArray(new Long[nodeIds1.size()]);
-        Set<Long> nodeIds2 = OsmTestUtils.createTestNodes(changesetId2, changeset2Bounds);
+        Set<Long> nodeIds2 = OSMTestUtils.createTestNodes(changesetId2, changeset2Bounds);
         Long[] nodeIds2Arr = nodeIds2.toArray(new Long[nodeIds2.size()]);
 
         // Upload a changeset where one of the elements in the changeset lists a
         // changeset ID that doesn't match the changeset ID specified in the URL. A failure should
         // occur and no data in the system should be modified.
-        BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
         try {
             target("api/0.6/changeset/" + changesetId1 + "/upload")
                 .queryParam("mapId", String.valueOf(mapId))
@@ -1240,8 +1238,8 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
 
-            OsmTestUtils.verifyTestNodesUnmodified(nodeIds1, changesetId1, changeset1Bounds);
-            OsmTestUtils.verifyTestNodesUnmodified(nodeIds2, changesetId2, changeset2Bounds);
+            OSMTestUtils.verifyTestNodesUnmodified(nodeIds1, changesetId1, changeset1Bounds);
+            OSMTestUtils.verifyTestNodesUnmodified(nodeIds2, changesetId2, changeset2Bounds);
 
             Changesets changeset = createQuery(mapId)
                     .select(changesets)
@@ -1289,13 +1287,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyNonExistingNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
 
         // Update the changeset with a node that has an ID that doesn't exist. A
         // failure should occur and no data in the system should be modified.
@@ -1326,7 +1324,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
 
             // make sure the bad node wasn't created and the other node wasn't updated
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1337,9 +1335,9 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // We allow elements with a negative ID to exist, which allows for
         // using the hootProps.hoot --convert command as a source of test data for the services.
 
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
 
         // link some nodes to the changeset
 
@@ -1381,7 +1379,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         tags.put("key 2", "val 2");
 
         long negativeWayId = -1;
-        OsmTestUtils.insertNewWay(negativeWayId, changesetId, mapId, wayNodeIds, tags);
+        OSMTestUtils.insertNewWay(negativeWayId, changesetId, mapId, wayNodeIds, tags);
 
         tags.clear();
 
@@ -1401,7 +1399,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         wayNodeIds.add(nodeIdsArr[0]);
         wayNodeIds.add(nodeIdsArr[1]);
 
-        wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, wayNodeIds, null));
+        wayIds.add(OSMTestUtils.insertNewWay(changesetId, mapId, wayNodeIds, null));
 
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
@@ -1414,7 +1412,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         tags.put("key 1", "val 1");
 
         long negativeRelationId = -1;
-        OsmTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags);
+        OSMTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags);
         tags.clear();
         CurrentRelations insertedRelationRecord =
                 createQuery(mapId)
@@ -1434,7 +1432,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role1"));
 
         tags.put("key 2", "val 2");
-        relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, tags));
+        relationIds.add(OSMTestUtils.insertNewRelation(changesetId, mapId, members, tags));
         tags.clear();
 
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
@@ -1777,14 +1775,14 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyNodeInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
 
         // Update the changeset where one of the nodes has version that doesn't
         // match the version on the server. A failure should occur and no data in the system should be modified.
@@ -1815,7 +1813,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
 
             // make sure neither node was updated
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1823,11 +1821,11 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadModifyNoMembersInRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // relations with no members are allowed
@@ -1849,13 +1847,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset where one of the nodes has a version greater
         // than zero, which is what the version should be for all new elements. A failure should occur
@@ -1884,7 +1882,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1892,12 +1890,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset where one of the relations has an invalid
@@ -1928,7 +1926,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1936,12 +1934,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyChangesetClosed() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // close the changeset
         Changesets changeset = createQuery(mapId)
@@ -1966,7 +1964,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
         assertTrue(changeset.getClosedAt().equals(now));
 
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
 
         // Try to update the closed changeset. A failure should occur and no
         // data in the system should be modified.
@@ -1993,8 +1991,8 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
 
             // make sure nothing was updated
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            OsmTestUtils.verifyTestChangesetClosed(changesetId);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestChangesetClosed(changesetId);
             throw e;
         }
     }
@@ -2002,12 +2000,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingNodeTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Upload a changeset where one of the tags specified has no value
         // attribute. A failure should occur and no data in the system should be modified.
@@ -2036,7 +2034,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2044,13 +2042,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyTooFewNodesForWay() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // A way has to have two or more nodes. Try to upload a way with one
         // node. The request should fail and no data in the system should be modified.
@@ -2074,7 +2072,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Too few nodes specified for way"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2095,13 +2093,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         // system. The request should fail and no data in the system should be
         // modified.
         try {
-            originalBounds = OsmTestUtils.createStartingTestBounds();
-            changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            originalBounds = OSMTestUtils.createStartingTestBounds();
+            changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+            nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-            wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-            relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // remember the original value to restore it later
             originalMaximumWayNodes = MAXIMUM_WAY_NODES;
@@ -2129,7 +2127,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Too many nodes specified for way"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
         finally {
@@ -2140,13 +2138,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayWithNonExistentNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to create a way referencing a node that doesn't exist. The
         // request should fail and no data in the system should be modified.
@@ -2170,7 +2168,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2178,12 +2176,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to update a relation referencing a node that doesn't exist. The
@@ -2208,7 +2206,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2216,13 +2214,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentWay() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to update a relation referencing a way that doesn't exist. The
@@ -2248,7 +2246,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2256,12 +2254,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNonExistentRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to create a relation referencing a relation that doesn't exist.
@@ -2287,7 +2285,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2295,13 +2293,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayWithInvisibleNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // make one of way nodes invisible
         CurrentNodes invisibleNode = createQuery(mapId)
@@ -2348,7 +2346,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("aren't visible for way"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2356,12 +2354,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation node members invisible
@@ -2409,7 +2407,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("visible for relation"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2417,13 +2415,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleWay() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation way members invisible
@@ -2471,7 +2469,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("visible for relation"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2479,13 +2477,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithInvisibleRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // make one of relation's members invisible
@@ -2533,7 +2531,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("visible for relation"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2541,13 +2539,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateWayIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to upload two ways with the same ID. The request should fail and
         // no data in the system should be modified.
@@ -2575,7 +2573,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2583,13 +2581,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInWay() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Upload a changeset where one of the elements in the changeset lists a
         // changeset ID that doesn't match the changeset ID specified in the URL. A failure should
@@ -2617,7 +2615,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2625,13 +2623,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyInvalidChangesetIdInRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Upload a changeset where one of the elements in the changeset lists a
@@ -2661,7 +2659,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2669,13 +2667,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingWayTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Upload a changeset where one of the tags specified has no value
         // attribute. A failure should occur and no data in the system should be modified.
@@ -2704,7 +2702,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2712,12 +2710,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyMissingRelationTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Upload a changeset where one of the element tags specified has no
@@ -2745,7 +2743,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2753,14 +2751,14 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateWayNodeIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to upload a way which lists the same node twice. The request
         // should fail and no data in the system should be modified.
@@ -2788,7 +2786,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2796,13 +2794,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayEmptyNodeId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset where one of the ways has a node with an empty
         // string for its ID. A failure should occur and no data in the system should be modified.
@@ -2831,7 +2829,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             // TODO: needed?
             // Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
 
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2839,14 +2837,14 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyWayMissingNodeId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset where one of the ways has a node with no ID
         // attribute. A failure should occur and no data in the system should be modified.
@@ -2875,7 +2873,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             // TODO: needed?
             // Assert.assertTrue(r.getEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2883,13 +2881,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyDuplicateRelationIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to upload two relations with the same ID. The request should fail
@@ -2919,7 +2917,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2927,13 +2925,13 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationReferencingItself() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset with a relation that references itself as a
@@ -2962,7 +2960,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("contains a relation member that references itself"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2970,12 +2968,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationEmptyMemberId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset where one of the relations has a member with an
@@ -3004,7 +3002,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3012,12 +3010,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationMissingMemberId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset where one of the relations has a member with an
@@ -3046,7 +3044,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3054,12 +3052,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationInvalidMemberType() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset where one of the relations has a member with an
@@ -3089,7 +3087,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3097,12 +3095,12 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadModifyRelationMissingMemberType() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Update the changeset where one of the relations has a member with no
@@ -3132,7 +3130,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }

@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.*;
 
@@ -45,12 +46,9 @@ import com.querydsl.sql.SQLExpressions;
 import hoot.services.UnitTest;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QMaps;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 
 
-public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
+public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
@@ -81,7 +79,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         assertNotNull(responseData);
 
         Long changesetId = Long.parseLong(responseData);
-        OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
+        OSMTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
     }
 
     @Test
@@ -102,7 +100,7 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
         assertNotNull(responseData);
 
         Long changesetId = Long.parseLong(responseData);
-        OsmTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
+        OSMTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
     }
 
     @Test(expected = WebApplicationException.class)
@@ -110,17 +108,13 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
     public void testCreateByNonUniqueMapName() throws Exception {
         // insert another map with the same name as the test map
         Maps map = new Maps();
-
         long nextMapId = createQuery(mapId).select(SQLExpressions.nextval(Long.class, "maps_id_seq")).from().fetchOne();
-
         map.setId(nextMapId);
-
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         map.setCreatedAt(now);
         map.setDisplayName("map-with-id-" + mapId);
         map.setUserId(userId);
 
-        QMaps maps = QMaps.maps;
         createQuery(mapId).insert(maps).populate(map).execute();
 
         // Create a changeset, providing a map name that isn't unique. A failure
@@ -145,9 +139,6 @@ public class ChangesetResourceCreateTest extends OsmResourceTestAbstract {
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
             throw e;
-        }
-        finally {
-            createQuery().delete(maps).where(maps.id.eq(nextMapId)).execute();
         }
     }
 

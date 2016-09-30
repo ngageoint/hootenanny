@@ -40,16 +40,15 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
-import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 
-public class ReviewResourceResolveAllTest extends OsmResourceTestAbstract {
-    public ReviewResourceResolveAllTest() {}
+public class ReviewResourceResolveAllTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)

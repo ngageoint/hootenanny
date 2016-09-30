@@ -65,37 +65,31 @@ import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.MapUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.utils.XmlUtils;
 
 
-public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
+public class ChangesetResourceUploadAllTest extends OSMResourceTestAbstract {
 
     /*
-     * This test tests basically everything possible in a valid changeset upload
-     * request and is a superset of some of the tests in
-     * ChangesetResourceUploadCreateTest, ChangesetResourceUploadDeleteTest, and
-     * ChangesetResourceUploadModifyTest.
-     */
+         * This test tests basically everything possible in a valid changeset upload
+         * request and is a superset of some of the tests in
+         * ChangesetResourceUploadCreateTest, ChangesetResourceUploadDeleteTest, and
+         * ChangesetResourceUploadModifyTest.
+         */
     @Test
     @Category(UnitTest.class)
     public void testUploadAll() throws Exception {
-        DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        MapUtils.createMap(mapId);
-
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         /*
@@ -156,7 +150,7 @@ public class ChangesetResourceUploadAllTest extends OsmResourceTestAbstract {
          *
          * deletes one relation relation 2
          */
-        BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
         Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
             .queryParam("mapId", String.valueOf(mapId))
             .request(MediaType.TEXT_XML)

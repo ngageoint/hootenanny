@@ -35,6 +35,7 @@ public class HootServicesSpringTestConfig {
         dataSource.setInitialSize(5);
         dataSource.setMaxActive(10);
         dataSource.setMaxIdle(2);
+        dataSource.setDefaultAutoCommit(false);
         return dataSource;
     }
 

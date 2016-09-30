@@ -43,8 +43,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import hoot.services.HootServicesJerseyApplication;
-import hoot.services.HootServicesSpringTestConfig;
+import hoot.services.HootServicesJerseyTestApplication;
 import hoot.services.UnitTest;
 
 
@@ -57,8 +56,8 @@ public class AboutResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        HootServicesJerseyApplication.setSpringConfigationClass(HootServicesSpringTestConfig.class);
-        return new HootServicesJerseyApplication();
+        //HootServicesJerseyApplication.setSpringConfigationClass(HootServicesSpringTestConfig.class);
+        return new HootServicesJerseyTestApplication(null);
     }
 
     private static void mockBuildInfo() throws IOException {

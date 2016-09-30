@@ -48,12 +48,11 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
-import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
-public class UserResourceTest extends OsmResourceTestAbstract {
+public class UserResourceTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)

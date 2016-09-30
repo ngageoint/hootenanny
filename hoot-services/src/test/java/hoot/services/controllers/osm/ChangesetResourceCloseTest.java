@@ -65,8 +65,6 @@ import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.PostgresUtils;
@@ -74,13 +72,13 @@ import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
-public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
+public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
-    public void testClose() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+    public void testCloseChangeset() throws Exception {
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
 
         // close the changeset via the service
         Response response = target("api/0.6/changeset/" + changesetId + "/close")
@@ -90,17 +88,17 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
 
         assertEquals(200, response.getStatus());
 
-        OsmTestUtils.verifyTestChangesetClosed(changesetId);
+        OSMTestUtils.verifyTestChangesetClosed(changesetId);
     }
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testCloseClosedChangeset() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
 
         // close the changeset
-        OsmTestUtils.closeChangeset(mapId, changesetId);
+        OSMTestUtils.closeChangeset(mapId, changesetId);
 
         try {
             // Try to close an already closed changeset. A failure should occur
@@ -114,8 +112,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
-            OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
-            OsmTestUtils.verifyTestChangesetClosed(changesetId);
+            OSMTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
+            OSMTestUtils.verifyTestChangesetClosed(changesetId);
             throw e;
         }
     }
@@ -149,8 +147,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int maximumChangesetElements = 2;
             HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 0);
 
             // Now create a new changeset with a number of elements larger than
             // the max allowed. A failure should occur and no data in the system should be modified.
@@ -226,8 +224,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int maximumChangesetElements = 12;
             HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 0);
 
             // Now create a new changeset with a number of elements equal to the
             // max allowed. The elements should be written and the changeset closed.
@@ -427,8 +425,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             // changes have actually occurred with the upload of the
             // changeset...what's actually being done here is to compare the state of the
             // default test data set with the dataset we uploaded here, and they should match each other
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            OsmTestUtils.verifyTestChangesetClosed(changesetId);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestChangesetClosed(changesetId);
         }
         finally {
             // restore original properties since they are at defined at the class level
@@ -446,16 +444,16 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int maximumChangesetElements = 16;
             HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-            BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
             // Now update an existing changeset with a number of elements larger than
             // the max allowed. A failure should occur and no data in the system should be modified.
             try {
@@ -498,7 +496,7 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
-                OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+                OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
                 throw e;
             }
         }
@@ -519,16 +517,16 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             int maximumChangesetElements = 18;
             HootCustomPropertiesSetter.setProperty("MAXIMUM_CHANGESET_ELEMENTS", String.valueOf(maximumChangesetElements));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+            Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
             Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
             Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
-            BoundingBox updatedBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            BoundingBox updatedBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
 
             // Now update an existing changeset with a number of elements that,
             // when combined with the existing elements, are equal to the max allowed. The elements
@@ -983,8 +981,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             HootCustomPropertiesSetter.setProperty("CHANGESET_IDLE_TIMEOUT_MINUTES",
                     String.valueOf(changesetIdleTimeoutSeconds));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 0);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 0);
 
             // pause long enough for the changeset to expire
             Thread.sleep(2000);
@@ -1014,9 +1012,9 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             catch (WebApplicationException e) {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
-                assertTrue(
-                        r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
-                OsmTestUtils.verifyTestChangesetClosed(changesetId, 0);
+                assertTrue(r.readEntity(String.class).contains("The changeset with ID: "
+                        + changesetId + " was closed at"));
+                OSMTestUtils.verifyTestChangesetClosed(changesetId, 0);
                 throw e;
             }
         }
@@ -1056,17 +1054,17 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
             HootCustomPropertiesSetter.setProperty("CHANGESET_MAX_OPEN_TIME_HOURS",
                     String.valueOf(changesetMaxOpenTimeSeconds));
 
-            BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-            long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-            Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+            BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+            long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+            Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-            Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-            Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+            Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+            Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
             // pause long enough for the changeset to expire
             Thread.sleep(3000);
 
-            BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+            BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
 
             // Access the changeset with an update request. This will trigger
             // closing the changeset, and No data in the system should be modified by the update request.
@@ -1093,8 +1091,8 @@ public class ChangesetResourceCloseTest extends OsmResourceTestAbstract {
                 assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
 
                 // make sure nothing was updated
-                OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-                OsmTestUtils.verifyTestChangesetClosed(changesetId);
+                OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+                OSMTestUtils.verifyTestChangesetClosed(changesetId);
                 throw e;
             }
         }

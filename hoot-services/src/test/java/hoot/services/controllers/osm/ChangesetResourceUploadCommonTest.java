@@ -41,12 +41,10 @@ import org.w3c.dom.Document;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.MapUtils;
 
 
-public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
+public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
@@ -62,11 +60,11 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadMultipleChangesets() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Upload more than one changeset in the same request. A failure should
         // occur and no data in the system should be modified.
@@ -112,7 +110,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Only one changeset may be uploaded at a time"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -120,8 +118,8 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadBadXml() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(null);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(null);
 
         // Upload a changeset with malformed XML. A failure should occur and no data in the system should be modified.
         try {
@@ -149,7 +147,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
-            OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
+            OSMTestUtils.verifyTestChangesetUnmodified(changesetId);
             assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
@@ -158,7 +156,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadEmptyChangeset() throws Exception {
-        long changesetId = OsmTestUtils.createTestChangeset(null);
+        long changesetId = OSMTestUtils.createTestChangeset(null);
 
         // Upload a changeset with no items in it. A failure should occur and no data in the system should be modified.
         try {

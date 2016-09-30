@@ -71,16 +71,13 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.osm.OsmResourceTestAbstract;
-import hoot.services.osm.OsmTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
-public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
-    public ChangesetResourceUploadDeleteTest() {}
+public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
 
     private void testUploadDelete(String request, BoundingBox originalBounds, long changesetId, Long[] nodeIdsArr,
             Long[] wayIdsArr, Long[] relationIdsArr) throws Exception {
@@ -432,13 +429,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDelete() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now, delete one of the nodes, one of the ways, and one of the relations.
@@ -469,11 +466,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDelete2() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 8);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 8);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
         // Now delete two of the nodes, where ways are specified in the
@@ -721,13 +718,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNoNodeCoords() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         try {
@@ -764,7 +761,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             // Assert.assertTrue(
             // r.getEntity(String.class).contains("Element(s) being referenced don't exist."));
 
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -772,13 +769,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNoWayNodes() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now, delete one of the nodes, one of the ways, and one of the relations.
@@ -806,13 +803,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNoRelationMembers() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now, delete one of the nodes, one of the ways, and one of the
@@ -842,13 +839,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteRelationContainsAnotherRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // now delete one of the nodes, one of the ways, and one of the relations
@@ -1238,13 +1235,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNoTags() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // now delete some elements
@@ -1637,14 +1634,14 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNonExistingNode() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
         // Try to delete a node in the changeset that doesn't exist. A failure
         // should occur and no data in the system should be modified.
         try {
@@ -1672,7 +1669,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
 
             // make sure that any of the existing nodes weren't deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
 
             throw e;
         }
@@ -1681,13 +1678,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNonExistingWay() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete a way in the changeset that doesn't exist. A failure
         // should occur and no data in the system should be modified.
@@ -1714,7 +1711,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
 
             // make sure that any of the existing nodes weren't deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1722,13 +1719,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNonExistingRelation() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete a relation in the changeset that doesn't exist. A
@@ -1758,7 +1755,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
 
             // make sure that any of the existing nodes weren't deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1766,12 +1763,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteDuplicateNodeIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete two nodes with the same ID. A failure should occur and
         // no data in the system should be modified.
@@ -1801,7 +1798,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
 
             // make sure that no nodes were deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1809,13 +1806,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteDuplicateWayIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete two ways with the same ID. A failure should occur and
         // no data in the system should be modified.
@@ -1843,7 +1840,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
 
             // make sure that no nodes were deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1851,12 +1848,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteDuplicateRelationIds() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete two relations with the same ID. A failure should occur
@@ -1889,7 +1886,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
 
             // make sure that no nodes were deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1897,12 +1894,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNodeInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset where one of the nodes has version that doesn't
         // match the version on he server. A failure should occur and no data in the system should be modified.
@@ -1932,7 +1929,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
 
             // make sure that no nodes were deleted
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -1943,9 +1940,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         // We allow elements with a negative ID to exist, which allows for
         // using the hoot --convert command as a source of test data for the services.
 
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        BoundingBox updateBounds = OsmTestUtils.createAfterModifiedTestChangesetBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
 
         // explicitly create a node with a negative ID
         Map<String, String> tags = new HashMap<>();
@@ -1988,7 +1985,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         tags.put("key 2", "val 2");
 
         long negativeWayId = -1;
-        OsmTestUtils.insertNewWay(negativeWayId, changesetId, mapId, wayNodeIds, tags);
+        OSMTestUtils.insertNewWay(negativeWayId, changesetId, mapId, wayNodeIds, tags);
         tags.clear();
 
         CurrentWays insertedWayRecord = createQuery(mapId)
@@ -2008,7 +2005,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         wayNodeIds.add(nodeIdsArr[0]);
         wayNodeIds.add(nodeIdsArr[1]);
 
-        wayIds.add(OsmTestUtils.insertNewWay(changesetId, mapId, wayNodeIds, null));
+        wayIds.add(OSMTestUtils.insertNewWay(changesetId, mapId, wayNodeIds, null));
 
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
@@ -2023,7 +2020,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         tags.put("key 2", "val 2");
 
         long negativeRelationId = -1;
-        OsmTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags);
+        OSMTestUtils.insertNewRelation(negativeRelationId, changesetId, mapId, members, tags);
         tags.clear();
 
         CurrentRelations insertedRelationRecord = createQuery(mapId)
@@ -2041,7 +2038,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         members.clear();
         members.add(new RelationMember(nodeIdsArr[1], ElementType.Node, "role1"));
         members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role1"));
-        relationIds.add(OsmTestUtils.insertNewRelation(changesetId, mapId, members, null));
+        relationIds.add(OSMTestUtils.insertNewRelation(changesetId, mapId, members, null));
 
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
@@ -2192,9 +2189,9 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteMissingNodeTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 5);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 5);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
 
         // Now delete some nodes with an update to the changeset. One of the
@@ -2289,11 +2286,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteMissingWayTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds, 8);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds, 8);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
 
         // Now delete some ways with an update to the changeset. One of the
@@ -2383,13 +2380,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteMissingRelationTagValue() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Now delete some relations with an update to the changeset. One of
@@ -2436,8 +2433,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         assertNull(xml.getAttributes().getNamedItem("new_id"));
         assertNull(xml.getAttributes().getNamedItem("new_version"));
 
-        OsmTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
-        OsmTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
+        OSMTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
+        OSMTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
 
         Timestamp now = super.getCurrentDBTime();
         Map<Long, CurrentRelations> relations = createQuery(mapId)
@@ -2550,13 +2547,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteWayInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Send a changeset delete request where one of the ways has a version
         // not equal to what's on the server. A failure should occur and no data in the system should be modified.
@@ -2582,7 +2579,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2590,11 +2587,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteRelationInvalidVersion() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Send a changeset delete request where one of the relations has a
@@ -2621,7 +2618,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -2629,13 +2626,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNodeStillBelongsToWayWithIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete some elements with the "if-unused" tag is passed
         // where one of them is a node that still belongs to a way. No failure should occur, the node
@@ -2859,7 +2856,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                     .where(currentWays.id.eq(wayIdsArr[2]))
                     .fetchOne());
 
-        OsmTestUtils.verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId);
+        OSMTestUtils.verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId);
 
         Changesets changeset = createQuery(mapId)
                 .select(changesets)
@@ -2884,11 +2881,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteNodeStillBelongsToRelationWithIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelationsNoWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelationsNoWays(changesetId, nodeIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete some elements with the "if-unused" tag is passed
@@ -3110,7 +3107,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         assertEquals(new Integer(1), member.getSequenceId());
         assertEquals(nodeIdsArr[2], member.getMemberId());
 
-        OsmTestUtils.verifyTestRelationsNoWaysUnmodified(relationIds, nodeIds, changesetId, true);
+        OSMTestUtils.verifyTestRelationsNoWaysUnmodified(relationIds, nodeIds, changesetId, true);
 
         Changesets changeset = createQuery(mapId)
                 .select(changesets)
@@ -3135,13 +3132,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteWayStillBelongsToRelationWithIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete some elements with the "if-unused" tag is passed
         // where one of them is a way that still belongs to a relation. No failure should occur, the
@@ -3257,8 +3254,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         assertEquals(1, tags.size());
         assertEquals("val 4", tags.get("key 4"));
 
-        OsmTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
-        OsmTestUtils.verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId);
+        OSMTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
+        OSMTestUtils.verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId);
 
         Changesets changeset = createQuery(mapId)
                 .select(changesets)
@@ -3283,13 +3280,13 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testUploadDeleteRelationStillBelongsToRelationWithIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete some elements with the "if-unused" tag is passed
@@ -3331,8 +3328,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         assertNull(xml.getAttributes().getNamedItem("new_id"));
         assertNull(xml.getAttributes().getNamedItem("new_version"));
 
-        OsmTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
-        OsmTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
+        OSMTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
+        OSMTestUtils.verifyTestWaysUnmodified(wayIds, nodeIds, changesetId);
 
         Timestamp now = super.getCurrentDBTime();
         Map<Long, CurrentRelations> relations = createQuery(mapId)
@@ -3488,12 +3485,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNodeStillBelongsToWayWithoutIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete a node that still belongs to a way when the "if-unused"
         // tag is not passed. A failure should occur and no data in the system should be modified.
@@ -3516,7 +3513,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("still used by other way(s)"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3524,11 +3521,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteNodeStillBelongsToRelationWithoutIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelationsNoWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelationsNoWays(changesetId, nodeIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete a node that still belongs to a relation when the
@@ -3552,8 +3549,8 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("still used by other relation(s)"));
-            OsmTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
-            OsmTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
+            OSMTestUtils.verifyTestChangesetUnmodified(changesetId, originalBounds);
+            OSMTestUtils.verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds);
 
             try {
                 List<CurrentRelations> relations = createQuery(mapId)
@@ -3665,7 +3662,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
                 Assert.fail("Error checking relations: " + e2.getMessage());
             }
 
-            OsmTestUtils.verifyTestRelationsNoWaysUnmodified(relationIds, nodeIds, changesetId, true);
+            OSMTestUtils.verifyTestRelationsNoWaysUnmodified(relationIds, nodeIds, changesetId, true);
 
             throw e;
         }
@@ -3674,12 +3671,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteWayStillBelongsToRelationWithoutIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Try to delete a way that still belongs to a relation when the
         // "if-unused" tag is not passed. A failure should occur and no data in the system should be modified.
@@ -3700,7 +3697,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("still used by other relation(s)"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3708,11 +3705,11 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteRelationStillBelongsToRelationWithoutIfUnused() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Try to delete a relation that still belongs to a relation when the
@@ -3736,7 +3733,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("still used by other relation(s)"));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3744,12 +3741,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteRelationEmptyMemberId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset where one of the relations has a member with an
         // empty string for an ID.  A failure should occur and no data in the system should be modified.
@@ -3776,7 +3773,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -3784,12 +3781,12 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testUploadDeleteRelationMissingMemberId() throws Exception {
-        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
-        long changesetId = OsmTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OsmTestUtils.createTestNodes(changesetId, originalBounds);
+        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OsmTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OsmTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
         // Update the changeset with a relation that has a member with a missing
         // ID attribute. A failure should occur and no data in the system should be modified.
@@ -3816,7 +3813,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         catch (WebApplicationException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }

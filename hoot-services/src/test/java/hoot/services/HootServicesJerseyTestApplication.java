@@ -28,31 +28,24 @@ package hoot.services;
 
 import java.util.logging.Logger;
 
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
+import org.springframework.context.ApplicationContext;
 
 import hoot.services.controllers.filters.CorsResponseFilter;
 
 
-public class HootServicesJerseyApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyApplication.class.getName());
+public class HootServicesJerseyTestApplication extends ResourceConfig {
+    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
 
-    public HootServicesJerseyApplication() {
+    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
         super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
 
         super.register(MultiPartFeature.class);
         super.register(CorsResponseFilter.class);
         super.register(RequestContextFilter.class);
 
-        /*
-        super.registerInstances(new LoggingFeature(logger,
-                                                     Level.ALL,
-                                                     LoggingFeature.Verbosity.PAYLOAD_TEXT,
-                                                     LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
-        */
-
-        super.registerInstances(new LoggingFilter(logger, true));
+        super.property("contextConfig", applicationContext);
     }
 }
