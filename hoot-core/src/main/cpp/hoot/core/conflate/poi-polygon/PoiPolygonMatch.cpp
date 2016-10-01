@@ -335,8 +335,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     _class = externalMatchClass;
   }
 
-  if (Log::getInstance().getLevel() == Log::Debug)
-  {
+  //if (Log::getInstance().getLevel() == Log::Debug)
+  //{
     //output feature distances for all feature types which fell within the match threshold
     const QString ref2 = poi->getTags().get("REF2");
     const QString review = poi->getTags().get("REVIEW");
@@ -366,7 +366,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         _polyReviewRefIdsToDistances.insert(_t1BestKvp, _distance);
       }
     }
-  }
+  //}
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))

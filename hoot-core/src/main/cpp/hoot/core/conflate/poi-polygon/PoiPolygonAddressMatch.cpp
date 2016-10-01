@@ -42,7 +42,9 @@ _testUuid(testUuid)
 
 bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstElementPtr poi)
 {
+  QStringList addresses;
   Tags buildingTags = building->getTags();
+
   QString buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
   QString buildingStreet =
     Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
@@ -50,10 +52,16 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstEleme
   if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
   {
     buildingAddrComb = buildingHouseNum + " " + buildingStreet;
+    addresses.append(buildingAddrComb);
   }
   QString buildingAddrTag =
     Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
-  if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
+  if (!buildingAddrTag.isEmpty())
+  {
+    addresses.append(buildingAddrTag);
+  }
+
+  if (addresses.size() == 0)
   {
     //try to find the address from a building way node instead
     if (building->getElementType() == ElementType::Way)
@@ -69,13 +77,14 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstEleme
           Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
         buildingAddrTag =
           Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
+        if (!buildingAddrTag.isEmpty())
+        {
+          addresses.append(buildingAddrTag);
+        }
         if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
         {
           buildingAddrComb = buildingHouseNum + " " + buildingStreet;
-        }
-        if (!buildingAddrComb.isEmpty() || !buildingAddrTag.isEmpty())
-        {
-          break;
+          addresses.append(buildingAddrComb);
         }
       }
     }
@@ -84,7 +93,7 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstEleme
       {
       }*/
   }
-  if (buildingAddrComb.isEmpty() && buildingAddrTag.isEmpty())
+  if (addresses.size() == 0)
   {
     return false;
   }
@@ -115,15 +124,16 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstEleme
   }
 
   ExactStringDistance addrComp;
-  return
-    (!buildingAddrTag.isEmpty() && !poiAddrTag.isEmpty() &&
-       addrComp.compare(buildingAddrTag, poiAddrTag) == 1.0) ||
-    (!buildingAddrComb.isEmpty() && !poiAddrTag.isEmpty() &&
-       addrComp.compare(buildingAddrComb, poiAddrTag) == 1.0) ||
-    (!poiAddrComb.isEmpty() && !buildingAddrTag.isEmpty() &&
-       addrComp.compare(poiAddrComb, buildingAddrTag) == 1.0) ||
-    (!buildingAddrComb.isEmpty() && !poiAddrComb.isEmpty() &&
-       addrComp.compare(buildingAddrComb, poiAddrComb) == 1.0);
+  for (int i = 0; i < addresses.size(); i++)
+  {
+    const QString buildingAddress = addresses.at(i);
+    if (addrComp.compare(buildingAddress, poiAddrTag) == 1.0 ||
+        addrComp.compare(buildingAddress, poiAddrComb) == 1.0)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 }
