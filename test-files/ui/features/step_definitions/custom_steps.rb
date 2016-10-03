@@ -784,5 +784,14 @@ end
 
 When(/^I expand the sidebar$/) do
   resizer = page.find('#resizer')
-  resizer.drag_by(350, 0)
+  resizer.drag_by(150, 0)
+end
+
+#for hidden features
+Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
+  el = page.find(input).should be_visible
+end
+
+Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
+  el = page.should have_no_css(input, :visible => true)
 end
