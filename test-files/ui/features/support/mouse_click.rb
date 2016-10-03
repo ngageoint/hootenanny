@@ -10,18 +10,3 @@ Capybara::Node::Element.class_eval do
     driver.browser.action.context_click(self.native).perform
   end
 end
-
-module CapybaraExtension
-  def drag_by(right_by, down_by)
-    base.drag_by(right_by, down_by)
-  end
-end
-
-module CapybaraSeleniumExtension
-  def drag_by(right_by, down_by)
-    driver.browser.action.drag_and_drop_by(native, right_by, down_by).perform
-  end
-end
-
-::Capybara::Selenium::Node.send :include, CapybaraSeleniumExtension
-::Capybara::Node::Element.send :include, CapybaraExtension
