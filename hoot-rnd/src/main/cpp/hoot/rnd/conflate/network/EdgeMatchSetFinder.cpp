@@ -385,9 +385,12 @@ QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLoc
 {
   QSet<ConstNetworkEdgePtr> result;
 
-  if (l->isExtreme())
+  LOG_VART(l);
+  LOG_VART(l->isExtreme(EdgeLocation::SLOPPY_EPSILON));
+  LOG_VART(QString("%1").arg(l->getPortion(), 0, 'g', 18));
+  if (l->isExtreme(EdgeLocation::SLOPPY_EPSILON))
   {
-    ConstNetworkVertexPtr v = l->getVertex();
+    ConstNetworkVertexPtr v = l->getVertex(EdgeLocation::SLOPPY_EPSILON);
     if (_n1->contains(v))
     {
       result = _n1->getEdgesFromVertex(v).toSet();
@@ -401,6 +404,7 @@ QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLoc
       throw IllegalArgumentException();
     }
   }
+  LOG_VART(result);
 
   return result;
 }

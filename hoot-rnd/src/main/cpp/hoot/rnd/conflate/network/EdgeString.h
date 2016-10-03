@@ -198,6 +198,11 @@ public:
    */
   void reverse();
 
+  /**
+   * If the ends are within epsilon of an extreme, snap the locations to the end.
+   */
+  void snapExtremes(double epsilon = EdgeLocation::SLOPPY_EPSILON);
+
   QString toString() const;
 
   bool touches(const ConstEdgeSublinePtr& es) const;

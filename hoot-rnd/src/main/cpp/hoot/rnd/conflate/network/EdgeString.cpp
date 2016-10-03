@@ -462,6 +462,40 @@ void EdgeString::reverse()
   assert(validate());
 }
 
+void EdgeString::snapExtremes(double epsilon)
+{
+  if (getFrom()->isExtreme(epsilon))
+  {
+    ConstEdgeSublinePtr es = _edges[0].getSubline();
+    double p;
+    if (es->getStart()->getPortion() < 0.5)
+    {
+      p = 0.0;
+    }
+    else
+    {
+      p = 1.0;
+    }
+    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), p, es->getEnd()->getPortion()));
+    _edges[0].setSubline(newEs);
+  }
+  if (getTo()->isExtreme(epsilon))
+  {
+    ConstEdgeSublinePtr es = _edges.back().getSubline();
+    double p;
+    if (es->getEnd()->getPortion() < 0.5)
+    {
+      p = 0.0;
+    }
+    else
+    {
+      p = 1.0;
+    }
+    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), es->getStart()->getPortion(), p));
+    _edges.back().setSubline(newEs);
+  }
+}
+
 QString EdgeString::toString() const
 {
   return hoot::toString(_edges);
@@ -495,6 +529,19 @@ bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
   for (int i = 0; i < _edges.size(); ++i)
   {
     if (_edges[i].getSubline()->intersects(es))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool EdgeString::touches(const shared_ptr<const EdgeString>& es) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (es->touches(_edges[i].getSubline()))
     {
       return true;
     }

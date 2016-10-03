@@ -444,6 +444,11 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
     // trim es1 and es2 based on the way matches found
     _trimEdgeString(map, tmp1, w1, wsm.getSublineString1());
     _trimEdgeString(map, tmp2, w2, wsm.getSublineString2());
+    tmp1->snapExtremes(EdgeLocation::SLOPPY_EPSILON);
+    tmp2->snapExtremes(EdgeLocation::SLOPPY_EPSILON);
+
+    LOG_VART(tmp1);
+    LOG_VART(tmp2);
 
     // if the subline match intersects e1 and e2 then this is a successful modification
     if (tmp1->contains(e1) && tmp2->contains(e2) &&
@@ -460,6 +465,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 
 void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) const
 {
+  bool foundEnd = false;
   // if e is the same as the last edge in the string
   if (es->getLastEdge() == e ||
     (es->getAllEdges().back().isBackwards() && e->contains(es->getLastEdge()->getFrom())) ||
@@ -481,8 +487,10 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     es->removeLast();
     es->appendEdge(ConstEdgeSublinePtr(new EdgeSubline(elStart, elEnd)));
+    foundEnd = true;
   }
-  else if (es->getFirstEdge() == e ||
+
+  if (es->getFirstEdge() == e ||
     (es->getAllEdges().front().isBackwards() && e->contains(es->getFirstEdge()->getTo())) ||
     (es->getAllEdges().front().isBackwards() == false &&
       e->contains(es->getFirstEdge()->getFrom())))
@@ -503,8 +511,11 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     es->removeFirst();
     es->prependEdge(ConstEdgeSublinePtr(new EdgeSubline(elStart, elEnd)));
+
+    foundEnd = true;
   }
-  else
+
+  if (!foundEnd)
   {
     LOG_VARW(es->validate());
     LOG_VARW(es);

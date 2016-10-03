@@ -141,6 +141,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
         scores << QString::number(m->getProbability());
         sum += m->getScore();
+        ConstEdgeStringPtr s1 = m->getEdgeMatch()->getString1();
+        ConstEdgeStringPtr s2 = m->getEdgeMatch()->getString2();
 
         mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found with "
           "multiple plausible solutions. Please reference input data/imagery and manually merge "
