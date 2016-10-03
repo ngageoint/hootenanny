@@ -28,6 +28,7 @@
 #define WAYMATCHLOCATION_H
 
 #include "WaySubline.h"
+#include "WaySublineCollection.h"
 
 namespace hoot
 {
@@ -49,6 +50,10 @@ public:
   const WaySubline& getSubline1() const { return _ws1; }
 
   const WaySubline& getSubline2() const { return _ws2; }
+
+  WaySublineCollection getSublineString1() const;
+
+  WaySublineCollection getSublineString2() const;
 
   bool isReverseMatch() const { return _reversed; }
 

@@ -49,6 +49,20 @@ WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, b
   _reversed = reversed;
 }
 
+WaySublineCollection WaySublineMatch::getSublineString1() const
+{
+  WaySublineCollection result;
+  result.addSubline(_ws1);
+  return result;
+}
+
+WaySublineCollection WaySublineMatch::getSublineString2() const
+{
+  WaySublineCollection result;
+  result.addSubline(_ws2);
+  return result;
+}
+
 bool WaySublineMatch::overlaps(const WaySublineMatch& ws) const
 {
   return (ws.getSubline1().getWay() == getSubline1().getWay() &&
