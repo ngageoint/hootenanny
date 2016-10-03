@@ -27,18 +27,24 @@ Feature: Highlight features on click
         And I hover over "#map"
         And I click the "map" at "350","300"
 
-    Scenario: I click on a feature and see a highlight
+    Scenario: I select a feature and see an orange highlight
         When I select a node map feature with OSM id "n-1"
         Then I should see a node element "n-1" with a selected highlight
-        And I hover over "#map"
+        # Then I de-select the feature
         And I click the "map" at "450","300"
         # Then I click off
 
-    Scenario: I can see a highlight on the active review features
-        And I should see an element with class "activeFeature" on the map
-        And I should see an element with class "activeFeature2" on the map
-    
-    Scenario: I can see a highlight on the added feature
+    Scenario: I can see a red and blue highlight on the active review features
+        Then I should see a ".activeReviewFeature" on the map
+        And I should see a ".activeReviewFeature2" on the map
+        # I zoom the map
+        When I click the "zoom-out" button
+        And I click the "zoom-out" button
+        And I should see a "g.activeReviewFeature" on the map
+        And I should see a "g.activeReviewFeature2" on the map
+        And I hover over "#map"
+
+    Scenario: I can see a yellow highlight on the edited feature
         When I click to expand Map Data
         Then I click the "a.hide-toggle" with text "Map Features"
         Then I turn on highlight edited features
@@ -48,4 +54,3 @@ Feature: Highlight features on click
         Then I wait 5 seconds
         Then I click the "trash.map-button" icon
         And I accept the alert
-
