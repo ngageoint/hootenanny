@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/algorithms/zindex/Range.h>
 
 // Qt
 #include <QFile>
@@ -89,16 +90,13 @@ public:
   shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
 
   /**
-   * Returns a results iterator to a node for a given node id.
-   */
-  shared_ptr<QSqlQuery> selectNodeById(const long elementId);
-
-  /**
     * Deletes data in the Osm Api db
     */
   void deleteData();
 
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+
+  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
   shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
@@ -154,10 +152,10 @@ private:
   bool _inTransaction;
 
   shared_ptr<QSqlQuery> _selectElementsForMap;
+  shared_ptr<QSqlQuery> _selectTagsForNode;
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
-  shared_ptr<QSqlQuery> _selectNodeById;
   shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
@@ -167,6 +165,8 @@ private:
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
+  QString _getTableName(const ElementType& elementType);
+  QString _getTileWhereCondition(vector<Range> ranges);
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
