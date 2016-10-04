@@ -27,7 +27,7 @@ Feature: Paste Attributes
         And I click the "Point" preset
         And I click the "Park" preset
         And I wait 2 seconds
-        And I click the tag list toggle
+        And I expand the tag list toggle
 
         #I copy a feature 
         Then I select a node map feature with OSM id "n1"
