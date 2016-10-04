@@ -622,4 +622,23 @@ bool EdgeString::validate() const
   return result;
 }
 
+bool EdgeString::isValid() const
+{
+  if (_edges.size() == 0)
+  {
+    return false;
+  }
+
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    ConstEdgeSublinePtr esi = _edges[i].getSubline();
+    if (esi->isZeroLength())
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 }

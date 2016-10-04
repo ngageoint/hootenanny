@@ -451,7 +451,8 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
     LOG_VART(tmp2);
 
     // if the subline match intersects e1 and e2 then this is a successful modification
-    if (tmp1->contains(e1) && tmp2->contains(e2) &&
+    if (tmp1->isValid() && tmp2->isValid() &&
+        tmp1->contains(e1) && tmp2->contains(e2) &&
       tmp1->touches(em->getString1()) && tmp2->touches(em->getString2()))
     {
       result.reset(new EdgeMatch(tmp1, tmp2));

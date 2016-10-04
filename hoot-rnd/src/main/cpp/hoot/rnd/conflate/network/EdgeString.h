@@ -180,6 +180,11 @@ public:
 
   bool isToOnVertex() const { return getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
 
+  /**
+   * Returns true if EdgeString is made up of non-zero length sublines.
+   */
+  bool isValid() const;
+
   bool overlaps(shared_ptr<const EdgeString> other) const;
 
   bool overlaps(const ConstEdgeSublinePtr& es) const;
