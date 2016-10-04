@@ -141,9 +141,6 @@ private:
 
   void _createMatchRelationships();
 
-  void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
-    ConstNetworkEdgePtr eb);
-
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
 
   QSet<ConstEdgeMatchPtr> _getMatchesWithSharedTermination(ConstNetworkVertexPtr v1,
