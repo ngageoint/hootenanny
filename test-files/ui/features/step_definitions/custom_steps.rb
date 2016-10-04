@@ -800,3 +800,9 @@ end
 Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
   el = page.should have_no_css(input, :visible => true)
 end
+
+# for invalid features
+Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq true
+end
