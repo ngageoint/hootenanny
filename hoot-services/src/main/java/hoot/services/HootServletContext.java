@@ -36,9 +36,10 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.springframework.core.env.AbstractEnvironment;
 
-import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.ogr.P2PResource;
+import hoot.services.controllers.ogr.TranslatorResource;
 
 
 public class HootServletContext implements ServletContextListener {
@@ -46,6 +47,7 @@ public class HootServletContext implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         TranslatorResource.startTranslationService();
+
         P2PResource.startP2PService();
 
         // Bridge/route all JUL log records to the SLF4J API.
@@ -55,13 +57,15 @@ public class HootServletContext implements ServletContextListener {
 
         HootProperties.init();
 
-        // Doing this to make sure we create ingest folder
-        try {
-            createTileServerPath(TILE_SERVER_PATH);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error creating tile server path: " + TILE_SERVER_PATH, ioe);
-        }
+        createIngestFolder();
+
+        activateSpringProfile();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        TranslatorResource.stopTranslationService();
+        P2PResource.stopP2PService();
     }
 
     private static void initSLF4JBridgeHandler() {
@@ -73,16 +77,25 @@ public class HootServletContext implements ServletContextListener {
         SLF4JBridgeHandler.install();
     }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        TranslatorResource.stopTranslationService();
-        P2PResource.stopP2PService();
-    }
-
     private static void createTileServerPath(String path) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             FileUtils.forceMkdir(file);
         }
+    }
+
+    private static void createIngestFolder() {
+        // Doing this to make sure we create ingest folder
+        try {
+            createTileServerPath(TILE_SERVER_PATH);
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error creating tile server path: " + TILE_SERVER_PATH, ioe);
+        }
+    }
+
+    private static void activateSpringProfile() {
+        // Activate Spring 'production' profile
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "production");
     }
 }
