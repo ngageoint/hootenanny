@@ -50,6 +50,11 @@ When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I should (not )?see a way map feature with OSM id "([^"]*)"$/) do |negate, id|
+  expectation = negate ? 0 : 1
+  find('div.layer-data').assert_selector('path[class*=" ' + id + '"]',:maximum => expectation)
+end
+
 When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -676,7 +681,7 @@ When(/^I select "([^"]*)" basemap/) do |file|
   end
 end
 
-When(/^I click the map background button$/) do
+When(/^I click the Background settings button$/) do
   find('div.background-control').find('button').click
 end
 

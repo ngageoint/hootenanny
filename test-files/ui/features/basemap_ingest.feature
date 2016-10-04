@@ -17,7 +17,7 @@ Feature: Basemap Ingest
     Scenario: Add Basemap To Map
         When I click the "closedeye" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
         Then I select the "sprocket" div
-        And I click the map background button
+        And I click the Background settings button
         And I click the "RomanColosseumCucumber" map layer
         And I wait
         And I accept the alert
