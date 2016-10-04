@@ -411,6 +411,10 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
 end
 
+When(/^I click the "([^"]*)" preset$/) do |txt|
+  find('div.label', :text=>txt).click
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -799,6 +803,7 @@ Then(/^I turn on highlight edited features$/) do
   el.click
 end
 
+<<<<<<< HEAD
 
 When(/^I click paste tags, overwrite$/) do
   page.all('button.col6')[0].click
@@ -827,7 +832,7 @@ Then(/^I should see the last element "([^"]*)" with value "([^"]*)"$/) do |id, v
   lel = page.all(id).last
   lel.value.should eq value
 end
-
+=======
 When(/^I expand the sidebar$/) do
   resizer = page.find('#resizer')
   resizer.drag_by(150, 0)
@@ -841,3 +846,4 @@ end
 Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
   el = page.should have_no_css(input, :visible => true)
 end
+>>>>>>> be9cf802648348bfa1953401652bee7168d4849e

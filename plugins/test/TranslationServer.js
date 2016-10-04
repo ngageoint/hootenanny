@@ -156,10 +156,10 @@ describe('TranslationServer', function () {
 
         var defaults = {};
         var defaultsResult = {
-                                name: "BLAST_FURNACE_P",
-                                fcode: "AC010",
-                                desc: "Blast-furnace",
-                                geom: "Point"
+                                "name": "AERIAL_FARM_P",
+                                "fcode": "AT012",
+                                "desc": "Aerial Farm",
+                                "geom": "Point"
                             };
 
         var MgcpPointBui = {
@@ -446,6 +446,88 @@ describe('TranslationServer', function () {
             assert.equal(schm[0].name, 'RIVER_C');
             assert.equal(schm[0].fcode, 'BH140');
             assert.equal(schm[0].desc, 'River');
+        });
+
+//Checking the use of limit param
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'TDSv40',
+                searchstr: 'river',
+                maxlevdst: 10,
+                limit: 1,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert.equal(schm.length, 1);
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'TDSv40',
+                searchstr: 'ri',
+                maxlevdst: 50,
+                limit: 33,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert.equal(schm.length, 33);
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'TDSv40',
+                searchstr: 'ri',
+                maxlevdst: 50,
+                limit: 100,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert(schm.length <= 100, 'Schema search results greater than requested');
+        });
+
+//Checking the use of limit param with no search string
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'TDSv40',
+                searchstr: '',
+                maxlevdst: 10,
+                limit: 1,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert.equal(schm.length, 1);
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'point',
+                translation: 'TDSv61',
+                searchstr: '',
+                limit: 33,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert.equal(schm.length, 33);
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'MGCP',
+                searchstr: '',
+                maxlevdst: 0, //This shouldn't be used when searchstr is ''
+                limit: 100,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert(schm.length <= 100, 'Schema search results greater than requested');
+            assert(schm.some(function(d) {
+                return d.desc === 'Railway Line Feature';
+            }));
         });
 
         it('throws error if url not found', function() {
