@@ -29,6 +29,7 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -36,8 +37,8 @@ import java.lang.reflect.Method;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -50,10 +51,11 @@ public class ReportsResourceTest {
     @BeforeClass
     public static void oneTimeSetup() {
         rps = new ReportsResource();
-        Assert.assertNotNull(HOME_FOLDER);
-        Assert.assertNotNull(RPT_STORE_PATH);
+        assertNotNull(HOME_FOLDER);
+        assertNotNull(RPT_STORE_PATH);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetMetaData() throws Exception {
@@ -67,7 +69,7 @@ public class ReportsResourceTest {
         Method getMetaDataMethod = getMetaDataMethod();
 
         JSONObject res = (JSONObject) getMetaDataMethod.invoke(null, "123_test");
-        Assert.assertNull(res.get("name"));
+        assertNull(res.get("name"));
 
         FileUtils.forceMkdir(fWks);
         String currTime = String.valueOf(System.currentTimeMillis());
@@ -81,14 +83,15 @@ public class ReportsResourceTest {
 
         res = (JSONObject) getMetaDataMethod.invoke(null, "123_test");
 
-        Assert.assertEquals("Test Report1", res.get("name").toString());
-        Assert.assertEquals("This is test report 1", res.get("description").toString());
-        Assert.assertEquals(currTime, res.get("created").toString());
-        Assert.assertEquals("reportpath", storePath + "/123_test/report.pdf", res.get("reportpath").toString());
+        assertEquals("Test Report1", res.get("name").toString());
+        assertEquals("This is test report 1", res.get("description").toString());
+        assertEquals(currTime, res.get("created").toString());
+        assertEquals("reportpath", storePath + "/123_test/report.pdf", res.get("reportpath").toString());
 
         FileUtils.forceDelete(fWks);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetReportsList() throws Exception {
@@ -161,15 +164,16 @@ public class ReportsResourceTest {
             }
         }
 
-        Assert.assertEquals(1, nCount1);
-        Assert.assertEquals(1, nCount2);
-        Assert.assertEquals(1, nCount3);
+        assertEquals(1, nCount1);
+        assertEquals(1, nCount2);
+        assertEquals(1, nCount3);
 
         FileUtils.forceDelete(fWks1);
         FileUtils.forceDelete(fWks2);
         FileUtils.forceDelete(fWks3);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetReportFile() throws Exception {
@@ -194,24 +198,26 @@ public class ReportsResourceTest {
         Method getReportFileMethod = getGetReportFileMethod();
         File fout = (File) getReportFileMethod.invoke(null, "123_test_file");
 
-        Assert.assertNotNull(fout);
+        assertNotNull(fout);
 
         fout = (File) getReportFileMethod.invoke(null, "123_test_file_not_there");
 
-        Assert.assertNull(fout);
+        assertNull(fout);
 
         FileUtils.forceDelete(fWks);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testDeleteReport() throws Exception {
         String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File dir = new File(storePath);
         File fWks = new File(storePath + "/123_test_del");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
+
+        File dir = new File(storePath);
         FileUtils.forceMkdir(dir);
 
         FileUtils.forceMkdir(fWks);
@@ -227,11 +233,11 @@ public class ReportsResourceTest {
         Method deleteReportMethod = getDeleteReportMethod();
 
         boolean isDel = (Boolean) deleteReportMethod.invoke(null, "123_test_del_not_exist");
-        Assert.assertFalse(isDel);
+        assertFalse(isDel);
 
         isDel = (Boolean) deleteReportMethod.invoke(null, "123_test_del");
 
-        Assert.assertTrue(isDel);
+        assertTrue(isDel);
     }
 
     private static Method getDeleteReportMethod() throws NoSuchMethodException {
@@ -245,6 +251,7 @@ public class ReportsResourceTest {
         getReportFileMethod.setAccessible(true);
         return getReportFileMethod;
     }
+
     private static Method getMetaDataMethod() throws NoSuchMethodException {
         Method getMetaDataMethod = ReportsResource.class.getDeclaredMethod("getMetaData", String.class);
         getMetaDataMethod.setAccessible(true);

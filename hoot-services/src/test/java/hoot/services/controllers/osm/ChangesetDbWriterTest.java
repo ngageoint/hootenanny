@@ -36,7 +36,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.utils.MapUtils;
+import hoot.services.testsupport.MapUtils;
 
 
 /**

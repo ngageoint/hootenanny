@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services;
+package hoot.services.testsupport;
 
 import java.util.logging.Logger;
 

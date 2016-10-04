@@ -44,7 +44,7 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 import hoot.services.controllers.job.JobFieldsValidator;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 public class JobFieldsValidatorTest {

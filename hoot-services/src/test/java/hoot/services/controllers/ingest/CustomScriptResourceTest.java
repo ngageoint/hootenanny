@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
+import static org.junit.Assert.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -50,14 +51,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 /*
@@ -69,88 +69,81 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 public class CustomScriptResourceTest {
     private static File homefolder;
     private static File customScriptFolder;
-    private static final String original_HOME_FOLDER;
-    private static final String original_SCRIPT_FOLDER;
-    private static final String original_JS_HEADER_SCRIPT_PATH;
-    private static final String original_DEFAULT_TRANSLATIONS_CONFIG;
-    private static final String original_TRANSLATION_SCRIPT_PATH;
+    private static String original_HOME_FOLDER;
+    private static String original_SCRIPT_FOLDER;
+    private static String original_JS_HEADER_SCRIPT_PATH;
+    private static String original_DEFAULT_TRANSLATIONS_CONFIG;
+    private static String original_TRANSLATION_SCRIPT_PATH;
 
-    static {
-        try {
-            original_HOME_FOLDER = HOME_FOLDER;
-            homefolder = new File(FileUtils.getTempDirectory(), "CustomScriptResourceTest");
-            FileUtils.forceMkdir(homefolder);
-            Assert.assertTrue(homefolder.exists());
-            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homefolder.getAbsolutePath());
-
-            original_SCRIPT_FOLDER = SCRIPT_FOLDER;
-            customScriptFolder = new File(homefolder, "customscript");
-            FileUtils.forceMkdir(customScriptFolder);
-            Assert.assertTrue(customScriptFolder.exists());
-            HootCustomPropertiesSetter.setProperty("SCRIPT_FOLDER", customScriptFolder.getAbsolutePath());
-
-            File scriptsFolder = new File(homefolder, "scripts");
-            FileUtils.forceMkdir(scriptsFolder);
-            Assert.assertTrue(scriptsFolder.exists());
-
-            //dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
-
-            original_JS_HEADER_SCRIPT_PATH = JS_HEADER_SCRIPT_PATH;
-            URL inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/empty_rh.js");
-            File dest = new File(scriptsFolder.getAbsolutePath(), "empty_rh.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-            HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", dest.getAbsolutePath());
-
-            File confFolder = new File(homefolder, "conf");
-            FileUtils.forceMkdir(confFolder);
-            Assert.assertTrue(confFolder.exists());
-
-            original_DEFAULT_TRANSLATIONS_CONFIG = DEFAULT_TRANSLATIONS_CONFIG;
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/DefaultTranslations.json");
-            dest = new File(confFolder, "DefaultTranslations.json");
-            FileUtils.copyURLToFile(inputUrl, dest);
-            HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", dest.getAbsolutePath());
-
-            //translationScriptPath=$(homeFolder)/translations
-
-            original_TRANSLATION_SCRIPT_PATH = TRANSLATION_SCRIPT_PATH;
-            File translationsFolder = new File(homefolder, "translations");
-            FileUtils.forceMkdir(translationsFolder);
-            Assert.assertTrue(translationsFolder.exists());
-
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-            dest = new File(translationsFolder, "TDSv61.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-            dest = new File(translationsFolder, "TDSv40.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-            dest = new File(translationsFolder, "MGCP_TRD4.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-            dest = new File(translationsFolder, "OSM_Ingest.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-
-            inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-            dest = new File(translationsFolder, "GeoNames.js");
-            FileUtils.copyURLToFile(inputUrl, dest);
-
-            HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", translationsFolder.getAbsolutePath());
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @BeforeClass
-    public static void oneTimeSetup() throws Exception {
+    public static void beforeClass() throws Exception {
+        original_HOME_FOLDER = HOME_FOLDER;
+        homefolder = new File(FileUtils.getTempDirectory(), "CustomScriptResourceTest");
+        FileUtils.forceMkdir(homefolder);
+        assertTrue(homefolder.exists());
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homefolder.getAbsolutePath());
+
+        original_SCRIPT_FOLDER = SCRIPT_FOLDER;
+        customScriptFolder = new File(homefolder, "customscript");
+        FileUtils.forceMkdir(customScriptFolder);
+        assertTrue(customScriptFolder.exists());
+        HootCustomPropertiesSetter.setProperty("SCRIPT_FOLDER", customScriptFolder.getAbsolutePath());
+
+        File scriptsFolder = new File(homefolder, "scripts");
+        FileUtils.forceMkdir(scriptsFolder);
+        assertTrue(scriptsFolder.exists());
+
+        //dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
+
+        original_JS_HEADER_SCRIPT_PATH = JS_HEADER_SCRIPT_PATH;
+        URL inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/empty_rh.js");
+        File dest = new File(scriptsFolder.getAbsolutePath(), "empty_rh.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+        HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", dest.getAbsolutePath());
+
+        File confFolder = new File(homefolder, "conf");
+        FileUtils.forceMkdir(confFolder);
+        assertTrue(confFolder.exists());
+
+        original_DEFAULT_TRANSLATIONS_CONFIG = DEFAULT_TRANSLATIONS_CONFIG;
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/DefaultTranslations.json");
+        dest = new File(confFolder, "DefaultTranslations.json");
+        FileUtils.copyURLToFile(inputUrl, dest);
+        HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", dest.getAbsolutePath());
+
+        //translationScriptPath=$(homeFolder)/translations
+
+        original_TRANSLATION_SCRIPT_PATH = TRANSLATION_SCRIPT_PATH;
+        File translationsFolder = new File(homefolder, "translations");
+        FileUtils.forceMkdir(translationsFolder);
+        assertTrue(translationsFolder.exists());
+
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
+        dest = new File(translationsFolder, "TDSv61.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
+        dest = new File(translationsFolder, "TDSv40.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
+        dest = new File(translationsFolder, "MGCP_TRD4.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
+        dest = new File(translationsFolder, "OSM_Ingest.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
+        dest = new File(translationsFolder, "GeoNames.js");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", translationsFolder.getAbsolutePath());
     }
 
     @AfterClass
-    public static void oneTimeTearDown() throws Exception {
+    public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homefolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
         HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", original_DEFAULT_TRANSLATIONS_CONFIG);
@@ -160,9 +153,7 @@ public class CustomScriptResourceTest {
     }
 
     @Before
-    public void beforeTest() {
-
-    }
+    public void beforeTest() {}
 
     @After
     public void afterTest() throws IOException {
@@ -181,16 +172,16 @@ public class CustomScriptResourceTest {
         JSONArray actualObj = (JSONArray) parser.parse(resp.getEntity().toString());
         JSONArray expectedObj = (JSONArray) parser.parse("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"Test Description\",\"CANEXPORT\":false}]");
 
-        Assert.assertEquals(expectedObj, actualObj);
+        assertEquals(expectedObj, actualObj);
+        assertEquals(200, resp.getStatus());
 
-        Assert.assertEquals(200, resp.getStatus());
         File file = new File(customScriptFolder + "/" + "testName.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         String expectedContent = "/*<<<" + actualObj.get(0) + ">>>*/" + System.lineSeparator() + "test";
         String actualContent = FileUtils.readFileToString(file, "UTF-8");
 
-        Assert.assertEquals(expectedContent, actualContent);
+        assertEquals(expectedContent, actualContent);
     }
 
     @Test
@@ -202,7 +193,7 @@ public class CustomScriptResourceTest {
         }
         catch (WebApplicationException e) {
             Response response = e.getResponse();
-            Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+            assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
             //Assert.assertTrue(response.readEntity(String.class).contains("missing } in compound statement"));
         }
     }
@@ -217,31 +208,31 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse response = res.saveScripts(request);
 
-        Assert.assertEquals(2, response.getScriptsModified().length);
+        assertEquals(2, response.getScriptsModified().length);
 
         List<String> modifiedScripts = Arrays.asList(response.getScriptsModified());
         Collections.sort(modifiedScripts);
 
-        Assert.assertEquals("testName1", modifiedScripts.get(0));
+        assertEquals("testName1", modifiedScripts.get(0));
         File file = new File(customScriptFolder, "testName1.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
         JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
-        Assert.assertEquals("testName2", modifiedScripts.get(1));
+        assertEquals("testName2", modifiedScripts.get(1));
         file = new File(customScriptFolder, "testName2.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\"Test Description 2\",\"CANEXPORT\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
     }
 
     @Test
@@ -260,34 +251,34 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse response = res.saveScripts(request);
 
-        Assert.assertEquals(2, response.getScriptsModified().length);
+        assertEquals(2, response.getScriptsModified().length);
 
         List<String> modifiedScripts = Arrays.asList(response.getScriptsModified());
         Collections.sort(modifiedScripts);
 
-        Assert.assertEquals("testName1", modifiedScripts.get(0));
+        assertEquals("testName1", modifiedScripts.get(0));
         File file = new File(customScriptFolder, "testName1.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
         JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
-        Assert.assertEquals("testName2", modifiedScripts.get(1));
+        assertEquals("testName2", modifiedScripts.get(1));
         file = new File(customScriptFolder, "testName2.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\"Test Description 2\",\"CANEXPORT\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
         actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
     }
 
     @Test
@@ -308,21 +299,21 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse response = res.saveScripts(request);
 
-        Assert.assertEquals(1, response.getScriptsModified().length);
+        assertEquals(1, response.getScriptsModified().length);
 
-        Assert.assertEquals("testName1", response.getScriptsModified()[0]);
+        assertEquals("testName1", response.getScriptsModified()[0]);
         File file = new File(customScriptFolder, "testName1.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
         JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
         file = new File(customScriptFolder + "/" + "testName2.js");
-        Assert.assertFalse(file.exists());
+        assertFalse(file.exists());
     }
 
     @Test
@@ -339,31 +330,31 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse response = res.saveScripts(request);
 
-        Assert.assertEquals(2, response.getScriptsModified().length);
+        assertEquals(2, response.getScriptsModified().length);
 
         List<String> modifiedScripts = Arrays.asList(response.getScriptsModified());
         Collections.sort(modifiedScripts);
 
-        Assert.assertEquals("testName1", modifiedScripts.get(0));
+        assertEquals("testName1", modifiedScripts.get(0));
         File file = new File(customScriptFolder, "testName1.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
         JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
-        Assert.assertEquals("testName2", modifiedScripts.get(1));
+        assertEquals("testName2", modifiedScripts.get(1));
         file = new File(customScriptFolder, "testName2.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\" \",\"CANEXPORT\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
     }
 
     @Test
@@ -379,11 +370,11 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse response = res.saveScripts(request);
 
-        Assert.assertEquals(1, response.getScriptsModified().length);
-        Assert.assertEquals("testName1", response.getScriptsModified()[0]);
+        assertEquals(1, response.getScriptsModified().length);
+        assertEquals("testName1", response.getScriptsModified()[0]);
 
         File file = new File(customScriptFolder, "testName1.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -391,10 +382,10 @@ public class CustomScriptResourceTest {
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
 
-        Assert.assertEquals(expectedStr, actualStr);
+        assertEquals(expectedStr, actualStr);
 
         file = new File(customScriptFolder, "testName2.js");
-        Assert.assertFalse(file.exists());
+        assertFalse(file.exists());
     }
 
     @Test
@@ -403,16 +394,16 @@ public class CustomScriptResourceTest {
         CustomScriptResource customScriptResource = new CustomScriptResource();
 
         Response response = customScriptResource.processSave("test3", "testName3", "Test3 Description");
-        Assert.assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
 
         response = customScriptResource.processSave("test1", "testName4", "Test4 Description");
-        Assert.assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
 
         File file = new File(customScriptFolder, "testName3.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         file = new File(customScriptFolder, "testName4.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         response = customScriptResource.getScriptsList();
         String strList = response.getEntity().toString();
@@ -420,14 +411,14 @@ public class CustomScriptResourceTest {
         JSONParser parser = new JSONParser();
         JSONArray arr = (JSONArray) parser.parse(strList);
 
-        Assert.assertTrue(!arr.isEmpty());
+        assertTrue(!arr.isEmpty());
 
         for (Object jo : arr) {
             JSONObject o = (JSONObject) jo;
             if (o.get("NAME") != null) {
                 if (o.get("NAME").toString().equals("testName3")) {
-                    Assert.assertTrue(o.get("NAME").toString().startsWith("testName"));
-                    Assert.assertTrue(o.get("DESCRIPTION").toString().startsWith("Test"));
+                    assertTrue(o.get("NAME").toString().startsWith("testName"));
+                    assertTrue(o.get("DESCRIPTION").toString().startsWith("Test"));
                 }
             }
         }
@@ -439,25 +430,25 @@ public class CustomScriptResourceTest {
         CustomScriptResource res = new CustomScriptResource();
         Response resp = res.processSave("test5", "testName5", "Test5 Description");
 
-        Assert.assertEquals(200, resp.getStatus());
+        assertEquals(200, resp.getStatus());
         resp = res.processSave("test6", "testName6", "Test6 Description");
-        Assert.assertEquals(200, resp.getStatus());
+        assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName5.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         file = new File(customScriptFolder, "testName6.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         resp = res.getScript("testName5");
         String scriptStr = resp.getEntity().toString();
 
-        Assert.assertEquals("test5", scriptStr);
+        assertEquals("test5", scriptStr);
 
         resp = res.getScript("testName6");
         scriptStr = resp.getEntity().toString();
 
-        Assert.assertEquals("test6", scriptStr);
+        assertEquals("test6", scriptStr);
     }
 
     @Test
@@ -465,10 +456,10 @@ public class CustomScriptResourceTest {
     public void testDeleteScript() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
         Response resp = res.processSave("test9", "testName9", "Test9 Description");
-        Assert.assertEquals(200, resp.getStatus());
+        assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName9.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         resp = res.deleteScript("testName9");
         String deletedStr = resp.getEntity().toString();
@@ -477,7 +468,7 @@ public class CustomScriptResourceTest {
         JSONArray actualObj = (JSONArray) parser.parse(deletedStr);
         JSONArray expectedObj = (JSONArray) parser.parse("[{\"NAME\":\"testName9\",\"DESCRIPTION\":\"Test9 Description\",\"CANEXPORT\":false}]");
 
-        Assert.assertEquals(expectedObj, actualObj);
+        assertEquals(expectedObj, actualObj);
     }
 
     @Test
@@ -485,14 +476,14 @@ public class CustomScriptResourceTest {
     public void testDeleteMultiple() {
         CustomScriptResource res = new CustomScriptResource();
         Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         saveResponse = res.processSave("test10", "testName10", "Test10 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         ModifyScriptsRequest request = new ModifyScriptsRequest();
         List<Script> scriptsToDelete = new ArrayList<>();
@@ -504,15 +495,15 @@ public class CustomScriptResourceTest {
 
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
-        Assert.assertEquals(2, deleteResponse.getScriptsModified().length);
+        assertEquals(2, deleteResponse.getScriptsModified().length);
         List<String> modifiedScripts = Arrays.asList(deleteResponse.getScriptsModified());
         Collections.sort(modifiedScripts);
-        Assert.assertEquals("testName10", modifiedScripts.get(0));
+        assertEquals("testName10", modifiedScripts.get(0));
         file = new File(customScriptFolder, "testName10.js");
-        Assert.assertFalse(file.exists());
-        Assert.assertEquals("testName9", modifiedScripts.get(1));
+        assertFalse(file.exists());
+        assertEquals("testName9", modifiedScripts.get(1));
         file = new File(customScriptFolder, "testName9.js");
-        Assert.assertFalse(file.exists());
+        assertFalse(file.exists());
     }
 
     @Test
@@ -533,7 +524,7 @@ public class CustomScriptResourceTest {
 
         CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
-        Assert.assertEquals(0, deleteResponse.getScriptsModified().length);
+        assertEquals(0, deleteResponse.getScriptsModified().length);
     }
 
     @Test
@@ -544,14 +535,14 @@ public class CustomScriptResourceTest {
          */
         CustomScriptResource res = new CustomScriptResource();
         Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         saveResponse = res.processSave("test10", "testName10", "Test10 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder + "/" + "testName10.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         ModifyScriptsRequest request = new ModifyScriptsRequest();
         List<Script> scriptsToDelete = new ArrayList<>();
@@ -564,13 +555,13 @@ public class CustomScriptResourceTest {
 
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
-        Assert.assertEquals(1, deleteResponse.getScriptsModified().length);
-        Assert.assertEquals("testName9", deleteResponse.getScriptsModified()[0]);
+        assertEquals(1, deleteResponse.getScriptsModified().length);
+        assertEquals("testName9", deleteResponse.getScriptsModified()[0]);
         file = new File(customScriptFolder, "testName9.js");
-        Assert.assertFalse(file.exists());
+        assertFalse(file.exists());
 
         file = new File(customScriptFolder, "testName10.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
     }
 
     /**
@@ -608,21 +599,21 @@ public class CustomScriptResourceTest {
     public void testDeleteMultipleScriptToBeDeletedHasNoHeader() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
         Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         saveResponse = res.processSave("test10", "testName10", "Test10 Description");
-        Assert.assertEquals(200, saveResponse.getStatus());
+        assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         // remove the header (on the first line) from the second script
         removeFirstLineFromFile(file);
 
         String content = FileUtils.readFileToString(file, "UTF-8");
-        Assert.assertFalse(content.contains("*<<<"));
-        Assert.assertFalse(content.contains(">>>*"));
+        assertFalse(content.contains("*<<<"));
+        assertFalse(content.contains(">>>*"));
 
         ModifyScriptsRequest request = new ModifyScriptsRequest();
         List<Script> scriptsToDelete = new ArrayList<>();
@@ -634,12 +625,12 @@ public class CustomScriptResourceTest {
 
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
-        Assert.assertEquals(1, deleteResponse.getScriptsModified().length);
-        Assert.assertEquals("testName9", deleteResponse.getScriptsModified()[0]);
+        assertEquals(1, deleteResponse.getScriptsModified().length);
+        assertEquals("testName9", deleteResponse.getScriptsModified()[0]);
         file = new File(customScriptFolder, "testName9.js");
-        Assert.assertFalse(file.exists());
+        assertFalse(file.exists());
         file = new File(customScriptFolder, "testName10.js");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
     }
 
     @Test
@@ -651,13 +642,13 @@ public class CustomScriptResourceTest {
         String noExportScript = "";
         noExportScript += "function translateToOsm(attrs, layerName){}";
         boolean canExport = (Boolean) validateExportMethod.invoke(null, noExportScript);
-        Assert.assertTrue(!canExport);
+        assertTrue(!canExport);
 
         String exportScript = "";
         exportScript += "function getDbSchema(){}";
         exportScript += "function translateToOgr(){}";
         canExport = (Boolean) validateExportMethod.invoke(null, exportScript);
-        Assert.assertTrue(canExport);
+        assertTrue(canExport);
     }
 
     @Test
@@ -680,23 +671,23 @@ public class CustomScriptResourceTest {
             JSONObject jsTrans = (JSONObject) o;
 
             Object oName = jsTrans.get("NAME");
-            Assert.assertNotNull(oName);
-            Assert.assertTrue(!oName.toString().isEmpty());
-            Assert.assertNotNull(jsTrans.get("DESCRIPTION"));
+            assertNotNull(oName);
+            assertTrue(!oName.toString().isEmpty());
+            assertNotNull(jsTrans.get("DESCRIPTION"));
 
             Object oPath = jsTrans.get("PATH");
-            Assert.assertNotNull(oPath);
-            Assert.assertTrue(!oPath.toString().isEmpty());
+            assertNotNull(oPath);
+            assertTrue(!oPath.toString().isEmpty());
 
             File fScript = new File(homefolder, (String) oPath);
-            Assert.assertTrue(fScript.exists());
+            assertTrue(fScript.exists());
 
             String sScript = FileUtils.readFileToString(fScript);
             validateExportMethod.invoke(null, sScript);
 
             if (jsTrans.get("FOUO_PATH") != null) {
                 File fouo = new File(homefolder, (String) jsTrans.get("FOUO_PATH"));
-                Assert.assertTrue(fouo.exists());
+                assertTrue(fouo.exists());
             }
         }
     }

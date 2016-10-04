@@ -36,6 +36,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -43,13 +44,14 @@ import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.models.review.ReviewResolverRequest;
 import hoot.services.models.review.ReviewResolverResponse;
-import hoot.services.review.ReviewTestUtils;
+import hoot.services.testsupport.ReviewTestUtils;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 
 public class ReviewResourceResolveAllTest extends OSMResourceTestAbstract {
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testSetAllReviewsResolved() throws Exception {

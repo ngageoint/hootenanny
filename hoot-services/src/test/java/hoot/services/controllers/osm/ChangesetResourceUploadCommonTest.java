@@ -41,7 +41,7 @@ import org.w3c.dom.Document;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.MapUtils;
+import hoot.services.testsupport.MapUtils;
 
 
 public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
@@ -89,7 +89,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
                             "<modify/>" +
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>" +
-                            "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<osmChange version=\"0.3\" generator=\"iD\">" +
                             "<create>" +
                                 "<node id=\"-1\" lon=\"" + originalBounds.getMinLon() + "\" lat=\"" +
                                     originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId + "\">" +

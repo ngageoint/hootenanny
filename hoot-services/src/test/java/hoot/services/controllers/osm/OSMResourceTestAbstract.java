@@ -31,46 +31,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
-import javax.ws.rs.core.Application;
-
 import org.apache.commons.dbcp.BasicDataSource;
-import org.glassfish.jersey.test.JerseyTest;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.BeforeClass;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
-import hoot.services.HootServicesJerseyTestApplication;
-import hoot.services.HootServicesSpringTestConfig;
-import hoot.services.utils.MapUtils;
+import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.testsupport.MapUtils;
 
 
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
 
-public abstract class OSMResourceTestAbstract extends JerseyTest {
+public abstract class OSMResourceTestAbstract extends HootServicesJerseyTestAbstract {
+
+    private static PlatformTransactionManager txManager;
+    private static TransactionStatus transactionStatus;
+    private static BasicDataSource dbcpDatasource;
 
     protected long userId;
     protected long mapId;
 
-    private ApplicationContext applicationContext;
-
-    private PlatformTransactionManager txManager;
-
-    private TransactionStatus transactionStatus;
-
+    static {
+        txManager = applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
+        dbcpDatasource = applicationContext.getBean("dataSource", BasicDataSource.class);
+    }
 
     public OSMResourceTestAbstract(String... controllerGroup) {}
 
+
+    @BeforeClass
+    public static void beforeClass() {}
+
+    @AfterClass
+    public static void afterClass() {}
+
     @Before
     public void beforeTest() throws Exception {
-        if (this.txManager == null) {
-            this.txManager = applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
-        }
-        this.transactionStatus = txManager.getTransaction(null);
+        transactionStatus = txManager.getTransaction(null);
 
         userId = MapUtils.insertUser();
         mapId = MapUtils.insertMap(userId);
@@ -81,18 +83,10 @@ public abstract class OSMResourceTestAbstract extends JerseyTest {
     @After
     public void afterTest() throws Exception {
         txManager.rollback(transactionStatus);
-        this.transactionStatus = null;
-    }
-
-    @Override
-    protected Application configure() {
-        this.applicationContext = new AnnotationConfigApplicationContext(HootServicesSpringTestConfig.class);
-        return new HootServicesJerseyTestApplication(this.applicationContext);
+        transactionStatus = null;
     }
 
     protected Timestamp getCurrentDBTime() throws Exception {
-        BasicDataSource dbcpDatasource = applicationContext.getBean("dataSource", BasicDataSource.class);
-
         try (Connection conn = dbcpDatasource.getConnection()) {
             String sql = "SELECT now()";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {

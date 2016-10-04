@@ -66,7 +66,7 @@ import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
@@ -188,7 +188,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
 
                 assertNotNull(changeset);
 
-                Timestamp now = super.getCurrentDBTime();
+                Timestamp now = new Timestamp(System.currentTimeMillis());
 
                 assertTrue(changeset.getCreatedAt().before(now));
                 assertTrue(changeset.getClosedAt().after(changeset.getCreatedAt()));

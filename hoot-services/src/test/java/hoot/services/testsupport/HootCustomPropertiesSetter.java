@@ -22,24 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.models.review;
+package hoot.services.testsupport;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
-import hoot.services.UnitTest;
+import hoot.services.HootProperties;
 
 
-public class ReviewableItemTest {
-    @Test
-    @Category(UnitTest.class)
-    public void testToString() throws Exception {
-        ReviewableItem o = new ReviewableItem(5, 3, 4);
-        String expected = "{\"sortorder\":5,\"relationid\":4,\"mapid\":3}";
-        String actual = o.toString();
+public final class HootCustomPropertiesSetter {
 
-        org.junit.Assert.assertEquals(expected, actual);
+    private HootCustomPropertiesSetter() {}
+
+    public static void setProperty(String key, String value) throws Exception {
+        Field field = HootProperties.class.getField(key);
+        field.setAccessible(true);
+
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+        field.set(null, value);
     }
 }

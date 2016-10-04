@@ -47,8 +47,6 @@ import javax.xml.xpath.XPath;
 import org.apache.xpath.XPathAPI;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Document;
 
 import com.querydsl.sql.SQLExpressions;
@@ -65,8 +63,8 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.utils.HootCustomPropertiesSetter;
-import hoot.services.utils.MapUtils;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.testsupport.MapUtils;
 import hoot.services.utils.XmlUtils;
 
 

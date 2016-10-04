@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -39,6 +40,7 @@ import hoot.services.UnitTest;
 
 public class CleanDataResourceTest {
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testProcess() throws Exception {

@@ -24,13 +24,15 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.nativeinterfaces;
+package hoot.services.controllers.info;
 
 import org.json.simple.JSONObject;
 
+import hoot.services.nativeinterfaces.NativeInterface;
+import hoot.services.nativeinterfaces.NativeInterfaceException;
 
-//@Component
-public class INativeInterfaceStubImpl implements NativeInterface {
+
+public class NativeInterfaceStubImpl implements NativeInterface {
     @Override
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
         JSONObject json = new JSONObject();

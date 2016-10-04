@@ -46,7 +46,7 @@ import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
-import hoot.services.review.ReviewTestUtils;
+import hoot.services.testsupport.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 

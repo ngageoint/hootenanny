@@ -55,10 +55,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.HootServicesSpringTestConfig;
+import hoot.services.testsupport.HootServicesSpringTestConfig;
 import hoot.services.UnitTest;
 import hoot.services.job.JobStatusManager;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 @Ignore

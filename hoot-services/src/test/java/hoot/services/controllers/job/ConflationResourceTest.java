@@ -38,6 +38,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalMatchers;
@@ -47,11 +48,12 @@ import org.mockito.Mockito;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testProcess() {
@@ -175,6 +177,7 @@ public class ConflationResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {

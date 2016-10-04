@@ -69,6 +69,7 @@ import org.junit.experimental.categories.Category;
 import org.jvnet.mimepull.MIMEMessage;
 import org.jvnet.mimepull.MIMEPart;
 
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 import hoot.services.UnitTest;
 
 
