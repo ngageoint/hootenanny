@@ -48,17 +48,27 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
   // recursively explore the edges that neighbor e1 and e2. All the discovered matches will be
   // recorded
 
-  QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
-
-  foreach (EdgeSublineMatchPtr s, sublines)
+  if (e1->isStub() || e2->isStub())
   {
     EdgeMatchPtr em(new EdgeMatch());
+    em->getString1()->addFirstEdge(e1);
+    em->getString2()->addFirstEdge(e2);
+    _recordMatch(em);
+  }
+  else
+  {
+    QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
 
-    em->getString1()->addFirstEdge(s->getSubline1());
-    em->getString2()->addFirstEdge(s->getSubline2());
+    foreach (EdgeSublineMatchPtr s, sublines)
+    {
+      EdgeMatchPtr em(new EdgeMatch());
 
-    _steps = 0;
-    _addEdgeMatches(em);
+      em->getString1()->addFirstEdge(s->getSubline1());
+      em->getString2()->addFirstEdge(s->getSubline2());
+
+      _steps = 0;
+      _addEdgeMatches(em);
+    }
   }
 }
 
@@ -163,7 +173,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
       _details->isStringCandidate(em->getString1()->getLastEdge(), neighbor1) &&
-      /*neighbors1[i]->isStub() == false &&*/
+      /*neighbors1[i]->isbb() == false &&*/
       _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()) > 0)
     {
     #warning review
