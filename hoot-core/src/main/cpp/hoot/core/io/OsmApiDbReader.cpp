@@ -542,7 +542,41 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   }
   way->addNodes(nodeIds);
 
+  _addNodesForWay(nodeIds, map);
+
   return way;
+}
+
+void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
+{
+  for (unsigned int i = 0; i < nodeIds.size(); i++)
+  {
+    QStringList tags;
+    if (map.containsNode(nodeIds[i]) == false)
+    {
+      shared_ptr<QSqlQuery> queryIterator = _database.selectNodeById(nodeIds[i]);
+      while (queryIterator->next())
+      {
+        shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
+        QString result = _database.extractTagFromRow(queryIterator, ElementType::Node);
+        if(result != "")
+        {
+          tags << result;
+        }
+
+        if(tags.size()>0)
+        {
+          node->setTags(ApiDb::unescapeTags(tags.join(", ")));
+          ApiDbReader::addTagsToElement(node);
+        }
+        if (_status != Status::Invalid)
+        {
+          node->setStatus(_status);
+        }
+        map.addElement(node);
+      }
+    }
+  }
 }
 
 shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,

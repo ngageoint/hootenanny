@@ -367,32 +367,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 
 shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox)
 {
-  //get tile id ranges
-  QStringList bboxParts = bbox.split(",");
-  double minLat = bboxParts[1].toDouble()*(double)ApiDb::COORDINATE_SCALE;
-  double minLon = bboxParts[0].toDouble()*(double)ApiDb::COORDINATE_SCALE;
-  double maxLat = bboxParts[3].toDouble()*(double)ApiDb::COORDINATE_SCALE;
-  double maxLon = bboxParts[2].toDouble()*(double)ApiDb::COORDINATE_SCALE;
-
-  vector<double> minV;
-  minV.push_back(-90.0);
-  minV.push_back(-180.0);
-  vector<double> maxV;
-  maxV.push_back(90.0);
-  maxV.push_back(180.0);
-  ZValue zv(2, 16, minV, maxV);
-  ZCurveRanger ranger(zv);
-
-  vector<double> minB;
-  minB.push_back(minLat);
-  minB.push_back(minLon);
-  vector<double> maxB;
-  maxB.push_back(maxLat);
-  maxB.push_back(maxLon);
-
-  BBox b(minB, maxB);
-  vector<Range> ranges = ranger.decomposeRange(b, 1);
-
   //prepare sql query
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
@@ -403,7 +377,10 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
     sql += _getTableName(elementType) + " WHERE visible = true ";
     if (elementType == ElementType::Node)
     {
-      sql += "AND " + _getTileWhereCondition(ranges);
+      if (elementId == -1)
+      {
+        sql += "AND " + _getTileWhereCondition(bbox);
+      }
     }
     if (elementId > -1)
     {
@@ -431,8 +408,34 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
   return _selectElementsForMap;
 }
 
-QString OsmApiDb::_getTileWhereCondition(vector<Range> ranges)
+QString OsmApiDb::_getTileWhereCondition(QString bbox)
 {
+  //get tile id ranges
+  QStringList bboxParts = bbox.split(",");
+  double minLat = bboxParts[1].toDouble();
+  double minLon = bboxParts[0].toDouble();
+  double maxLat = bboxParts[3].toDouble();
+  double maxLon = bboxParts[2].toDouble();
+
+  vector<double> minV;
+  minV.push_back(-90.0);
+  minV.push_back(-180.0);
+  vector<double> maxV;
+  maxV.push_back(90.0);
+  maxV.push_back(180.0);
+  ZValue zv(2, 16, minV, maxV);
+  ZCurveRanger ranger(zv);
+
+  vector<double> minB;
+  minB.push_back(minLat);
+  minB.push_back(minLon);
+  vector<double> maxB;
+  maxB.push_back(maxLat);
+  maxB.push_back(maxLon);
+
+  BBox b(minB, maxB);
+  vector<Range> ranges = ranger.decomposeRange(b, 1);
+
   QString sql = "";
   for (uint i = 0; i < ranges.size(); i++)
   {

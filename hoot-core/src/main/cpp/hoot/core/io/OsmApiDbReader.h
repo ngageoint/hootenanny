@@ -118,6 +118,7 @@ private:
   shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+  void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
 };
 
 }
