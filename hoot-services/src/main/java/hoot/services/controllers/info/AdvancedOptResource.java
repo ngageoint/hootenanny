@@ -53,12 +53,10 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Controller
 @Path("/advancedopts")
-@Transactional
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
 
@@ -124,12 +122,9 @@ public class AdvancedOptResource {
                 template = this.template;
             }
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error getting advanced options!";
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting advanced options!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(template.toJSONString()).build();

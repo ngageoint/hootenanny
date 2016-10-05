@@ -32,9 +32,6 @@ import static hoot.services.HootProperties.INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -104,9 +101,9 @@ public class JobControllerBase {
 
             logger.debug("postJobRequest Response: {}", r.getStatusLine());
         }
-        catch (Exception ex) {
-            String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "postJobRquest() failed!  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
@@ -135,9 +132,9 @@ public class JobControllerBase {
 
             logger.debug("postChainJobRquest Response x: {}", r.getStatusLine());
         }
-        catch (Exception ex) {
-            String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "postChainJobRequest() failed.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 

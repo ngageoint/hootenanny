@@ -112,9 +112,6 @@ public class ClipDatasetResource extends JobControllerBase {
 
             postChainJobRquest(uuid, jobArgs.toJSONString());
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());

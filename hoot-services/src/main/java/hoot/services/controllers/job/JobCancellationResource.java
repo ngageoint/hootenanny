@@ -100,9 +100,6 @@ public class JobCancellationResource extends JobControllerBase {
 
             postChainJobRquest(jobId, jobArgs.toJSONString());
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception ex) {
             String msg = "Error process data clean request: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());

@@ -179,7 +179,6 @@ public class FileUploadResource extends JobControllerBase {
                     reqList = new JSONArray();
                     buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat);
                 }
-
             }
 
             if (((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt) > 0) && ((osmZipCnt + osmCnt) > 0)) {

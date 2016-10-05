@@ -26,10 +26,9 @@
  */
 package hoot.services;
 
-import static hoot.services.HootProperties.TILE_SERVER_PATH;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -59,13 +58,18 @@ public class HootServletContext implements ServletContextListener {
 
         createIngestFolder();
 
+        createUploadFolder();
+
         activateSpringProfile();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         TranslatorResource.stopTranslationService();
+
         P2PResource.stopP2PService();
+
+        FileUtils.deleteQuietly(new File(TEMP_OUTPUT_PATH));
     }
 
     private static void initSLF4JBridgeHandler() {
@@ -77,25 +81,26 @@ public class HootServletContext implements ServletContextListener {
         SLF4JBridgeHandler.install();
     }
 
-    private static void createTileServerPath(String path) throws IOException {
-        File file = new File(path);
-        if (!file.exists()) {
-            FileUtils.forceMkdir(file);
-        }
-    }
-
-    private static void createIngestFolder() {
-        // Doing this to make sure we create ingest folder
-        try {
-            createTileServerPath(TILE_SERVER_PATH);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error creating tile server path: " + TILE_SERVER_PATH, ioe);
-        }
-    }
-
     private static void activateSpringProfile() {
         // Activate Spring 'production' profile
         System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "production");
+    }
+
+    private static void createIngestFolder() {
+        File ingestFolder = new File(TILE_SERVER_PATH);
+        if (!ingestFolder.exists()) {
+            if (!ingestFolder.mkdir()) {
+                throw new RuntimeException("Error creating " + ingestFolder.getAbsolutePath() + " directory!");
+            }
+        }
+    }
+
+    private static void createUploadFolder() {
+        File uploadDir = new File(UPLOAD_FOLDER);
+        if (!uploadDir.exists()) {
+            if (!uploadDir.mkdir()) {
+                throw new RuntimeException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+            }
+        }
     }
 }

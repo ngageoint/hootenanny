@@ -35,6 +35,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.ArgumentCaptor;
@@ -46,6 +47,7 @@ import hoot.services.UnitTest;
 
 public class HGISFilterResourceTest {
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestFilterNonHgisPois() throws Exception {

@@ -86,11 +86,9 @@ public class ReportsResource {
         try {
             report = getReportFile(id);
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception e) {
-            String msg = "Error returning report with id = " + id + ", reportname = "  + name;
+            String msg = "Error returning report with id = " + id + ", reportname = "  + name +
+                    ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -116,12 +114,9 @@ public class ReportsResource {
         try {
             reports = getReportsList();
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String message = "Error getting reports list!";
-            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
+        catch (Exception e) {
+            String message = "Error getting reports list!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         return Response.ok(reports.toJSONString()).build();
@@ -145,11 +140,8 @@ public class ReportsResource {
         try {
             isDeleted = deleteReport(id);
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception e) {
-            String msg = "Error deleting report file with id = " + id;
+            String msg = "Error deleting report file with id = " + id + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -179,11 +171,9 @@ public class ReportsResource {
         return res;
     }
 
-    // gets the list of meta data. This could get slow if there is large numbers of reports
-    // One solution may be using Runtime to do bash to get folder count natively
-    // and that should be the fastest way..
     private static JSONArray getReportsList() {
-        JSONArray res = new JSONArray();
+        JSONArray reportsList = new JSONArray();
+
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
@@ -209,26 +199,27 @@ public class ReportsResource {
             }
         }
 
-        res.addAll(sorted.values());
+        reportsList.addAll(sorted.values());
 
-        return res;
+        return reportsList;
     }
 
     // retrieves the report file
     private static File getReportFile(String id) throws IOException, ParseException {
-        File res = null;
+        File reportFile = null;
 
         JSONObject meta = getMetaData(id);
+
         Object oRepPath = meta.get("reportpath");
         if (oRepPath != null) {
             String repPath = oRepPath.toString();
             File file = new File(repPath);
             if (file.exists()) {
-                res = file;
+                reportFile = file;
             }
         }
 
-        return res;
+        return reportFile;
     }
 
     // deletes requested report by deleting folder
