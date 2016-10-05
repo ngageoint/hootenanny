@@ -86,9 +86,13 @@ public class TranslatorResource extends ServerControllerBase {
             // Make sure to wipe out previously running servers.
             stopServer(translationServiceScript);
 
+            logger.info("Starting Translation Service by running {} script", translationServiceScript);
+
             // start Translaction Service
             translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
                     translationServiceScript);
+
+            logger.info("Translation Service started");
         }
         catch (Exception e) {
             String msg = "Error starting Translation Service.  Cause: " + e.getMessage();

@@ -113,10 +113,16 @@ public class P2PResource extends ServerControllerBase {
     public static void startP2PService() {
         try {
             String p2PServiceScript = HOME_FOLDER + P_2_P_SERVER_SCRIPT;
+
             // Make sure to wipe out previosuly running servers.
             stopServer(p2PServiceScript);
 
+
+            logger.info("Starting Point-To-Polygon Service by running {} script", p2PServiceScript);
+
             p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
+
+            logger.info("Point-To-Polygon Service started");
         }
         catch (Exception e) {
             String msg = "Error starting Point-To-Polygon Service.  Cause: " + e.getMessage();
