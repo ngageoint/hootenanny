@@ -806,3 +806,10 @@ Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
   el = find(input)
   el[:class].include?('invalid-input').should eq true
 end
+
+# for placeholders 
+Then(/^I should see element "([^"]*)" with no value and placeholder (\w+)$/) do |id, value|
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
+end
