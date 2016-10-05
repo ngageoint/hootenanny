@@ -234,7 +234,7 @@ public final class HootProperties {
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
         OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
-        UPLOAD_FOLDER = HOME_FOLDER + File.pathSeparator + "upload";
+        UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
     }
 
     private HootProperties() {}
