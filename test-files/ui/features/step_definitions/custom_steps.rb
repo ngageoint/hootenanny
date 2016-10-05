@@ -322,7 +322,7 @@ When(/^I double-click the "([^"]*)"$/) do |el|
 end
 
 When(/^I fill "([^"]*)" with "([^"]*)"$/) do |el, value|
-  find('#' + el).set(value)
+  find(el).set(value)
   sleep 1
 end
 
