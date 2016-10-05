@@ -35,7 +35,6 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import org.springframework.core.env.AbstractEnvironment;
 
 import hoot.services.controllers.ogr.P2PResource;
 import hoot.services.controllers.ogr.TranslatorResource;
@@ -45,10 +44,6 @@ public class HootServletContext implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        TranslatorResource.startTranslationService();
-
-        P2PResource.startP2PService();
-
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
         // route those calls through SLF4J.
@@ -60,7 +55,9 @@ public class HootServletContext implements ServletContextListener {
 
         createUploadFolder();
 
-        activateSpringProfile();
+        TranslatorResource.startTranslationService();
+
+        P2PResource.startP2PService();
     }
 
     @Override
@@ -79,11 +76,6 @@ public class HootServletContext implements ServletContextListener {
         // add SLF4JBridgeHandler to j.u.l's root logger, should be done once
         // during the initialization phase of your application
         SLF4JBridgeHandler.install();
-    }
-
-    private static void activateSpringProfile() {
-        // Activate Spring 'production' profile
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "production");
     }
 
     private static void createIngestFolder() {
