@@ -50,6 +50,11 @@ When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I should (not )?see a way map feature with OSM id "([^"]*)"$/) do |negate, id|
+  expectation = negate ? 0 : 1
+  find('div.layer-data').assert_selector('path[class*=" ' + id + '"]',:maximum => expectation)
+end
+
 When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -231,6 +236,18 @@ end
 
 When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
+end
+
+When(/^I click the control "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control,  arg1]
+end
+
+When(/^I click the control shift "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :shift, arg1]
+end
+
+When(/^I click the control alt "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :alt, arg1]
 end
 
 When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
@@ -660,7 +677,7 @@ When(/^I select "([^"]*)" basemap/) do |file|
   end
 end
 
-When(/^I click the map background button$/) do
+When(/^I click the Background settings button$/) do
   find('div.background-control').find('button').click
 end
 
@@ -780,4 +797,47 @@ end
 Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
   el.click
+end
+
+
+When(/^I click paste tags, overwrite$/) do
+  page.all('button.col6')[0].click
+end
+
+When(/^I click paste tags, append$/) do
+  page.all('button.col6')[1].click
+end
+
+When(/^I click undo$/) do
+  page.all('button.col6')[2].click
+end
+
+When(/^I click redo$/) do
+  page.all('button.col6')[3].click
+end
+
+When(/^I expand the tag list toggle$/) do
+  ttg = page.all('a.hide-toggle')[1]
+  unless ttg.has_css?('hide-toggle expanded')
+    ttg.click
+  end
+end
+
+Then(/^I should see the last element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  lel = page.all(id).last
+  lel.value.should eq value
+end
+
+When(/^I expand the sidebar$/) do
+  resizer = page.find('#resizer')
+  resizer.drag_by(150, 0)
+end
+
+#for hidden features
+Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
+  el = page.find(input).should be_visible
+end
+
+Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
+  el = page.should have_no_css(input, :visible => true)
 end

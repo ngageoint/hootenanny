@@ -44,10 +44,6 @@
 namespace hoot
 {
 
-/*
- * TODO: Re-enable this test when PostgresqlDumpfileWriterv2 scaling issues are corrected and is
- * changed back to PostgresqlDumpfileWriter
- */
 class PostgresqlDumpfileWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PostgresqlDumpfileWriterTest);
