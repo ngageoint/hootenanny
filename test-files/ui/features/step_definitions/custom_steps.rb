@@ -238,6 +238,18 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the control "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control,  arg1]
+end
+
+When(/^I click the control shift "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :shift, arg1]
+end
+
+When(/^I click the control alt "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :alt, arg1]
+end
+
 When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
   find(el).native.send_keys(key)
 end
@@ -785,4 +797,47 @@ end
 Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
   el.click
+end
+
+
+When(/^I click paste tags, overwrite$/) do
+  page.all('button.col6')[0].click
+end
+
+When(/^I click paste tags, append$/) do
+  page.all('button.col6')[1].click
+end
+
+When(/^I click undo$/) do
+  page.all('button.col6')[2].click
+end
+
+When(/^I click redo$/) do
+  page.all('button.col6')[3].click
+end
+
+When(/^I expand the tag list toggle$/) do
+  ttg = page.all('a.hide-toggle')[1]
+  unless ttg.has_css?('hide-toggle expanded')
+    ttg.click
+  end
+end
+
+Then(/^I should see the last element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  lel = page.all(id).last
+  lel.value.should eq value
+end
+
+When(/^I expand the sidebar$/) do
+  resizer = page.find('#resizer')
+  resizer.drag_by(150, 0)
+end
+
+#for hidden features
+Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
+  el = page.find(input).should be_visible
+end
+
+Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
+  el = page.should have_no_css(input, :visible => true)
 end
