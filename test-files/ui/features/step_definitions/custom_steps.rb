@@ -808,7 +808,7 @@ Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
 end
 
 # for placeholders 
-Then(/^I should see element "([^"]*)" with no value and placeholder (\w+)$/) do |id, value|
+Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
   el = find(id)
   el.value.should eq ""
   el['placeholder'].should eq value
