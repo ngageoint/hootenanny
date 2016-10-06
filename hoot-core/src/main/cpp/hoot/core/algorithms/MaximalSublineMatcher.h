@@ -59,7 +59,7 @@ public:
 
   virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
 
-  //TODO: not used?  need some refactoring here
+  /// @todo not used?  need some refactoring here
   virtual void setHeadingDelta(Meters /*headingDelta*/) { }
 
 private:
