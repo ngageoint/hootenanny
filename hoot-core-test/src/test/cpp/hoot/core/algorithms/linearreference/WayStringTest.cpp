@@ -95,6 +95,7 @@ public:
     map->addWay(w2);
     map->addWay(w3);
 
+    // WayString::append
     WayStringPtr wstring(new WayString());
     WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
     wstring->append(w1subline);
@@ -135,7 +136,7 @@ public:
     int sz = wstring->getSize();
     CPPUNIT_ASSERT_EQUAL(3, sz);
 
-    // WayString
+    // WayString::visitRo
     CountVisitor counter;
     wstring->visitRo(*map, counter);
     CPPUNIT_ASSERT_EQUAL(14, counter.getCount());
@@ -173,9 +174,9 @@ public:
     map->addWay(w2);
     map->addWay(w3);
 
-    bool exThrown = false;
     // Try to create a waystring with sublines that come from the same way,
     // but are not consecutive
+    bool exThrown = false;
     try
     {
       WayStringPtr wstring(new WayString());
@@ -191,9 +192,9 @@ public:
     }
     CPPUNIT_ASSERT(exThrown);
 
-    exThrown = false;
     // Try to create a waystring with sublines with different ways that do not stop/start
     // at an extreme
+    exThrown = false;
     try
     {
       WayStringPtr wstring(new WayString());
@@ -210,9 +211,9 @@ public:
     CPPUNIT_ASSERT(exThrown);
 
 
-    exThrown = false;
     // Try to create a waystring with sublines with different ways that are not
     // consecutive
+    exThrown = false;
     try
     {
       WayStringPtr wstring(new WayString());
@@ -317,7 +318,7 @@ public:
   }
 
   /**
-   * Try connecting a way to a partial, and make sure it works
+   * Try connecting with a partial subline, and make sure it works
    */
   void runPartialWayConnectTest()
   {
@@ -363,4 +364,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayStringTest, "quick");
 
 }
-
