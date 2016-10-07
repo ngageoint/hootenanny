@@ -102,7 +102,7 @@ Feature: Advanced Conflation Options
 			And I should see element "#<element>" with no value and placeholder <placeholder>
 			When I fill "#<element>" with "-10000000"
 			When I press enter in the "#<element>" input
-			Then I should see an invalid input warning for "#<element>"
+			Then I <might> see an invalid input warning for "#<element>"
 			When I fill "#<element>" with ""
 			When I press tab in the "#<element>" input
 			And I should see element "#<element>" with no value and placeholder <placeholder>
@@ -115,9 +115,9 @@ Feature: Advanced Conflation Options
 			Then I click on "#<option id>"
 				
 			Examples:
-				| option name | option id | element | placeholder |
-				| Road Options | hoot_road_options_label | search_radius_highway | "-1" |
-				| Road Options | hoot_road_options_label | highway_matcher_heading_delta | "5.0" |
-				| Road Options | hoot_road_options_label | highway_matcher_max_angle | 60 |
-				| Road Options | hoot_road_options_label | way_merger_min_split_size | 5 |
-				#| Cookie Cutter & Horizontal Options | horizontal_conflation_options_label | horizontal_cookie_cutter_alpha_shape_buffer | 0 |
+				| option name | option id | element | placeholder | might |
+				| Road Options | hoot_road_options_label | search_radius_highway | "-1" | should |
+				| Road Options | hoot_road_options_label | highway_matcher_heading_delta | "5.0" | should|
+				| Road Options | hoot_road_options_label | highway_matcher_max_angle | 60 | should |
+				| Road Options | hoot_road_options_label | way_merger_min_split_size | 5 | should |
+				| Cookie Cutter & Horizontal Options | horizontal_conflation_options_label | horizontal_cookie_cutter_alpha_shape_buffer | 0 | should_not |
