@@ -29,6 +29,7 @@ package hoot.services.models.osm;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
@@ -53,7 +54,6 @@ import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
@@ -85,7 +85,6 @@ import hoot.services.utils.PostgresUtils;
  */
 public class Map extends Maps {
     private static final Logger logger = LoggerFactory.getLogger(Map.class);
-    private static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
 
     private BoundingBox bounds;
 
@@ -200,7 +199,7 @@ public class Map extends Maps {
     }
 
     public long getNodesCount(BoundingBox bounds) {
-        long ret = 0;
+        long count = 0;
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);
@@ -208,13 +207,13 @@ public class Map extends Maps {
             BooleanExpression combinedGeospatialCondition =
                     getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
-            ret = createQuery(getId())
+            count = createQuery(getId())
                     .from(currentNodes)
                     .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
                     .fetchCount();
         }
 
-        return ret;
+        return count;
     }
 
     public JSONObject retrieveANode(BoundingBox bounds) {
@@ -791,9 +790,6 @@ public class Map extends Maps {
     }
 
     public static boolean mapExists(long id) {
-        return createQuery()
-                .from(QMaps.maps)
-                .where(QMaps.maps.id.eq(id))
-                .fetchCount() > 0;
+        return createQuery().from(QMaps.maps).where(QMaps.maps.id.eq(id)).fetchCount() > 0;
     }
 }
