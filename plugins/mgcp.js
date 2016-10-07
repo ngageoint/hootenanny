@@ -80,7 +80,8 @@ mgcp = {
                 {
                     if (attrList.indexOf(val) == -1)
                     {
-                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
+                        // We made FUN a default for all features. Dropping it should not throw an error.
+                        if (val !== 'FUN') hoot.logWarn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
                         delete attrs[val];
 
                         // Since we deleted the attribute, Skip the text check
@@ -1189,6 +1190,10 @@ mgcp = {
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
+        // We are going to assume that things are "Fully Functional" unless told otherwise.
+        // Make FUN=6 (Fully Functional) the default.
+        if (! tags.condition) tags.condition = 'functional';
 
     }, // End applyToMgcpPreProcessing
 
