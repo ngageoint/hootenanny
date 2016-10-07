@@ -28,6 +28,7 @@ package hoot.services.controllers.osm;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
+import static hoot.services.controllers.osm.OSMTestUtils.insertNew;
 import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
@@ -67,7 +68,6 @@ import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
@@ -1857,7 +1857,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         tags.put("key 3", "val 3");
 
         long negativeNodeId = -1;
-        Node.insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
+        insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
         tags.clear();
 
         CurrentNodes insertedNodeRecord = createQuery(mapId)
@@ -1876,7 +1876,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
 
-        nodeIds.add(Node.insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
+        nodeIds.add(insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
 
         tags.clear();
 
