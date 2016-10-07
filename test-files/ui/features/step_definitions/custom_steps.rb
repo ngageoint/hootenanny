@@ -848,6 +848,12 @@ Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
   el[:class].include?('invalid-input').should eq true
 end
 
+Then(/^I should_not see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq false
+end
+
+
 # for placeholders 
 Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
   el = find(id)
