@@ -505,8 +505,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     public static void removeRelatedRecords(long mapId, RelationalPathBase<?> relatedRecordTable,
             NumberPath<Long> joinField, Set<Long> elementIds, boolean warnOnNothingRemoved) {
-        logger.debug("Removing related records...");
-
         long recordsProcessed = 0;
         if ((relatedRecordTable != null) && (joinField != null)) {
             SQLDeleteClause sqldelete = createQuery(mapId).delete(relatedRecordTable);
@@ -664,8 +662,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Parses tags from the element XML and returns them in a map
      */
     static Map<String, String> parseTags(org.w3c.dom.Node elementXml) {
-        logger.debug("Parsing element tags...");
-
         Map<String, String> tags = new HashMap<>();
         try {
             // using xpath api here to get the tags is *very* slow, since it

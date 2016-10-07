@@ -112,7 +112,7 @@ public class OSMTestUtils {
      * Creates a modified geo bounds (bounds that changeset should have after an
      * update) for all the tests
      */
-    public static BoundingBox createAfterModifiedTestChangesetBounds() throws Exception {
+    static BoundingBox createAfterModifiedTestChangesetBounds() throws Exception {
         return new BoundingBox(-79.02265434416296, 37.90089748801109, -77.0224564416296, 39.90085678801109);
     }
 
@@ -120,13 +120,13 @@ public class OSMTestUtils {
      * If a null bounds is specified, then the changeset gets no starting
      * bounds, as if it has newly been created with no data uploaded to it.
      */
-    public static long createTestChangeset( BoundingBox bounds) throws Exception {
+    static long createTestChangeset(BoundingBox bounds) throws Exception {
         // default changeset we use for testing has 12 edits
         return createTestChangeset(bounds, 12);
     }
 
     // allow num changes to be passed in as a var for testing purposes
-    public static long createTestChangeset(BoundingBox bounds, int numChanges) throws Exception {
+    static long createTestChangeset(BoundingBox bounds, int numChanges) throws Exception {
         long changesetId = Changeset.insertNew(getMapId(), getUserId(), new HashMap<String, String>());
         Changeset changeset = new Changeset(getMapId(), changesetId);
 
@@ -155,7 +155,7 @@ public class OSMTestUtils {
      * the test data used in this method doesn't have closed polys and other
      * tests test for that, leaving it returned as a Set for now.
      */
-    public static Set<Long> createTestNodes(long changesetId, BoundingBox bounds) throws Exception {
+    static Set<Long> createTestNodes(long changesetId, BoundingBox bounds) throws Exception {
         Map<String, String> tags = new HashMap<>();
 
         tags.put("key 1", "val 1");
@@ -179,7 +179,7 @@ public class OSMTestUtils {
         return nodeIds;
     }
 
-    public static Set<Long> createTestWays(long changesetId, Set<Long> nodeIds) throws Exception {
+    static Set<Long> createTestWays(long changesetId, Set<Long> nodeIds) throws Exception {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         Map<String, String> tags = new HashMap<>();
 
@@ -209,8 +209,7 @@ public class OSMTestUtils {
         return wayIds;
     }
 
-    public static Set<Long> createTestRelations(long changesetId, Set<Long> nodeIds, Set<Long> wayIds)
-            throws Exception {
+    static Set<Long> createTestRelations(long changesetId, Set<Long> nodeIds, Set<Long> wayIds) throws Exception {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
         List<RelationMember> members = new ArrayList<>();
@@ -250,8 +249,7 @@ public class OSMTestUtils {
 
     // This is similar to createTestRelations but without any ways involved to
     // support certain tests.
-    public static Set<Long> createTestRelationsNoWays(long changesetId, Set<Long> nodeIds)
-            throws Exception {
+    static Set<Long> createTestRelationsNoWays(long changesetId, Set<Long> nodeIds) throws Exception {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         List<RelationMember> members = new ArrayList<>();
 
@@ -282,7 +280,7 @@ public class OSMTestUtils {
         return relationIds;
     }
 
-    public static void verifyTestChangesetCreatedByRequest(Long changesetId) {
+    static void verifyTestChangesetCreatedByRequest(Long changesetId) {
         Changesets changeset = createQuery(getMapId())
                 .select(changesets)
                 .from(changesets)
@@ -301,12 +299,12 @@ public class OSMTestUtils {
         assertEquals(new Long(getUserId()), changeset.getUserId());
     }
 
-    public static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
+    static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
             Set<Long> nodeIds, Set<Long> wayIds, Set<Long> relationIds) {
         verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, true);
     }
 
-    public static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
+    static void verifyTestDataUnmodified(BoundingBox originalBounds, long changesetId,
             Set<Long> nodeIds, Set<Long> wayIds, Set<Long> relationIds, boolean verifyTags) {
         verifyTestChangesetUnmodified(changesetId, originalBounds);
         verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds, verifyTags);
@@ -314,7 +312,7 @@ public class OSMTestUtils {
         verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId, verifyTags);
     }
 
-    public static void verifyTestChangesetUnmodified(long changesetId) {
+    static void verifyTestChangesetUnmodified(long changesetId) {
         Changesets changeset = createQuery(getMapId())
                 .select(changesets)
                 .from(changesets)
@@ -336,7 +334,7 @@ public class OSMTestUtils {
     }
 
     // for testing purposes allow specifying numChanges as a variable
-    public static void verifyTestChangesetClosed(long changesetId, int numChanges) {
+    static void verifyTestChangesetClosed(long changesetId, int numChanges) {
         Changesets changeset = createQuery(getMapId())
                 .select(changesets)
                 .from(changesets)
@@ -352,12 +350,12 @@ public class OSMTestUtils {
         assertEquals(new Long(getUserId()), changeset.getUserId());
     }
 
-    public static void verifyTestChangesetClosed(long changesetId) {
+    static void verifyTestChangesetClosed(long changesetId) {
         // default changeset we use for testing has 12 edits
         verifyTestChangesetClosed(changesetId, 12);
     }
 
-    public static void verifyTestChangesetUnmodified(long changesetId, BoundingBox originalBounds) {
+    static void verifyTestChangesetUnmodified(long changesetId, BoundingBox originalBounds) {
         Changesets changeset = createQuery(getMapId())
                 .select(changesets)
                 .from(changesets)
@@ -383,11 +381,11 @@ public class OSMTestUtils {
         assertEquals(defaultBounds, changesetBounds);
     }
 
-    public static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId, BoundingBox originalBounds) {
+    static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId, BoundingBox originalBounds) {
         verifyTestNodesUnmodified(nodeIds, changesetId, originalBounds, true);
     }
 
-    public static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId,
+    private static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId,
             BoundingBox originalBounds, boolean verifyTags) {
 
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
@@ -461,11 +459,11 @@ public class OSMTestUtils {
         }
     }
 
-    public static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId) {
+    static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId) {
         verifyTestWaysUnmodified(wayIds, nodeIds, changesetId, true);
     }
 
-    public static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId,
+    private static void verifyTestWaysUnmodified(Set<Long> wayIds, Set<Long> nodeIds, long changesetId,
             boolean verifyTags) {
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
         Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
@@ -564,12 +562,12 @@ public class OSMTestUtils {
         }
     }
 
-    public static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
+    static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
             Set<Long> nodeIds, long changesetId) {
         verifyTestRelationsUnmodified(relationIds, wayIds, nodeIds, changesetId, true);
     }
 
-    public static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
+    private static void verifyTestRelationsUnmodified(Set<Long> relationIds, Set<Long> wayIds,
             Set<Long> nodeIds, long changesetId, boolean verifyTags) {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
@@ -714,7 +712,7 @@ public class OSMTestUtils {
         }
     }
 
-    public static void verifyTestRelationsNoWaysUnmodified(Set<Long> relationIds, Set<Long> nodeIds,
+    static void verifyTestRelationsNoWaysUnmodified(Set<Long> relationIds, Set<Long> nodeIds,
             long changesetId, boolean verifyTags) {
         Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
@@ -821,7 +819,7 @@ public class OSMTestUtils {
         }
     }
 
-    public static void verifyOsmHeader(Document responseData) throws Exception {
+    static void verifyOsmHeader(Document responseData) throws Exception {
         XPath xpath = XmlUtils.createXPath();
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
         assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
@@ -831,7 +829,7 @@ public class OSMTestUtils {
         assertNotNull(xpath.evaluate("//osm[1]/@license", responseData));
     }
 
-    public static void verifyBounds(Document responseData, BoundingBox expectedBounds) throws Exception {
+    static void verifyBounds(Document responseData, BoundingBox expectedBounds) throws Exception {
         XPath xpath = XmlUtils.createXPath();
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/bounds").getLength());
         assertEquals(expectedBounds.getMinLat(),
@@ -844,7 +842,7 @@ public class OSMTestUtils {
                 Double.parseDouble(xpath.evaluate("//osm/bounds[1]/@maxlon", responseData)), 0.0);
     }
 
-    public static void verifyNode(Document responseData, long index, String expectedId,
+    static void verifyNode(Document responseData, long index, String expectedId,
             long changesetId, double lat, double lon, boolean multiLayerUniqueElementIds) throws Exception {
         XPath xpath = XmlUtils.createXPath();
         if (!multiLayerUniqueElementIds) {
@@ -876,7 +874,7 @@ public class OSMTestUtils {
         assertEquals(lon, Double.parseDouble(xpath.evaluate("//osm/node[" + index + "]/@lon", responseData)), 0.0);
     }
 
-    public static void verifyWay(Document responseData, long index, String expectedId,
+    static void verifyWay(Document responseData, long index, String expectedId,
             long changesetId, Set<Long> expectedWayNodeIds, boolean multiLayerUniqueElementIds) throws Exception {
         XPath xpath = XmlUtils.createXPath();
 
@@ -917,7 +915,7 @@ public class OSMTestUtils {
         }
     }
 
-    public static void verifyRelation(Document responseData, long index, String expectedId,
+    static void verifyRelation(Document responseData, long index, String expectedId,
             long changesetId, List<RelationMember> expectedMembers, boolean multiLayerUniqueElementIds)
         throws Exception {
         XPath xpath = XmlUtils.createXPath();
@@ -967,7 +965,7 @@ public class OSMTestUtils {
         }
     }
 
-    public static void closeChangeset(long mapId, long changesetId) {
+    static void closeChangeset(long mapId, long changesetId) {
         Changesets changeset = createQuery(mapId)
                 .select(changesets)
                 .from(changesets)
@@ -982,7 +980,7 @@ public class OSMTestUtils {
                 .populate(changeset).execute();
     }
 
-    public static BoundingBox createTestQueryBounds() throws Exception {
+    static BoundingBox createTestQueryBounds() throws Exception {
         BoundingBox bounds = new BoundingBox(-78.02265434416296, 38.90089748801109, -77.9224564416296,
                 39.00085678801109);
         BoundingBox expandedBounds = new BoundingBox();
@@ -995,7 +993,7 @@ public class OSMTestUtils {
     // the response.  Eventually, this out of bounds data should be made part of the test
     // dataset created in ChangesetResourceUtils. Since that involves updating *a lot* of tests, so
     // not doing it right now.
-    public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
+    static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
         Set<Long> nodeIds = new LinkedHashSet<>();
         nodeIds.add(insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, new HashMap<String, String>()));
@@ -1017,8 +1015,8 @@ public class OSMTestUtils {
      * @return ID of the newly created way
      * @throws Exception
      */
-    public static long insertNewWay(long changesetId, long mapId, List<Long> nodeIds,
-            Map<String, String> tags) throws Exception {
+    static long insertNewWay(long changesetId, long mapId, List<Long> nodeIds, Map<String, String> tags)
+            throws Exception {
 
         long nextWayId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "current_ways_id_seq"))
@@ -1047,7 +1045,7 @@ public class OSMTestUtils {
      * @throws Exception
      *             see addNodeRefs
      */
-    public static void insertNewWay(long wayId, long changesetId, long mapId,
+    static void insertNewWay(long wayId, long changesetId, long mapId,
             List<Long> nodeIds, Map<String, String> tags) throws Exception {
         CurrentWays wayRecord = new CurrentWays();
         wayRecord.setChangesetId(changesetId);
@@ -1175,7 +1173,7 @@ public class OSMTestUtils {
      * @return ID of the newly created element
      * @throws Exception
      */
-    public static long insertNewRelation(long changesetId, long mapId, List<RelationMember> members,
+    static long insertNewRelation(long changesetId, long mapId, List<RelationMember> members,
             Map<String, String> tags) throws Exception {
 
         long nextRelationId = createQuery(mapId)
@@ -1204,7 +1202,7 @@ public class OSMTestUtils {
      *            element tags
      * @throws Exception
      */
-    public static void insertNewRelation(long relId, long changesetId, long mapId,
+    static void insertNewRelation(long relId, long changesetId, long mapId,
             List<RelationMember> members, Map<String, String> tags) throws Exception {
 
         CurrentRelations relationRecord = new CurrentRelations();
@@ -1239,8 +1237,7 @@ public class OSMTestUtils {
      * @return a tag count
      * @throws Exception
      */
-    public static long getTagCountForElementType(long mapId, ElementType elementType)
-            throws Exception {
+    static long getTagCountForElementType(long mapId, ElementType elementType) throws Exception {
         Element prototype = ElementFactory.create(mapId, elementType);
 
         List<?> records = createQuery(mapId)
@@ -1289,9 +1286,7 @@ public class OSMTestUtils {
      *            element tags
      * @return ID of the newly created node
      */
-    public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags) {
-
+    static long insertNew(long changesetId, long mapId, double latitude, double longitude, Map<String, String> tags) {
         long nextNodeId = createQuery(mapId)
                 .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
                 .fetchOne();
@@ -1318,8 +1313,8 @@ public class OSMTestUtils {
      * @param tags
      *            element tags
      */
-    public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags) {
+    static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
+            Map<String, String> tags) {
 
         createQuery(mapId).insert(currentNodes)
                 .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
