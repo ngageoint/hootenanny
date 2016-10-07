@@ -26,9 +26,6 @@
  */
 package hoot.services.models.osm;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.models.db.CurrentRelationMembers;
@@ -42,29 +39,8 @@ public class RelationMember {
 
     private final ElementType type;
     private final long id;
-
     private String role = "";
     private long oldId;
-
-    public ElementType getType() {
-        return type;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public long getOldId() {
-        return oldId;
-    }
-
-    public void setOldId(long elementId) {
-        oldId = elementId;
-    }
-
-    public String getRole() {
-        return role;
-    }
 
     public RelationMember(long id, ElementType type, String role) {
         this.id = id;
@@ -86,45 +62,23 @@ public class RelationMember {
         }
     }
 
-    /**
-     * Creates a relation member database record
-     *
-     * @param id
-     *            the member's ID
-     * @param sequenceId
-     *            the member's sequence ordering (1..n)
-     * @param role
-     *            the member's role
-     * @param elementType
-     *            the member's element type
-     * @param relationId
-     *            the owning relation ID
-     * @return a relation member database record
-     */
-    static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
-            long relationId) {
-        CurrentRelationMembers memberRecord = new CurrentRelationMembers();
-        memberRecord.setMemberId(id);
-        memberRecord.setSequenceId(sequenceId);
-        memberRecord.setMemberRole(StringUtils.isEmpty(role) ? "" : role);
-        memberRecord.setMemberType(elementType);
-        memberRecord.setRelationId(relationId);
-        return memberRecord;
+    public ElementType getType() {
+        return type;
     }
 
-    /**
-     * Transforms a list of relation member database records into a list of
-     * RelationMember objects
-     *
-     * @param records
-     *            a list of relation member database records
-     * @return a list of RelationMember objects
-     */
-    static List<RelationMember> fromRecords(List<CurrentRelationMembers> records) {
-        List<RelationMember> members = new ArrayList<>();
-        for (CurrentRelationMembers memberRecord : records) {
-            members.add(new RelationMember(memberRecord));
-        }
-        return members;
+    public long getId() {
+        return id;
+    }
+
+    public long getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(long elementId) {
+        oldId = elementId;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

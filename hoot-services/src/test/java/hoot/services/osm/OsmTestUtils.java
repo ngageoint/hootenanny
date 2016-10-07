@@ -29,6 +29,7 @@ package hoot.services.osm;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.HootProperties.CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES;
 import static hoot.services.HootProperties.MAX_RECORD_BATCH_SIZE;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -62,14 +63,12 @@ import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
-import hoot.services.models.osm.Node;
 import hoot.services.models.osm.Relation;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.models.osm.Way;
@@ -77,6 +76,7 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
+import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -164,18 +164,18 @@ public class OsmTestUtils {
         tags.put("key 2", "val 2");
         Set<Long> nodeIds = new LinkedHashSet<>();
 
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
+        nodeIds.add(insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
         tags.clear();
 
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMaxLat(), bounds.getMaxLon(), tags));
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
+        nodeIds.add(insertNew(changesetId, getMapId(), bounds.getMaxLat(), bounds.getMaxLon(), tags));
+        nodeIds.add(insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
 
         tags.put("key 3", "val 3");
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
+        nodeIds.add(insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
         tags.clear();
 
         tags.put("key 4", "val 4");
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
+        nodeIds.add(insertNew(changesetId, getMapId(), bounds.getMinLat(), bounds.getMinLon(), tags));
         tags.clear();
 
         return nodeIds;
@@ -406,8 +406,6 @@ public class OsmTestUtils {
     public static void verifyTestNodesUnmodified(Set<Long> nodeIds, long changesetId,
             BoundingBox originalBounds, boolean verifyTags) {
         try {
-            QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-
             Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
             Map<Long, CurrentNodes> nodes = createQuery(getMapId())
                     .from(currentNodes)
@@ -1144,8 +1142,8 @@ public class OsmTestUtils {
     public static Set<Long> createNodesOutsideOfQueryBounds(long changesetId, BoundingBox queryBounds)
             throws Exception {
         Set<Long> nodeIds = new LinkedHashSet<>();
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, new HashMap<String, String>()));
-        nodeIds.add(Node.insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, new HashMap<String, String>()));
+        nodeIds.add(insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, new HashMap<String, String>()));
+        nodeIds.add(insertNew(changesetId, getMapId(), queryBounds.getMinLat() - 10, queryBounds.getMinLon() - 10, new HashMap<String, String>()));
         return nodeIds;
     }
 
@@ -1418,5 +1416,60 @@ public class OsmTestUtils {
 
     public static void setUserId(long userId) {
         OsmTestUtils.userId = userId;
+    }
+
+    /**
+     * Inserts a new node into the services database
+     *
+     * @param changesetId
+     *            corresponding changeset ID for the node to be inserted
+     * @param mapId
+     *            corresponding map ID for the node to be inserted
+     * @param latitude
+     *            latitude coordinate for the node to be inserted
+     * @param longitude
+     *            longitude coordinate for the node to be inserted
+     * @param tags
+     *            element tags
+     * @return ID of the newly created node
+     */
+    public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
+            Map<String, String> tags) {
+
+        long nextNodeId = createQuery(mapId)
+                .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
+                .fetchOne();
+
+        insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags);
+
+        return nextNodeId;
+    }
+
+    /**
+     * Inserts a new node into the services database with the specified ID;
+     * useful for testing
+     *
+     * @param nodeId
+     *            ID to assign to the new node
+     * @param changesetId
+     *            corresponding changeset ID for the node to be inserted
+     * @param mapId
+     *            corresponding map ID for the node to be inserted
+     * @param latitude
+     *            latitude coordinate for the node to be inserted
+     * @param longitude
+     *            longitude coordinate for the node to be inserted
+     * @param tags
+     *            element tags
+     */
+    public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
+            Map<String, String> tags) {
+
+        createQuery(mapId).insert(currentNodes)
+                .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
+                        currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
+                .values(nodeId, latitude, longitude, changesetId,
+                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
+                .execute();
     }
 }
