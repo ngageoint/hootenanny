@@ -10,7 +10,7 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         # Clean up from previous failed tests
         When I delete any existing "CucumberShp" folder if necessary
         And I wait
-        And I press "Add Dataset"
+        And I press "Import Single Dataset"
         And I select the "File (shp,zip,gdb.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/MGCPv3.zip" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "MGCPv3"

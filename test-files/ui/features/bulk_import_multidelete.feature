@@ -7,9 +7,7 @@ Feature: Bulk Import and Multiselect Delete Datasets
 
     Scenario: Bulk Import Dataset
         When I click on the "Datasets" option in the "settingsSidebar"
-        And I context click "Add Dataset"
-        And I click the first "dataset-option" list item
-        And I should see "Bulk Add Data"
+        And I press "Import Multiple Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
