@@ -113,7 +113,7 @@ Feature: Review Bookmarks
 
     Scenario: Delete Layer with active bookmark
         Then I click on the "Datasets" option in the "settingsSidebar"
-        And I press "Refresh"
+        And I press "Refresh Datasets"
         And I wait
         When I click the "mergedBookmarkTest" Dataset
         When I context click the "mergedBookmarkTest" Dataset
