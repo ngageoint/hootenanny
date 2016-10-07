@@ -213,7 +213,7 @@ Feature: Advanced Conflation Options
 	    And I context click the "Merged_AllDataTypes_Advanced" Dataset
 	    And I click the "Delete (1)" context menu item
 	    Then I accept the alert
-	    And I wait 30 "seconds" to not see "Merged_AllDataTypes_Advanced"
+	  # And I wait 30 "seconds" to not see "Merged_AllDataTypes_Advanced"
 	    Then I select the "sprocket" div
 
 	Scenario: Check for previous settings
