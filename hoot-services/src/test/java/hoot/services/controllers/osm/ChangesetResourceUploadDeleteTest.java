@@ -1995,7 +1995,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
         Map<String, String> tags = new HashMap<>();
         tags.put("key 3", "val 3");
         long negativeNodeId = -1;
-        Node.insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
+        OsmTestUtils.insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
         tags.clear();
 
         CurrentNodes insertedNodeRecord = createQuery(mapId)
@@ -2010,7 +2010,7 @@ public class ChangesetResourceUploadDeleteTest extends OsmResourceTestAbstract {
 
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
-        nodeIds.add(Node.insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
+        nodeIds.add(OsmTestUtils.insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
         tags.clear();
 
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
