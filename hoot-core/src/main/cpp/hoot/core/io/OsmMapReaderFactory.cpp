@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -99,8 +99,9 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
-  //TODO: hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api databases,
-  //but by using the factory override during conflation it won't - see #781 for potential fix task
+  /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
+  /// databases, but by using the factory override during conflation it won't - see #781 for
+  /// potential fix task
   if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
   {
     readerOverride = "";

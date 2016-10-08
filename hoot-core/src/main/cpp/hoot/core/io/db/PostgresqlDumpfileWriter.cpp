@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -507,7 +507,7 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
   return dbIdentifier;
 }
 
-//TODO: This should use ApiDb::COORDINATE_SCALE instead.
+/// @todo This should use ApiDb::COORDINATE_SCALE instead.
 unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
 {
   return ( round(degrees * 10000000.0) );

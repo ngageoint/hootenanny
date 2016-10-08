@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -198,7 +198,6 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
-  /// @todo r7255 go through and use the cleaned tag vertices rather than tags directly.
   vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
   vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 
