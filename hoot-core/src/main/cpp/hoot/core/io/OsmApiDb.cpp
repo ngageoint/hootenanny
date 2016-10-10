@@ -378,7 +378,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
     if (elementType == ElementType::Node)
     {
       //use bounding box if element id is not giving.
-      if (elementId < 0)
+      if (elementId == -1)
       {
         sql += "AND " + _getTileWhereCondition(bbox);
       }
