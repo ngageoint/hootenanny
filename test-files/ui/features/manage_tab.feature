@@ -19,7 +19,8 @@ Feature: Manage Tab
 
     Scenario: Checking content of tabs
         When I click on the "Datasets" option in the "settingsSidebar"
-        And I should see "Add Dataset"
+        And I should see "Import Single Dataset"
+        And I should see "Import Multiple Datasets"
         And I should see "Add Folder"
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
         And I should see "Upload file(s)"
