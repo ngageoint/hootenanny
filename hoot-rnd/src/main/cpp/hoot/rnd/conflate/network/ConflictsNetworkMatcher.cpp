@@ -346,9 +346,12 @@ void ConflictsNetworkMatcher::_iterateSimple()
   const double partialHandicap = _partialHandicap;
   const double stubHandicap = _stubHandicap;
   double aggression = _aggression;
+  // we'll create a new copy of the scores in this function and assign to the authoritative copy at
+  // the end.
   EdgeScoreMap newScores, newWeights;
   double weightSum = EPSILON;
   int count = 0;
+  // go through all matches
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     PROGRESS_INFO(++count << "/" << _scores.size());
@@ -382,6 +385,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       LOG_VART(r->getEdge()->getString1()->contains(em->getString1()));
       LOG_VART(r->getEdge()->getString2()->contains(em->getString2()));
       // if r contains at least one line in em and em doesn't contain an edge string in r
+      // (overlapping, but not completely contained)
       if ((r->getEdge()->getString1()->contains(em->getString1()) ||
         r->getEdge()->getString2()->contains(em->getString2())) &&
         !(em->getString1()->contains(r->getEdge()->getString1()) ||
@@ -401,6 +405,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
 //        handicap = 2.0;
 //      }
 
+      // s is modified throughout the function to represent how important this edge match is to
+      // em.
       double s = _scores[r->getEdge()] * childHandicap;
 
       // in some cases a stub can implicitly connect two matches. If this occurs we shouldn't add
@@ -422,7 +428,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
         //s = 0.0;
       }
 
+      // how many edges match relationships support this match
       int supportCount = 0;
+      // Number of match relationships
       int relationCount = 0;
       foreach (ConstMatchRelationshipPtr sr, _matchRelationships[r->getEdge()])
       {
@@ -438,6 +446,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       s = s * _weights[r->getEdge()];
 
       //s = s / (double)relationCount;
+      // if network.conflicts.outbound.weighting is non-zero, use the number of neighboring matches
+      // to weight the influence of this edge match.
       s = s * pow(1.0 / (double)relationCount, _outboundWeighting);
 
       if (r->isConflict() == false)
