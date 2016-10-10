@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -82,8 +82,6 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    //TODO: This logic is ok for calculating the changeset bounds, except that for the fact the
-    //OsmApiDbReader has a bug: see #774.
     if (change.e->getElementType().getEnum() == ElementType::Node)
     {
       ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);

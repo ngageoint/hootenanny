@@ -27,6 +27,7 @@
 package hoot.services.models.osm;
 
 import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -56,11 +57,6 @@ import com.querydsl.sql.dml.SQLDeleteClause;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QCurrentNodes;
-import hoot.services.models.db.QCurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelations;
-import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.models.db.QCurrentWays;
 import hoot.services.models.db.QUsers;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
@@ -75,12 +71,6 @@ import hoot.services.utils.PostgresUtils;
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger logger = LoggerFactory.getLogger(Element.class);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
-
-    protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
-    protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-    protected static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-    protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-    protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 
@@ -703,14 +693,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     org.w3c.dom.Element addTagsXml(org.w3c.dom.Element elementXml) {
         try {
             Document doc = elementXml.getOwnerDocument();
+
             // We want tags map sorted
             Map<String, String> tags = new TreeMap<>(this.getTags());
 
             for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
                 org.w3c.dom.Element tagElement = doc.createElement("tag");
                 tagElement.setAttribute("k", tagEntry.getKey());
-                tagElement.setAttribute("v",
-                        hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
+                tagElement.setAttribute("v", encodeURIComponentForJavaScript(tagEntry.getValue()));
                 elementXml.appendChild(tagElement);
             }
 

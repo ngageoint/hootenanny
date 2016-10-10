@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -377,10 +377,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
     sql += _getTableName(elementType) + " WHERE visible = true ";
     if (elementType == ElementType::Node)
     {
-      if (elementId == -1)
-      {
-        sql += "AND " + _getTileWhereCondition(bbox);
-      }
+      sql += "AND " + _getTileWhereCondition(bbox);
     }
     if (elementId > -1)
     {

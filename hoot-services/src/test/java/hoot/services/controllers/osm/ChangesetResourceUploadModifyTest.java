@@ -71,7 +71,6 @@ import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.models.osm.Node;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.osm.OsmTestUtils;
@@ -1446,7 +1445,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
         tags.put("key 3", "val 3");
 
         long negativeNodeId = -1;
-        Node.insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
+        OsmTestUtils.insertNew(negativeNodeId, changesetId, mapId, originalBounds.getMaxLat(), originalBounds.getMaxLon(), tags);
 
         tags.clear();
 
@@ -1464,7 +1463,7 @@ public class ChangesetResourceUploadModifyTest extends OsmResourceTestAbstract {
 
         tags.put("key 1", "val 1");
         tags.put("key 2", "val 2");
-        nodeIds.add(Node.insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
+        nodeIds.add(OsmTestUtils.insertNew(changesetId, mapId, originalBounds.getMinLat(), originalBounds.getMinLon(), tags));
         tags.clear();
 
         Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);

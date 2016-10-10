@@ -492,7 +492,7 @@ var searchSchema = function(options) {
         result = schema.filter(function(d) {
                 return d.geom.toLowerCase() === geomType.toLowerCase()
             })
-            .slice(limitResult)
+            .slice(0, limitResult)
             .map(function(d) {
                 return {
                     name: d.name,
