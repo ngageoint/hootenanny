@@ -841,3 +841,9 @@ end
 Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
   el = page.should have_no_css(input, :visible => true)
 end
+
+#for invalidName warning
+Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
+  el = find('input.' + el)
+  el[:class].include?('invalidName').should eq true
+end

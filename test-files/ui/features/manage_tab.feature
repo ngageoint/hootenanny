@@ -65,20 +65,33 @@ Feature: Manage Tab
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
-        # Rename the folder
+    
+    Scenario: Name and Rename folders
         Then I wait 5 "seconds" to see "tspan" element with text "ManageTabTest"
         Then I click the "ManageTabTest" Dataset
         And I context click the "ManageTabTest" Dataset
         And I click the "Rename/Move ManageTabTest" context menu item
+        # Test for invalid input
+        Then I fill "fileOutputName" input with "&*#$invalid chars!"
+        And I press enter in the ".fileOutputName" input
+        Then I should see an invalid name warning for "fileOutputName" input
+        # Rename the folder
         Then I fill "fileOutputName" input with "TestFolder"
         And I press "big.loud" span with text "Update"
         # Add a sub folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestFolder"
         Then I context click the "TestFolder" Dataset
         And I click the "Add Folder" context menu item
+        # Test for invalid input 
+        Then I fill "NewFolderName" input with "#!*invalid chars"
+        And I press enter in the ".NewFolderName" input
+        Then I should see an invalid name warning for "NewFolderName" input
+        # Name subfolder
         Then I fill "NewFolderName" input with "TestSubFolder"
         And I press "big.loud" span with text "Add Folder"
         Then I wait 30 "seconds" to not see "Folder Name"
+
+    Scenario: Add dataset into sub folder 
         # Add dataset into sub folder
         Then I expand the "TestFolder" folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
@@ -92,11 +105,11 @@ Feature: Manage Tab
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
-
         # TODO: Rename dataset
         # TODO: Add as reference
         # TODO: Add as secondary
 
+    Scenario: Delete folders
         # Delete sub folder and dataset
         And I click the "TestSubFolder" Dataset
         And I should see "dcpoi_clip_Cucumber_manage"
