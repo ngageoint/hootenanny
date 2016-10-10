@@ -228,7 +228,8 @@ public class ChangesetDbWriter {
     private long getNextElementId(ElementType elementType) {
 
         long nextElementId = createQuery(requestChangesetMapId)
-                .select(SQLExpressions.nextval(Long.class, "current_" + elementType.toString().toLowerCase() + "s_" + requestChangesetMapId + "_id_seq"))
+                .select(SQLExpressions.nextval(Long.class,
+                        "current_" + elementType.toString().toLowerCase() + "s_" + requestChangesetMapId + "_id_seq"))
                 .fetchOne();
 
         // This is a bigtime hack put in place b/c I was getting dupe
@@ -276,8 +277,6 @@ public class ChangesetDbWriter {
      */
     private List<Element> parseElements(NodeList xml, ElementType elementType, EntityChangeType entityChangeType,
             boolean deleteIfUnused) throws OSMAPIPreconditionException, OSMAPIAlreadyDeletedException {
-        logger.debug("Parsing elements...");
-
         long nextElementId = -1;
 
         // no need to get the next element ID from the database unless we are creating a new one
@@ -287,6 +286,7 @@ public class ChangesetDbWriter {
 
         List<Element> changesetDiffElements = new ArrayList<>();
         List<Long> oldElementIds = new ArrayList<>();
+
         for (int i = 0; i < xml.getLength(); i++) {
             Node xmlElement = xml.item(i);
             NamedNodeMap xmlAttributes = xmlElement.getAttributes();
@@ -352,6 +352,7 @@ public class ChangesetDbWriter {
             if (diffBounds == null) {
                 diffBounds = new BoundingBox(); // I think this is wrong
             }
+
             BoundingBox elementBounds = element.getBounds();
 
             // null check here if for relations that only contain members of
@@ -591,16 +592,9 @@ public class ChangesetDbWriter {
      *            changeset request
      * @return a changeset upload response XML document
      */
-    private static Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements) {
-        logger.debug("Building response...");
-
-        Document responseDoc;
-        try {
-            responseDoc = XmlDocumentBuilder.create();
-        }
-        catch (ParserConfigurationException e) {
-            throw new RuntimeException("Error creating XmlDocumentBuilder!", e);
-        }
+    private static Document writeResponse(long changesetId, List<XmlSerializable> changesetDiffElements)
+            throws ParserConfigurationException {
+        Document responseDoc = XmlDocumentBuilder.create();
 
         org.w3c.dom.Element osmElement = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
         org.w3c.dom.Element diffResultXmlElement = responseDoc.createElement("diffResult");
@@ -626,22 +620,22 @@ public class ChangesetDbWriter {
      * @return a record batch type
      */
     private static RecordBatchType recordBatchTypeForEntityChangeType(EntityChangeType entityChangeType) {
-        RecordBatchType rbType = null;
+        RecordBatchType recordBatchType = null;
 
         switch (entityChangeType) {
             case CREATE:
-                rbType = RecordBatchType.INSERT;
+                recordBatchType = RecordBatchType.INSERT;
                 break;
 
             case MODIFY:
-                rbType = RecordBatchType.UPDATE;
+                recordBatchType = RecordBatchType.UPDATE;
                 break;
 
             case DELETE:
-                rbType = RecordBatchType.DELETE;
+                recordBatchType = RecordBatchType.DELETE;
                 break;
         }
 
-        return rbType;
+        return recordBatchType;
     }
 }
