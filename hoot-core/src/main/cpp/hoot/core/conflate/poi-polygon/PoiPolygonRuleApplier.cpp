@@ -60,6 +60,7 @@ PoiPolygonRuleApplier::PoiPolygonRuleApplier(const ConstOsmMapPtr& map,
                                                      bool exactNameMatch,
                                                      double typeScoreThreshold,
                                                      double typeScore,
+                                                     bool typeMatch,
                                                      double matchDistance,
                                                      shared_ptr<Geometry> polyGeom,
                                                      shared_ptr<Geometry> poiGeom,
@@ -73,6 +74,7 @@ _nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
 _typeScoreThreshold(typeScoreThreshold),
 _typeScore(typeScore),
+_typeMatch(typeMatch),
 _matchDistance(matchDistance),
 _polyGeom(polyGeom),
 _poiGeom(poiGeom),
@@ -673,6 +675,20 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
 //    matchClass.setMiss();
 //    triggersParkRule = true;
 //  }
+
+  //LAST FULL DATASET SCORE CHECKS BEFORE HERE
+
+  //need to be stricter on tunnels since we don't want above ground things to conflate with them
+  else if (poly->getTags().get("tunnel") == "yes" && !(_typeMatch || _nameMatch))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #22...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))

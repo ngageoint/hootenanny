@@ -50,9 +50,9 @@ public:
   PoiPolygonRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance,
                             double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
-                            double typeScoreThreshold, double typeScore, double matchDistance,
-                            shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
-                            const QString testUuid);
+                            double typeScoreThreshold, double typeScore, bool typeMatch,
+                            double matchDistance, shared_ptr<Geometry> polyGeom,
+                            shared_ptr<Geometry> poiGeom, const QString testUuid);
 
   bool applyRules(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
 
@@ -69,6 +69,7 @@ private:
   bool _exactNameMatch;
   double _typeScoreThreshold;
   double _typeScore;
+  bool _typeMatch;
   double _matchDistance;
 
   shared_ptr<Geometry> _polyGeom;

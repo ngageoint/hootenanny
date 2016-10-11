@@ -134,7 +134,7 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
   if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier").toLower() == "fence" ||
-      tags.get("landuse").toLower() == "grass")
+      tags.get("landuse").toLower() == "grass" || tags.get("building").toLower() == "roof")
   {
     return false;
   }
@@ -289,7 +289,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   const bool externalRuleTriggered =
     PoiPolygonRuleApplier(
       _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
-      _typeScoreThreshold, _typeScore, _matchDistance, polyGeom, poiGeom, _testUuid)
+      _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, _testUuid)
       .applyRules(poi, poly, externalMatchClass);
   if (!externalRuleTriggered)
   {
