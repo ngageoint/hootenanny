@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -156,6 +156,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("  Removing nodes...");
 
   // go through all the nodes
+  long nodesRemoved = 0;
   const NodeMap nodes = result->getNodeMap();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
@@ -198,11 +199,15 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
         if (n2w.find(it->first) == n2w.end())
         {
           // remove the node
+          LOG_TRACE(
+            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
           RemoveNodeOp::removeNodeNoCheck(result, it->second->getId());
+          nodesRemoved++;
         }
       }
     }
   }
+  LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
 
   RemoveEmptyRelationsVisitor v;
   map->visitRw(v);
