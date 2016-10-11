@@ -53,15 +53,15 @@ Feature: Manage Tab
         And I press "big.loud" span with text "Add Folder"
         # Move datasets into folder
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
-        And I context click the "AllDataTypesACucumber" Dataset
+        And I context click "AllDataTypesACucumber"
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I select the "ManageTabTest" option in the "root" combobox
         And I press "big.loud" span with text "Update"
         # Move datasets back out of folder
         Then I click the "ManageTabTest" Dataset
-        When I click the "AllDataTypesBCucumber" Dataset and the "AllDataTypesACucumber" Dataset
-        And I context click the "AllDataTypesACucumber" Dataset
+        When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
+        And I context click "AllDataTypesACucumber"
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
@@ -74,7 +74,7 @@ Feature: Manage Tab
         # Test for invalid input
         Then I fill "fileOutputName" input with "&*#$invalid chars!"
         And I press enter in the ".fileOutputName" input
-        Then I should see an invalid name warning for "fileOutputName" input
+        Then I should see an invalid name warning for ".fileOutputName" input
         # Rename the folder
         Then I fill "fileOutputName" input with "TestFolder"
         And I press "big.loud" span with text "Update"
@@ -84,8 +84,8 @@ Feature: Manage Tab
         And I click the "Add Folder" context menu item
         # Test for invalid input 
         Then I fill "NewFolderName" input with "#!*invalid chars"
-        And I press enter in the ".NewFolderName" input
-        Then I should see an invalid name warning for "NewFolderName" input
+        Then I click on the "Folder Name" label
+        Then I should see an invalid name warning for ".NewFolderName" input
         # Name subfolder
         Then I fill "NewFolderName" input with "TestSubFolder"
         And I press "big.loud" span with text "Add Folder"
@@ -100,19 +100,46 @@ Feature: Manage Tab
         And I click the "Add Dataset" context menu item
         And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
-        And I fill "importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
+        And I fill "#importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_Cucumber_manage"
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
-        # TODO: Rename dataset
-        # TODO: Add as reference
-        # TODO: Add as secondary
+        # Rename dataset
+        And I click the "TestSubFolder" Dataset
+        And I should see "dcpoi_clip_Cucumber_manage"
+        And I click the "dcpoi_clip_Cucumber_manage" Dataset
+        And I context click the "dcpoi_clip_Cucumber_manage" Dataset
+        And I click the "Rename dcpoi_clip_Cucumber_manage" context menu item
+        And I should see "Modify Dataset"
+        And I should see element "#modifyDatasetFileOutputName" with value "dcpoi_clip_Cucumber_manage"
+        # Test invalid input
+        Then I fill "#modifyDatasetFileOutputName" with "test_invalid chars!!&#"
+        And I press enter in the "#modifyDatasetFileOutputName" input
+        Then I should see an invalid name warning for "#modifyDatasetFileOutputName" input
+        # Input valid name
+        Then I fill "#modifyDatasetFileOutputName" with "DC_poi_clip_cucumber"
+        And I press "big.loud" span with text "Update"
+
+    Scenario: Add dataset as reference and secondary dataset
+        # Add as reference
+        And I should see "DC_poi_clip_cucumber"
+        And I click the "DC_poi_clip_cucumber" Dataset
+        And I context click the "DC_poi_clip_cucumber" Dataset
+        Then I should see "Add as Reference Dataset"
+        And I click the "Add as Reference Dataset" context menu item
+        And I should see "Successfully added this layer to the map!"
+        # Add as secondary
+        Then I click the "AllDataTypesBCucumber" Dataset
+        And I context click the "AllDataTypesBCucumber" Dataset
+        Then I should see "Add as Secondary Dataset"
+        And I click the "Add as Secondary Dataset" context menu item
+        And I should see "Successfully added this layer to the map!"
 
     Scenario: Delete folders
         # Delete sub folder and dataset
         And I click the "TestSubFolder" Dataset
-        And I should see "dcpoi_clip_Cucumber_manage"
+        And I should see "DC_poi_clip_cucumber"
         And I context click the "TestSubFolder" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
