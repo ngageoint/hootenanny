@@ -211,7 +211,7 @@ When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
 end
 
 When(/^I context click "([^"]*)"$/) do |txt|
-  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+  page.find('tspan',:text=>txt, :match => :prefer_exact).context_click
 end
 
 
@@ -334,7 +334,7 @@ When(/^I double-click the "([^"]*)"$/) do |el|
 end
 
 When(/^I fill "([^"]*)" with "([^"]*)"$/) do |el, value|
-  find('#' + el).set(value)
+  find(el).set(value)
   sleep 1
 end
 
@@ -844,6 +844,6 @@ end
 
 #for invalidName warning
 Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
-  el = find('input.' + el)
+  el = find('input' + el)
   el[:class].include?('invalidName').should eq true
 end
