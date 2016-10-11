@@ -68,7 +68,8 @@ private:
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
-RemoveRef2Visitor::RemoveRef2Visitor()
+RemoveRef2Visitor::RemoveRef2Visitor() :
+_errorOnMissingRef1(false)
 {
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
@@ -112,19 +113,35 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      LOG_WARN(key << " contains " << r);
-      throw IllegalArgumentException("Found a REF2 that references a non-existing REF1.");
-    }
-
-    ElementPtr e = _map->getElement(eid);
-    // if the REF1 element meets the criterion.
-    if (ref1CriterionSatisfied(e))
-    {
-      // remove the specified REF2 from the appropriate REF2 field.
-      refs.removeAll(r);
-      if (refs.size() == 0 && key == "REF2")
+      const QString errMsg =
+        "Found a REF2 on element " + eid.toString() + " that references a non-existing REF1: " + key;
+      //TODO: make _errorOnMissingRef1 configurable from nodejs
+      if (_errorOnMissingRef1)
       {
-        refs.append("none");
+        throw IllegalArgumentException(errMsg);
+      }
+      else
+      {
+        LOG_WARN(errMsg);
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == "REF2")
+        {
+          refs.append("none");
+        }
+      }
+    }
+    else
+    {
+      ElementPtr e = _map->getElement(eid);
+      // if the REF1 element meets the criterion.
+      if (ref1CriterionSatisfied(e))
+      {
+        // remove the specified REF2 from the appropriate REF2 field.
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == "REF2")
+        {
+          refs.append("none");
+        }
       }
     }
   }
