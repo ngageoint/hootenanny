@@ -71,12 +71,12 @@ public:
   /**
    * see class description
    */
-  GeometryConverter() {}
+  GeometryConverter() { _logCount = 0; }
 
   /**
    * see class description
    */
-  GeometryConverter(const OsmMapPtr& map) : _constMap(map), _map(map) { assert(map.get()); }
+  GeometryConverter(const OsmMapPtr& map) : _constMap(map), _map(map) { _logCount = 0; assert(map.get()); }
 
   /**
    * see class description
@@ -154,6 +154,7 @@ protected:
   shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
   OsmMapPtr _map;
+  int _logCount;
 };
 
 }
