@@ -961,25 +961,58 @@ tds = {
         */
         }
 
-      // Should be disabled until polygons are fixed....
-        translate.fixConstruction(tags, 'highway');
-        translate.fixConstruction(tags, 'railway');
+        // Fix up landuse tags
+        if (attrs.FCODE == 'AL020')
+        {
+            switch (tags.use) // Fixup the landuse tags
+            {
+                case undefined: // Break early if no value
+                    break;
+
+                case 'commercial':
+                    tags.landuse = 'commercial';
+                    delete tags.use;
+                    break;
+
+                case 'industrial':
+                    tags.landuse = 'industrial';
+                    delete tags.use;
+                    break;
+
+                case 'residential':
+                    tags.landuse = 'residential';
+                    delete tags.use;
+                    break;
+            } // End switch
+        }
+
+        // Lifecycle tags
+        // NOTE: This needs to be expanded.
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
 
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
-
-    /*
-        // Fix up the "works" tags
-        if (tags.works)
-        {
-           // print('## Works = ' + tags.works);
-           tags.man_made = 'works';
-           tags.product = tags.works;
-           delete tags.works
-        }
-     */
 
         // Denominations without religions - from ZI037_REL which has some denominations as religions
         if (tags.denomination)
@@ -1113,21 +1146,10 @@ tds = {
             ["t.historic == 'castle' && t.building","delete t.building"],
             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
-            ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
-            ["t.landuse == 'brownfield'","t.landuse = 'built_up_area'; t.condition = 'destroyed'"],
-            ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
-            ["t.landuse == 'farm'","t.landuse = 'farmland'"],
             ["t.landuse == 'farmland' && t.crop == 'fruit_tree'","t.landuse = 'orchard'"],
-            ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
-            ["t.landuse == 'grass'","t.natural = 'grassland'; t['grassland:type'] = 'grassland';"],
-            ["t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'meadow';"],
-            ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
-            ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
-            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
-            // ["t.landuse == 'grass'","a.F_CODE = 'EB010'; t['grassland:type'] = 'grassland';"],
-            // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
+            ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
@@ -1265,6 +1287,68 @@ tds = {
                 }
             }
         }
+
+        // Fix up landuse & AL020
+        switch (tags.landuse)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'brownfield':
+                tags.landuse = 'built_up_area';
+                tags.condition = 'destroyed';
+                break
+
+            case 'commercial':
+            case 'retail':
+                tags.use = 'commercial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'construction':
+                tags.condition = 'construction';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'farm':
+            case 'allotments':
+                tags.landuse = 'farmland';
+                break;
+
+            case 'farmyard': // NOTE: This is different to farm.
+                tags.facility = 'yes';
+                tags.use = 'agriculture';
+                delete tags.landuse;
+                break;
+
+            case 'grass':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'grassland';
+                delete tags.landuse;
+                break;
+
+            case 'industrial':
+                tags.use = 'industrial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'military':
+                tags.military = 'installation';
+                delete tags.landuse;
+                break;
+
+            case 'meadow':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'meadow';
+                delete tags.landuse;
+                break;
+
+            case 'residential':
+                tags.use = 'residential';
+                tags.landuse = 'built_up_area';
+                break;
+
+        } // End switch landuse
 
         // Places, localities and regions
         if (tags.place)
