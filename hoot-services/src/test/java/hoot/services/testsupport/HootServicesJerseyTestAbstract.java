@@ -3,6 +3,7 @@ package hoot.services.testsupport;
 import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.TestProperties;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -28,6 +29,9 @@ public class HootServicesJerseyTestAbstract extends JerseyTest {
 
     @Override
     protected Application configure() {
+        super.set(TestProperties.RECORD_LOG_LEVEL, Integer.MIN_VALUE);
+        super.enable(TestProperties.LOG_TRAFFIC);
+        super.enable(TestProperties.DUMP_ENTITY);
         return new HootServicesJerseyTestApplication(applicationContext);
     }
 }
