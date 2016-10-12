@@ -56,6 +56,12 @@ public:
   bool intersects(shared_ptr<const EdgeSubline> other) const;
   bool intersects(ConstEdgeLocationPtr el) const;
 
+  /**
+   * Returns true if the other subline goes in the same dirction as this subline. Only
+   * a valid test if sublines belong to the same edge.
+   */
+  bool isSameDirection(shared_ptr<const EdgeSubline> other) const;
+
   bool isBackwards() const { return _end < _start; }
 
   bool isValid() const { return _start->isValid() && _end->isValid(); }

@@ -93,7 +93,7 @@ public:
     {
       EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
       EdgeSublinePtr s2(new EdgeSubline(e1, 0.25, 0.5));
-      HOOT_STR_EQUALS("{ _start: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 0.2 }, _end: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 0.5 } }",
+      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.2 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.5 } }",
         s1->unionSubline(s2));
     }
 
@@ -101,7 +101,7 @@ public:
       // one line contains the other, should still work.
       EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
       EdgeSublinePtr s2(new EdgeSubline(e1, 0.1, 0.5));
-      HOOT_STR_EQUALS("{ _start: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 0.1 }, _end: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 0.5 } }",
+      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.1 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.5 } }",
         s1->unionSubline(s2));
     }
 
@@ -109,7 +109,7 @@ public:
       // both backwards, the result should be backwards.
       EdgeSublinePtr s1(new EdgeSubline(e1, 0.3, 0.2));
       EdgeSublinePtr s2(new EdgeSubline(e1, 1.0, 0.25));
-      HOOT_STR_EQUALS("{ _start: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 1 }, _end: { _e: (2) Way:-1 --  -- (3) Way:-2, _portion: 0.2 } }",
+      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 1 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.2 } }",
         s1->unionSubline(s2));
     }
 

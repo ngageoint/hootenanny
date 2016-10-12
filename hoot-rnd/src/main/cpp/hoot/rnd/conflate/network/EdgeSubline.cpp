@@ -128,6 +128,33 @@ bool EdgeSubline::intersects(ConstEdgeLocationPtr el) const
   return el->getEdge() == getEdge() && getFormer() <= el && getLatter() >= el;
 }
 
+// Figure out if other goes in the same direction that we do
+bool EdgeSubline::isSameDirection(shared_ptr<const EdgeSubline> other) const
+{
+  // We need this & other to be on the same edge
+  if (other->getEdge() != getEdge())
+  {
+    throw IllegalArgumentException("Expected 'other' to belong to the same edge as this.");
+  }
+
+  // TRICKY: We could probably debate whether to use getFormer & getLatter,
+  // or if we should check isBackwards, or something. But this seems to produce
+  // the desired result.
+  bool thisRight = this->getStart() < this->getEnd();
+  bool thisLeft  = this->getStart() > this->getEnd();
+
+  bool otherRight = other->getStart() < other->getEnd();
+  bool otherLeft  = other->getStart() > other->getEnd();
+
+  bool result = false;
+  if ((thisRight && otherRight) || (thisLeft && otherLeft))
+  {
+    result = true;
+  }
+
+  return result;
+}
+
 bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
 {
   bool result = false;
@@ -162,7 +189,14 @@ shared_ptr<EdgeSubline> EdgeSubline::unionSubline(shared_ptr<const EdgeSubline> 
   {
     LOG_VARW(*this);
     LOG_VARW(other);
-    throw IllegalArgumentException("Expected 'other' to touch and go in the same direction.");
+    throw IllegalArgumentException("Expected 'other' to touch intersect.");
+  }
+
+  if (!isSameDirection(other))
+  {
+    LOG_VARW(*this);
+    LOG_VARW(other);
+    throw IllegalArgumentException("Expected 'other' go in the same direction.");
   }
 
   EdgeSublinePtr result(new EdgeSubline(
