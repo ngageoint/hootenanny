@@ -56,6 +56,7 @@ OsmWriter::OsmWriter()
   _formatXml = ConfigOptions().getOsmMapWriterFormatXml();
   _includeIds = false;
   _includeDebug = ConfigOptions().getWriterIncludeDebug();
+  _textStatus = ConfigOptions().getWriterTextStatus();
   _includePointInWays = false;
   _includeCompatibilityTags = true;
   _osmSchema = ConfigOptions().getOsmMapWriterSchema();
@@ -308,6 +309,13 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
       writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
       writer.writeEndElement();
     }
+    else if (_textStatus)
+    {
+      writer.writeStartElement("tag");
+      writer.writeAttribute("k", "hoot:status");
+      writer.writeAttribute("v", QString("%1").arg(n->getStatus().toString()));
+      writer.writeEndElement();
+    }
 
     writer.writeEndElement();
   }
@@ -387,6 +395,13 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "hoot:status");
       writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+      writer.writeEndElement();
+    }
+    else if (_textStatus)
+    {
+      writer.writeStartElement("tag");
+      writer.writeAttribute("k", "hoot:status");
+      writer.writeAttribute("v", QString("%1").arg(w->getStatus().toString()));
       writer.writeEndElement();
     }
 
@@ -473,6 +488,13 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "hoot:status");
       writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
+      writer.writeEndElement();
+    }
+    else if (_textStatus)
+    {
+      writer.writeStartElement("tag");
+      writer.writeAttribute("k", "hoot:status");
+      writer.writeAttribute("v", QString("%1").arg(r->getStatus().toString()));
       writer.writeEndElement();
     }
 
