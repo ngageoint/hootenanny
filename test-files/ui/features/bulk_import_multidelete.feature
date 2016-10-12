@@ -34,7 +34,7 @@ Feature: Bulk Import and Multiselect Delete Datasets
         And I select in row 1 the "/test-files/mapcruzinpoi_clip.osm" dataset
         And I should see row 1 input "Save As" with value "mapcruzinpoi_clip"
         Then I fill row 1 input "Save As" with value "mapcruzinpoi_clip"
-        Then I fill "customSuffix" with "_customSuffix"
+        Then I fill "#customSuffix" with "_customSuffix"
         Then I press "big.loud" span with text "Import"
         And I should see "Initializing...Starting bulk import process..."
         Then I wait 2 "minutes" to see "dcpoi_clip_customSuffix"
