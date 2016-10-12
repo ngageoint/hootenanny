@@ -318,6 +318,10 @@ When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
   elements[0].click
 end
 
+And(/^I click the "([^"]*)" preset$/) do |label|
+  find('button.preset-list-button', :text=>label).click
+end
+
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   find('#' + el).click_at(x,y)
   sleep 3
