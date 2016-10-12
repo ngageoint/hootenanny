@@ -92,6 +92,11 @@ public class ReportsResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
+        if (report == null) {
+            String msg = "Report with id = " + id + " not found!";
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+        }
+
         ResponseBuilder responseBuilder = Response.ok(report, "application/pdf");
         responseBuilder.header("Content-Disposition", "attachment; filename=" + name);
 
@@ -108,7 +113,7 @@ public class ReportsResource {
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getReport() {
+    public Response getReportList() {
         JSONArray reports;
 
         try {
@@ -127,34 +132,45 @@ public class ReportsResource {
      * 
      * hoot-services/info/reports/delete?id=123-456
      *
-     * @param id
+     * @param reportId
      *            Report id for deletion
      * @return JSON Object
      */
     @GET
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response delReport(@QueryParam("id") String id) {
-        boolean isDeleted;
+    public Response deleteReport(@QueryParam("id") String reportId) {
+        boolean wasDeleted;
 
         try {
-            isDeleted = deleteReport(id);
+            File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, reportId);
+            if ((folder != null) && folder.exists()) {
+                FileUtils.forceDelete(folder);
+                wasDeleted = true;
+            }
+            else {
+                String msg = "Folder with id = " + reportId + " under " + REPORTS_PATH + " wasn't found!";
+                throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+            }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception e) {
-            String msg = "Error deleting report file with id = " + id + ".  Cause: " + e.getMessage();
+            String msg = "Error deleting report with id = " + reportId + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         JSONObject entity = new JSONObject();
-        entity.put("id", id);
-        entity.put("deleted", String.valueOf(isDeleted));
+        entity.put("id", reportId);
+        entity.put("deleted", String.valueOf(wasDeleted));
 
         return Response.ok(entity.toJSONString()).build();
     }
 
     // Gets the meta data of the report
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
-        JSONObject res = new JSONObject();
+        JSONObject metadata = new JSONObject();
 
         File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
 
@@ -164,11 +180,11 @@ public class ReportsResource {
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");
                 JSONParser p = new JSONParser();
-                res = (JSONObject) p.parse(meta);
+                metadata = (JSONObject) p.parse(meta);
             }
         }
 
-        return res;
+        return metadata;
     }
 
     private static JSONArray getReportsList() {
@@ -205,14 +221,14 @@ public class ReportsResource {
     }
 
     // retrieves the report file
-    private static File getReportFile(String id) throws IOException, ParseException {
+    private static File getReportFile(String reportId) throws IOException, ParseException {
         File reportFile = null;
 
-        JSONObject meta = getMetaData(id);
+        JSONObject meta = getMetaData(reportId);
 
-        Object oRepPath = meta.get("reportpath");
-        if (oRepPath != null) {
-            String repPath = oRepPath.toString();
+        Object reportPath = meta.get("reportpath");
+        if (reportPath != null) {
+            String repPath = reportPath.toString();
             File file = new File(repPath);
             if (file.exists()) {
                 reportFile = file;
@@ -220,18 +236,5 @@ public class ReportsResource {
         }
 
         return reportFile;
-    }
-
-    // deletes requested report by deleting folder
-    private static boolean deleteReport(String id) throws IOException {
-        boolean deleted = false;
-
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
-        if ((folder != null) && folder.exists()) {
-            FileUtils.forceDelete(folder);
-            deleted = true;
-        }
-
-        return deleted;
     }
 }

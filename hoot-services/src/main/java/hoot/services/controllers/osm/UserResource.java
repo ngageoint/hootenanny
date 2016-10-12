@@ -87,9 +87,8 @@ public class UserResource {
     @GET
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("userId") String userId) {
-        logger.debug("Retrieving user with ID: {} ...", userId.trim());
-
         Document responseDoc;
+
         try {
             long userIdNum;
             try {
