@@ -48,6 +48,7 @@ navteq = {}
 
 // Grab all of the init and rules files so we have somthing to work with
 hoot.require('tds40_rules')
+hoot.require('SchemaTools');
 hoot.require('tds61_rules')
 hoot.require('mgcp_rules')
 hoot.require('ufd_rules')

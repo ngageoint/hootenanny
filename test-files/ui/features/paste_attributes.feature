@@ -9,7 +9,7 @@ Feature: Paste Attributes
     Scenario: Import Dataset
     	Then I select the "sprocket" div
         When I click on the "Datasets" option in the "settingsSidebar"
-        And I press "Add Dataset"
+        And I press "Import Single Dataset"
         And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip"

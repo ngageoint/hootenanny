@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4769078352165188" lon="153.0554985197094595"/>
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4770778613896880" lon="153.0554985197094595"/>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4775879399091814" lon="153.0663801947919183"/>
@@ -57,7 +57,7 @@
         <nd ref="-49"/>
         <nd ref="-50"/>
         <nd ref="-46"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.080Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="place" v="yes"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
@@ -78,7 +78,7 @@
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-41"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.080Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="education"/>
         <tag k="place" v="city"/>
@@ -102,7 +102,7 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-36"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.269Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.080Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="healthcare"/>
         <tag k="place" v="city"/>
@@ -125,7 +125,7 @@
         <nd ref="-34"/>
         <nd ref="-35"/>
         <nd ref="-31"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.080Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="urbanised"/>
         <tag k="place" v="village"/>
@@ -148,7 +148,7 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <nd ref="-26"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.079Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="correctional"/>
         <tag k="place" v="village"/>
@@ -170,9 +170,8 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-21"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.079Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="use" v="residential"/>
         <tag k="place" v="town"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -180,7 +179,7 @@
         <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
         <tag k="source" v="mgcp:aal020"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="landuse" v="built_up_area"/>
+        <tag k="landuse" v="residential"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="place:importance" v="fourth"/>
@@ -193,7 +192,7 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-16"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.268Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.079Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="use" v="institute"/>
         <tag k="place" v="town"/>
@@ -217,9 +216,8 @@
         <nd ref="-14"/>
         <nd ref="-15"/>
         <nd ref="-11"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.267Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.079Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="use" v="commercial"/>
         <tag k="place" v="city"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -228,7 +226,7 @@
         <tag k="source" v="mgcp:aal020"/>
         <tag k="name" v="test1"/>
         <tag k="building:density" v="dense"/>
-        <tag k="landuse" v="built_up_area"/>
+        <tag k="landuse" v="commercial"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="place:importance" v="second"/>
@@ -241,9 +239,8 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.267Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:01.078Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="use" v="industrial"/>
         <tag k="place" v="city"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="capital" v="yes"/>
@@ -253,7 +250,7 @@
         <tag k="source" v="mgcp:aal020"/>
         <tag k="name" v="bua02"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="landuse" v="built_up_area"/>
+        <tag k="landuse" v="industrial"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="place:importance" v="first"/>
@@ -266,7 +263,7 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-1"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:23.148Z"/>
+        <tag k="source:ingest:datetime" v="2016-10-04T16:59:00.960Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="place" v="yes"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
