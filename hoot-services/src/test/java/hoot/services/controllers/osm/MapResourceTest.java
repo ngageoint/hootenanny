@@ -39,7 +39,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
@@ -820,7 +821,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetMapNodeLimitExceeded() throws Exception {
         String originalMaxQueryNodes = MAX_QUERY_NODES;
@@ -850,7 +851,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                         .request(MediaType.TEXT_XML)
                         .get(Document.class);
             }
-            catch (WebApplicationException e) {
+            catch (BadRequestException e) {
                 Response r = e.getResponse();
                 assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class)
@@ -866,7 +867,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapInvalidMap() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -884,7 +885,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -893,7 +894,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingMapParam() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -910,7 +911,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists with ID: null"));
@@ -919,7 +920,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapEmptyMapId() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -937,7 +938,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists with ID:"));
@@ -946,7 +947,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapByNonUniqueName() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -980,7 +981,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
@@ -989,7 +990,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingBounds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1006,7 +1007,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));

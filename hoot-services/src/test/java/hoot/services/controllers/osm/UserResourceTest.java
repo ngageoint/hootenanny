@@ -33,7 +33,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
@@ -147,7 +148,7 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetInvalidUserId() throws Exception {
         // TODO: change this to something randomly generated and very large
@@ -155,7 +156,7 @@ public class UserResourceTest extends OSMResourceTestAbstract {
             long invalidUserId = 999999;
             target("user/" + invalidUserId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
@@ -163,26 +164,26 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotAllowedException.class)
     @Category(UnitTest.class)
     public void testGetEmptyUserId() throws Exception {
         try {
             target("user/").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotAllowedException e) {
             Response r = e.getResponse();
             assertEquals(405, r.getStatus());
             throw e;
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotAllowedException.class)
     @Category(UnitTest.class)
     public void testGetMissingUserId() throws Exception {
         try {
             target("user").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotAllowedException e) {
             Response r = e.getResponse();
             assertEquals(405, r.getStatus());
             throw e;

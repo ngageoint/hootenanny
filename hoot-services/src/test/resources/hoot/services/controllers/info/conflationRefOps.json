@@ -1,0 +1,102 @@
+{
+	"id": "reference_conflation_options",
+	"elem_type": "group",
+	"description": "Reference conflation options.",
+	"name": "Reference Conflation Options",
+	"required":"true",
+	"members": [
+      {
+        "id": "reference_override_conflate_enable_old_roads",
+        "elem_type": "bool",
+		"override":{
+					"elem_type":"bool"
+				},
+        "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command. By default the `--conflate` command will first conflate roads using the circa 2012 conflation algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying algorithm has road conflation enable then the results could get interesting.",
+        "name": "Conflate Enable Old Roads",
+        "defaultvalue": "false",
+        "hoot_key": "conflate.enable.old.roads",
+				"required":"true",
+        "members": [
+          {
+            "isDefault": "false",
+            "description": "Enable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
+            "name": "true",
+            "hoot_val": "true"
+          },
+          {
+            "isDefault": "true",
+            "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
+            "name": "false",
+            "hoot_val": "false"
+          }
+        ]
+      },
+      
+      {
+        "id": "reference_override_conflate_match_highway_classifier",
+        "elem_type": "string",
+        "description": "The highway match classifier to use. This should only be used for testing and debugging.",
+        "name": "Conflate Match Highway Classifier",
+        "defaultvalue": "hoot::HighwayRfClassifier",
+        "hoot_key": "conflate.match.highway.classifier",
+				"required":"true"
+      },
+    
+      {
+        "id": "road_match_creator",
+        "elem_type": "string",
+        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Match Creator",
+        "defaultvalue": "hoot::HighwayMatchCreator",
+        "hoot_key": "match.creators",
+				"required":"true"
+      },
+      {
+        "id": "road_merger_creator",
+        "elem_type": "string",
+        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Merger Creator",
+        "defaultvalue": "hoot::HighwaySnapMergerCreator",
+        "hoot_key": "merger.creators",
+				"required":"true"
+      },
+      {
+        "id": "building_match_creator",
+        "elem_type": "string",
+        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Match Creator",
+        "defaultvalue": "hoot::BuildingMatchCreator",
+        "hoot_key": "match.creators"
+      },
+      {
+        "id": "building_merger_creator",
+        "elem_type": "string",
+        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Merger Creator",
+        "defaultvalue": "hoot::BuildingMergerCreator",
+        "hoot_key": "merger.creators"
+      },
+    
+	  {
+        "id": "reference_override_small_way_merger_threshold",
+        "minvalue": "0",
+        "elem_type": "double",
+        "description": "If highways are smaller than threshold and the tags matched then they will be merged together into a single way.",
+        "maxvalue": "",
+        "name": "Small Way Merger Threshold",
+        "defaultvalue": "15",
+        "hoot_key": "small.way.merger.threshold"
+      },
+       {
+        "id": "horizontal_override_writer_include_debug",
+        "elem_type": "bool",
+        "description": "Writer Include Debug",
+        "name": "Writer Include Debug",
+        "defaultvalue": "false",
+        "hoot_key": "writer.include.debug",
+		"required":"true"
+      }
+ 
+	]
+
+}

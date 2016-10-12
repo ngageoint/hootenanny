@@ -34,7 +34,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
@@ -367,7 +368,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetNodeDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -383,7 +384,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -392,7 +393,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetNodeUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -406,7 +407,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -415,7 +416,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetWayDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -431,7 +432,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -440,7 +441,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetWayUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -454,7 +455,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -463,7 +464,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetWayFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -479,7 +480,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -488,7 +489,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetWayFullUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -502,7 +503,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -511,7 +512,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetRelationDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -527,7 +528,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -536,7 +537,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetRelationUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -550,7 +551,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -559,7 +560,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetRelationFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -575,7 +576,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -584,7 +585,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetRelationFullUniqueIdDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -598,7 +599,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist"));
@@ -609,7 +610,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
     // Technically, could test these map params for each element type, but the
     // map ID checking code should always be the same for all element types.
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetElementMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -625,7 +626,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -634,7 +635,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetUniqueIdMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -649,7 +650,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -658,7 +659,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetFullElementMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -674,7 +675,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -683,7 +684,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdFullMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -698,7 +699,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -707,7 +708,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetInvalidElementType() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -721,7 +722,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
             // invalid element type
             target("api/0.6/blah/" + nodeIdsArr[0]).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -729,7 +730,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetFullInvalidElementType() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -743,7 +744,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
             // invalid element type
             target("api/0.6/blah/" + nodeIdsArr[0] + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -751,7 +752,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdInvalidElementIdFormat() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -766,7 +767,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
@@ -775,7 +776,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetElementUniqueIdFullInvalidElementIdFormat() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -790,7 +791,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
@@ -803,7 +804,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
      * A call to get a full node is not allowed, since nodes have no children
      * (like ways and relations do) and, therefore, the call makes no sense.
      */
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetNodeFull() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -819,7 +820,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -830,7 +831,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
     /*
      * see testGetNodeFull
      */
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetNodeUniqueIdFull() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -845,7 +846,7 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         try {
             target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));

@@ -44,7 +44,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -632,7 +634,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds, false);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateMissingNodeTagValue() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -661,7 +663,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
@@ -671,7 +673,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testUploadCreateInvalidChangesetSpecifiedInUrl() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -699,7 +701,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
@@ -709,7 +711,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateInvalidChangesetIdInNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -738,7 +740,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
@@ -748,7 +750,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateEmptyNodeCoords() throws Exception {
         // Try to update a changeset with nodes that have empty coordinate
@@ -756,7 +758,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         uploadCreateNodeCoords("", "");
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateNodeCoordsOutOfBounds() throws Exception {
         // Try to update a changeset with nodes that have out of world bounds
@@ -787,7 +789,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error uploading changeset with ID"));
@@ -820,7 +822,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateExistingNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -854,7 +856,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid OSM element ID for create"));
@@ -865,7 +867,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateDuplicateNodeIds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -894,7 +896,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
@@ -907,7 +909,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateTooFewNodesForWay() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -935,7 +937,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Too few nodes specified for way"));
@@ -944,7 +946,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateTooManyNodesForWay() throws Exception {
         String originalMaximumWayNodes = MAXIMUM_WAY_NODES;
@@ -987,7 +989,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Too many nodes specified for way"));
@@ -1024,7 +1026,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         assertEquals(1, createQuery(mapId).from(currentRelations).fetchCount());
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testUploadCreateWayWithNonExistentNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1052,7 +1054,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
@@ -1061,7 +1063,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithNonExistentNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1089,7 +1091,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                     "<delete if-unused=\"true\"/>" +
                 "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
@@ -1098,7 +1100,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithNonExistentWay() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1127,7 +1129,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
@@ -1136,7 +1138,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithNonExistentRelation() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1165,7 +1167,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element(s) being referenced don't exist."));
@@ -1176,7 +1178,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
 
     // haven't been able to find any good way to handle this yet, so I'm
     // choosing not to for now
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWhereRelationReferencesAnotherRelationThatComesAfterIt() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1210,7 +1212,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                          "<delete if-unused=\"true\"/>" +
                      "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("does not exist for relation"));
@@ -1219,7 +1221,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateWayWithInvisibleNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1270,7 +1272,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("visible for way"));
@@ -1279,7 +1281,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithInvisibleNode() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1330,7 +1332,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("visible for relation"));
@@ -1339,7 +1341,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithInvisibleWay() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1391,7 +1393,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
 //            Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
@@ -1400,7 +1402,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationWithInvisibleRelation() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1454,7 +1456,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
  //           Assert.assertTrue(r.getEntity(String.class).contains("visible for relation"));
@@ -1463,7 +1465,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateDuplicateWayIds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1495,7 +1497,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
@@ -1504,7 +1506,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateDuplicateRelationIds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1537,7 +1539,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
@@ -1546,7 +1548,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateExistingWay() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1578,7 +1580,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid OSM element ID for create"));
@@ -1587,7 +1589,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateExistingRelation() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1621,7 +1623,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid OSM element ID for create"));
@@ -1630,7 +1632,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationReferencingItself() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1663,7 +1665,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("references itself"));
@@ -1672,7 +1674,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateInvalidChangesetIdInWay() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1705,7 +1707,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
@@ -1714,7 +1716,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateInvalidChangesetIdInRelation() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1748,7 +1750,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid changeset ID"));
@@ -1757,7 +1759,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateMissingWayTagValue() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1790,7 +1792,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
@@ -1799,7 +1801,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateMissingRelationTagValue() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1834,7 +1836,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing tag"));
@@ -1843,7 +1845,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateDuplicateWayNodeIds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1875,7 +1877,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Duplicate OSM element ID"));
@@ -1884,7 +1886,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateNodeInvalidVersion() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1917,7 +1919,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
@@ -1926,7 +1928,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateWayInvalidVersion() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1959,7 +1961,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
@@ -1968,7 +1970,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationInvalidVersion() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2001,7 +2003,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
@@ -2010,7 +2012,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateWayEmptyNodeId() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2041,7 +2043,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
@@ -2050,7 +2052,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationEmptyMemberId() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2083,7 +2085,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Element in changeset has empty ID."));
@@ -2092,7 +2094,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testUploadCreateWayMissingNodeId() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2124,7 +2126,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.CONFLICT, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid version"));
@@ -2133,7 +2135,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationMissingMemberId() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2166,7 +2168,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
@@ -2174,7 +2176,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationInvalidMemberType() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2207,7 +2209,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Invalid relation member type"));
@@ -2216,7 +2218,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadCreateRelationMissingMemberType() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -2249,7 +2251,7 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);

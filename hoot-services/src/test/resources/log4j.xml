@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="could not create Vfs.Dir from url" />
+            <param name="AcceptOnMatch" value="false" />
+        </filter>
+        <filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="Broken pipe" />
+            <param name="AcceptOnMatch" value="false" />
+        </filter>
+        <filter class="org.apache.log4j.filter.ExpressionFilter">
+            <param name="expression" value="EXCEPTION ~= 'ClientAbortException:  java.net.SocketException: Broken pipe'" />
+            <param name="acceptOnMatch" value="false"/>
+        </filter>
+    </appender>
+
+    <appender name="FileAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/log/tomcat6/hoot-services.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="25MB" />
+        <param name="maxBackupIndex" value="1" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n" />
+        </layout>
+
+        <filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="could not create Vfs.Dir from url" />
+            <param name="AcceptOnMatch" value="false" />
+        </filter>
+
+        <filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="Broken pipe" />
+            <param name="AcceptOnMatch" value="false" />
+        </filter>
+        <filter class="org.apache.log4j.filter.ExpressionFilter">
+            <param name="expression" value="EXCEPTION ~= 'ClientAbortException:  java.net.SocketException: Broken pipe'" />
+            <param name="acceptOnMatch" value="false"/>
+        </filter>
+    </appender>
+
+    <logger name="hoot.services" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to 'info' for detailed
+      logging of HTTP request/response messages received and sent by the Jersey Framework -->
+    <logger name="hoot.services.HootServicesJerseyApplication" additivity="false">
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
+    <logger name="hoot.services.JerseyEventLogger" additivity="false">
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="org.deegree" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="com.querydsl" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="org.springframework" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="org.glassfish.jersey" additivity="false">
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <root>
+        <level value="error" />
+        <appender-ref ref="ConsoleAppender" />
+    </root>
+
+</log4j:configuration>

@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -57,7 +57,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
         assertEquals("", responseData);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadMultipleChangesets() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -106,7 +106,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
                         "</osmChange>" +
                     "</osmChanges>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Only one changeset may be uploaded at a time"));
@@ -115,7 +115,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadBadXml() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -143,7 +143,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
@@ -153,7 +153,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testUploadEmptyChangeset() throws Exception {
         long changesetId = OSMTestUtils.createTestChangeset(null);
@@ -170,7 +170,7 @@ public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {
                         "<delete if-unused=\"true\"/>" +
                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));

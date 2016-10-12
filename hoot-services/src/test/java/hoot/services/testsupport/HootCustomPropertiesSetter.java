@@ -37,7 +37,11 @@ public final class HootCustomPropertiesSetter {
     private HootCustomPropertiesSetter() {}
 
     public static void setProperty(String key, String value) throws Exception {
-        Field field = HootProperties.class.getField(key);
+        setProperty(key, value, HootProperties.class);
+    }
+
+    public static void setProperty(String key, String value, Class<?> clazz) throws Exception {
+        Field field = clazz.getDeclaredField(key);
         field.setAccessible(true);
 
         Field modifiersField = Field.class.getDeclaredField("modifiers");

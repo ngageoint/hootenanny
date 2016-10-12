@@ -43,7 +43,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -65,8 +66,8 @@ import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
-import hoot.services.utils.DbUtils;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
@@ -91,7 +92,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestChangesetClosed(changesetId);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testCloseClosedChangeset() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -108,7 +109,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                     .request(MediaType.APPLICATION_JSON)
                     .put(Entity.text(""), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (ClientErrorException e) {
             Response r = e.getResponse();
             assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));
@@ -118,7 +119,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testCloseNonExistingChangeset() throws Exception {
         // Try to close a changeset that doesn't exist. A failure should occur
@@ -130,7 +131,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                 .request(MediaType.APPLICATION_JSON)
                 .put(Entity.text(""), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Status.NOT_FOUND, Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Changeset to be updated does not exist"));
@@ -138,7 +139,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToEmptyChangeset() throws Exception {
         String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
@@ -175,7 +176,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (WebApplicationException e) {
+            catch (ClientErrorException e) {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
@@ -434,7 +435,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testChangesetMaxElementsExceededUploadedToExistingChangeset() throws Exception {
         String original_MAXIMUM_CHANGESET_ELEMENTS = MAXIMUM_CHANGESET_ELEMENTS;
@@ -492,7 +493,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (WebApplicationException e) {
+            catch (ClientErrorException e) {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class).contains("Changeset maximum element threshold exceeded"));
@@ -958,7 +959,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenNoElementsAddedToItBeforeExpiration() throws Exception {
         String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
@@ -1009,7 +1010,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (WebApplicationException e) {
+            catch (ClientErrorException e) {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class).contains("The changeset with ID: "
@@ -1025,7 +1026,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = ClientErrorException.class)
     @Category(UnitTest.class)
     public void testChangesetAutoCloseWhenLengthBetweenUpdatesCausesExpiration() throws Exception {
         String original_TEST_CHANGESET_AUTO_CLOSE = TEST_CHANGESET_AUTO_CLOSE;
@@ -1085,7 +1086,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
                             "<delete if-unused=\"true\"/>" +
                         "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
             }
-            catch (WebApplicationException e) {
+            catch (ClientErrorException e) {
                 Response r = e.getResponse();
                 assertEquals(Status.CONFLICT, Status.fromStatusCode(r.getStatus()));
                 assertTrue(r.readEntity(String.class).contains("The changeset with ID: " + changesetId + " was closed at"));

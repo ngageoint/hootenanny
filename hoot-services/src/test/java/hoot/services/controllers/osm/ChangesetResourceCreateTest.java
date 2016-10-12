@@ -33,7 +33,8 @@ import static org.junit.Assert.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -103,7 +104,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestChangesetCreatedByRequest(changesetId);
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testCreateByNonUniqueMapName() throws Exception {
         // insert another map with the same name as the test map
@@ -134,7 +135,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                              "</changeset>" +
                          "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
@@ -142,7 +143,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testCreateMissingMapParam() throws Exception {
         // Try to create a changeset without specifying its map. A failure
@@ -159,7 +160,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
@@ -168,7 +169,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testCreateEmptyMapId() throws Exception {
         // Try to create a changeset, specifying an empty map ID string. A
@@ -186,7 +187,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists with ID"));
@@ -195,7 +196,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testCreateInvalidMapId() throws Exception {
         // Try to create a changeset, specifying an ID of a map that doesn't
@@ -213,7 +214,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
             assertTrue(r.readEntity(String.class).contains("No map exists"));
@@ -221,7 +222,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testCreateBadXml() throws Exception {
         // Try to create a changeset with malformed XML. A failure should occur
@@ -239,7 +240,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error parsing changeset XML"));
@@ -248,7 +249,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testCreateEmptyTag() throws Exception {
         // Try to create a changeset with a tag that has no attributes. A
@@ -266,7 +267,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
@@ -275,7 +276,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testCreateMissingTagValue() throws Exception {
         // Try to create a changeset with a tag missing its attribute value. A
@@ -293,7 +294,7 @@ public class ChangesetResourceCreateTest extends OSMResourceTestAbstract {
                         "</changeset>" +
                     "</osm>", MediaType.TEXT_XML_TYPE), String.class);
         }
-        catch (WebApplicationException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             assertTrue(r.readEntity(String.class).contains("Error inserting tags"));
