@@ -105,7 +105,7 @@ Feature: Advanced Conflation Options
 		And I should see "Cookie Cutter & Horizontal Options"
 		Then I click on "#horizontal_conflation_options_label"
 		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
-		Then I fill "horizontal_cookie_cutter_alpha_shape_buffer" with "5"
+		Then I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with "5"
 		Then I click on "#horizontal_conflation_options_label"
 	 	Then I press "big.loud-red" span with text "Cancel"
 	 	And I should see "►"
@@ -213,7 +213,7 @@ Feature: Advanced Conflation Options
 	    And I context click the "Merged_AllDataTypes_Advanced" Dataset
 	    And I click the "Delete (1)" context menu item
 	    Then I accept the alert
-	    #And I wait 30 "seconds" to not see "Merged_AllDataTypes_Advanced"
+	  # And I wait 30 "seconds" to not see "Merged_AllDataTypes_Advanced"
 	    Then I select the "sprocket" div
 
 	Scenario: Check for previous settings
