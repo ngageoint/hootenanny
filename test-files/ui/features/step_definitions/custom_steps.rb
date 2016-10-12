@@ -847,3 +847,23 @@ Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
   el = find('input' + el)
   el[:class].include?('invalidName').should eq true
 end
+
+# for invalid features
+Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq true
+end
+
+Then(/^I should_not see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq false
+end
+
+
+# for placeholders 
+Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
+end
+
