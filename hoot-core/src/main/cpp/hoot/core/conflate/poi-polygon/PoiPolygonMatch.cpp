@@ -134,7 +134,8 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
   if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier").toLower() == "fence" ||
-      tags.get("landuse").toLower() == "grass" /*|| tags.get("building").toLower() == "roof"*/)
+      tags.get("landuse").toLower() == "grass" /*|| tags.get("building").toLower() == "roof"*/
+      || tags.get("natural").toLower() == "tree_row")
   {
     return false;
   }

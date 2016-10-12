@@ -689,6 +689,29 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  else if (poiHasType && polyHasType && poly->getTags().get("amenity") == "parking" &&
+           !(_typeMatch || _nameMatch))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #23...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  else if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
+           OsmSchema::getInstance().getCategories(
+             poi->getTags()).intersects(OsmSchemaCategory::building()))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #24...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
