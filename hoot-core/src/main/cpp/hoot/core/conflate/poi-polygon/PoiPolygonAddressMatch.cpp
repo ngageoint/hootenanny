@@ -33,6 +33,12 @@
 namespace hoot
 {
 
+const QChar PoiPolygonAddressMatch::ESZETT(0x00DF);
+const QString PoiPolygonAddressMatch::ESZETT_REPLACE = "ss";
+const QString PoiPolygonAddressMatch::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString PoiPolygonAddressMatch::STREET_TAG_NAME = "addr:street";
+const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME = "address";
+
 PoiPolygonAddressMatch::PoiPolygonAddressMatch(const ConstOsmMapPtr& map,
                                                const QString testUuid = "") :
 _map(map),
@@ -40,97 +46,115 @@ _testUuid(testUuid)
 {
 }
 
-bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr building, ConstElementPtr poi)
+void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr element,
+                                                          QStringList& addresses)
 {
-  QStringList addresses;
-  Tags buildingTags = building->getTags();
-
-  QString buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
-  QString buildingStreet =
-    Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
-  QString buildingAddrComb;
-  if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
+  const Tags tags = element->getTags();
+  QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
+  QString street =
+    Translator::getInstance().toEnglish(tags.get(STREET_TAG_NAME)).trimmed().toLower();
+  QString combinedAddress;
+  if (!houseNum.isEmpty() && !street.isEmpty())
   {
-    buildingAddrComb = buildingHouseNum + " " + buildingStreet;
-    addresses.append(buildingAddrComb);
+    //TODO: hack - I thought this would have been eliminated by using the translated name comparison
+    //logic...seems like it wasn't. - see others
+    street = street.replace(ESZETT, ESZETT_REPLACE);
+    combinedAddress = houseNum + " " + street;
+    addresses.append(combinedAddress);
   }
-  QString buildingAddrTag =
-    Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
-  if (!buildingAddrTag.isEmpty())
+  QString addressTagVal =
+    Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME)).trimmed().toLower();
+  if (!addressTagVal.isEmpty())
   {
-    addresses.append(buildingAddrTag);
+    addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
+    addresses.append(addressTagVal);
   }
+}
 
-  if (addresses.size() == 0)
+void PoiPolygonAddressMatch::_collectAddressesFromWay(ConstWayPtr way, QStringList& addresses)
+{
+  const vector<long> wayNodeIds = way->getNodeIds();
+  for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    //try to find the address from a building way node instead
-    if (building->getElementType() == ElementType::Way)
+    _collectAddressesFromElement(_map->getElement(ElementType::Node, wayNodeIds.at(i)), addresses);
+  }
+}
+
+void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr relation,
+                                                           QStringList& addresses)
+{
+  const vector<RelationData::Entry> relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+    if (member->getElementType() == ElementType::Node)
     {
-      ConstWayPtr wayBuilding = dynamic_pointer_cast<const Way>(building);
-      const vector<long> wayNodeIds = wayBuilding->getNodeIds();
-      for (size_t i = 0; i < wayNodeIds.size(); i++)
-      {
-        ConstElementPtr buildingWayNode = _map->getElement(ElementType::Node, wayNodeIds.at(i));
-        buildingTags = buildingWayNode->getTags();
-        buildingHouseNum = buildingTags.get("addr:housenumber").trimmed();
-        buildingStreet =
-          Translator::getInstance().toEnglish(buildingTags.get("addr:street")).trimmed().toLower();
-        buildingAddrTag =
-          Translator::getInstance().toEnglish(buildingTags.get("address")).trimmed().toLower();
-        if (!buildingAddrTag.isEmpty())
-        {
-          addresses.append(buildingAddrTag);
-        }
-        if (!buildingHouseNum.isEmpty() && !buildingStreet.isEmpty())
-        {
-          buildingAddrComb = buildingHouseNum + " " + buildingStreet;
-          addresses.append(buildingAddrComb);
-        }
-      }
+      _collectAddressesFromElement(member, addresses);
     }
-    //haven't seen addresses yet in building relation node members
-    /*else if (e2->getElementType() == ElementType::Relation)
-      {
-      }*/
-  }
-  if (addresses.size() == 0)
-  {
-    return false;
-  }
-
-  const Tags poiTags = poi->getTags();
-  const QString poiHouseNum = poiTags.get("addr:housenumber").trimmed();
-  const QString poiStreet =
-    Translator::getInstance().toEnglish(poiTags.get("addr:street")).trimmed().toLower();
-  QString poiAddrComb;
-  if (!poiHouseNum.isEmpty() && !poiStreet.isEmpty())
-  {
-    poiAddrComb = poiHouseNum + " " + poiStreet;
-  }
-  const QString poiAddrTag =
-    Translator::getInstance().toEnglish(poiTags.get("address")).trimmed().toLower();
-  if (poiAddrComb.isEmpty() && poiAddrTag.isEmpty())
-  {
-    return false;
-  }
-
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (buildingTags.get("uuid") == _testUuid || poiTags.get("uuid") == _testUuid))
-  {
-    LOG_VARD(buildingAddrComb);
-    LOG_VARD(poiAddrComb);
-    LOG_VARD(buildingAddrTag);
-    LOG_VARD(poiAddrTag);
-  }
-
-  ExactStringDistance addrComp;
-  for (int i = 0; i < addresses.size(); i++)
-  {
-    const QString buildingAddress = addresses.at(i);
-    if (addrComp.compare(buildingAddress, poiAddrTag) == 1.0 ||
-        addrComp.compare(buildingAddress, poiAddrComb) == 1.0)
+    else if (member->getElementType() == ElementType::Way)
     {
-      return true;
+      ConstWayPtr wayMember = dynamic_pointer_cast<const Way>(member);
+      _collectAddressesFromWay(wayMember, addresses);
+    }
+  }
+}
+
+bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPtr poi)
+{
+  QStringList polyAddresses;
+
+  //see if the poly has any address
+  _collectAddressesFromElement(poly, polyAddresses);
+
+  if (polyAddresses.size() == 0)
+  {
+    //if not, try to find the address from a poly way node instead
+    if (poly->getElementType() == ElementType::Way)
+    {
+      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(poly), polyAddresses);
+    }
+    //if still no luck, try to find the address from a poly way node that is a relation member
+    else if (poly->getElementType() == ElementType::Relation)
+    {
+      _collectAddressesFromRelation(dynamic_pointer_cast<const Relation>(poly), polyAddresses);
+    }
+  }
+  if (polyAddresses.size() == 0)
+  {
+    LOG_VART("No poly addresses.");
+    return false;
+  }
+
+  //see if the poi has an address
+  QStringList poiAddresses;
+  _collectAddressesFromElement(poi, poiAddresses);
+  if (poiAddresses.size() == 0)
+  {
+    LOG_VART("No POI addresses.");
+    return false;
+  }
+
+  //look for an exact match between the two
+  ExactStringDistance addrComp;
+  for (int i = 0; i < polyAddresses.size(); i++)
+  {
+    const QString polyAddress = polyAddresses.at(i);
+    for (int j = 0; j < poiAddresses.size(); j++)
+    {
+      const QString poiAddress = poiAddresses.at(j);
+
+      if (Log::getInstance().getLevel() == Log::Debug &&
+            (poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid))
+      {
+        LOG_VART(polyAddress);
+        LOG_VART(poiAddress);
+      }
+
+      if (addrComp.compare(polyAddress, poiAddress) == 1.0)
+      {
+        LOG_VART("Found address match.");
+        return true;
+      }
     }
   }
   return false;

@@ -40,14 +40,24 @@ class PoiPolygonAddressMatch
 {
 public:
 
+  static const QChar ESZETT;
+  static const QString ESZETT_REPLACE;
+  static const QString HOUSE_NUMBER_TAG_NAME;
+  static const QString STREET_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME;
+
   PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
 
-  bool calculateMatch(ConstElementPtr building, ConstElementPtr poi);
+  bool calculateMatch(ConstElementPtr poly, ConstElementPtr poi);
 
 private:
 
   const ConstOsmMapPtr _map;
   QString _testUuid;
+
+  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
+  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
+  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
 
 };
 
