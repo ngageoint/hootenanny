@@ -89,8 +89,8 @@ public class HGISFilterResource extends HGISResource {
 
         try {
             String jobId = UUID.randomUUID().toString();
-            String argStr = super.createBashPostBody(createParamObj(src, output));
-            super.postJobRquest(jobId, argStr);
+            String argStr = createBashPostBody(createParamObj(src, output));
+            postJobRequest(jobId, argStr);
             resp.setJobId(jobId);
         }
         catch (Exception e) {

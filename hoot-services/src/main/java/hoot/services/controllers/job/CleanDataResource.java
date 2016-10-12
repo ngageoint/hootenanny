@@ -80,7 +80,7 @@ public class CleanDataResource extends JobControllerBase {
         try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
-            postJobRquest(uuid, argStr);
+            postJobRequest(uuid, argStr);
         }
         catch (Exception e) {
             String msg = "Error processing data clean request.   Cause: " + e.getMessage();

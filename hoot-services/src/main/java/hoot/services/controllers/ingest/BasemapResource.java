@@ -189,7 +189,7 @@ public class BasemapResource extends JobControllerBase {
                 commandArgs.add(arg);
 
                 String argStr = createBashPostBody(commandArgs);
-                postJobRquest(jobId, argStr);
+                postJobRequest(jobId, argStr);
 
                 JSONObject res = new JSONObject();
                 res.put("jobid", jobId);

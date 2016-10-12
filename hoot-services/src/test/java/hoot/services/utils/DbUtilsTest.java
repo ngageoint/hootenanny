@@ -30,25 +30,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
@@ -58,26 +56,23 @@ import hoot.services.testsupport.MapUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles("test")
 public class DbUtilsTest {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     @Before
     public void setAppContext() {
         new ApplicationContextUtils().setApplicationContext(applicationContext);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
+    @Transactional
     public void testUpdateMapsTableTags() throws Exception {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
@@ -223,71 +218,5 @@ public class DbUtilsTest {
         JSONObject exJson = (JSONObject) parser.parse(expected.replaceAll("'", "\""));
         JSONObject outJson = (JSONObject) parser.parse(output.replaceAll("\\\\\"", "\""));
         assertEquals(exJson, outJson);
-    }
-
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testCreateDeleteDB() throws Exception {
-        boolean exists = checkDbExists("wfdbtest");
-        if (exists) {
-            DbUtils.deleteDb("wfdbtest");
-        }
-
-        createDb("wfdbtest");
-
-        exists = checkDbExists("wfdbtest");
-        assertTrue(exists);
-        DbUtils.deleteDb("wfdbtest");
-
-        exists = checkDbExists("wfdbtest");
-        assertTrue(!exists);
-    }
-
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testTable() throws Exception {
-        try {
-            boolean exists = checkDbExists("wfdbtest");
-            if (exists) {
-                DbUtils.deleteDb("wfdbtest");
-            }
-
-            createDb("wfdbtest");
-            exists = checkDbExists("wfdbtest");
-            assertTrue(exists);
-
-            String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
-                + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
-
-            this.jdbcTemplate.execute(createTblSql);
-
-            List<String> tbls = DbUtils.getTablesList("test");
-            assertTrue(!tbls.isEmpty());
-
-            DbUtils.deleteTables(tbls);
-
-            tbls = DbUtils.getTablesList("TEST");
-            assertTrue(tbls.isEmpty());
-
-            DbUtils.deleteDb("wfdbtest");
-
-            exists = checkDbExists("wfdbtest");
-            assertTrue(!exists);
-        }
-        finally {
-            this.jdbcTemplate.execute("DROP TABLE IF EXISTS test_TABLE");
-        }
-    }
-
-    private boolean checkDbExists(String dbName) {
-        List<Integer> result = this.jdbcTemplate
-                .queryForList("SELECT 1 FROM pg_database WHERE datname = ?", Integer.class, dbName);
-        return !result.isEmpty();
-    }
-
-    private void createDb(String dbname) {
-        this.jdbcTemplate.execute("CREATE DATABASE \"" + dbname + "\"");
     }
 }

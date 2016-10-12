@@ -707,7 +707,7 @@ public class MapResource extends JobControllerBase {
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(command);
 
-            super.postChainJobRquest(uuid, jobArgs.toJSONString());
+            super.postChainJobRequest(uuid, jobArgs.toJSONString());
         }
         catch (WebApplicationException wae) {
             throw wae;

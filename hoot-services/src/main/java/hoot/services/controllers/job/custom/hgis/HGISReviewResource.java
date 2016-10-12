@@ -119,7 +119,7 @@ public class HGISReviewResource extends HGISResource {
             jobArgs.add(validationCommand);
             jobArgs.add(updateMapTagCommand);
 
-            postChainJobRquest(jobId, jobArgs.toJSONString());
+            postChainJobRequest(jobId, jobArgs.toJSONString());
 
             res.setJobId(jobId);
         }

@@ -143,11 +143,11 @@ public class ExportJobResource extends JobControllerBase {
                 jobArgs.add(osm2orgCommand);
                 jobArgs.add(createWfsResCommand);
 
-                postChainJobRquest(jobId, jobArgs.toJSONString());
+                postChainJobRequest(jobId, jobArgs.toJSONString());
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 commandArgs = getExportToOsmApiDbCommandArgs(commandArgs);
-                postJobRquest(jobId, createPostBody(commandArgs));
+                postJobRequest(jobId, createPostBody(commandArgs));
             }
             else {
                 // replace with with getParameterValue
@@ -171,7 +171,7 @@ public class ExportJobResource extends JobControllerBase {
                 }
 
                 String argStr = createPostBody(commandArgs);
-                postJobRquest(jobId, argStr);
+                postJobRequest(jobId, argStr);
             }
         }
         catch (WebApplicationException wae) {

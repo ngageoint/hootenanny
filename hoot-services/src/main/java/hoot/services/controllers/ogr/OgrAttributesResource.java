@@ -168,7 +168,7 @@ public class OgrAttributesResource extends JobControllerBase {
 
             String argStr = createPostBody(params);
 
-            postJobRquest(jobId, argStr);
+            postJobRequest(jobId, argStr);
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();

@@ -110,7 +110,7 @@ public class ClipDatasetResource extends JobControllerBase {
             jobArgs.add(clipCommand);
             jobArgs.add(ingestOSMResource);
 
-            postChainJobRquest(uuid, jobArgs.toJSONString());
+            postChainJobRequest(uuid, jobArgs.toJSONString());
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
