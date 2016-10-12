@@ -42,10 +42,12 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Controller
 @Path("/filter/custom/HGIS")
+@Transactional
 public class HGISFilterResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
 
@@ -83,7 +85,7 @@ public class HGISFilterResource extends HGISResource {
         }
 
         if (!mapExists(src)) {
-            String msg = "sourceMap does not exist.";
+            String msg = "Map " + src + " does not exist.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
