@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{2a8fa83f-b564-5d02-893f-2c822804bb61}";
+QString PoiPolygonMatch::_testUuid = "{f6e06985-dc1a-581b-bbd4-8647675e0b55}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -478,6 +478,11 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
   if (typeKvp == "leisure=park")
   {
     return 20.0;
+  }
+  else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
+           _map->getElement(_polyEid)->getTags().get("subway") == "yes")
+  {
+    return 150.0;
   }
   /*else if (typeKvp == "leisure=playground")
   {
