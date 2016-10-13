@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{6117767e-8a0b-5624-a599-fa50f96213a6}";
+QString PoiPolygonMatch::_testUuid = "{9b0ea9de-a01c-5684-984e-2b8789301027}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -137,7 +137,8 @@ bool PoiPolygonMatch::isPoly(const Element& e)
       tags.get("landuse").toLower() == "grass" /*|| tags.get("building").toLower() == "roof"*/
       || tags.get("natural").toLower() == "tree_row"
       || tags.get("highway").toLower() == "pedestrian"
-      || tags.get("natural").toLower() == "scrub")
+      || tags.get("natural").toLower() == "scrub"
+      | tags.get("highway").toLower() == "residential")
   {
     return false;
   }

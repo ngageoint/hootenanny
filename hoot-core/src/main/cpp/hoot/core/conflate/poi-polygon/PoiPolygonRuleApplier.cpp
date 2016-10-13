@@ -559,6 +559,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Don't review schools against their sports fields.
   else if (poi->getTags().get("amenity").toLower() == "school" && poly->getTags().contains("sport"))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -569,7 +570,10 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poiHasType && polyHasType && !_nameMatch &&
+  //Don't review park poi's against large non-park polys.
+  //TODO: the commented out section adds two wrong matches to C but takes one away from D; look
+  //into it
+  else if (poiHasType && polyHasType && !_nameMatch && /*!polyIsPark &&*/
            (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
            (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
            poly->getTags().get("leisure").toLower() == "common") ||
@@ -585,6 +589,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Be a little stricter on place related reviews.
   else if (poi->getTags().get("place").toLower() == "neighbourhood" &&
            !poly->getTags().contains("place"))
   {
@@ -596,6 +601,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Reduce reviews against some non-use type polys.
   //TODO: replace with isArea/isPoi changes...tried already once and didn't seem to work
   else if (poly->getTags().get("natural").toLower() == "coastline" ||
            poi->getTags().get("highway").toLower() == "traffic_signals" ||
@@ -610,6 +616,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Gates and Parking are two separate things.
   else if (poi->getTags().get("barrier").toLower() == "gate" &&
            poly->getTags().get("amenity").toLower() == "parking")
   {
@@ -621,6 +628,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //If a building is a building don't review it against a non-building poly.
   else if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -631,6 +639,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Similar to previous, except more focused for restrooms.
   else if (poiHasType && polyHasType && !_typeScore == 1.0 &&
            poi->getTags().get("amenity").toLower() == "toilets" &&
            !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
@@ -678,7 +687,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
 
   //LAST FULL DATASET SCORE CHECKS BEFORE HERE
 
-  //need to be stricter on tunnels since we don't want above ground things to conflate with them
+  //Need to be stricter on tunnels since we don't want above ground things to conflate with them.
   else if (poly->getTags().get("tunnel") == "yes" && !(_typeMatch || _nameMatch))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -689,7 +698,9 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  else if (poiHasType && polyHasType && poly->getTags().get("amenity") == "parking" &&
+  //Be more strict reviewing parking lots against places.
+  else if (poiHasType && polyHasType &&
+           (poly->getTags().get("amenity") == "parking" || poly->getTags().contains("place")) &&
            !(_typeMatch || _nameMatch))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -700,6 +711,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
+  //Be more strict reviewing natural features against building features.
   else if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
            OsmSchema::getInstance().getCategories(
              poi->getTags()).intersects(OsmSchemaCategory::building()))
