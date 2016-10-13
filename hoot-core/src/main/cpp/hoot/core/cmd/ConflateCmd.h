@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -146,8 +146,13 @@ public:
     stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
 
-    CalculateStatsOp input1Cso(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
-    CalculateStatsOp input2Cso(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
+    NamedOp(ConfigOptions().getConflateLoadPostOps()).apply(map);
+    //stats.append(SingleStat("Apply Load Post Ops Time (sec)", t.getElapsedAndRestart()));
+
+    CalculateStatsOp input1Cso(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
+    CalculateStatsOp input2Cso(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
     if (displayStats)
     {
       input1Cso.apply(map);
