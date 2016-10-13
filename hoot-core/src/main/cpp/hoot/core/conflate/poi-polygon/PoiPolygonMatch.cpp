@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{f6e06985-dc1a-581b-bbd4-8647675e0b55}";
+QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -135,7 +135,8 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   const Tags& tags = e.getTags();
   if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier").toLower() == "fence" ||
       tags.get("landuse").toLower() == "grass" /*|| tags.get("building").toLower() == "roof"*/
-      || tags.get("natural").toLower() == "tree_row")
+      || tags.get("natural").toLower() == "tree_row"
+      || tags.get("highway").toLower() == "pedestrian")
   {
     return false;
   }
@@ -476,12 +477,13 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) cons
 
 double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
 {
+  const Tags polyTags = _map->getElement(_polyEid)->getTags();
   if (typeKvp == "leisure=park")
   {
     return 20.0;
   }
   else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
-           _map->getElement(_polyEid)->getTags().get("subway") == "yes")
+           (polyTags.get("subway") == "yes" || polyTags.get("tunnel") == "yes"))
   {
     return 150.0;
   }
