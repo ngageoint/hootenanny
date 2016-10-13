@@ -751,6 +751,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "building"
+        ],
         "isA": "amenity",
         "name": "amenity=fast_food",
         "objectType": "tag",

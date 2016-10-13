@@ -93,8 +93,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr rela
     }
     else if (member->getElementType() == ElementType::Way)
     {
-      ConstWayPtr wayMember = dynamic_pointer_cast<const Way>(member);
-      _collectAddressesFromWay(wayMember, addresses);
+      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(member), addresses);
     }
   }
 }
@@ -144,7 +143,7 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPt
       const QString poiAddress = poiAddresses.at(j);
 
       if (Log::getInstance().getLevel() == Log::Debug &&
-            (poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid))
+           (poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid))
       {
         LOG_VART(polyAddress);
         LOG_VART(poiAddress);
