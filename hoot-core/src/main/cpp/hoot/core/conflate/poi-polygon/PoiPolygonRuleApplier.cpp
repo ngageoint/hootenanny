@@ -383,6 +383,13 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
 
+  QStringList genericLandUseTagVals;
+  genericLandUseTagVals.append("retail");
+  genericLandUseTagVals.append("commercial");
+  genericLandUseTagVals.append("village_green");
+  genericLandUseTagVals.append("forest");
+  genericLandUseTagVals.append("residential");
+
   //TODO: CONVERT ALL THESE RULES TO EXTRACTORS GENERATING SPECIFIC SCORES AND MOVE TO A CLASSIFIER
   //TYPE CLASS WHICH POIPOLYGONMATCH USES IN PLACE OF THE CURRENT EVIDENCE VALUE
 
@@ -720,6 +727,19 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
       LOG_DEBUG("Returning miss per rule #24...");
+    }
+    matchClass.setMiss();
+    triggersParkRule = true;
+  }
+  //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
+  //be more strict with their reviews.
+  else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
+           !(_typeMatch || _nameMatch))
+  {
+    if (Log::getInstance().getLevel() == Log::Debug &&
+        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    {
+      LOG_DEBUG("Returning miss per rule #25...");
     }
     matchClass.setMiss();
     triggersParkRule = true;

@@ -249,7 +249,7 @@ public:
                              getMap());
 
       getMap()->visitWaysRo(v);
-      //getMap()->visitRelationsRo(v);
+      getMap()->visitRelationsRo(v);
       v.finalizeIndex();
     }
 
