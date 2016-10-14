@@ -450,6 +450,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I wait ([0-9]*) "([^"]*)" to see css "([^"]*)"$/) do |timeout, unit, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.should have_css(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
 When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text|
   if unit == "seconds"
     multiplier = 1
@@ -842,7 +856,7 @@ Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
   el = page.find(input).should be_visible
 end
 
-Then(/^I should not see the "([^"]*)" on the page$/) do |input| 
+Then(/^I should not see the "([^"]*)" on the page$/) do |input|
   el = page.should have_no_css(input, :visible => true)
 end
 
@@ -858,7 +872,7 @@ Then(/^I should_not see an invalid input warning for "([^"]*)"/) do |input|
 end
 
 
-# for placeholders 
+# for placeholders
 Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
   el = find(id)
   el.value.should eq ""

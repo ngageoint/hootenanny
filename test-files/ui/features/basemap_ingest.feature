@@ -12,9 +12,10 @@ Feature: Basemap Ingest
         And I select "/test-files/gdal2tiles/RomanColosseum_WV2naturalcolor_clip.tif" basemap
         And I type "RomanColosseumCucumber" in input "Save As"
         When I press "big.loud" span with text "Publish"
-        Then I wait 60 "seconds" to see "RomanColosseumCucumber"
+        Then I wait 30 "seconds" to see "RomanColosseumCucumber"
 
     Scenario: Add Basemap To Map
+        Then I wait 30 "seconds" to see css "button.closedeye"
         When I click the "closedeye" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
         Then I select the "sprocket" div
         And I click the Background settings button
@@ -27,4 +28,4 @@ Feature: Basemap Ingest
     Scenario: Delete Map
         When I click the "trash" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
         And I accept the alert
-        Then I wait 60 "seconds" to not see "RomanColosseumCucumber"
+        Then I wait 30 "seconds" to not see "RomanColosseumCucumber"
