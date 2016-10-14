@@ -85,7 +85,13 @@
     {
         "isA": "amenity",
         "name": "amenity=arts_centre",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=community_centre",
+                "weight": 0.7
+            }
+	]
     },
     {
         "isA": "amenity",

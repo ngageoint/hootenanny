@@ -389,6 +389,9 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   genericLandUseTagVals.append("village_green");
   genericLandUseTagVals.append("forest");
   genericLandUseTagVals.append("residential");
+  genericLandUseTagVals.append("meadow");
+  genericLandUseTagVals.append("industrial");
+  genericLandUseTagVals.append("grass");
 
   //TODO: CONVERT ALL THESE RULES TO EXTRACTORS GENERATING SPECIFIC SCORES AND MOVE TO A CLASSIFIER
   //TYPE CLASS WHICH POIPOLYGONMATCH USES IN PLACE OF THE CURRENT EVIDENCE VALUE

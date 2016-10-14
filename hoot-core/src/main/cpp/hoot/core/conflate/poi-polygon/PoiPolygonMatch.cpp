@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{e34e671d-e148-5a0c-afc5-f08a18d80afe}";
+QString PoiPolygonMatch::_testUuid = "{69d6c63a-d959-5f87-aac2-9f928f42b781}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -133,19 +133,21 @@ _typeScoreThreshold(typeScoreThreshold)
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
-  if (/*tags.get("natural") == "coastline" &&*/tags.get("barrier").toLower() == "fence" ||
-      tags.get("landuse").toLower() == "grass" /*|| tags.get("building").toLower() == "roof"*/
+  //check this first, b/c some of these excluded features may have multiple type vals
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(tags).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  if (!inABuildingOrPoiCategory && (tags.get("barrier").toLower() == "fence"
+      || tags.get("landuse").toLower() == "grass"
       || tags.get("natural").toLower() == "tree_row"
       || tags.get("highway").toLower() == "pedestrian"
       || tags.get("natural").toLower() == "scrub"
-      | tags.get("highway").toLower() == "residential")
+      || tags.get("highway").toLower() == "residential"))
   {
     return false;
   }
   return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
-         (OsmSchema::getInstance().getCategories(tags).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-          tags.getNames().size() > 0);
+         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 }
 
 bool PoiPolygonMatch::isPoi(const Element& e)
