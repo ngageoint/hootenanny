@@ -49,6 +49,8 @@ public:
 
   void touchesTest1()
   {
+    TestUtils::resetEnvironment();
+
     WayPtr w1(new Way(Status::Invalid, -1, 15));
     NetworkVertexPtr v1(new NetworkVertex(w1));
     WayPtr w2(new Way(Status::Invalid, -2, 15));
@@ -83,6 +85,8 @@ public:
 
   void unionTest1()
   {
+    TestUtils::resetEnvironment();
+
     WayPtr w1(new Way(Status::Invalid, -1, 15));
     NetworkVertexPtr v1(new NetworkVertex(w1));
     WayPtr w2(new Way(Status::Invalid, -2, 15));
