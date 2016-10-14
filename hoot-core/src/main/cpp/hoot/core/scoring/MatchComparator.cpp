@@ -135,9 +135,9 @@ public:
     {
       _uuidToEid.insert(uuid, e->getElementId());
 
-      //If an item was merged during conflation, its uuid is its original uuid + the concatenated
-      //uuid's of the merged items.  So, add map entries for all the uuid parts, if it contains
-      //multiple.
+      //If an item was merged during conflation, its uuid is its original uuid prepended or appended
+      //with the uuid's of the merged items.  So, add map entries for all the uuid parts, if it
+      //contains multiple features.
       const QStringList uuidParts = uuid.split(";");
       for (int i = 0; i < uuidParts.size(); i++)
       {
@@ -254,8 +254,6 @@ double MatchComparator::getPertyScore() const
   LOG_VARD(_expected);
   assert(_expected.size() > 0);
   set<UuidPair> intersection;
-  //tried to use QSet here, since its more intuitive to do set operations with, but it required that
-  //UuidPair implement a hash function...tried to implement but was unsuccessful
   set_intersection(_actual.begin(), _actual.end(), _expected.begin(), _expected.end(),
     insert_iterator<std::set<UuidPair> >(intersection, intersection.begin()));
   LOG_VARD(intersection.size());
@@ -370,12 +368,13 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
       //those cases multiple actual/expected states can exist and this logic only records one
       //of them.
+      //@todo The expected miss/actual review tags are sometimes inaccurate.
       const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
       _tagTestOutcome(
-            conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
+        conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
       _tagTestOutcome(
-            conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
+        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
     }
 
     _confusion[actualIndex][expectedIndex]++;
