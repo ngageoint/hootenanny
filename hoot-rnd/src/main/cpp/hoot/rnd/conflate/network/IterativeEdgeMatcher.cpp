@@ -131,8 +131,7 @@ void IterativeEdgeMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, O
 {
   _n1 = n1;
   _n2 = n2;
-  _details1.reset(new NetworkDetails(map, n1));
-  _details2.reset(new NetworkDetails(map, n2));
+  _details.reset(new NetworkDetails(map, n1, n2));
 
   // create a spatial index of n2 vertices & edges.
   _createEdge2Index();
@@ -245,7 +244,7 @@ void IterativeEdgeMatcher::_normalizeScores(VertexScoreMap& t)
 double IterativeEdgeMatcher::_scoreEdges(ConstNetworkEdgePtr e1,
   ConstNetworkEdgePtr e2) const
 {
-  return _details1->getEdgeMatchScore(e1, e2);
+  return _details->getEdgeMatchScore(e1, e2);
 }
 
 double IterativeEdgeMatcher::_scoreVertices(ConstNetworkVertexPtr /*e1*/,
@@ -260,17 +259,17 @@ void IterativeEdgeMatcher::_seedEdgeScores()
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
-    NetworkEdgePtr e1 = it.value();
+    ConstNetworkEdgePtr e1 = it.value();
     // find all the n2 edges that are in range of this one
-    Envelope env = _details1->getEnvelope(it.value());
-    env.expandBy(_details1->getSearchRadius(it.value()));
+    Envelope env = _details->getEnvelope(it.value());
+    env.expandBy(_details->getSearchRadius(it.value()));
     IntersectionIterator iit = _createIterator(env, _edge2Index);
 
     while (iit.next())
     {
-      NetworkEdgePtr e2 = _index2Edge[iit.getId()];
+      ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
       double score = _scoreEdges(it.value(), e2);
-      bool reversed = _details1->isReversed(e1, e2);
+      bool reversed = _details->isReversed(e1, e2);
 
       if (score > 0)
       {
@@ -287,18 +286,18 @@ void IterativeEdgeMatcher::_seedVertexScores()
   const OsmNetwork::VertexMap& vm = _n1->getVertexMap();
   for (OsmNetwork::VertexMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
-    NetworkVertexPtr v1 = it.value();
+    ConstNetworkVertexPtr v1 = it.value();
 
     // find all the vertices that are in range of this one
     ConstElementPtr e1 = it.value()->getElement();
-    Envelope env = _details1->getEnvelope(v1);
-    env.expandBy(_details1->getSearchRadius(v1));
+    Envelope env = _details->getEnvelope(v1);
+    env.expandBy(_details->getSearchRadius(v1));
     IntersectionIterator iit = _createIterator(env, _vertex2Index);
 
     // set the initial match score to 1 for all candidate matches
     while (iit.next())
     {
-      NetworkVertexPtr v2 = _index2Vertex[iit.getId()];
+      ConstNetworkVertexPtr v2 = _index2Vertex[iit.getId()];
 
       double score = _scoreVertices(v1, v2);
       if (score > 0)
@@ -368,7 +367,7 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
   }
 }
 
-void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em)
+void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)
@@ -426,14 +425,6 @@ void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap 
 
       // aggregate the scores between the two sets of edges
       double edgeScore = pow(_aggregateScores(scores), _dampening) * _scoreVertices(v1, v2);
-      if (v1->getElementId() == ElementId::node(-1803252))
-      {
-        LOG_VAR(em);
-        LOG_VAR(v1);
-        LOG_VAR(v2);
-        LOG_VAR(scores);
-        LOG_VAR(edgeScore);
-      }
 
       // set this vertex pair's score to the new aggregated score.
       jt.value() = edgeScore;

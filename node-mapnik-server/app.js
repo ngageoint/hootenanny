@@ -60,6 +60,10 @@ var acquire = function(id, mapid, color, stylesheet, options, callback) {
                 stylesheet = stylesheet.replace(/\${COLOR}/g, color || 'rgb(255, 85, 153)');
                 var obj = new mapnik.Map(options.width || 256, options.height || 256);
                 obj.fromString(stylesheet, {strict: true}, function(err, obj) {
+                    if (err) {
+                      console.log(err);
+                      return;
+                    }
                     if (options.bufferSize) {
                         obj.bufferSize = options.bufferSize;
                     }
@@ -114,7 +118,6 @@ http.createServer(function(req, res) {
         && query.y !== undefined
         && query.z !== undefined
         && query.color !== undefined
-        && query.name !== undefined
         && query.mapid !== undefined
     ) {
       var id = query.mapid + '_' + query.color;
@@ -154,7 +157,7 @@ http.createServer(function(req, res) {
         res.writeHead(500, {
           'Content-Type': 'text/plain'
         });
-        res.end('no x,y,z,color,name,mapid provided!');
+        res.end('no x,y,z,color,mapid provided!');
     }
 }).listen(port);
 

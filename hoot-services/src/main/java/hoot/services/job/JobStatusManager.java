@@ -28,22 +28,18 @@ package hoot.services.job;
 
 import static hoot.services.job.JobStatusManager.JOB_STATUS.*;
 import static hoot.services.models.db.QJobStatus.jobStatus;
-import static hoot.services.utils.DbUtils.getConfiguration;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.querydsl.sql.Configuration;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLInsertClause;
-import com.querydsl.sql.dml.SQLUpdateClause;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.JobStatus;
-import hoot.services.models.db.QJobStatus;
 
 
 /**
@@ -52,11 +48,10 @@ import hoot.services.models.db.QJobStatus;
  *         This job status management class. It tracks current execution status.
  *
  */
+@Component
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
-
-    private final Connection connection;
-
 
     public enum JOB_STATUS {
         RUNNING, COMPLETE, FAILED, UNKNOWN;
@@ -74,9 +69,7 @@ public class JobStatusManager {
         }
     }
 
-    public JobStatusManager(Connection conn) {
-        this.connection = conn;
-    }
+    public JobStatusManager() {}
 
     /**
      * Creates job status. It sets JOB_STATUS_RUNNING
@@ -178,15 +171,12 @@ public class JobStatusManager {
      */
     public JobStatus getJobStatusObj(String jobId) {
         try {
-            return new SQLQuery<>(connection, getConfiguration())
-                    .select(jobStatus)
-                    .from(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .fetchOne();
+            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);
         }
+
         return null;
     }
 
@@ -196,8 +186,7 @@ public class JobStatusManager {
      */
     private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) {
         try {
-            boolean isComplete = (jobStatus != RUNNING);
-            updateJobStatus(jobId, jobStatus.ordinal(), isComplete, statusDetail, connection);
+            updateJobStatus(jobId, jobStatus, statusDetail);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -209,48 +198,45 @@ public class JobStatusManager {
      * Updates job status. If the record does not exist then creates.
      *
      * @param jobId
-     * @param jobStatus
-     * @param isComplete
-     * @param conn
+     * @param newStatus
      */
-    private static void updateJobStatus(String jobId, int jobStatus, boolean isComplete, String statusDetail, Connection conn) {
-        Configuration configuration = getConfiguration();
-
-        JobStatus stat = new SQLQuery<>(conn, configuration)
-                .select(QJobStatus.jobStatus)
-                .from(QJobStatus.jobStatus)
-                .where(QJobStatus.jobStatus.jobId.eq(jobId))
+    private void updateJobStatus(String jobId, JOB_STATUS newStatus, String statusDetail) {
+        JobStatus currentJobStatus = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
                 .fetchOne();
 
-        if (stat != null) {
-            if (isComplete) {
-                stat.setPercentComplete(100.0);
-                stat.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+                currentJobStatus.setPercentComplete(100.0);
+                currentJobStatus.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             }
 
-            stat.setStatus(jobStatus);
+            currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {
-                stat.setStatusDetail(statusDetail);
+                currentJobStatus.setStatusDetail(statusDetail);
             }
 
-            new SQLUpdateClause(conn, configuration, QJobStatus.jobStatus)
-                    .populate(stat)
-                    .where(QJobStatus.jobStatus.jobId.eq(stat.getJobId()))
-                    .execute();
+            createQuery().update(jobStatus).where(jobStatus.jobId.eq(jobId)).populate(currentJobStatus).execute();
         }
-        else {
-            stat = new JobStatus();
-            stat.setJobId(jobId);
-            stat.setStatus(jobStatus);
+        else if (currentJobStatus == null) {
+            currentJobStatus = new JobStatus();
+            currentJobStatus.setJobId(jobId);
+            currentJobStatus.setStatus(newStatus.ordinal());
             Timestamp ts = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            stat.setStart(ts);
+            currentJobStatus.setStart(ts);
 
-            if (isComplete) {
-                stat.setEnd(ts);
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+                currentJobStatus.setPercentComplete(100.0);
+                currentJobStatus.setEnd(ts);
+            }
+            else {
+                currentJobStatus.setPercentComplete(0.0);
             }
 
-            new SQLInsertClause(conn, configuration, QJobStatus.jobStatus).populate(stat).execute();
+           createQuery().insert(jobStatus).populate(currentJobStatus).execute();
         }
     }
 }

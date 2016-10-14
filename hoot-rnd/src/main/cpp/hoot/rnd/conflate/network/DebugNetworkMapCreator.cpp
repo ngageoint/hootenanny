@@ -32,7 +32,8 @@
 namespace hoot
 {
 
-DebugNetworkMapCreator::DebugNetworkMapCreator()
+DebugNetworkMapCreator::DebugNetworkMapCreator(double matchThreshold) :
+  _matchThreshold(matchThreshold)
 {
 }
 
@@ -53,7 +54,7 @@ void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeSc
 
 void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore)
 {
-  if (edgeScore->getScore() >= 1e-6)
+  if (edgeScore->getScore() >= 1e-4)
   {
     ConstNodePtr n1 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString1()->getMembers());
     ConstNodePtr n2 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString2()->getMembers());
@@ -61,19 +62,47 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     WayPtr w(new Way(Status::Invalid, map->createNextWayId(), -1));
     w->addNode(n1->getId());
     w->addNode(n2->getId());
-    w->getTags().set("hoot:edge:score12", edgeScore->getScore12());
-    w->getTags().set("hoot:edge:score21", edgeScore->getScore21());
-    w->getTags().set("hoot:edge:score", edgeScore->getScore());
-    w->getTags().set("hoot:edge:id", edgeScore->getUid());
-    if (edgeScore->getScore() >= 0.15)
+    Tags tags;
+    tags.set("hoot:edge:score12", edgeScore->getScore12());
+    tags.set("hoot:edge:score21", edgeScore->getScore21());
+    tags.set("hoot:edge:score", edgeScore->getScore());
+    tags.set("hoot:edge:id", edgeScore->getUid());
+    tags.set("hoot:edge", edgeScore->toString());
+
+    RelationPtr r(new Relation(Status::Invalid, map->createNextRelationId(), -1, "match"));
+    r->setTags(tags);
+    r->addElement("visual", w);
+
+    foreach (const EdgeString::EdgeEntry& ee,
+      edgeScore->getEdgeMatch()->getString1()->getAllEdges())
     {
-      w->getTags().set("highway", "cycleway");
+      foreach (ConstElementPtr e, ee.getEdge()->getMembers())
+      {
+        r->addElement("string1", e);
+      }
+    }
+
+    foreach (const EdgeString::EdgeEntry& ee,
+      edgeScore->getEdgeMatch()->getString2()->getAllEdges())
+    {
+      foreach (ConstElementPtr e, ee.getEdge()->getMembers())
+      {
+        r->addElement("string2", e);
+      }
+    }
+
+    map->addRelation(r);
+
+    if (edgeScore->getScore() >= _matchThreshold)
+    {
+      tags.set("highway", "cycleway");
     }
     else
     {
       // a hack to make it easier to look at.
-      w->getTags().set("highway", "dashpurple");
+      tags.set("highway", "dashpurple");
     }
+    w->setTags(tags);
 
     map->addWay(w);
   }
@@ -92,6 +121,7 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
     w->getTags().set("hoot:vertex:score12", vertexScore->getScore12());
     w->getTags().set("hoot:vertex:score21", vertexScore->getScore21());
     w->getTags().set("hoot:vertex:score", vertexScore->getScore());
+    w->getTags().set("hoot:vertex", vertexScore->toString());
     if (vertexScore->getScore() >= 0.15)
     {
       w->getTags().set("highway", "footway");

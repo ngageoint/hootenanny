@@ -56,8 +56,8 @@ void NetworkMatcher::_createEdge2Index()
     _index2Edge.push_back(it.value());
 
     Box b(2);
-    Meters searchRadius = _details2->getSearchRadius(it.value());
-    Envelope env(_details2->getEnvelope(it.value()));
+    Meters searchRadius = _details->getSearchRadius(it.value());
+    Envelope env(_details->getEnvelope(it.value()));
     env.expandBy(searchRadius);
 
     b.setBounds(0, env.getMinX(), env.getMaxX());
@@ -98,8 +98,8 @@ void NetworkMatcher::_createVertex2Index()
     _index2Vertex.push_back(it.value());
 
     Box b(2);
-    Meters searchRadius = _details2->getSearchRadius(it.value());
-    Envelope env(_details2->getEnvelope(it.value()));
+    Meters searchRadius = _details->getSearchRadius(it.value());
+    Envelope env(_details->getEnvelope(it.value()));
     env.expandBy(searchRadius);
 
     b.setBounds(0, env.getMinX(), env.getMaxX());

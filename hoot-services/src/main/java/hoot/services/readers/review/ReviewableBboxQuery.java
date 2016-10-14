@@ -30,8 +30,8 @@ import static com.querydsl.sql.SQLExpressions.select;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
 import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,8 +58,8 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
 
     private final Long relationId;
 
-    ReviewableBboxQuery(Connection connection, long mapid, long relationid) {
-        super(connection, mapid);
+    ReviewableBboxQuery(long mapid, long relationid) {
+        super(mapid);
         relationId = relationid;
     }
 
@@ -171,7 +171,7 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
                         .from(currentWayNodes)
                         .where(currentWayNodes.wayId.in(currentRelationMembersSub));
 
-        List<Tuple> result = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+        List<Tuple> result = createQuery(this.getMapId())
                 .select(currentNodes.latitude.min(),
                         currentNodes.latitude.max(),
                         currentNodes.longitude.min(),
@@ -201,11 +201,9 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
                 .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)));
 
-        List<Tuple> result = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
-                .select(currentNodes.latitude.min(),
-                        currentNodes.latitude.max(),
-                        currentNodes.longitude.min(),
-                        currentNodes.longitude.min())
+        List<Tuple> result = createQuery(this.getMapId())
+                .select(currentNodes.latitude.min(), currentNodes.latitude.max(),
+                        currentNodes.longitude.min(), currentNodes.longitude.min())
                 .from(currentNodes)
                 .where(currentNodes.id.in(sub))
                 .fetch();
@@ -226,13 +224,11 @@ class ReviewableBboxQuery extends ReviewableQueryBase implements IReviewableQuer
      * @return - List of relation member ids
      */
     private List<Long> getRelationMembers(long relationId) {
-        List<Long> relationMemberIds = new SQLQuery<>(this.getConnection(), DbUtils.getConfiguration(this.getMapId()))
+        return createQuery(this.getMapId())
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(relationId)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)))
                 .fetch();
-
-        return relationMemberIds;
     }
 }

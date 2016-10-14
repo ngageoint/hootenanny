@@ -11,7 +11,10 @@ hoot --version --debug
 export HOOT_TEST_DIFF=--diff
 # Run all of the tests - from the "test-all" target
 echo "Running core glacial tests..."
-bin/HootTest $HOOT_TEST_DIFF --glacial
+# Removing Poi test to troubleshoot hanging jobs on Jenkins
+bin/HootTest $HOOT_TEST_DIFF --glacial --exclude=".*ConflatePoiStatsTest.*"
+#bin/HootTest $HOOT_TEST_DIFF --glacial
+
 
 echo "Running pretty-pipes tests..."
 make -sj`nproc` pp-test

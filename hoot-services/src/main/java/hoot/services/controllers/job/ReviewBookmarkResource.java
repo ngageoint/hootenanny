@@ -27,8 +27,8 @@
 package hoot.services.controllers.job;
 
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +51,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.querydsl.sql.Configuration;
-import com.querydsl.sql.dml.SQLDeleteClause;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkDelRequest;
@@ -63,19 +63,26 @@ import hoot.services.models.review.ReviewBookmarksGetResponse;
 import hoot.services.models.review.ReviewBookmarksSaveResponse;
 import hoot.services.models.review.ReviewBookmarksStatResponse;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 
 
 /**
  * Service endpoint for the conflated data review process
  */
+@Controller
 @Path("/review/bookmarks")
+@Transactional
 public class ReviewBookmarkResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarkResource.class);
 
-    public ReviewBookmarkResource() {
-    }
+    @Autowired
+    private ReviewBookmarksSaver reviewBookmarksSaver;
+
+    @Autowired
+    private ReviewBookmarkRetriever reviewBookmarkRetriever;
+
+
+    public ReviewBookmarkResource() {}
 
     /**
      * To create or update review bookmark
@@ -94,7 +101,7 @@ public class ReviewBookmarkResource {
     public ReviewBookmarksSaveResponse createReviewBookmark(ReviewBookmarkSaveRequest request) {
         ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             JSONObject oDetail = request.getDetail();
             Object oNotes = oDetail.get("bookmarknotes");
             if (oNotes != null) {
@@ -119,8 +126,7 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            ReviewBookmarksSaver saver = new ReviewBookmarksSaver(conn);
-            long nSaved = saver.save(request);
+            long nSaved = reviewBookmarksSaver.save(request);
             response.setSavedCount(nSaved);
         }
         catch (WebApplicationException wae) {
@@ -159,14 +165,13 @@ public class ReviewBookmarkResource {
                                                         @QueryParam("relationId") Long relationId) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
+        try {
             List<ReviewBookmarks> reviewBookmarks;
             if (bookmarkId != null) {
-                reviewBookmarks = retriever.retrieve(bookmarkId);
+                reviewBookmarks = reviewBookmarkRetriever.retrieve(bookmarkId);
             }
             else {
-                reviewBookmarks = retriever.retrieve(mapId, relationId);
+                reviewBookmarks = reviewBookmarkRetriever.retrieve(mapId, relationId);
             }
 
             for (ReviewBookmarks mk : reviewBookmarks) {
@@ -262,7 +267,7 @@ public class ReviewBookmarkResource {
                                                            @QueryParam("layerFilterVal") String filterByLayerVal) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             boolean isAsc = true;
             if (asc != null) {
                 isAsc = (asc.equalsIgnoreCase("true"));
@@ -301,8 +306,8 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            List<ReviewBookmarks> res = retriever.retrieveAll(orderByCol, isAsc, limit, offsetCnt, creatorArray, layerArray);
+            List<ReviewBookmarks> res = reviewBookmarkRetriever.retrieveAll(orderByCol, isAsc, limit,
+                    offsetCnt, creatorArray, layerArray);
 
             for (ReviewBookmarks mk : res) {
                 Object oDetail = mk.getDetail();
@@ -347,10 +352,9 @@ public class ReviewBookmarkResource {
     public ReviewBookmarksStatResponse getAllReviewBookmarkStat() {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
-            long nCnt = retriever.getBookmarksCount();
-            response.setTotalCount(nCnt);
+        try {
+            long bookmarksCount = reviewBookmarkRetriever.getBookmarksCount();
+            response.setTotalCount(bookmarksCount);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -380,9 +384,9 @@ public class ReviewBookmarkResource {
         ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(bookmarkId);
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 
-        try (Connection connection = DbUtils.createConnection()) {
-            long nDel = remove(request, connection);
-            response.setDeleteCount(nDel);
+        try {
+            long count = remove(request);
+            response.setDeleteCount(count);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -402,20 +406,9 @@ public class ReviewBookmarkResource {
      *            - Request containing mapid and relationid
      * @return - total numbers of removed
      */
-    private static long remove(ReviewBookmarkDelRequest request, Connection connection) {
-        return createDelClause(request, connection).execute();
-    }
-
-    /**
-     * Delete clause
-     *
-     * @param request
-     *            - Request containing bookmarkid
-     * @return - toal numbers of removed
-     */
-    private static SQLDeleteClause createDelClause(ReviewBookmarkDelRequest request, Connection connection) {
-        Configuration configuration = DbUtils.getConfiguration();
-        return new SQLDeleteClause(connection, configuration, reviewBookmarks)
-                .where(reviewBookmarks.id.eq(request.getBookmarkId()));
+    private static long remove(ReviewBookmarkDelRequest request) {
+        return createQuery().delete(reviewBookmarks)
+                .where(reviewBookmarks.id.eq(request.getBookmarkId()))
+                .execute();
     }
 }

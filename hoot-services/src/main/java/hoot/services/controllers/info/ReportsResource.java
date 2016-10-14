@@ -54,14 +54,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/reports")
 public class ReportsResource {
     private static final Logger logger = LoggerFactory.getLogger(ReportsResource.class);
 
-    public ReportsResource() {
-    }
+    private static final String REPORTS_PATH = HOME_FOLDER + "/" + RPT_STORE_PATH;
+
+    public ReportsResource() {}
 
     /**
      * Gets the file stream of requested report.
@@ -161,10 +164,10 @@ public class ReportsResource {
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject res = new JSONObject();
 
-        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
+        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
 
         if (metaFolder != null) {
-            String metaDataPath = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + id + "/meta.data";
+            String metaDataPath = REPORTS_PATH + "/" + id + "/meta.data";
             File file = new File(metaDataPath);
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");
@@ -184,8 +187,7 @@ public class ReportsResource {
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
-        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File dir = new File(storePath);
+        File dir = new File(REPORTS_PATH);
         if (dir.exists()) {
             List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, new NotFileFilter(TrueFileFilter.INSTANCE),
                     DirectoryFileFilter.DIRECTORY);
@@ -194,7 +196,7 @@ public class ReportsResource {
                     if (file.isDirectory()) {
                         String id = file.getName();
                         String absPath = file.getAbsolutePath();
-                        if (!absPath.equals(storePath)) {
+                        if (!absPath.equals(REPORTS_PATH)) {
                             JSONObject meta = getMetaData(id);
                             meta.put("id", id);
                             sorted.put(meta.get("name").toString(), meta);
@@ -233,7 +235,7 @@ public class ReportsResource {
     private static boolean deleteReport(String id) throws IOException {
         boolean deleted = false;
 
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(HOME_FOLDER + "/" + RPT_STORE_PATH, id);
+        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
         if ((folder != null) && folder.exists()) {
             FileUtils.forceDelete(folder);
             deleted = true;

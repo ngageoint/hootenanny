@@ -37,23 +37,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ServerControllerBase {
+public abstract class ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ServerControllerBase.class);
 
-    private Process serverProc;
-
-    protected Process startServer(String currPort, String currThreadCnt, String serverScript) throws IOException {
+    protected static Process startServer(String port, String threadCount, String serverScript) throws IOException {
         List<String> command = new ArrayList<>();
         command.add("node");
         command.add(serverScript);
-        command.add("port=" + currPort);
-        command.add("threadcount=" + currThreadCnt);
+        command.add("port=" + port);
+        command.add("threadcount=" + threadCount);
 
         ProcessBuilder builder = new ProcessBuilder(command);
 
         // This combines stdout and stderr into one stream
         builder.redirectErrorStream(true);
-        serverProc = builder.start();
+        final Process serverProcess = builder.start();
 
         // Pumping the output to service output stream
         // Also, if there is no handler to pump out the std and stderr stream
@@ -63,7 +61,7 @@ public class ServerControllerBase {
             @Override
             public void run() {
                 try {
-                    processStreamHandler(serverProc, true);
+                    processStreamHandler(serverProcess);
                 }
                 catch (IOException ioe) {
                     logger.error("Error during a call to processStreamHandler()", ioe);
@@ -71,10 +69,10 @@ public class ServerControllerBase {
             }
         }.start();
 
-        return serverProc;
+        return serverProcess;
     }
 
-    public static void stopServer(String processSignature) throws IOException {
+    protected static void stopServer(String processSignature) throws IOException {
         closeAllServers(processSignature);
     }
 
@@ -83,49 +81,49 @@ public class ServerControllerBase {
         return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 
-    public static boolean getStatus(Process serverProc) {
+    protected static boolean getStatus(Process serverProc) {
         // We first get the server process ID
-        Integer transServerPID = null;
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
-            transServerPID = getProcessId();
+            Integer transServerPID = getProcessId();
+
+            // And then gets the status
+            boolean isRunning = false;
+            if (transServerPID > 0) {
+                try {
+                    Runtime runtime = Runtime.getRuntime();
+
+                    // kill -0 checks if a process with the given PID is running
+                    // and you have the permission to send a signal to it.
+                    Process statusProcess = runtime.exec(new String[] { "kill", "-0", String.valueOf(transServerPID)});
+
+                    // usually we should not get any output but just in case if we get some error..
+                    processStreamHandler(statusProcess);
+
+                    int exitCode = statusProcess.waitFor();
+                    isRunning = (exitCode == 0);
+                }
+                catch (Exception e) {
+                    throw new RuntimeException("Error running 'kill -0 " + transServerPID + "'", e);
+                }
+            }
+
+            return isRunning;
         }
         else {
             logger.error("server has started but failed to get process ID."
-                    + " You will not be able to stop server through service. To stop use manual process!");
+                    + " You will not be able to stop server through the service. To stop, use the manual process!");
+
+            return false;
         }
-
-        // And then gets the status
-        boolean isRunning = false;
-        if ((transServerPID != null) && (transServerPID > 0)) {
-            try {
-                Runtime runtime = Runtime.getRuntime();
-
-                Process statusProcess = runtime.exec(new String[] { "kill", "-0", String.valueOf(transServerPID)});
-
-                // usually we should not get any output but just in case if we get some error..
-                processStreamHandler(statusProcess, false);
-
-                int exitCode = statusProcess.waitFor();
-                if (exitCode == 0) {
-                    isRunning = true;
-                }
-            }
-            catch (Exception e) {
-                logger.error("Error running 'kill -0 {}'", transServerPID, e);
-                isRunning = false;
-            }
-        }
-
-        return isRunning;
     }
 
     private static void closeAllServers(String processSignature) throws IOException {
         // Note that we kill process that contains the name of server script
         Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
-        processStreamHandler(killProc, false);
+        processStreamHandler(killProc);
     }
 
-    private static void processStreamHandler(Process proc, boolean doSendToStdout) throws IOException {
+    private static void processStreamHandler(Process proc) throws IOException {
         try (InputStreamReader stdStream = new InputStreamReader(proc.getInputStream())) {
             try (BufferedReader stdInput = new BufferedReader(stdStream)) {
                 try (InputStreamReader stdErrStream = new InputStreamReader(proc.getErrorStream())) {
@@ -133,16 +131,10 @@ public class ServerControllerBase {
                         String s;
                         while ((s = stdInput.readLine()) != null) {
                             logger.info(s);
-                            if (doSendToStdout) {
-                                System.out.println(s);
-                            }
                         }
 
                         while ((s = stdError.readLine()) != null) {
                             logger.error(s);
-                            if (doSendToStdout) {
-                                System.out.println(s);
-                            }
                         }
                     }
                 }

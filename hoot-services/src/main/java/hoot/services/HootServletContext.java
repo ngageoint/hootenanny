@@ -38,21 +38,15 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import hoot.services.controllers.ogr.TranslatorResource;
-import hoot.services.controllers.services.P2PResource;
+import hoot.services.controllers.ogr.P2PResource;
 
 
 public class HootServletContext implements ServletContextListener {
 
-    private TranslatorResource transRes;
-    private P2PResource p2PRes;
-
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        transRes = new TranslatorResource();
-        transRes.startTranslationService();
-
-        p2PRes = new P2PResource();
-        p2PRes.startP2PService();
+        TranslatorResource.startTranslationService();
+        P2PResource.startP2PService();
 
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
@@ -82,7 +76,7 @@ public class HootServletContext implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         TranslatorResource.stopTranslationService();
-        p2PRes.stopP2PService();
+        P2PResource.stopP2PService();
     }
 
     private static void createTileServerPath(String path) throws IOException {

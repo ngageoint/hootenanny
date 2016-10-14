@@ -27,8 +27,8 @@
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
 
+#include "EdgeSublineMatch.h"
 #include "IndexedEdgeMatchSet.h"
-#include "MatchScoreProvider.h"
 #include "NetworkDetails.h"
 
 namespace hoot
@@ -46,24 +46,42 @@ public:
    */
   void addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
+  void setAddStubsInBothDirections(bool bidirectionalStubs) { _bidirectionalStubs = bidirectionalStubs; }
+
+  void setIncludePartialMatches(bool include) { _includePartialMatches = include; }
+
 private:
 
+  bool _bidirectionalStubs;
   NetworkDetailsPtr _details;
+  bool _includePartialMatches;
   IndexedEdgeMatchSetPtr _matchSet;
   ConstOsmNetworkPtr _n1, _n2;
   int _steps;
 
-  void _addEdgeMatches(EdgeMatchPtr em);
+  bool _addEdgeMatches(ConstEdgeMatchPtr em);
 
-  void _addEdgeNeighborsToEnd(EdgeMatchPtr em, QList<ConstNetworkEdgePtr> neighbors1,
+  bool _addEdgeNeighborsToEnd(ConstEdgeMatchPtr em, QSet<ConstNetworkEdgePtr> neighbors1,
+    QSet<ConstNetworkEdgePtr> neighbors2);
+
+  bool _addEdgeNeighborsToStart(ConstEdgeMatchPtr em, QList<ConstNetworkEdgePtr> neighbors1,
     QList<ConstNetworkEdgePtr> neighbors2);
 
-  void _addEdgeNeighborsToStart(EdgeMatchPtr em, QList<ConstNetworkEdgePtr> neighbors1,
-    QList<ConstNetworkEdgePtr> neighbors2);
+  bool _addPartialMatch(ConstEdgeMatchPtr em);
 
   /// @todo replace with a real method
-  double _scoreMatch(EdgeMatchPtr em) const;
+  double _scoreMatch(ConstEdgeMatchPtr em) const;
+
+  EdgeMatchPtr _trimFromEdge(ConstEdgeMatchPtr em);
+
+  EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
 };
+
+typedef shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
+typedef shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+
+// not implemented
+bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);
 
 }
 

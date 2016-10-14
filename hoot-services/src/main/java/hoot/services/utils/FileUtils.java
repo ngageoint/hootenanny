@@ -76,7 +76,6 @@ public final class FileUtils {
 
     public static boolean validateFilePath(String expectedPath, String actualPath) {
         String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
-        boolean isValid = expectedPath.equals(path);
-        return isValid;
+        return expectedPath.equals(path);
     }
 }

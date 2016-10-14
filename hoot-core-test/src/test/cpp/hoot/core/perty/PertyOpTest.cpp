@@ -189,10 +189,10 @@ public:
 
     PertyOp uut;
     uut.setGridSpacing(gridSpacing);
-    uut.setRandomError(0.0, 0.0);
+    //uut.setRandomError(0.0, 0.0);
     uut.setSeed(1);
-    uut.setSystematicError(10.0, 10.0);
-    uut.setCsmParameters(9, 10);
+    //uut.setSystematicError(10.0, 10.0);
+    //uut.setCsmParameters(9, 10);
     //uut.apply(map);
 //    for (int i = 0; i < 100; i++)
 //    {

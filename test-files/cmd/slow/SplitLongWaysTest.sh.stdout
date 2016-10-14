@@ -1,9 +1,1 @@
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40:splitlongwaystest
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40:splitlongwaystest
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 136) < source = tdsv40
-01:04:41.278 WARN  ...core/scoring/MapComparator.cpp( 137) > source = tdsv40:splitlongwaystest
+Test Complete

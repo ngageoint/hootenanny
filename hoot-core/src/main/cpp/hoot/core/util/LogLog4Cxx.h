@@ -47,6 +47,7 @@ log4cxx::LevelPtr toLog4CxxLevel(Log::WarningLevel l);
     LOG4CXX_LOGLS(hoot::getLogger(), log4cxxLevel, ss_.str()); \
   }}
 
+#define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
 #define LOG_VERBOSE(str) { LOG_LEVEL(hoot::Log::Verbose, str) }
 #define LOG_INFO(str) { LOG_LEVEL(hoot::Log::Info, str) }

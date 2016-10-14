@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-325319' action='modify' visible='true' lat='-0.2885656669' lon='3.86566703988' />
+  <node id='-325320' action='modify' visible='true' lat='-0.28903263911' lon='3.86566703988' />
+  <node id='-325321' action='modify' visible='true' lat='-0.28966871585' lon='3.86566023988' />
+  <node id='-325322' action='modify' visible='true' lat='-0.29014232843' lon='3.86556553988' />
+  <node id='-325323' action='modify' visible='true' lat='-0.29060930197' lon='3.86530843988' />
+  <node id='-325324' action='modify' visible='true' lat='-0.29106269523' lon='3.86490913988' />
+  <node id='-325325' action='modify' visible='true' lat='-0.2888769146' lon='3.86553173988' />
+  <node id='-325326' action='modify' visible='true' lat='-0.28946571042' lon='3.86517303988' />
+  <node id='-325327' action='modify' visible='true' lat='-0.28980401932' lon='3.86494973988' />
+  <node id='-325328' action='modify' visible='true' lat='-0.29021677054' lon='3.86483473988' />
+  <node id='-325329' action='modify' visible='true' lat='-0.2905957213' lon='3.86478733988' />
+  <node id='-325330' action='modify' visible='true' lat='-0.29098151296' lon='3.86480083988' />
+  <node id='-325331' action='modify' visible='true' lat='-0.29117506278' lon='3.86484305345' />
+  <node id='-325332' action='modify' visible='true' lat='-0.29117506278' lon='3.86479208898' />
+  <node id='-325530' action='modify' visible='true' lat='-0.28815291691' lon='3.86566703988' />
+  <node id='-325532' action='modify' visible='true' lat='-0.28617890388' lon='3.86594723988' />
+  <node id='-325533' action='modify' visible='true' lat='-0.28685360651' lon='3.86574143988' />
+  <node id='-325534' action='modify' visible='true' lat='-0.28725961553' lon='3.86570083988' />
+  <node id='-325535' action='modify' visible='true' lat='-0.28619550233' lon='3.86750703988' />
+  <node id='-325536' action='modify' visible='true' lat='-0.28641379727' lon='3.86724373988' />
+  <node id='-325537' action='modify' visible='true' lat='-0.28730025669' lon='3.86618133988' />
+  <node id='-325538' action='modify' visible='true' lat='-0.28786188963' lon='3.86582943988' />
+  <node id='-359223' action='modify' visible='true' lat='-0.28654041559' lon='3.86689685645' />
+  <node id='-359224' action='modify' visible='true' lat='-0.28721874017' lon='3.86615605645' />
+  <node id='-359225' action='modify' visible='true' lat='-0.28791285931' lon='3.86561505645' />
+  <node id='-359226' action='modify' visible='true' lat='-0.28878473455' lon='3.86517675645' />
+  <node id='-359227' action='modify' visible='true' lat='-0.28983185179' lon='3.86483335645' />
+  <node id='-359228' action='modify' visible='true' lat='-0.2904498219' lon='3.86470465645' />
+  <node id='-359229' action='modify' visible='true' lat='-0.29117171006' lon='3.8647160713' />
+  <way id='-325316' action='modify' visible='true'>
+    <nd ref='-325319' />
+    <nd ref='-325320' />
+    <nd ref='-325321' />
+    <nd ref='-325322' />
+    <nd ref='-325323' />
+    <nd ref='-325324' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='name' v='Gereja' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-325317' action='modify' visible='true'>
+    <nd ref='-325319' />
+    <nd ref='-325325' />
+    <nd ref='-325326' />
+    <nd ref='-325327' />
+    <nd ref='-325328' />
+    <nd ref='-325329' />
+    <nd ref='-325330' />
+    <nd ref='-325331' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-325318' action='modify' visible='true'>
+    <nd ref='-325332' />
+    <nd ref='-325324' />
+    <tag k='bridge' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='layer' v='1' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-325527' action='modify' visible='true'>
+    <nd ref='-325530' />
+    <nd ref='-325319' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='name' v='Gereja' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-325528' action='modify' visible='true'>
+    <nd ref='-325532' />
+    <nd ref='-325533' />
+    <nd ref='-325534' />
+    <nd ref='-325530' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-325529' action='modify' visible='true'>
+    <nd ref='-325535' />
+    <nd ref='-325536' />
+    <nd ref='-325537' />
+    <nd ref='-325538' />
+    <nd ref='-325530' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='name' v='Gereja' />
+    <tag k='oneway' v='yes' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-359222' action='modify' visible='true'>
+    <nd ref='-359223' />
+    <nd ref='-359224' />
+    <nd ref='-359225' />
+    <nd ref='-359226' />
+    <nd ref='-359227' />
+    <nd ref='-359228' />
+    <nd ref='-359229' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='motorway_link' />
+    <tag k='lanes' v='3' />
+    <tag k='oneway' v='yes' />
+  </way>
+</osm>

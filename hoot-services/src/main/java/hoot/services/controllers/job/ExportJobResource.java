@@ -29,7 +29,6 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,16 +52,19 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.wfs.WfsManager;
-import hoot.services.utils.DataDefinitionManager;
-import hoot.services.utils.DbUtils;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
+import hoot.services.utils.DbUtils;
 
 
+@Controller
 @Path("/export")
+@Transactional
 public class ExportJobResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
@@ -112,7 +114,7 @@ public class ExportJobResource extends JobControllerBase {
         String jobId = UUID.randomUUID().toString();
         jobId = "ex_" + jobId.replace("-", "");
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             JSONArray commandArgs = parseParams(params);
 
             JSONObject arg = new JSONObject();
@@ -161,7 +163,7 @@ public class ExportJobResource extends JobControllerBase {
                 postChainJobRquest(jobId, jobArgs.toJSONString());
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
-                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, conn);
+                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs);
                 postJobRquest(jobId, createPostBody(commandArgs));
             }
             else {
@@ -200,7 +202,7 @@ public class ExportJobResource extends JobControllerBase {
         return new JobId(jobId);
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, Connection conn) {
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs) {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
@@ -232,10 +234,10 @@ public class ExportJobResource extends JobControllerBase {
         arg.put("writeStdOutToStatusDetail", "true");
         commandArgs.add(arg);
 
-        Map conflatedMap = getConflatedMap(commandArgs, conn);
+        Map conflatedMap = getConflatedMap(commandArgs);
 
         //pass the export timestamp to the export bash script
-        addMapForExportTag(conflatedMap, commandArgs, conn);
+        addMapForExportTag(conflatedMap, commandArgs);
 
         //pass the export aoi to the export bash script
         setAoi(conflatedMap, commandArgs);
@@ -243,9 +245,9 @@ public class ExportJobResource extends JobControllerBase {
         return commandArgs;
     }
 
-    private Map getConflatedMap(JSONArray commandArgs, Connection conn) {
+    private Map getConflatedMap(JSONArray commandArgs) {
         String mapName = getParameterValue("input", commandArgs);
-        List<Long> mapIds = getMapIdsByName(mapName, conn);
+        List<Long> mapIds = getMapIdsByName(mapName);
 
         // we don't expect the services to try to export a map that has multiple
         // name entries, but check for it anyway
@@ -260,19 +262,19 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Map conflatedMap = new Map(mapIds.get(0), conn);
+        Map conflatedMap = new Map(mapIds.get(0));
         conflatedMap.setDisplayName(mapName);
         return conflatedMap;
     }
 
     // adding this to satisfy the mock
-    List<Long> getMapIdsByName(String conflatedMapName, Connection conn) {
-        return DbUtils.getMapIdsByName(conn, conflatedMapName);
+    List<Long> getMapIdsByName(String conflatedMapName) {
+        return DbUtils.getMapIdsByName(conflatedMapName);
     }
 
     // adding this to satisfy the mock
-    java.util.Map<String, String> getMapTags(long mapId, Connection conn) {
-        return DbUtils.getMapsTableTags(mapId, conn);
+    java.util.Map<String, String> getMapTags(long mapId) {
+        return DbUtils.getMapsTableTags(mapId);
     }
 
     // adding this to satisfy the mock
@@ -280,8 +282,8 @@ public class ExportJobResource extends JobControllerBase {
         return map.getBounds();
     }
 
-    private void addMapForExportTag(Map map, JSONArray commandArgs, Connection conn) {
-        java.util.Map<String, String> tags = getMapTags(map.getId(), conn);
+    private void addMapForExportTag(Map map, JSONArray commandArgs) {
+        java.util.Map<String, String> tags = getMapTags(map.getId());
 
         if (!tags.containsKey("osm_api_db_export_time")) {
             String msg = "Error exporting data.  Map with ID: " + map.getId()
@@ -306,7 +308,7 @@ public class ExportJobResource extends JobControllerBase {
      * To retrieve the output from job make Get request.
      *
      * GET hoot-services/job/export/[job id from export job]?outputname=[user
-     * defined name]&removecache=[true | false]
+     * defined name]&removecache=[true | false]&ext=[file extension override from zip]
      *
      * @param id
      *            ?
@@ -316,6 +318,8 @@ public class ExportJobResource extends JobControllerBase {
      * @param remove
      *            parameter controls if the output file from export job should
      *            be delete when Get request completes.
+     * @param ext
+     *            parameter overrides the file extension of the file being downloaded
      * @return Octet stream
      */
     @GET
@@ -323,8 +327,10 @@ public class ExportJobResource extends JobControllerBase {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportFile(@PathParam("id") String id,
                                @QueryParam("outputname") String outputname,
-                               @QueryParam("removecache") String remove) {
+                               @QueryParam("removecache") String remove,
+                               @QueryParam("ext") String ext) {
         File out = null;
+        String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
         try {
             File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
 
@@ -335,7 +341,7 @@ public class ExportJobResource extends JobControllerBase {
                     delPath = workingFolder;
                 }
 
-                out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, "zip");
+                out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
 
                 if ((out == null) || !out.exists()) {
                     throw new NativeInterfaceException("Missing output file",
@@ -361,7 +367,7 @@ public class ExportJobResource extends JobControllerBase {
         }
 
         ResponseBuilder rBuild = Response.ok(out);
-        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + ".zip");
+        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
         return rBuild.build();
     }
@@ -388,8 +394,8 @@ public class ExportJobResource extends JobControllerBase {
             WfsManager wfsMan = new WfsManager();
             wfsMan.removeWfsResource(id);
 
-            List<String> tbls = DataDefinitionManager.getTablesList(WFS_STORE_DB, id);
-            DataDefinitionManager.deleteTables(tbls, WFS_STORE_DB);
+            List<String> tbls = DbUtils.getTablesList(id);
+            DbUtils.deleteTables(tbls);
         }
         catch (WebApplicationException wae) {
             throw wae;

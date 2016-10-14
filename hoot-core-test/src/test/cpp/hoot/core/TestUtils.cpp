@@ -47,6 +47,8 @@
 namespace hoot
 {
 
+shared_ptr<TestUtils> TestUtils::_theInstance;
+
 TestUtils::TestUtils()
 {
 }
@@ -98,7 +100,7 @@ WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce, 
 }
 
 WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,
-                            Meters circularError)
+                            Meters circularError, Tags tags)
 {
   WayPtr way(new Way(status, map->createNextWayId(), circularError));
   foreach (NodePtr node, nodes)
@@ -106,6 +108,7 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
     map->addNode(node);
     way->addNode(node->getId());
   }
+  way->setTags(tags);
   map->addWay(way);
   return way;
 }
@@ -166,6 +169,16 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
+shared_ptr<TestUtils> TestUtils::getInstance()
+{
+  if (!_theInstance)
+  {
+    _theInstance.reset(new TestUtils());
+  }
+
+  return _theInstance;
+}
+
 std::string TestUtils::readFile(QString f1)
 {
   QFile fpTest(f1);
@@ -192,6 +205,11 @@ void TestUtils::resetEnvironment()
 
   // make sure the UUIDs are repeatable
   UuidHelper::resetRepeatableKey();
+
+  foreach (RegisteredReset* rr, getInstance()->_resets)
+  {
+    rr->reset();
+  }
 }
 
 QString TestUtils::toQuotedString(QString str)

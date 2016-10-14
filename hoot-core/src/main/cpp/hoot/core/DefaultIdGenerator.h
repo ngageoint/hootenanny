@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DEFAULTIDGENERATOR_H
@@ -47,6 +47,8 @@ public:
   DefaultIdGenerator() { reset(); }
 
   virtual ~DefaultIdGenerator() {}
+
+  virtual IdGeneratorPtr clone() const;
 
   virtual long createNodeId() { return --_nodeId; }
 

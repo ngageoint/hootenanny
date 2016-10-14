@@ -122,6 +122,11 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/BufferedLineSegmentIntersectorTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayLocationTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WaySublineStringTest.cpp \
+    src/test/cpp/hoot/core/algorithms/zindex/ZValueTest.cpp \
+    src/test/cpp/hoot/core/algorithms/zindex/ZCurveRangerTest.cpp \
+    src/test/cpp/hoot/core/algorithms/zindex/BBoxTest.cpp \
+    src/test/cpp/hoot/core/algorithms/zindex/LongBoxTest.cpp \
+    src/test/cpp/hoot/core/algorithms/zindex/RangeTest.cpp \
     src/test/cpp/hoot/core/conflate/highway/HighwaySnapMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/MultiLineStringSplitterTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WaySublineMatchStringTest.cpp \
@@ -226,6 +231,14 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
     src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp
+    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
+    src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
+    src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
+    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
+    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp
+
+HEADERS += \
+    src/test/cpp/hoot/core/test/ConflateCaseTest.h \
+    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h
 
 

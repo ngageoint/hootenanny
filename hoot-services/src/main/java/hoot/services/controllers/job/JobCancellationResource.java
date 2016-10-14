@@ -41,8 +41,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/cancel")
 public class JobCancellationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
@@ -50,6 +52,8 @@ public class JobCancellationResource extends JobControllerBase {
     public JobCancellationResource() {
         super(null);
     }
+
+    // TODO: Review this controller to make sure that cancellation logic works correctly
 
     /**
      * Cancel job.
@@ -75,6 +79,7 @@ public class JobCancellationResource extends JobControllerBase {
             String cancelMapId = command.get("mapid").toString();
 
             JSONArray cancelArgs = new JSONArray();
+
             JSONObject param = new JSONObject();
             param.put("value", cancelJobId);
             param.put("paramtype", String.class.getName());
@@ -88,7 +93,7 @@ public class JobCancellationResource extends JobControllerBase {
             cancelArgs.add(param);
 
             JSONObject jobCancellationCommand = createReflectionJobReq(cancelArgs,
-                    "hoot.services.controllers.job.JobResource", "terminateJob");
+                    JobResource.class.getName(), "terminateJob");
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(jobCancellationCommand);

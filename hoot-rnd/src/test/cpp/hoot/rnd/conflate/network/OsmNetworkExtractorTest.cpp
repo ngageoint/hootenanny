@@ -47,6 +47,8 @@ public:
    */
   void toyTest()
   {
+    NetworkVertex::reset();
+
     OsmMapPtr map(new OsmMap());
 
     OsmMapReaderFactory::getInstance().read(map, "test-files/conflate/network/ToyInput.osm");
@@ -56,14 +58,15 @@ public:
     uut.setCriterion(c);
     OsmNetworkPtr network = uut.extractNetwork(map);
 
-    HOOT_STR_EQUALS("Node:-169 -- Way:-247 -- Node:-221\n"
-      "Node:-175 -- Way:-245 -- Node:-217\n"
-      "Node:-165 -- Way:-243 -- Node:-169\n"
-      "Node:-229 -- Way:-241 -- Node:-221\n"
-      "Node:-171 -- Way:-239 -- Node:-175\n"
-      "Node:-221 -- Way:-237 -- Node:-171\n"
-      "Node:-169 -- Way:-235 -- Node:-175\n"
-      "Node:-171 -- Relation:-477 -- Node:-233",
+    //LOG_VAR(TestUtils::toQuotedString(network->toString()));
+    HOOT_STR_EQUALS("(0) Node:-169 -- Way:-247 -- (1) Node:-221\n"
+      "(2) Node:-175 -- Way:-245 -- (3) Node:-217\n"
+      "(4) Node:-165 -- Way:-243 -- (0) Node:-169\n"
+      "(5) Node:-229 -- Way:-241 -- (1) Node:-221\n"
+      "(6) Node:-171 -- Way:-239 -- (2) Node:-175\n"
+      "(1) Node:-221 -- Way:-237 -- (6) Node:-171\n"
+      "(0) Node:-169 -- Way:-235 -- (2) Node:-175\n"
+      "(6) Node:-171 -- Relation:-477 -- (7) Node:-233",
       network->toString());
   }
 };

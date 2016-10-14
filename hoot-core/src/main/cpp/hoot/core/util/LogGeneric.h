@@ -40,6 +40,7 @@
     hoot::Log::getInstance().log((level), ss_.str(), __FILE__, "", __LINE__); \
   }}
 
+#define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }
 #define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
 #define LOG_VERBOSE(str) { LOG_LEVEL(hoot::Log::Verbose, str) }
 #define LOG_INFO(str) { LOG_LEVEL(hoot::Log::Info, str) }

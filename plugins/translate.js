@@ -564,7 +564,11 @@ translate = {
             if (eIndex > -1)
             {
                 tgs = rawMemo.slice(sIndex + 5, eIndex);
-                txt = rawMemo.substring(0,sIndex) + rawMemo.substring(eIndex + 6);
+
+                if (sIndex > 0)
+                {
+                    txt = rawMemo.substring(0,sIndex) + rawMemo.substring(eIndex + 6);
+                }
 
                 // If the </OSM> tag was at the end, remove the ';' delimiter from the text
                 if (txt.charAt(txt.length - 1) == ';') txt = txt.slice(0,-1);
@@ -573,6 +577,10 @@ translate = {
             {
                 hoot.logWarn('Missing OSM end tag in: ' + rawMemo);
             }
+        }
+        else
+        {
+            txt = rawMemo;
         }
 
         return {tags:tgs,text:txt};

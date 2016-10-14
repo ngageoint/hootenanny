@@ -108,6 +108,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   {
     return None;
   }
+  if (l == "trace")
+  {
+    return Trace;
+  }
   if (l == "debug")
   {
     return Debug;
@@ -134,6 +138,8 @@ QString Log::getLevelString(WarningLevel l)
   {
   case None:
     return "NONE";
+  case Trace:
+    return "TRACE";
   case Debug:
     return "DEBUG";
   case Verbose:

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-53980' action='modify' visible='true' lat='0.64416683374' lon='4.99826244649' />
+  <node id='-53982' action='modify' visible='true' lat='0.64385549386' lon='4.99839365149' />
+  <node id='-53984' action='modify' visible='true' lat='0.64402427596' lon='4.99898037549' />
+  <node id='-53986' action='modify' visible='true' lat='0.64407502771' lon='4.99919936049' />
+  <node id='-53988' action='modify' visible='true' lat='0.64408123152' lon='4.99939723349' />
+  <node id='-53990' action='modify' visible='true' lat='0.64409129335' lon='4.99950590349' />
+  <node id='-53992' action='modify' visible='true' lat='0.64411045056' lon='4.99956459449' />
+  <node id='-53994' action='modify' visible='true' lat='0.6441662473' lon='4.99960968149' />
+  <node id='-53996' action='modify' visible='true' lat='0.64422908762' lon='4.99963158949' />
+  <node id='-53998' action='modify' visible='true' lat='0.64446498076' lon='4.99967559349' />
+  <node id='-54000' action='modify' visible='true' lat='0.64365473243' lon='4.99848199749' />
+  <node id='-54002' action='modify' visible='true' lat='0.64354112147' lon='4.99852300649' />
+  <node id='-54004' action='modify' visible='true' lat='0.64341704202' lon='4.99855769049' />
+  <node id='-54006' action='modify' visible='true' lat='0.64331111892' lon='4.99858671049' />
+  <node id='-54008' action='modify' visible='true' lat='0.64311408549' lon='4.99860937149' />
+  <node id='-54010' action='modify' visible='true' lat='0.64305367682' lon='4.99860297849' />
+  <node id='-54012' action='modify' visible='true' lat='0.64302565407' lon='4.99857935449' />
+  <node id='-54014' action='modify' visible='true' lat='0.64292737188' lon='4.99774940749' />
+  <node id='-54016' action='modify' visible='true' lat='0.64284733052' lon='4.99757699849' />
+  <node id='-54018' action='modify' visible='true' lat='0.64373681762' lon='4.99955960749' />
+  <node id='-54020' action='modify' visible='true' lat='0.64375239517' lon='4.99949541949' />
+  <node id='-54022' action='modify' visible='true' lat='0.64375260317' lon='4.99943003949' />
+  <node id='-54024' action='modify' visible='true' lat='0.64366786255' lon='4.99867527049' />
+  <way id='-54026' action='modify' visible='true'>
+    <nd ref='-53980' />
+    <nd ref='-53982' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+  <way id='-54028' action='modify' visible='true'>
+    <nd ref='-53982' />
+    <nd ref='-53984' />
+    <nd ref='-53986' />
+    <nd ref='-53988' />
+    <nd ref='-53990' />
+    <nd ref='-53992' />
+    <nd ref='-53994' />
+    <nd ref='-53996' />
+    <nd ref='-53998' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+  <way id='-54030' action='modify' visible='true'>
+    <nd ref='-53982' />
+    <nd ref='-54000' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+  <way id='-54032' action='modify' visible='true'>
+    <nd ref='-54000' />
+    <nd ref='-54002' />
+    <nd ref='-54004' />
+    <nd ref='-54006' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+  <way id='-54034' action='modify' visible='true'>
+    <nd ref='-54006' />
+    <nd ref='-54008' />
+    <nd ref='-54010' />
+    <nd ref='-54012' />
+    <nd ref='-54014' />
+    <nd ref='-54016' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+  <way id='-54036' action='modify' visible='true'>
+    <nd ref='-54018' />
+    <nd ref='-54020' />
+    <nd ref='-54022' />
+    <nd ref='-54024' />
+    <nd ref='-54000' />
+    <tag k='all_weather' v='yes' />
+    <tag k='error:circular' v='10.08' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='1' />
+    <tag k='surface' v='paved' />
+  </way>
+</osm>

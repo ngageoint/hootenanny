@@ -53,6 +53,7 @@ class TDistributionTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(TDistributionTest);
   CPPUNIT_TEST(runPbfTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -101,6 +102,33 @@ public:
     OsmWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorTest.osm");
+  }
+
+  //This test shows the fix for ticket #249.
+  //Now the river/building never get mergeed together.
+  void runMergeTest()
+  {
+    OsmReader reader;
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/building_Valqueire.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/river_Valqueire.osm", map);
+
+    Conflator uut;
+    uut.loadSource(map);
+    uut.conflate();
+
+    shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
+    MapProjector::projectToWgs84(out);
+
+    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelationMap().size());
+
+    OsmWriter writer;
+    writer.setIncludeIds(true);
+    writer.write(out, "test-output/RiverBuildingConflatorTest.osm");
   }
 };
 

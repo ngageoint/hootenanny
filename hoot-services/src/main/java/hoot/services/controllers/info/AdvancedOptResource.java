@@ -52,10 +52,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 
-
+@Controller
 @Path("/advancedopts")
+@Transactional
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
 
@@ -68,15 +71,7 @@ public class AdvancedOptResource {
     private JSONObject horzOverride;
     private JSONObject aveOverride;
 
-    static {
-        File file = new File(HOME_FOLDER + "/" + ASCIIDOC_PATH);
-        if (!file.exists()) {
-            throw new RuntimeException("Missing required file: " + file.getAbsolutePath());
-        }
-    }
-
-    public AdvancedOptResource() {
-    }
+    public AdvancedOptResource() {}
 
     @GET
     @Path("/getoptions")
@@ -425,7 +420,12 @@ public class AdvancedOptResource {
     }
 
     private void parseAsciidoc() throws IOException {
-        try (FileInputStream fstream = new FileInputStream(HOME_FOLDER + "/" + ASCIIDOC_PATH)) {
+        File file = new File(HOME_FOLDER + "/" + ASCIIDOC_PATH);
+        if (!file.exists()) {
+            throw new IOException("Missing required file: " + file.getAbsolutePath());
+        }
+
+        try (FileInputStream fstream = new FileInputStream(file)) {
             try (InputStreamReader istream = new InputStreamReader(fstream)) {
                 try (BufferedReader br = new BufferedReader(istream)) {
                     String strLine;

@@ -1,7 +1,7 @@
 hoot-services/src/main/resources/conf/local.conf
 plugins/config.js
-.*.swo
-.*.swp
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
 *.pyc
 *.log
 *.war

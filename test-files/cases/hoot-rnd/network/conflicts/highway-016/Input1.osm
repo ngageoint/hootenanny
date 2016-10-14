@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-144828' visible='true' lat='-6.197003' lon='106.7867338'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41825' />
+  </node>
+  <node id='-144829' visible='true' lat='-6.1969822' lon='106.7877288'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41824' />
+  </node>
+  <node id='-144830' visible='true' lat='-6.1955524' lon='106.7864763'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41819' />
+  </node>
+  <node id='-144831' visible='true' lat='-6.1958721' lon='106.7864912'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41820' />
+  </node>
+  <node id='-144832' visible='true' lat='-6.1962664' lon='106.7865095'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41821' />
+  </node>
+  <node id='-144833' visible='true' lat='-6.1966835' lon='106.7865288'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41822' />
+  </node>
+  <node id='-144834' visible='true' lat='-6.196939' lon='106.7865407'>
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='hoot:id' v='-41823' />
+  </node>
+  <way id='-144826' action='modify' visible='true'>
+    <nd ref='-144828' />
+    <nd ref='-144829' />
+    <tag k='accuracy' v='15' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='highway' v='residential' />
+  </way>
+  <way id='-144827' action='modify' visible='true'>
+    <nd ref='-144830' />
+    <nd ref='-144831' />
+    <nd ref='-144832' />
+    <nd ref='-144833' />
+    <nd ref='-144834' />
+    <tag k='accuracy' v='15' />
+    <tag k='created_by' v='Merkaartor 0.12' />
+    <tag k='highway' v='residential' />
+  </way>
+</osm>

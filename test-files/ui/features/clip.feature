@@ -13,7 +13,7 @@ Feature: Clip Dataset
         When I press "Add Reference Dataset"
         And I click the "DcGisRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 5 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
+        Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
         Then I change the reference layer color to blue
     Scenario: I can change coordinates for clip
         When I press "Tools"
@@ -27,10 +27,10 @@ Feature: Clip Dataset
         And I should see "#minlon" with a value between "-78" and "-76"
         And I should see "#maxlon" with a value greater than "#minlon"
         Then I click the "Use Visual Extent" link
-        And I fill "maxlat" with "38.901164"
-        And I fill "maxlon" with "-77.016836"
-        And I fill "minlat" with "38.882563"
-        And I fill "minlon" with "-77.071161"
+        And I fill "#maxlat" with "38.901164"
+        And I fill "#maxlon" with "-77.016836"
+        And I fill "#minlat" with "38.882563"
+        And I fill "#minlon" with "-77.071161"
         Then I click the "Clip to Bounding Box" link
         And I click the "map" at "100","100"
         And I click the "map" at "400","400"

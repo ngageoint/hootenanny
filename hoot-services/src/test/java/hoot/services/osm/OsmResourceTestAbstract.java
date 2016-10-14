@@ -26,102 +26,143 @@
  */
 package hoot.services.osm;
 
-import static hoot.services.HootProperties.GRIZZLY_PORT;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Application;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.glassfish.jersey.test.JerseyTest;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import hoot.services.review.ReviewTestUtils;
-import hoot.services.utils.DbUtils;
+import hoot.services.ApplicationContextUtils;
+import hoot.services.HootServicesJerseyApplication;
+import hoot.services.HootServicesSpringTestConfig;
 import hoot.services.utils.MapUtils;
 
 
 /*
  * Base class for tests that need to read/write OSM data to the services database
  */
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
+@Rollback
 public abstract class OsmResourceTestAbstract extends JerseyTest {
-    private static final Logger log = LoggerFactory.getLogger(OsmResourceTestAbstract.class);
-
-    // For whatever reason, when making Jersey async test calls you have to
-    // specify the host and port,
-    // whereas you do not with synchronous calls.
-    private static WebTarget asyncTestResource;
-
-    public static final int TEST_JOB_DELAY_MS = /* 125 */0;
-
-    protected static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
 
     protected static long userId = -1;
-    protected long mapId = -1;
+    protected static long mapId = -1;
 
-    protected static Connection conn = null;
+    private static AnnotationConfigWebApplicationContext appContext;
 
-    public OsmResourceTestAbstract(String... controllerGroup) throws NumberFormatException {
+    static {
+        appContext = new AnnotationConfigWebApplicationContext();
+        appContext.register(HootServicesSpringTestConfig.class);
+        appContext.refresh();
+    }
+
+    public OsmResourceTestAbstract(String... controllerGroup) {
         super();
-        int grizzlyPort = Integer.parseInt(GRIZZLY_PORT);
-        //asyncTestResource = client().target("http://localhost:" + String.valueOf(grizzlyPort));
     }
 
     @BeforeClass
     public static void beforeClass() throws Exception {
+        ApplicationContextUtils acu = null;
+
         try {
-            conn = DbUtils.createConnection();
-            OsmTestUtils.setConn(conn);
-            ReviewTestUtils.conn = conn;
-            userId = MapUtils.insertUser(conn);
+            acu = new ApplicationContextUtils();
+            acu.setApplicationContext(appContext);
+
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+            TransactionStatus ts = txManager.getTransaction(null);
+
+            userId = MapUtils.insertUser();
+            mapId = MapUtils.insertMap(userId);
+            OsmTestUtils.setUserId(userId);
+            OsmTestUtils.setMapId(mapId);
+
+            txManager.commit(ts);
         }
-        catch (Exception e) {
-            conn.close();
-            log.error(e.getMessage() + " ");
-            throw e;
+        finally {
+            if (acu != null) {
+                acu.setApplicationContext(null);
+            }
+        }
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        ApplicationContextUtils acu = null;
+
+        try {
+            acu = new ApplicationContextUtils();
+            acu.setApplicationContext(appContext);
+
+            PlatformTransactionManager txManager = appContext.getBean("transactionManager", PlatformTransactionManager.class);
+
+            TransactionStatus ts = txManager.getTransaction(null);
+            MapUtils.deleteOSMRecord(mapId);
+            txManager.commit(ts);
+        }
+        finally {
+            if (acu != null) {
+                acu.setApplicationContext(null);
+            }
         }
     }
 
     @Before
     public void beforeTest() throws Exception {
-        try {
-            mapId = MapUtils.insertMap(userId, conn);
+        List<String> tables = new ArrayList<>();
 
-            OsmTestUtils.setUserId(userId);
+        /*
+        SELECT EXISTS (
+            SELECT 1
+            FROM information_schema.tables
+            WHERE table_schema = 'schema_name'
+            AND table_name = 'table_name'
+            );
+         */
+        tables.add("current_way_nodes_" + mapId);
+        tables.add("current_relation_members_" + mapId);
+        tables.add("current_nodes_" + mapId);
+        tables.add("current_ways_" + mapId);
+        tables.add("current_relations_" + mapId);
+        tables.add("changesets_" + mapId);
 
-            OsmTestUtils.setMapId(mapId);
-        }
-        catch (Exception e) {
-            log.error(e.getMessage() + " ");
-            throw e;
+        BasicDataSource dbcpDatasource = appContext.getBean("dataSource", BasicDataSource.class);
+
+        try (Connection conn = dbcpDatasource.getConnection()) {
+            for (String tblName : tables) {
+                String sql = "TRUNCATE TABLE \"" + tblName + "\" CASCADE";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.execute();
+                }
+            }
         }
     }
 
     @After
-    public void afterTest() throws Exception {
-        // no need to clear out each map, if we're clearing the whole db out before each run
-        MapUtils.deleteOSMRecord(conn, mapId);
-    }
+    public void afterTest() throws Exception {}
 
-    @AfterClass
-    public static void afterClass() throws Exception {
-        try {
-            // DbUtils.deleteUser(conn, userId);
-            OsmTestUtils.setConn(null);
-            ReviewTestUtils.conn = null;
-        }
-        catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
-        finally {
-            conn.close();
-        }
+    @Override
+    protected Application configure() {
+        HootServicesJerseyApplication.setSpringConfigationClass(HootServicesSpringTestConfig.class);
+        return new HootServicesJerseyApplication();
     }
 }

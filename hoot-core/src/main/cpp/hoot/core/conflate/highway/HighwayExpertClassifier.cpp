@@ -57,6 +57,11 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
     result.setReviewP(m.getReviewP() + result.getReviewP());
   }
 
+  if (result.getMatchP() + result.getMissP() + result.getReviewP() == 0.0)
+  {
+    result.setMiss();
+  }
+
   result.normalize();
 
   return result;

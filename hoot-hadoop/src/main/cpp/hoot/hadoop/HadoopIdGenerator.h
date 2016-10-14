@@ -31,6 +31,11 @@ public:
 
   virtual ~HadoopIdGenerator() {}
 
+  /**
+   * This method doesn't make sense in the context of Hadoop.
+   */
+  virtual IdGeneratorPtr clone() const { throw NotImplementedException(); }
+
   virtual long createNodeId();
 
   virtual long createRelationId();

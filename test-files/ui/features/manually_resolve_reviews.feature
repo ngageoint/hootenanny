@@ -7,11 +7,11 @@ Feature: Manually resolve reviews feature
     And I press "Add Reference Dataset"
     And I click the "AllDataTypesACucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
     And I press "Add Secondary Dataset"
     And I click the "AllDataTypesBCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I append "saveAs" input with "_Cucumber"
@@ -51,6 +51,55 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
+    #Click the review item box
+    And I hover over "#map"
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    #Click the review against item box
+    #Click random feature
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 5 (Resolved: 3)"
     Then I wait 5 seconds to see "g.activeReviewFeature" on the map

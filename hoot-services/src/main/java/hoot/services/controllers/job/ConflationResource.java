@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,13 +28,9 @@ package hoot.services.controllers.job;
 
 import static hoot.services.HootProperties.*;
 
-import java.lang.management.ManagementFactory;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.UUID;
 
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -52,16 +48,23 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.ingest.RasterToTilesService;
+import hoot.services.controllers.osm.MapResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
 
 
+@Controller
 @Path("/conflation")
+@Transactional
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
+
 
     public ConflationResource() {
         super(CONFLATE_MAKEFILE_PATH);
@@ -110,7 +113,7 @@ public class ConflationResource extends JobControllerBase {
 
         String jobId = UUID.randomUUID().toString();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -129,25 +132,6 @@ public class ConflationResource extends JobControllerBase {
             String confOutputName = oParams.get("OUTPUT_NAME").toString();
             String input1Name = oParams.get("INPUT1").toString();
             String input2Name = oParams.get("INPUT2").toString();
-
-            Object oTunn = oParams.get("AUTO_TUNNING");
-            if (oTunn != null) {
-                String autoTune = oTunn.toString();
-                if (autoTune.equalsIgnoreCase("true")) {
-                    MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-                    Object attribute = mBeanServer.getAttribute(new ObjectName("java.lang", "type",
-                            "OperatingSystem"), "TotalPhysicalMemorySize");
-
-                    long totalMemSize = Long.parseLong(attribute.toString());
-                    Long input1Size = Long.parseLong(oParams.get("INPUT1_ESTIMATE").toString());
-                    Long input2Size = Long.parseLong(oParams.get("INPUT2_ESTIMATE").toString());
-
-                    if ((input1Size + input2Size) > (totalMemSize / 2)) {
-                        oParams.put("IS_BIG", "true");
-                        processScriptName = "makebigconflate";
-                    }
-                }
-            }
 
             JSONArray commandArgs = parseParams(oParams.toJSONString());
             JSONObject conflationCommand = createMakeScriptJobReq(commandArgs);
@@ -172,8 +156,7 @@ public class ConflationResource extends JobControllerBase {
             }
 
             // osm api db related input params have already been validated by
-            // this point, so just check to
-            // see if any osm api db input is present
+            // this point, so just check to see if any osm api db input is present
             if (conflatingOsmApiDbData && osmApiDbEnabled) {
                 validateOsmApiDbConflateParams(oParams);
 
@@ -184,13 +167,19 @@ public class ConflationResource extends JobControllerBase {
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
-                if (!mapExists(secondaryMapId, conn)) {
+                if (!mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
-                Map secondaryMap = new Map(secondaryMapId, conn);
-                setAoi(secondaryMap, commandArgs);
+                BoundingBox bbox;
+                if (oParams.get("TASK_BBOX") != null) {
+                    bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
+                } else {
+                    Map secondaryMap = new Map(secondaryMapId);
+                    bbox = getMapBounds(secondaryMap);
+                }
+                setAoi(bbox, commandArgs);
 
                 // write a timestamp representing the time the osm api db data was queried out
                 // from the source; to be used conflict detection during export of conflated
@@ -205,6 +194,7 @@ public class ConflationResource extends JobControllerBase {
             }
 
             JSONArray mapTagsArgs = new JSONArray();
+
             JSONObject param = new JSONObject();
             param.put("value", tags);
             param.put("paramtype", java.util.Map.class.getName());
@@ -218,13 +208,14 @@ public class ConflationResource extends JobControllerBase {
             mapTagsArgs.add(param);
 
             JSONObject updateMapsTagsCommand = createReflectionJobReq(mapTagsArgs,
-                    "hoot.services.controllers.osm.MapResource", "updateTagsDirect");
+                    MapResource.class.getName(), "updateTagsDirect");
 
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
 
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();
+
             JSONObject rasterTilesparam = new JSONObject();
             rasterTilesparam.put("value", confOutputName);
             rasterTilesparam.put("paramtype", String.class.getName());
@@ -238,7 +229,7 @@ public class ConflationResource extends JobControllerBase {
             rasterTilesArgs.add(rasterTilesparam);
 
             JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                    "hoot.services.controllers.ingest.RasterToTilesService", "ingestOSMResourceDirect");
+                    RasterToTilesService.class.getName(), "ingestOSMResourceDirect");
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(conflationCommand);
@@ -292,12 +283,11 @@ public class ConflationResource extends JobControllerBase {
     }
 
     // adding this to satisfy the mock
-    boolean mapExists(long id, Connection conn) {
-        return Map.mapExists(id, conn);
+    boolean mapExists(long id) {
+        return Map.mapExists(id);
     }
 
-    private void setAoi(Map secondaryMap, JSONArray commandArgs) {
-        BoundingBox bounds = getMapBounds(secondaryMap);
+    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
         arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
                 bounds.getMaxLon() + "," + bounds.getMaxLat());

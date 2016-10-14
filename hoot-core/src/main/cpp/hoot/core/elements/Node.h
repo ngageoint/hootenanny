@@ -107,6 +107,11 @@ protected:
 typedef boost::shared_ptr<Node> NodePtr;
 typedef boost::shared_ptr<const Node> ConstNodePtr;
 
+inline uint qHash(const ConstNodePtr& n)
+{
+  return qHash(n->getElementId());
+}
+
 } // hoot
 
 #endif

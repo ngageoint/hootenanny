@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * Merges network pairs.
+ * Merges whole network pairs (no partials).
  *
  * In the case of network matches we're guaranteed there is no overlap between matches so we can
  * use some of the functions in HighwaySnapMerger, but others are too complex/imprecise.
@@ -65,8 +65,6 @@ private:
   set< pair<ElementId, ElementId> > _pairs;
   ConstEdgeMatchPtr _edgeMatch;
   ConstNetworkDetailsPtr _details;
-
-  WaySublineMatchStringPtr _createMatchString() const { return WaySublineMatchStringPtr(); }
 };
 
 }

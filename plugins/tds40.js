@@ -961,25 +961,58 @@ tds = {
         */
         }
 
-      // Should be disabled until polygons are fixed....
-        translate.fixConstruction(tags, 'highway');
-        translate.fixConstruction(tags, 'railway');
+        // Fix up landuse tags
+        if (attrs.FCODE == 'AL020')
+        {
+            switch (tags.use) // Fixup the landuse tags
+            {
+                case undefined: // Break early if no value
+                    break;
+
+                case 'commercial':
+                    tags.landuse = 'commercial';
+                    delete tags.use;
+                    break;
+
+                case 'industrial':
+                    tags.landuse = 'industrial';
+                    delete tags.use;
+                    break;
+
+                case 'residential':
+                    tags.landuse = 'residential';
+                    delete tags.use;
+                    break;
+            } // End switch
+        }
+
+        // Lifecycle tags
+        // NOTE: This needs to be expanded.
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
 
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
-
-    /*
-        // Fix up the "works" tags
-        if (tags.works)
-        {
-           // print('## Works = ' + tags.works);
-           tags.man_made = 'works';
-           tags.product = tags.works;
-           delete tags.works
-        }
-     */
 
         // Denominations without religions - from ZI037_REL which has some denominations as religions
         if (tags.denomination)
@@ -1026,8 +1059,15 @@ tds = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
+            }
 
+            if (tObj.text !== '')
+            {
                 tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
             }
         } // End unpack tags.note
 
@@ -1106,21 +1146,10 @@ tds = {
             ["t.historic == 'castle' && t.building","delete t.building"],
             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
-            ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
-            ["t.landuse == 'brownfield'","t.landuse = 'built_up_area'; t.condition = 'destroyed'"],
-            ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
-            ["t.landuse == 'farm'","t.landuse = 'farmland'"],
             ["t.landuse == 'farmland' && t.crop == 'fruit_tree'","t.landuse = 'orchard'"],
-            ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
-            ["t.landuse == 'grass'","t.natural = 'grassland'; t['grassland:type'] = 'grassland';"],
-            ["t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'meadow';"],
-            ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
-            ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
-            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
-            // ["t.landuse == 'grass'","a.F_CODE = 'EB010'; t['grassland:type'] = 'grassland';"],
-            // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
+            ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
@@ -1258,6 +1287,68 @@ tds = {
                 }
             }
         }
+
+        // Fix up landuse & AL020
+        switch (tags.landuse)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'brownfield':
+                tags.landuse = 'built_up_area';
+                tags.condition = 'destroyed';
+                break
+
+            case 'commercial':
+            case 'retail':
+                tags.use = 'commercial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'construction':
+                tags.condition = 'construction';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'farm':
+            case 'allotments':
+                tags.landuse = 'farmland';
+                break;
+
+            case 'farmyard': // NOTE: This is different to farm.
+                tags.facility = 'yes';
+                tags.use = 'agriculture';
+                delete tags.landuse;
+                break;
+
+            case 'grass':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'grassland';
+                delete tags.landuse;
+                break;
+
+            case 'industrial':
+                tags.use = 'industrial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'military':
+                tags.military = 'installation';
+                delete tags.landuse;
+                break;
+
+            case 'meadow':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'meadow';
+                delete tags.landuse;
+                break;
+
+            case 'residential':
+                tags.use = 'residential';
+                tags.landuse = 'built_up_area';
+                break;
+
+        } // End switch landuse
 
         // Places, localities and regions
         if (tags.place)
@@ -1632,6 +1723,7 @@ tds = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1713,7 +1805,6 @@ tds = {
 
             tds.lookup = translate.createBackwardsLookup(tds.rules.one2one);
             // translate.dumpOne2OneLookup(tds.lookup);
-
         }
 
         // Pre Processing
@@ -1757,55 +1848,54 @@ tds = {
 
         if (!(nfddAttrLookup[gFcode]))
         {
-            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-            if (config.getOgrPartialTranslate() == 'true')
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (config.getOgrThrowError() == 'true')
             {
-                tableName = 'Partial';
-                attrs.F_CODE = 'Partial';
-
-                // If we have unused tags, add them to partial feature.
-                if (Object.keys(notUsedTags).length > 0)
+                if (! attrs.F_CODE)
                 {
-                    for (var i in notUsedTags)
-                    {
-                        attrs['OSM:' + i] = notUsedTags[i];
-                    }
-                }
-            }
-            else
-            {
-                tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-                // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-                // Convert all of the Tags to a string so we can jam it into an attribute
-                var str = JSON.stringify(tags);
-
-                // Shapefiles can't handle fields > 254 chars.
-                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-                // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-                {
-                    // return {attrs:{tag1:str}, tableName: tableName};
-                    attrs = {tag1:str};
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
                 }
                 else
                 {
-                    // Not good. Will fix with the rewrite of the tag splitting code
-                    if (str.length > 1012)
-                    {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
-                        str = str.substring(0,1012);
-                    }
-
-                    // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                    attrs = {tag1:str.substring(0,253),
-                            tag2:str.substring(253,506),
-                            tag3:str.substring(506,759),
-                            tag4:str.substring(759,1012)};
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv40'}, tableName: ''});
+                    return returnData;
                 }
+            }
+
+            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Dump out what attributes we have converted before they get wiped out
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+            // Convert all of the Tags to a string so we can jam it into an attribute
+            var str = JSON.stringify(tags);
+
+            // Shapefiles can't handle fields > 254 chars.
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            {
+                // return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
@@ -1882,7 +1972,6 @@ tds = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
                 var kList = Object.keys(returnData[i]['attrs']).sort()
                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }

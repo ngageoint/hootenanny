@@ -62,11 +62,11 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     if (dnext1 < dnext2)
     {
       sub1 = WaySubline(wl1, ws1.getEnd());
-      sub2 = WaySubline(wl2, mapping->map1To2(ws1.getEnd()));
+      sub2 = WaySubline(wl2, mapping->map1To2(ws1.getEnd(), ws2.getElementId()));
     }
     else
     {
-      sub1 = WaySubline(wl1, mapping->map2To1(ws2.getEnd()));
+      sub1 = WaySubline(wl1, mapping->map2To1(ws2.getEnd(), ws1.getElementId()));
       sub2 = WaySubline(wl2, ws2.getEnd());
     }
 

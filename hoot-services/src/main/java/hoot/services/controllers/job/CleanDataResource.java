@@ -41,8 +41,10 @@ import javax.ws.rs.core.Response;
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);

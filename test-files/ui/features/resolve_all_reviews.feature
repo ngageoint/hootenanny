@@ -7,11 +7,11 @@ Feature: Resolve all reviews feature
     And I press "Add Reference Dataset"
     And I click the "DcGisRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
     And I press "Add Secondary Dataset"
     And I click the "DcTigerRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "span.strong" element with text "DcTigerRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcTigerRoadsCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
@@ -39,7 +39,7 @@ Feature: Resolve all reviews feature
     And I press "Add Secondary Dataset"
     And I click the "DcOsmRoadsCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 5 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
+    Then I wait 15 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I scroll element into view and press "conflate2"

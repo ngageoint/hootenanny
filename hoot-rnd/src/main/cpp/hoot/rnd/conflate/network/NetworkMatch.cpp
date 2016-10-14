@@ -86,15 +86,15 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   for (int i = 0; i < string1->getMembers().size(); ++i)
   {
     _pairs.insert(pair<ElementId, ElementId>(
-        _toWay(string1->getEdge(i))->getElementId(),
-        _toWay(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
+        _toElement(string1->getEdge(i))->getElementId(),
+        _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
       ));
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
     _pairs.insert(pair<ElementId, ElementId>(
-        _toWay(string1->getEdge(i))->getElementId(),
-        _toWay(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
+        _toElement(string1->getEdge(i))->getElementId(),
+        _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
       ));
   }
 
@@ -102,15 +102,15 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   for (int i = 0; i < string2->getMembers().size(); ++i)
   {
     _pairs.insert(pair<ElementId, ElementId>(
-        _toWay(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-        _toWay(string2->getEdge(i))->getElementId()
+        _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
+        _toElement(string2->getEdge(i))->getElementId()
       ));
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
     _pairs.insert(pair<ElementId, ElementId>(
-        _toWay(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-        _toWay(string2->getEdge(i))->getElementId()
+        _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
+        _toElement(string2->getEdge(i))->getElementId()
       ));
   }
 }
@@ -142,11 +142,12 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
 
 QString NetworkMatch::toString() const
 {
+  LOG_VAR(_threshold->toString());
   return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
     arg(hoot::toString(_pairs)).arg(getScore());
 }
 
-ConstWayPtr NetworkMatch::_toWay(ConstNetworkEdgePtr edge) const
+ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();
 
@@ -154,13 +155,8 @@ ConstWayPtr NetworkMatch::_toWay(ConstNetworkEdgePtr edge) const
   {
     throw NotImplementedException("Only one member is support in the network edge at this time.");
   }
-  if (members[0]->getElementType() != ElementType::Way)
-  {
-    throw NotImplementedException("Only way members are supported in the network edge at this"
-      " time.");
-  }
 
-  return dynamic_pointer_cast<const Way>(members[0]);
+  return members[0];
 }
 
 }

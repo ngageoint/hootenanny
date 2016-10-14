@@ -26,7 +26,12 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,11 +50,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanPath;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
@@ -68,16 +73,13 @@ public class Relation extends Element {
 
     private List<RelationMember> membersCache = new ArrayList<>();
 
-    public Relation(long mapId, Connection dbConn) {
-        super(dbConn);
+    public Relation(long mapId) {
         super.elementType = ElementType.Relation;
         super.record = new CurrentRelations();
-
         setMapId(mapId);
     }
 
-    public Relation(long mapId, Connection dbConn, CurrentRelations record) {
-        super(dbConn);
+    public Relation(long mapId, CurrentRelations record) {
         super.elementType = ElementType.Relation;
 
         CurrentRelations relationRecord = new CurrentRelations();
@@ -101,8 +103,6 @@ public class Relation extends Element {
      */
     @Override
     public void fromXml(org.w3c.dom.Node xml) {
-        logger.debug("Parsing relation...");
-
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
         CurrentRelations relationRecord = (CurrentRelations) record;
@@ -132,9 +132,8 @@ public class Relation extends Element {
         }
 
         // From the Rails port of OSM API:
-        // RelationMember.joins(:relation).find_by("visible = ? AND member_type
-        // = 'Relation' and member_id = ? ", true, id)
-        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        // RelationMember.joins(:relation).find_by("visible = ? AND member_type = 'Relation' and member_id = ? ", true, id)
+        List<Long> owningRelationsIds = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelationMembers)
@@ -142,9 +141,8 @@ public class Relation extends Element {
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberId.eq(super.getId()))
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.relation)))
-                .orderBy(currentRelationMembers.relationId.asc());
-
-        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
+                .orderBy(currentRelationMembers.relationId.asc())
+                .fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(
@@ -189,6 +187,7 @@ public class Relation extends Element {
                     memberElement.setAttribute("role", member.getMemberRole());
                     role = "";
                 }
+
                 memberElement.setAttribute("role", role);
                 memberElement.setAttribute("ref", String.valueOf(member.getMemberId()));
                 element.appendChild(memberElement);
@@ -307,25 +306,43 @@ public class Relation extends Element {
      * then computes the combined bounds for all the elements
      */
     private BoundingBox getBoundsForNodesAndWays(Set<Long> dbNodeIds, Set<Long> dbWayIds) {
-        ArrayList<CurrentNodes> nodes = new ArrayList<>(Node.getNodes(getMapId(), dbNodeIds, conn));
-        nodes.addAll(Way.getNodesForWays(getMapId(), dbWayIds, conn));
+        List<CurrentNodes> nodes = new ArrayList<>();
+
+        if (!dbNodeIds.isEmpty()) {
+            nodes = createQuery(getMapId())
+                    .select(Projections.bean(CurrentNodes.class, currentNodes.latitude, currentNodes.longitude))
+                    .from(currentNodes)
+                    .where(currentNodes.id.in(dbNodeIds))
+                    .fetch();
+        }
+
+        if (!dbWayIds.isEmpty()) {
+            nodes.addAll(createQuery(getMapId())
+                    .select(Projections.bean(CurrentNodes.class, currentNodes.latitude, currentNodes.longitude))
+                    .from(currentWayNodes)
+                    .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
+                    .where(currentWayNodes.wayId.in(dbWayIds))
+                    .fetch());
+        }
+
         BoundingBox bounds = null;
         if (!nodes.isEmpty()) {
             BoundingBox nodeBounds = new BoundingBox(nodes);
             bounds = new BoundingBox(nodeBounds);
         }
+
         return bounds;
     }
 
     private BoundingBox getBoundsForNodesAndWays() {
-        List<Long> nodeIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> nodeIds = createQuery(getMapId())
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
                 .fetch();
 
-        List<Long> wayIds = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> wayIds = createQuery(getMapId())
                 .select(currentRelationMembers.memberId)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId())
@@ -348,10 +365,11 @@ public class Relation extends Element {
     @Override
     public BoundingBox getBounds() {
         if ((membersCache == null) || (membersCache.isEmpty())) {
-            membersCache = RelationMember.fromRecords(getMembers());
+            membersCache = fromRecords(getMembers());
         }
 
         BoundingBox nodesAndWaysBounds = parseNodesAndWayMembersBounds(membersCache);
+
         BoundingBox bounds = null;
         if (nodesAndWaysBounds != null) {
             bounds = new BoundingBox(nodesAndWaysBounds);
@@ -364,7 +382,7 @@ public class Relation extends Element {
      * Retrieves this relation's members from the services database
      */
     private List<CurrentRelationMembers> getMembers() {
-        return new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        return createQuery(getMapId())
                 .select(currentRelationMembers)
                 .from(currentRelationMembers)
                 .where(currentRelationMembers.relationId.eq(getId()))
@@ -392,8 +410,6 @@ public class Relation extends Element {
     }
 
     private RelationMember parseMember(org.w3c.dom.Node nodeXml) {
-        logger.debug("Parsing relation member...");
-
         NamedNodeMap memberXmlAttributes = nodeXml.getAttributes();
 
         long parsedMemberId = Long.parseLong(memberXmlAttributes.getNamedItem("ref").getNodeValue());
@@ -441,7 +457,7 @@ public class Relation extends Element {
         // element not referenced in this request, so should already exist in
         // the db and its info up to date
         else {
-            memberElement = ElementFactory.create(getMapId(), elementType, conn);
+            memberElement = ElementFactory.create(getMapId(), elementType);
         }
 
         // role is allowed to be empty
@@ -454,11 +470,8 @@ public class Relation extends Element {
         return member;
     }
 
-    // relations of size = 0 are allowed; see
-    // http://wiki.openstreetmap.org/wiki/Empty_relations
+    // relations of size = 0 are allowed; see http://wiki.openstreetmap.org/wiki/Empty_relations
     private void parseMembersXml(org.w3c.dom.Node xml) {
-        logger.debug("Parsing relation members...");
-
         NodeList membersXml = null;
         try {
             membersXml = XPathAPI.selectNodeList(xml, "member");
@@ -475,9 +488,51 @@ public class Relation extends Element {
             RelationMember member = parseMember(memberXml);
             membersCache.add(member);
             relatedRecordIds.add(member.getId());
-            relatedRecords.add(RelationMember.createRecord(member.getId(), i + 1, member.getRole(),
+            relatedRecords.add(createRecord(member.getId(), i + 1, member.getRole(),
                     Element.elementEnumForElementType(member.getType()), getId()));
         }
+    }
+
+    /**
+     * Creates a relation member database record
+     *
+     * @param id
+     *            the member's ID
+     * @param sequenceId
+     *            the member's sequence ordering (1..n)
+     * @param role
+     *            the member's role
+     * @param elementType
+     *            the member's element type
+     * @param relationId
+     *            the owning relation ID
+     * @return a relation member database record
+     */
+    private static CurrentRelationMembers createRecord(long id, int sequenceId, String role, Object elementType,
+            long relationId) {
+        CurrentRelationMembers memberRecord = new CurrentRelationMembers();
+        memberRecord.setMemberId(id);
+        memberRecord.setSequenceId(sequenceId);
+        memberRecord.setMemberRole(StringUtils.isEmpty(role) ? "" : role);
+        memberRecord.setMemberType(elementType);
+        memberRecord.setRelationId(relationId);
+        return memberRecord;
+    }
+
+    /**
+     * Transforms a list of relation member database records into a list of
+     * RelationMember objects
+     *
+     * @param records
+     *            a list of relation member database records
+     * @return a list of RelationMember objects
+     */
+    private static List<RelationMember> fromRecords(List<CurrentRelationMembers> records) {
+        List<RelationMember> members = new ArrayList<>();
+        for (CurrentRelationMembers memberRecord : records) {
+            members.add(new RelationMember(memberRecord));
+        }
+        return members;
     }
 
     /**

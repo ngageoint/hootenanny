@@ -6,11 +6,11 @@ Feature: Review Bookmarks
         And I press "Add Reference Dataset"
         And I click the "AllDataTypesACucumber" Dataset
         And I press "Add Layer"
-        Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
         And I press "Add Secondary Dataset"
         And I click the "AllDataTypesBCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 5 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
         Then I wait 30 "seconds" to see "Conflate"
         And I press "Conflate"
         Then I fill "saveAs" input with "mergedBookmarkTest"
@@ -113,7 +113,7 @@ Feature: Review Bookmarks
 
     Scenario: Delete Layer with active bookmark
         Then I click on the "Datasets" option in the "settingsSidebar"
-        And I click on "#btnDatasetRefresh"
+        And I press "Refresh Datasets"
         And I wait
         When I click the "mergedBookmarkTest" Dataset
         When I context click the "mergedBookmarkTest" Dataset

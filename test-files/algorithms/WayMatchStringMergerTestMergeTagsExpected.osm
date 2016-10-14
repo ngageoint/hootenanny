@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-1412397" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0057328274076645" lon="0.0029928353283275">
+        <tag k="hoot:id" v="-1412397"/>
+        <tag k="hoot:status" v="0"/>
+    </node>
     <node visible="true" id="-1412396" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0041284719296967" lon="0.0029442279974678">
         <tag k="hoot:id" v="-1412396"/>
         <tag k="hoot:status" v="0"/>
@@ -40,6 +44,22 @@
         <tag k="hoot:id" v="-1412375"/>
         <tag k="hoot:status" v="0"/>
     </node>
+    <way visible="true" id="-1412400" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1412397"/>
+        <nd ref="-1412389"/>
+        <tag k="note" v="2a"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-1412400"/>
+        <tag k="hoot:status" v="0"/>
+    </way>
+    <way visible="true" id="-1412399" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1412388"/>
+        <nd ref="-1412397"/>
+        <tag k="note" v="2a"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-1412399"/>
+        <tag k="hoot:status" v="0"/>
+    </way>
     <way visible="true" id="-1412398" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1412396"/>
         <nd ref="-1412378"/>
@@ -79,14 +99,6 @@
         <tag k="note" v="2b"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="-1412392"/>
-        <tag k="hoot:status" v="0"/>
-    </way>
-    <way visible="true" id="-1412390" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1412388"/>
-        <nd ref="-1412389"/>
-        <tag k="note" v="2a"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-1412390"/>
         <tag k="hoot:status" v="0"/>
     </way>
     <way visible="true" id="-1412382" timestamp="1970-01-01T00:00:00Z" version="1">

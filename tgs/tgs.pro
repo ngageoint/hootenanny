@@ -154,6 +154,11 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/BigContainers/BigMapHybrid.h \
     src/main/cpp/tgs/System/DisableCerr.h \
     src/main/cpp/tgs/LruCache.h \
+    src/main/cpp/tgs/Optimization/SimulatedAnnealing.h \
+    src/main/cpp/tgs/Optimization/StateDescription.h \
+    src/main/cpp/tgs/Optimization/VariableDescription.h \
+    src/main/cpp/tgs/Optimization/State.h \
+    src/main/cpp/tgs/Optimization/FitnessFunction.h
 
 win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
@@ -234,6 +239,10 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/System/DisableCout.cpp \
     src/main/cpp/tgs/System/DisableCerr.cpp \
+    src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
+    src/main/cpp/tgs/Optimization/StateDescription.cpp \
+    src/main/cpp/tgs/Optimization/VariableDescription.cpp \
+    src/main/cpp/tgs/Optimization/State.cpp \
 
 cppunit:SOURCES += \
     src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
@@ -270,7 +279,8 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
     src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
     src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
-    src/test/cpp/tgs/LruCacheTest.cpp
+    src/test/cpp/tgs/LruCacheTest.cpp \
+    src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \

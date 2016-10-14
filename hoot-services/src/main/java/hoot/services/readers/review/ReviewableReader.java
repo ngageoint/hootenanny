@@ -26,42 +26,28 @@
  */
 package hoot.services.readers.review;
 
-import java.sql.Connection;
-
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.review.AllReviewableItems;
 import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 
 
-public class ReviewableReader {
-    private final Connection connection;
+public final class ReviewableReader {
+    private ReviewableReader() {}
 
-    public ReviewableReader(Connection connection) {
-        this.connection = connection;
+    public static ReviewableItem getReviewableItem(long mapId, long sortOrder) {
+        return (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(mapId, sortOrder).execQuery();
     }
 
-    public ReviewableItem getReviewableItem(long mapid, long seqid) {
-        ReviewableItem r =
-                (ReviewableItem) ReviewableQueryFactory.getReviewableQuery(connection, mapid, seqid).execQuery();
-        return r;
+    public static ReviewableItem getRandomReviewableItem(long mapId) {
+        return (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(mapId).execQuery();
     }
 
-    public ReviewableItem getRandomReviewableItem(long mapid) {
-        ReviewableItem r =
-                (ReviewableItem) ReviewableQueryFactory.getRandomReviewableQuery(connection, mapid).execQuery();
-        return r;
+    public static ReviewableStatistics getReviewablesStatistics(long mapId) {
+        return (ReviewableStatistics) ReviewableQueryFactory.getReviewableStatisticsQuery(mapId).execQuery();
     }
 
-    public ReviewableStatistics getReviewablesStatistics(long mapid) {
-        ReviewableStatistics r = (ReviewableStatistics)
-                ReviewableQueryFactory.getReviewableStatisticsQuery(connection, mapid).execQuery();
-        return r;
-    }
-
-    public AllReviewableItems getAllReviewableItems(long mapid, BoundingBox bbox) {
-        AllReviewableItems r = (AllReviewableItems)
-                ReviewableQueryFactory.getAllReviewableItemsQuery(connection, mapid, bbox).execQuery();
-        return r;
+    public static AllReviewableItems getAllReviewableItems(long mapId, BoundingBox bbox) {
+        return (AllReviewableItems) ReviewableQueryFactory.getAllReviewableItemsQuery(mapId, bbox).execQuery();
     }
 }

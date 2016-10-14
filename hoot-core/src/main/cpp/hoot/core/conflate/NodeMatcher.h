@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEMATCHER_H
@@ -40,6 +40,11 @@ public:
   friend class NodeMatcherTest;
 
   NodeMatcher();
+
+  /**
+   * Returns the degree of a node (number of ways incident to the node)
+   */
+  int getDegree(ElementId nid);
 
   /**
    * Returns a score for the confidence that two nodes represent the same intersection. 0 means
@@ -68,8 +73,11 @@ private:
 
 
   double _calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
-    vector<bool>& exclude, size_t depth);
+    vector<bool>& exclude, size_t depth, bool debug = false);
 };
+
+typedef shared_ptr<NodeMatcher> NodeMatcherPtr;
+typedef shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
 
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYSPLITTER_H
@@ -69,6 +69,8 @@ public:
    * locations that are in the same location, or a way location at the start/end of the way.
    *
    * The old way is not modified and the new ways are not added to the map.
+   *
+   * @param wl A sorted list of split points. There may be duplicate split points.
    */
   vector<WayPtr> createSplits(const vector<WayLocation>& wl);
 

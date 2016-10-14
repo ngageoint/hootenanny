@@ -30,16 +30,12 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import hoot.services.UnitTest;
@@ -50,41 +46,26 @@ import hoot.services.utils.MapUtils;
 
 
 public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
-    private static final Logger logger = LoggerFactory.getLogger(ChangesetResourceUploadCommonTest.class);
-
-    public ChangesetResourceUploadCommonTest() {
-        super();
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(ChangesetResource.class);
-    }
+    public ChangesetResourceUploadCommonTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testUploadPreflight() throws Exception {
+        String responseData = null;
         try {
-            String responseData = null;
-            try {
-                String changesetId = "1";
-                responseData =
-                    target("api/0.6/changeset/" + changesetId + "/upload")
-                        .queryParam("mapId", "1")
-                        //.type(MediaType.APPLICATION_FORM_URLENCODED)
-                        .request(MediaType.TEXT_PLAIN)
-                        .options(String.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
+            String changesetId = "1";
+            responseData =
+                target("api/0.6/changeset/" + changesetId + "/upload")
+                    .queryParam("mapId", "1")
+                    //.type(MediaType.APPLICATION_FORM_URLENCODED)
+                    .request(MediaType.TEXT_PLAIN)
+                    .options(String.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
 
-            Assert.assertEquals("", responseData);
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
+        Assert.assertEquals("", responseData);
     }
 
     @Test(expected = WebApplicationException.class)
@@ -143,10 +124,6 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             OsmTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
-        catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -183,11 +160,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("Error parsing changeset diff data"));
             OsmTestUtils.verifyTestChangesetUnmodified(changesetId);
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
-            throw e;
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage());
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
     }
@@ -214,7 +187,7 @@ public class ChangesetResourceUploadCommonTest extends OsmResourceTestAbstract {
             Response r = e.getResponse();
             Assert.assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
             Assert.assertTrue(r.readEntity(String.class).contains("No items in uploaded changeset"));
-            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb(conn));
+            Assert.assertFalse(MapUtils.elementDataExistsInServicesDb());
             throw e;
         }
     }

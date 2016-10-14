@@ -26,8 +26,9 @@
  */
 package hoot.services.controllers.osm;
 
-import java.io.IOException;
-import java.sql.Connection;
+import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.sql.SQLException;
 
 import javax.ws.rs.Consumes;
@@ -47,28 +48,25 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 
-import com.querydsl.sql.SQLQuery;
-
-import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
 /**
  * Service endpoint for an OSM changeset
  */
+@Controller
 @Path("/api/0.6/changeset")
+@Transactional
 public class ChangesetResource {
     private static final Logger logger = LoggerFactory.getLogger(ChangesetResource.class);
 
-    private final QMaps maps = QMaps.maps;
-
-    public ChangesetResource() {
-    }
+    public ChangesetResource() {}
 
     /**
      * Service method endpoint for creating a pre-flight request for a new OSM
@@ -113,75 +111,54 @@ public class ChangesetResource {
             logger.debug("Parsing changeset XML...");
             changesetDoc = XmlDocumentBuilder.parse(changesetData);
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception ex) {
             String msg = "Error parsing changeset XML: "
                     + StringUtils.abbreviate(changesetData, 100) + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        long changesetId = -1;
-        try (Connection conn = DbUtils.createConnection()) {
-            long mapIdNum;
-
-            try {
-                // input mapId may be a map ID or a map name
-                mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, conn, maps, maps.id, maps.displayName);
-            }
-            catch (Exception ex) {
-                if (ex.getMessage().startsWith("Multiple records exist")
-                        || ex.getMessage().startsWith("No record exists")) {
-                    String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                    throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
-                }
-
-                String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
-            long userId;
-            try {
-                logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
-
-                userId = new SQLQuery<>(conn, DbUtils.getConfiguration())
-                        .select(maps.userId)
-                        .from(maps)
-                        .where(maps.id.eq(mapIdNum))
-                        .fetchOne();
-
-                logger.debug("Retrieved user ID: {}", userId);
-            }
-            catch (Exception ex) {
-                String msg = "Error locating user associated with map for changeset data: "
-                        + StringUtils.abbreviate(changesetData, 100) + " (" + ex.getMessage() + ")";
-                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
-            conn.setAutoCommit(false);
-
-            try {
-                changesetId = Changeset.createChangeset(changesetDoc, mapIdNum, userId, conn);
-            }
-            catch (Exception ex) {
-                logger.error("Rolling back the database transaction...");
-                conn.rollback();
-
-                String msg = "Error creating changeset: (" + ex.getMessage() + ") "
-                        + StringUtils.abbreviate(changesetData, 100);
-                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-
-            logger.debug("Committing the database transaction...");
-            conn.commit();
+        long mapIdNum;
+        try {
+            // input mapId may be a map ID or a map name
+            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
         }
-        catch (WebApplicationException wae) {
-            throw wae;
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist")
+                    || ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
+            }
+
+            String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
-        catch (SQLException e) {
-            String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+
+        long userId;
+        try {
+            logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
+
+            userId = createQuery()
+                    .select(maps.userId)
+                    .from(maps)
+                    .where(maps.id.eq(mapIdNum))
+                    .fetchOne();
+
+            logger.debug("Retrieved user ID: {}", userId);
+        }
+        catch (Exception ex) {
+            String msg = "Error locating user associated with map for changeset data: "
+                    + StringUtils.abbreviate(changesetData, 100) + " (" + ex.getMessage() + ")";
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        long changesetId;
+        try {
+            changesetId = Changeset.createChangeset(changesetDoc, mapIdNum, userId);
+        }
+        catch (Exception ex) {
+            String msg = "Error creating changeset: (" + ex.getMessage() + ") "
+                    + StringUtils.abbreviate(changesetData, 100);
+            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         logger.debug("Returning ID: {} for new changeset...", changesetId);
@@ -227,58 +204,25 @@ public class ChangesetResource {
     public Response upload(String changeset,
                            @PathParam("changesetId") Long changesetId,
                            @QueryParam("mapId") Long mapId) {
-
         if (mapId == null) {
             String msg = "mapId cannot be null!";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Document changesetDoc;
+        Document changesetUploadResponse = null;
         try {
-            changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            Document changesetDoc = ChangesetUploadXmlValidator.parseAndValidate(changeset);
+            changesetUploadResponse = (new ChangesetDbWriter()).write(mapId, changesetId, changesetDoc);
         }
         catch (Exception e) {
-            String msg = "Error parsing changeset diff data: " + StringUtils.abbreviate(changeset, 100)
-                    + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        Document changesetUploadResponse = null;
-        try (Connection conn = DbUtils.createConnection()) {
-            logger.debug("Intializing changeset upload transaction...");
-
-            conn.setAutoCommit(false);
-
-            try {
-                changesetUploadResponse = (new ChangesetDbWriter(conn)).write(mapId, changesetId, changesetDoc);
-            }
-            catch (WebApplicationException wae) {
-                throw wae;
-            }
-            catch (Exception e) {
-                logger.error("Rolling back transaction for changeset upload...", e);
-                conn.rollback();
-
-                handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
-            }
-
-            logger.debug("Committing changeset upload transaction...");
-
-            conn.commit();
-        }
-        catch (SQLException e) {
-            String msg = "Error during changeset diff data upload! changesetId = " + changesetId + ", mapId = " + mapId;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
         }
 
         try {
             logger.debug("Returning changeset upload response: {} ...",
                     StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100));
         }
-        catch (IOException ignored) {
+        catch (Exception ignored) {
         }
 
         return Response.ok(new DOMSource(changesetUploadResponse)).build();
@@ -308,22 +252,18 @@ public class ChangesetResource {
      */
     @PUT
     @Path("/{changesetId}/close")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public String close(@PathParam("changesetId") Long changesetId,
                         @QueryParam("mapId") Long mapId) {
-        logger.info("Closing changeset with ID: {} ...", changesetId);
+        logger.debug("Closing changeset with ID: {} ...", changesetId);
 
         if (mapId == null) {
             String msg = "Invalid map id!";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        try (Connection conn = DbUtils.createConnection()) {
-            Changeset.closeChangeset(mapId, changesetId, conn);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+        try {
+            Changeset.closeChangeset(mapId, changesetId);
         }
         catch (Exception e) {
             handleError(e, changesetId, "");
@@ -334,6 +274,11 @@ public class ChangesetResource {
 
     // TODO: clean up these message...some are obsolete now
     private static void handleError(Exception e, long changesetId, String changesetDiffSnippet) {
+
+        if (e instanceof WebApplicationException) {
+            throw (WebApplicationException) e;
+        }
+
         String message = e.getMessage();
         if (e instanceof SQLException) {
             SQLException sqlException = (SQLException) e;

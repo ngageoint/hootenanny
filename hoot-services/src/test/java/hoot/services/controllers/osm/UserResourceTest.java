@@ -26,25 +26,22 @@
  */
 package hoot.services.controllers.osm;
 
+import static hoot.services.utils.DbUtils.createQuery;
+
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
@@ -57,173 +54,146 @@ import hoot.services.utils.XmlUtils;
 
 
 public class UserResourceTest extends OsmResourceTestAbstract {
-    private static final Logger log = LoggerFactory.getLogger(UserResourceTest.class);
-
-    public UserResourceTest() {
-        super();
-    }
-
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(UserResource.class, UserDetailsResource.class);
-    }
+    public UserResourceTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testGetById() throws Exception {
+        Document responseData = null;
         try {
-            Document responseData = null;
-            try {
-                responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
+            responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
-            XPath xpath = XmlUtils.createXPath();
+        XPath xpath = XmlUtils.createXPath();
 
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-                Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-                Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing header from response document: " + e.getMessage());
-            }
-
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-                Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-                Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-                Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing user from response document: " + e.getMessage());
-            }
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
         }
         catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetByName() throws Exception {
+        Document responseData = null;
         try {
-            Document responseData = null;
-            try {
-                responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
+            responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
-            XPath xpath = XmlUtils.createXPath();
+        XPath xpath = XmlUtils.createXPath();
 
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-                Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-                Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing header from response document: " + e.getMessage());
-            }
-
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-                Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-                Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-                Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing user from response document: " + e.getMessage());
-            }
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
         }
         catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
         }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetWithChangesetsModified() throws Exception {
+        double originalMinLon = -78.02265434416296;
+        double originalMinLat = 38.90089748801109;
+        double originalMaxLon = -77.9224564416296;
+        double originalMaxLat = 39.00085678801109;
+        BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon,
+                originalMaxLat);
+
+        // link some changesets to the user
+        Set<Long> changesetIds = new LinkedHashSet<>();
+
+        long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
+        changesetIds.add(changesetId);
+        (new Changeset(mapId, changesetId)).setBounds(originalBounds);
+
+        QChangesets changesets = QChangesets.changesets;
+
+        Changesets changeset = createQuery(mapId)
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
+
+        Assert.assertNotNull(changeset);
+        Assert.assertEquals(userId, (long) changeset.getUserId());
+
+        changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
+        changesetIds.add(changesetId);
+
+        (new Changeset(mapId, changesetId)).setBounds(originalBounds);
+
+        changeset = createQuery(mapId)
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
+
+        Assert.assertNotNull(changeset);
+        Assert.assertEquals(userId, (long) changeset.getUserId());
+
+        Document responseData = null;
         try {
-            double originalMinLon = -78.02265434416296;
-            double originalMinLat = 38.90089748801109;
-            double originalMaxLon = -77.9224564416296;
-            double originalMaxLat = 39.00085678801109;
-            BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon,
-                    originalMaxLat);
+            responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
-            // link some changesets to the user
-            Set<Long> changesetIds = new LinkedHashSet<>();
+        XPath xpath = XmlUtils.createXPath();
 
-            long changesetId = Changeset.insertNew(mapId, userId, conn);
-            changesetIds.add(changesetId);
-            (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
-
-            QChangesets changesets = QChangesets.changesets;
-
-            Changesets changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                    .select(changesets)
-                    .from(changesets)
-                    .where(changesets.id.eq(changesetId))
-                    .fetchOne();
-
-            Assert.assertNotNull(changeset);
-            Assert.assertEquals(userId, (long) changeset.getUserId());
-
-            changesetId = Changeset.insertNew(mapId, userId, conn);
-            changesetIds.add(changesetId);
-
-            (new Changeset(mapId, changesetId, conn)).setBounds(originalBounds);
-
-            changeset = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                    .select(changesets)
-                    .from(changesets)
-                    .where(changesets.id.eq(changesetId))
-                    .fetchOne();
-
-            Assert.assertNotNull(changeset);
-            Assert.assertEquals(userId, (long) changeset.getUserId());
-
-            Document responseData = null;
-            try {
-                responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
-
-            XPath xpath = XmlUtils.createXPath();
-
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-                Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-                Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing header from response document: " + e.getMessage());
-            }
-
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-                Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-                Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-                Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing user from response document: " + e.getMessage());
-            }
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
         }
         catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
         }
     }
 
@@ -251,7 +221,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            Assert.assertEquals(405, r.getStatus());
             throw e;
         }
     }
@@ -264,7 +234,7 @@ public class UserResourceTest extends OsmResourceTestAbstract {
         }
         catch (WebApplicationException e) {
             Response r = e.getResponse();
-            Assert.assertEquals(404, r.getStatus());
+            Assert.assertEquals(405, r.getStatus());
             throw e;
         }
     }
@@ -274,52 +244,46 @@ public class UserResourceTest extends OsmResourceTestAbstract {
     public void testGetDetails() throws Exception {
         // Authentication doesn't exist yet, so this just looks for the first user from a select.
         // This test is essentially the same as testGet now but will change after authentication is implemented.
+        Document responseData = null;
         try {
-            Document responseData = null;
-            try {
-                responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
-            }
-            catch (WebApplicationException e) {
-                Assert.fail("Unexpected response: " + e.getResponse());
-            }
-            Assert.assertNotNull(responseData);
+            responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
-            XPath xpath = XmlUtils.createXPath();
+        XPath xpath = XmlUtils.createXPath();
 
-            try {
-                Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-                Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-                Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing header from response document: " + e.getMessage());
-            }
-
-            try {
-                // probably need a better check than this
-                Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
-                Assert.assertEquals(DbUtils.getTestUserId(conn),
-                        Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-
-                // TODO: fix
-                // Assert.assertEquals(
-                // "user-with-id-" +
-                // String.valueOf(DbUtils.getTestUserId(conn)),
-                // xpath.evaluate("//osm/user/@display_name", responseData));
-                // TODO: can't test this from here if clearing out maps after
-                // every test...need a different
-                // test for it
-                // Assert.assertTrue(
-                // Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
-                // responseData)) > 0);
-            }
-            catch (Exception e) {
-                Assert.fail("Error parsing user from response document: " + e.getMessage());
-            }
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
         }
         catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            // probably need a better check than this
+            Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
+            Assert.assertEquals(DbUtils.getTestUserId(),
+                    Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+
+            // TODO: fix
+            // Assert.assertEquals(
+            // "user-with-id-" +
+            // String.valueOf(DbUtils.getTestUserId(conn)),
+            // xpath.evaluate("//osm/user/@display_name", responseData));
+            // TODO: can't test this from here if clearing out maps after
+            // every test...need a different
+            // test for it
+            // Assert.assertTrue(
+            // Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
+            // responseData)) > 0);
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
         }
     }
 }

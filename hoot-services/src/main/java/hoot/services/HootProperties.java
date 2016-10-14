@@ -36,8 +36,6 @@ import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 /**
@@ -45,8 +43,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public final class HootProperties {
     private static final Logger logger = LoggerFactory.getLogger(HootProperties.class);
+
     private static final Properties properties;
-    private static final ApplicationContext springContext;
 
     public static final String HOME_FOLDER;
     public static final String ASCIIDOC_PATH;
@@ -156,9 +154,6 @@ public final class HootProperties {
             throw new RuntimeException("Error loading Hootenanny's configuation!", ioe);
         }
 
-        springContext = new ClassPathXmlApplicationContext("hoot/spring/CoreServiceContext.xml",
-                                                           "db/spring-database.xml");
-
         HOME_FOLDER = getProperty("homeFolder");
         ASCIIDOC_PATH = getProperty("configAsciidocPath");
         TEMPLATE_PATH = getProperty("advOptTemplate");
@@ -239,8 +234,7 @@ public final class HootProperties {
         OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
     }
 
-    private HootProperties() {
-    }
+    private HootProperties() {}
 
     /**
      * Helper function to add property reference. It looks for property from the
@@ -303,11 +297,7 @@ public final class HootProperties {
         return Collections.unmodifiableMap(props);
     }
 
-    public static ApplicationContext getSpringContext() {
-        return springContext;
-    }
-
-    public static void init() {
+    static void init() {
         logger.debug("Hoot Properties - {}", getProperties());
     }
 }

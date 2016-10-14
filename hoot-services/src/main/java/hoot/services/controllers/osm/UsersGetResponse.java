@@ -34,19 +34,17 @@ import hoot.services.models.db.Users;
 public class UsersGetResponse {
     private List<Users> users;
 
+    public UsersGetResponse() {}
+
+    public UsersGetResponse(List<Users> users) {
+        this.users = users;
+    }
+
     public List<Users> getUsers() {
         return this.users;
     }
 
     public void setUsers(List<Users> users) {
         this.users = users;
-    }
-
-    public UsersGetResponse(List<Users> users) {
-        this.users = users;
-    }
-
-    public UsersGetResponse() {
-
     }
 }

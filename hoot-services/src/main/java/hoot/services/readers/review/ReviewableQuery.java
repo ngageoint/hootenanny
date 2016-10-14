@@ -26,13 +26,13 @@
  */
 package hoot.services.readers.review;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
@@ -40,40 +40,29 @@ import hoot.services.models.review.ReviewableItem;
 
 class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableQuery.class);
-    private long seqId = -1;
+    private long sortOrder = -1;
 
-    ReviewableQuery(Connection connection, long mapid, long seqid) {
-        super(connection, mapid);
-        seqId = seqid;
-    }
-
-    private String getQueryString() {
-        return "select id from current_relations_" + getMapId()
-                + " where tags->'hoot:review:needs' = 'yes' and tags->'hoot:review:sort_order'='" + seqId + "'";
+    ReviewableQuery(long mapId, long sortOrder) {
+        super(mapId);
+        this.sortOrder = sortOrder;
     }
 
     @Override
     public ReviewQueryMapper execQuery() {
-        ReviewableItem ret;
-        try (Statement stmt = super.getConnection().createStatement()) {
-            try (ResultSet rs = stmt.executeQuery(getQueryString())) {
-                long nResCnt = 0;
-                long relid = -1;
+        Long result = createQuery(getMapId())
+                .select(currentRelations.id)
+                .from(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'")
+                        .and(Expressions.booleanTemplate("tags->'hoot:review:sort_order'='" + sortOrder + "'")))
+                .fetchOne();
 
-                while (rs.next()) {
-                    // Retrieve by column name
-                    relid = rs.getLong("id");
-                    nResCnt++;
-                }
+        ReviewableItem reviewableItem = new ReviewableItem(sortOrder, getMapId(), -1);
 
-                ret = new ReviewableItem(seqId, getMapId(), relid);
-                ret.setResultCount(nResCnt);
-            }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error executing query!", e);
+        if (result != null) {
+            reviewableItem.setRelationId(result);
+            reviewableItem.setResultCount(1);
         }
 
-        return ret;
+        return reviewableItem;
     }
 }

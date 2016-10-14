@@ -29,7 +29,6 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.RASTER_TO_TILES;
 import static hoot.services.HootProperties.TILE_SERVER_PATH;
 
-import java.sql.Connection;
 import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
@@ -39,8 +38,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.HootProperties;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.JobStatusManager;
@@ -48,11 +49,19 @@ import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.utils.DbUtils;
 
 
+@Transactional
+@Component
 public class RasterToTilesService extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
+
+    @Autowired
+    private JobExecutionManager jobExecManager;
+
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
 
     public RasterToTilesService() {
         super(RASTER_TO_TILES);
@@ -69,14 +78,12 @@ public class RasterToTilesService extends JobControllerBase {
      */
     public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
         // _zoomLevels
-        try (Connection conn = DbUtils.createConnection()) {
-            JobStatusManager jobStatusManager = null;
+        try {
             try {
-                jobStatusManager = new JobStatusManager(conn);
                 jobStatusManager.addJob(jobId);
 
                 QMaps maps = QMaps.maps;
-                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
+                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
 
                 BoundingBox queryBounds;
                 try {
@@ -88,7 +95,7 @@ public class RasterToTilesService extends JobControllerBase {
                             + e.getMessage() + ")", e);
                 }
 
-                Map currMap = new Map(mapIdNum, conn);
+                Map currMap = new Map(mapIdNum);
                 JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
                 Object oMinLon = extents.get("minlon");
@@ -122,9 +129,7 @@ public class RasterToTilesService extends JobControllerBase {
                     JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
                     argStr.put("jobId", jobId);
 
-                    JobExecutionManager jobExecManager = (JobExecutionManager)
-                            HootProperties.getSpringContext().getBean("jobExecutionManagerNative");
-                    JSONObject res = jobExecManager.exec(argStr);
+                    JSONObject res = this.jobExecManager.exec(argStr);
                     Object oRes = res.get("warnings");
 
                     if (oRes != null) {
@@ -161,9 +166,9 @@ public class RasterToTilesService extends JobControllerBase {
         // _zoomLevels
         String jobId = UUID.randomUUID().toString();
 
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, conn, maps, maps.id, maps.displayName);
+            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
 
             BoundingBox queryBounds;
             try {
@@ -175,7 +180,7 @@ public class RasterToTilesService extends JobControllerBase {
                         + e.getMessage() + ")", e);
             }
 
-            Map currMap = new Map(mapIdNum, conn);
+            Map currMap = new Map(mapIdNum);
             JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
 
             double dMinLon = (Double) extents.get("minlon");

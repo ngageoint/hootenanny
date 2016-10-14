@@ -27,11 +27,11 @@
 package hoot.services.controllers.job;
 
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +53,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.sql.SQLQuery;
+import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.controllers.osm.MapResource;
 import hoot.services.geo.BoundingBox;
@@ -72,17 +75,21 @@ import hoot.services.models.review.ReviewableItem;
 import hoot.services.models.review.ReviewableStatistics;
 import hoot.services.readers.review.ReviewReferencesRetriever;
 import hoot.services.readers.review.ReviewableReader;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.ReviewUtils;
 
 
 /**
  * Service endpoint for the conflated data review process
  */
+@Controller
 @Path("/review")
+@Transactional
 public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
     private static final long MAX_RESULT_SIZE;
+
+    @Autowired
+    private ReviewReferencesRetriever reviewReferencesRetriever;
 
     static {
         long value;
@@ -98,8 +105,7 @@ public class ReviewResource {
         MAX_RESULT_SIZE = value;
     }
 
-    public ReviewResource() {
-    }
+    public ReviewResource() {}
 
     /**
      * Resolves all reviews for a given map
@@ -124,19 +130,19 @@ public class ReviewResource {
         logger.debug("Setting all items reviewed for map with ID: {}...", request.getMapId());
 
         long changesetId = -1;
-        try (Connection conn = DbUtils.createConnection()) {
-            conn.setAutoCommit(false);
-
-            long mapIdNum = MapResource.validateMap(request.getMapId(), conn);
+        try {
+            long mapIdNum = MapResource.validateMap(request.getMapId());
 
             long userId;
             try {
                 logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
-                userId = new SQLQuery<>(conn, DbUtils.getConfiguration())
+
+                userId = createQuery()
                         .select(QMaps.maps.userId)
                         .from(QMaps.maps)
                         .where(QMaps.maps.id.eq(mapIdNum))
                         .fetchOne();
+
                 logger.debug("Retrieved user ID: {}", userId);
             }
             catch (Exception e) {
@@ -146,12 +152,10 @@ public class ReviewResource {
             }
 
             try {
-                changesetId = setAllReviewsResolved(mapIdNum, userId, conn);
+                changesetId = setAllReviewsResolved(mapIdNum, userId);
                 logger.debug("Committing set all items reviewed transaction...");
-                conn.commit();
             }
             catch (Exception e) {
-                conn.rollback();
                 ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
             }
         }
@@ -198,8 +202,7 @@ public class ReviewResource {
 
         ReviewRefsResponses response = new ReviewRefsResponses();
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewReferencesRetriever refsRetriever = new ReviewReferencesRetriever(conn);
+        try {
             List<ReviewRefsResponse> responseRefsList = new ArrayList<>();
             for (ElementInfo elementInfo : request.getQueryElements()) {
                 ReviewRefsResponse responseRefs = new ReviewRefsResponse();
@@ -207,7 +210,7 @@ public class ReviewResource {
                 // element can be involved in many different relations and since we do not know the
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
-                List<ReviewRef> references = refsRetriever.getAllReferences(elementInfo);
+                List<ReviewRef> references = reviewReferencesRetriever.getAllReferences(elementInfo);
                 logger.debug("Returning {} review references for requesting element: {}", references.size(), elementInfo);
                 responseRefs.setReviewRefs(references.toArray(new ReviewRef[references.size()]));
                 responseRefs.setQueryElementInfo(elementInfo);
@@ -242,10 +245,8 @@ public class ReviewResource {
     @Path("/random")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getRandomReviewable(@QueryParam("mapid") Long mapId) {
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewableReader reader = new ReviewableReader(conn);
-            ReviewableItem ret = reader.getRandomReviewableItem(mapId);
-            return ret;
+        try {
+            return ReviewableReader.getRandomReviewableItem(mapId);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -277,15 +278,14 @@ public class ReviewResource {
     public ReviewableItem getNextReviewable(@QueryParam("mapid") Long mapId,
                                             @QueryParam("offsetseqid") Long offsetSeqId,
                                             @QueryParam("direction") String direction) {
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             // if nextSquence is - or out of index value we will get random
             long nextSequence = offsetSeqId + 1;
             if ("backward".equalsIgnoreCase(direction)) {
                 nextSequence = offsetSeqId - 1;
             }
 
-            ReviewableReader reader = new ReviewableReader(conn);
-            ReviewableItem ret = reader.getReviewableItem(mapId, nextSequence);
+            ReviewableItem ret = ReviewableReader.getReviewableItem(mapId, nextSequence);
 
             // get random if we can not find immediate next sequence item
             if (ret.getResultCount() < 1) {
@@ -320,10 +320,8 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getReviewable(@QueryParam("mapid") Long mapId,
                                         @QueryParam("offsetseqid") Long offsetSeqId) {
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewableReader reader = new ReviewableReader(conn);
-            ReviewableItem reviewableItem = reader.getReviewableItem(mapId, offsetSeqId);
-            return reviewableItem;
+        try {
+            return ReviewableReader.getReviewableItem(mapId, offsetSeqId);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -352,9 +350,8 @@ public class ReviewResource {
             reviewableStatistics = new ReviewableStatistics();
         }
         else {
-            try (Connection conn = DbUtils.createConnection()) {
-                ReviewableReader reader = new ReviewableReader(conn);
-                reviewableStatistics = reader.getReviewablesStatistics(mapId);
+            try {
+                reviewableStatistics = ReviewableReader.getReviewablesStatistics(mapId);
             }
             catch (WebApplicationException wae) {
                 throw wae;
@@ -399,10 +396,9 @@ public class ReviewResource {
         response.put("type", "FeatureCollection");
         response.put("features", new JSONArray());
 
-        try (Connection conn = DbUtils.createConnection()) {
-            ReviewableReader reader = new ReviewableReader(conn);
+        try {
             AllReviewableItems result =
-                    reader.getAllReviewableItems(mapId, new BoundingBox(minLon, minLat, maxLon, maxLat));
+                    ReviewableReader.getAllReviewableItems(mapId, new BoundingBox(minLon, minLat, maxLon, maxLat));
             response = new JSONObject();
 
             if (result.getOverflow()) {
@@ -433,34 +429,28 @@ public class ReviewResource {
      *            user ID associated with the review data
      * @return the ID of the changeset used to resolve the reviews
      */
-    private static long setAllReviewsResolved(long mapId, long userId, Connection connection) {
+    private static long setAllReviewsResolved(long mapId, long userId) {
         // create a changeset
         Map<String, String> changesetTags = new HashMap<>();
         changesetTags.put("bot", "yes");
         changesetTags.put("created_by", "hootenanny");
 
-        long changesetId = Changeset.createChangeset(mapId, userId, changesetTags, connection);
-        Changeset.closeChangeset(mapId, changesetId, connection);
+        long changesetId = Changeset.createChangeset(mapId, userId, changesetTags);
+        Changeset.closeChangeset(mapId, changesetId);
 
         /*
          * - mark all review relations belonging to the map as resolved - update
          * the changeset id for each review relation - increment the version for
          * each review relation
          */
-        String sql = "";
-        sql += "update current_relations_" + mapId;
-        sql += " set tags = tags || hstore('hoot:review:needs', 'no'),";
-        sql += " changeset_id = " + changesetId + ",";
-        sql += " version = version + 1";
-        sql += " where tags->'type' = 'review'";
+        long numRecordsUpdated = createQuery(mapId).update(currentRelations)
+                .where(Expressions.booleanTemplate("tags->'type' = 'review'"))
+                .set(Arrays.asList(currentRelations.changesetId, currentRelations.version, currentRelations.tags),
+                     Arrays.asList(changesetId, Expressions.stringTemplate("version + 1"),
+                                   Expressions.stringTemplate("tags || hstore('hoot:review:needs', 'no')")))
+                .execute();
 
-        try (Statement stmt = connection.createStatement()) {
-            int numRecordsUpdated = stmt.executeUpdate(sql);
-            logger.debug("{} records updated.", numRecordsUpdated);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Error retrieving all resolved reviews!", e);
-        }
+        logger.debug("{} records updated.", numRecordsUpdated);
 
         return changesetId;
     }

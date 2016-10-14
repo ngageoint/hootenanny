@@ -28,11 +28,6 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,11 +40,17 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.utils.DbUtils;
 
 
+@Controller
 @Path("/map")
+@Transactional(readOnly = true)
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
@@ -63,8 +64,7 @@ public class MapInfoResource {
     };
 
 
-    public MapInfoResource() {
-    }
+    public MapInfoResource() {}
 
     /**
      * Service method endpoint for retrieving the physical size of a map record.
@@ -134,7 +134,6 @@ public class MapInfoResource {
                 layer.put("id", Long.parseLong(mapId));
                 layer.put("size", mapSize);
                 layers.add(layer);
-                //layers.put(layer);
             }
         }
         catch (WebApplicationException wae) {
@@ -174,23 +173,9 @@ public class MapInfoResource {
      * Returns table size in byte
      */
     private static long getTableSizeInBytes(String tableName) {
-        long tableSize = 0;
-
-        try (Connection conn = DbUtils.createConnection()) {
-            try (Statement stmt = conn.createStatement()) {
-                String sql = "select pg_total_relation_size('" + tableName + "') as tablesize";
-                try (ResultSet rs = stmt.executeQuery(sql)){
-                    while (rs.next()) {
-                        tableSize = rs.getLong("tablesize");
-                    }
-                }
-            }
-        }
-        catch (SQLException e) {
-            String msg = "Error retrieving table size in bytes of " + tableName + " table!";
-            throw new RuntimeException(msg, e);
-        }
-
-        return tableSize;
+        return DbUtils.createQuery()
+                .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
+                .from()
+                .fetchOne();
     }
 }

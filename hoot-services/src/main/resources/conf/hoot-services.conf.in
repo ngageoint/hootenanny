@@ -26,7 +26,7 @@ testJobStatusPollerTimeout=250
 # determines whether the system automatically scans for changes to the log4j props file
 autoScanForLogPropsChanges=true
 
-# amount of time in minutes (integer) that the system checks the log verbosity level for changes 
+# amount of time in minutes (integer) that the system checks the log verbosity level for changes
 # in the log4j properties file
 logPropsDynamicChangeScanInterval=1
 
@@ -207,7 +207,7 @@ translationServerPort=8094
 translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
-translationServerScript=TranslationServer.js
+translationServerScript=/plugins/TranslationServer.js
 
 # Ogr Attributes script name
 GetOgrAttributeScript=makeGetOgrAttrib
@@ -249,7 +249,7 @@ P2PServerPort=8096
 P2PServerThreadCount=0
 
 # POI to POI Server Script in scripts folder
-P2PServerScript=P2PServer.js
+P2PServerScript=/plugins/P2PServer.js
 
 # REVIEW
 

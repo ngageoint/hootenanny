@@ -32,7 +32,12 @@
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
+#include <hoot/rnd/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
+
+#include "EdgeSublineMatch.h"
+#include "EidMapper.h"
 
 namespace hoot
 {
@@ -43,24 +48,33 @@ namespace hoot
  * The advantage is that we don't link concepts such as OsmMap and ElementIds directly to the
  * network algorithms.
  */
-class NetworkDetails
+class NetworkDetails : public SearchRadiusProvider
 {
 public:
-  NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr network);
+  NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
-  Meters calculateLength(ConstNetworkEdgePtr e);
+  Meters calculateLength(ConstNetworkEdgePtr e) const;
 
-  ConstOsmMapPtr getMap() const { return _map; }
+  Meters calculateLength(ConstEdgeSublinePtr e) const;
+
+  Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v);
+
+  QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1,
+    ConstNetworkEdgePtr e2);
+
+  QList<ConstNetworkVertexPtr> getCandidateMatches(ConstNetworkVertexPtr v);
 
   double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
   
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
+  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
+
+  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const;
+
+  ConstOsmMapPtr getMap() const { return _map; }
+
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
-  Envelope getEnvelope(ConstNetworkEdgePtr e);
-
-  Envelope getEnvelope(ConstNetworkVertexPtr v);
 
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
 
@@ -70,34 +84,81 @@ public:
 
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
-  bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
+
+  Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
+
+  /**
+   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
+   * no match and larger scores are better.
+   */
+  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
+
+  bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
   bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
-  WayStringPtr toWayString(ConstEdgeStringPtr e) const;
+  bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
+  /**
+   * Starting at v1, v2, are e1 and e2 partial edge match candidates?
+   *
+   * E.g.
+   *
+   *     a----1---b
+   *       c----2---d
+   *
+   * isPartialCandidateMatch(a, c, 1, 2) == true
+   * isPartialCandidateMatch(a, d, 1, 2) == false
+   */
+  bool isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
+  ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
+
+  WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
 
 private:
   shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
-  ConstOsmNetworkPtr _network;
+  ConstOsmNetworkPtr _n1, _n2;
   shared_ptr<SublineStringMatcher> _sublineMatcher;
+  LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache
   {
   public:
     bool reversed;
     double p;
+    WaySublineMatchStringPtr matches;
   };
 
   QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;
 
+  /**
+   * Assuming e1 & e2 match at v1 and v2 respectively, score the edges for match based on their
+   * relative angles.
+   * @param v1 - vertex in e1
+   * @param v2 - vertex in e2
+   * @return
+   */
+  double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
+
+  LegacyVertexMatcherPtr _getVertexMatcher();
+
+  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
 };
 
 typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;
 typedef shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+
+// not implemented
+bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);
 
 }
 

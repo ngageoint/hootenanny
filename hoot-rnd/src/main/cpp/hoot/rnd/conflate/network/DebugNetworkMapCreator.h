@@ -42,12 +42,14 @@ namespace hoot
 class DebugNetworkMapCreator
 {
 public:
-  DebugNetworkMapCreator();
+  DebugNetworkMapCreator(double matchThreshold = 0.15);
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
     QList<NetworkVertexScorePtr> vertexScores);
 
 private:
+  double _matchThreshold;
+
   void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore);
 
   void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore);

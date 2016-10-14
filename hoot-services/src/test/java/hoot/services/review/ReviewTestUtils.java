@@ -27,29 +27,21 @@
 package hoot.services.review;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import hoot.services.controllers.osm.ChangesetDbWriter;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.controllers.osm.ChangesetDbWriter;
 
 
 /*
  * Various utilities for review process testing
  */
 public class ReviewTestUtils {
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ReviewTestUtils.class);
-
-    public static Connection conn;
-
     public Map<ElementType, Map<Long, Element>> parsedElementIdsToElementsByType;
 
     /**
@@ -57,12 +49,11 @@ public class ReviewTestUtils {
      * AllDataTypesA.osm with AllDataTypesB.osm
      * 
      * @throws Exception
-     * @throws IOException
      */
-    public long populateReviewDataForAllDataTypes(final long mapId, final long userId) throws IOException, Exception {
+    public long populateReviewDataForAllDataTypes(long mapId, long userId) throws Exception {
         // write the reviewable data to the OSM tables
-        final long changesetId = Changeset.insertNew(mapId, userId, conn);
-        ChangesetDbWriter elementWriter = new ChangesetDbWriter(conn);
+        long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
+        ChangesetDbWriter elementWriter = new ChangesetDbWriter();
         /* final Document response = */
         elementWriter.write(mapId, changesetId,
                 FileUtils

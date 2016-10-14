@@ -158,6 +158,8 @@ public:
 
   const vector< shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
 
+  const IdGenerator& getIdGenerator() const { return *_idGen; }
+
   /**
    * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
    * out of date and will require calling getIndex again.

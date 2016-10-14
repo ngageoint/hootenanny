@@ -22,24 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
+
+import java.util.HashMap;
 
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.osm.OsmTestUtils;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.MapUtils;
 
 
@@ -48,10 +45,6 @@ import hoot.services.utils.MapUtils;
  * writing. Its not meant to be run as part of the test suite.
  */
 public class ChangesetDbWriterTest {
-    private static final Logger logger = LoggerFactory.getLogger(ChangesetDbWriterTest.class);
-
-    private static final QCurrentNodes nodes = QCurrentNodes.currentNodes;
-
     private static final int NUM_NODES = 1000;
     private static final int NUM_TAGS_PER_NODE = 10;
 
@@ -61,40 +54,31 @@ public class ChangesetDbWriterTest {
      * @Category(IntegrationTest.class)
      */
     public void testLargeWrite() throws Exception {
-        Connection conn = DbUtils.createConnection();
-        long userId = MapUtils.insertUser(conn);
-        long mapId = MapUtils.insertMap(userId, conn);
-        long changesetId = Changeset.insertNew(mapId, userId, conn);
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+        long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
         BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
 
-        try {
-            String changeset = "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>";
-            for (int i = 0; i < NUM_NODES; i++) {
-                changeset += "<node id=\"" + (i + 1) * -1 + "\" lon=\"" + originalBounds.getMinLon()
-                        + "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId
-                        + "\">";
-                for (int j = 0; j < NUM_TAGS_PER_NODE; j++) {
-                    changeset += "<tag k=\"" + "tag " + (j + 1) + "\" v=\"" + (j + 1) + "\"/>";
-                }
-                changeset += "</node>";
+        String changeset = "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>";
+        for (int i = 0; i < NUM_NODES; i++) {
+            changeset += "<node id=\"" + (i + 1) * -1 + "\" lon=\"" + originalBounds.getMinLon()
+                    + "\" lat=\"" + originalBounds.getMinLat() + "\" version=\"0\" changeset=\"" + changesetId
+                    + "\">";
+            for (int j = 0; j < NUM_TAGS_PER_NODE; j++) {
+                changeset += "<tag k=\"" + "tag " + (j + 1) + "\" v=\"" + (j + 1) + "\"/>";
             }
-            changeset += "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>";
-
-            logger.info("Create elements test start.");
-            /* final Document response = */new ChangesetDbWriter(conn).write(mapId, changesetId, changeset);
-            logger.info("Create elements test end.");
-
-            Assert.assertEquals(NUM_NODES,
-                    (int) new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                            .from(nodes)
-                            .fetchCount());
-
-            Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,
-                    OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node, conn));
+            changeset += "</node>";
         }
-        finally {
-            // DbUtils.deleteOSMRecord(conn, mapId);
-            conn.close();
-        }
+        changeset += "</create>" + "<modify/>" + "<delete if-unused=\"true\"/>" + "</osmChange>";
+
+        /* final Document response = */new ChangesetDbWriter().write(mapId, changesetId, changeset);
+
+        Assert.assertEquals(NUM_NODES,
+                (int) createQuery(mapId)
+                        .from(QCurrentNodes.currentNodes)
+                        .fetchCount());
+
+        Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,
+                OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node));
     }
 }
