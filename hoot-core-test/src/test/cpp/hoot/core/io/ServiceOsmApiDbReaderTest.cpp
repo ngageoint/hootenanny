@@ -39,6 +39,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 
+#include <hoot/core/io/OsmWriter.h>
+
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
@@ -51,6 +53,7 @@ class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
   CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadBoundingBoxTest);
+  CPPUNIT_TEST(runReadBoundingBoxTestMap);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -92,6 +95,35 @@ public:
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/nodes.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/ways.sql > /dev/null 2>&1; \
       psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/relations.sql > /dev/null 2>&1";
+
+    if( std::system(cmd.toStdString().c_str()) != 0 )
+    {
+      throw HootException("Failed postgres command.  Exiting test.");
+    }
+  }
+
+  void insertDataForBoundTest()
+  {
+    // parse out the osm api dbname, dbuser, and dbpassword
+    //example: postgresql://hoot:hoottest@localhost:5432/osmapi_test
+    QUrl dbUrl = ServicesDbTestUtils::getOsmApiDbUrl();
+    QString dbUrlString = dbUrl.toString();
+    QStringList dbUrlParts = dbUrlString.split("/");
+    QString dbName = dbUrlParts[dbUrlParts.size()-1];
+    QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
+    QString dbUser = userParts[0];
+    QString dbPassword = userParts[1].split("@")[0];
+    QString dbHost = userParts[1].split("@")[1];
+    QString dbPort = userParts[2];
+
+    LOG_DEBUG("Name="+dbName+", user="+dbUser+", pass="+dbPassword+", port="+dbPort+", host="+dbHost);
+
+    // insert simple test data
+    QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
+    QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/users.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/changesets.sql > /dev/null 2>&1; \
+      psql "+auth+" -f ${HOOT_HOME}/test-files/servicesdb/postgresql_forbounding_test.sql > /dev/null 2>&1";
 
     if( std::system(cmd.toStdString().c_str()) != 0 )
     {
@@ -203,6 +235,22 @@ public:
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
   }
 
+  void verifyReadBoundingBoxMapOutput(shared_ptr<OsmMap> map, shared_ptr<OsmMap> map1)
+  {
+    //before crop
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationMap().size());
+
+    //after crop, there are 1 way, 2 nodes and 1 relation are out of the bounding box
+    CPPUNIT_ASSERT_EQUAL(2, (int)map1->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map1->getRelationMap().size());
+
+    //verify the detials for the map after cropping
+    verifyReadBoundingBoxOutput(map1);
+  }
+
   void runReadOsmApiTest()
   {
     //test reader
@@ -243,6 +291,35 @@ public:
     verifyReadBoundingBoxOutput(map);
 
     reader.close();
+  }
+
+  void runReadBoundingBoxTestMap()
+  {
+    OsmApiDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    insertDataForBoundTest();
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    reader.read(map);
+    reader.close();
+
+    //setup bounding box
+    OsmApiDbReader reader1;
+    shared_ptr<OsmMap> map1(new OsmMap());
+
+    reader1.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    QString bbox = "-106.51848,38.0445,-105.378,38.56";
+    reader1.setBoundingBox(bbox);
+    reader1.read(map1);
+
+    verifyReadBoundingBoxMapOutput(map, map1);
+    reader1.close();
   }
 };
 
