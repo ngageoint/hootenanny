@@ -2,6 +2,7 @@ Feature: Review Bookmarks
 
     Scenario: Conflate AllDataTypes
         Given I am on Hootenanny
+        And I resize the window
         And I click Get Started
         And I press "Add Reference Dataset"
         And I click the "AllDataTypesACucumber" Dataset
