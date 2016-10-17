@@ -128,9 +128,6 @@ public class ChangesetDbWriter {
         return parsedElementIdsToElementsByType;
     }
 
-    /**
-     * Constructor
-     */
     public ChangesetDbWriter() {
         maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
     }
@@ -176,7 +173,7 @@ public class ChangesetDbWriter {
         // Formerly, we had a setting called
         // "hootCoreServicesDatabaseWriterCompatibility" that would
         // have to be turned on to allow nodes with negative ID's to be written,
-        // which was to accomodate the behavior of hoot --convert. If it wasn't turned on, a failure
+        // which was to accommodate the behavior of hoot --convert. If it wasn't turned on, a failure
         // would occur here. Now, by default the writing nodes with negative ID's is always allowed.
         oldElementIds.add(oldElementId);
 
@@ -440,146 +437,145 @@ public class ChangesetDbWriter {
     }
 
     private List<Element> write(Document changesetDoc) throws Exception {
-            logger.debug(XmlDocumentBuilder.toString(changesetDoc));
+        logger.debug(XmlDocumentBuilder.toString(changesetDoc));
 
-            ChangesetErrorChecker changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId);
-            dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
-            changesetErrorChecker.checkForVersionErrors();
-            changesetErrorChecker.checkForElementVisibilityErrors();
+        ChangesetErrorChecker changesetErrorChecker = new ChangesetErrorChecker(changesetDoc, requestChangesetMapId);
+        dbNodeCache = changesetErrorChecker.checkForElementExistenceErrors();
+        changesetErrorChecker.checkForVersionErrors();
+        changesetErrorChecker.checkForElementVisibilityErrors();
 
-            initParsedElementCache();
+        initParsedElementCache();
 
-            // The "if-unused" attribute in the delete tag prevents any element
-            // being used by another element from being deleted (e.g. node can't be deleted that is still
-            // being used by a way or relation, etc.); its attribute value is ignored; only the presence
-            // of the attribute or lack thereof is looked at. This seems a little confusing to me,
-            // but that's how the OSM rails port parses it, and I'm trying to stay consistent with
-            // what it does when possible.
-            logger.debug("Changeset delete unused check...");
-            boolean deleteIfUnused = false;
-            Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
-            if ((deleteXml != null) && deleteXml.hasAttributes()
-                    && (deleteXml.getAttributes().getNamedItem("if-unused") != null)) {
-                deleteIfUnused = true;
+        // The "if-unused" attribute in the delete tag prevents any element
+        // being used by another element from being deleted (e.g. node can't be deleted that is still
+        // being used by a way or relation, etc.); its attribute value is ignored; only the presence
+        // of the attribute or lack thereof is looked at. This seems a little confusing to me,
+        // but that's how the OSM rails port parses it, and I'm trying to stay consistent with
+        // what it does when possible.
+        logger.debug("Changeset delete unused check...");
+        boolean deleteIfUnused = false;
+        Node deleteXml = XPathAPI.selectSingleNode(changesetDoc, "//osmChange/delete");
+        if ((deleteXml != null) && deleteXml.hasAttributes()
+                && (deleteXml.getAttributes().getNamedItem("if-unused") != null)) {
+            deleteIfUnused = true;
+        }
+
+        logger.debug("Inserting new OSM elements and updating existing OSM elements...");
+
+        // By storing the elements and the element records in two different
+        // collections, changesetDiffElements and recordsToStore, data is being duplicated
+        // here since Element already has a copy of the UpdatableRecord. However, this prevents
+        // having to parse through the records a second time to collect them to pass on to the database
+        // with the batch method. This is wasteful of memory, so perhaps there is a better way to do this.
+        List<Element> changesetDiffElements = new ArrayList<>();
+        long changesetDiffElementsSize = 0;
+
+        // Process on entity change type at a time, different database update
+        // types must be batched separately (inserts/updates/deletes).
+        for (EntityChangeType entityChangeType : EntityChangeType.values()) {
+            // Process one element type at a time. For create/modify operations
+            // we want to make sure elements that contain an element type are processed after that
+            // element type (ways contain nodes, so process ways after nodes). This corresponds to the
+            // default ordering of ElementType. For delete operations we want to go in the reverse order.
+            List<ElementType> elementTypeValues = Arrays.asList(ElementType.values());
+
+            if (entityChangeType == EntityChangeType.DELETE) {
+                Collections.reverse(elementTypeValues);
             }
 
-            logger.debug("Inserting new OSM elements and updating existing OSM elements...");
+            for (ElementType elementType : elementTypeValues) {
+                if (elementType != ElementType.Changeset) {
+                    logger.debug("Parsing {} for {}", entityChangeType, elementType);
 
-            // By storing the elements and the element records in two different
-            // collections, changesetDiffElements and recordsToStore, data is being duplicated
-            // here since Element already has a copy of the UpdatableRecord. However, this prevents
-            // having to parse through the records a second time to collect them to pass on to the database
-            // with the batch method. This is wasteful of memory, so perhaps there is a better way to do this.
-            List<Element> changesetDiffElements = new ArrayList<>();
-            long changesetDiffElementsSize = 0;
+                    // parse the elements from the request XML for the given element type
+                    changesetDiffElements.addAll(parseElements(
+                            XPathAPI.selectNodeList(changesetDoc,
+                                    "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
+                                            + elementType.toString().toLowerCase()),
+                            elementType, entityChangeType, deleteIfUnused));
 
-            // Process on entity change type at a time, different database update
-            // types must be batched separately (inserts/updates/deletes).
-            for (EntityChangeType entityChangeType : EntityChangeType.values()) {
-                // Process one element type at a time. For create/modify operations
-                // we want to make sure elements that contain an element type are processed after that
-                // element type (ways contain nodes, so process ways after nodes). This corresponds to the
-                // default ordering of ElementType. For delete operations we want to go in the reverse order.
-                List<ElementType> elementTypeValues = Arrays.asList(ElementType.values());
+                    // If any elements were actually parsed for this element and entity update type, update the
+                    // database with the parsed elements, their related records, and their tags
+                    if (changesetDiffElements.size() > changesetDiffElementsSize) {
+                        changesetDiffElementsSize += (changesetDiffElements.size() - changesetDiffElementsSize);
 
-                if (entityChangeType == EntityChangeType.DELETE) {
-                    Collections.reverse(elementTypeValues);
-                }
+                        // don't need to clear tags or related records out if
+                        // this is a new element, since they won't exist yet
+                        if (entityChangeType != EntityChangeType.CREATE) {
+                            // Clear out *all* related elements (e.g. way nodes
+                            // for node, relation members for relation, etc.) first (this is how the rails port
+                            // does it, although while it seems necessary for ways, it doesn't seem necessary to
+                            // me for relations). Any related elements to be created/retained specified in the
+                            // request have already been added to relatedRecordsToStore and will be inserted into
+                            // the db following this.
+                            Element prototypeElement = ElementFactory.create(requestChangesetMapId, elementType);
 
-                for (ElementType elementType : elementTypeValues) {
-                    if (elementType != ElementType.Changeset) {
-                        logger.debug("Parsing {} for {}", entityChangeType, elementType);
+                            // Elements which don't have related elements, will return a null for the
+                            // relatedRecordType.
+                            RelationalPathBase<?> relatedRecordTable = prototypeElement.getRelatedRecordTable();
+                            Element.removeRelatedRecords(requestChangesetMapId, relatedRecordTable,
+                                    prototypeElement.getRelatedRecordJoinField(), parsedElementIds,
+                                    relatedRecordTable != null);
+                        }
 
-                        // parse the elements from the request XML for the given element type
-                        changesetDiffElements.addAll(parseElements(
-                                XPathAPI.selectNodeList(changesetDoc,
-                                        "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
-                                                + elementType.toString().toLowerCase()),
-                                elementType, entityChangeType, deleteIfUnused));
+                        // TODO: really need to be flushing these batch executions after they get
+                        // TODO: to be a certain size to avoid memory problems; see maxRecordBatchSize
+                        // TODO: make this code element generic; reinstate the DbSerializable interface??
+                        if (elementType == ElementType.Node) {
+                            DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
+                                    recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                        }
+                        else if (elementType == ElementType.Way) {
+                            DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
+                                    recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                        }
+                        else if (elementType == ElementType.Relation) {
+                            DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
+                                    recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                        }
 
-                        // If any elements were actually parsed for this element and entity update type, update the
-                        // database with the parsed elements, their related records, and their tags
-                        if (changesetDiffElements.size() > changesetDiffElementsSize) {
-                            changesetDiffElementsSize += (changesetDiffElements.size() - changesetDiffElementsSize);
+                        // make the database updates for the element records
+                        recordsToModify.clear();
+                        parsedElementIds.clear();
 
-                            // don't need to clear tags or related records out if
-                            // this is a new element, since they won't exist yet
-                            if (entityChangeType != EntityChangeType.CREATE) {
-                                // Clear out *all* related elements (e.g. way nodes
-                                // for node, relation members for relation, etc.) first (this is how the rails port
-                                // does it, although while it seems necessary for ways, it doesn't seem necessary to
-                                // me for relations). Any related elements to be created/retained specified in the
-                                // request have already been added to relatedRecordsToStore and will be inserted into
-                                // the db following this.
-                                Element prototypeElement = ElementFactory.create(requestChangesetMapId,
-                                        elementType);
-
-                                // Elements which don't have related elements, will return a null for the
-                                // relatedRecordType.
-                                RelationalPathBase<?> relatedRecordTable = prototypeElement.getRelatedRecordTable();
-                                Element.removeRelatedRecords(requestChangesetMapId, relatedRecordTable,
-                                        prototypeElement.getRelatedRecordJoinField(), parsedElementIds,
-                                        relatedRecordTable != null);
-                            }
-
-                            // TODO: really need to be flushing these batch executions after they get
-                            // TODO: to be a certain size to avoid memory problems; see maxRecordBatchSize
-                            // TODO: make this code element generic; reinstate the DbSerializable interface??
+                        // Add the related records after the parent element records to keep from violating
+                        // foreign key constraints. Any existing related records
+                        // for this element have already been completely cleared.
+                        // TODO: make this code element generic; reinstate the
+                        // DbSerializable interface??
+                        if ((relatedRecordsToStore != null) && (!relatedRecordsToStore.isEmpty())) {
                             if (elementType == ElementType.Node) {
-                                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
-                                        recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
+                                        RecordBatchType.INSERT, maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Way) {
-                                DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
-                                        recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                        QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
+                                        maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Relation) {
-                                DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
-                                        recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
+                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                        QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
+                                        maxRecordBatchSize);
                             }
-
-                            // make the database updates for the element records
-                            recordsToModify.clear();
-                            parsedElementIds.clear();
-
-                            // Add the related records after the parent element records to keep from violating
-                            // foreign key constraints. Any existing related records
-                            // for this element have already been completely cleared.
-                            // TODO: make this code element generic; reinstate the
-                            // DbSerializable interface??
-                            if ((relatedRecordsToStore != null) && (!relatedRecordsToStore.isEmpty())) {
-                                if (elementType == ElementType.Node) {
-                                    DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
-                                            RecordBatchType.INSERT, maxRecordBatchSize);
-                                }
-                                else if (elementType == ElementType.Way) {
-                                    DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
-                                            QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
-                                            maxRecordBatchSize);
-                                }
-                                else if (elementType == ElementType.Relation) {
-                                    DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
-                                            QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
-                                            maxRecordBatchSize);
-                                }
-                                relatedRecordsToStore.clear();
-                            }
+                            relatedRecordsToStore.clear();
                         }
-                      }
-                }
+                    }
+                  }
             }
+        }
 
-            changeset.updateNumChanges((int) changesetDiffElementsSize);
+        changeset.updateNumChanges((int) changesetDiffElementsSize);
 
-            // Even if a bounds is specified in the incoming changeset diff data, it
-            // should be ignored, per OSM docs.
-            BoundingBox newChangesetBounds = changeset.getBounds();
-            newChangesetBounds.expand(diffBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
+        // Even if a bounds is specified in the incoming changeset diff data, it
+        // should be ignored, per OSM docs.
+        BoundingBox newChangesetBounds = changeset.getBounds();
+        newChangesetBounds.expand(diffBounds, Double.parseDouble(CHANGESET_BOUNDS_EXPANSION_FACTOR_DEEGREES));
 
-            changeset.setBounds(newChangesetBounds);
-            changeset.updateExpiration();
+        changeset.setBounds(newChangesetBounds);
+        changeset.updateExpiration();
 
-            return changesetDiffElements;
+        return changesetDiffElements;
     }
 
     /**
