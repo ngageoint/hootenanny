@@ -845,7 +845,11 @@
         ],
         "isA": "amenity",
         "name": "amenity=fountain",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=attraction",
+            "weight": 0.7
+        }
     },
     {
         "isA": "amenity",

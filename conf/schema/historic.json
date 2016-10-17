@@ -44,6 +44,10 @@
         "similarTo": {
             "name": "tourism=artwork",
             "weight": 0.4
+        },
+        "similarTo": {
+            "name": "amenity=place_of_worship",
+            "weight": 0.3
         }
     },
     {

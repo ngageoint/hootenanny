@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{69d6c63a-d959-5f87-aac2-9f928f42b781}";
+QString PoiPolygonMatch::_testUuid = "{fde621f3-c915-5f50-b521-49cb75c20337}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -130,6 +130,8 @@ _typeScoreThreshold(typeScoreThreshold)
   _calculateMatch(eid1, eid2);
 }
 
+//TODO: define a poi poly poly category??
+
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
@@ -137,10 +139,10 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  if (!inABuildingOrPoiCategory && (tags.get("barrier").toLower() == "fence"
+  if (!inABuildingOrPoiCategory &&
+      (tags.get("barrier").toLower() == "fence"
       || tags.get("landuse").toLower() == "grass"
       || tags.get("natural").toLower() == "tree_row"
-      || tags.get("highway").toLower() == "pedestrian"
       || tags.get("natural").toLower() == "scrub"
       || tags.get("highway").toLower() == "residential"))
   {
@@ -149,6 +151,8 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
          (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 }
+
+//TODO: define a poi poly poi category??
 
 bool PoiPolygonMatch::isPoi(const Element& e)
 {
@@ -171,11 +175,11 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix.
   //TODO: replace logic in rule applier with commented out ones
   const Tags& tags = e.getTags();
-  if (tags.get("natural").toLower() == "tree" || tags.get("amenity").toLower() == "drinking_water" ||
-      tags.get("amenity").toLower() == "bench" || tags.contains("traffic_sign") ||
-      tags.get("amenity").toLower() == "recycling"
-      /*|| tags.get("highway").toLower() == "traffic_signals",
-      tags.get("amenity").toLower() == "atm"*/)
+  if (tags.get("natural").toLower() == "tree"
+      || tags.get("amenity").toLower() == "drinking_water"
+      || tags.get("amenity").toLower() == "bench"
+      || tags.contains("traffic_sign")
+      || tags.get("amenity").toLower() == "recycling")
   {
     return false;
   }
@@ -282,7 +286,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _exactNameMatch = scorer.getExactNameScore(poi, poly) == 1.0;
 
   _typeScore = scorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
-  _typeMatch = _typeScore >= _typeScoreThreshold;
+  if (poi->getTags().get("historic") == "monument")
+  {
+    _typeMatch = _typeScore >= 0.3; //TODO: move to constant
+  }
+  else
+  {
+    _typeMatch = _typeScore >= _typeScoreThreshold;
+  }
   //const bool exactTypeMatch = typeScore == 1.0;
 
   double ce = -1.0;

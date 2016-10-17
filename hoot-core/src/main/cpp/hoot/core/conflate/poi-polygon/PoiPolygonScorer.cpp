@@ -89,9 +89,7 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QS
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
     const QString t2Cuisine = t2.get("cuisine").toLower();
-    //TODO: test this again
-    if (/*t1Cuisine != t2Cuisine*/
-        OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
+    if (OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
         //Don't return false on regional, since its location dependent and we don't take that into
         //account.
         t1Cuisine != "regional" && t2Cuisine != "regional" &&
@@ -130,7 +128,7 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
 }
 
 bool PoiPolygonScorer::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                      QString& t2BestKvp)
+                                   QString& t2BestKvp)
 {
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
 }

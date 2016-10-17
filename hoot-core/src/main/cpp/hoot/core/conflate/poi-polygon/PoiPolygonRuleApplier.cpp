@@ -121,6 +121,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
   const bool polyIsRecCenter = _isRecCenter(poly);
   const bool polyIsSport = _isSport(poly);
+  const bool polyContainsMoreThanOneType = _containsMoreThanOneType(poly);
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -393,9 +394,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   genericLandUseTagVals.append("industrial");
   genericLandUseTagVals.append("grass");
 
-  //TODO: CONVERT ALL THESE RULES TO EXTRACTORS GENERATING SPECIFIC SCORES AND MOVE TO A CLASSIFIER
-  //TYPE CLASS WHICH POIPOLYGONMATCH USES IN PLACE OF THE CURRENT EVIDENCE VALUE
-
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
   //ring of this poly and the other park poly has a name.
@@ -415,8 +413,8 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   //to another park poly, we want to be more restrictive on type matching, but only if the poi has
   //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
   //cause a review here, rather than a miss.
-  else if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) && !poiIsPark &&
-           !poiIsParkish && poiHasType)
+  else if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
+           !polyContainsMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
   {
     if (_exactNameMatch)
     {
@@ -522,7 +520,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   }
   //This is a simple rule to prevent matching poi's not at all like a park with park polys.
   //TODO: this may render some of the previous rules obsolete.
-  else if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark)
+  else if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyContainsMoreThanOneType)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -663,47 +661,14 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-//  else if (poiHasType && polyHasType && poly->getTags().contains("place") &&
-//           !poi->getTags().contains("place"))
-//  {
-//    if (Log::getInstance().getLevel() == Log::Debug &&
-//        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-//    {
-//      LOG_DEBUG("Returning miss per rule #20...");
-//    }
-//    matchClass.setMiss();
-//    triggersParkRule = true;
-//  }
-//  //TODO: come up with a definitive list for this ??
-//  //good: public transport, tunnel
-//  else if (poiHasType && (poi->getTags().get("amenity").toLower() == "restaurant" ||
-//                          poi->getTags().get("shop").toLower() == "car") &&
-//           ((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
-//           (poly->getTags().contains("public_transport") && !poi->getTags().contains("public_transport")) ||
-//           (poly->getTags().get("tunnel").toLower() == "yes" && poi->getTags().get("tunnel").toLower() != "yes") ||
-//           (poly->getTags().get("amenity").toLower() == "parking" && poi->getTags().get("amenity").toLower() != "parking") ||
-//           (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
-//           (poly->getTags().contains("highway") && !poi->getTags().contains("highway"))) /*&&
-//           _typeScore < 0.2*/)
-//  {
-//    if (Log::getInstance().getLevel() == Log::Debug &&
-//        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-//    {
-//      LOG_DEBUG("Returning miss per rule #21...");
-//    }
-//    matchClass.setMiss();
-//    triggersParkRule = true;
-//  }
-
   //LAST FULL DATASET SCORE CHECKS BEFORE HERE
-
   //Need to be stricter on tunnels since we don't want above ground things to conflate with them.
   else if (poly->getTags().get("tunnel") == "yes" && !(_typeMatch || _nameMatch))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per rule #22...");
+      LOG_DEBUG("Returning miss per rule #20...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -716,7 +681,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per rule #23...");
+      LOG_DEBUG("Returning miss per rule #21...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -729,7 +694,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per rule #24...");
+      LOG_DEBUG("Returning miss per rule #22...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -742,7 +707,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
     {
-      LOG_DEBUG("Returning miss per rule #25...");
+      LOG_DEBUG("Returning miss per rule #23...");
     }
     matchClass.setMiss();
     triggersParkRule = true;
@@ -843,6 +808,26 @@ bool PoiPolygonRuleApplier::_isBuildingIsh(ConstElementPtr element) const
     Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
   return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
     elementName.contains("bldg");
+}
+
+bool PoiPolygonRuleApplier::_containsMoreThanOneType(ConstElementPtr element) const
+{
+  int typeCount = 0;
+  vector<SchemaVertex> allTags = OsmSchema::getInstance().getAllTags();
+  for (vector<SchemaVertex>::const_iterator it = allTags.begin(); it != allTags.end(); ++it)
+  {
+    SchemaVertex vertex = *it;
+    if (element->getTags().contains(vertex.key))
+    {
+      LOG_TRACE("Has key: " << vertex.key);
+      typeCount++;
+      if (typeCount > 1)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 }
