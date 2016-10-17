@@ -29,45 +29,69 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
+import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
+
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.Assert;
+import org.json.simple.parser.JSONParser;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootServicesJerseyTestAbstract;
 
 
-public class ReportsResourceTest {
-    private static ReportsResource rps;
+public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
+    private static File homeFolder;
+    private static String original_HOME_FOLDER;
+    private static String storePath;
 
     @BeforeClass
-    public static void oneTimeSetup() {
-        rps = new ReportsResource();
-        Assert.assertNotNull(HOME_FOLDER);
-        Assert.assertNotNull(RPT_STORE_PATH);
+    public static void beforeClass() throws Exception {
+        original_HOME_FOLDER = HOME_FOLDER;
+        homeFolder = new File(FileUtils.getTempDirectory(), "ReportsResourceTest");
+        FileUtils.forceMkdir(homeFolder);
+        assertTrue(homeFolder.exists());
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
+        HootCustomPropertiesSetter.setProperty("REPORTS_PATH", homeFolder.getAbsolutePath() + "/" + RPT_STORE_PATH, ReportsResource.class);
+
+        storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
+        File dir = new File(storePath);
+        FileUtils.forceMkdir(dir);
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetMetaData() throws Exception {
-        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File dir = new File(storePath);
+        ReportsResource rps = new ReportsResource();
+
         File fWks = new File(storePath, "123_test");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(dir);
         Method getMetaDataMethod = getMetaDataMethod();
 
         JSONObject res = (JSONObject) getMetaDataMethod.invoke(null, "123_test");
-        Assert.assertNull(res.get("name"));
+        assertNull(res.get("name"));
 
         FileUtils.forceMkdir(fWks);
         String currTime = String.valueOf(System.currentTimeMillis());
@@ -81,10 +105,10 @@ public class ReportsResourceTest {
 
         res = (JSONObject) getMetaDataMethod.invoke(null, "123_test");
 
-        Assert.assertEquals("Test Report1", res.get("name").toString());
-        Assert.assertEquals("This is test report 1", res.get("description").toString());
-        Assert.assertEquals(currTime, res.get("created").toString());
-        Assert.assertEquals("reportpath", storePath + "/123_test/report.pdf", res.get("reportpath").toString());
+        assertEquals("Test Report1", res.get("name").toString());
+        assertEquals("This is test report 1", res.get("description").toString());
+        assertEquals(currTime, res.get("created").toString());
+        assertEquals("reportpath", storePath + "/123_test/report.pdf", res.get("reportpath").toString());
 
         FileUtils.forceDelete(fWks);
     }
@@ -92,8 +116,6 @@ public class ReportsResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testGetReportsList() throws Exception {
-        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File file = new File(storePath);
         File fWks1 = new File(storePath + "/123_test1");
         if (fWks1.exists()) {
             FileUtils.forceDelete(fWks1);
@@ -108,7 +130,6 @@ public class ReportsResourceTest {
         if (fWks3.exists()) {
             FileUtils.forceDelete(fWks3);
         }
-        FileUtils.forceMkdir(file);
 
         FileUtils.forceMkdir(fWks1);
         String currTime = String.valueOf(System.currentTimeMillis());
@@ -140,8 +161,14 @@ public class ReportsResourceTest {
         meta = new File(storePath + "/123_test3/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        Method getReportsListMethod = getGetReportsListMethod();
-        JSONArray out = (JSONArray) getReportsListMethod.invoke(null);
+        Response responseData =
+                target("/reports/list")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
+
+        String jsonStr = responseData.readEntity(String.class);
+        JSONParser parser = new JSONParser();
+        JSONArray out = (JSONArray) parser.parse(jsonStr);
 
         int nCount1 = 0;
         int nCount2 = 0;
@@ -161,9 +188,9 @@ public class ReportsResourceTest {
             }
         }
 
-        Assert.assertEquals(1, nCount1);
-        Assert.assertEquals(1, nCount2);
-        Assert.assertEquals(1, nCount3);
+        assertEquals(1, nCount1);
+        assertEquals(1, nCount2);
+        assertEquals(1, nCount3);
 
         FileUtils.forceDelete(fWks1);
         FileUtils.forceDelete(fWks2);
@@ -172,14 +199,11 @@ public class ReportsResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testGetReportFile() throws Exception {
-        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File dir = new File(storePath);
+    public void testGetExistingReportFile() throws Exception {
         File fWks = new File(storePath + "/123_test_file");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(dir);
 
         FileUtils.forceMkdir(fWks);
         String currTime = String.valueOf(System.currentTimeMillis());
@@ -187,32 +211,47 @@ public class ReportsResourceTest {
         metaData.put("name", "Test Report1");
         metaData.put("description", "This is test report 1");
         metaData.put("created", currTime);
-        metaData.put("reportpath", HOME_FOLDER + "/test-files/test_report1.pdf");
+        metaData.put("reportpath", HOME_FOLDER + "/test_report1.pdf");
+
+        File dest = new File(HOME_FOLDER, "test_report1.pdf");
+        URL inputUrl = ReportsResourceTest.class.getResource("/hoot/services/controllers/info/test_report1.pdf");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
         File meta = new File(storePath + "/123_test_file/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        Method getReportFileMethod = getGetReportFileMethod();
-        File fout = (File) getReportFileMethod.invoke(null, "123_test_file");
+        Response responseData =
+                target("/reports/get")
+                        .queryParam("id", "123_test_file")
+                        .queryParam("reportname", "test")
+                        .request(MediaType.APPLICATION_OCTET_STREAM)
+                        .get();
 
-        Assert.assertNotNull(fout);
+        InputStream is = responseData.readEntity(InputStream.class);
 
-        fout = (File) getReportFileMethod.invoke(null, "123_test_file_not_there");
-
-        Assert.assertNull(fout);
+        assertNotNull(is);
 
         FileUtils.forceDelete(fWks);
     }
 
+    @Test(expected = NotFoundException.class)
+    @Category(UnitTest.class)
+    public void getNonExistingReportFile() throws Exception {
+        InputStream responseData =
+                target("/reports/get")
+                        .queryParam("id", "non-existent-id")
+                        .queryParam("reportname", "non-existent-report")
+                        .request(MediaType.APPLICATION_OCTET_STREAM)
+                        .get(InputStream.class);
+    }
+
     @Test
     @Category(UnitTest.class)
-    public void testDeleteReport() throws Exception {
-        String storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
-        File dir = new File(storePath);
+    public void testDeleteExistingReport() throws Exception {
         File fWks = new File(storePath + "/123_test_del");
         if (fWks.exists()) {
             FileUtils.forceDelete(fWks);
         }
-        FileUtils.forceMkdir(dir);
 
         FileUtils.forceMkdir(fWks);
         String currTime = String.valueOf(System.currentTimeMillis());
@@ -224,36 +263,32 @@ public class ReportsResourceTest {
         File meta = new File(storePath + "/123_test_del/meta.data");
         FileUtils.write(meta, metaData.toJSONString());
 
-        Method deleteReportMethod = getDeleteReportMethod();
+        Response responseData =
+                target("/reports/delete")
+                        .queryParam("id", "123_test_del")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
 
-        boolean isDel = (Boolean) deleteReportMethod.invoke(null, "123_test_del_not_exist");
-        Assert.assertFalse(isDel);
+        String jsonStr = responseData.readEntity(String.class);
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(jsonStr);
 
-        isDel = (Boolean) deleteReportMethod.invoke(null, "123_test_del");
-
-        Assert.assertTrue(isDel);
+        assertTrue(Boolean.valueOf((String) json.get("deleted")));
     }
 
-    private static Method getDeleteReportMethod() throws NoSuchMethodException {
-        Method deleteReportMethod = ReportsResource.class.getDeclaredMethod("deleteReport", String.class);
-        deleteReportMethod.setAccessible(true);
-        return deleteReportMethod;
+    @Test(expected = NotFoundException.class)
+    @Category(UnitTest.class)
+    public void testDeleteNonExistingReport() throws Exception {
+        JSONObject responseData =
+                target("/reports/delete")
+                        .queryParam("id", "non-existing-id")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get(JSONObject.class);
     }
 
-    private static Method getGetReportFileMethod() throws NoSuchMethodException {
-        Method getReportFileMethod = ReportsResource.class.getDeclaredMethod("getReportFile", String.class);
-        getReportFileMethod.setAccessible(true);
-        return getReportFileMethod;
-    }
     private static Method getMetaDataMethod() throws NoSuchMethodException {
         Method getMetaDataMethod = ReportsResource.class.getDeclaredMethod("getMetaData", String.class);
         getMetaDataMethod.setAccessible(true);
         return getMetaDataMethod;
-    }
-
-    private static Method getGetReportsListMethod() throws NoSuchMethodException {
-        Method getReportsListMethod = ReportsResource.class.getDeclaredMethod("getReportsList");
-        getReportsListMethod.setAccessible(true);
-        return getReportsListMethod;
     }
 }
