@@ -62,8 +62,8 @@ void WayString::append(const WaySubline& subline)
     if (back().getWay() == subline.getWay() &&
       back().getEnd() != subline.getStart())
     {
-      LOG_VARW(back());
-      LOG_VARW(subline);
+      LOG_VART(back());
+      LOG_VART(subline);
       throw IllegalArgumentException("All consecutive ways must connect end to start in a "
         "WayString.");
     }
@@ -78,11 +78,11 @@ void WayString::append(const WaySubline& subline)
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
         subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        LOG_VARW(back());
-        LOG_VARW(back().getWay());
-        LOG_VARW(subline);
-        LOG_VARW(subline.getWay());
-        LOG_WARN("Nodes don't match: "
+        LOG_VART(back());
+        LOG_VART(back().getWay());
+        LOG_VART(subline);
+        LOG_VART(subline.getWay());
+        LOG_TRACE("Nodes don't match: "
           << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
           << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
         throw IllegalArgumentException("Ways must connect at a node in the WayString.");
