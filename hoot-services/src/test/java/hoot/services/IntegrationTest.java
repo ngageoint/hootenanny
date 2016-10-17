@@ -26,5 +26,4 @@
  */
 package hoot.services;
 
-public interface IntegrationTest {
-    /* category marker */}
+public interface IntegrationTest { /* category marker */ }

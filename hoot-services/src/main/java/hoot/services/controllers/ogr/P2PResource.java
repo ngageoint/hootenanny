@@ -51,36 +51,6 @@ public class P2PResource extends ServerControllerBase {
 
     public P2PResource() {}
 
-    public static void startP2PService() {
-        try {
-            String p2PServiceScript = HOME_FOLDER + P_2_P_SERVER_SCRIPT;
-            // Make sure to wipe out previosuly running servers.
-            stopServer(p2PServiceScript);
-
-            p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
-        }
-        catch (Exception e) {
-            String msg = "Error starting Point-To-Polygon Service: " + e.getMessage();
-            throw new RuntimeException(msg, e);
-        }
-            }
-
-    public static void stopP2PService() {
-        // This also gets called automatically from HootServletContext when
-        // service exits but should not be reliable since there are many path where it will not be invoked.
-        try {
-            // Destroy the reference to the process directly here via the Java
-            // API vs having the base class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files created by hoot threads not to be cleaned up.
-            // stopServer(homeFolder + "/scripts/" + translationServerScript);
-            p2PServiceProcess.destroy();
-            }
-        catch (Exception e) {
-            String msg = "Error stopping Translation Service: " + e.getMessage();
-            throw new RuntimeException(msg, e);
-        }
-    }
-
     /**
      * Destroys all POI to POI server process where it effectively shutting them
      * down.
@@ -129,7 +99,7 @@ public class P2PResource extends ServerControllerBase {
             isRunning = getStatus(p2PServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of Point-To-Polygon Service: " + e.getMessage();
+            String msg = "Error getting status of Point-To-Polygon Service.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -138,5 +108,41 @@ public class P2PResource extends ServerControllerBase {
         json.put("port", P_2_P_SERVER_PORT);
 
         return Response.ok(json.toJSONString()).build();
+    }
+
+    public static void startP2PService() {
+        try {
+            String p2PServiceScript = HOME_FOLDER + P_2_P_SERVER_SCRIPT;
+
+            // Make sure to wipe out previosuly running servers.
+            stopServer(p2PServiceScript);
+
+
+            logger.info("Starting Point-To-Polygon Service by running {} script", p2PServiceScript);
+
+            p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
+
+            logger.info("Point-To-Polygon Service started");
+        }
+        catch (Exception e) {
+            String msg = "Error starting Point-To-Polygon Service.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    public static void stopP2PService() {
+        // This also gets called automatically from HootServletContext when
+        // service exits but should not be reliable since there are many path where it will not be invoked.
+        try {
+            // Destroy the reference to the process directly here via the Java
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            p2PServiceProcess.destroy();
+        }
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
     }
 }

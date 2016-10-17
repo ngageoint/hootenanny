@@ -83,10 +83,6 @@ mgcp.rules = {
         ['F_CODE','AK120','landuse','recreation_ground'], // From OSM - PArk, not great
         ['F_CODE','AL015','building','yes'], // To fix amenity etc
         ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
-        // ['F_CODE','AL020','place','city'], // From OSM
-        ['F_CODE','AL020','landuse','residential'], // From OSM Data
-        ['F_CODE','AL020','landuse','commercial'], // From OSM Data
-        ['F_CODE','AL020','landuse','industrial'], // From OSM Data
         ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
         ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
         ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great

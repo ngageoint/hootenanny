@@ -223,6 +223,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== conflate.load.post.ops
+
+* Data Type: list
+* Default Value:
+
+List of operations to run in the conflate command immediately after map data is loaded and before
+conflation.
+
 === conflate.post.ops
 
 * Data Type: list
@@ -233,7 +241,7 @@ See also:
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
 
-Runs in the conflate command after data is conflated, but before exporting.
+List of operations to run in the conflate command after data is conflated, but before exporting.
 
 === conflate.pre.ops
 
@@ -296,14 +304,6 @@ Some of the possible options include:
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
 less confident matches.
-
-=== conflator.post.ops
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of user specified operations to run post conflation.
 
 === convert.ops
 
@@ -2286,14 +2286,16 @@ problematic if you're doing testing or expecting repeatable output for other
 * Data Type: string
 * Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger`
 
-Semi-colon delimited list of operations to apply after conflating.
+Semi-colon delimited list of operations to apply immediately after conflation when using
+Unifying Conflation only.  Runs before the operations in `conflate.post.ops`.
 
 === unify.pre.ops
 
 * Data Type: string
 * Default Value: ``
 
-Semi-colon delimited list of operations to apply before conflating.
+Semi-colon delimited list of operations to apply immediately before conflating when using
+Unifying Conflation only.  Runs after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
 

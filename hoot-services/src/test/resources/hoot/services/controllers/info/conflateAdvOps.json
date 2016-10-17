@@ -1,0 +1,645 @@
+[
+  {
+    "id": "hoot_cleaning_options",
+    "elem_type": "group",
+    "description": "A list of map operations to be applied to a map for cleaning purposes in order",
+    "name": "Cleaning Options",
+    "hoot_key": "map.cleaner.transforms",
+    "members": [
+			{
+				"id":"hoot_enable_cleaning_options",
+				"elem_type":"checkbox",
+				"description":"Enable cleaning options",
+				"name":"Enabled",
+				"defaultvalue":"true",
+				"onchange": "true"
+			},    
+			{
+				"id":"hoot_checkall_cleaning_options",
+				"elem_type":"checkbox",
+				"description":"Select or deselect all cleaning options",
+				"name":"Select All",
+				"defaultvalue":"false",
+				"onchange":"true"
+			},
+			{
+        "id": "reproject_to_planar_option",
+        "elem_type": "checkbox",
+        "description": "Before any cleaning, reproject to a planar projection (e.g. UTM).",
+        "name": "Reproject To Planar Option",
+        "hoot_val": "hoot::ReprojectToPlanarOp",
+        "required":"true",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "duplicate_way_remover",
+        "elem_type": "checkplus",
+		"override":{
+						"elem_type":"checkplus"
+					},
+        "description": "Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.",
+        "name": "Remove Duplicate Way",
+        "hoot_val": "hoot::DuplicateWayRemover",
+		"onchange":"true",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "superfluous_way_remover",
+        "elem_type": "checkbox",
+        "description": "Remove all ways that contain no nodes or all the nodes are exactly the same.",
+        "name": "Remove Superfluous Way",
+        "hoot_val": "hoot::SuperfluousWayRemover",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "intersection_splitter",
+        "elem_type": "checkbox",
+        "description": "Split all highway type ways that intersect.",
+        "name": "Intersection Splitter",
+        "hoot_val": "hoot::IntersectionSplitter",
+        "required": "true",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "unlikely_intersection_remover",
+        "elem_type": "checkbox",
+        "description": "Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and \"unsnapped\". The geometry location is not modified.",
+        "name": "Remove Unlikely Intersection",
+        "hoot_val": "hoot::UnlikelyIntersectionRemover",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "dual_way_splitter",
+        "elem_type": "checkbox",
+        "description": "Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).",
+        "name": "DualWay Splitter",
+        "hoot_val": "hoot::DualWaySplitter",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "implied_divided_marker",
+        "elem_type": "checkbox",
+        "description": "If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
+        "name": "Implied Divided Marker",
+        "hoot_val": "hoot::ImpliedDividedMarker",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "duplicate_name_remover",
+        "elem_type": "checkbox",
+        "description": "Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.",
+        "name": "Remove Duplicate Name",
+        "hoot_val": "hoot::DuplicateNameRemover",
+        "required": "true",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "small_way_merger",
+        "elem_type": "checkplus",
+		"override":{
+						"elem_type":"checkplus"
+					},
+        "description": "Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.way.merger.threshold` for setting the threshold value.",
+        "name": "Small Way Merger",
+        "hoot_val": "hoot::SmallWayMerger",
+		"onchange":"true",
+        "defaultvalue": "true",
+        "members": [
+          {
+            "id": "small_way_merger_threshold",
+            "minvalue": "0",
+            "elem_type": "double",
+            "description": "If highways are smaller than threshold and the tags matched then they will be merged together into a single way.",
+            "maxvalue": "",
+            "name": "Small Way Merger Threshold",
+            "defaultvalue": "15",
+            "hoot_key": "small.way.merger.threshold"
+          }
+        ]
+      },
+      {
+        "id": "remove_empty_areas_visitor",
+        "elem_type": "checkbox",
+        "description": "Remove all area elements that have a area of zero.",
+        "name": "Remove Empty Areas",
+        "hoot_val": "hoot::RemoveEmptyAreasVisitor",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "remove_duplicate_area_visitor",
+        "elem_type": "checkbox",
+        "description": "Remove any area elements that are essentially the same.",
+        "name": "Remove Duplicate Area",
+        "hoot_val": "hoot::RemoveDuplicateAreaVisitor",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "no_information_element_remover",
+        "elem_type": "checkbox",
+        "description": "Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).",
+        "name": "Remove No Information Element",
+        "hoot_val": "hoot::NoInformationElementRemover",
+        "defaultvalue": "true"
+      }
+    ]
+  },
+  {
+    "id": "hoot_rubber_sheeting_options",
+    "elem_type": "group",
+    "dependencies": [
+      {
+        "id": "map_cleaner_transforms",
+        "append": {
+          "id": "hoot::RubberSheet",
+          "isDefault": "true",
+          "description": "Enable rubber sheet",
+          "dependent": "hoot_enable_rubber_sheeting",
+          "name": "Rubber Sheet",
+          "hoot_val": "hoot::RubberSheet",
+          "hoot_key": "map.cleaner.transforms"
+        }
+      }
+    ],
+    "description": "Hootenanny rubber sheeting options",
+    "name": "Rubber Sheeting Options",
+    "members": [
+      {
+        "id": "hoot_enable_rubber_sheeting_options",
+        "elem_type": "checkbox",
+        "description": "Enable rubber sheeting options",
+        "name": "Enabled",
+        "defaultvalue": "false",
+        "onchange": "true"
+      },
+      {
+        "id": "rubber_sheet_ref",
+        "elem_type": "checkbox",
+        "description": "If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
+        "name": "Rubber Sheet Ref",
+        "defaultvalue": "false",
+        "hoot_key": "rubber.sheet.ref"
+      },
+      {
+        "id": "rubber_sheet_minimum_ties",
+        "minvalue": "0",
+        "elem_type": "int",
+        "description": "Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+        "maxvalue": "",
+        "name": "Rubber Sheet Minimum Ties",
+        "defaultvalue": "10",
+        "hoot_key": "rubber.sheet.minimum.ties"
+      }
+    ]
+  },
+  {
+    "id": "hoot_general_conflation_options",
+    "elem_type": "group",
+    "description": "Hootenanny general conflation options",
+    "name": "General Conflation Options",
+    "members": [
+      {
+        "id": "unify_optimizer_time_limit",
+        "minvalue": "-1",
+        "elem_type": "double",
+        "description": "The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes the time limit unlimited. If this value is set to something other than -1 your conflation results may change between multiple runs. Especially if the machine Hoot is running on is under heavy load. If the \"CM Score:\" value is changing between runs and GLPK isn't finding an optimal solution then this is likely causing different output. Just because the output is changing doesn't mean it is wrong, but this can be problematic if you're doing testing or expecting repeatable output for other",
+        "maxvalue": "",
+        "name": "Unify Optimizer Time Limit",
+        "defaultvalue": "30",
+        "hoot_key": "unify.optimizer.time.limit"
+      },
+      {
+        "id": "ogr_split_o2s",
+        "elem_type": "checkbox",
+        "description": "If the list of o2s tags is > 255 char, split it into into 254 char long pieces. If this is false, it will be exported as one big string.",
+        "name": "OGR Split O2S",
+        "defaultvalue": "false",
+        "hoot_key": "ogr.split.o2s"
+      },
+      {
+        "id": "ogr_tds_add_fcsubtype",
+        "elem_type": "checkbox",
+        "description": "Add the ESRI specific FCSUBTYPE field to the output",
+        "name": "OGR TDS Add FCSubtype",
+        "defaultvalue": "true",
+        "hoot_key": "ogr.tds.add.fcsubtype"
+      },
+      {
+        "id": "ogr_tds_structure",
+        "elem_type": "checkbox",
+        "description": "Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).",
+        "name": "OGR TDS Structure",
+        "defaultvalue": "true",
+        "hoot_key": "ogr.tds.structure"
+      },
+      {
+        "id": "duplicate_name_case_sensitive",
+        "elem_type": "checkbox",
+        "hoot_key": "duplicate.name.case.sensitive",
+        "description": "If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
+        "name": "Duplicate Name Case Sensitive",
+        "defaultvalue": "true"
+      },
+      {
+        "id": "element_cache_size_node",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with nodes.",
+        "name": "Element Cache Size Node",
+        "defaultvalue": "2000000",
+        "hoot_key": "element.cache.size.node"
+      },
+      {
+        "id": "element_cache_size_relation",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with relations.",
+        "name": "Element Cache Size Relation",
+        "defaultvalue": "200000",
+        "hoot_key": "element.cache.size.relation"
+      },
+      {
+        "id": "element_cache_size_way",
+        "elem_type": "int",
+        "description":"Size of the cache used when streaming I/O is used with ways.",
+        "name": "Element Cache Size Way",
+        "defaultvalue": "200000",
+        "hoot_key": "element.cache.size.way"
+      }
+    ]
+  },
+  {
+    "id": "hoot_road_options",
+    "elem_type": "group",
+    "description": "Hootenanny road options",
+    "name": "Road Options",
+    "members": [
+      {
+        "id": "hoot_enable_road_options",
+        "elem_type": "checkbox",
+        "description": "Enable road options",
+        "name": "Enabled",
+        "defaultvalue": "true",
+        "onchange": "true"
+			},
+      {
+        "id": "hoot_road_opt_engine",
+        "elem_type": "list",
+        "description": "A list of road engines",
+        "name": "Engines",
+        "defaultvalue": "Unify",
+        "onchange": "true",
+        "members": [
+          {
+            "id": "hoot_road_opt_engine_unify",
+            "description": "Unify options",
+            "name": "Unify",
+						"members":[
+							{
+								"id": "conflate_match_highway_classifier",
+								"elem_type": "string",
+								"description": "The highway match classifier to use. This should only be used for testing and debugging.",
+								"name": "Conflate Match Highway Classifier",
+								"required": "true",
+								"defaultvalue": "hoot::HighwayExpertClassifier",
+								"hoot_key": "conflate.match.highway.classifier"
+							},
+							{
+								"id": "road_match_creator",
+								"elem_type": "string",
+								"description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+								"name": "Match Creator",
+								"required": "true",
+								"defaultvalue": "hoot::HighwayMatchCreator",
+								"override":{"defaultvalue":"hoot::HighwayMatchCreator"},
+								"hoot_key": "match.creators"				
+							},
+							{
+								"id": "road_merger_creator",
+								"elem_type": "string",
+								"description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+								"name": "Merger Creator",
+								"required": "true",
+								"defaultvalue": "hoot::HighwaySnapMergerCreator",
+								"override":{"defaultvalue":"hoot::HighwaySnapMergerCreator"},
+								"hoot_key": "merger.creators"
+							},
+							{
+								"id": "search_radius_highway",
+								"minvalue": "-1",
+								"elem_type": "double",
+								"description": "The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
+								"maxvalue": "",
+								"name": "Search Radius Highway",
+								"defaultvalue": "-1",
+						"override":{
+										"defaultvalue": "-1"
+									},
+								"hoot_key": "search.radius.highway"
+							},
+							{
+								"id": "highway_matcher_heading_delta",
+								"minvalue": "0",
+								"elem_type": "double",
+								"description": "The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on a line. A smaller value will make the heading values correspond directly to the heading on the way at that point. This is primarily used in subline matching. Values are in meters.",
+								"maxvalue": "",
+								"name": "Highway Matcher Heading Delta",
+								"defaultvalue": "5.0",
+								"hoot_key": "highway.matcher.heading.delta"
+							},
+							{
+								"id": "highway_matcher_max_angle",
+								"minvalue": "0",
+								"elem_type": "double",
+								"description": "Sets that maximum angle that is still considered a highway match. Units in degrees.",
+								"maxvalue": "",
+								"name": "Highway Matcher Max Angle",
+								"defaultvalue": "60",
+								"hoot_key": "highway.matcher.max.angle"
+							},
+							{
+								"id": "way_merger_min_split_size",
+								"minvalue": "0",
+								"elem_type": "double",
+								"description": "The minimum size that a way should be split into for merging. Units in meters.",
+								"maxvalue": "",
+								"name": "Way Merger Min Split Size",
+								"defaultvalue": "5",
+								"hoot_key": "way.merger.min.split.size"
+							}
+						]
+          },
+          {
+            "id": "hoot_road_opt_engine_greedy",
+            "description": "Greedy options",
+            "name": "Greedy"
+          }
+        ]
+      },
+      {
+        "id": "conflate_enable_old_roads",
+        "elem_type": "bool",
+				"override":
+					{
+				"elem_type":"bool",
+					"defaultvalue": "false"
+				},
+        "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command. By default the `--conflate` command will first conflate roads using the circa 2012 conflation algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying algorithm has road conflation enable then the results could get interesting. Look at the `conf/UnifyingRoads.json` config file for a reasonable set of options when conflating roads w/ the newer algorithm.",
+        "name": "Conflate Enable Old Roads",
+        "required": "true",
+        "defaultvalue": "false",
+        "hoot_key": "conflate.enable.old.roads",
+        "members": [
+          {
+            "isDefault": "false",
+            "description": "Enable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
+            "name": "true",
+            "hoot_val": "true"
+          },
+          {
+            "isDefault": "true",
+            "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
+            "name": "false",
+            "hoot_val": "false"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hoot_building_options",
+    "elem_type": "group",
+    "description": "Hootenanny building options",
+    "name": "Building Options",
+    "members": [
+      {
+        "id": "hoot_enable_building_options",
+        "elem_type": "checkbox",
+        "description": "Enable building options",
+        "name": "Enabled",
+        "defaultvalue": "true",
+        "onchange": "true"
+			},
+      {
+        "id": "building_match_creator",
+        "elem_type": "string",
+        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Match Creator",
+        "required": "true",
+        "defaultvalue": "hoot::BuildingMatchCreator",
+   			"override":{"defaultvalue":"hoot::BuildingMatchCreator"},
+        "hoot_key": "match.creators",
+				"required":"true"
+      },
+      {
+        "id": "building_merger_creator",
+        "elem_type": "string",
+        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Merger Creator",
+        "required": "true",
+        "defaultvalue": "hoot::BuildingMergerCreator",
+   			"override":{"defaultvalue":"hoot::BuildingMergerCreator"},
+        "hoot_key": "merger.creators",
+				"required":"true"
+      },
+    ]
+  },
+  {
+    "id": "hoot_poi_options",
+    "elem_type": "group",
+    "description": "Hootenanny POI options",
+    "name": "POI Options",
+    "members": [
+      {
+        "id": "hoot_enable_poi_options",
+        "elem_type": "checkbox",
+        "description": "Enable POI options",
+        "name": "Enabled",
+        "defaultvalue": "true",
+        "onchange": "true"
+			},
+			{
+				"id": "hoot_poi_options_list",
+				"elem_type": "list",
+				"description": "A list of poi options",
+				"name": "POI Options",
+				"defaultvalue":"Unifying",
+				"members":[
+					{
+						"id":"hoot_poi_opt_unifying",
+						"description":"Unifying options",
+						"name":"Unifying",
+						"members":[
+							{
+								"id": "poi_match_creator_unifying",
+								"elem_type": "string",
+								"description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+								"name": "POI Unifying Match Creator",
+								"required": "true",
+								"defaultvalue": "hoot::ScriptMatchCreator,PoiGeneric.js",
+								"override":{
+												"defaultvalue": "hoot::ScriptMatchCreator,PoiGeneric.js"
+											},
+								"hoot_key": "match.creators"								
+							},
+							{
+								"id": "poi_merger_creator_unifying",
+								"elem_type": "string",
+								"description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+								"name": "POI Unifying Merger Creator",
+								"required": "true",
+								"defaultvalue": "hoot::ScriptMergerCreator",
+								"override":{
+												"defaultvalue": "hoot::ScriptMergerCreator"
+											},
+								"hoot_key": "merger.creators"
+							}
+						]
+					},
+					{
+						"id": "hoot_poi_opt_places",
+						"description": "Places options",
+						"name": "Places",
+						"members":[
+							  {
+									"id": "poi_match_creator_places",
+									"elem_type": "string",
+									"description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+									"name": "POI Places Match Creator",
+									"required": "true",
+									"defaultvalue": "hoot::PlacesPoiMatchCreator",
+									"override":{
+													"defaultvalue": "hoot::PlacesPoiMatchCreator"
+												},
+									"hoot_key": "match.creators"
+							  },
+							  {
+									"id": "poi_merger_creator_places",
+									"elem_type": "string",
+									"description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+									"name": "POI Places Merger Creator",
+									"required": "true",
+									"defaultvalue": "hoot::PlacesPoiMergerCreator",
+									"override":{
+													"defaultvalue": "hoot::PlacesPoiMergerCreator"
+												},
+									"hoot_key": "merger.creators"
+							  }
+						]
+					}			 
+				]
+			}
+    ]
+  },
+  {
+    "id": "hoot_waterway_options",
+    "elem_type": "group",
+    "description": "Hootenanny Waterway options",
+    "name": "Waterway Options",
+    "members": [
+      {
+        "id": "hoot_enable_waterway_options",
+        "elem_type": "checkbox",
+		"override":{
+						"elem_type":"checkbox"
+					},
+        "description": "Enable waterway options",
+        "name": "Enabled",
+        "defaultvalue": "true",
+        "onchange": "true"
+			},
+		   {
+		    "id": "waterway_match_creator",
+		    "elem_type": "string",
+		    "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+		    "name": "Match Creator",
+		    "required": "true",
+		    "defaultvalue": "hoot::ScriptMatchCreator,LinearWaterway.js",
+		"override":{
+						"defaultvalue": "hoot::ScriptMatchCreator,LinearWaterway.js"
+					},
+		    "hoot_key": "match.creators"
+		  },
+		  {
+		    "id": "waterway_merger_creator",
+		    "elem_type": "string",
+		    "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+		    "name": "Merger Creator",
+		    "required": "true",
+		    "defaultvalue": "hoot::ScriptMergerCreator",
+		"override":{
+						"defaultvalue": "hoot::ScriptMergerCreator"
+					},
+		    "hoot_key": "merger.creators"
+		  },
+      {
+        "id": "waterway_way_subline_matcher",
+        "elem_type": "string",
+        "description": "The way subline matcher to use when determining matching sublines.",
+        "name": "Way Subline Matcher",
+        "defaultvalue": "hoot::MaximalSublineMatcher",
+        "hoot_key": "way.subline.matcher",
+				"required":"true"
+      },
+      {
+        "id": "waterway_way_angle_sample_distance",
+        "minvalue": "0",
+        "elem_type": "double",
+        "description": "Distance, in meters, used for sampling during angle histogram extraction with the SampledAngleHistogramExtractor",
+        "maxvalue": "",
+        "name": "Waterway Angle Sample Distance",
+        "defaultvalue": "10.0",
+        "hoot_key": "waterway.angle.sample.distance"
+      },
+      {
+        "id": "waterway_way_matcher_heading_delta",
+        "minvalue": "0",
+        "elem_type": "double",
+        "description": "The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on a line. A smaller value will make the heading values correspond directly to the heading on the way at that point. This is primarily used in subline matching. Values are in meters.",
+        "maxvalue": "",
+        "name": "Waterway Matcher Heading Delta",
+        "defaultvalue": "5.0",
+        "hoot_key": "waterway.matcher.heading.delta"
+      },
+      {
+        "id": "waterway_auto_calc_search_radius",
+        "elem_type": "bool",
+        "description": "Automatically calculates the search radius to be used during conflation of waterways using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
+        "name": "Waterway Auto Calc Search Radius",
+        "defaultvalue": "true",
+        "disabled": "false",
+        "hoot_key": "waterway.auto.calc.search.radius",
+"onchange": "true"
+      },
+      {
+        "id": "search_radius_waterway",
+        "minvalue": "-1",
+        "elem_type": "double",
+        "description": "The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
+        "maxvalue": "",
+        "name": "Search Radius Waterway",
+        "defaultvalue": "-1",
+        "disabled": "true",
+		"override":{
+						"defaultvalue": "-1"
+					},
+        "hoot_key": "search.radius.waterway"
+      },
+	{
+        "id": "waterway_rubber_sheet_minimum_ties",
+        "minvalue": "0",
+        "elem_type": "int",
+        "description": "Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+        "maxvalue": "",
+        "name": "Waterway Rubber Sheet Minimum Ties",
+        "defaultvalue": "5",
+        "hoot_key": "waterway.rubber.sheet.minimum.ties"
+      },
+      {
+        "id": "waterway_rubber_sheet_ref",
+        "elem_type": "bool",
+        "description": "If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
+        "name": "Waterway Rubber Sheet Ref",
+        "defaultvalue": "true",
+        "hoot_key": "waterway.rubber.sheet.ref"
+      }
+    ]
+  }
+]

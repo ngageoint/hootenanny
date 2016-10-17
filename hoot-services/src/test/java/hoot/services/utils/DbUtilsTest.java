@@ -26,16 +26,15 @@
  */
 package hoot.services.utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -43,30 +42,28 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
-import hoot.services.HootServicesSpringTestConfig;
 import hoot.services.UnitTest;
+import hoot.services.testsupport.HootServicesSpringTestConfig;
+import hoot.services.testsupport.MapUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles("test")
 public class DbUtilsTest {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     @Before
     public void setAppContext() {
@@ -76,7 +73,6 @@ public class DbUtilsTest {
     @Test
     @Category(UnitTest.class)
     @Transactional
-    @Rollback
     public void testUpdateMapsTableTags() throws Exception {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
@@ -90,12 +86,12 @@ public class DbUtilsTest {
         tags.put(k2, v2);
         // Test tag set
         long result = DbUtils.updateMapsTableTags(tags, mapId);
-        Assert.assertTrue(result > -1);
+        assertTrue(result > -1);
         Map<String, String> checkTags = DbUtils.getMapsTableTags(mapId);
-        Assert.assertTrue(checkTags.containsKey(k1));
-        Assert.assertTrue(checkTags.containsKey(k2));
-        Assert.assertEquals(v1, checkTags.get(k1));
-        Assert.assertEquals(v2, checkTags.get(k2));
+        assertTrue(checkTags.containsKey(k1));
+        assertTrue(checkTags.containsKey(k2));
+        assertEquals(v1, checkTags.get(k1));
+        assertEquals(v2, checkTags.get(k2));
 
         // Test tag append
         Map<String, String> tagsAppend = new HashMap<>();
@@ -103,14 +99,14 @@ public class DbUtilsTest {
         String v3 = "value";
         tagsAppend.put(k3, v3);
         result = DbUtils.updateMapsTableTags(tagsAppend, mapId);
-        Assert.assertTrue(result > -1);
+        assertTrue(result > -1);
         checkTags = DbUtils.getMapsTableTags(mapId);
-        Assert.assertTrue(checkTags.containsKey(k1));
-        Assert.assertTrue(checkTags.containsKey(k2));
-        Assert.assertTrue(checkTags.containsKey(k3));
-        Assert.assertEquals(v1, checkTags.get(k1));
-        Assert.assertEquals(v2, checkTags.get(k2));
-        Assert.assertEquals(v3, checkTags.get(k3));
+        assertTrue(checkTags.containsKey(k1));
+        assertTrue(checkTags.containsKey(k2));
+        assertTrue(checkTags.containsKey(k3));
+        assertEquals(v1, checkTags.get(k1));
+        assertEquals(v2, checkTags.get(k2));
+        assertEquals(v3, checkTags.get(k3));
 
         // Test tag update
         Map<String, String> tagsUpdate = new HashMap<>();
@@ -118,14 +114,14 @@ public class DbUtilsTest {
         String v4 = "change";
         tagsUpdate.put(k4, v4);
         result = DbUtils.updateMapsTableTags(tagsUpdate, mapId);
-        Assert.assertTrue(result > -1);
+        assertTrue(result > -1);
         checkTags = DbUtils.getMapsTableTags(mapId);
-        Assert.assertTrue(checkTags.containsKey(k1));
-        Assert.assertTrue(checkTags.containsKey(k2));
-        Assert.assertTrue(checkTags.containsKey(k4));
-        Assert.assertEquals(v1, checkTags.get(k1));
-        Assert.assertEquals(v2, checkTags.get(k2));
-        Assert.assertEquals(v4, checkTags.get(k4));
+        assertTrue(checkTags.containsKey(k1));
+        assertTrue(checkTags.containsKey(k2));
+        assertTrue(checkTags.containsKey(k4));
+        assertEquals(v1, checkTags.get(k1));
+        assertEquals(v2, checkTags.get(k2));
+        assertEquals(v4, checkTags.get(k4));
 
         // Test json tag value
         Map<String, String> tagsJson = new HashMap<>();
@@ -133,22 +129,22 @@ public class DbUtilsTest {
         String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
         tagsJson.put(k5, JsonUtils.escapeJson(v5));
         result = DbUtils.updateMapsTableTags(tagsJson, mapId);
-        Assert.assertTrue(result > -1);
+        assertTrue(result > -1);
         checkTags = DbUtils.getMapsTableTags(mapId);
-        Assert.assertTrue(checkTags.containsKey(k1));
-        Assert.assertTrue(checkTags.containsKey(k2));
-        Assert.assertTrue(checkTags.containsKey(k4));
-        Assert.assertTrue(checkTags.containsKey(k5));
-        Assert.assertEquals(v1, checkTags.get(k1));
-        Assert.assertEquals(v2, checkTags.get(k2));
-        Assert.assertEquals(v4, checkTags.get(k4));
-        Assert.assertEquals(parser.parse(JsonUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")),
+        assertTrue(checkTags.containsKey(k1));
+        assertTrue(checkTags.containsKey(k2));
+        assertTrue(checkTags.containsKey(k4));
+        assertTrue(checkTags.containsKey(k5));
+        assertEquals(v1, checkTags.get(k1));
+        assertEquals(v2, checkTags.get(k2));
+        assertEquals(v4, checkTags.get(k4));
+        assertEquals(parser.parse(JsonUtils.escapeJson(v5).replaceAll("\\\\\"", "\"")),
                 parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\"")));
 
         // Test that we can parse back into json
         JSONObject oParams = (JSONObject) parser.parse(checkTags.get(k5).replaceAll("\\\\\"", "\""));
-        Assert.assertEquals("4835", oParams.get("INPUT1").toString());
-        Assert.assertEquals("15", ((JSONObject) oParams.get("ADV_OPTIONS")).get("small.way.merger.threshold").toString());
+        assertEquals("4835", oParams.get("INPUT1").toString());
+        assertEquals("15", ((JSONObject) oParams.get("ADV_OPTIONS")).get("small.way.merger.threshold").toString());
 
         // Test stats tag value
         Map<String, String> tagsStats = new HashMap<>();
@@ -156,93 +152,71 @@ public class DbUtilsTest {
         String v6 = IOUtils.toString(this.getClass().getResourceAsStream("conflation-stats.csv"), "UTF-8");
         tagsStats.put(k6, v6);
         result = DbUtils.updateMapsTableTags(tagsStats, mapId);
-        Assert.assertTrue(result > -1);
+        assertTrue(result > -1);
         checkTags = DbUtils.getMapsTableTags(mapId);
-        Assert.assertTrue(checkTags.containsKey(k1));
-        Assert.assertTrue(checkTags.containsKey(k2));
-        Assert.assertTrue(checkTags.containsKey(k4));
-        Assert.assertTrue(checkTags.containsKey(k6));
-        Assert.assertEquals(v1, checkTags.get(k1));
-        Assert.assertEquals(v2, checkTags.get(k2));
-        Assert.assertEquals(v4, checkTags.get(k4));
-        Assert.assertEquals(v6, checkTags.get(k6));
+        assertTrue(checkTags.containsKey(k1));
+        assertTrue(checkTags.containsKey(k2));
+        assertTrue(checkTags.containsKey(k4));
+        assertTrue(checkTags.containsKey(k6));
+        assertEquals(v1, checkTags.get(k1));
+        assertEquals(v2, checkTags.get(k2));
+        assertEquals(v4, checkTags.get(k4));
+        assertEquals(v6, checkTags.get(k6));
     }
 
     @Test
     @Category(UnitTest.class)
     public void testEscapeJson() throws Exception {
-        String expected = "{'INPUT1':'4835','INPUT2':'4836','OUTPUT_NAME':'Merged_525_stats','CONFLATION_TYPE':'Reference','GENERATE_REPORT':'false','TIME_STAMP':'1453777469448','REFERENCE_LAYER':'1','AUTO_TUNNING':'false','ADV_OPTIONS': {'map.cleaner.transforms': 'hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover', 'small.way.merger.threshold': '15', 'unify.optimizer.time.limit': '30', 'ogr.split.o2s': 'false', 'ogr.tds.add.fcsubtype': 'true', 'ogr.tds.structure': 'true', 'duplicate.name.case.sensitive': 'true', 'conflate.match.highway.classifier': 'hoot::HighwayRfClassifier', 'match.creators': 'hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js', 'merger.creators': 'hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator', 'search.radius.highway': '-1', 'highway.matcher.heading.delta': '5.0', 'highway.matcher.max.angle': '60', 'way.merger.min.split.size': '5', 'conflate.enable.old.roads': 'false', 'way.subline.matcher': 'hoot::MaximalNearestSublineMatcher', 'waterway.angle.sample.distance': '20.0', 'waterway.matcher.heading.delta': '150.0', 'waterway.auto.calc.search.radius': 'true', 'search.radius.waterway': '-1', 'waterway.rubber.sheet.minimum.ties': '5', 'waterway.rubber.sheet.ref': 'true', 'writer.include.debug': 'false'},'INPUT1_TYPE':'DB','INPUT2_TYPE':'DB','USER_EMAIL':'test@test.com'}";
+        String expected = "{'INPUT1':'4835','INPUT2':'4836','OUTPUT_NAME':'Merged_525_stats'," +
+                "'CONFLATION_TYPE':'Reference','GENERATE_REPORT':'false','TIME_STAMP':'1453777469448'," +
+                "'REFERENCE_LAYER':'1','AUTO_TUNNING':'false','ADV_OPTIONS': {'map.cleaner.transforms': " +
+                "'hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
+                "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;" +
+                "hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                "hoot::NoInformationElementRemover', 'small.way.merger.threshold': '15', " +
+                "'unify.optimizer.time.limit': '30', 'ogr.split.o2s': 'false', 'ogr.tds.add.fcsubtype': 'true', " +
+                "'ogr.tds.structure': 'true', 'duplicate.name.case.sensitive': 'true', " +
+                "'conflate.match.highway.classifier': 'hoot::HighwayRfClassifier', 'match.creators': " +
+                "'hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;" +
+                "hoot::ScriptMatchCreator,LinearWaterway.js', 'merger.creators': 'hoot::HighwaySnapMergerCreator;" +
+                "hoot::BuildingMergerCreator;hoot::ScriptMergerCreator', 'search.radius.highway': '-1', " +
+                "'highway.matcher.heading.delta': '5.0', 'highway.matcher.max.angle': '60', " +
+                "'way.merger.min.split.size': '5', 'conflate.enable.old.roads': 'false', " +
+                "'way.subline.matcher': 'hoot::MaximalNearestSublineMatcher', 'waterway.angle.sample.distance': " +
+                "'20.0', 'waterway.matcher.heading.delta': '150.0', 'waterway.auto.calc.search.radius': 'true', " +
+                "'search.radius.waterway': '-1', 'waterway.rubber.sheet.minimum.ties': '5', " +
+                "'waterway.rubber.sheet.ref': 'true', 'writer.include.debug': 'false'}," +
+                "'INPUT1_TYPE':'DB','INPUT2_TYPE':'DB','USER_EMAIL':'test@test.com'}";
 
-        String input = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
+        String input = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\"," +
+                "\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\"," +
+                "\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\"," +
+                "\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;" +
+                "hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
+                "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" " +
+                "-D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D " +
+                "\\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" " +
+                "-D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=" +
+                "hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::" +
+                "BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator," +
+                "LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;" +
+                "hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" " +
+                "-D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" " +
+                "-D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" " +
+                "-D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" " +
+                "-D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" " +
+                "-D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" " +
+                "-D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" " +
+                "-D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\"," +
+                "\"USER_EMAIL\":\"test@test.com\"}";
 
         String output = JsonUtils.escapeJson(input);
 
         JSONParser parser = new JSONParser();
         JSONObject exJson = (JSONObject) parser.parse(expected.replaceAll("'", "\""));
         JSONObject outJson = (JSONObject) parser.parse(output.replaceAll("\\\\\"", "\""));
-        Assert.assertEquals(exJson, outJson);
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testDb() throws Exception {
-        boolean exists = checkDbExists("wfdbtest");
-        if (exists) {
-            DbUtils.deleteDb("wfdbtest");
-        }
-
-        createDb("wfdbtest");
-        exists = checkDbExists("wfdbtest");
-        Assert.assertTrue(exists);
-        DbUtils.deleteDb("wfdbtest");
-
-        exists = checkDbExists("wfdbtest");
-        Assert.assertTrue(!exists);
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testTable() throws Exception {
-        try {
-            boolean exists = checkDbExists("wfdbtest");
-            if (exists) {
-                DbUtils.deleteDb("wfdbtest");
-            }
-
-            createDb("wfdbtest");
-            exists = checkDbExists("wfdbtest");
-            Assert.assertTrue(exists);
-
-            String createTblSql = "CREATE TABLE test_TABLE " + "(id INTEGER not NULL, " + " first VARCHAR(255), "
-                + " last VARCHAR(255), " + " age INTEGER, " + " PRIMARY KEY ( id ))";
-
-            this.jdbcTemplate.execute(createTblSql);
-
-            List<String> tbls = DbUtils.getTablesList("test");
-            Assert.assertTrue(!tbls.isEmpty());
-
-            DbUtils.deleteTables(tbls);
-
-            tbls = DbUtils.getTablesList("TEST");
-            Assert.assertTrue(tbls.isEmpty());
-
-            DbUtils.deleteDb("wfdbtest");
-
-            exists = checkDbExists("wfdbtest");
-            Assert.assertTrue(!exists);
-        }
-        finally {
-            this.jdbcTemplate.execute("DROP TABLE IF EXISTS test_TABLE");
-        }
-    }
-
-    private boolean checkDbExists(String dbName) {
-        List<Integer> result = this.jdbcTemplate
-                .queryForList("SELECT 1 FROM pg_database WHERE datname = ?", Integer.class, dbName);
-        return !result.isEmpty();
-    }
-
-    private void createDb(String dbname) {
-        this.jdbcTemplate.execute("CREATE DATABASE \"" + dbname + "\"");
+        assertEquals(exJson, outJson);
     }
 }

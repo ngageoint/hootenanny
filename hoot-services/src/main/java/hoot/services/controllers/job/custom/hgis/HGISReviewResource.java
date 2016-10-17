@@ -119,12 +119,9 @@ public class HGISReviewResource extends HGISResource {
             jobArgs.add(validationCommand);
             jobArgs.add(updateMapTagCommand);
 
-            postChainJobRquest(jobId, jobArgs.toJSONString());
+            postChainJobRequest(jobId, jobArgs.toJSONString());
 
             res.setJobId(jobId);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception ex) {
             String msg = ex.getMessage();
@@ -154,6 +151,7 @@ public class HGISReviewResource extends HGISResource {
             jobStatusManager.addJob(jobId);
 
             long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
+
             updateMapTagWithReviewType(mapId);
 
             jobStatusManager.setComplete(jobId);
@@ -170,10 +168,10 @@ public class HGISReviewResource extends HGISResource {
         Map<String, String> tags = new HashMap<>();
         tags.put("reviewtype", "hgisvalidation");
 
-        long resCnt = DbUtils.updateMapsTableTags(tags, mapId);
+        long count = DbUtils.updateMapsTableTags(tags, mapId);
 
-        if (resCnt < 1) {
-            throw new ReviewMapTagUpdateException("Failed to update maps table for mapid:" + mapId);
+        if (count < 1) {
+            throw new ReviewMapTagUpdateException("Failed to update maps table for mapid = " + mapId);
         }
     }
 }

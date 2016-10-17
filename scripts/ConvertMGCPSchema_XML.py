@@ -500,7 +500,7 @@ def readFeatures(xmlDoc,funcList):
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
 
     # These attributes have non-standard defaults
-    customDefVal = {'ACC':'1', 'TXT':'N_A', 'SDP':'N_A', 'CON':'998'}
+    customDefVal = {'ACC':'1','TXT':'N_A','SDP':'N_A','CON':'998','FUN':'6'}
 
     tSchema = {}
 
