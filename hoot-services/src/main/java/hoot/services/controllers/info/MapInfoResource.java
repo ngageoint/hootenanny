@@ -27,7 +27,6 @@
 package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.*;
-import static hoot.services.utils.DbUtils.createQuery;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -45,6 +44,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
+
+import hoot.services.utils.DbUtils;
 
 
 @Controller
@@ -90,9 +91,12 @@ public class MapInfoResource {
                 }
             }
         }
-        catch (Exception e) {
-            String message = "Error getting combined map size for: " + mapIds + ".  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String message = "Error getting combined map size for: " + mapIds;
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         JSONObject entity = new JSONObject();
@@ -132,9 +136,12 @@ public class MapInfoResource {
                 layers.add(layer);
             }
         }
-        catch (Exception e) {
-            String message = "Error getting map size.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String message = "Error getting map size: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         JSONObject entity = new JSONObject();
@@ -166,7 +173,7 @@ public class MapInfoResource {
      * Returns table size in byte
      */
     private static long getTableSizeInBytes(String tableName) {
-        return createQuery()
+        return DbUtils.createQuery()
                 .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
                 .from()
                 .fetchOne();

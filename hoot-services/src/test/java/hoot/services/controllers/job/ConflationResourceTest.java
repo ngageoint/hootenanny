@@ -26,11 +26,7 @@
  */
 package hoot.services.controllers.job;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -41,6 +37,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.AdditionalMatchers;
@@ -50,7 +48,7 @@ import org.mockito.Mockito;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
@@ -75,9 +73,9 @@ public class ConflationResourceTest {
                 + "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
 
         ConflationResource spy = Mockito.spy(new ConflationResource());
-        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
         JobId resp = spy.process(params);
-        //verify(spy).postChainJobRequest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
+        verify(spy).postChainJobRquest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
     }
 
     @Test
@@ -92,7 +90,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             Mockito.doReturn(true).when(spy).mapExists(anyLong());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
@@ -104,7 +102,7 @@ public class ConflationResourceTest {
             // got added; testProcess checks the generated input at a more
             // detailed
             // level
-            verify(spy).postChainJobRequest(Matchers.matches(jobId),
+            verify(spy).postChainJobRquest(Matchers.matches(jobId),
             // wasn't able to get the mockito matcher to take the timestamp
             // regex...validated the
             // regex externally, and it looks correct
@@ -132,16 +130,18 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
+                    .getResource(
+                            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("OSM_API_DB not allowed as secondary input type"));
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString()
+                    .contains("OSM_API_DB not allowed as secondary input type"));
             throw e;
         }
         finally {
@@ -157,16 +157,18 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
+                    .getResource(
+                            "hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("OSM_API_DB not allowed as secondary input type"));
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString()
+                    .contains("OSM_API_DB not allowed as secondary input type"));
             throw e;
         }
         finally {
@@ -174,6 +176,7 @@ public class ConflationResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
@@ -187,15 +190,15 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-            assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("Error during process call!  Params: "));
+            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No secondary map exists with ID"));
             throw e;
         }
         finally {
@@ -215,7 +218,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
@@ -224,9 +227,14 @@ public class ConflationResourceTest {
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
-            assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains(
-                    "Attempted to conflate an OSM API database data source but OSM API database support is disabled"));
+            Assert.assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e
+                .getResponse()
+                .getEntity()
+                .toString()
+                .contains(
+                        "Attempted to conflate an OSM API database data source but OSM API database " +
+                                "support is disabled"));
             throw e;
         }
         finally {

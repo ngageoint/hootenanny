@@ -38,7 +38,6 @@ import hoot.services.UnitTest;
 
 
 public class FileUtilsTest {
-
     @Test
     @Category(UnitTest.class)
     public void testValidateFilePath() throws Exception {

@@ -153,6 +153,7 @@ public class ReviewResource {
 
             try {
                 changesetId = setAllReviewsResolved(mapIdNum, userId);
+                logger.debug("Committing set all items reviewed transaction...");
             }
             catch (Exception e) {
                 ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());

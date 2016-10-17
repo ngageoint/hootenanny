@@ -27,7 +27,6 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -37,38 +36,42 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class RasterToTilesResourceTest {
-    private static File homeFolder;
-    private static String tileServerPath;
-    private static String original_HOME_FOLDER;
-    private static String original_TILE_SERVER_PATH;
+    private static final File homeFolder;
+    private static final String tileServerPath;
+    private static final String original_HOME_FOLDER;
+    private static final String original_TILE_SERVER_PATH;
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        original_HOME_FOLDER = HOME_FOLDER;
-        homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
-        FileUtils.forceMkdir(homeFolder);
-        assertTrue(homeFolder.exists());
-        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
+    static {
+        try {
+            original_HOME_FOLDER = HOME_FOLDER;
+            homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+            FileUtils.forceMkdir(homeFolder);
+            Assert.assertTrue(homeFolder.exists());
+            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
-        //tileServerPath=$(homeFolder)/ingest/processed
+            //tileServerPath=$(homeFolder)/ingest/processed
 
-        original_TILE_SERVER_PATH = TILE_SERVER_PATH;
-        File processedFolder = new File(homeFolder, "ingest/processed");
-        FileUtils.forceMkdir(processedFolder);
-        assertTrue(processedFolder.exists());
-        tileServerPath = processedFolder.getAbsolutePath();
-        assertNotNull(tileServerPath);
-        assertTrue(!tileServerPath.isEmpty());
-        HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
+            original_TILE_SERVER_PATH = TILE_SERVER_PATH;
+            File processedFolder = new File(homeFolder, "ingest/processed");
+            FileUtils.forceMkdir(processedFolder);
+            Assert.assertTrue(processedFolder.exists());
+            tileServerPath = processedFolder.getAbsolutePath();
+            Assert.assertNotNull(tileServerPath);
+            Assert.assertTrue(!tileServerPath.isEmpty());
+            HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @AfterClass
@@ -82,8 +85,8 @@ public class RasterToTilesResourceTest {
     @Category(UnitTest.class)
     public void TestIngestOSMResource() throws Exception {
         String processScriptName = RASTER_TO_TILES;
-        assertNotNull(processScriptName);
-        assertTrue(!processScriptName.isEmpty());
+        Assert.assertNotNull(processScriptName);
+        Assert.assertTrue(!processScriptName.isEmpty());
 
         RasterToTilesService rts = new RasterToTilesService();
 
@@ -127,7 +130,7 @@ public class RasterToTilesResourceTest {
         JSONParser parser = new JSONParser();
         JSONObject actualObj = (JSONObject) parser.parse(actual);
 
-        assertEquals(oExpected, actualObj);
+        Assert.assertEquals(oExpected, actualObj);
     }
 
     @Test
@@ -139,7 +142,7 @@ public class RasterToTilesResourceTest {
 
         JSONObject oActual = (JSONObject) getZoomInfoMethod.invoke(rts, 0.025);
 
-        assertEquals("0-1 2-3 4-5 6-7 8-9 10-11 12-13 14-15 16-17", oActual.get("zoomlist").toString());
-        assertEquals(500, oActual.get("rastersize"));
+        Assert.assertEquals("0-1 2-3 4-5 6-7 8-9 10-11 12-13 14-15 16-17", oActual.get("zoomlist").toString());
+        Assert.assertEquals(500, oActual.get("rastersize"));
     }
 }

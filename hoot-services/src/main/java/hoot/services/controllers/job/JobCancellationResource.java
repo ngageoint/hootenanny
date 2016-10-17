@@ -98,7 +98,10 @@ public class JobCancellationResource extends JobControllerBase {
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(jobCancellationCommand);
 
-            postChainJobRequest(jobId, jobArgs.toJSONString());
+            postChainJobRquest(jobId, jobArgs.toJSONString());
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error process data clean request: " + ex.getMessage();

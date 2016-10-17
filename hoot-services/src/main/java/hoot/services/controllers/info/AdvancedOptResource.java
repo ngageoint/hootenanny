@@ -53,21 +53,23 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Controller
 @Path("/advancedopts")
+@Transactional
 public class AdvancedOptResource {
     private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
 
     private JSONObject doc;
     private JSONArray template;
-    private JSONArray referenceTemplate;
-    private JSONArray horizontalTemplate;
-    private JSONArray averageTemplate;
-    private JSONObject referenceOverride;
-    private JSONObject horizontalOverride;
-    private JSONObject averageOverride;
+    private JSONArray refTemplate;
+    private JSONArray hrzTemplate;
+    private JSONArray aveTemplate;
+    private JSONObject refOverride;
+    private JSONObject horzOverride;
+    private JSONObject aveOverride;
 
     public AdvancedOptResource() {}
 
@@ -90,41 +92,44 @@ public class AdvancedOptResource {
                 parseAsciidoc();
             }
 
-            JSONParser parser = new JSONParser();
+            JSONParser par = new JSONParser();
             if (confType.equalsIgnoreCase("reference")) {
-                if ((referenceTemplate == null) || doForce) {
-                    referenceTemplate = new JSONArray();
-                    referenceTemplate.add(referenceOverride);
+                if ((refTemplate == null) || doForce) {
+                    refTemplate = new JSONArray();
+                    refTemplate.add(refOverride);
                 }
-                template = referenceTemplate;
+                template = refTemplate;
             }
             else if (confType.equalsIgnoreCase("horizontal")) {
-                if ((horizontalTemplate == null) || doForce) {
-                    horizontalTemplate = new JSONArray();
-                    horizontalTemplate.add(horizontalOverride);
+                if ((hrzTemplate == null) || doForce) {
+                    hrzTemplate = new JSONArray();
+                    hrzTemplate.add(horzOverride);
                 }
-                template = horizontalTemplate;
+                template = hrzTemplate;
             }
             else if (confType.equalsIgnoreCase("average")) {
-                if ((averageTemplate == null) || doForce) {
-                    averageTemplate = new JSONArray();
-                    averageTemplate.add(averageOverride);
+                if ((aveTemplate == null) || doForce) {
+                    aveTemplate = new JSONArray();
+                    aveTemplate.add(aveOverride);
                 }
-                template = averageTemplate;
+                template = aveTemplate;
             }
             else {
                 if ((this.template == null) || doForce) {
-                    try (FileReader fileReader = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
-                        this.template = (JSONArray) parser.parse(fileReader);
+                    try (FileReader fr = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
+                        this.template = (JSONArray)par.parse(fr);
                         generateRule(this.template, null);
                     }
                 }
                 template = this.template;
             }
         }
-        catch (Exception e) {
-            String msg = "Error getting advanced options!  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String msg = "Error getting advanced options!";
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(template.toJSONString()).build();
@@ -137,19 +142,19 @@ public class AdvancedOptResource {
             doForce = isForce.equalsIgnoreCase("true");
         }
 
-        if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
-            JSONParser parser = new JSONParser();
+        if ((horzOverride == null) || (refOverride == null) || doForce) {
+            JSONParser par = new JSONParser();
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + REF_OVERRIDE_PATH)){
-                referenceOverride = (JSONObject) parser.parse(fileReader);
+            try (FileReader frRef = new FileReader(HOME_FOLDER + File.separator + REF_OVERRIDE_PATH)){
+                refOverride = (JSONObject) par.parse(frRef);
             }
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + HORZ_OVERRIDE_PATH)){
-                horizontalOverride = (JSONObject) parser.parse(fileReader);
+            try (FileReader frHrz = new FileReader(HOME_FOLDER + File.separator + HORZ_OVERRIDE_PATH)){
+                horzOverride = (JSONObject) par.parse(frHrz);
             }
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + AVE_OVERRIDE_PATH)) {
-                averageOverride = (JSONObject) parser.parse(fileReader);
+            try (FileReader frAve = new FileReader(HOME_FOLDER + File.separator + AVE_OVERRIDE_PATH)) {
+                aveOverride = (JSONObject) par.parse(frAve);
             }
         }
     }
@@ -415,21 +420,21 @@ public class AdvancedOptResource {
     }
 
     private void parseAsciidoc() throws IOException {
-        File file = new File(HOME_FOLDER, ASCIIDOC_PATH);
+        File file = new File(HOME_FOLDER + "/" + ASCIIDOC_PATH);
         if (!file.exists()) {
             throw new IOException("Missing required file: " + file.getAbsolutePath());
         }
 
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            try (InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream)) {
-                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                    String line;
-                    String currentOption = null;
+        try (FileInputStream fstream = new FileInputStream(file)) {
+            try (InputStreamReader istream = new InputStreamReader(fstream)) {
+                try (BufferedReader br = new BufferedReader(istream)) {
+                    String strLine;
+                    String curOptName = null;
 
                     // Read File Line By Line
-                    while ((line = bufferedReader.readLine()) != null) {
+                    while ((strLine = br.readLine()) != null) {
                         // Print the content on the console
-                        currentOption = parseLine(line, currentOption);
+                        curOptName = parseLine(strLine, curOptName);
                     }
                 }
             }

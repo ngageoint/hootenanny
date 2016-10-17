@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -156,7 +156,6 @@ public:
     WayPtr matchWay = map->getWay(match->getId());
     //LOG_VAR(matchWay->getNodeIds());
     const std::vector<long>& matchWayNodeIds = matchWay->getNodeIds();
-    /// @todo these results still need to be validated
     CPPUNIT_ASSERT_EQUAL(-1L, matchWayNodeIds.at(0));
     CPPUNIT_ASSERT_EQUAL(-3L, matchWayNodeIds.at(1));
     way1 = map->getWay(-1);

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.utils;
 
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QUsers.users;
@@ -44,7 +44,6 @@ import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
-import hoot.services.utils.DbUtils;
 
 
 public final class MapUtils {

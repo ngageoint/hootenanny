@@ -129,6 +129,9 @@ public class ReviewBookmarkResource {
             long nSaved = reviewBookmarksSaver.save(request);
             response.setSavedCount(nSaved);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error saving review bookmark: " + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -208,7 +211,8 @@ public class ReviewBookmarkResource {
     }
 
     /**
-     * Helper function to handle JSON string conversion to Hstore friendly format
+     * Helper function to handle JSON string conversion to Hstore friendly
+     * format
      * 
      * @throws ParseException
      */
@@ -324,6 +328,9 @@ public class ReviewBookmarkResource {
             }
             response.setReviewBookmarks(res);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -348,6 +355,9 @@ public class ReviewBookmarkResource {
         try {
             long bookmarksCount = reviewBookmarkRetriever.getBookmarksCount();
             response.setTotalCount(bookmarksCount);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark counts: " + " (" + ex.getMessage() + ")";
@@ -378,6 +388,9 @@ public class ReviewBookmarkResource {
             long count = remove(request);
             response.setDeleteCount(count);
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error deleting review bookmark: " + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -394,6 +407,8 @@ public class ReviewBookmarkResource {
      * @return - total numbers of removed
      */
     private static long remove(ReviewBookmarkDelRequest request) {
-        return createQuery().delete(reviewBookmarks).where(reviewBookmarks.id.eq(request.getBookmarkId())).execute();
+        return createQuery().delete(reviewBookmarks)
+                .where(reviewBookmarks.id.eq(request.getBookmarkId()))
+                .execute();
     }
 }

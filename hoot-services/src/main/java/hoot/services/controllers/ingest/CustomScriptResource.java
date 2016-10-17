@@ -142,9 +142,12 @@ public class CustomScriptResource {
         try {
             saveArr.add(saveScript(scriptName, scriptDescription, script));
         }
-        catch (Exception e) {
-            String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String msg = "Error processing script save for: " + scriptName;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(saveArr.toString()).build();
@@ -168,8 +171,11 @@ public class CustomScriptResource {
 
             response.setScriptsModified(scriptsModified.toArray(new String[scriptsModified.size()]));
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception e) {
-            String msg = "Error processing save scripts request.  Cause: " + e.getMessage();
+            String msg = "Error processing save scripts request!";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -231,9 +237,12 @@ public class CustomScriptResource {
 
             retList.addAll(sortedScripts.values());
         }
-        catch (Exception e) {
-            String msg = "Error getting scripts list.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String msg = "Error getting scripts list: " + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(retList.toString()).build();
@@ -366,6 +375,9 @@ public class CustomScriptResource {
                 }
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptName;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -446,6 +458,9 @@ public class CustomScriptResource {
                 throw new IOException("Invalid script path: " + scriptPath);
             }
         }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptPath;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -492,6 +507,9 @@ public class CustomScriptResource {
                     }
                 }
             }
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error deleting script: " + scriptName;
@@ -542,6 +560,9 @@ public class CustomScriptResource {
             }
 
             response.setScriptsModified(scriptsDeleted.toArray(new String[scriptsDeleted.size()]));
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error deleting scripts!";

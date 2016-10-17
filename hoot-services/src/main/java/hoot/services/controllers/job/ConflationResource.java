@@ -238,7 +238,7 @@ public class ConflationResource extends JobControllerBase {
 
             logger.debug(jobArgs.toJSONString());
 
-            postChainJobRequest(jobId, jobArgs.toJSONString());
+            postChainJobRquest(jobId, jobArgs.toJSONString());
         }
         catch (WebApplicationException wae) {
             throw wae;

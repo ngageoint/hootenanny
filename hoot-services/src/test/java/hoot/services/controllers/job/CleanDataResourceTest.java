@@ -26,17 +26,11 @@
  */
 package hoot.services.controllers.job;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
-import java.util.List;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -48,28 +42,16 @@ public class CleanDataResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcess() throws Exception {
-        ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
+
+        String jobArgs = ",\"exec\":\"makecleandata\",\"params\":[{\"INPUT\":\"DcGisRoads\"},{\"INPUT_TYPE\":\"DB\"},";
+        jobArgs += "{\"OUTPUT\":\"DcGisRoadsOUt5\"},{\"OUTPUT_TYPE\":\"DB\"}],\"exectype\":\"make\"}";
 
         CleanDataResource spy = Mockito.spy(new CleanDataResource());
-        Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), argCaptor.capture());
+        Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
 
         String params = "{\"INPUT_TYPE\":\"DB\",\"INPUT\":\"DcGisRoads\",\"OUTPUT_TYPE\":\"DB\",\"OUTPUT\":\"DcGisRoadsOUt5\"}";
+
         JobId resp = spy.process(params);
-
-        JSONParser parser = new JSONParser();
-
-        List<String> values = argCaptor.getAllValues();
-        JSONObject jsonObject = (JSONObject) parser.parse(values.get(0));
-
-//        String expected = "[{\"INPUT\":\"DcGisRoads\"},{\"OUTPUT\":\"DcGisRoadsOUt5\"},{\"INPUT_TYPE\":\"DB\"},{\"OUTPUT_TYPE\":\"DB\"}]";
-//        assertEquals(parser.parse(expected), jsonObject.get("params"));
-
-        String expected = "makecleandata";
-        assertEquals(expected, jsonObject.get("exec").toString());
-
-        expected = "make";
-        assertEquals(expected, jsonObject.get("exectype").toString());
-
-        verify(spy).postJobRequest(Matchers.matches(resp.getJobid()), anyString());
+        verify(spy).postJobRquest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
     }
 }
