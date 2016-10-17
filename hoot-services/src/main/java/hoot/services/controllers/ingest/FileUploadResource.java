@@ -179,6 +179,7 @@ public class FileUploadResource extends JobControllerBase {
                     reqList = new JSONArray();
                     buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat);
                 }
+
             }
 
             if (((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt) > 0) && ((osmZipCnt + osmCnt) > 0)) {
@@ -233,7 +234,7 @@ public class FileUploadResource extends JobControllerBase {
 
             logger.debug("Posting Job Request for Job :{} With Args: {}", batchJobId, jobArgs.toJSONString());
 
-            postChainJobRequest(batchJobId, jobArgs.toJSONString());
+            postChainJobRquest(batchJobId, jobArgs.toJSONString());
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();

@@ -202,7 +202,7 @@ public class RasterToTilesService extends JobControllerBase {
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
             String argStr = createCommand(name, zoomList, rasterSize, mapIdNum);
-            postJobRequest(jobId, argStr);
+            postJobRquest(jobId, argStr);
         }
         catch (WebApplicationException wae) {
             throw wae;

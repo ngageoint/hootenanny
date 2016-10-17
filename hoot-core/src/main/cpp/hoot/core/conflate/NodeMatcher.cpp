@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -183,7 +183,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   double d = n1->toCoordinate().distance(n2->toCoordinate());
 
-  /// @todo this isnt right Talk to mike
+  /// @todo this isnt right; Talk to mike
   double distanceScore = 1 - (Normal::phi(d, acc * 1.5) - 0.5) * 2.0;
   LOG_VAR(nid1);
   LOG_VAR(nid2);
