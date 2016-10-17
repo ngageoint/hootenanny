@@ -65,3 +65,10 @@ Feature: Paste Attributes
         And I expand the tag list toggle
         Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
+
+        #Click save to clear local history
+        #Otherwise next feature test will get alert about restoring unsaved features
+        When I press "Save"
+        Then I click the "save-button" button
+        Then I click the "trash" button
+        And I accept the alert
