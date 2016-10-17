@@ -28,21 +28,30 @@ package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.ERROR_LOG_PATH;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URL;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootServicesJerseyTestAbstract;
 
 
-public class ErrorLogTest {
+public class ErrorLogTest extends HootServicesJerseyTestAbstract {
     private static final File testFolder = new File(FileUtils.getTempDirectory(), "ErrorLogTest");
     private static String original_ERROR_LOG_PATH;
     private static String original_TEMP_OUTPUT_PATH;
@@ -69,16 +78,24 @@ public class ErrorLogTest {
     @Test
     @Category(UnitTest.class)
     public void testGenerateExportLog() throws Exception {
-//        String path = ErrorLog.generateExportLog();
+        Response responseData =
+                target("/logging/export").request(MediaType.APPLICATION_OCTET_STREAM).get(Response.class);
 
-//        File logFile = new File(path);
-//        Assert.assertTrue(logFile.exists());
+        InputStream is = responseData.readEntity(InputStream.class);
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(is, writer);
+        String theString = writer.toString();
+        assertFalse(theString.isEmpty());
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetErrorLog() throws Exception {
-//        String logStr = ErrorLog.getErrorlog(100);
-//        Assert.assertTrue(logStr.length() <= 100);
+        Response responseData =
+                target("/logging/debuglog").request(MediaType.APPLICATION_JSON).get(Response.class);
+
+        String theString = responseData.readEntity(String.class);
+        assertFalse(theString.isEmpty());
+        assertEquals(282637, theString.length());
     }
 }

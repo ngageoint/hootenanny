@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PreDestroy;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,7 +45,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -60,6 +58,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.FileUtils;
 
 
 @Controller
@@ -68,26 +67,10 @@ import hoot.services.utils.DbUtils;
 public class ExportJobResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
-    private String delPath;
-
     public ExportJobResource() {
         super(EXPORT_SCRIPT);
     }
 
-    @PreDestroy
-    public void preDestroy() {
-        try {
-            if (delPath != null) {
-                File workfolder = new File(delPath);
-                if (workfolder.exists() && workfolder.isDirectory()) {
-                    FileUtils.deleteDirectory(workfolder);
-                }
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-    }
 
     /**
      * Asynchronous export service.
@@ -160,11 +143,11 @@ public class ExportJobResource extends JobControllerBase {
                 jobArgs.add(osm2orgCommand);
                 jobArgs.add(createWfsResCommand);
 
-                postChainJobRquest(jobId, jobArgs.toJSONString());
+                postChainJobRequest(jobId, jobArgs.toJSONString());
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 commandArgs = getExportToOsmApiDbCommandArgs(commandArgs);
-                postJobRquest(jobId, createPostBody(commandArgs));
+                postJobRequest(jobId, createPostBody(commandArgs));
             }
             else {
                 // replace with with getParameterValue
@@ -188,7 +171,7 @@ public class ExportJobResource extends JobControllerBase {
                 }
 
                 String argStr = createPostBody(commandArgs);
-                postJobRquest(jobId, argStr);
+                postJobRequest(jobId, argStr);
             }
         }
         catch (WebApplicationException wae) {
@@ -264,6 +247,7 @@ public class ExportJobResource extends JobControllerBase {
 
         Map conflatedMap = new Map(mapIds.get(0));
         conflatedMap.setDisplayName(mapName);
+
         return conflatedMap;
     }
 
@@ -332,16 +316,11 @@ public class ExportJobResource extends JobControllerBase {
         File out = null;
         String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
         try {
-            File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
+            File folder = FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
 
             if (folder != null) {
                 String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
-
-                if (remove.equalsIgnoreCase("true")) {
-                    delPath = workingFolder;
-                }
-
-                out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
+                out = FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
 
                 if ((out == null) || !out.exists()) {
                     throw new NativeInterfaceException("Missing output file",
@@ -480,9 +459,6 @@ public class ExportJobResource extends JobControllerBase {
                 o.put("description", "UTP");
                 exportResources.add(o);
             }
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String msg = "Error retrieving exported resource list!";

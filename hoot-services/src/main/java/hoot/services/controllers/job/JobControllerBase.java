@@ -32,9 +32,6 @@ import static hoot.services.HootProperties.INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -78,7 +75,7 @@ public class JobControllerBase {
      * @param jobId
      * @param requestParams
      */
-    public void postJobRquest(String jobId, String requestParams) {
+    public void postJobRequest(String jobId, String requestParams) {
         logger.debug(jobId);
         logger.debug(requestParams);
 
@@ -104,13 +101,13 @@ public class JobControllerBase {
 
             logger.debug("postJobRequest Response: {}", r.getStatusLine());
         }
-        catch (Exception ex) {
-            String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "postJobRequest() failed!  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
-    public void postChainJobRquest(String jobId, String requestParams) {
+    public void postChainJobRequest(String jobId, String requestParams) {
         // Request should come back immediately but if something is wrong then
         // timeout and clean up.to make UI responsive
         RequestConfig requestConfig =
@@ -123,7 +120,7 @@ public class JobControllerBase {
             httpclient.start();
 
             HttpPost httpPost = new HttpPost(CORE_JOB_SERVER_URL + "/hoot-services/job/chain/" + jobId);
-            logger.debug("postChainJobRquest : {}/hoot-services/job/chain/{}", CORE_JOB_SERVER_URL, jobId);
+            logger.debug("postChainJobRequest : {}/hoot-services/job/chain/{}", CORE_JOB_SERVER_URL, jobId);
 
             StringEntity se = new StringEntity(requestParams);
             httpPost.setEntity(se);
@@ -133,11 +130,11 @@ public class JobControllerBase {
             // wait till we get response
             HttpResponse r = future.get();
 
-            logger.debug("postChainJobRquest Response x: {}", r.getStatusLine());
+            logger.debug("postChainJobRequest Response x: {}", r.getStatusLine());
         }
-        catch (Exception ex) {
-            String msg = "Failed upload: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "postChainJobRequest() failed.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
         }
     }
 
