@@ -36,7 +36,8 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.osm.OsmTestUtils;
+import hoot.services.utils.MapUtils;
 
 
 /**
@@ -56,7 +57,7 @@ public class ChangesetDbWriterTest {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
         long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
+        BoundingBox originalBounds = OsmTestUtils.createStartingTestBounds();
 
         String changeset = "<osmChange version=\"0.3\" generator=\"iD\">" + "<create>";
         for (int i = 0; i < NUM_NODES; i++) {
@@ -78,6 +79,6 @@ public class ChangesetDbWriterTest {
                         .fetchCount());
 
         Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,
-                OSMTestUtils.getTagCountForElementType(mapId, ElementType.Node));
+                OsmTestUtils.getTagCountForElementType(mapId, ElementType.Node));
     }
 }

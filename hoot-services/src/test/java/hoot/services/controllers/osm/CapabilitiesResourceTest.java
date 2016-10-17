@@ -27,55 +27,69 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.xpath.XPathAPI;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
 
 import hoot.services.UnitTest;
+import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.XmlUtils;
 
 
-public class CapabilitiesResourceTest extends OSMResourceTestAbstract {
+public class CapabilitiesResourceTest extends OsmResourceTestAbstract {
+    public CapabilitiesResourceTest() {}
 
     @Test
     @Category(UnitTest.class)
-    public void testGetCapabilities() throws Exception {
-        Document responseInXML = target("api/capabilities").request(MediaType.TEXT_XML).get(Document.class);
+    public void testGet() throws Exception {
+        Document responseData = null;
+        try {
+            responseData = target("api/capabilities").request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response " + e.getResponse());
+        }
 
-        assertNotNull(responseInXML);
-
+        Assert.assertNotNull(responseData);
         XPath xpath = XmlUtils.createXPath();
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/@version", responseData));
+            Assert.assertEquals(GENERATOR, xpath.evaluate("//osm/@generator", responseData));
+            Assert.assertEquals(COPYRIGHT, xpath.evaluate("//osm/@copyright", responseData));
+            Assert.assertEquals(ATTRIBUTION, xpath.evaluate("//osm/@attribution", responseData));
+            Assert.assertEquals(LICENSE, xpath.evaluate("//osm/@license", responseData));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api").getLength());
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/version").getLength());
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@minimum", responseData));
+            Assert.assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@maximum", responseData));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/area").getLength());
+            Assert.assertEquals(MAX_QUERY_AREA_DEGREES, xpath.evaluate("//osm/api/area/@maximum", responseData));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/waynodes").getLength());
+            Assert.assertEquals(MAXIMUM_WAY_NODES, xpath.evaluate("//osm/api/waynodes/@maximum", responseData));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/changesets").getLength());
+            Assert.assertEquals(MAXIMUM_CHANGESET_ELEMENTS,
+                    xpath.evaluate("//osm/api/changesets/@maximum_elements", responseData));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/timeout").getLength());
+            Assert.assertEquals(
+                    Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES) * 60,
+                    Integer.parseInt(xpath.evaluate("//osm/api/timeout/@seconds", responseData)));
 
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/version").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/area").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/waynodes").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/timeout").getLength());
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/changesets").getLength());
-
-        assertEquals(OSM_VERSION, xpath.evaluate("//osm/@version", responseInXML));
-        assertEquals(GENERATOR, xpath.evaluate("//osm/@generator", responseInXML));
-        assertEquals(COPYRIGHT, xpath.evaluate("//osm/@copyright", responseInXML));
-        assertEquals(ATTRIBUTION, xpath.evaluate("//osm/@attribution", responseInXML));
-        assertEquals(LICENSE, xpath.evaluate("//osm/@license", responseInXML));
-        assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@minimum", responseInXML));
-        assertEquals(OSM_VERSION, xpath.evaluate("//osm/api/version/@maximum", responseInXML));
-        assertEquals(MAX_QUERY_AREA_DEGREES, xpath.evaluate("//osm/api/area/@maximum", responseInXML));
-        assertEquals(MAXIMUM_WAY_NODES, xpath.evaluate("//osm/api/waynodes/@maximum", responseInXML));
-        assertEquals(MAXIMUM_CHANGESET_ELEMENTS, xpath.evaluate("//osm/api/changesets/@maximum_elements", responseInXML));
-        assertEquals(Integer.parseInt(CHANGESET_IDLE_TIMEOUT_MINUTES) * 60,
-                     Integer.parseInt(xpath.evaluate("//osm/api/timeout/@seconds", responseInXML)));
-        assertEquals(1, XPathAPI.selectNodeList(responseInXML, "//osm/api/status").getLength());
-        assertEquals("online", xpath.evaluate("//osm/api/status/@database", responseInXML));
-        assertEquals("online", xpath.evaluate("//osm/api/status/@api", responseInXML));
-        assertEquals("offline", xpath.evaluate("//osm/api/status/@gpx", responseInXML));
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/api/status").getLength());
+            Assert.assertEquals("online", xpath.evaluate("//osm/api/status/@database", responseData));
+            Assert.assertEquals("online", xpath.evaluate("//osm/api/status/@api", responseData));
+            Assert.assertEquals("offline", xpath.evaluate("//osm/api/status/@gpx", responseData));
+        }
+        catch (XPathExpressionException e) {
+            Assert.fail("Error parsing response document: " + e.getMessage());
+        }
     }
 }
