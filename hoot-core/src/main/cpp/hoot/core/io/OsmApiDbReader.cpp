@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -559,7 +559,8 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       resultIterator.value(ApiDb::WAYS_TIMESTAMP).toUInt()));
 
-  //TODO: read these out in batch at the same time the element results are read
+  // if performance becomes an issue, try reading these out in batch at the same time
+  // the element results are read
   vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {

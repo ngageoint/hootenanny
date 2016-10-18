@@ -38,7 +38,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.review.ElementInfo;
@@ -46,11 +45,14 @@ import hoot.services.models.review.ReviewRef;
 import hoot.services.models.review.ReviewRefsRequest;
 import hoot.services.models.review.ReviewRefsResponse;
 import hoot.services.models.review.ReviewRefsResponses;
-import hoot.services.testsupport.ReviewTestUtils;
+import hoot.services.osm.OsmResourceTestAbstract;
+import hoot.services.review.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 
-public class ReviewResourceGetReferencesTest extends OSMResourceTestAbstract {
+public class ReviewResourceGetReferencesTest extends OsmResourceTestAbstract {
+    public ReviewResourceGetReferencesTest() {
+    }
 
     @Test
     @Category(UnitTest.class)

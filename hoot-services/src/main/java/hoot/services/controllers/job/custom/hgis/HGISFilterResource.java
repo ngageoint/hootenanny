@@ -85,19 +85,22 @@ public class HGISFilterResource extends HGISResource {
         }
 
         if (!mapExists(src)) {
-            String msg = "Map " + src + " does not exist.";
+            String msg = "sourceMap does not exist.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
         try {
             String jobId = UUID.randomUUID().toString();
             String argStr = createBashPostBody(createParamObj(src, output));
-            postJobRequest(jobId, argStr);
+            postJobRquest(jobId, argStr);
             resp.setJobId(jobId);
         }
-        catch (Exception e) {
-            String msg = "Error while trying to filter non-HGIS POI's.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String msg = "Error while trying to filter non-HGIS POI's" + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return resp;

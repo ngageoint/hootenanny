@@ -27,11 +27,10 @@
 package hoot.services.controllers.job;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,15 +42,16 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ExportJobResourceTest {
@@ -72,12 +72,12 @@ public class ExportJobResourceTest {
         jobArgs += "\"exectype\":\"make\"}";
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+        Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
         JobId resp = spy.process(params);
         String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        //verify(spy).postJobRequest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+        verify(spy).postJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
     }
 
     @Test
@@ -101,12 +101,12 @@ public class ExportJobResourceTest {
                 + "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRquest(anyString(), anyString());
         JobId resp = spy.process(params);
         String jobId = resp.getJobid();
 
         jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        //verify(spy).postChainJobRequest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
+        verify(spy).postChainJobRquest(Matchers.matches(jobId), Matchers.endsWith(jobArgs));
     }
 
     @Test
@@ -124,16 +124,12 @@ public class ExportJobResourceTest {
         String expected = "";
         File file = new File(transExtPath);
         if (file.exists() && file.isDirectory()) {
-            expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"}," +
-                        "{\"description\":\"MGCP\",\"name\":\"MGCP\"}," +
-                        "{\"description\":\"UTP\",\"name\":\"UTP\"}]";
+            expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"},{\"description\":\"UTP\",\"name\":\"UTP\"}]";
         }
         else {
             expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
         }
-
-        JSONParser parser = new JSONParser();
-        assertEquals(parser.parse(expected), parser.parse(result));
+        Assert.assertEquals(expected, result);
     }
 
     @Test
@@ -147,7 +143,7 @@ public class ExportJobResourceTest {
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(new Long(1));
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
@@ -161,13 +157,13 @@ public class ExportJobResourceTest {
 
             String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
 
-            assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
-            assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
-            assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
-            assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
-            assertTrue(commandArgs.contains("{\"temppath\":"));
-            assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
-            assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"temppath\":"));
+            Assert.assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
+            Assert.assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
         }
         finally {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
@@ -188,7 +184,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
@@ -202,8 +198,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString()
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("Custom translation not allowed when exporting to OSM API database."));
             throw e;
         }
@@ -224,7 +220,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
@@ -237,8 +233,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("has no osm_api_db_export_time tag"));
+            Assert.assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("has no osm_api_db_export_time tag"));
             throw e;
         }
         finally {
@@ -260,7 +256,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
@@ -274,8 +270,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e
                     .getResponse()
                     .getEntity()
                     .toString()
@@ -299,7 +295,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             // add two map id's
             mapIds.add(1L);
@@ -315,8 +311,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
             throw e;
         }
         finally {
@@ -336,7 +332,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             // add no map id's
             Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
@@ -350,8 +346,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
+            Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
             throw e;
         }
         finally {
@@ -371,7 +367,7 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).postJobRquest(anyString(), anyString());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
 
@@ -388,8 +384,8 @@ public class ExportJobResourceTest {
             spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
         }
         catch (WebApplicationException e) {
-            assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString()
+            Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
+            Assert.assertTrue(e.getResponse().getEntity().toString()
                     .contains("Attempted to export to an OSM API database but OSM API database support is disabled"));
             throw e;
         }

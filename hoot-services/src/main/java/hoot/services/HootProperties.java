@@ -26,7 +26,6 @@
  */
 package hoot.services;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -125,7 +124,6 @@ public final class HootProperties {
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String DB_URL;
     public static final String OSM_API_DB_URL;
-    public static final String UPLOAD_FOLDER;
 
     static {
         try {
@@ -234,7 +232,6 @@ public final class HootProperties {
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
         OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
-        UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
     }
 
     private HootProperties() {}

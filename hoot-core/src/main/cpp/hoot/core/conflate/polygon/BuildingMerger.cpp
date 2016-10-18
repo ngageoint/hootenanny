@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -151,11 +151,6 @@ void BuildingMerger::apply(const OsmMapPtr& map,
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
     RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
     scrap->getTags().clear();
-
-    // if we created a relation, we now need to make sure the building part information is added
-    // properly
-    /// @todo synchronize building parts See ticket #2880
-    //_synchronizeParts(keeper);
 
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();

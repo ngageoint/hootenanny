@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.annotation.PreDestroy;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,6 +46,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -61,9 +63,17 @@ public class ErrorLogResource {
     @Autowired
     private AboutResource aboutResource;
 
+    private String exportLogPath;
+
 
     public ErrorLogResource() {}
 
+    @PreDestroy
+    public void preDestroy() throws IOException {
+        if ((exportLogPath != null) && (!exportLogPath.isEmpty())) {
+            FileUtils.forceDelete(new File(exportLogPath));
+        }
+    }
 
     /**
      * Service method endpoint for retrieving the Hootenanny tomcat logger.
@@ -81,9 +91,12 @@ public class ErrorLogResource {
             // 50k Length
             errorLog = getErrorLog(50000);
         }
-        catch (Exception e) {
-            String msg = "Error getting error log: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String msg = "Error getting error log: " + ex;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         JSONObject entity = new JSONObject();
@@ -104,14 +117,19 @@ public class ErrorLogResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportLog() {
         File out;
-
         try {
             String outputPath = generateExportLog();
             out = new File(outputPath);
+
+            // TODO: Really not sure about the line below.  Will the be always a single export?  Probably not.
+            exportLogPath = outputPath;
         }
-        catch (Exception e) {
-            String message = "Error exporting log file!  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception ex) {
+            String message = "Error exporting log file!";
+            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -125,7 +143,9 @@ public class ErrorLogResource {
     }
 
     private static String getErrorLog(int maxLength) throws IOException {
-        try (RandomAccessFile file = new RandomAccessFile(new File(ERROR_LOG_PATH), "r")) {
+        File file = new File(ERROR_LOG_PATH);
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             long fileLength = file.length();
 
             long startOffset = 0;
@@ -133,27 +153,27 @@ public class ErrorLogResource {
                 startOffset = fileLength - maxLength;
             }
 
-            file.seek(startOffset);
+            randomAccessFile.seek(startOffset);
 
             byte[] buffer = new byte[maxLength];
-            file.read(buffer, 0, maxLength);
+            randomAccessFile.read(buffer, 0, maxLength);
 
             return new String(buffer);
         }
     }
 
     private String generateExportLog() throws IOException {
-        UUID uuid = UUID.randomUUID();
+        String fileId = UUID.randomUUID().toString();
 
-        VersionInfo versionInfo = this.aboutResource.getCoreVersionInfo();
+        VersionInfo vInfo = this.aboutResource.getCoreVersionInfo();
         String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
-        data += versionInfo.toString();
+        data += vInfo.toString();
 
-        CoreDetail coreDetail = this.aboutResource.getCoreVersionDetail();
+        CoreDetail cd = this.aboutResource.getCoreVersionDetail();
         data += System.lineSeparator() + "************ CORE ENVIRONMENT ***********" + System.lineSeparator();
 
-        if (coreDetail != null) {
-            data += StringUtils.join(coreDetail.getEnvironmentInfo(), System.lineSeparator());
+        if (cd != null) {
+            data += StringUtils.join(cd.getEnvironmentInfo(), System.lineSeparator());
         }
 
         data += System.lineSeparator() + "************ SERVICE VERSION INFO ***********" + System.lineSeparator();
@@ -165,7 +185,7 @@ public class ErrorLogResource {
 
         String logStr = getErrorLog(maxSize);
 
-        String outputPath = TEMP_OUTPUT_PATH + File.separator + uuid;
+        String outputPath = TEMP_OUTPUT_PATH + File.separator + fileId;
         try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
             raf.writeBytes(data + System.lineSeparator() + logStr);
             return outputPath;

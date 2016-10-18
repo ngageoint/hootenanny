@@ -108,6 +108,7 @@ public class ChangesetResource {
     public Response create(String changesetData, @QueryParam("mapId") String mapId) {
         Document changesetDoc;
         try {
+            logger.debug("Parsing changeset XML...");
             changesetDoc = XmlDocumentBuilder.parse(changesetData);
         }
         catch (Exception ex) {
@@ -134,11 +135,15 @@ public class ChangesetResource {
 
         long userId;
         try {
+            logger.debug("Retrieving user ID associated with map having ID: {} ...", mapIdNum);
+
             userId = createQuery()
                     .select(maps.userId)
                     .from(maps)
                     .where(maps.id.eq(mapIdNum))
                     .fetchOne();
+
+            logger.debug("Retrieved user ID: {}", userId);
         }
         catch (Exception ex) {
             String msg = "Error locating user associated with map for changeset data: "
@@ -155,6 +160,8 @@ public class ChangesetResource {
                     + StringUtils.abbreviate(changesetData, 100);
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
+
+        logger.debug("Returning ID: {} for new changeset...", changesetId);
 
         return Response.ok(String.valueOf(changesetId)).build();
     }
@@ -211,6 +218,13 @@ public class ChangesetResource {
             handleError(e, changesetId, StringUtils.abbreviate(changeset, 100));
         }
 
+        try {
+            logger.debug("Returning changeset upload response: {} ...",
+                    StringUtils.abbreviate(XmlDocumentBuilder.toString(changesetUploadResponse), 100));
+        }
+        catch (Exception ignored) {
+        }
+
         return Response.ok(new DOMSource(changesetUploadResponse)).build();
     }
 
@@ -241,6 +255,8 @@ public class ChangesetResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String close(@PathParam("changesetId") Long changesetId,
                         @QueryParam("mapId") Long mapId) {
+        logger.debug("Closing changeset with ID: {} ...", changesetId);
+
         if (mapId == null) {
             String msg = "Invalid map id!";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());

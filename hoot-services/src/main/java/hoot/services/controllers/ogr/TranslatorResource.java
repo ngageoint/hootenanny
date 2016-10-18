@@ -52,6 +52,39 @@ public class TranslatorResource extends ServerControllerBase {
 
     public TranslatorResource() {}
 
+    public static void startTranslationService() {
+        try {
+            String translationServiceScript = HOME_FOLDER + TRANSLATION_SERVER_SCRIPT;
+
+            // Make sure to wipe out previously running servers.
+            stopServer(translationServiceScript);
+
+            // start Translaction Service
+            translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
+                    translationServiceScript);
+            }
+        catch (Exception e) {
+            String msg = "Error starting Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    public static void stopTranslationService() {
+        // This also gets called automatically from HootServletContext when
+        // service exits but should not be reliable since there are many path where it will not be invoked.
+        try {
+            // Destroy the reference to the process directly here via the Java
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            translationServiceProcess.destroy();
+        }
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
+    }
+
     /**
      * Gets current status of translation server.
      * <p>
@@ -68,7 +101,7 @@ public class TranslatorResource extends ServerControllerBase {
             isRunning = getStatus(translationServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of Translation Service.  Cause: " + e.getMessage();
+            String msg = "Error getting status of Translation Service: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -77,42 +110,5 @@ public class TranslatorResource extends ServerControllerBase {
         json.put("port", TRANSLATION_SERVER_PORT);
 
         return Response.ok(json.toJSONString()).build();
-    }
-
-    public static void startTranslationService() {
-        try {
-            String translationServiceScript = HOME_FOLDER + TRANSLATION_SERVER_SCRIPT;
-
-            // Make sure to wipe out previously running servers.
-            stopServer(translationServiceScript);
-
-            logger.info("Starting Translation Service by running {} script", translationServiceScript);
-
-            // start Translaction Service
-            translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
-                    translationServiceScript);
-
-            logger.info("Translation Service started");
-        }
-        catch (Exception e) {
-            String msg = "Error starting Translation Service.  Cause: " + e.getMessage();
-            throw new RuntimeException(msg, e);
-        }
-    }
-
-    public static void stopTranslationService() {
-        // This also gets called automatically from HootServletContext when
-        // service exits but should not be reliable since there are many path where it will not be invoked.
-        try {
-            // Destroy the reference to the process directly here via the Java
-            // API vs having the base class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files created by hoot threads not to be cleaned up.
-            // stopServer(homeFolder + "/scripts/" + translationServerScript);
-            translationServiceProcess.destroy();
-        }
-        catch (Exception e) {
-            String msg = "Error stopping Translation Service.  Cause: " + e.getMessage();
-            throw new RuntimeException(msg, e);
-        }
     }
 }

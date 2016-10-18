@@ -27,19 +27,18 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.utils.DbUtils.createQuery;
-import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -49,46 +48,80 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.osm.Changeset;
+import hoot.services.osm.OsmResourceTestAbstract;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
-public class UserResourceTest extends OSMResourceTestAbstract {
+public class UserResourceTest extends OsmResourceTestAbstract {
+    public UserResourceTest() {}
 
     @Test
     @Category(UnitTest.class)
     public void testGetById() throws Exception {
-        Document responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-
-        assertNotNull(responseData);
+        Document responseData = null;
+        try {
+            responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
 
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-        assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
+        }
     }
 
     @Test
     @Category(UnitTest.class)
     public void testGetByName() throws Exception {
-        Document responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
-
-        assertNotNull(responseData);
+        Document responseData = null;
+        try {
+            responseData = target("user/" + "user-with-id-" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
 
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-        assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
+        }
     }
 
     @Test
@@ -98,15 +131,14 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         double originalMinLat = 38.90089748801109;
         double originalMaxLon = -77.9224564416296;
         double originalMaxLat = 39.00085678801109;
-
-        BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon, originalMaxLat);
+        BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon,
+                originalMaxLat);
 
         // link some changesets to the user
         Set<Long> changesetIds = new LinkedHashSet<>();
 
         long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
         changesetIds.add(changesetId);
-
         (new Changeset(mapId, changesetId)).setBounds(originalBounds);
 
         QChangesets changesets = QChangesets.changesets;
@@ -117,8 +149,8 @@ public class UserResourceTest extends OSMResourceTestAbstract {
                 .where(changesets.id.eq(changesetId))
                 .fetchOne();
 
-        assertNotNull(changeset);
-        assertEquals(userId, (long) changeset.getUserId());
+        Assert.assertNotNull(changeset);
+        Assert.assertEquals(userId, (long) changeset.getUserId());
 
         changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
         changesetIds.add(changesetId);
@@ -131,24 +163,41 @@ public class UserResourceTest extends OSMResourceTestAbstract {
                 .where(changesets.id.eq(changesetId))
                 .fetchOne();
 
-        assertNotNull(changeset);
-        assertEquals(userId, (long) changeset.getUserId());
+        Assert.assertNotNull(changeset);
+        Assert.assertEquals(userId, (long) changeset.getUserId());
 
-        Document responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-        assertNotNull(responseData);
+        Document responseData = null;
+        try {
+            responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
 
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-        assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
+
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+            Assert.assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+            Assert.assertEquals("user-with-id-" + userId, xpath.evaluate("//osm/user/@display_name", responseData));
+            Assert.assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
+        }
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetInvalidUserId() throws Exception {
         // TODO: change this to something randomly generated and very large
@@ -156,36 +205,36 @@ public class UserResourceTest extends OSMResourceTestAbstract {
             long invalidUserId = 999999;
             target("user/" + invalidUserId).request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (NotFoundException e) {
+        catch (WebApplicationException e) {
             Response r = e.getResponse();
-            assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
+            Assert.assertEquals(404, r.getStatus());
+            Assert.assertTrue(r.readEntity(String.class).contains("No user exists with ID"));
             throw e;
         }
     }
 
-    @Test(expected = NotAllowedException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetEmptyUserId() throws Exception {
         try {
             target("user/").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (NotAllowedException e) {
+        catch (WebApplicationException e) {
             Response r = e.getResponse();
-            assertEquals(405, r.getStatus());
+            Assert.assertEquals(405, r.getStatus());
             throw e;
         }
     }
 
-    @Test(expected = NotAllowedException.class)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testGetMissingUserId() throws Exception {
         try {
             target("user").request(MediaType.TEXT_XML).get(Document.class);
         }
-        catch (NotAllowedException e) {
+        catch (WebApplicationException e) {
             Response r = e.getResponse();
-            assertEquals(405, r.getStatus());
+            Assert.assertEquals(405, r.getStatus());
             throw e;
         }
     }
@@ -195,30 +244,46 @@ public class UserResourceTest extends OSMResourceTestAbstract {
     public void testGetDetails() throws Exception {
         // Authentication doesn't exist yet, so this just looks for the first user from a select.
         // This test is essentially the same as testGet now but will change after authentication is implemented.
-        Document responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
-
-        assertNotNull(responseData);
+        Document responseData = null;
+        try {
+            responseData = target("api/0.6/user/details").request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (WebApplicationException e) {
+            Assert.fail("Unexpected response: " + e.getResponse());
+        }
+        Assert.assertNotNull(responseData);
 
         XPath xpath = XmlUtils.createXPath();
 
-        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        try {
+            Assert.assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+            Assert.assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+            Assert.assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing header from response document: " + e.getMessage());
+        }
 
-        // probably need a better check than this
-        assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
-        assertEquals(DbUtils.getTestUserId(), Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+        try {
+            // probably need a better check than this
+            Assert.assertTrue(XPathAPI.selectNodeList(responseData, "//osm/user").getLength() >= 1);
+            Assert.assertEquals(DbUtils.getTestUserId(),
+                    Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
 
-        // TODO: fix
-        // Assert.assertEquals(
-        // "user-with-id-" +
-        // String.valueOf(DbUtils.getTestUserId(conn)),
-        // xpath.evaluate("//osm/user/@display_name", responseData));
-        // TODO: can't test this from here if clearing out maps after
-        // every test...need a different
-        // test for it
-        // Assert.assertTrue(
-        // Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
-        // responseData)) > 0);
+            // TODO: fix
+            // Assert.assertEquals(
+            // "user-with-id-" +
+            // String.valueOf(DbUtils.getTestUserId(conn)),
+            // xpath.evaluate("//osm/user/@display_name", responseData));
+            // TODO: can't test this from here if clearing out maps after
+            // every test...need a different
+            // test for it
+            // Assert.assertTrue(
+            // Long.parseLong(xpath.evaluate("//osm/user/changesets/@count",
+            // responseData)) > 0);
+        }
+        catch (Exception e) {
+            Assert.fail("Error parsing user from response document: " + e.getMessage());
+        }
     }
 }

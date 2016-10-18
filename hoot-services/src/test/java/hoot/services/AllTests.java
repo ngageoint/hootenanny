@@ -29,9 +29,12 @@ package hoot.services;
 import static org.junit.extensions.cpsuite.SuiteType.TEST_CLASSES;
 
 import org.junit.extensions.cpsuite.ClasspathSuite;
+import org.junit.extensions.cpsuite.ClasspathSuite.SuiteTypes;
 import org.junit.runner.RunWith;
 
 
 @RunWith(ClasspathSuite.class)
-@ClasspathSuite.SuiteTypes(TEST_CLASSES)
-public class AllTests { }
+@SuiteTypes({ TEST_CLASSES })
+public class AllTests {
+    //
+}

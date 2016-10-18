@@ -15,6 +15,7 @@ Feature: Basemap Ingest
         Then I wait 30 "seconds" to see "RomanColosseumCucumber"
 
     Scenario: Add Basemap To Map
+        Then I wait 30 "seconds" to see css "button.closedeye"
         When I click the "closedeye" classed element under "span.fill-white.small" with text "RomanColosseumCucumber"
         Then I select the "sprocket" div
         And I click the Background settings button

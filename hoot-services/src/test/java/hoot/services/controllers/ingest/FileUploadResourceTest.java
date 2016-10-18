@@ -27,8 +27,6 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,39 +43,31 @@ import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class FileUploadResourceTest {
-    private static File homeFolder;
-    private static String original_HOME_FOLDER;
+    private static final File homeFolder;
+    private static final String original_HOME_FOLDER;
 
 
-    private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
-        for (String resource : resources) {
-            URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/ingest/FileUploadResourceTest/" + resource);
-            File dest = new File(homeFolder, resource);
-            FileUtils.copyURLToFile(inputUrl, dest);
-        }
-    }
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
+    static {
         try {
             original_HOME_FOLDER = HOME_FOLDER;
             homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest");
             FileUtils.forceMkdir(homeFolder);
-            assertTrue(homeFolder.exists());
+            Assert.assertTrue(homeFolder.exists());
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
             copyResourcesInfoTestFolder(new String[]
                     {"ogr.zip", "zip1.zip", "osm.zip", "osm1.osm", "osm2.osm",
-                            "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
+                     "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
 
             String command = "/usr/bin/unzip " + new File(homeFolder, "DcGisRoads.zip").getAbsolutePath() +
                     " -d " + homeFolder.getAbsolutePath();
@@ -88,8 +78,20 @@ public class FileUploadResourceTest {
         }
     }
 
+    private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
+        for (String resource : resources) {
+            URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/ingest/FileUploadResourceTest/" + resource);
+            File dest = new File(homeFolder, resource);
+            FileUtils.copyURLToFile(inputUrl, dest);
+        }
+    }
+
+    @BeforeClass
+    public static void oneTimeSetup() throws Exception {
+    }
+
     @AfterClass
-    public static void afterClass() throws Exception {
+    public static void oneTimeTearDown() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
     }
@@ -101,12 +103,12 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         File srcFile = new File(homeFolder, "fgdb_ogr.zip");
         File destFile = new File(wkdirpath, "fgdb_ogr.zip");
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -117,15 +119,15 @@ public class FileUploadResourceTest {
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
         buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat);
 
-        assertEquals(2, results.size());
+        Assert.assertEquals(2, results.size());
 
         for (Object oRes : results) {
             JSONObject cnt = (JSONObject) oRes;
             if (cnt.get("type").toString().equals("FGDB_ZIP")) {
-                assertEquals("fgdb_ogr/DcGisRoads.gdb", cnt.get("name").toString());
+                Assert.assertEquals("fgdb_ogr/DcGisRoads.gdb", cnt.get("name").toString());
             }
             else if (cnt.get("type").toString().equals("OGR_ZIP")) {
-                assertEquals("fgdb_ogr/jakarta_raya_coastline.shp", cnt.get("name").toString());
+                Assert.assertEquals("fgdb_ogr/jakarta_raya_coastline.shp", cnt.get("name").toString());
             }
         }
         FileUtils.forceDelete(workingDir);
@@ -139,12 +141,12 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         File srcFile = new File(homeFolder, "test-files/service/FileUploadResourceTest/" + input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -157,7 +159,7 @@ public class FileUploadResourceTest {
             buildNativeRequestMethod.invoke(res, jobId, "fgdb_osm", "zip", input, results, zipStat);
         }
         catch (Exception ex) {
-            assertEquals("Zip should not contain both osm and ogr types.", ex.getMessage());
+            Assert.assertEquals("Zip should not contain both osm and ogr types.", ex.getMessage());
             throw ex;
         }
 
@@ -172,12 +174,12 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -228,27 +230,27 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"fgdb_ogr/DcGisRoads.gdb\" \"fgdb_ogr/jakarta_raya_coastline.shp\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"fgdb_ogr/DcGisRoads.gdb\" \"fgdb_ogr/jakarta_raya_coastline.shp\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
 
             if (oJ.get("UNZIP_LIST") != null) {
-                assertEquals("fgdb_ogr", oJ.get("UNZIP_LIST").toString());
+                Assert.assertEquals("fgdb_ogr", oJ.get("UNZIP_LIST").toString());
                 nP++;
             }
         }
 
-        assertEquals(4, nP);
+        Assert.assertEquals(4, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -259,13 +261,13 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "fgdb_ogr.zip";
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -302,7 +304,7 @@ public class FileUploadResourceTest {
         srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         inputsList.add(input);
 
@@ -336,27 +338,27 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"fgdb_ogr/DcGisRoads.gdb\" \"fgdb_ogr/jakarta_raya_coastline.shp\" \"TransportationGroundCrv.shp\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"fgdb_ogr/DcGisRoads.gdb\" \"fgdb_ogr/jakarta_raya_coastline.shp\" \"TransportationGroundCrv.shp\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
 
             if (oJ.get("UNZIP_LIST") != null) {
-                assertEquals("fgdb_ogr", oJ.get("UNZIP_LIST").toString());
+                Assert.assertEquals("fgdb_ogr", oJ.get("UNZIP_LIST").toString());
                 nP++;
             }
         }
 
-        assertEquals(4, nP);
+        Assert.assertEquals(4, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -368,14 +370,14 @@ public class FileUploadResourceTest {
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
 
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "osm.zip";
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
 
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -411,7 +413,7 @@ public class FileUploadResourceTest {
         srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         inputsList.add(input);
 
@@ -445,27 +447,27 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"osm/DcGisRoads.osm\" \"osm/DcTigerRoads.osm\" \"osm1.osm\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"osm/DcGisRoads.osm\" \"osm/DcTigerRoads.osm\" \"osm1.osm\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("OSM", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("OSM", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
 
             if (oJ.get("UNZIP_LIST") != null) {
-                assertEquals("osm", oJ.get("UNZIP_LIST").toString());
+                Assert.assertEquals("osm", oJ.get("UNZIP_LIST").toString());
                 nP++;
             }
         }
 
-        assertEquals(4, nP);
+        Assert.assertEquals(4, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -476,13 +478,13 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "ogr.zip";
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -518,7 +520,7 @@ public class FileUploadResourceTest {
         srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         inputsList.add("zip1");
 
@@ -552,22 +554,22 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("ogr.zip;zip1.zip", oJ.get("INPUT").toString());
+                Assert.assertEquals("ogr.zip;zip1.zip", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("ZIP", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("ZIP", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
         }
 
-        assertEquals(3, nP);
+        Assert.assertEquals(3, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -578,13 +580,13 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "TransportationGroundCrv.shp";
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -618,7 +620,7 @@ public class FileUploadResourceTest {
         srcFile = new File(homeFolder, "TransportationGroundCrv.shp");
         destFile = new File(wkdirpath + "/" + input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         inputsList.add(input);
 
@@ -649,21 +651,21 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"TransportationGroundCrv.shp\" \"TransportationGroundCrv2.shp\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"TransportationGroundCrv.shp\" \"TransportationGroundCrv2.shp\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("OGR", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
         }
-        assertEquals(3, nP);
+        Assert.assertEquals(3, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -674,13 +676,13 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "osm1.osm";
         File srcFile = new File(homeFolder, input);
         File destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -714,7 +716,7 @@ public class FileUploadResourceTest {
         srcFile = new File(homeFolder, input);
         destFile = new File(wkdirpath, input);
         FileUtils.copyFile(srcFile, destFile);
-        assertTrue(destFile.exists());
+        Assert.assertTrue(destFile.exists());
 
         inputsList.add(input);
 
@@ -745,22 +747,22 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"osm1.osm\" \"osm2.osm\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"osm1.osm\" \"osm2.osm\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("OSM", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("OSM", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
         }
 
-        assertEquals(3, nP);
+        Assert.assertEquals(3, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -771,13 +773,13 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         String input = "DcGisRoads.gdb";
         File srcDir = new File(homeFolder, input);
         File destDir = new File(wkdirpath, input);
         FileUtils.copyDirectory(srcDir, destDir);
-        assertTrue(destDir.exists());
+        Assert.assertTrue(destDir.exists());
 
         FileUploadResource res = new FileUploadResource();
 
@@ -825,22 +827,22 @@ public class FileUploadResourceTest {
             JSONObject oJ = (JSONObject) o;
 
             if (oJ.get("INPUT") != null) {
-                assertEquals("\"DcGisRoads.gdb\" ", oJ.get("INPUT").toString());
+                Assert.assertEquals("\"DcGisRoads.gdb\" ", oJ.get("INPUT").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                Assert.assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
                 nP++;
             }
 
             if (oJ.get("INPUT_TYPE") != null) {
-                assertEquals("FGDB", oJ.get("INPUT_TYPE").toString());
+                Assert.assertEquals("FGDB", oJ.get("INPUT_TYPE").toString());
                 nP++;
             }
         }
 
-        assertEquals(3, nP);
+        Assert.assertEquals(3, nP);
         FileUtils.forceDelete(workingDir);
     }
 
@@ -856,7 +858,7 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         List<FileItem> fileItemsList = new ArrayList<>();
 
@@ -876,7 +878,7 @@ public class FileUploadResourceTest {
         File out = new File(wkdirpath + "/buffer.tmp");
         item.write(out);
         fileItemsList.add(item);
-        assertTrue(out.exists());
+        Assert.assertTrue(out.exists());
 
         /*
          * Map<String,String> uploadedFiles = new HashMap<String, String>();
@@ -912,7 +914,7 @@ public class FileUploadResourceTest {
         String wkdirpath = homeFolder + "/upload/" + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
-        assertTrue(workingDir.exists());
+        Assert.assertTrue(workingDir.exists());
 
         List<FileItem> fileItemsList = new ArrayList<>();
 
@@ -932,7 +934,7 @@ public class FileUploadResourceTest {
         File out = new File(wkdirpath + "/buffer.tmp");
         item.write(out);
         fileItemsList.add(item);
-        assertTrue(out.exists());
+        Assert.assertTrue(out.exists());
 
         /*
          * Map<String,String> uploadedFiles = new HashMap<String, String>();

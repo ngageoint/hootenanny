@@ -28,6 +28,10 @@ package hoot.services.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -35,14 +39,14 @@ import java.util.Map;
  */
 public final class PostgresUtils {
 
-    private PostgresUtils() {}
+    private PostgresUtils() {
+    }
 
     /**
-     * Converts an hstore Postgres object to Map<String, String>
+     * Converts an hstore Postgres object to a string map
      * 
      * @param postgresObj
      *            a Postgres object containing an hstore
-
      * @return a string map with the hstore's data
      */
     public static Map<String, String> postgresObjToHStore(Object postgresObj) {
@@ -50,11 +54,31 @@ public final class PostgresUtils {
         // value = "key 1"=>"val 1", "key 2"=>"val 2"
 
         Map<String, String> hstore = (Map<String, String>) postgresObj;
-
         if (hstore == null) {
             hstore = new HashMap<>();
         }
 
         return hstore;
     }
+
+    static Map<String, String> parseTags(String tagsStr) {
+        Map<String, String> tagsMap = new HashMap<>();
+
+        if ((tagsStr != null) && (!tagsStr.isEmpty())) {
+            Pattern regex = Pattern.compile("(\"[^\"]*\")=>(\"(?:\\\\.|[^\"\\\\]+)*\"|[^,\"]*)");
+            Matcher regexMatcher = regex.matcher(tagsStr);
+            while (regexMatcher.find()) {
+                String key = regexMatcher.group(1);
+                key = StringUtils.removeStart(key, "\"");
+                key = StringUtils.removeEnd(key, "\"");
+                String val = regexMatcher.group(2);
+                val = StringUtils.removeStart(val, "\"");
+                val = StringUtils.removeEnd(val, "\"");
+                tagsMap.put(key, val);
+            }
+        }
+
+        return tagsMap;
+    }
+
 }

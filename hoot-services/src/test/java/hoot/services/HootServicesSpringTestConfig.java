@@ -1,4 +1,4 @@
-package hoot.services.testsupport;
+package hoot.services;
 
 import javax.sql.DataSource;
 
@@ -9,23 +9,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import hoot.services.ApplicationContextUtils;
-import hoot.services.HootServicesSpringConfig;
-import hoot.services.controllers.info.NativeInterfaceStubImpl;
-import hoot.services.nativeinterfaces.NativeInterface;
 
 
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"},
         excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
-@Profile("test")
 public class HootServicesSpringTestConfig {
 
     @Bean
@@ -43,9 +35,6 @@ public class HootServicesSpringTestConfig {
         dataSource.setInitialSize(5);
         dataSource.setMaxActive(10);
         dataSource.setMaxIdle(2);
-        dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandoned(true);
-        dataSource.setLogAbandoned(true);
         return dataSource;
     }
 
@@ -54,16 +43,5 @@ public class HootServicesSpringTestConfig {
     @DependsOn("dataSource")
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Bean
-    public NativeInterface nativeInterface() {
-        return new NativeInterfaceStubImpl();
-    }
-
-    @Bean
-    @Autowired
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
     }
 }

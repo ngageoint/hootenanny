@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,16 +32,10 @@ import java.lang.reflect.Modifier;
 import hoot.services.HootProperties;
 
 
-public final class HootCustomPropertiesSetter {
-
-    private HootCustomPropertiesSetter() {}
+public class HootCustomPropertiesSetter {
 
     public static void setProperty(String key, String value) throws Exception {
-        setProperty(key, value, HootProperties.class);
-    }
-
-    public static void setProperty(String key, String value, Class<?> clazz) throws Exception {
-        Field field = clazz.getDeclaredField(key);
+        Field field = HootProperties.class.getField(key);
         field.setAccessible(true);
 
         Field modifiersField = Field.class.getDeclaredField("modifiers");

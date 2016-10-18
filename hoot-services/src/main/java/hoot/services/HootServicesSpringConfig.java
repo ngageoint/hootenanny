@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"})
 @PropertySource("classpath:db/db.properties")
-@Profile("production")
 public class HootServicesSpringConfig {
 
     @Autowired
@@ -45,9 +43,6 @@ public class HootServicesSpringConfig {
         dataSource.setInitialSize(25);
         dataSource.setMaxActive(90);
         dataSource.setMaxIdle(30);
-        dataSource.setDefaultAutoCommit(false);
-        dataSource.setRemoveAbandoned(true);
-        dataSource.setLogAbandoned(true);
         return dataSource;
     }
 
