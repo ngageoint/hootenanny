@@ -65,5 +65,5 @@ Feature: Resolve all reviews feature
     When I click on "input.fill-darken0[type='submit']"
     Then I type "export_conflated" in input "fileExportOutputName"
     Then I click on "input.fill-dark[type='submit']"
-    And I wait 3 "minutes" to not see "Output Name"
+    And I wait 5 "minutes" to not see "Output Name"
     Then the download file "export_conflated.zip" should exist
