@@ -506,7 +506,7 @@ public final class DbUtils {
         try (Connection conn = getConnection()) {
             for (String table : tables) {
                 // DDL Statement. No support in QueryDSL anymore. Have to do it the old-fashioned way.
-                String sql = "DROP TABLE \"" + table + "\"";
+                String sql = "DROP TABLE IF EXISTS \"" + table + "\"";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.execute();
                 }
