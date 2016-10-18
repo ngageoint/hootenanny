@@ -27,9 +27,8 @@ Feature: Paste Attributes
         And I click the "Point" preset
         And I click the "Park" preset
         And I wait 2 seconds
-        And I expand the tag list toggle
 
-        #I copy a feature 
+        #I copy a feature
         Then I select a node map feature with OSM id "n1"
         And I click the control "c" key
 
@@ -42,23 +41,34 @@ Feature: Paste Attributes
         Then I select a node map feature with OSM id "n2"
         And I click the control shift "v" key
         Then I should see element "#preset-input-name" with value "KALORAMA PARK"
+        And I expand the tag list toggle
         Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I append paste attributes with keyboard shortcut
         Then I click the control alt "v" key
         Then I should see element "#preset-input-name" with value "KALORAMA RECREATION CENTER;KALORAMA PARK"
+        And I expand the tag list toggle
         Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I overwrite paste attributes with UI button
         Then I click paste tags, overwrite
         Then I should see element "#preset-input-name" with value "KALORAMA PARK"
+        And I expand the tag list toggle
         Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
 
         #I append paste attributes with UI button
         Then I click paste tags, append
         Then I should see element "#preset-input-name" with value "KALORAMA RECREATION CENTER;KALORAMA PARK"
+        And I expand the tag list toggle
         Then I should see the last element "input.value.combobox-input" with value "park"
         Then I click undo
+
+        #Click save to clear local history
+        #Otherwise next feature test will get alert about restoring unsaved features
+        When I press "Save"
+        Then I click the "save-button" button
+        Then I click the "trash" button
+        And I accept the alert
