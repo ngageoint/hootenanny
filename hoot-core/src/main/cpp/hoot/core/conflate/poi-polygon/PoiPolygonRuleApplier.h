@@ -37,6 +37,7 @@ namespace hoot
 {
 
 class MatchClassification;
+class SchemaVertex;
 
 /**
  * A custom set of rules intended to prevent bad matches and reduce unnecessary reviews during
@@ -71,6 +72,8 @@ private:
   double _typeScore;
   bool _typeMatch;
   double _matchDistance;
+
+  static vector<SchemaVertex> _allTags;
 
   shared_ptr<Geometry> _polyGeom;
   shared_ptr<Geometry> _poiGeom;

@@ -495,7 +495,7 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
   const Tags polyTags = _map->getElement(_polyEid)->getTags();
   if (typeKvp == "leisure=park")
   {
-    return 20.0;
+    return 25.0;
   }
   else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
            (polyTags.get("subway") == "yes" || polyTags.get("tunnel") == "yes"))

@@ -52,6 +52,8 @@
 namespace hoot
 {
 
+vector<SchemaVertex> PoiPolygonRuleApplier::_allTags;
+
 PoiPolygonRuleApplier::PoiPolygonRuleApplier(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& areaNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
@@ -394,6 +396,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   genericLandUseTagVals.append("industrial");
   genericLandUseTagVals.append("grass");
   genericLandUseTagVals.append("construction");
+  genericLandUseTagVals.append("cemetery");
 
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
@@ -680,6 +683,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
            (poly->getTags().get("amenity") == "parking" || poly->getTags().contains("place")) &&
            !(_typeMatch || _nameMatch))*/
   else if (poiHasType && polyHasType && poly->getTags().get("amenity") == "parking" &&
+           _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -705,8 +709,10 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   }
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
+  //else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
+           //!(_typeMatch || _nameMatch))
   else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-           !(_typeMatch || _nameMatch))
+           (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
         (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
@@ -812,12 +818,16 @@ bool PoiPolygonRuleApplier::_isBuildingIsh(ConstElementPtr element) const
     elementName.contains("bldg");
 }
 
+//TODO: add a method to OsmSchema to return the unique types in a list?
 bool PoiPolygonRuleApplier::_hasMoreThanOneType(ConstElementPtr element) const
 {
   int typeCount = 0;
   QStringList typesParsed;
-  vector<SchemaVertex> allTags = OsmSchema::getInstance().getAllTags();
-  for (vector<SchemaVertex>::const_iterator it = allTags.begin(); it != allTags.end(); ++it)
+  if (_allTags.size() == 0)
+  {
+    _allTags = OsmSchema::getInstance().getAllTags();
+  }
+  for (vector<SchemaVertex>::const_iterator it = _allTags.begin(); it != _allTags.end(); ++it)
   {
     SchemaVertex vertex = *it;
     //LOG_DEBUG("Key: " << vertex.key);
