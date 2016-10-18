@@ -15,6 +15,12 @@ var schemaMap = {
     MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js')
 };
 
+var osmToCodeMap = {
+    TDSv40: '/translations/TDSv40.js',
+    TDSv61: '/translations/TDSv61.js',
+    MGCP: '/translations/MGCP_TRD4.js'
+};
+
 var osmToTdsMap = {
     TDSv40: '/translations/OSM_to_englishTDS.js',
     TDSv61: '/translations/OSM_to_englishTDS61.js',
@@ -158,6 +164,16 @@ function handleInputs(params) {
             break;
         case '/osmtotds':
             params.transMap = osmToTdsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
+        case '/english':
+            params.transMap = osmToTdsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
+        case '/code':
+            params.transMap = osmToCodeMap;
             params.transDir = 'toogr';
             result = osmtotds(params);
             break;
