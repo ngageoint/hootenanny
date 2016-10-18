@@ -584,9 +584,9 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     triggersParkRule = true;
   }
   //Don't review park poi's against large non-park polys.
-  //TODO: the commented out section adds two wrong matches to C but takes one away from D; look
+  //TODO: !polyIsPark conditional adds two wrong matches to C but takes one away from D; look
   //into it
-  else if (poiHasType && polyHasType && !_nameMatch && /*!polyIsPark &&*/
+  else if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
            (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
            (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
            poly->getTags().get("leisure").toLower() == "common") ||
@@ -832,7 +832,6 @@ bool PoiPolygonRuleApplier::_hasMoreThanOneType(ConstElementPtr element) const
   {
     SchemaVertex vertex = *it;
     //LOG_DEBUG("Key: " << vertex.key);
-    typesParsed.append(vertex.key);
     //there may be duplicate keys in allTags
     if (element->getTags().contains(vertex.key) && !typesParsed.contains(vertex.key))
     {
@@ -843,6 +842,8 @@ bool PoiPolygonRuleApplier::_hasMoreThanOneType(ConstElementPtr element) const
         return true;
       }
     }
+
+    typesParsed.append(vertex.key);
   }
   return false;
 }
