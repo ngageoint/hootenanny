@@ -87,7 +87,7 @@ private:
   bool _isPlayArea(ConstElementPtr element) const;
   bool _isSport(ConstElementPtr element) const;
   bool _isBuildingIsh(ConstElementPtr element) const;
-  bool _containsMoreThanOneType(ConstElementPtr element) const;
+  bool _hasMoreThanOneType(ConstElementPtr element) const;
 
 };
 
