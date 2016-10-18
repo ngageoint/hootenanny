@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -372,16 +372,77 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
   _selectElementsForMap->setForwardOnly(true);
 
   QString sql =  "SELECT * FROM ";
-  if (elementType != ElementType::Unknown)
+  //if element id is giving, use it directly
+  if (elementId > -1)
   {
     sql += _getTableName(elementType) + " WHERE visible = true ";
     if (elementType == ElementType::Node)
     {
       sql += "AND (" + _getTileWhereCondition(bbox) + ")";
     }
-    if (elementId > -1)
+    sql += " AND (id = :elementId)";
+  }
+  else
+  {
+    sql += " current_nodes WHERE visible = true AND (" + _getTileWhereCondition(bbox) + ")";
+
+    //get node ids so we can select ways or relations related to those node ids
+    if (elementType != ElementType::Node)
     {
-      sql += " AND (id = :elementId)";
+      QStringList nodeIds;
+      QSqlQuery nodeIdsQuery(_db);
+      nodeIdsQuery.setForwardOnly(true);
+      nodeIdsQuery.prepare(sql);
+      if (nodeIdsQuery.exec() == false)
+      {
+        QString err = nodeIdsQuery.lastError().text();
+        LOG_WARN(sql);
+        throw HootException("Error selecting elements of type: " + elementType.toString() +
+          " Error: " + err);
+      }
+      while(nodeIdsQuery.next())
+      {
+        nodeIds << nodeIdsQuery.value(0).toString();;
+      }
+
+      //select way ids or relation ids depends on node ids
+      QString idsQuery = "SELECT ";
+      QStringList ids;
+      if (elementType == ElementType::Way)
+      {
+        idsQuery += "way_id FROM current_way_nodes WHERE " + _getIdWhereCondition("node_id", nodeIds);
+      }
+      else if (elementType == ElementType::Relation)
+      {
+        idsQuery += "relation_id FROM current_relation_members WHERE member_type='Node' AND (" + _getIdWhereCondition("member_id", nodeIds) + ")";
+      }
+      QSqlQuery idsSqlQuery(_db);
+      idsSqlQuery.setForwardOnly(true);
+      idsSqlQuery.prepare(idsQuery);
+      if (idsSqlQuery.exec() == false)
+      {
+        QString err = idsSqlQuery.lastError().text();
+        LOG_WARN(idsQuery);
+        throw HootException("Error selecting elements of type: " + elementType.toString() +
+          " Error: " + err);
+      }
+      while(idsSqlQuery.next())
+      {
+        ids << idsSqlQuery.value(0).toString();
+      }
+      ids.removeDuplicates();
+
+      //format sql for ways or relations
+      if (ids.size() > 0)
+      {
+        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" + _getIdWhereCondition("id", ids) + ")";
+      }
+      else
+      {
+        //will return 0 records
+        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (id=-1)";
+      }
+
     }
   }
   sql += " ORDER BY id DESC";
@@ -403,6 +464,23 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
   }
 
   return _selectElementsForMap;
+}
+
+QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
+{
+  QString sql = "";
+  for (int i = 0; i < ids.size(); i++)
+  {
+    if (i == ids.size() - 1)
+    {
+      sql += idCol + "=" + ids.at(i);
+    }
+    else
+    {
+      sql += idCol + "=" + ids.at(i) + " or ";
+    }
+  }
+  return sql;
 }
 
 QString OsmApiDb::_getTileWhereCondition(QString bbox)

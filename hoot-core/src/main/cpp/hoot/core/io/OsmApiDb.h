@@ -173,6 +173,7 @@ private:
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
   QString _getTableName(const ElementType& elementType);
   QString _getTileWhereCondition(QString bbox);
+  QString _getIdWhereCondition(QString idCol, QStringList ids);
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
