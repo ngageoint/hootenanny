@@ -10,7 +10,7 @@ Feature: Display inset map
         Then I should not see the "div.map-in-map" on the page
 
     Scenario: I can check minimap and see the inset map
-        When I click the map background button
+        When I click the Background settings button
         And I should see checkbox "Minimap" unchecked
         And I check the "Minimap" checkbox
         Then I should see the previously hidden "div.map-in-map" on the page
