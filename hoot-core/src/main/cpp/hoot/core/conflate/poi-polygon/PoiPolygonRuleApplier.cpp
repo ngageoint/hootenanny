@@ -397,6 +397,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   genericLandUseTagVals.append("grass");
   genericLandUseTagVals.append("construction");
   genericLandUseTagVals.append("cemetery");
+  genericLandUseTagVals.append("farm");
 
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer

@@ -47,7 +47,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
+QString PoiPolygonMatch::_testUuid = "{ee5efb97-18e3-5230-9800-62ed07d81cae}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -139,7 +139,12 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  if (!inABuildingOrPoiCategory &&
+  /*if (tags.get("uuid") == _testUuid)
+  {
+    LOG_VARD(inABuildingOrPoiCategory);
+    LOG_VARD(e.toString());
+  }*/
+  if (/*!inABuildingOrPoiCategory &&*/
       (tags.get("barrier").toLower() == "fence"
       || tags.get("landuse").toLower() == "grass"
       || tags.get("natural").toLower() == "tree_row"
@@ -192,13 +197,7 @@ bool PoiPolygonMatch::isPoi(const Element& e)
 
 bool PoiPolygonMatch::isArea(const Element& e)
 {
-  //TODO: make this work instead of the logic in the rule applier
   const Tags& tags = e.getTags();
-  /*if (tags.get("natural") == "coastline")
-  {
-    return false;
-  }*/
-
   return isPoly(e) && !OsmSchema::getInstance().isBuilding(tags, e.getElementType());
 }
 
