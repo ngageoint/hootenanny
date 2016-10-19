@@ -73,7 +73,8 @@ private:
   bool _typeMatch;
   double _matchDistance;
 
-  static vector<SchemaVertex> _allTags;
+  //static vector<SchemaVertex> _allTags;
+  static QSet<QString> _allTagKeys;
 
   shared_ptr<Geometry> _polyGeom;
   shared_ptr<Geometry> _poiGeom;

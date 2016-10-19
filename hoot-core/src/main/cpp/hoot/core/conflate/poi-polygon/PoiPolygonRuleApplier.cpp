@@ -52,7 +52,8 @@
 namespace hoot
 {
 
-vector<SchemaVertex> PoiPolygonRuleApplier::_allTags;
+//vector<SchemaVertex> PoiPolygonRuleApplier::_allTags;
+QSet<QString> PoiPolygonRuleApplier::_allTagKeys;
 
 PoiPolygonRuleApplier::PoiPolygonRuleApplier(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& areaNeighborIds,
@@ -713,6 +714,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   //else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
            //!(_typeMatch || _nameMatch))
   else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
+           _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -819,23 +821,48 @@ bool PoiPolygonRuleApplier::_isBuildingIsh(ConstElementPtr element) const
     elementName.contains("bldg");
 }
 
-//TODO: add a method to OsmSchema to return the unique types in a list?
 bool PoiPolygonRuleApplier::_hasMoreThanOneType(ConstElementPtr element) const
 {
+//  int typeCount = 0;
+//  QStringList typesParsed;
+//  if (_allTags.size() == 0)
+//  {
+//    _allTags = OsmSchema::getInstance().getAllTags();
+//  }
+//  for (vector<SchemaVertex>::const_iterator it = _allTags.begin(); it != _allTags.end(); ++it)
+//  {
+//    SchemaVertex vertex = *it;
+//    //LOG_DEBUG("Key: " << vertex.key);
+//    //there may be duplicate keys in allTags
+//    if (element->getTags().contains(vertex.key) && !typesParsed.contains(vertex.key))
+//    {
+//      LOG_DEBUG("Has key: " << vertex.key);
+//      typeCount++;
+//      if (typeCount > 1)
+//      {
+//        return true;
+//      }
+//    }
+
+//    typesParsed.append(vertex.key);
+//  }
+//  return false;
+
   int typeCount = 0;
   QStringList typesParsed;
-  if (_allTags.size() == 0)
+  if (_allTagKeys.size() == 0)
   {
-    _allTags = OsmSchema::getInstance().getAllTags();
+    _allTagKeys = OsmSchema::getInstance().getAllTagKeys();
   }
-  for (vector<SchemaVertex>::const_iterator it = _allTags.begin(); it != _allTags.end(); ++it)
+  const Tags elementTags = element->getTags();
+  for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
   {
-    SchemaVertex vertex = *it;
+    const QString elementTagKey = it.key();
     //LOG_DEBUG("Key: " << vertex.key);
     //there may be duplicate keys in allTags
-    if (element->getTags().contains(vertex.key) && !typesParsed.contains(vertex.key))
+    if (_allTagKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
     {
-      LOG_DEBUG("Has key: " << vertex.key);
+      LOG_DEBUG("Has key: " << elementTagKey);
       typeCount++;
       if (typeCount > 1)
       {
@@ -843,7 +870,7 @@ bool PoiPolygonRuleApplier::_hasMoreThanOneType(ConstElementPtr element) const
       }
     }
 
-    typesParsed.append(vertex.key);
+    typesParsed.append(elementTagKey);
   }
   return false;
 }

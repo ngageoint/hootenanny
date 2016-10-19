@@ -288,6 +288,8 @@ public:
 
   vector<SchemaVertex> getAllTags();
 
+  QSet<QString> getAllTagKeys();
+
   vector<SchemaVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();

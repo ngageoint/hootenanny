@@ -463,6 +463,18 @@ public:
     return result;
   }
 
+  QSet<QString> getAllTagKeys()
+  {
+    QSet<QString> result;
+    result.reserve(_name2Vertex.size());
+    for (QHash<QString, VertexId>::const_iterator it = _name2Vertex.begin();
+      it != _name2Vertex.end(); ++it)
+    {
+      result.insert(it.key());
+    }\
+    return result;
+  }
+
   vector<SchemaVertex> getAssociatedTags(QString name)
   {
     set<VertexId> vids;
@@ -1376,6 +1388,11 @@ void OsmSchema::createTestingGraph()
 vector<SchemaVertex> OsmSchema::getAllTags()
 {
   return d->getAllTags();
+}
+
+QSet<QString> OsmSchema::getAllTagKeys()
+{
+  return d->getAllTagKeys();
 }
 
 vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
