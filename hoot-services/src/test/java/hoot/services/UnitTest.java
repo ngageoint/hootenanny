@@ -26,5 +26,4 @@
  */
 package hoot.services;
 
-public interface UnitTest {
-    /* category marker */}
+public interface UnitTest { /* category marker */ }

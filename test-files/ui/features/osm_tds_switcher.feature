@@ -86,7 +86,7 @@ Feature: OSM/TDS Switcher
         And I should see "Edit feature: "
         And I select the "MGCP" option labelled "Filter By Type"
         Then I wait 5 seconds
-        Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015:General Building Point Feature"
+        Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015:General Building"
 
         # Add a point with MGCP schema
         When I click the "add-point" button
