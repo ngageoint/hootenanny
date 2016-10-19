@@ -64,8 +64,45 @@ void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr elemen
     //TODO: hack - I thought this would have been eliminated by using the translated name comparison
     //logic...seems like it wasn't. - see others
     street = street.replace(ESZETT, ESZETT_REPLACE);
-    combinedAddress = houseNum + " " + street;
-    addresses.append(combinedAddress);
+    if (!houseNum.contains("-"))
+    {
+      combinedAddress = houseNum + " " + street;
+      addresses.append(combinedAddress);
+    }
+    else
+    {
+      //address ranges; e.g. 1-3 elm street is an address range that includes the addresses:
+      //"1 elm street", "2 elm street", and "3 elm street".  I've only seen this on the houseNum
+      //tag so far, but conceivably you could find it in the full address tags as well...won't add
+      //logic for that, though, unless its encountered.  I could also see someone separating '-'
+      //with a space (which isn't hard to handle), but also won't worry about it until its seen
+      //in the wild.
+
+      QStringList houseNumParts = houseNum.split("-");
+      LOG_VARD(houseNumParts);
+      if (houseNumParts.size() == 2)
+      {
+        bool startHouseNumParsedOk = false;
+        const int startHouseNum = houseNumParts[0].toInt(&startHouseNumParsedOk);
+        LOG_VARD(startHouseNum);
+        if (startHouseNumParsedOk)
+        {
+          bool endHouseNumParsedOk = false;
+          const int endHouseNum = houseNumParts[1].toInt(&endHouseNumParsedOk);
+          LOG_VARD(endHouseNum);
+          if (endHouseNumParsedOk && startHouseNum < endHouseNum)
+          {
+            for (int i = startHouseNum; i < endHouseNum + 1; i++)
+            {
+              combinedAddress = QString::number(i) + " " + street;
+              LOG_VARD(combinedAddress);
+              addresses.append(combinedAddress);
+            }
+          }
+        }
+      }
+    }
+
   }
 
   //full address in one tag
@@ -95,7 +132,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr elemen
       int ctr = 1;
       while (ctr < addressParts.length() && !ok)
       {
-        addressParts[ctr].toDouble(&ok);
+        addressParts[ctr].toInt(&ok);
         ctr++;
       }
       LOG_VARD(ctr);
@@ -169,7 +206,7 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPt
   }
   if (polyAddresses.size() == 0)
   {
-    LOG_VART("No poly addresses.");
+    LOG_DEBUG("No poly addresses.");
     return false;
   }
 
@@ -178,11 +215,10 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPt
   _collectAddressesFromElement(poi, poiAddresses);
   if (poiAddresses.size() == 0)
   {
-    LOG_VART("No POI addresses.");
+    LOG_DEBUG("No POI addresses.");
     return false;
   }
 
-  //look for an exact match between the two
   ExactStringDistance addrComp;
   for (int i = 0; i < polyAddresses.size(); i++)
   {
@@ -194,17 +230,71 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPt
       if (Log::getInstance().getLevel() == Log::Debug &&
            (poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid))
       {
-        LOG_VART(polyAddress);
-        LOG_VART(poiAddress);
+        LOG_VARD(polyAddress);
+        LOG_VARD(poiAddress);
       }
 
+      const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
+      assert(polyAddressParts.length() > 0);
+      const QStringList poiAddressParts = poiAddress.split(QRegExp("\\s"));
+      assert(poiAddressParts.length() > 0);
+
+      //exact match
       if (addrComp.compare(polyAddress, poiAddress) == 1.0)
       {
-        LOG_VART("Found address match.");
+        LOG_DEBUG("Found address match.");
         return true;
+      }
+      //subletter fuzziness
+      /*
+       * we're also going to allow sub letter differences be
+       //matches; ex "34 elm street" matches "34a elm street".  This is b/c the subletters are
+       sometimes left out of the addresses, and we'd like to at least end up with a review in that
+       situation.
+       */
+      //TODO: this may be able to be cleaned up with better use of regex's
+      else
+      {
+        QString polyAddressTemp = polyAddressParts[0];
+        const QString polyHouseNumStr = polyAddressTemp.replace(QRegExp("[a-z]+"), "");
+        LOG_VARD(polyHouseNumStr);
+        bool polyHouseNumOk = false;
+        /*const int polyHouseNum = */polyHouseNumStr.toInt(&polyHouseNumOk);
+
+        QString poiAddressTemp = poiAddressParts[0];
+        const QString poiHouseNumStr = poiAddressTemp.replace(QRegExp("[a-z]+"), "");
+        LOG_VARD(poiHouseNumStr);
+        bool poiHouseNumOk = false;
+        /*const int poiHouseNum = */polyHouseNumStr.toInt(&poiHouseNumOk);
+
+        //don't think this check is needed since the addresses have already been parsed...but will
+        //leave it here for now
+        if (polyHouseNumOk && poiHouseNumOk)
+        {
+          QString subletterCleanedPolyAddress = polyHouseNumStr;
+          for (int k = 1; k < polyAddressParts.length(); k++)
+          {
+            subletterCleanedPolyAddress += " " + polyAddressParts[k];
+          }
+          LOG_VARD(subletterCleanedPolyAddress);
+
+          QString subletterCleanedPoiAddress = poiHouseNumStr;
+          for (int k = 1; k < poiAddressParts.length(); k++)
+          {
+            subletterCleanedPoiAddress += " " + poiAddressParts[k];
+          }
+          LOG_VARD(subletterCleanedPoiAddress);
+
+          if (addrComp.compare(subletterCleanedPolyAddress, subletterCleanedPoiAddress) == 1.0)
+          {
+            LOG_DEBUG("Found address match.");
+            return true;
+          }
+        }
       }
     }
   }
+
   return false;
 }
 

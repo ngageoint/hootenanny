@@ -49,7 +49,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{69d6c63a-d959-5f87-aac2-9f928f42b781}";
+QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -283,14 +283,17 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     return;
   }
 
-  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
-  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
+  //name/type matching output is needed by the ReviewReducer, otherwise we would do it after
+  //the distance calcs.
 
+  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
   _nameScore = nameScorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
 
+  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
   _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
+  //TODO: move to type scorer
   if (poi->getTags().get("historic") == "monument")
   {
     _typeMatch = _typeScore >= 0.3; //TODO: move to constant
@@ -314,13 +317,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       .triggersRule(poi, poly, externalMatchClass);
   if (!reviewReductionRuleTriggered)
   {
+    evidence = 0;
+    evidence += _typeMatch ? 1 : 0;
+    evidence += _nameMatch ? 1 : 0;
+
     // calculate the 2 sigma for the distance between the two objects
     const double sigma1 = e1->getCircularError() / 2.0;
     const double sigma2 = e1->getCircularError() / 2.0;
     ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
-
-    addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
-
     PoiPolygonMatchDistanceCalculator distanceCalc(
       _matchDistance, _reviewDistance, _map->getElement(_polyEid)->getTags());
     _matchDistance =
@@ -333,12 +337,19 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         distanceCalc.getReviewDistanceForType(_t2BestKvp));
     reviewDistancePlusCe = _reviewDistance + ce;
     closeMatch = _distance <= reviewDistancePlusCe;
-
-    evidence = 0;
-    evidence += _typeMatch ? 1 : 0;
-    evidence += _nameMatch ? 1 : 0;
-    evidence += addressMatch ? 1 : 0;
     evidence += _distance <= _matchDistance ? 2 : 0;
+
+    //no point in calc'ing the address match if we already have a match from the other evidence
+    //TODO: make threshold levels constants
+    if (evidence <= 3)
+    {
+      addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
+    }
+    else
+    {
+      LOG_DEBUG("Skipped address matching.");
+    }
+    evidence += addressMatch ? 1 : 0;
 
     if (!closeMatch)
     {
