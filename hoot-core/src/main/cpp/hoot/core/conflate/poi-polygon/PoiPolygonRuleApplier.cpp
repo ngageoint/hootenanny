@@ -104,7 +104,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   bool triggersParkRule = false;
 
   const QString poiName = poi->getTags().get("name").toLower();
-  //const QString polyName = poly->getTags().get("name").toLower();
 
   const bool poiHasType =
     OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
@@ -124,8 +123,8 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
   const bool polyIsRecCenter = _isRecCenter(poly);
   const bool polyIsSport = _isSport(poly);
-  const bool polyHasMoreThanOneType = _hasMoreThanOneType(poly);
 
+  const bool polyHasMoreThanOneType = _hasMoreThanOneType(poly);
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
   double parkPolyOverlapVal = -1.0;
@@ -141,10 +140,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
   bool anotherPolyContainsPoiWithTypeMatch = false;
   bool poiCloseToAnotherPolyWithTypeMatch = false;
-
   bool poiOnBuilding = false;
-  //int numOtherBuildingsCloseToPoi = -1;
-
   double polyArea = -1.0;
   try
   {
@@ -227,7 +223,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     if (area->getElementId() != poly->getElementId())
     {
       shared_ptr<Geometry> areaGeom;
-      //bool topologyError = false;
       try
       {
         areaGeom = ElementConverter(_map).convertToGeometry(area);
@@ -243,7 +238,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
             _badGeomCount++;
           }
         }
-        else if (/*!topologyError && */areaGeom.get())
+        else if (areaGeom.get())
         {
           /*if (Log::getInstance().getLevel() == Log::Debug &&
               (poi->getTags().get("uuid") == _testUuid ||
@@ -378,7 +373,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
             "geometry: " << area->toString() << "\n" << e.what());
           _badGeomCount++;
         }
-        //topologyError = true;
       }
     }
     areaNeighborItr++;
@@ -667,8 +661,7 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     matchClass.setMiss();
     triggersParkRule = true;
   }
-  //Need to be stricter on tunnels since we don't want above ground things to conflate with them.
-  //else if (poly->getTags().get("tunnel") == "yes" && !(_typeMatch || _nameMatch))
+  //Need to be stricter on tunnels since we don't want above ground things to review against them.
   else if (poly->getTags().get("tunnel") == "yes" && poiHasType &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
@@ -681,9 +674,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
     triggersParkRule = true;
   }
   //Be more strict reviewing parking lots against other features.
-  /*else if (poiHasType && polyHasType &&
-           (poly->getTags().get("amenity") == "parking" || poly->getTags().contains("place")) &&
-           !(_typeMatch || _nameMatch))*/
   else if (poiHasType && polyHasType && poly->getTags().get("amenity") == "parking" &&
            _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
@@ -711,8 +701,6 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
   }
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
-  //else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-           //!(_typeMatch || _nameMatch))
   else if (genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
            _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))

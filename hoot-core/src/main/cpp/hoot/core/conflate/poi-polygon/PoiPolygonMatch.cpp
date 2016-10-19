@@ -293,7 +293,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     _typeMatch = _typeScore >= _typeScoreThreshold;
   }
-  //const bool exactTypeMatch = typeScore == 1.0;
 
   double ce = -1.0;
   double reviewDistancePlusCe = -1.0;
@@ -459,32 +458,20 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       distancesStr.chop(2);
       averageDistance = sumDist / (double)distances.size();
 
-      LOG_DEBUG(matchType.toUpper() << " distance info for type: " << type);
-      LOG_VARD(maxDistance);
-      LOG_VARD(minimumDistance);
-      LOG_VARD(averageDistance);
-      LOG_VARD(numberOfEntries);
-      LOG_VARD(distancesStr);
-      LOG_DEBUG("**************************");
+      LOG_INFO(matchType.toUpper() << " distance info for type: " << type);
+      LOG_VAR(maxDistance);
+      LOG_VAR(minimumDistance);
+      LOG_VAR(averageDistance);
+      LOG_VAR(numberOfEntries);
+      LOG_VAR(distancesStr);
+      LOG_INFO("**************************");
     }
   }
 }
 
 double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) const
 {
-  //dataset c
-  /*if (typeKvp == "amenity=clinic")
-  {
-    return 10.0;
-  }
-  else if (typeKvp == "amenity=school" || typeKvp == "amenity=kindergarten")
-  {
-    return 20.0;
-  }
-  else if (typeKvp == "leisure=park")
-  {
-    return 10.0;
-  }*/
+
 
   return _matchDistance;
 }
@@ -492,6 +479,7 @@ double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) cons
 double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
 {
   const Tags polyTags = _map->getElement(_polyEid)->getTags();
+
   if (typeKvp == "leisure=park")
   {
     return 25.0;
@@ -501,14 +489,6 @@ double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
   {
     return 150.0;
   }
-  /*else if (typeKvp == "leisure=playground")
-  {
-    return 20.0;
-  }
-  else if (typeKvp == "sport=basketball")
-  {
-    return 50.0;
-  }*/
 
   return _reviewDistance;
 }
