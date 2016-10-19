@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -363,7 +363,8 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     }
     else
     {
-      LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
+      //TODO: change back
+      /*LOG_WARN*/LOG_DEBUG("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
                partials[i]->getElementId());
     }
   }

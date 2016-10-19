@@ -75,6 +75,7 @@ private:
 
   //static vector<SchemaVertex> _allTags;
   static QSet<QString> _allTagKeys;
+  QStringList _genericLandUseTagVals;
 
   shared_ptr<Geometry> _polyGeom;
   shared_ptr<Geometry> _poiGeom;

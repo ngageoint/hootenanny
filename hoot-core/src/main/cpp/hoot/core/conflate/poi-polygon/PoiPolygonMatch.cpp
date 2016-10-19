@@ -231,6 +231,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
                                    eid2.toString());
   }
 
+  //TODO: temp suppress "unable to connect all ways..." message here?
   shared_ptr<Geometry> polyGeom;
   try
   {
@@ -458,13 +459,14 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       distancesStr.chop(2);
       averageDistance = sumDist / (double)distances.size();
 
-      LOG_INFO(matchType.toUpper() << " distance info for type: " << type);
-      LOG_VAR(maxDistance);
-      LOG_VAR(minimumDistance);
-      LOG_VAR(averageDistance);
-      LOG_VAR(numberOfEntries);
-      LOG_VAR(distancesStr);
-      LOG_INFO("**************************");
+      //TODO: change back to info or debug later
+      LOG_ERROR(matchType.toUpper() << " distance info for type: " << type);
+      LOG_VARE(maxDistance);
+      LOG_VARE(minimumDistance);
+      LOG_VARE(averageDistance);
+      LOG_VARE(numberOfEntries);
+      LOG_VARE(distancesStr);
+      LOG_ERROR("**************************");
     }
   }
 }
