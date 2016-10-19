@@ -241,7 +241,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      LOG_WARN(
+      //TODO: change back to warn?
+      /*LOG_WARN*/LOG_DEBUG(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
         "geometry: " << poly->toString() << "\n" << e.what());
       _badGeomCount++;
@@ -254,7 +255,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      LOG_WARN("Invalid polygon passed to PoiPolygonMatchCreator: " << polyGeom->toString());
+      //TODO: change back to warn?
+      /*LOG_WARN*/LOG_DEBUG("Invalid polygon passed to PoiPolygonMatchCreator: " << polyGeom->toString());
       _badGeomCount++;
     }
     _class.setMiss();

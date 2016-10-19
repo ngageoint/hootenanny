@@ -103,12 +103,14 @@ bool PoiPolygonRuleApplier::applyRules(ConstElementPtr poi, ConstElementPtr poly
 {
   if (!_poiGeom.get())
   {
-    LOG_WARN("Invalid poi geometry.");
+    //TODO: change back to warn?
+    /*LOG_WARN*/LOG_DEBUG("Invalid poi geometry.");
     return false;
   }
   if (!_polyGeom.get())
   {
-    LOG_WARN("Invalid poly geometry.");
+    //TODO: change back to warn?
+    /*LOG_WARN*/LOG_DEBUG("Invalid poly geometry.");
     return false;
   }
 
