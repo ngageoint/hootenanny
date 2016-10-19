@@ -205,8 +205,21 @@ bool PoiPolygonMatch::isArea(const Element& e)
 
 void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {
+  _class.setMiss();
+
   ConstElementPtr e1 = _map->getElement(eid1);
   ConstElementPtr e2 = _map->getElement(eid2);
+
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
+    LOG_VARD(_eid1);
+    LOG_VARD(e1->getTags().get("uuid"));
+    LOG_VARD(e1->getTags());
+    LOG_VARD(_eid2);
+    LOG_VARD(e2->getTags().get("uuid"));
+    LOG_VARD(e2->getTags());
+  }
 
   ConstElementPtr poi, poly;
   bool e1IsPoi = false;
@@ -233,6 +246,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
                                    eid2.toString());
   }
 
+  //GEOMETRY CONVERSION
+
   //TODO: temp suppress "unable to connect all ways..." message here?
   shared_ptr<Geometry> polyGeom;
   try
@@ -249,7 +264,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         "geometry: " << poly->toString() << "\n" << e.what());
       _badGeomCount++;
     }
-    _class.setMiss();
     return;
   }
   //may need a better way to handle this...(already tried using isValid())
@@ -261,7 +275,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       /*LOG_WARN*/LOG_DEBUG("Invalid polygon passed to PoiPolygonMatchCreator: " << polyGeom->toString());
       _badGeomCount++;
     }
-    _class.setMiss();
     return;
   }
   shared_ptr<Geometry> poiGeom;
@@ -274,107 +287,71 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      LOG_WARN(
+      //TODO: change back to warn?
+      /*LOG_WARN*/LOG_DEBUG(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
         "geometry: " << poi->toString() << "\n" << e.what());
       _badGeomCount++;
     }
-    _class.setMiss();
     return;
   }
 
-  //name/type matching output is needed by the ReviewReducer, otherwise we would do it after
-  //the distance calcs.
+  int evidence = 0;
 
-  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
-  _nameScore = nameScorer.getNameScore(poi, poly);
-  _nameMatch = _nameScore >= _nameScoreThreshold;
-  _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
+  //DISTANCE
+
+  // calculate the 2 sigma for the distance between the two objects
+  const double sigma1 = e1->getCircularError() / 2.0;
+  const double sigma2 = e1->getCircularError() / 2.0;
+  const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
+  const double reviewDistancePlusCe = _reviewDistance + ce;
+  const bool closeMatch = _distance <= reviewDistancePlusCe;
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
+    LOG_VARD(closeMatch);
+    LOG_VARD(_distance);
+    LOG_VARD(_matchDistance);
+    LOG_VARD(_reviewDistance);
+    LOG_VARD(reviewDistancePlusCe);
+    LOG_VARD(ce);
+    LOG_VARD(e1->getCircularError());
+    LOG_VARD(e2->getCircularError());
+  }
+  const bool printMatchDistanceTruth = ConfigOptions().getPoiPolygonPrintMatchDistanceTruth();
+  //close match is a requirement, regardless of the evidence count
+  if (!closeMatch && !printMatchDistanceTruth)
+  {
+    //don't exit early here if printing truths, b/c we need to calculate type match for that first
+    //before exiting
+    return;
+  }
+  PoiPolygonMatchDistanceCalculator distanceCalc(
+    _matchDistance, _reviewDistance, _map->getElement(_polyEid)->getTags());
+  _matchDistance =
+    max(
+      distanceCalc.getMatchDistanceForType(_t1BestKvp),
+      distanceCalc.getMatchDistanceForType(_t2BestKvp));
+  _reviewDistance =
+    max(
+      distanceCalc.getReviewDistanceForType(_t1BestKvp),
+      distanceCalc.getReviewDistanceForType(_t2BestKvp));
+  evidence += _distance <= _matchDistance ? 2 : 0;
+
+  //TYPE
 
   PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
   _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
-  //TODO: move to type scorer
   if (poi->getTags().get("historic") == "monument")
   {
-    _typeMatch = _typeScore >= 0.3; //TODO: move to constant
+    //monuments can represent just about any poi type, so lowering this some to account for that
+    _typeScoreThreshold = 0.3; //TODO: move to config
   }
-  else
+  _typeMatch = _typeScore >= _typeScoreThreshold;
+  evidence += _typeMatch ? 1 : 0;
+  //TODO: re-enable
+  if (/*Log::getInstance().getLevel() == Log::Debug*/printMatchDistanceTruth)
   {
-    _typeMatch = _typeScore >= _typeScoreThreshold;
-  }
-
-  double ce = -1.0;
-  double reviewDistancePlusCe = -1.0;
-  bool closeMatch = false;
-  bool addressMatch = false;
-  int evidence = -1;
-
-  MatchClassification externalMatchClass;
-  const bool reviewReductionRuleTriggered =
-    PoiPolygonReviewReducer(
-      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
-      _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, _testUuid)
-      .triggersRule(poi, poly, externalMatchClass);
-  if (!reviewReductionRuleTriggered)
-  {
-    evidence = 0;
-    evidence += _typeMatch ? 1 : 0;
-    evidence += _nameMatch ? 1 : 0;
-
-    // calculate the 2 sigma for the distance between the two objects
-    const double sigma1 = e1->getCircularError() / 2.0;
-    const double sigma2 = e1->getCircularError() / 2.0;
-    ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
-    PoiPolygonMatchDistanceCalculator distanceCalc(
-      _matchDistance, _reviewDistance, _map->getElement(_polyEid)->getTags());
-    _matchDistance =
-      max(
-        distanceCalc.getMatchDistanceForType(_t1BestKvp),
-        distanceCalc.getMatchDistanceForType(_t2BestKvp));
-    _reviewDistance =
-      max(
-        distanceCalc.getReviewDistanceForType(_t1BestKvp),
-        distanceCalc.getReviewDistanceForType(_t2BestKvp));
-    reviewDistancePlusCe = _reviewDistance + ce;
-    closeMatch = _distance <= reviewDistancePlusCe;
-    evidence += _distance <= _matchDistance ? 2 : 0;
-
-    //no point in calc'ing the address match if we already have a match from the other evidence
-    //TODO: make threshold levels constants
-    if (evidence <= 3)
-    {
-      addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
-    }
-    else
-    {
-      LOG_DEBUG("Skipped address matching.");
-    }
-    evidence += addressMatch ? 1 : 0;
-
-    if (!closeMatch)
-    {
-      _class.setMiss();
-    }
-    else if (evidence >= 3)
-    {
-      _class.setMatch();
-    }
-    else if (evidence >= 1)
-    {
-      _class.setReview();
-    }
-    else
-    {
-      _class.setMiss();
-    }
-  }
-  else
-  {
-    _class = externalMatchClass;
-  }
-
-  //if (Log::getInstance().getLevel() == Log::Debug)
-  //{
     //output feature distances for all feature types which fell within the match threshold
     const QString ref2 = poi->getTags().get("REF2");
     const QString review = poi->getTags().get("REVIEW");
@@ -404,34 +381,86 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         _polyReviewRefIdsToDistances.insert(_t1BestKvp, _distance);
       }
     }
-  //}
+  }
 
   if (Log::getInstance().getLevel() == Log::Debug &&
       (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
   {
-    LOG_VARD(_eid1);
-    LOG_VARD(e1->getTags().get("uuid"));
-    LOG_VARD(e1->getTags());
-    LOG_VARD(_eid2);
-    LOG_VARD(e2->getTags().get("uuid"));
-    LOG_VARD(e2->getTags());
     LOG_VARD(_typeScore);
     LOG_VARD(_typeMatch);
+    LOG_VARD(_t1BestKvp);
+    LOG_VARD(_t2BestKvp);
+  }
+  if (!closeMatch) //second chance to exit early if printing match truths
+  {
+    return;
+  }
+
+  //NAME
+
+  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
+  _nameScore = nameScorer.getNameScore(poi, poly);
+  _nameMatch = _nameScore >= _nameScoreThreshold;
+  _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
+  evidence += _nameMatch ? 1 : 0;
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
     LOG_VARD(_nameMatch);
     LOG_VARD(_exactNameMatch);
     LOG_VARD(_nameScore);
+  }
+
+  //ADDRESS
+
+  //no point in calc'ing the address match if we already have a match from the other evidence
+  //TODO: make threshold levels constants
+  bool addressMatch = false;
+  if (evidence <= 3)
+  {
+    addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
+  }
+  else
+  {
+    LOG_DEBUG("Skipped address matching.");
+  }
+  evidence += addressMatch ? 1 : 0;
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
     LOG_VARD(addressMatch);
-    LOG_VARD(closeMatch);
-    LOG_VARD(_distance);
-    LOG_VARD(_matchDistance);
-    LOG_VARD(_reviewDistance);
-    LOG_VARD(reviewDistancePlusCe);
-    LOG_VARD(ce);
-    LOG_VARD(e1->getCircularError());
-    LOG_VARD(e2->getCircularError());
-    LOG_VARD(_t1BestKvp);
-    LOG_VARD(_t2BestKvp);
-    LOG_VARD(evidence);
+  }
+
+  //CLASSIFICATION
+
+  if (evidence >= 3)
+  {
+    _class.setMatch();
+  }
+  else if (evidence >= 1)
+  {
+    _class.setReview();
+  }
+
+  //REVIEW REDUCTION
+
+  MatchClassification externalMatchClass;
+  //TODO: pass in nameScorer and typeScorer here to clean this constructor up
+  const bool reviewReductionRuleTriggered =
+    PoiPolygonReviewReducer(
+      _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
+      _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, _testUuid)
+      .triggersRule(poi, poly, externalMatchClass);
+  if (reviewReductionRuleTriggered)
+  {
+    //This could just be set to miss, except there is one case in ReviewReducer where a review is
+    //returned instead of a miss....may need to refactor that out.
+    _class = externalMatchClass;
+  }
+
+  if (Log::getInstance().getLevel() == Log::Debug &&
+      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  {
     LOG_VARD(_class);
     LOG_DEBUG("**************************");
   }

@@ -1719,6 +1719,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.print.match.distance.truth
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, debug match distance output will be obtained from manually matched source data and printed
+if running 'hoot score-matches' with POI to polygon conflation.
+
 === poi.polygon.review.threshold
 
 * Data Type: double
