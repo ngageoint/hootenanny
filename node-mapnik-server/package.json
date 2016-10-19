@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "mapnik": "3.x",
+    "mapnik": "3.4.x",
     "generic-pool": "*",
     "pg": "*"
   },
