@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONSCORER_H
-#define POIPOLYGONSCORER_H
+#ifndef POIPOLYGONTYPEMATCH_H
+#define POIPOLYGONTYPEMATCH_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -34,20 +34,13 @@ namespace hoot
 {
 
 /**
- * Scores element similarity
+ * Scores element type similarity
  */
-class PoiPolygonScorer
+class PoiPolygonTypeMatch
 {
 public:
 
-  PoiPolygonScorer(double nameScoreThreshold, double typeScoreThreshold, const QString testUuid);
-
-  /**
-   * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
-   * means one or both of the features have no names.
-   */
-  double getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
-  double getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  PoiPolygonTypeMatch(double typeScoreThreshold, const QString testUuid);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -64,7 +57,6 @@ public:
 
 private:
 
-  double _nameScoreThreshold;
   double _typeScoreThreshold;
 
   QString _testUuid;
@@ -77,4 +69,4 @@ private:
 
 }
 
-#endif // POIPOLYGONSCORER_H
+#endif // POIPOLYGONTYPEMATCH_H

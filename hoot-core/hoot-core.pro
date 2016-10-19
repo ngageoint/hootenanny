@@ -536,8 +536,9 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRuleApplier.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatch.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatch.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.cpp \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.cpp \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
@@ -1083,8 +1084,9 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRuleApplier.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonScorer.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatch.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatch.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.h \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h

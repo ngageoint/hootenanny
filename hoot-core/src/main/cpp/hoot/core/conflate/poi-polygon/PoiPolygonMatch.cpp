@@ -38,8 +38,9 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 
-#include "PoiPolygonRuleApplier.h"
-#include "PoiPolygonScorer.h"
+#include "PoiPolygonReviewReducer.h"
+#include "PoiPolygonTypeMatch.h"
+#include "PoiPolygonNameMatch.h"
 #include "PoiPolygonAddressMatch.h"
 
 namespace hoot
@@ -281,13 +282,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     return;
   }
 
-  PoiPolygonScorer scorer(_nameScoreThreshold, _typeScoreThreshold, _testUuid);
+  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
+  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
 
-  _nameScore = scorer.getNameScore(poi, poly);
+  _nameScore = nameScorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
-  _exactNameMatch = scorer.getExactNameScore(poi, poly) == 1.0;
+  _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
 
-  _typeScore = scorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
+  _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
   if (poi->getTags().get("historic") == "monument")
   {
     _typeMatch = _typeScore >= 0.3; //TODO: move to constant
@@ -304,12 +306,12 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   int evidence = -1;
 
   MatchClassification externalMatchClass;
-  const bool externalRuleTriggered =
-    PoiPolygonRuleApplier(
+  const bool reviewReductionRuleTriggered =
+    PoiPolygonReviewReducer(
       _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
       _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, _testUuid)
-      .applyRules(poi, poly, externalMatchClass);
-  if (!externalRuleTriggered)
+      .triggersRule(poi, poly, externalMatchClass);
+  if (!reviewReductionRuleTriggered)
   {
     // calculate the 2 sigma for the distance between the two objects
     const double sigma1 = e1->getCircularError() / 2.0;

@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONRULEAPPLIER_H
-#define POIPOLYGONRULEAPPLIER_H
+#ifndef POIPOLYGONREVIEWREDUCER_H
+#define POIPOLYGONREVIEWREDUCER_H
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -40,22 +40,24 @@ class MatchClassification;
 class SchemaVertex;
 
 /**
- * A custom set of rules intended to prevent bad matches and reduce unnecessary reviews during
- * poi to poly conflation.
+ * A custom set of rules intended to reduce the number of unnecesary reviews between POI's
+ * and polygons with the goal of never causing a miss where there should be a match.  Any rule
+ * that does so over the course of time testing against different datasets should be removed
+ * from this class.
  */
-class PoiPolygonRuleApplier
+class PoiPolygonReviewReducer
 {
 
 public:
 
-  PoiPolygonRuleApplier(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
+  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const set<ElementId>& areaNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance,
                             double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                             double typeScoreThreshold, double typeScore, bool typeMatch,
                             double matchDistance, shared_ptr<Geometry> polyGeom,
                             shared_ptr<Geometry> poiGeom, const QString testUuid);
 
-  bool applyRules(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
+  bool triggersRule(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
 
 private:
 
@@ -98,4 +100,4 @@ private:
 
 }
 
-#endif // POIPOLYGONPARKAPPLIER_H
+#endif // POIPOLYGONREVIEWREDUCER_H

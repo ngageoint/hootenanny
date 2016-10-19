@@ -24,33 +24,39 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSMATCH_H
-#define POIPOLYGONADDRESSMATCH_H
+#ifndef POIPOLYGONNAMEMATCH_H
+#define POIPOLYGONNAMEMATCH_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 /**
- * Determines if two features has an address match
+ * Scores element name similarity
  */
-class PoiPolygonAddressMatch
+class PoiPolygonNameMatch
 {
 public:
 
-  PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
+  PoiPolygonNameMatch(double nameScoreThreshold, const QString testUuid);
 
-  bool calculateMatch(ConstElementPtr building, ConstElementPtr poi);
+  /**
+   * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
+   * means one or both of the features have no names.
+   */
+  double getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  double getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
 private:
 
-  const ConstOsmMapPtr _map;
+  double _nameScoreThreshold;
+
   QString _testUuid;
 
 };
 
 }
 
-#endif // POIPOLYGONADDRESSMATCH_H
+#endif // POIPOLYGONNAMEMATCH_H

@@ -24,59 +24,24 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonScorer.h"
+#include "PoiPolygonTypeMatch.h"
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/Translator.h>
 
 namespace hoot
 {
 
-PoiPolygonScorer::PoiPolygonScorer(double nameScoreThreshold, double typeScoreThreshold,
+PoiPolygonTypeMatch::PoiPolygonTypeMatch(double typeScoreThreshold,
                                    const QString testUuid = "") :
-_nameScoreThreshold(nameScoreThreshold),
 _typeScoreThreshold(typeScoreThreshold),
 _testUuid(testUuid)
 {
 
 }
 
-double PoiPolygonScorer::getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
-   .extract(e1, e2);
-}
-
-double PoiPolygonScorer::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  const QString e1Name = e1->getTags().get("name");
-  const QString e2Name = e2->getTags().get("name");
-  if (e1Name.trimmed().isEmpty() && e2Name.trimmed().isEmpty())
-  {
-    return 0.0;
-  }
-  //TODO: fix
-  /*return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new ExactStringDistance())))
-   .extract(e1, e2);*/
-   return ExactStringDistance().compare(e1Name.toLower(), e2Name.toLower());
-}
-
-double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                       QString& t2BestKvp)
 {
   const Tags& t1 = e1->getTags();
@@ -121,37 +86,37 @@ double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QS
   return typeScore;
 }
 
-double PoiPolygonScorer::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
+double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
 {
   QString t1BestKvp, t2BestKvp;
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp);
 }
 
-bool PoiPolygonScorer::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+bool PoiPolygonTypeMatch::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                    QString& t2BestKvp)
 {
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
 }
 
-bool PoiPolygonScorer::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
+bool PoiPolygonTypeMatch::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
   QString t1BestKvp, t2BestKvp;
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
 }
 
-bool PoiPolygonScorer::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+bool PoiPolygonTypeMatch::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                       QString& t2BestKvp)
 {
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;
 }
 
-bool PoiPolygonScorer::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
+bool PoiPolygonTypeMatch::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
 {
   QString t1BestKvp, t2BestKvp;
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;
 }
 
-double PoiPolygonScorer::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
+double PoiPolygonTypeMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                       QString& t2BestKvp)
 {
   double result = 0.0;
@@ -195,7 +160,7 @@ double PoiPolygonScorer::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QS
   return result;
 }
 
-QStringList PoiPolygonScorer::_getRelatedTags(const Tags& tags) const
+QStringList PoiPolygonTypeMatch::_getRelatedTags(const Tags& tags) const
 {
   QStringList tagsList;
 
