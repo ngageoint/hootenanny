@@ -38,6 +38,7 @@ const QString PoiPolygonAddressMatch::ESZETT_REPLACE = "ss";
 const QString PoiPolygonAddressMatch::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString PoiPolygonAddressMatch::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME = "address";
+const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
 PoiPolygonAddressMatch::PoiPolygonAddressMatch(const ConstOsmMapPtr& map,
                                                const QString testUuid = "") :
@@ -46,13 +47,14 @@ _testUuid(testUuid)
 {
 }
 
-//TODO: add european address format
 //TODO: sub letter
 //TODO: range
 void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr element,
                                                           QStringList& addresses)
 {
   const Tags tags = element->getTags();
+
+  //address parts in separate tags
   QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
   QString street =
     Translator::getInstance().toEnglish(tags.get(STREET_TAG_NAME)).trimmed().toLower();
@@ -65,12 +67,56 @@ void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr elemen
     combinedAddress = houseNum + " " + street;
     addresses.append(combinedAddress);
   }
+
+  //full address in one tag
   QString addressTagVal =
     Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME)).trimmed().toLower();
   if (!addressTagVal.isEmpty())
   {
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
     addresses.append(addressTagVal);
+  }
+
+  //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
+  //parse through the tokens until you come to a number; assume that is the house number and
+  //everything before it is the street name
+  QString addressTagValAltFormatRaw =
+    Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME_2)).trimmed().toLower();
+  if (!addressTagValAltFormatRaw.isEmpty())
+  {
+    addressTagValAltFormatRaw = addressTagValAltFormatRaw.replace(ESZETT, ESZETT_REPLACE);
+    LOG_VARD(addressTagValAltFormatRaw);
+    const QStringList addressParts = addressTagValAltFormatRaw.split(QRegExp("\\s"));
+    LOG_VARD(addressParts);
+    if (addressParts.length() >= 2)
+    {
+      QString addressTagValAltFormat = "";
+      bool ok = false;
+      int ctr = 1;
+      while (ctr < addressParts.length() && !ok)
+      {
+        addressParts[ctr].toDouble(&ok);
+        ctr++;
+      }
+      LOG_VARD(ctr);
+      LOG_VARD(ok);
+      if (ok && ctr > 1)
+      {
+        houseNum = addressParts[ctr - 1];
+        LOG_VARD(houseNum);
+        addressTagValAltFormat += houseNum;
+        LOG_VARD(addressTagValAltFormat);
+        for (int i = 0; i < (ctr - 1); i++)
+        {
+          addressTagValAltFormat += " ";
+          addressTagValAltFormat += addressParts[i];
+          LOG_VARD(addressTagValAltFormat);
+        }
+        addressTagValAltFormat = addressTagValAltFormat.trimmed();
+        LOG_VARD(addressTagValAltFormat);
+        addresses.append(addressTagValAltFormat);
+      }
+    }
   }
 }
 

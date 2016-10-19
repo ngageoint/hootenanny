@@ -49,7 +49,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{00e22c8e-155b-5de4-a0fa-3e98ef220d01}";
+QString PoiPolygonMatch::_testUuid = "{69d6c63a-d959-5f87-aac2-9f928f42b781}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;

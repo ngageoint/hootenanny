@@ -45,6 +45,7 @@ public:
   static const QString HOUSE_NUMBER_TAG_NAME;
   static const QString STREET_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
 
