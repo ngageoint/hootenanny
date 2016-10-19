@@ -46,6 +46,9 @@ _testUuid(testUuid)
 {
 }
 
+//TODO: add european address format
+//TODO: sub letter
+//TODO: range
 void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr element,
                                                           QStringList& addresses)
 {

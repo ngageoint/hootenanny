@@ -22,45 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSMATCH_H
-#define POIPOLYGONADDRESSMATCH_H
+#include "PoiPolygonMatchDistanceCalculator.h"
 
-// hoot
-#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
 
-/**
- * Determines if two features have an address match
- */
-class PoiPolygonAddressMatch
+PoiPolygonMatchDistanceCalculator::PoiPolygonMatchDistanceCalculator(double matchDistanceDefault,
+                                                                     double reviewDistanceDefault,
+                                                                     const Tags& polyTags) :
+_matchDistanceDefault(matchDistanceDefault),
+_reviewDistanceDefault(reviewDistanceDefault),
+_polyTags(polyTags)
 {
-public:
-
-  static const QChar ESZETT;
-  static const QString ESZETT_REPLACE;
-  static const QString HOUSE_NUMBER_TAG_NAME;
-  static const QString STREET_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME;
-
-  PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
-
-  bool calculateMatch(ConstElementPtr poly, ConstElementPtr poi);
-
-private:
-
-  const ConstOsmMapPtr _map;
-  QString _testUuid;
-
-  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
-  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
-  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
-
-};
 
 }
 
-#endif // POIPOLYGONADDRESSMATCH_H
+double PoiPolygonMatchDistanceCalculator::getMatchDistanceForType(const QString /*typeKvp*/) const
+{
+  return _matchDistanceDefault;
+}
+
+double PoiPolygonMatchDistanceCalculator::getReviewDistanceForType(const QString typeKvp) const
+{
+  if (typeKvp == "leisure=park")
+  {
+    return 25.0;
+  }
+  else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
+           (_polyTags.get("subway") == "yes" || _polyTags.get("tunnel") == "yes"))
+  {
+    return 150.0;
+  }
+
+  return _reviewDistanceDefault;
+}
+
+}
+

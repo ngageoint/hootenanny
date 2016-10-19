@@ -22,45 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSMATCH_H
-#define POIPOLYGONADDRESSMATCH_H
+#ifndef POIPOLYGONMATCHDISTANCECALCULATOR_H
+#define POIPOLYGONMATCHDISTANCECALCULATOR_H
 
-// hoot
-#include <hoot/core/OsmMap.h>
+// Hoot
+#include <hoot/core/elements/Tags.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * Determines if two features have an address match
+ *
  */
-class PoiPolygonAddressMatch
+class PoiPolygonMatchDistanceCalculator
 {
+
 public:
 
-  static const QChar ESZETT;
-  static const QString ESZETT_REPLACE;
-  static const QString HOUSE_NUMBER_TAG_NAME;
-  static const QString STREET_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME;
+  PoiPolygonMatchDistanceCalculator(double matchDistanceDefault, double reviewDistanceDefault,
+                                    const Tags& polyTags);
 
-  PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
-
-  bool calculateMatch(ConstElementPtr poly, ConstElementPtr poi);
+  double getMatchDistanceForType(const QString typeKvp) const;
+  double getReviewDistanceForType(const QString typeKvp) const;
 
 private:
 
-  const ConstOsmMapPtr _map;
-  QString _testUuid;
+  double _matchDistanceDefault;
+  double _reviewDistanceDefault;
 
-  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
-  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
-  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
+  Tags _polyTags;
 
 };
 
 }
 
-#endif // POIPOLYGONADDRESSMATCH_H
+#endif // POIPOLYGONMATCHDISTANCECALCULATOR_H

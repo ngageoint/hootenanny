@@ -42,6 +42,7 @@
 #include "PoiPolygonTypeMatch.h"
 #include "PoiPolygonNameMatch.h"
 #include "PoiPolygonAddressMatch.h"
+#include "PoiPolygonMatchDistanceCalculator.h"
 
 namespace hoot
 {
@@ -320,10 +321,16 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
     addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
 
+    PoiPolygonMatchDistanceCalculator distanceCalc(
+      _matchDistance, _reviewDistance, _map->getElement(_polyEid)->getTags());
     _matchDistance =
-      max(_getMatchDistanceForType(_t1BestKvp), _getMatchDistanceForType(_t2BestKvp));
+      max(
+        distanceCalc.getMatchDistanceForType(_t1BestKvp),
+        distanceCalc.getMatchDistanceForType(_t2BestKvp));
     _reviewDistance =
-      max(_getReviewDistanceForType(_t1BestKvp), _getReviewDistanceForType(_t2BestKvp));
+      max(
+        distanceCalc.getReviewDistanceForType(_t1BestKvp),
+        distanceCalc.getReviewDistanceForType(_t2BestKvp));
     reviewDistancePlusCe = _reviewDistance + ce;
     closeMatch = _distance <= reviewDistancePlusCe;
 
@@ -473,30 +480,6 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       LOG_ERROR("**************************");
     }
   }
-}
-
-double PoiPolygonMatch::_getMatchDistanceForType(const QString /*typeKvp*/) const
-{
-
-
-  return _matchDistance;
-}
-
-double PoiPolygonMatch::_getReviewDistanceForType(const QString typeKvp) const
-{
-  const Tags polyTags = _map->getElement(_polyEid)->getTags();
-
-  if (typeKvp == "leisure=park")
-  {
-    return 25.0;
-  }
-  else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
-           (polyTags.get("subway") == "yes" || polyTags.get("tunnel") == "yes"))
-  {
-    return 150.0;
-  }
-
-  return _reviewDistance;
 }
 
 set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const

@@ -148,9 +148,6 @@ private:
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  double _getMatchDistanceForType(const QString typeKvp) const;
-  double _getReviewDistanceForType(const QString typeKvp) const;
-
 };
 
 }
