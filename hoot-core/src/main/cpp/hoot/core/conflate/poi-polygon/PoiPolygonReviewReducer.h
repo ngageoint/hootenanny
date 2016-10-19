@@ -55,7 +55,8 @@ public:
                             double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                             double typeScoreThreshold, double typeScore, bool typeMatch,
                             double matchDistance, shared_ptr<Geometry> polyGeom,
-                            shared_ptr<Geometry> poiGeom, const QString testUuid);
+                            shared_ptr<Geometry> poiGeom, const int evidence,
+                            const QString testUuid);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
 
@@ -83,6 +84,8 @@ private:
   shared_ptr<Geometry> _poiGeom;
 
   int _badGeomCount;
+
+  int _evidence;
 
   QString _testUuid;
 

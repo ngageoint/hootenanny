@@ -68,6 +68,7 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                      double matchDistance,
                                                      shared_ptr<Geometry> polyGeom,
                                                      shared_ptr<Geometry> poiGeom,
+                                                     const int evidence,
                                                      const QString testUuid = "") :
 _map(map),
 _areaNeighborIds(areaNeighborIds),
@@ -83,6 +84,7 @@ _matchDistance(matchDistance),
 _polyGeom(polyGeom),
 _poiGeom(poiGeom),
 _badGeomCount(0),
+_evidence(evidence),
 _testUuid(testUuid)
 {
   //TODO: can probably get rid of this list and make the logic work against all landuse
@@ -352,7 +354,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      LOG_WARN(
+      //TODO: change back
+      /*LOG_WARN*/LOG_DEBUG(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
         "geometry: " << _polyGeom->toString() << "\n" << e.what());
       _badGeomCount++;
@@ -436,7 +439,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         {
           if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
           {
-            LOG_WARN(
+            //TODO: change back
+            /*LOG_WARN*/LOG_DEBUG(
               "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
               areaGeom->toString());
             _badGeomCount++;
@@ -574,7 +578,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       {
         if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
         {
-          LOG_WARN(
+          //TODO: change back
+          /*LOG_WARN*/LOG_DEBUG(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
             "geometry: " << area->toString() << "\n" << e.what());
           _badGeomCount++;
@@ -764,7 +769,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       {
         if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
         {
-          LOG_WARN(
+          //TODO: change back
+          /*LOG_WARN*/LOG_DEBUG(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
             "geometry: " << poiNeighbor->toString() << "\n" << e.what());
           _badGeomCount++;
@@ -773,6 +779,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
     poiNeighborItr++;
   }
+
+  //TODO: add a rule that misses when another POI has a better evidence match with the poly than
+  //this one
+
 
   //If this isn't a park or playground poi, then don't match it to any park poly that contains
   //another park or playground poi.

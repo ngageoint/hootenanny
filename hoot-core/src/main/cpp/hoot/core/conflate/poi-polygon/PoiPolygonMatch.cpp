@@ -349,7 +349,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   }
   _typeMatch = _typeScore >= _typeScoreThreshold;
   evidence += _typeMatch ? 1 : 0;
-  //TODO: re-enable
   if (/*Log::getInstance().getLevel() == Log::Debug*/printMatchDistanceTruth)
   {
     //output feature distances for all feature types which fell within the match threshold
@@ -449,7 +448,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   const bool reviewReductionRuleTriggered =
     PoiPolygonReviewReducer(
       _map, _areaNeighborIds, _poiNeighborIds, _distance, _nameScore, _nameMatch, _exactNameMatch,
-      _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, _testUuid)
+      _typeScoreThreshold, _typeScore, _typeMatch, _matchDistance, polyGeom, poiGeom, evidence,
+      _testUuid)
       .triggersRule(poi, poly, externalMatchClass);
   if (reviewReductionRuleTriggered)
   {
