@@ -42,6 +42,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +66,7 @@ import hoot.services.command.CommandRunnerImpl;
  */
 @Transactional
 @Component
+@Profile("production")
 public class ProcessStreamInterface implements NativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
