@@ -730,32 +730,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
           }
         }
-
-        /*const double distanceFromNeighborPoiToPoly = _polyGeom->distance(poiNeighborGeom.get());
-        PoiPolygonEvidenceScorer evidenceScorer(_matchDistance, _reviewDistance,
-          distanceFromNeighborPoiToPoly, _typeScoreThreshold, _nameScoreThreshold, _map,
-          _testUuid);
-        const int neighborEvidence = evidenceScorer.calculateEvidence(poiNeighbor, poly);
-        if (neighborEvidence > _evidence)
-        {
-          LOG_DEBUG(
-            "neighbor poi examined and found to have better evidence than the poi currently " <<
-            "being compared: " << poi->toString());
-          LOG_DEBUG("neighbor poi: " << poiNeighbor->toString());
-          LOG_VARD(distanceFromNeighborPoiToPoly);
-          LOG_VARD(_evidence);
-          LOG_VARD(neighborEvidence);
-
-          //miss when another POI in the surrounding area has a better evidence match with the poly than
-          //this one
-          if (Log::getInstance().getLevel() == Log::Debug &&
-              (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
-          {
-            LOG_DEBUG("Returning miss per rule #24...");
-          }
-          matchClass.setMiss();
-          return true;
-        }*/
       }
       catch (const geos::util::TopologyException& e)
       {
