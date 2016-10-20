@@ -544,7 +544,7 @@ def readFeatures(xmlDoc,funcList):
             # The short version of the feature definition
             if node.localName == 'typeName':
                 #print 'Feature Type: ', processSingleNode(node,'gco:LocalName')
-                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName')
+                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
                 continue
 
             # The long version of the feature definition

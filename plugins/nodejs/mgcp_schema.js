@@ -129,7 +129,7 @@ getDbSchema: function()
     var schema = [
         { name:"AAA010",
           fcode:"AA010",
-          desc:"Extraction Mine Area Feature",
+          desc:"Extraction Mine",
           definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
           geom:"Area",
           columns:[
@@ -276,7 +276,7 @@ getDbSchema: function()
 
         { name:"AAA012",
           fcode:"AA012",
-          desc:"Quarry Area Feature",
+          desc:"Quarry",
           definition:"An open-air excavation created by removal of stone by blasting or cutting.",
           geom:"Area",
           columns:[
@@ -404,7 +404,7 @@ getDbSchema: function()
 
         { name:"AAA052",
           fcode:"AA052",
-          desc:"Hydrocarbons Field Area Feature",
+          desc:"Hydrocarbons Field",
           definition:"An area where the presence of recoverable petroleum, oil, and/or natural gas has been identified. ( The field can exist regardless of current exploitation activities. )",
           geom:"Area",
           columns:[
@@ -503,7 +503,7 @@ getDbSchema: function()
 
         { name:"AAB000",
           fcode:"AB000",
-          desc:"Disposal Site Area Feature",
+          desc:"Disposal Site",
           definition:"A site for the collection and/or deposition of refuse or discarded material.",
           geom:"Area",
           columns:[
@@ -640,7 +640,7 @@ getDbSchema: function()
 
         { name:"AAB010",
           fcode:"AB010",
-          desc:"Recycling Site Area Feature",
+          desc:"Recycling Site",
           definition:"A site engaged in the wrecking, dismantling, storage, recycling, and/or disposal of discarded or scrap products. ( For example, a wrecking yard or a scrap yard. )",
           geom:"Area",
           columns:[
@@ -747,7 +747,7 @@ getDbSchema: function()
 
         { name:"AAC000",
           fcode:"AC000",
-          desc:"Processing Facility Area Feature",
+          desc:"Processing Facility",
           definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
           geom:"Area",
           columns:[
@@ -920,7 +920,7 @@ getDbSchema: function()
 
         { name:"AAC030",
           fcode:"AC030",
-          desc:"Settling Pond Area Feature",
+          desc:"Settling Pond",
           definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
           geom:"Area",
           columns:[
@@ -1017,7 +1017,7 @@ getDbSchema: function()
 
         { name:"AAD010",
           fcode:"AD010",
-          desc:"Electric Power Station Area Feature",
+          desc:"Electric Power Station",
           definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
           geom:"Area",
           columns:[
@@ -1158,7 +1158,7 @@ getDbSchema: function()
 
         { name:"AAD030",
           fcode:"AD030",
-          desc:"Power Substation Area Feature",
+          desc:"Power Substation",
           definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
           geom:"Area",
           columns:[
@@ -1265,7 +1265,7 @@ getDbSchema: function()
 
         { name:"AAD050",
           fcode:"AD050",
-          desc:"Heating Facility Area Feature",
+          desc:"Heating Facility",
           definition:"A facility for the generation of thermal energy for heating purposes.",
           geom:"Area",
           columns:[
@@ -1372,7 +1372,7 @@ getDbSchema: function()
 
         { name:"AAH050",
           fcode:"AH050",
-          desc:"Fortification Area Feature",
+          desc:"Fortification",
           definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
           geom:"Area",
           columns:[
@@ -1526,7 +1526,7 @@ getDbSchema: function()
 
         { name:"AAI030",
           fcode:"AI030",
-          desc:"Camp Area Feature",
+          desc:"Camp",
           definition:"An encampment where tents and/or other easily moveable structures (for example: yurts) serve as full-time, temporary, or seasonal residences.",
           geom:"Area",
           columns:[
@@ -1625,7 +1625,7 @@ getDbSchema: function()
 
         { name:"AAJ010",
           fcode:"AJ010",
-          desc:"Circular Irrigation System Area Feature",
+          desc:"Circular Irrigation System",
           definition:"An elevated irrigation system revolving around a central pivot point.",
           geom:"Area",
           columns:[
@@ -1700,7 +1700,7 @@ getDbSchema: function()
 
         { name:"AAJ030",
           fcode:"AJ030",
-          desc:"Holding Pen Area Feature",
+          desc:"Holding Pen",
           definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
           geom:"Area",
           columns:[
@@ -1775,7 +1775,7 @@ getDbSchema: function()
 
         { name:"AAJ110",
           fcode:"AJ110",
-          desc:"Greenhouse Area Feature",
+          desc:"Greenhouse",
           definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
           geom:"Area",
           columns:[
@@ -1858,7 +1858,7 @@ getDbSchema: function()
 
         { name:"AAK030",
           fcode:"AK030",
-          desc:"Amusement Park Area Feature",
+          desc:"Amusement Park",
           definition:"A predominantly man-made facility equipped with recreational devices.",
           geom:"Area",
           columns:[
@@ -1965,7 +1965,7 @@ getDbSchema: function()
 
         { name:"AAK040",
           fcode:"AK040",
-          desc:"Sports Ground Area Feature",
+          desc:"Sports Ground",
           definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
           geom:"Area",
           columns:[
@@ -2092,7 +2092,7 @@ getDbSchema: function()
 
         { name:"AAK060",
           fcode:"AK060",
-          desc:"Camp-site Area Feature",
+          desc:"Camp-site",
           definition:"A designated place for recreational camping.",
           geom:"Area",
           columns:[
@@ -2191,7 +2191,7 @@ getDbSchema: function()
 
         { name:"AAK090",
           fcode:"AK090",
-          desc:"Fairground Area Feature",
+          desc:"Fairground",
           definition:"An area where permanent facilities exist to hold outdoor fairs, circuses or exhibitions.",
           geom:"Area",
           columns:[
@@ -2290,7 +2290,7 @@ getDbSchema: function()
 
         { name:"AAK100",
           fcode:"AK100",
-          desc:"Golf Course Area Feature",
+          desc:"Golf Course",
           definition:"A tract of land on which golf is played.",
           geom:"Area",
           columns:[
@@ -2389,7 +2389,7 @@ getDbSchema: function()
 
         { name:"AAK120",
           fcode:"AK120",
-          desc:"Park Area Feature",
+          desc:"Park",
           definition:"An area used for recreational or ornamental purposes.",
           geom:"Area",
           columns:[
@@ -2488,7 +2488,7 @@ getDbSchema: function()
 
         { name:"AAK160",
           fcode:"AK160",
-          desc:"Stadium Area Feature",
+          desc:"Stadium",
           definition:"An arena for holding and viewing events.",
           geom:"Area",
           columns:[
@@ -2626,7 +2626,7 @@ getDbSchema: function()
 
         { name:"AAK170",
           fcode:"AK170",
-          desc:"Swimming Pool Area Feature",
+          desc:"Swimming Pool",
           definition:"A man-made pool used for swimming outdoors.",
           geom:"Area",
           columns:[
@@ -2701,7 +2701,7 @@ getDbSchema: function()
 
         { name:"AAK180",
           fcode:"AK180",
-          desc:"Zoo Area Feature",
+          desc:"Zoo",
           definition:"A site where wild animals are kept for exhibition to the public, that may also support breeding and/or study.",
           geom:"Area",
           columns:[
@@ -2800,7 +2800,7 @@ getDbSchema: function()
 
         { name:"AAK190",
           fcode:"AK190",
-          desc:"Recreational Pier Area Feature",
+          desc:"Recreational Pier",
           definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
           geom:"Area",
           columns:[
@@ -2938,7 +2938,7 @@ getDbSchema: function()
 
         { name:"AAL010",
           fcode:"AL010",
-          desc:"Facility Area Feature",
+          desc:"Facility",
           definition:"An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land. ( For example, an industrial plant consisting of building(s), shipping dock(s), storage area(s), power transformer(s), heating and/or cooling equipment, vehicle parking, roads, railroad tracks, and perimeter fences and gates. )",
           geom:"Area",
           columns:[
@@ -3074,7 +3074,7 @@ getDbSchema: function()
 
         { name:"AAL012",
           fcode:"AL012",
-          desc:"Archeological Site Area Feature",
+          desc:"Archeological Site",
           definition:"A site where remains of past civilizations or human activity have been discovered.",
           geom:"Area",
           columns:[
@@ -3173,7 +3173,7 @@ getDbSchema: function()
 
         { name:"AAL015",
           fcode:"AL015",
-          desc:"General Building Area Feature",
+          desc:"General Building",
           definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
           geom:"Area",
           columns:[
@@ -3400,7 +3400,7 @@ getDbSchema: function()
 
         { name:"AAL019",
           fcode:"AL019",
-          desc:"Shed Area Feature",
+          desc:"Shed",
           definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
           geom:"Area",
           columns:[
@@ -3475,7 +3475,7 @@ getDbSchema: function()
 
         { name:"AAL020",
           fcode:"AL020",
-          desc:"Built-Up Area Area Feature",
+          desc:"Built-Up Area",
           definition:"A tract containing a concentration of buildings and/or other structures.",
           geom:"Area",
           columns:[
@@ -3625,7 +3625,7 @@ getDbSchema: function()
 
         { name:"AAL030",
           fcode:"AL030",
-          desc:"Cemetery Area Feature",
+          desc:"Cemetery",
           definition:"A site and associated structures devoted to the burial of the dead.",
           geom:"Area",
           columns:[
@@ -3739,7 +3739,7 @@ getDbSchema: function()
 
         { name:"AAL060",
           fcode:"AL060",
-          desc:"Dragon's Teeth Area Feature",
+          desc:"Dragon's Teeth",
           definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
           geom:"Area",
           columns:[
@@ -3854,7 +3854,7 @@ getDbSchema: function()
 
         { name:"AAL105",
           fcode:"AL105",
-          desc:"Settlement Area Feature",
+          desc:"Settlement",
           definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
           geom:"Area",
           columns:[
@@ -3975,7 +3975,7 @@ getDbSchema: function()
 
         { name:"AAL140",
           fcode:"AL140",
-          desc:"Particle Accelerator Area Feature",
+          desc:"Particle Accelerator",
           definition:"An apparatus for imparting high velocities to charged particles.",
           geom:"Area",
           columns:[
@@ -4074,7 +4074,7 @@ getDbSchema: function()
 
         { name:"AAL170",
           fcode:"AL170",
-          desc:"Public Square Area Feature",
+          desc:"Public Square",
           definition:"An open site that serves as a public meeting location in a built-up area.",
           geom:"Area",
           columns:[
@@ -4173,7 +4173,7 @@ getDbSchema: function()
 
         { name:"AAL200",
           fcode:"AL200",
-          desc:"Ruins Area Feature",
+          desc:"Ruins",
           definition:"The deteriorated remains of an unspecified structure.",
           geom:"Area",
           columns:[
@@ -4272,7 +4272,7 @@ getDbSchema: function()
 
         { name:"AAL208",
           fcode:"AL208",
-          desc:"Shanty Town Area Feature",
+          desc:"Shanty Town",
           definition:"A section of a built-up area consisting chiefly of densely packed shacks and having few, if any, streets and no public facilities. ( Usually located on the outskirts of the built-up area. The shacks are generally crude, improvised, and made from salvaged materials. )",
           geom:"Area",
           columns:[
@@ -4379,7 +4379,7 @@ getDbSchema: function()
 
         { name:"AAM010",
           fcode:"AM010",
-          desc:"Storage Depot Area Feature",
+          desc:"Storage Depot",
           definition:"A tract used for the storage of products and/or supplies.",
           geom:"Area",
           columns:[
@@ -4523,7 +4523,7 @@ getDbSchema: function()
 
         { name:"AAM020",
           fcode:"AM020",
-          desc:"Grain Storage Structure Area Feature",
+          desc:"Grain Storage Structure",
           definition:"An enclosed container, used for storing grain or fodder.",
           geom:"Area",
           columns:[
@@ -4622,7 +4622,7 @@ getDbSchema: function()
 
         { name:"AAM030",
           fcode:"AM030",
-          desc:"Grain Elevator Area Feature",
+          desc:"Grain Elevator",
           definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
           geom:"Area",
           columns:[
@@ -4721,7 +4721,7 @@ getDbSchema: function()
 
         { name:"AAM040",
           fcode:"AM040",
-          desc:"Mineral Pile Area Feature",
+          desc:"Mineral Pile",
           definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
           geom:"Area",
           columns:[
@@ -4831,7 +4831,7 @@ getDbSchema: function()
 
         { name:"AAM060",
           fcode:"AM060",
-          desc:"Surface Bunker Area Feature",
+          desc:"Surface Bunker",
           definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
           geom:"Area",
           columns:[
@@ -4924,7 +4924,7 @@ getDbSchema: function()
 
         { name:"AAM070",
           fcode:"AM070",
-          desc:"Storage Tank Area Feature",
+          desc:"Storage Tank",
           definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
           geom:"Area",
           columns:[
@@ -5072,7 +5072,7 @@ getDbSchema: function()
 
         { name:"AAN060",
           fcode:"AN060",
-          desc:"Railway Yard Area Feature",
+          desc:"Railway Yard",
           definition:"A system of railway tracks and associated structures that are located within defined limits and that provide for loading, unloading, and/or assembling trains.",
           geom:"Area",
           columns:[
@@ -5179,7 +5179,7 @@ getDbSchema: function()
 
         { name:"AAN076",
           fcode:"AN076",
-          desc:"Roundhouse Area Feature",
+          desc:"Roundhouse",
           definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
           geom:"Area",
           columns:[
@@ -5254,7 +5254,7 @@ getDbSchema: function()
 
         { name:"AAQ040",
           fcode:"AQ040",
-          desc:"Bridge Area Feature",
+          desc:"Bridge",
           definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
           geom:"Area",
           columns:[
@@ -5478,7 +5478,7 @@ getDbSchema: function()
 
         { name:"AAQ116",
           fcode:"AQ116",
-          desc:"Pumping Station Area Feature",
+          desc:"Pumping Station",
           definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
           geom:"Area",
           columns:[
@@ -5578,7 +5578,7 @@ getDbSchema: function()
 
         { name:"AAQ125",
           fcode:"AQ125",
-          desc:"Transportation Station Area Feature",
+          desc:"Transportation Station",
           definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
           geom:"Area",
           columns:[
@@ -5720,7 +5720,7 @@ getDbSchema: function()
 
         { name:"AAQ130",
           fcode:"AQ130",
-          desc:"Tunnel Area Feature",
+          desc:"Tunnel",
           definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
           geom:"Area",
           columns:[
@@ -5848,7 +5848,7 @@ getDbSchema: function()
 
         { name:"AAQ135",
           fcode:"AQ135",
-          desc:"Roadside Rest Area Area Feature",
+          desc:"Roadside Rest Area",
           definition:"A roadside place usually having facilities for people and/or vehicles.",
           geom:"Area",
           columns:[
@@ -5967,7 +5967,7 @@ getDbSchema: function()
 
         { name:"AAQ140",
           fcode:"AQ140",
-          desc:"Vehicle Lot Area Feature",
+          desc:"Vehicle Lot",
           definition:"A tract used for storing and/or parking vehicles (for example: recreational vehicles) and/or vessels.",
           geom:"Area",
           columns:[
@@ -6062,7 +6062,7 @@ getDbSchema: function()
 
         { name:"AAT050",
           fcode:"AT050",
-          desc:"Communication Station Area Feature",
+          desc:"Communication Station",
           definition:"A facility in which communication signals are processed and/or controlled. ( For example, a telephone switching station, a microwave repeater station, a satellite ground station, cellular telephone equipment, and a land-line telephone repeater station. )",
           geom:"Area",
           columns:[
@@ -6201,7 +6201,7 @@ getDbSchema: function()
 
         { name:"ABA030",
           fcode:"BA030",
-          desc:"Island Area Feature",
+          desc:"Island",
           definition:"A land mass, other than a continent, surrounded by water.",
           geom:"Area",
           columns:[
@@ -6300,7 +6300,7 @@ getDbSchema: function()
 
         { name:"ABA040",
           fcode:"BA040",
-          desc:"Tidal Water Area Feature",
+          desc:"Tidal Water",
           definition:"Any water the level of which changes periodically due to tidal action.",
           geom:"Area",
           columns:[
@@ -6407,7 +6407,7 @@ getDbSchema: function()
 
         { name:"ABA050",
           fcode:"BA050",
-          desc:"Beach Area Feature",
+          desc:"Beach",
           definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
           geom:"Area",
           columns:[
@@ -6519,7 +6519,7 @@ getDbSchema: function()
 
         { name:"ABB005",
           fcode:"BB005",
-          desc:"Harbour Area Feature",
+          desc:"Harbour",
           definition:"A natural or artificial improved body of water providing protection for vessels and generally anchorage and docking facilities. ( A harbour consists of both its port (see Feature: 'Port') and its waters (see Feature: 'Harbour Waters'). )",
           geom:"Area",
           columns:[
@@ -6643,7 +6643,7 @@ getDbSchema: function()
 
         { name:"ABB041",
           fcode:"BB041",
-          desc:"Breakwater Area Feature",
+          desc:"Breakwater",
           definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
           geom:"Area",
           columns:[
@@ -6774,7 +6774,7 @@ getDbSchema: function()
 
         { name:"ABB043",
           fcode:"BB043",
-          desc:"Groin Area Feature",
+          desc:"Groin",
           definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
           geom:"Area",
           columns:[
@@ -6905,7 +6905,7 @@ getDbSchema: function()
 
         { name:"ABB090",
           fcode:"BB090",
-          desc:"Dry Dock Area Feature",
+          desc:"Dry Dock",
           definition:"An artificial basin fitted with a gate or caisson into which vessels can be floated and the water pumped out to expose the bottom of the vessel.",
           geom:"Area",
           columns:[
@@ -7019,7 +7019,7 @@ getDbSchema: function()
 
         { name:"ABB140",
           fcode:"BB140",
-          desc:"Training Wall Area Feature",
+          desc:"Training Wall",
           definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
           geom:"Area",
           columns:[
@@ -7133,7 +7133,7 @@ getDbSchema: function()
 
         { name:"ABB190",
           fcode:"BB190",
-          desc:"Berthing Structure Area Feature",
+          desc:"Berthing Structure",
           definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
           geom:"Area",
           columns:[
@@ -7289,7 +7289,7 @@ getDbSchema: function()
 
         { name:"ABB240",
           fcode:"BB240",
-          desc:"Slipway Area Feature",
+          desc:"Slipway",
           definition:"The prepared and usually reinforced inclined surface on which keel- and bilge-blocks are laid for supporting a vessel under construction. ( Rails associated with a slipway are usually represented separately, for example as a marine railway. )",
           geom:"Area",
           columns:[
@@ -7389,7 +7389,7 @@ getDbSchema: function()
 
         { name:"ABD100",
           fcode:"BD100",
-          desc:"Structural Pile Area Feature",
+          desc:"Structural Pile",
           definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
           geom:"Area",
           columns:[
@@ -7464,7 +7464,7 @@ getDbSchema: function()
 
         { name:"ABD120",
           fcode:"BD120",
-          desc:"Reef Area Feature",
+          desc:"Reef",
           definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
           geom:"Area",
           columns:[
@@ -7591,7 +7591,7 @@ getDbSchema: function()
 
         { name:"ABH010",
           fcode:"BH010",
-          desc:"Aqueduct Area Feature",
+          desc:"Aqueduct",
           definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
           geom:"Area",
           columns:[
@@ -7723,7 +7723,7 @@ getDbSchema: function()
 
         { name:"ABH015",
           fcode:"BH015",
-          desc:"Bog Area Feature",
+          desc:"Bog",
           definition:"A permanently wet area of land consisting of incompletely decayed organic material and mainly stagnant fresh water. ( It is generally too soft to bear the weight of any heavy body. A subtype of the more generalized Feature: 'Wetland'. )",
           geom:"Area",
           columns:[
@@ -7835,7 +7835,7 @@ getDbSchema: function()
 
         { name:"ABH020",
           fcode:"BH020",
-          desc:"Canal Area Feature",
+          desc:"Canal",
           definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
           geom:"Area",
           columns:[
@@ -7980,7 +7980,7 @@ getDbSchema: function()
 
         { name:"ABH030",
           fcode:"BH030",
-          desc:"Ditch Area Feature",
+          desc:"Ditch",
           definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
           geom:"Area",
           columns:[
@@ -8112,7 +8112,7 @@ getDbSchema: function()
 
         { name:"ABH040",
           fcode:"BH040",
-          desc:"Water Treatment Bed Area Feature",
+          desc:"Water Treatment Bed",
           definition:"A tract for the treatment of water that consists of a bed of material where water is aerated or filtered.",
           geom:"Area",
           columns:[
@@ -8219,7 +8219,7 @@ getDbSchema: function()
 
         { name:"ABH050",
           fcode:"BH050",
-          desc:"Mariculture Site Area Feature",
+          desc:"Mariculture Site",
           definition:"A site where marine organisms are cultivated for food and other products in either the open ocean, in an enclosed section of the ocean, or in tanks, ponds or raceways that are filled with seawater (for example: the farming of marine fish, prawns, or oysters in saltwater ponds).",
           geom:"Area",
           columns:[
@@ -8326,7 +8326,7 @@ getDbSchema: function()
 
         { name:"ABH051",
           fcode:"BH051",
-          desc:"Fish Farm Facility Area Feature",
+          desc:"Fish Farm Facility",
           definition:"A facility involved in the breeding (hatching and associated activities) and cultivation (raising for release or harvesting) of fish in tanks or landlocked enclosures. ( Fish species raised on fish farms include, for example, salmon, catfish, tilapia, cod, carp, and trout. )",
           geom:"Area",
           columns:[
@@ -8433,7 +8433,7 @@ getDbSchema: function()
 
         { name:"ABH080",
           fcode:"BH080",
-          desc:"Lake Area Feature",
+          desc:"Lake",
           definition:"A large body of water entirely surrounded by land.",
           geom:"Area",
           columns:[
@@ -8558,7 +8558,7 @@ getDbSchema: function()
 
         { name:"ABH090",
           fcode:"BH090",
-          desc:"Land Subject to Inundation Area Feature",
+          desc:"Land Subject to Inundation",
           definition:"A tract periodically covered by flood water, excluding tidal waters.",
           geom:"Area",
           columns:[
@@ -8657,7 +8657,7 @@ getDbSchema: function()
 
         { name:"ABH120",
           fcode:"BH120",
-          desc:"Rapids Area Feature",
+          desc:"Rapids",
           definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
           geom:"Area",
           columns:[
@@ -8756,7 +8756,7 @@ getDbSchema: function()
 
         { name:"ABH130",
           fcode:"BH130",
-          desc:"Reservoir Area Feature",
+          desc:"Reservoir",
           definition:"A substantial lake-like body of water impounded by a dam. ( May be used for flood control and/or as a source of water for irrigation, industrial processes, and/or human consumption. )",
           geom:"Area",
           columns:[
@@ -8876,7 +8876,7 @@ getDbSchema: function()
 
         { name:"ABH135",
           fcode:"BH135",
-          desc:"Rice Field Area Feature",
+          desc:"Rice Field",
           definition:"A tract that is periodically covered with water and is used for growing rice.",
           geom:"Area",
           columns:[
@@ -8963,7 +8963,7 @@ getDbSchema: function()
 
         { name:"ABH140",
           fcode:"BH140",
-          desc:"River Area Feature",
+          desc:"River",
           definition:"A natural flowing watercourse.",
           geom:"Area",
           columns:[
@@ -9128,7 +9128,7 @@ getDbSchema: function()
 
         { name:"ABH150",
           fcode:"BH150",
-          desc:"Salt Flat Area Feature",
+          desc:"Salt Flat",
           definition:"A flat area of natural surface salt deposits. ( May also be used to describe smaller areas; these are commonly termed salt pans. )",
           geom:"Area",
           columns:[
@@ -9227,7 +9227,7 @@ getDbSchema: function()
 
         { name:"ABH155",
           fcode:"BH155",
-          desc:"Salt Evaporator Area Feature",
+          desc:"Salt Evaporator",
           definition:"Shallow pools, normally man-made, used for the natural evaporation of water for the collection of salt.",
           geom:"Area",
           columns:[
@@ -9314,7 +9314,7 @@ getDbSchema: function()
 
         { name:"ABH160",
           fcode:"BH160",
-          desc:"Sabkha Area Feature",
+          desc:"Sabkha",
           definition:"A natural depression in arid or semi-arid regions whose bed is covered with salt encrusted clayey soil. ( Found especially in North Africa and Arabia. )",
           geom:"Area",
           columns:[
@@ -9413,7 +9413,7 @@ getDbSchema: function()
 
         { name:"ABH165",
           fcode:"BH165",
-          desc:"Spillway Area Feature",
+          desc:"Spillway",
           definition:"A passage for surplus water to run over or around a dam.",
           geom:"Area",
           columns:[
@@ -9488,7 +9488,7 @@ getDbSchema: function()
 
         { name:"ABI020",
           fcode:"BI020",
-          desc:"Dam Area Feature",
+          desc:"Dam",
           definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
           geom:"Area",
           columns:[
@@ -9663,7 +9663,7 @@ getDbSchema: function()
 
         { name:"ABI030",
           fcode:"BI030",
-          desc:"Lock Area Feature",
+          desc:"Lock",
           definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
           geom:"Area",
           columns:[
@@ -9770,7 +9770,7 @@ getDbSchema: function()
 
         { name:"ABJ020",
           fcode:"BJ020",
-          desc:"Moraine Area Feature",
+          desc:"Moraine",
           definition:"An accumulation of soil and stone debris deposited by a glacier.",
           geom:"Area",
           columns:[
@@ -9845,7 +9845,7 @@ getDbSchema: function()
 
         { name:"ABJ030",
           fcode:"BJ030",
-          desc:"Glacier Area Feature",
+          desc:"Glacier",
           definition:"A large mass or river of ice formed by accumulation and compaction of snow on higher ground that is moving slowly down a slope or valley from above the snowline.",
           geom:"Area",
           columns:[
@@ -9944,7 +9944,7 @@ getDbSchema: function()
 
         { name:"ABJ031",
           fcode:"BJ031",
-          desc:"Crevasse Area Feature",
+          desc:"Crevasse",
           definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
           geom:"Area",
           columns:[
@@ -10019,7 +10019,7 @@ getDbSchema: function()
 
         { name:"ABJ100",
           fcode:"BJ100",
-          desc:"Snow Field and/or Ice-field Area Feature",
+          desc:"Snow Field and/or Ice-field",
           definition:"A large area permanently covered by snow and/or ice. ( May cover land and/or water. )",
           geom:"Area",
           columns:[
@@ -10118,7 +10118,7 @@ getDbSchema: function()
 
         { name:"ABJ110",
           fcode:"BJ110",
-          desc:"Tundra Area Feature",
+          desc:"Tundra",
           definition:"A vast, nearly level, treeless arctic region usually with a marshy surface and underlying permafrost.",
           geom:"Area",
           columns:[
@@ -10193,7 +10193,7 @@ getDbSchema: function()
 
         { name:"ADA010",
           fcode:"DA010",
-          desc:"Soil Surface Region Area Feature",
+          desc:"Soil Surface Region",
           definition:"A region of the land that is homogeneous with respect to a soil characteristic.",
           geom:"Area",
           columns:[
@@ -10299,7 +10299,7 @@ getDbSchema: function()
 
         { name:"ADB061",
           fcode:"DB061",
-          desc:"Crevice Area Feature",
+          desc:"Crevice",
           definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
           geom:"Area",
           columns:[
@@ -10374,7 +10374,7 @@ getDbSchema: function()
 
         { name:"ADB090",
           fcode:"DB090",
-          desc:"Embankment Area Feature",
+          desc:"Embankment",
           definition:"A man-made raised long mound of earth or other material.",
           geom:"Area",
           columns:[
@@ -10515,7 +10515,7 @@ getDbSchema: function()
 
         { name:"ADB115",
           fcode:"DB115",
-          desc:"Geothermal Outlet Area Feature",
+          desc:"Geothermal Outlet",
           definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
           geom:"Area",
           columns:[
@@ -10614,7 +10614,7 @@ getDbSchema: function()
 
         { name:"ADB160",
           fcode:"DB160",
-          desc:"Rock Formation Area Feature",
+          desc:"Rock Formation",
           definition:"A significant outcropping of exposed bedrock.",
           geom:"Area",
           columns:[
@@ -10726,7 +10726,7 @@ getDbSchema: function()
 
         { name:"ADB170",
           fcode:"DB170",
-          desc:"Sand Dunes Area Feature",
+          desc:"Sand Dunes",
           definition:"One or more mounds or ridges of sand usually formed by the wind.",
           geom:"Area",
           columns:[
@@ -10851,7 +10851,7 @@ getDbSchema: function()
 
         { name:"ADB180",
           fcode:"DB180",
-          desc:"Volcano Area Feature",
+          desc:"Volcano",
           definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
           geom:"Area",
           columns:[
@@ -10966,7 +10966,7 @@ getDbSchema: function()
 
         { name:"ADB200",
           fcode:"DB200",
-          desc:"Gully Area Feature",
+          desc:"Gully",
           definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
           geom:"Area",
           columns:[
@@ -11065,7 +11065,7 @@ getDbSchema: function()
 
         { name:"AEA010",
           fcode:"EA010",
-          desc:"Crop Land Area Feature",
+          desc:"Crop Land",
           definition:"An area that has been tilled for the planting of crops.",
           geom:"Area",
           columns:[
@@ -11194,7 +11194,7 @@ getDbSchema: function()
 
         { name:"AEA040",
           fcode:"EA040",
-          desc:"Orchard Area Feature",
+          desc:"Orchard",
           definition:"A tract covered by systematic plantings of trees that yield fruits (including nuts).",
           geom:"Area",
           columns:[
@@ -11318,7 +11318,7 @@ getDbSchema: function()
 
         { name:"AEA050",
           fcode:"EA050",
-          desc:"Vineyard Area Feature",
+          desc:"Vineyard",
           definition:"A tract covered by the systematic planting of grape vines.",
           geom:"Area",
           columns:[
@@ -11417,7 +11417,7 @@ getDbSchema: function()
 
         { name:"AEA055",
           fcode:"EA055",
-          desc:"Hop Field Area Feature",
+          desc:"Hop Field",
           definition:"A tract covered by the systematic planting of hop vines.",
           geom:"Area",
           columns:[
@@ -11492,7 +11492,7 @@ getDbSchema: function()
 
         { name:"AEB010",
           fcode:"EB010",
-          desc:"Grassland Area Feature",
+          desc:"Grassland",
           definition:"A tract covered mainly by grasses that have little or no woody tissue. ( For example, pasture, meadow, and steppe. )",
           geom:"Area",
           columns:[
@@ -11604,7 +11604,7 @@ getDbSchema: function()
 
         { name:"AEB020",
           fcode:"EB020",
-          desc:"Thicket Area Feature",
+          desc:"Thicket",
           definition:"A tract covered mainly by low-growing, uncultured, woody plants that are thickly tangled together. ( For example, covered by brushwood and/or stunted trees. The predominant height may be up to 6-8 metres. )",
           geom:"Area",
           columns:[
@@ -11688,7 +11688,7 @@ getDbSchema: function()
 
         { name:"AEC010",
           fcode:"EC010",
-          desc:"Cane Area Feature",
+          desc:"Cane",
           definition:"A tract covered mainly by large treelike grasses. ( For example, bamboo and sugarcane. )",
           geom:"Area",
           columns:[
@@ -11763,7 +11763,7 @@ getDbSchema: function()
 
         { name:"AEC020",
           fcode:"EC020",
-          desc:"Oasis Area Feature",
+          desc:"Oasis",
           definition:"A small, isolated, fertile or green area in a desert region usually having a spring or well.",
           geom:"Area",
           columns:[
@@ -11862,7 +11862,7 @@ getDbSchema: function()
 
         { name:"AEC030",
           fcode:"EC030",
-          desc:"Wood Area Feature",
+          desc:"Wood",
           definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
           geom:"Area",
           columns:[
@@ -12001,7 +12001,7 @@ getDbSchema: function()
 
         { name:"AEC040",
           fcode:"EC040",
-          desc:"Cleared Way Area Feature",
+          desc:"Cleared Way",
           definition:"A man-made cleared strip through a vegetated region. ( May be designed to: provide access for a road, railroad, pipeline, power transmission line, or electrical signal line; demarcate a boundary; obtain survey line-of-sight; or to impede the progress of forest fires (a firebreak). )",
           geom:"Area",
           columns:[
@@ -12076,7 +12076,7 @@ getDbSchema: function()
 
         { name:"AEC060",
           fcode:"EC060",
-          desc:"Forest Clearing Area Feature",
+          desc:"Forest Clearing",
           definition:"A site in a forest or wood(s) that has been cleared, often for slash and burn agriculture and/or as a result of clear-cutting logging. ( May also occur from natural causes such as a forest fire. )",
           geom:"Area",
           columns:[
@@ -12151,7 +12151,7 @@ getDbSchema: function()
 
         { name:"AED010",
           fcode:"ED010",
-          desc:"Marsh Area Feature",
+          desc:"Marsh",
           definition:"A soft, poorly drained wetland that is characterized by the growth of only non-woody plants (for example: grasses) and often forms a transition region between a waterbody and land. ( It is subject to frequent or tidal inundations, but not considered to be continually under water. It lacks trees. A subtype of the more generalized Feature: 'Wetland'. )",
           geom:"Area",
           columns:[
@@ -12262,7 +12262,7 @@ getDbSchema: function()
 
         { name:"AED020",
           fcode:"ED020",
-          desc:"Swamp Area Feature",
+          desc:"Swamp",
           definition:"A seasonally flooded, poorly drained wetland with more woody plants than a marsh and better drainage than a bog. ( It is covered with water all or most of the year, and accumulating dead vegetation does not rapidly decay. It can exist on flat-lying areas created by certain geomorphic environments. The vegetation mainly consists of hydrophytic trees and/or scrubs whose roots are adapted to wet conditions, with an open to very dense canopy closure. A subtype of the more generalized Feature: 'Wetland'. )",
           geom:"Area",
           columns:[
@@ -12422,7 +12422,7 @@ getDbSchema: function()
 
         { name:"AED030",
           fcode:"ED030",
-          desc:"Mangrove Swamp Area Feature",
+          desc:"Mangrove Swamp",
           definition:"A dense thicket of mangrove that is subject to tidal inundation and forming a muddy swamp.",
           geom:"Area",
           columns:[
@@ -12542,7 +12542,7 @@ getDbSchema: function()
 
         { name:"AFA015",
           fcode:"FA015",
-          desc:"Firing Range Area Feature",
+          desc:"Firing Range",
           definition:"A site designated for the purpose of discharging firearms or detonating munitions.",
           geom:"Area",
           columns:[
@@ -12666,7 +12666,7 @@ getDbSchema: function()
 
         { name:"AFA100",
           fcode:"FA100",
-          desc:"Test Site Area Feature",
+          desc:"Test Site",
           definition:"A site for the testing of technical products and equipment.",
           geom:"Area",
           columns:[
@@ -12765,7 +12765,7 @@ getDbSchema: function()
 
         { name:"AGB005",
           fcode:"GB005",
-          desc:"Land Aerodrome Area Feature",
+          desc:"Land Aerodrome",
           definition:"An aerodrome on land intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft.",
           geom:"Area",
           columns:[
@@ -12912,7 +12912,7 @@ getDbSchema: function()
 
         { name:"AGB015",
           fcode:"GB015",
-          desc:"Apron Area Feature",
+          desc:"Apron",
           definition:"A defined area, on a land aerodrome/heliport, intended to accommodate aircraft/helicopters for purposes of loading and unloading passengers, mail or cargo, and for fuelling, parking or maintenance.",
           geom:"Area",
           columns:[
@@ -13024,7 +13024,7 @@ getDbSchema: function()
 
         { name:"AGB035",
           fcode:"GB035",
-          desc:"Heliport Area Feature",
+          desc:"Heliport",
           definition:"An aerodrome intended to be used for the arrival, landing, takeoff or departure of vertical takeoff and landing aircraft/helicopters.",
           geom:"Area",
           columns:[
@@ -13146,7 +13146,7 @@ getDbSchema: function()
 
         { name:"AGB045",
           fcode:"GB045",
-          desc:"Stopway Area Feature",
+          desc:"Stopway",
           definition:"A defined rectangular area on the ground at the end of the take-off run available that has been prepared as a suitable area in which an aircraft can be stopped in the case of an abandoned take-off.",
           geom:"Area",
           columns:[
@@ -13258,7 +13258,7 @@ getDbSchema: function()
 
         { name:"AGB055",
           fcode:"GB055",
-          desc:"Runway Area Feature",
+          desc:"Runway",
           definition:"A defined rectangular area on a land aerodrome prepared for the landing and take-off of aircraft.",
           geom:"Area",
           columns:[
@@ -13414,7 +13414,7 @@ getDbSchema: function()
 
         { name:"AGB065",
           fcode:"GB065",
-          desc:"Water Aerodrome Area Feature",
+          desc:"Water Aerodrome",
           definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
           geom:"Area",
           columns:[
@@ -13536,7 +13536,7 @@ getDbSchema: function()
 
         { name:"AGB075",
           fcode:"GB075",
-          desc:"Taxiway Area Feature",
+          desc:"Taxiway",
           definition:"A defined path at an aerodrome established for the taxiing of aircraft and intended to provide a ground movement link between one part of the aerodrome and another.",
           geom:"Area",
           columns:[
@@ -13648,7 +13648,7 @@ getDbSchema: function()
 
         { name:"AGB230",
           fcode:"GB230",
-          desc:"Aircraft Hangar Area Feature",
+          desc:"Aircraft Hangar",
           definition:"A building for housing aircraft.",
           geom:"Area",
           columns:[
@@ -13731,7 +13731,7 @@ getDbSchema: function()
 
         { name:"ASU001",
           fcode:"SU001",
-          desc:"Military Installation Area Feature",
+          desc:"Military Installation",
           definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
           geom:"Area",
           columns:[
@@ -13838,7 +13838,7 @@ getDbSchema: function()
 
         { name:"AZD020",
           fcode:"ZD020",
-          desc:"Void Collection Area Area Feature",
+          desc:"Void Collection Area",
           definition:"A data collection region lacking suitable source coverage and/or where data is not required.",
           geom:"Area",
           columns:[
@@ -13913,7 +13913,7 @@ getDbSchema: function()
 
         { name:"LAF020",
           fcode:"AF020",
-          desc:"Conveyor Line Feature",
+          desc:"Conveyor",
           definition:"A mechanical device for conveying articles or materials during manufacture or processing using an endless moving belt or series of rollers.",
           geom:"Line",
           columns:[
@@ -14012,7 +14012,7 @@ getDbSchema: function()
 
         { name:"LAH025",
           fcode:"AH025",
-          desc:"Engineered Earthwork Line Feature",
+          desc:"Engineered Earthwork",
           definition:"An excavation and/or embankment created by remolding the natural configuration of the terrain for the purpose of enhancing the defense of a site from armed attack. ( The earthwork may include ancillary elements (for example: a palisade) or reinforcements (for example: a concrete facing). )",
           geom:"Line",
           columns:[
@@ -14111,7 +14111,7 @@ getDbSchema: function()
 
         { name:"LAK130",
           fcode:"AK130",
-          desc:"Racetrack Line Feature",
+          desc:"Racetrack",
           definition:"A ground or tract marked out for racing. ( The track may be banked to facilitate high-speed racing, either by grading of the terrain or the use of structures. The bank angle may exceed 30 arc degrees and such structures can reach significant heights. )",
           geom:"Line",
           columns:[
@@ -14238,7 +14238,7 @@ getDbSchema: function()
 
         { name:"LAK150",
           fcode:"AK150",
-          desc:"Ski-jump Line Feature",
+          desc:"Ski-jump",
           definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
           geom:"Line",
           columns:[
@@ -14361,7 +14361,7 @@ getDbSchema: function()
 
         { name:"LAK190",
           fcode:"AK190",
-          desc:"Recreational Pier Line Feature",
+          desc:"Recreational Pier",
           definition:"A structure extending into the water used as a platform for recreational purposes, not intended as a berthing place for vessels. ( For example, a fishing pier or a promenade pier. )",
           geom:"Line",
           columns:[
@@ -14499,7 +14499,7 @@ getDbSchema: function()
 
         { name:"LAL060",
           fcode:"AL060",
-          desc:"Dragon's Teeth Line Feature",
+          desc:"Dragon's Teeth",
           definition:"Upward-pointing obstacles laid in the ground to slow or stop the movement of vehicles. ( Typically constructed of regularly spaced concrete or metal shapes laid in single or multiple rows. )",
           geom:"Line",
           columns:[
@@ -14614,7 +14614,7 @@ getDbSchema: function()
 
         { name:"LAL070",
           fcode:"AL070",
-          desc:"Fence Line Feature",
+          desc:"Fence",
           definition:"A man-made barrier of relatively light structure used as an enclosure or boundary. ( Similar structures that are constructed of heavy materials (for example: stone, rock or masonry) are classified as walls. )",
           geom:"Line",
           columns:[
@@ -14689,7 +14689,7 @@ getDbSchema: function()
 
         { name:"LAL210",
           fcode:"AL210",
-          desc:"Protection Shed Line Feature",
+          desc:"Protection Shed",
           definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
           geom:"Line",
           columns:[
@@ -14772,7 +14772,7 @@ getDbSchema: function()
 
         { name:"LAL260",
           fcode:"AL260",
-          desc:"Wall Line Feature",
+          desc:"Wall",
           definition:"A solid man-made barrier of generally heavy material used as an enclosure, boundary, or for protection.",
           geom:"Line",
           columns:[
@@ -14886,7 +14886,7 @@ getDbSchema: function()
 
         { name:"LAN010",
           fcode:"AN010",
-          desc:"Railway Line Feature",
+          desc:"Railway",
           definition:"One or more railway tracks comprising a network that is operated for the conveyance of passengers and/or goods.",
           geom:"Line",
           columns:[
@@ -15105,7 +15105,7 @@ getDbSchema: function()
 
         { name:"LAN050",
           fcode:"AN050",
-          desc:"Railway Sidetrack Line Feature",
+          desc:"Railway Sidetrack",
           definition:"A stretch of railway track connected to a main railway and used for temporary storage, passing, loading, and/or unloading.",
           geom:"Line",
           columns:[
@@ -15235,7 +15235,7 @@ getDbSchema: function()
 
         { name:"LAP010",
           fcode:"AP010",
-          desc:"Cart Track Line Feature",
+          desc:"Cart Track",
           definition:"An unimproved road. ( The surface is usually rough (for example: rutted) and minimally prepared (for example: packed earth or thinly covered with gravel). )",
           geom:"Line",
           columns:[
@@ -15355,7 +15355,7 @@ getDbSchema: function()
 
         { name:"LAP030",
           fcode:"AP030",
-          desc:"Road Line Feature",
+          desc:"Road",
           definition:"A route with a specially prepared surface that is intended for use by wheeled vehicles.",
           geom:"Line",
           columns:[
@@ -15568,7 +15568,7 @@ getDbSchema: function()
 
         { name:"LAP050",
           fcode:"AP050",
-          desc:"Trail Line Feature",
+          desc:"Trail",
           definition:"A path worn by the passage of people or animals.",
           geom:"Line",
           columns:[
@@ -15679,7 +15679,7 @@ getDbSchema: function()
 
         { name:"LAQ040",
           fcode:"AQ040",
-          desc:"Bridge Line Feature",
+          desc:"Bridge",
           definition:"A structure that connects two locations and provides for the passage of a transportation route (for example: a road or a railway) over a terrain obstacle (for example: a waterbody, a gully, and/or a road). ( A bridge consists of a set of two abutments and/or zero or more bridge piers joined by bridge spans. A bridge may serve, for example, as an overpass or a viaduct. In the context of a bridge, the scope of the term 'transportation route' includes the transportation of liquids or gases by means of either pipelines or aqueducts. )",
           geom:"Line",
           columns:[
@@ -15919,7 +15919,7 @@ getDbSchema: function()
 
         { name:"LAQ063",
           fcode:"AQ063",
-          desc:"Causeway Structure Line Feature",
+          desc:"Causeway Structure",
           definition:"A solid raised way across a terrain obstacle (for example: a wetland or a body of shallow water) that is intended to support a transportation route (for example: a road or a railway). ( The causeway structure is often constructed from local fill supplemented by other materials (for example: rocks, boulders or gravel) and consists of a solid linear structure in the configuration of an embankment. Causeway structures are built just high enough to insure that the transportation route will remain passable during periods of flooding, tides and seasonal rainfall. Culverts may occur along the length of the causeway structure and individual sections of the causeway structure may be interrupted by bridges. )",
           geom:"Line",
           columns:[
@@ -16063,7 +16063,7 @@ getDbSchema: function()
 
         { name:"LAQ070",
           fcode:"AQ070",
-          desc:"Ferry Crossing Line Feature",
+          desc:"Ferry Crossing",
           definition:"A route where a ferry crosses from one shore to another.",
           geom:"Line",
           columns:[
@@ -16191,7 +16191,7 @@ getDbSchema: function()
 
         { name:"LAQ075",
           fcode:"AQ075",
-          desc:"Ice Route Line Feature",
+          desc:"Ice Route",
           definition:"A route over a frozen watercourse. ( Usually marked and intended to support substantial vehicle traffic. Often designed as an alternate to a seasonally-closed ferry crossing (see Feature: 'Ferry Crossing'). )",
           geom:"Line",
           columns:[
@@ -16290,7 +16290,7 @@ getDbSchema: function()
 
         { name:"LAQ113",
           fcode:"AQ113",
-          desc:"Pipeline Line Feature",
+          desc:"Pipeline",
           definition:"A connected set of pipes for conveying liquids, slurries, or gases. ( Usually for long distances and often located underground. )",
           geom:"Line",
           columns:[
@@ -16419,7 +16419,7 @@ getDbSchema: function()
 
         { name:"LAQ130",
           fcode:"AQ130",
-          desc:"Tunnel Line Feature",
+          desc:"Tunnel",
           definition:"An underground passage that is open at both ends and usually contains a land transportation route (for example: a road and/or a railway). ( Commonly used to pass through a hill or mountain, or under a river or road. May also provide underground passage in a mine. )",
           geom:"Line",
           columns:[
@@ -16555,7 +16555,7 @@ getDbSchema: function()
 
         { name:"LAT030",
           fcode:"AT030",
-          desc:"Power Line Line Feature",
+          desc:"Power Line",
           definition:"A cable that transmits or distributes electrical power. ( Long distance power transmission lines are typically operated at high voltages (for example, 500 kilovolts) whereas local power distribution lines are typically operated at much lower voltages (usually less than one kilovolt). )",
           geom:"Line",
           columns:[
@@ -16654,7 +16654,7 @@ getDbSchema: function()
 
         { name:"LAT041",
           fcode:"AT041",
-          desc:"Cableway Line Feature",
+          desc:"Cableway",
           definition:"A transportation system consisting of load cables strung between pylons on which carrier units (for example: cars or buckets intended to transport people, material, and/or equipment) are suspended. ( For example, a ski-lift. )",
           geom:"Line",
           columns:[
@@ -16799,7 +16799,7 @@ getDbSchema: function()
 
         { name:"LAT060",
           fcode:"AT060",
-          desc:"Communication Line Line Feature",
+          desc:"Communication Line",
           definition:"A cable that transmits communication signals. ( For example, a telephone line, a telegraph line, or a fibreoptic cable. )",
           geom:"Line",
           columns:[
@@ -16890,7 +16890,7 @@ getDbSchema: function()
 
         { name:"LBA010",
           fcode:"BA010",
-          desc:"Land Water Boundary Line Feature",
+          desc:"Land Water Boundary",
           definition:"The line where a land mass is in contact with a body of water and the tide state or river stage are unspecified. ( It may be in either the littoral or inland waters. In the littoral, consideration should be given to using the more specific high water or low water lines based on the nature of the source data collection. )",
           geom:"Line",
           columns:[
@@ -16982,7 +16982,7 @@ getDbSchema: function()
 
         { name:"LBB041",
           fcode:"BB041",
-          desc:"Breakwater Line Feature",
+          desc:"Breakwater",
           definition:"A structure that protects a waterbody region (for example: a shore, a harbour, and/or an anchorage) from water waves by preventing them from reaching the protected region or reducing their magnitude.",
           geom:"Line",
           columns:[
@@ -17121,7 +17121,7 @@ getDbSchema: function()
 
         { name:"LBB043",
           fcode:"BB043",
-          desc:"Groin Line Feature",
+          desc:"Groin",
           definition:"A low artificial wall-like structure of durable material extending from the land to seaward for a particular purpose, such as to prevent coast erosion.",
           geom:"Line",
           columns:[
@@ -17260,7 +17260,7 @@ getDbSchema: function()
 
         { name:"LBB140",
           fcode:"BB140",
-          desc:"Training Wall Line Feature",
+          desc:"Training Wall",
           definition:"A wall, bank or jetty often submerged, built to direct or confine the flow of a river or tidal current or to promote scour actions.",
           geom:"Line",
           columns:[
@@ -17382,7 +17382,7 @@ getDbSchema: function()
 
         { name:"LBB190",
           fcode:"BB190",
-          desc:"Berthing Structure Line Feature",
+          desc:"Berthing Structure",
           definition:"A structure primarily used as a berthing place for vessels. ( For example, a pier, a wharf, and a quay. Consideration should be given to using the more general Feature: 'Shoreline Construction' and a type-discriminating attribute. )",
           geom:"Line",
           columns:[
@@ -17546,7 +17546,7 @@ getDbSchema: function()
 
         { name:"LBB230",
           fcode:"BB230",
-          desc:"Seawall Line Feature",
+          desc:"Seawall",
           definition:"An embankment or wall for protection against waves or tidal action along a shore or water front.",
           geom:"Line",
           columns:[
@@ -17668,7 +17668,7 @@ getDbSchema: function()
 
         { name:"LBD120",
           fcode:"BD120",
-          desc:"Reef Line Feature",
+          desc:"Reef",
           definition:"A mass of rock or coral which either reaches close to the sea surface or is exposed at low tide, posing a hazard to navigation.",
           geom:"Line",
           columns:[
@@ -17795,7 +17795,7 @@ getDbSchema: function()
 
         { name:"LBH010",
           fcode:"BH010",
-          desc:"Aqueduct Line Feature",
+          desc:"Aqueduct",
           definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
           geom:"Line",
           columns:[
@@ -17935,7 +17935,7 @@ getDbSchema: function()
 
         { name:"LBH020",
           fcode:"BH020",
-          desc:"Canal Line Feature",
+          desc:"Canal",
           definition:"An artificial waterway with no flow, or a controlled flow, usable or built for navigation.",
           geom:"Line",
           columns:[
@@ -18088,7 +18088,7 @@ getDbSchema: function()
 
         { name:"LBH030",
           fcode:"BH030",
-          desc:"Ditch Line Feature",
+          desc:"Ditch",
           definition:"An artificial waterway with no flow, or a controlled flow, usually unlined, used for draining or irrigating land.",
           geom:"Line",
           columns:[
@@ -18228,7 +18228,7 @@ getDbSchema: function()
 
         { name:"LBH060",
           fcode:"BH060",
-          desc:"Flume Line Feature",
+          desc:"Flume",
           definition:"An inclined channel for conveying water from a distance. ( For example, carries water to be utilized for power, transportation, and/or irrigation. )",
           geom:"Line",
           columns:[
@@ -18323,7 +18323,7 @@ getDbSchema: function()
 
         { name:"LBH070",
           fcode:"BH070",
-          desc:"Ford Line Feature",
+          desc:"Ford",
           definition:"A shallow place in a body of water used as a crossing.",
           geom:"Line",
           columns:[
@@ -18434,7 +18434,7 @@ getDbSchema: function()
 
         { name:"LBH110",
           fcode:"BH110",
-          desc:"Penstock Line Feature",
+          desc:"Penstock",
           definition:"A pipeline that is used by hydroelectric plants to transport water by gravity from a reservoir to the turbine(s).",
           geom:"Line",
           columns:[
@@ -18522,7 +18522,7 @@ getDbSchema: function()
 
         { name:"LBH120",
           fcode:"BH120",
-          desc:"Rapids Line Feature",
+          desc:"Rapids",
           definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
           geom:"Line",
           columns:[
@@ -18621,7 +18621,7 @@ getDbSchema: function()
 
         { name:"LBH140",
           fcode:"BH140",
-          desc:"River Line Feature",
+          desc:"River",
           definition:"A natural flowing watercourse.",
           geom:"Line",
           columns:[
@@ -18794,7 +18794,7 @@ getDbSchema: function()
 
         { name:"LBH165",
           fcode:"BH165",
-          desc:"Spillway Line Feature",
+          desc:"Spillway",
           definition:"A passage for surplus water to run over or around a dam.",
           geom:"Line",
           columns:[
@@ -18869,7 +18869,7 @@ getDbSchema: function()
 
         { name:"LBH180",
           fcode:"BH180",
-          desc:"Waterfall Line Feature",
+          desc:"Waterfall",
           definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
           geom:"Line",
           columns:[
@@ -18968,7 +18968,7 @@ getDbSchema: function()
 
         { name:"LBI020",
           fcode:"BI020",
-          desc:"Dam Line Feature",
+          desc:"Dam",
           definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
           geom:"Line",
           columns:[
@@ -19151,7 +19151,7 @@ getDbSchema: function()
 
         { name:"LBI030",
           fcode:"BI030",
-          desc:"Lock Line Feature",
+          desc:"Lock",
           definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
           geom:"Line",
           columns:[
@@ -19266,7 +19266,7 @@ getDbSchema: function()
 
         { name:"LBI040",
           fcode:"BI040",
-          desc:"Sluice Gate Line Feature",
+          desc:"Sluice Gate",
           definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
           geom:"Line",
           columns:[
@@ -19357,7 +19357,7 @@ getDbSchema: function()
 
         { name:"LBI041",
           fcode:"BI041",
-          desc:"Water Gate Line Feature",
+          desc:"Water Gate",
           definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
           geom:"Line",
           columns:[
@@ -19462,7 +19462,7 @@ getDbSchema: function()
 
         { name:"LBJ031",
           fcode:"BJ031",
-          desc:"Crevasse Line Feature",
+          desc:"Crevasse",
           definition:"A deep crack or fissure in a glacier that results from differential movement of ice.",
           geom:"Line",
           columns:[
@@ -19545,7 +19545,7 @@ getDbSchema: function()
 
         { name:"LBJ040",
           fcode:"BJ040",
-          desc:"Ice Cliff Line Feature",
+          desc:"Ice Cliff",
           definition:"The vertical face of a glacier or ice shelf.",
           geom:"Line",
           columns:[
@@ -19644,7 +19644,7 @@ getDbSchema: function()
 
         { name:"LDB010",
           fcode:"DB010",
-          desc:"Steep Terrain Face Line Feature",
+          desc:"Steep Terrain Face",
           definition:"A steep, vertical, or overhanging face of rock and/or soil. ( For example, an escarpment, a bluff, or a cliff. )",
           geom:"Line",
           columns:[
@@ -19743,7 +19743,7 @@ getDbSchema: function()
 
         { name:"LDB061",
           fcode:"DB061",
-          desc:"Crevice Line Feature",
+          desc:"Crevice",
           definition:"A narrow opening or fissure produced by a crack in the land, especially in rock. ( May also describe a deep vertical opening in the terrain that appears after an earthquake. )",
           geom:"Line",
           columns:[
@@ -19826,7 +19826,7 @@ getDbSchema: function()
 
         { name:"LDB070",
           fcode:"DB070",
-          desc:"Cut Line Feature",
+          desc:"Cut",
           definition:"An excavation in the terrain to provide passage for a land or water transportation route (for example: a road, a railway, and/or a canal).",
           geom:"Line",
           columns:[
@@ -19943,7 +19943,7 @@ getDbSchema: function()
 
         { name:"LDB071",
           fcode:"DB071",
-          desc:"Cut Line Line Feature",
+          desc:"Cut Line",
           definition:"The demarcation line between a cut and the surrounding land surface.",
           geom:"Line",
           columns:[
@@ -20018,7 +20018,7 @@ getDbSchema: function()
 
         { name:"LDB090",
           fcode:"DB090",
-          desc:"Embankment Line Feature",
+          desc:"Embankment",
           definition:"A man-made raised long mound of earth or other material.",
           geom:"Line",
           columns:[
@@ -20166,7 +20166,7 @@ getDbSchema: function()
 
         { name:"LDB100",
           fcode:"DB100",
-          desc:"Esker Line Feature",
+          desc:"Esker",
           definition:"A long, narrow ridge of sand and gravel deposited by a glacial stream.",
           geom:"Line",
           columns:[
@@ -20241,7 +20241,7 @@ getDbSchema: function()
 
         { name:"LDB110",
           fcode:"DB110",
-          desc:"Geologic Fault Line Feature",
+          desc:"Geologic Fault",
           definition:"A fracture or zone of fractures in a rock formation, marked by the relative displacement on either side of the plane of the fracture. ( The intersection of a geologic fault with the ground surface is termed the 'fault trace' and is commonly plotted on maps to represent a fault. Since geologic faults do not usually consist of a single, clean fracture, the term 'fault zone' (or 'distributed fault') is often used when referring to the zone of complex deformation and numerous small fractures that is associated with the fault plane. )",
           geom:"Line",
           columns:[
@@ -20348,7 +20348,7 @@ getDbSchema: function()
 
         { name:"LDB160",
           fcode:"DB160",
-          desc:"Rock Formation Line Feature",
+          desc:"Rock Formation",
           definition:"A significant outcropping of exposed bedrock.",
           geom:"Line",
           columns:[
@@ -20447,7 +20447,7 @@ getDbSchema: function()
 
         { name:"LDB200",
           fcode:"DB200",
-          desc:"Gully Line Feature",
+          desc:"Gully",
           definition:"A deep ditch or channel cut into the terrain that results from erosion due to surface water runoff.",
           geom:"Line",
           columns:[
@@ -20546,7 +20546,7 @@ getDbSchema: function()
 
         { name:"LEA020",
           fcode:"EA020",
-          desc:"Hedgerow Line Feature",
+          desc:"Hedgerow",
           definition:"A continuous growth of shrubs planted as a fence, a boundary, and/or a windbreak.",
           geom:"Line",
           columns:[
@@ -20621,7 +20621,7 @@ getDbSchema: function()
 
         { name:"LEC030",
           fcode:"EC030",
-          desc:"Wood Line Feature",
+          desc:"Wood",
           definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
           geom:"Line",
           columns:[
@@ -20709,7 +20709,7 @@ getDbSchema: function()
 
         { name:"LFA090",
           fcode:"FA090",
-          desc:"Geophysical Prospecting Grid Line Feature",
+          desc:"Geophysical Prospecting Grid",
           definition:"A grid established for the collection of geophysical data within an area. ( The grid is typically composed of one or more series of observation points where each series is obtained along a single track and the grid is then assembled from multiple tracks. )",
           geom:"Line",
           columns:[
@@ -20784,7 +20784,7 @@ getDbSchema: function()
 
         { name:"LGB050",
           fcode:"GB050",
-          desc:"Aircraft Revetment Line Feature",
+          desc:"Aircraft Revetment",
           definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
           geom:"Line",
           columns:[
@@ -20859,7 +20859,7 @@ getDbSchema: function()
 
         { name:"PAA010",
           fcode:"AA010",
-          desc:"Extraction Mine Point Feature",
+          desc:"Extraction Mine",
           definition:"An excavation made in the terrain for the purpose of extracting and/or exploiting natural resources.",
           geom:"Point",
           columns:[
@@ -21006,7 +21006,7 @@ getDbSchema: function()
 
         { name:"PAA012",
           fcode:"AA012",
-          desc:"Quarry Point Feature",
+          desc:"Quarry",
           definition:"An open-air excavation created by removal of stone by blasting or cutting.",
           geom:"Point",
           columns:[
@@ -21134,7 +21134,7 @@ getDbSchema: function()
 
         { name:"PAA040",
           fcode:"AA040",
-          desc:"Rig Point Feature",
+          desc:"Rig",
           definition:"A superstructure fitted for drilling or lifting operations for extraction and/or exploitation of natural resources.",
           geom:"Point",
           columns:[
@@ -21271,7 +21271,7 @@ getDbSchema: function()
 
         { name:"PAA050",
           fcode:"AA050",
-          desc:"Well Point Feature",
+          desc:"Well",
           definition:"An excavation drilled or dug into the ground (for example: the sea bed) for the extraction of liquids and/or gases.",
           geom:"Point",
           columns:[
@@ -21437,7 +21437,7 @@ getDbSchema: function()
 
         { name:"PAC000",
           fcode:"AC000",
-          desc:"Processing Facility Point Feature",
+          desc:"Processing Facility",
           definition:"A facility including one or more buildings used for processing materials. ( For example, a treatment plant. )",
           geom:"Point",
           columns:[
@@ -21610,7 +21610,7 @@ getDbSchema: function()
 
         { name:"PAC020",
           fcode:"AC020",
-          desc:"Catalytic Cracker Point Feature",
+          desc:"Catalytic Cracker",
           definition:"A device in which the separation of petroleum is carried out in the presence of a catalyst.",
           geom:"Point",
           columns:[
@@ -21709,7 +21709,7 @@ getDbSchema: function()
 
         { name:"PAC030",
           fcode:"AC030",
-          desc:"Settling Pond Point Feature",
+          desc:"Settling Pond",
           definition:"A small reservoir where solid matter is precipitated from a liquid by evaporating or settling.",
           geom:"Point",
           columns:[
@@ -21806,7 +21806,7 @@ getDbSchema: function()
 
         { name:"PAD010",
           fcode:"AD010",
-          desc:"Electric Power Station Point Feature",
+          desc:"Electric Power Station",
           definition:"A facility including one or more buildings and equipment used for electric power generation. ( An electric power station consists of one or more power generating units, each consisting of the full set of equipment required to generate power and capable of independent operation. The power generating units are located on one or more contiguous or adjacent properties, are under the common control of the same entity and supply power through a common connection to the electric grid. Electric power stations most commonly are used to generate electricity for long distance transmission. )",
           geom:"Point",
           columns:[
@@ -21947,7 +21947,7 @@ getDbSchema: function()
 
         { name:"PAD020",
           fcode:"AD020",
-          desc:"Solar Panel Point Feature",
+          desc:"Solar Panel",
           definition:"A panel designed to absorb the sun's rays for the purpose of generating electricity or heat.",
           geom:"Point",
           columns:[
@@ -22030,7 +22030,7 @@ getDbSchema: function()
 
         { name:"PAD030",
           fcode:"AD030",
-          desc:"Power Substation Point Feature",
+          desc:"Power Substation",
           definition:"A facility, along a power transmission line, in which electric current is switched, transformed, and/or converted.",
           geom:"Point",
           columns:[
@@ -22137,7 +22137,7 @@ getDbSchema: function()
 
         { name:"PAD050",
           fcode:"AD050",
-          desc:"Heating Facility Point Feature",
+          desc:"Heating Facility",
           definition:"A facility for the generation of thermal energy for heating purposes.",
           geom:"Point",
           columns:[
@@ -22244,7 +22244,7 @@ getDbSchema: function()
 
         { name:"PAF010",
           fcode:"AF010",
-          desc:"Smokestack Point Feature",
+          desc:"Smokestack",
           definition:"A vertical structure containing a passage or flue for discharging smoke and gases of combustion.",
           geom:"Point",
           columns:[
@@ -22343,7 +22343,7 @@ getDbSchema: function()
 
         { name:"PAF040",
           fcode:"AF040",
-          desc:"Crane Point Feature",
+          desc:"Crane",
           definition:"Equipment for lifting, shifting, and lowering objects or materials by means of a swinging boom or with the lifting apparatus supported on an overhead track.",
           geom:"Point",
           columns:[
@@ -22470,7 +22470,7 @@ getDbSchema: function()
 
         { name:"PAF070",
           fcode:"AF070",
-          desc:"Flare Pipe Point Feature",
+          desc:"Flare Pipe",
           definition:"An open-ended pipe at which waste gases are burned.",
           geom:"Point",
           columns:[
@@ -22569,7 +22569,7 @@ getDbSchema: function()
 
         { name:"PAH050",
           fcode:"AH050",
-          desc:"Fortification Point Feature",
+          desc:"Fortification",
           definition:"A structure constructed for the military defence of a site. ( For example, a bastion and a rampart. )",
           geom:"Point",
           columns:[
@@ -22723,7 +22723,7 @@ getDbSchema: function()
 
         { name:"PAH070",
           fcode:"AH070",
-          desc:"Checkpoint Point Feature",
+          desc:"Checkpoint",
           definition:"A location to control passage and/or to register, declare and/or inspect goods, vehicles and/or people.",
           geom:"Point",
           columns:[
@@ -22822,7 +22822,7 @@ getDbSchema: function()
 
         { name:"PAJ030",
           fcode:"AJ030",
-          desc:"Holding Pen Point Feature",
+          desc:"Holding Pen",
           definition:"An enclosed tract on which livestock are temporarily kept. ( For example, a sheepfold, a holding paddock, a livestock pen, a feedlot, and/or a stock yard. The enclosure may be by, for example, a fence or a wall. )",
           geom:"Point",
           columns:[
@@ -22897,7 +22897,7 @@ getDbSchema: function()
 
         { name:"PAJ050",
           fcode:"AJ050",
-          desc:"Windmill Point Feature",
+          desc:"Windmill",
           definition:"A system of vanes attached to a tower and driven by wind (excluding wind turbines).",
           geom:"Point",
           columns:[
@@ -22996,7 +22996,7 @@ getDbSchema: function()
 
         { name:"PAJ051",
           fcode:"AJ051",
-          desc:"Wind Turbine Point Feature",
+          desc:"Wind Turbine",
           definition:"A tower and associated equipment that generates electrical power from wind.",
           geom:"Point",
           columns:[
@@ -23095,7 +23095,7 @@ getDbSchema: function()
 
         { name:"PAJ110",
           fcode:"AJ110",
-          desc:"Greenhouse Point Feature",
+          desc:"Greenhouse",
           definition:"A building constructed primarily of transparent material (for example: glass or plastic), in which temperature and humidity can be controlled for the cultivation and/or protection of plants.",
           geom:"Point",
           columns:[
@@ -23178,7 +23178,7 @@ getDbSchema: function()
 
         { name:"PAK040",
           fcode:"AK040",
-          desc:"Sports Ground Point Feature",
+          desc:"Sports Ground",
           definition:"An open area where sporting events, exercises, and/or games occur. ( For example, an athletic field, a playing field, and/or a sports field. )",
           geom:"Point",
           columns:[
@@ -23305,7 +23305,7 @@ getDbSchema: function()
 
         { name:"PAK150",
           fcode:"AK150",
-          desc:"Ski-jump Point Feature",
+          desc:"Ski-jump",
           definition:"A man-made structure consisting of a steep ramp levelling off at the end and built on a natural slope, used in ski-jumping.",
           geom:"Point",
           columns:[
@@ -23428,7 +23428,7 @@ getDbSchema: function()
 
         { name:"PAK160",
           fcode:"AK160",
-          desc:"Stadium Point Feature",
+          desc:"Stadium",
           definition:"An arena for holding and viewing events.",
           geom:"Point",
           columns:[
@@ -23566,7 +23566,7 @@ getDbSchema: function()
 
         { name:"PAK170",
           fcode:"AK170",
-          desc:"Swimming Pool Point Feature",
+          desc:"Swimming Pool",
           definition:"A man-made pool used for swimming outdoors.",
           geom:"Point",
           columns:[
@@ -23641,7 +23641,7 @@ getDbSchema: function()
 
         { name:"PAL012",
           fcode:"AL012",
-          desc:"Archeological Site Point Feature",
+          desc:"Archeological Site",
           definition:"A site where remains of past civilizations or human activity have been discovered.",
           geom:"Point",
           columns:[
@@ -23740,7 +23740,7 @@ getDbSchema: function()
 
         { name:"PAL015",
           fcode:"AL015",
-          desc:"General Building Point Feature",
+          desc:"General Building",
           definition:"A relatively permanent structure, roofed and usually walled and designed for some particular use.",
           geom:"Point",
           columns:[
@@ -23967,7 +23967,7 @@ getDbSchema: function()
 
         { name:"PAL019",
           fcode:"AL019",
-          desc:"Shed Point Feature",
+          desc:"Shed",
           definition:"A small building, generally of light construction, that usually has one or more open sides. ( Typically used for storage. )",
           geom:"Point",
           columns:[
@@ -24042,7 +24042,7 @@ getDbSchema: function()
 
         { name:"PAL020",
           fcode:"AL020",
-          desc:"Built-Up Area Point Feature",
+          desc:"Built-Up Area",
           definition:"A tract containing a concentration of buildings and/or other structures.",
           geom:"Point",
           columns:[
@@ -24192,7 +24192,7 @@ getDbSchema: function()
 
         { name:"PAL025",
           fcode:"AL025",
-          desc:"Cairn Point Feature",
+          desc:"Cairn",
           definition:"A heap of stones piled up as a memorial or a landmark.",
           geom:"Point",
           columns:[
@@ -24291,7 +24291,7 @@ getDbSchema: function()
 
         { name:"PAL030",
           fcode:"AL030",
-          desc:"Cemetery Point Feature",
+          desc:"Cemetery",
           definition:"A site and associated structures devoted to the burial of the dead.",
           geom:"Point",
           columns:[
@@ -24405,7 +24405,7 @@ getDbSchema: function()
 
         { name:"PAL099",
           fcode:"AL099",
-          desc:"Hut Point Feature",
+          desc:"Hut",
           definition:"A small, simple free-standing (detached) self-contained residence usually having only a single multi-function room. ( May be intended only as temporary (for example: by displaced persons) or seasonal (for example: during seasonal livestock movement) residence. May be crude (for example: quickly built from locally-available natural materials) or relatively modern in construction and austerely furnished (for example: a Norwegian 'hytte'). )",
           geom:"Point",
           columns:[
@@ -24480,7 +24480,7 @@ getDbSchema: function()
 
         { name:"PAL105",
           fcode:"AL105",
-          desc:"Settlement Point Feature",
+          desc:"Settlement",
           definition:"A continuously occupied concentration of tents or lightweight fixed structures (for example: huts) serving as residences. ( May also include supporting non-residential (for example: commercial) structures. )",
           geom:"Point",
           columns:[
@@ -24601,7 +24601,7 @@ getDbSchema: function()
 
         { name:"PAL130",
           fcode:"AL130",
-          desc:"Memorial Monument Point Feature",
+          desc:"Memorial Monument",
           definition:"A marker erected and/or maintained as a memorial to a person and/or event.",
           geom:"Point",
           columns:[
@@ -24731,7 +24731,7 @@ getDbSchema: function()
 
         { name:"PAL210",
           fcode:"AL210",
-          desc:"Protection Shed Point Feature",
+          desc:"Protection Shed",
           definition:"A shelter built to protect a section of road or railway from slides of snow and/or rock. ( For example, a snow shed or a rock shed. )",
           geom:"Point",
           columns:[
@@ -24820,7 +24820,7 @@ getDbSchema: function()
 
         { name:"PAL241",
           fcode:"AL241",
-          desc:"Tower Point Feature",
+          desc:"Tower",
           definition:"A relatively tall, narrow structure that may either stand alone or may form part of another structure. ( Usually of a square, circular, or rectangular cross-section. )",
           geom:"Point",
           columns:[
@@ -24968,7 +24968,7 @@ getDbSchema: function()
 
         { name:"PAM020",
           fcode:"AM020",
-          desc:"Grain Storage Structure Point Feature",
+          desc:"Grain Storage Structure",
           definition:"An enclosed container, used for storing grain or fodder.",
           geom:"Point",
           columns:[
@@ -25067,7 +25067,7 @@ getDbSchema: function()
 
         { name:"PAM030",
           fcode:"AM030",
-          desc:"Grain Elevator Point Feature",
+          desc:"Grain Elevator",
           definition:"A tall structure, equipped for loading, unloading, processing, and/or storing grain.",
           geom:"Point",
           columns:[
@@ -25166,7 +25166,7 @@ getDbSchema: function()
 
         { name:"PAM040",
           fcode:"AM040",
-          desc:"Mineral Pile Point Feature",
+          desc:"Mineral Pile",
           definition:"A man-made heap of mining or quarrying products that does not contain waste materials. ( For example, a pile of coal or quarried stones. )",
           geom:"Point",
           columns:[
@@ -25276,7 +25276,7 @@ getDbSchema: function()
 
         { name:"PAM060",
           fcode:"AM060",
-          desc:"Surface Bunker Point Feature",
+          desc:"Surface Bunker",
           definition:"A surface structure that may be covered and/or surrounded with earth and is resistant to ordnance. ( Used, for example, for storage and/or aircraft protection. )",
           geom:"Point",
           columns:[
@@ -25369,7 +25369,7 @@ getDbSchema: function()
 
         { name:"PAM070",
           fcode:"AM070",
-          desc:"Storage Tank Point Feature",
+          desc:"Storage Tank",
           definition:"A container used for the storage of liquids and/or gases that is not supported by a tower.",
           geom:"Point",
           columns:[
@@ -25517,7 +25517,7 @@ getDbSchema: function()
 
         { name:"PAN075",
           fcode:"AN075",
-          desc:"Railway Turntable Point Feature",
+          desc:"Railway Turntable",
           definition:"A rotating platform with railway tracks used for turning locomotives and/or railway carriages. ( May be enclosed within a structure. )",
           geom:"Point",
           columns:[
@@ -25600,7 +25600,7 @@ getDbSchema: function()
 
         { name:"PAN076",
           fcode:"AN076",
-          desc:"Roundhouse Point Feature",
+          desc:"Roundhouse",
           definition:"A circular or semicircular building, with a railway turntable in the centre, used for storing and/or repairing railway locomotives. ( The railway turntable may be either completely covered, partially covered or not covered, and partially or completely surrounded by the building. )",
           geom:"Point",
           columns:[
@@ -25675,7 +25675,7 @@ getDbSchema: function()
 
         { name:"PAQ065",
           fcode:"AQ065",
-          desc:"Culvert Point Feature",
+          desc:"Culvert",
           definition:"An enclosed channel for carrying a watercourse (for example: a stream, a sewer, or a drain) under a route (for example: a road, a railway, or an embankment). ( Usually the construction of the route is unaffected. )",
           geom:"Point",
           columns:[
@@ -25766,7 +25766,7 @@ getDbSchema: function()
 
         { name:"PAQ070",
           fcode:"AQ070",
-          desc:"Ferry Crossing Point Feature",
+          desc:"Ferry Crossing",
           definition:"A route where a ferry crosses from one shore to another.",
           geom:"Point",
           columns:[
@@ -25894,7 +25894,7 @@ getDbSchema: function()
 
         { name:"PAQ090",
           fcode:"AQ090",
-          desc:"Entrance and/or Exit Point Feature",
+          desc:"Entrance and/or Exit",
           definition:"A location of entrance and/or exit. ( For example, a cave mouth or a doorway. )",
           geom:"Point",
           columns:[
@@ -25977,7 +25977,7 @@ getDbSchema: function()
 
         { name:"PAQ110",
           fcode:"AQ110",
-          desc:"Mooring Mast Point Feature",
+          desc:"Mooring Mast",
           definition:"A mast used to secure an airship.",
           geom:"Point",
           columns:[
@@ -26068,7 +26068,7 @@ getDbSchema: function()
 
         { name:"PAQ116",
           fcode:"AQ116",
-          desc:"Pumping Station Point Feature",
+          desc:"Pumping Station",
           definition:"A facility to move solids, liquids or gases by means of pressure or suction.",
           geom:"Point",
           columns:[
@@ -26168,7 +26168,7 @@ getDbSchema: function()
 
         { name:"PAQ125",
           fcode:"AQ125",
-          desc:"Transportation Station Point Feature",
+          desc:"Transportation Station",
           definition:"A station that serves as a stopping place along a transportation route. ( For example, used for the transfer of passengers and/or freight. )",
           geom:"Point",
           columns:[
@@ -26310,7 +26310,7 @@ getDbSchema: function()
 
         { name:"PAT010",
           fcode:"AT010",
-          desc:"Dish Aerial Point Feature",
+          desc:"Dish Aerial",
           definition:"A concave-shaped aerial that is used for emitting and/or sensing electromagnetic energy. ( For example, used to transmit and/or receive electronic signals as at a satellite station or to capture electromagnetic energy as in radio astronomy. )",
           geom:"Point",
           columns:[
@@ -26401,7 +26401,7 @@ getDbSchema: function()
 
         { name:"PAT042",
           fcode:"AT042",
-          desc:"Pylon Point Feature",
+          desc:"Pylon",
           definition:"A pylon or pole used to support one or more cables.",
           geom:"Point",
           columns:[
@@ -26524,7 +26524,7 @@ getDbSchema: function()
 
         { name:"PAT045",
           fcode:"AT045",
-          desc:"Radar Station Point Feature",
+          desc:"Radar Station",
           definition:"A facility utilizing radar to detect and analyze objects (for example: aircraft, artificial satellites, asteroids, and/or missiles) and/or environmental phenomena (for example: tornadoes). ( May include both a radar aerial as well as a structure housing radar equipment. )",
           geom:"Point",
           columns:[
@@ -26647,7 +26647,7 @@ getDbSchema: function()
 
         { name:"PBA050",
           fcode:"BA050",
-          desc:"Beach Point Feature",
+          desc:"Beach",
           definition:"On a shore, the area on which the waves break and over which shore debris (for example: sand, shingle, and/or pebbles) accumulate. ( A beach includes backshore and foreshore. )",
           geom:"Point",
           columns:[
@@ -26759,7 +26759,7 @@ getDbSchema: function()
 
         { name:"PBB155",
           fcode:"BB155",
-          desc:"Maritime Signal Station Point Feature",
+          desc:"Maritime Signal Station",
           definition:"A place on shore from which signals are made to vessels at sea.",
           geom:"Point",
           columns:[
@@ -26898,7 +26898,7 @@ getDbSchema: function()
 
         { name:"PBD100",
           fcode:"BD100",
-          desc:"Structural Pile Point Feature",
+          desc:"Structural Pile",
           definition:"A long pile (for example: a heavy timber or section of steel, wood, or concrete) forced into the earth that may serve as a support (for example: for a pier) or as a free standing pole within a marine environment.",
           geom:"Point",
           columns:[
@@ -26973,7 +26973,7 @@ getDbSchema: function()
 
         { name:"PBD110",
           fcode:"BD110",
-          desc:"Offshore Platform Point Feature",
+          desc:"Offshore Platform",
           definition:"An offshore structure with a flat surface raised above the sea, used as a working stage for conducting offshore operations. ( May be fixed or floating. )",
           geom:"Point",
           columns:[
@@ -27125,7 +27125,7 @@ getDbSchema: function()
 
         { name:"PBD130",
           fcode:"BD130",
-          desc:"Hazardous Rock Point Feature",
+          desc:"Hazardous Rock",
           definition:"An isolated rocky formation or a single large stone or coral, usually one constituting a danger to navigation. ( May be either dry, awash, or below the water surface. )",
           geom:"Point",
           columns:[
@@ -27241,7 +27241,7 @@ getDbSchema: function()
 
         { name:"PBD180",
           fcode:"BD180",
-          desc:"Wreck Point Feature",
+          desc:"Wreck",
           definition:"The ruined remains of a stranded or sunken vessel that has been rendered useless.",
           geom:"Point",
           columns:[
@@ -27316,7 +27316,7 @@ getDbSchema: function()
 
         { name:"PBH010",
           fcode:"BH010",
-          desc:"Aqueduct Point Feature",
+          desc:"Aqueduct",
           definition:"A pipe or artificial channel that is designed to transport water from a remote source, usually by gravity, for freshwater supply, agricultural, and/or industrial use. ( It may be supported by a bridge. )",
           geom:"Point",
           columns:[
@@ -27418,7 +27418,7 @@ getDbSchema: function()
 
         { name:"PBH070",
           fcode:"BH070",
-          desc:"Ford Point Feature",
+          desc:"Ford",
           definition:"A shallow place in a body of water used as a crossing.",
           geom:"Point",
           columns:[
@@ -27529,7 +27529,7 @@ getDbSchema: function()
 
         { name:"PBH120",
           fcode:"BH120",
-          desc:"Rapids Point Feature",
+          desc:"Rapids",
           definition:"Portions of a stream with accelerated current where it descends rapidly but without a break in the slope of the bed sufficient to form a waterfall. ( The surface is usually broken by boulders and rocks. )",
           geom:"Point",
           columns:[
@@ -27628,7 +27628,7 @@ getDbSchema: function()
 
         { name:"PBH145",
           fcode:"BH145",
-          desc:"Vanishing Point Point Feature",
+          desc:"Vanishing Point",
           definition:"The location at which a watercourse disappears into the terrain.",
           geom:"Point",
           columns:[
@@ -27715,7 +27715,7 @@ getDbSchema: function()
 
         { name:"PBH170",
           fcode:"BH170",
-          desc:"Natural Pool Point Feature",
+          desc:"Natural Pool",
           definition:"A naturally formed pool of water. ( It is usually fed by surface drainage from the surrounding region and/or water arising from an underground source (for example: a spring or a resurgence). )",
           geom:"Point",
           columns:[
@@ -27840,7 +27840,7 @@ getDbSchema: function()
 
         { name:"PBH180",
           fcode:"BH180",
-          desc:"Waterfall Point Feature",
+          desc:"Waterfall",
           definition:"A vertically descending part of a watercourse where it falls from a height (for example: over a rock or a precipice). ( In place names, commonly shortened to 'fall' or 'falls', for example, 'Niagara Falls'. )",
           geom:"Point",
           columns:[
@@ -27939,7 +27939,7 @@ getDbSchema: function()
 
         { name:"PBI010",
           fcode:"BI010",
-          desc:"Cistern Point Feature",
+          desc:"Cistern",
           definition:"A man-made container used for the collection and/or storage of water.",
           geom:"Point",
           columns:[
@@ -28014,7 +28014,7 @@ getDbSchema: function()
 
         { name:"PBI020",
           fcode:"BI020",
-          desc:"Dam Point Feature",
+          desc:"Dam",
           definition:"A barrier constructed to hold back water and raise its level to form a reservoir or to prevent flooding.",
           geom:"Point",
           columns:[
@@ -28189,7 +28189,7 @@ getDbSchema: function()
 
         { name:"PBI030",
           fcode:"BI030",
-          desc:"Lock Point Feature",
+          desc:"Lock",
           definition:"An enclosure with a pair or series of gates used for raising or lowering vessels as they pass from one water level to another.",
           geom:"Point",
           columns:[
@@ -28296,7 +28296,7 @@ getDbSchema: function()
 
         { name:"PBI040",
           fcode:"BI040",
-          desc:"Sluice Gate Point Feature",
+          desc:"Sluice Gate",
           definition:"A gate used to regulate the flow or level of water in a watercourse (for example: stream, irrigation ditch, or sluice). ( Sluice gates are normally installed in a superstructure and/or frame and most commonly slide vertically to open but on occasion may instead slide horizontally. When opened they allow water to flow under or beside the gate. Commonly sluice gates will be installed perpendicular to the orientation of the flow of water within a watercourse and will be constructed as wide as the watercourse they regulate. Sluice gates may also be installed along the margins of watercourses for the purpose of controlling or permitting the flow of water to or from that watercourse into adjacent watercourses. Sluice gates may be used to regulate both tidal or non-tidal waters. )",
           geom:"Point",
           columns:[
@@ -28379,7 +28379,7 @@ getDbSchema: function()
 
         { name:"PBI041",
           fcode:"BI041",
-          desc:"Water Gate Point Feature",
+          desc:"Water Gate",
           definition:"A barrier that may be swung, drawn, or lowered to block an entrance or passageway on a watercourse.",
           geom:"Point",
           columns:[
@@ -28476,7 +28476,7 @@ getDbSchema: function()
 
         { name:"PBI050",
           fcode:"BI050",
-          desc:"Water Intake Tower Point Feature",
+          desc:"Water Intake Tower",
           definition:"A tower-like structure associated with a dam or water source and used for the intake of water.",
           geom:"Point",
           columns:[
@@ -28567,7 +28567,7 @@ getDbSchema: function()
 
         { name:"PBJ060",
           fcode:"BJ060",
-          desc:"Ice Peak Point Feature",
+          desc:"Ice Peak",
           definition:"A rocky peak projecting above a surrounding ice field that may be perpetually covered with ice.",
           geom:"Point",
           columns:[
@@ -28666,7 +28666,7 @@ getDbSchema: function()
 
         { name:"PDB029",
           fcode:"DB029",
-          desc:"Cave Mouth Point Feature",
+          desc:"Cave Mouth",
           definition:"The entrance to an interconnected series of subterranean chambers. ( Typically located in limestone, and often open to the Earth's surface either vertically or horizontally. )",
           geom:"Point",
           columns:[
@@ -28765,7 +28765,7 @@ getDbSchema: function()
 
         { name:"PDB115",
           fcode:"DB115",
-          desc:"Geothermal Outlet Point Feature",
+          desc:"Geothermal Outlet",
           definition:"A terrain surface feature controlled by or derived from the heat of the Earth's interior. ( For example, a hot spring. )",
           geom:"Point",
           columns:[
@@ -28864,7 +28864,7 @@ getDbSchema: function()
 
         { name:"PDB150",
           fcode:"DB150",
-          desc:"Mountain Pass Point Feature",
+          desc:"Mountain Pass",
           definition:"A narrow route through a mountainous region or over a mountain range.",
           geom:"Point",
           columns:[
@@ -28963,7 +28963,7 @@ getDbSchema: function()
 
         { name:"PDB160",
           fcode:"DB160",
-          desc:"Rock Formation Point Feature",
+          desc:"Rock Formation",
           definition:"A significant outcropping of exposed bedrock.",
           geom:"Point",
           columns:[
@@ -29075,7 +29075,7 @@ getDbSchema: function()
 
         { name:"PDB180",
           fcode:"DB180",
-          desc:"Volcano Point Feature",
+          desc:"Volcano",
           definition:"A hill or mountain situated over an opening or openings in the Earth's crust through which lava, cinders, steam, and/or gases, are or have been expelled.",
           geom:"Point",
           columns:[
@@ -29190,7 +29190,7 @@ getDbSchema: function()
 
         { name:"PEC030",
           fcode:"EC030",
-          desc:"Wood Point Feature",
+          desc:"Wood",
           definition:"A tract of trees whose canopy is not closed (allows sunlight to reach the ground) and often includes undergrowth.",
           geom:"Point",
           columns:[
@@ -29289,7 +29289,7 @@ getDbSchema: function()
 
         { name:"PGA034",
           fcode:"GA034",
-          desc:"Aeronautical Radio Navigation Service Point Feature",
+          desc:"Aeronautical Radio Navigation Service",
           definition:"A service providing aeronautical navigation guidance information or position data, intended for the benefit and safe operation of aircraft.",
           geom:"Point",
           columns:[
@@ -29399,7 +29399,7 @@ getDbSchema: function()
 
         { name:"PGB030",
           fcode:"GB030",
-          desc:"Helipad Point Feature",
+          desc:"Helipad",
           definition:"A designated area, usually with a prepared surface, used for the take-off, landing, or parking of helicopters. ( This prepared surface could either be located on land or on a platform over water. It may or may not be associated with an aerodrome. For example: a hospital helipad, and an offshore rig helipad. )",
           geom:"Point",
           columns:[
@@ -29522,7 +29522,7 @@ getDbSchema: function()
 
         { name:"PGB040",
           fcode:"GB040",
-          desc:"Launch Pad Point Feature",
+          desc:"Launch Pad",
           definition:"A designated site or structure from which a rocket or missile is launched.",
           geom:"Point",
           columns:[
@@ -29605,7 +29605,7 @@ getDbSchema: function()
 
         { name:"PGB050",
           fcode:"GB050",
-          desc:"Aircraft Revetment Point Feature",
+          desc:"Aircraft Revetment",
           definition:"A barricade that protects an aircraft, equipment, and/or facility from hostile action.",
           geom:"Point",
           columns:[
@@ -29680,7 +29680,7 @@ getDbSchema: function()
 
         { name:"PGB065",
           fcode:"GB065",
-          desc:"Water Aerodrome Point Feature",
+          desc:"Water Aerodrome",
           definition:"An aerodrome intended to be used either wholly or in part for the arrival, departure and surface movement of aircraft on water.",
           geom:"Point",
           columns:[
@@ -29802,7 +29802,7 @@ getDbSchema: function()
 
         { name:"PGB220",
           fcode:"GB220",
-          desc:"Aeronautical Obstacle Point Feature",
+          desc:"Aeronautical Obstacle",
           definition:"Any object, or part thereof, or terrain which rises far enough above the surrounding surface or above a specified height to create a hazard to aircraft operations. ( Obstacle objects may be fixed (whether temporary or permanent) or mobile. )",
           geom:"Point",
           columns:[
@@ -29893,7 +29893,7 @@ getDbSchema: function()
 
         { name:"PGB230",
           fcode:"GB230",
-          desc:"Aircraft Hangar Point Feature",
+          desc:"Aircraft Hangar",
           definition:"A building for housing aircraft.",
           geom:"Point",
           columns:[
@@ -29976,7 +29976,7 @@ getDbSchema: function()
 
         { name:"PGB485",
           fcode:"GB485",
-          desc:"Approach Lighting System Point Feature",
+          desc:"Approach Lighting System",
           definition:"An airport lighting facility which provides visual guidance to landing aircraft by radiating light beams in a directional pattern by which the pilot aligns the aircraft with the final approach path for landing.",
           geom:"Point",
           columns:[
@@ -30068,7 +30068,7 @@ getDbSchema: function()
 
         { name:"PSU001",
           fcode:"SU001",
-          desc:"Military Installation Point Feature",
+          desc:"Military Installation",
           definition:"An installation designed for military use. ( For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages. )",
           geom:"Point",
           columns:[
@@ -30175,7 +30175,7 @@ getDbSchema: function()
 
         { name:"PZD040",
           fcode:"ZD040",
-          desc:"Named Location Point Feature",
+          desc:"Named Location",
           definition:"A location that normally does not appear as a specific, characterized object but that has a name that is required to be displayed in association with that location. ( For example, the name of the Alps or the Sahara. )",
           geom:"Point",
           columns:[

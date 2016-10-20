@@ -96,10 +96,9 @@ public class Map extends Maps {
      * Retrieves all ranges of quad tiles that fall within the bounds
      */
     private static List<Range> getTileRanges(BoundingBox bounds) {
-        logger.debug("Retrieving tile ranges...");
         int queryDimensions = Integer.parseInt(MAP_QUERY_DIMENSIONS);
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
-        // use y, x ordering here
+                // use y, x ordering here
                 new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT }, new double[] {
                         BoundingBox.LAT_LIMIT, BoundingBox.LON_LIMIT }));
         return ranger.decomposeRange(bounds.toZIndexBox(), 1);
@@ -132,7 +131,6 @@ public class Map extends Maps {
     }
 
     private static void validateQueryBounds(BoundingBox bounds) {
-        logger.debug("Checking request bounds size...");
         double maxQueryAreaDegrees = Double.parseDouble(MAP_QUERY_AREA_DEGREES);
         double requestedArea = bounds.getArea();
         if (requestedArea > maxQueryAreaDegrees) {
@@ -148,8 +146,6 @@ public class Map extends Maps {
      * check, then getNodeCount should be used.
      */
     private void validateNodeCount(BooleanExpression combinedGeospatialCondition) {
-        logger.debug("Retrieving node count...");
-
         long nodeCount = createQuery(getId())
                 .from(currentNodes)
                 .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
