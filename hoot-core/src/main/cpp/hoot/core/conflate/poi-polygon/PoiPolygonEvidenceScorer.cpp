@@ -61,6 +61,16 @@ _testUuid(testUuid)
 unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
                                                             ConstElementPtr poly)
 {
+  PoiPolygonMatchDistanceCalculator distanceCalc(_matchDistance, _reviewDistance, poly->getTags());
+  _matchDistance =
+    max(
+      distanceCalc.getMatchDistanceForType(_t1BestKvp),
+      distanceCalc.getMatchDistanceForType(_t2BestKvp));
+  _reviewDistance =
+    max(
+      distanceCalc.getReviewDistanceForType(_t1BestKvp),
+      distanceCalc.getReviewDistanceForType(_t2BestKvp));
+
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;
   const double sigma2 = poly->getCircularError() / 2.0;
@@ -83,15 +93,6 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
   {
     return 0;
   }
-  PoiPolygonMatchDistanceCalculator distanceCalc(_matchDistance, _reviewDistance, poly->getTags());
-  _matchDistance =
-    max(
-      distanceCalc.getMatchDistanceForType(_t1BestKvp),
-      distanceCalc.getMatchDistanceForType(_t2BestKvp));
-  _reviewDistance =
-    max(
-      distanceCalc.getReviewDistanceForType(_t1BestKvp),
-      distanceCalc.getReviewDistanceForType(_t2BestKvp));
   unsigned int evidence = _distance <= _matchDistance ? 2 : 0;
 
   return evidence;
