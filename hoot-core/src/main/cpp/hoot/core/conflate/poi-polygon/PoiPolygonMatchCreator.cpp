@@ -108,7 +108,8 @@ public:
         {
           // score each candidate and push it on the result vector
           PoiPolygonMatch* m =
-            new PoiPolygonMatch(_map, from, *it, _threshold, _rf, _areaIds, _poiIds);
+            new PoiPolygonMatch(
+              _map, from, *it, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
 
           // if we're confident this is a miss
           if (m->getType() == MatchType::Miss)
@@ -128,16 +129,16 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  void collectAreaIds(const shared_ptr<const Element>& e)
+  void collectSurroundingPolyIds(const shared_ptr<const Element>& e)
   {
-    _areaIds.clear();
+    _surroundingPolyIds.clear();
     auto_ptr<Envelope> env(e->getEnvelope(_map));
-    env->expandBy(e->getCircularError() /*+ ConfigOptions().getPoiPolygonMatchReviewDistance()*/);
+    env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
     set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                   getAreaIndex(),
-                                                                   _areaIndexToEid,
+                                                                   getPolyIndex(),
+                                                                   _polyIndexToEid,
                                                                    getMap());
     ElementId from(e->getElementType(), e->getId());
 
@@ -147,19 +148,19 @@ public:
       {
         const shared_ptr<const Element>& n = _map->getElement(*it);
 
-        if (n->isUnknown() && PoiPolygonMatch::isArea(*n))
+        if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
-          _areaIds.insert(*it);
+          _surroundingPolyIds.insert(*it);
         }
       }
     }
   }
 
-  void collectPoiIds(const shared_ptr<const Element>& e)
+  void collectSurroundingPoiIds(const shared_ptr<const Element>& e)
   {
-    _poiIds.clear();
+    _surroundingPoiIds.clear();
     auto_ptr<Envelope> env(e->getEnvelope(_map));
-    env->expandBy(e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
+    env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
     set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
@@ -176,7 +177,7 @@ public:
 
         if (n->isUnknown() && PoiPolygonMatch::isPoi(*n))
         {
-          _poiIds.insert(*it);
+          _surroundingPoiIds.insert(*it);
         }
       }
     }
@@ -187,17 +188,12 @@ public:
     return e->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance();
   }
 
-  Meters getAreaSearchRadius(const shared_ptr<const Element>& e) const
-  {
-    return e->getCircularError() /*+ ConfigOptions().getPoiPolygonMatchReviewDistance()*/;
-  }
-
   virtual void visit(const ConstElementPtr& e)
   {
     if (isMatchCandidate(e))
     {
-      collectAreaIds(e);
-      collectPoiIds(e);
+      collectSurroundingPolyIds(e);
+      collectSurroundingPoiIds(e);
       checkForMatch(e);
     }
   }
@@ -233,19 +229,20 @@ public:
     return _index;
   }
 
-  shared_ptr<HilbertRTree>& getAreaIndex()
+  shared_ptr<HilbertRTree>& getPolyIndex()
   {
-    if (!_areaIndex)
+    if (!_polyIndex)
     {
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _areaIndex.reset(new HilbertRTree(mps, 2));
+      _polyIndex.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<PoiPolygonAreaCriterion> crit(new PoiPolygonAreaCriterion());
+      //shared_ptr<PoiPolygonAreaCriterion> crit(new PoiPolygonAreaCriterion());
+      shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
-      IndexElementsVisitor v(_areaIndex,
-                             _areaIndexToEid,
+      IndexElementsVisitor v(_polyIndex,
+                             _polyIndexToEid,
                              crit,
-                             boost::bind(&PoiPolygonMatchVisitor::getAreaSearchRadius, this, _1),
+                             boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
       getMap()->visitWaysRo(v);
@@ -253,7 +250,7 @@ public:
       v.finalizeIndex();
     }
 
-    return _areaIndex;
+    return _polyIndex;
   }
 
   shared_ptr<HilbertRTree>& getPoiIndex()
@@ -294,14 +291,14 @@ private:
   // Used for finding neighbors
   shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
-  // used for finding surrounding areas
-  shared_ptr<HilbertRTree> _areaIndex;
-  deque<ElementId> _areaIndexToEid;
-  set<ElementId> _areaIds;
+  // used for finding surrounding polys
+  shared_ptr<HilbertRTree> _polyIndex;
+  deque<ElementId> _polyIndexToEid;
+  set<ElementId> _surroundingPolyIds;
   // used for finding surrounding poi's
   shared_ptr<HilbertRTree> _poiIndex;
   deque<ElementId> _poiIndexToEid;
-  set<ElementId> _poiIds;
+  set<ElementId> _surroundingPoiIds;
 
   shared_ptr<PoiPolygonRfClassifier> _rf;
 };

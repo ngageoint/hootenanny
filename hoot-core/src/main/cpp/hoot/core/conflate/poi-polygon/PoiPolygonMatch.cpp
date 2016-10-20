@@ -80,7 +80,7 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 const set<ElementId>& areaNeighborIds = set<ElementId>(),
+                                 const set<ElementId>& polyNeighborIds = set<ElementId>(),
                                  const set<ElementId>& poiNeighborIds = set<ElementId>()) :
 Match(threshold),
 _eid1(eid1),
@@ -98,7 +98,7 @@ _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
 _reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
-_areaNeighborIds(areaNeighborIds),
+_polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds)
 {
   _calculateMatch(eid1, eid2);
@@ -336,7 +336,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     //TODO: pass in evidence scorer here to clean this constructor up ??
     const bool reviewReductionRuleTriggered =
       PoiPolygonReviewReducer(
-        _map, _areaNeighborIds, _poiNeighborIds, _distance, evidenceScorer.getNameScore(),
+        _map, _polyNeighborIds, _poiNeighborIds, _distance, evidenceScorer.getNameScore(),
         evidenceScorer.getNameMatch(), evidenceScorer.getExactNameMatch(), _typeScoreThreshold,
         evidenceScorer.getTypeScore(), evidenceScorer.getTypeMatch(), _matchDistance,
         _reviewDistance, _polyGeom, _poiGeom, _testUuid)

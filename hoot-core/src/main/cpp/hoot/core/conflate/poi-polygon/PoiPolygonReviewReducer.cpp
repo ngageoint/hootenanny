@@ -57,7 +57,7 @@ namespace hoot
 QSet<QString> PoiPolygonReviewReducer::_allTagKeys;
 
 PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
-                                                     const set<ElementId>& areaNeighborIds,
+                                                     const set<ElementId>& polyNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance, double nameScoreThreshold,
                                                      bool nameMatch,
@@ -71,7 +71,7 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                      shared_ptr<Geometry> poiGeom,
                                                      const QString testUuid = "") :
 _map(map),
-_areaNeighborIds(areaNeighborIds),
+_polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
@@ -389,31 +389,31 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
   PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
 
-  set<ElementId>::const_iterator areaNeighborItr = _areaNeighborIds.begin();
-  while (areaNeighborItr != _areaNeighborIds.end())
+  set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
+  while (polyNeighborItr != _polyNeighborIds.end())
   {
-    ConstElementPtr area = _map->getElement(*areaNeighborItr);
-    if (area->getElementId() != poly->getElementId())
+    ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
+    if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      shared_ptr<Geometry> areaGeom;
+      shared_ptr<Geometry> polyNeighborGeom;
       try
       {
         //TODO: temp suppress "unable to connect all ways..." message here?
-        areaGeom = ElementConverter(_map).convertToGeometry(area);
+        polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
 
-        if (areaGeom.get() &&
-            QString::fromStdString(areaGeom->toString()).toUpper().contains("EMPTY"))
+        if (polyNeighborGeom.get() &&
+            QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
         {
           if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
           {
             //TODO: change back
             /*LOG_WARN*/LOG_DEBUG(
               "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-              areaGeom->toString());
+              polyNeighborGeom->toString());
             _badGeomCount++;
           }
         }
-        else if (areaGeom.get())
+        else if (polyNeighborGeom.get())
         {
           /*if (testFeatureFound)
           {
@@ -431,13 +431,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             LOG_VARD(t2);
           }*/
 
-          if (_isPark(area))
+          if (_isPark(polyNeighbor))
           {
-            otherParkPolyHasName = !area->getTags().get("name").trimmed().isEmpty();
-            otherParkPolyNameScore = nameScorer.getNameScore(poi, area);
+            otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
+            otherParkPolyNameScore = nameScorer.getNameScore(poi, polyNeighbor);
             otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
-            if (areaGeom->contains(_poiGeom.get()))
+            if (polyNeighborGeom->contains(_poiGeom.get()))
             {
               poiContainedInAnotherParkPoly = true;
 
@@ -446,14 +446,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                 LOG_DEBUG(
                   "poi examined and found to be contained within a park poly outside of this match " <<
                   "comparison: " << poi->toString());
-                LOG_DEBUG("park poly it is very close to: " << area->toString());
+                LOG_DEBUG("park poly it is very close to: " << polyNeighbor->toString());
               }
             }
 
-            if (areaGeom->intersects(_polyGeom.get()))
+            if (polyNeighborGeom->intersects(_polyGeom.get()))
             {
-              parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, area, poly);
-              parkPolyOverlapVal = OverlapExtractor().extract(*_map, area, poly);
+              parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, polyNeighbor, poly);
+              parkPolyOverlapVal = OverlapExtractor().extract(*_map, polyNeighbor, poly);
 
               //When just using intersection as the criteria, only found one instance when something
               //was considered as "very close" to a park poly when I didn't want it to be...so these
@@ -465,7 +465,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                 polyVeryCloseToAnotherParkPoly = true;
 
                 if (poly->getElementType() == ElementType::Way &&
-                    area->getElementType() == ElementType::Way)
+                    polyNeighbor->getElementType() == ElementType::Way)
                 {
                   //Calc the distance from the poi to the poly line instead of the poly itself.
                   //Calcing distance to the poly itself will always return 0 when the poi is in the
@@ -476,53 +476,56 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                       dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyWay));
                   poiToPolyNodeDist = polyLineStr->distance(_poiGeom.get());
-                  ConstWayPtr areaWay = dynamic_pointer_cast<const Way>(area);
+                  ConstWayPtr polyNeighborWay = dynamic_pointer_cast<const Way>(polyNeighbor);
                   //TODO: temp suppress "unable to connect all ways..." message here?
-                  shared_ptr<const LineString> areaLineStr =
+                  shared_ptr<const LineString> polyNeighborLineStr =
                       dynamic_pointer_cast<const LineString>(
-                        ElementConverter(_map).convertToLineString(areaWay));
-                  poiToOtherParkPolyNodeDist = areaLineStr->distance(_poiGeom.get());
+                        ElementConverter(_map).convertToLineString(polyNeighborWay));
+                  poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(_poiGeom.get());
                 }
 
                 if (testFeatureFound)
                 {
                   LOG_DEBUG(
-                    "poly examined and found very close to a another park poly: " << poly->toString());
-                  LOG_DEBUG("park poly it is very close to: " << area->toString());
+                    "poly examined and found very close to a another park poly: " <<
+                    poly->toString());
+                  LOG_DEBUG("park poly it is very close to: " << polyNeighbor->toString());
                 }
               }
             }
           }
-          else if ((_isPlayground(area) || _isPlayArea(area)) && _polyGeom->contains(areaGeom.get()))
+          else if ((_isPlayground(polyNeighbor) || _isPlayArea(polyNeighbor)) &&
+                   _polyGeom->contains(polyNeighborGeom.get()))
           {
             polyContainsPlayAreaOrPlaygroundPoly = true;
 
             if (testFeatureFound)
             {
-              LOG_DEBUG("poly examined and found to contain a playground poly: " << poly->toString());
-              LOG_DEBUG("playground poly it contains: " << area->toString());
+              LOG_DEBUG(
+                "poly examined and found to contain a playground poly: " << poly->toString());
+              LOG_DEBUG("playground poly it contains: " << polyNeighbor->toString());
             }
           }
           else if (poiIsSport)
           {
-            //this is a little lose, b/c there could be more than one type match set of tags...
-            if (_isSport(area) && areaGeom->contains(_poiGeom.get()) &&
-                typeScorer.isExactTypeMatch(poi, area))
+            //this is a little loose, b/c there could be more than one type match set of tags...
+            if (_isSport(polyNeighbor) && polyNeighborGeom->contains(_poiGeom.get()) &&
+                typeScorer.isExactTypeMatch(poi, polyNeighbor))
             {
               sportPoiOnOtherSportPolyWithExactTypeMatch = true;
             }
           }
-          else if (OsmSchema::getInstance().isBuilding(area))
+          else if (OsmSchema::getInstance().isBuilding(polyNeighbor))
           {
-            if (areaGeom->contains(_poiGeom.get()))
+            if (polyNeighborGeom->contains(_poiGeom.get()))
             {
               poiOnBuilding = true;
             }
           }
           //type generic rules
-          else if (typeScorer.isTypeMatch(poi, area))
+          else if (typeScorer.isTypeMatch(poi, polyNeighbor))
           {
-            if (areaGeom->contains(_poiGeom.get()))
+            if (polyNeighborGeom->contains(_poiGeom.get()))
             {
               anotherPolyContainsPoiWithTypeMatch = true;
             }
@@ -536,12 +539,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           //TODO: change back
           /*LOG_WARN*/LOG_DEBUG(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-            "geometry: " << area->toString() << "\n" << e.what());
+            "geometry: " << polyNeighbor->toString() << "\n" << e.what());
           _badGeomCount++;
         }
       }
     }
-    areaNeighborItr++;
+    polyNeighborItr++;
   }
 
   const bool poiContainedInParkPoly =

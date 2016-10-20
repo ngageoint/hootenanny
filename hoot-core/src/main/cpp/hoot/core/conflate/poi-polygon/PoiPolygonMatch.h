@@ -151,7 +151,7 @@ private:
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
 
-  set<ElementId> _areaNeighborIds;
+  set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
 
   void _separateElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
