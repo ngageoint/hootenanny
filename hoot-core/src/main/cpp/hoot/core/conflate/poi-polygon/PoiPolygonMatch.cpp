@@ -49,6 +49,9 @@ QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyReviewRefIdsToDistances;
 
+const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
+const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
+
 //TODO: reduce these constructors
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -153,8 +156,6 @@ bool PoiPolygonMatch::isPoly(const Element& e)
          (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 }
 
-//TODO: define a poi poly poi category??
-
 bool PoiPolygonMatch::isPoi(const Element& e)
 {
   /*if (Log::getInstance().getLevel() == Log::Debug && e.getTags().get("uuid") == _testUuid)
@@ -197,10 +198,8 @@ bool PoiPolygonMatch::isArea(const Element& e)
   return isPoly(e) && !OsmSchema::getInstance().isBuilding(tags, e.getElementType());
 }
 
-void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
+void PoiPolygonMatch::_separateElementsByGeometryType(const ElementId& eid1, const ElementId& eid2)
 {
-  _class.setMiss();
-
   ConstElementPtr e1 = _map->getElement(eid1);
   ConstElementPtr e2 = _map->getElement(eid2);
 
@@ -215,22 +214,17 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     LOG_VARD(e2->getTags());
   }
 
-  ConstElementPtr poi, poly;
-  bool e1IsPoi = false;
+  _e1IsPoi = false;
   if (isPoi(*e1) && isPoly(*e2))
   {
-    _poiEid = eid1;
-    _polyEid = eid2;
-    poi = e1;
-    poly = e2;
-    e1IsPoi = true;
+    _poi = e1;
+    _poly = e2;
+    _e1IsPoi = true;
   }
   else if (isPoi(*e2) && isPoly(*e1))
   {
-    _poiEid = eid2;
-    _polyEid = eid1;
-    poi = e2;
-    poly = e1;
+    _poi = e2;
+    _poly = e1;
   }
   else
   {
@@ -240,13 +234,16 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
                                    eid2.toString());
   }
 
-  //GEOMETRY CONVERSION
+  _testFeatureFound =
+    _poly->getTags().get("uuid") == _testUuid || _poi->getTags().get("uuid") == _testUuid;
+}
 
+bool PoiPolygonMatch::_parseGeometries()
+{
   //TODO: temp suppress "unable to connect all ways..." message here?
-  shared_ptr<Geometry> polyGeom;
   try
   {
-    polyGeom = ElementConverter(_map).convertToGeometry(poly);
+    _polyGeom = ElementConverter(_map).convertToGeometry(_poly);
   }
   catch (const geos::util::TopologyException& e)
   {
@@ -255,26 +252,26 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       //TODO: change back to warn?
       /*LOG_WARN*/LOG_DEBUG(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << poly->toString() << "\n" << e.what());
+        "geometry: " << _poly->toString() << "\n" << e.what());
       _badGeomCount++;
     }
-    return;
+    return false;
   }
   //may need a better way to handle this...(already tried using isValid())
-  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  if (QString::fromStdString(_polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
       //TODO: change back to warn?
-      /*LOG_WARN*/LOG_DEBUG("Invalid polygon passed to PoiPolygonMatchCreator: " << polyGeom->toString());
+      /*LOG_WARN*/LOG_DEBUG("Invalid polygon passed to PoiPolygonMatchCreator: " << _polyGeom->toString());
       _badGeomCount++;
     }
-    return;
+    return false;
   }
-  shared_ptr<Geometry> poiGeom;
+
   try
   {
-    poiGeom = ElementConverter(_map).convertToGeometry(poi);
+    _poiGeom = ElementConverter(_map).convertToGeometry(_poi);
   }
   catch (const geos::util::TopologyException& e)
   {
@@ -283,15 +280,15 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       //TODO: change back to warn?
       /*LOG_WARN*/LOG_DEBUG(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << poi->toString() << "\n" << e.what());
+        "geometry: " << _poi->toString() << "\n" << e.what());
       _badGeomCount++;
     }
-    return;
+    return false;
   }
 
   try
   {
-    _distance = polyGeom->distance(poiGeom.get());
+    _distance = _polyGeom->distance(_poiGeom.get());
   }
   catch (const geos::util::TopologyException& e)
   {
@@ -299,29 +296,39 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     {
       //TODO: change back to warn?
       /*LOG_WARN*/LOG_DEBUG(
-        "Calculating the distance between the POI " << poi->toString() << "\n and polygon " <<
-        poly->toString() << "\n caused topology exception on conversion to a " << e.what());
+        "Calculating the distance between the POI " << _poi->toString() << "\n and polygon " <<
+        _poly->toString() << "\n caused topology exception on conversion to a " << e.what());
       _badGeomCount++;
     }
+    return false;
+  }
+
+  return true;
+}
+
+void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
+{
+  _class.setMiss();
+
+  _separateElementsByGeometryType(eid1, eid2);
+
+  if (!_parseGeometries())
+  {
     return;
   }
 
-  //CLASSIFICATION
-
   PoiPolygonEvidenceScorer evidenceScorer(
-    _matchDistance, _reviewDistance, _distance, _typeScoreThreshold, _nameScoreThreshold, _map,
-    _testUuid);
-  const int evidence = evidenceScorer.calculateEvidence(poi, poly);
-  if (evidence >= 3)
+    _matchDistance, _reviewDistance, _distance, _typeScoreThreshold, _nameScoreThreshold,
+    MATCH_EVIDENCE_THRESHOLD, _map, _testUuid);
+  const unsigned int evidence = evidenceScorer.calculateEvidence(_poi, _poly);
+  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
   }
-  else if (evidence >= 1)
+  else if (evidence >= REVIEW_EVIDENCE_THRESHOLD)
   {
     _class.setReview();
   }
-
-  //REVIEW REDUCTION
 
   if (evidence > 0)
   {
@@ -332,8 +339,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         _map, _areaNeighborIds, _poiNeighborIds, _distance, evidenceScorer.getNameScore(),
         evidenceScorer.getNameMatch(), evidenceScorer.getExactNameMatch(), _typeScoreThreshold,
         evidenceScorer.getTypeScore(), evidenceScorer.getTypeMatch(), _matchDistance,
-        _reviewDistance, polyGeom, poiGeom, evidence, _testUuid)
-        .triggersRule(poi, poly, externalMatchClass);
+        _reviewDistance, _polyGeom, _poiGeom, evidence, _testUuid)
+        .triggersRule(_poi, _poly, externalMatchClass);
     if (reviewReductionRuleTriggered)
     {
       //This could just be set to miss, except there is one case in ReviewReducer where a review is
@@ -342,46 +349,47 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     }
   }
 
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
+  if (_testFeatureFound)
   {
     LOG_VARD(_class);
     LOG_DEBUG("**************************");
   }
 
-  //DISTANCE TRUTHS
-
-  if (/*Log::getInstance().getLevel() == Log::Debug*/
-      ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
-    //output feature distances for all feature types which fell within the match threshold
-    const QString ref2 = poi->getTags().get("REF2");
-    const QString review = poi->getTags().get("REVIEW");
-    if (ref2 == poly->getTags().get("REF1").split(";")[0])
+    _recordDistanceTruth(evidenceScorer);
+  }
+}
+
+void PoiPolygonMatch::_recordDistanceTruth(const PoiPolygonEvidenceScorer& evidenceScorer)
+{
+  //output feature distances for all feature types which fell within the match threshold
+  const QString ref2 = _poi->getTags().get("REF2");
+  const QString review = _poi->getTags().get("REVIEW");
+  if (ref2 == _poly->getTags().get("REF1").split(";")[0])
+  {
+    if (_e1IsPoi)
     {
-      if (e1IsPoi)
-      {
-        _poiMatchRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
-        _polyMatchRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
-      }
-      else
-      {
-        _poiMatchRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
-        _polyMatchRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
-      }
+      _poiMatchRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
+      _polyMatchRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
     }
-    else if (review == poly->getTags().get("REF1").split(";")[0])
+    else
     {
-      if (e1IsPoi)
-      {
-        _poiReviewRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
-        _polyReviewRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
-      }
-      else
-      {
-        _poiReviewRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
-        _polyReviewRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
-      }
+      _poiMatchRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
+      _polyMatchRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
+    }
+  }
+  else if (review == _poly->getTags().get("REF1").split(";")[0])
+  {
+    if (_e1IsPoi)
+    {
+      _poiReviewRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
+      _polyReviewRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
+    }
+    else
+    {
+      _poiReviewRefIdsToDistances.insert(evidenceScorer.getType2BestKvp(), _distance);
+      _polyReviewRefIdsToDistances.insert(evidenceScorer.getType1BestKvp(), _distance);
     }
   }
 }
@@ -445,7 +453,7 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
 set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
 {
   set< pair<ElementId, ElementId> > result;
-  result.insert(pair<ElementId, ElementId>(_poiEid, _polyEid));
+  result.insert(pair<ElementId, ElementId>(_poi->getElementId(), _poly->getElementId()));
   return result;
 }
 
@@ -457,8 +465,8 @@ map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>
 //TODO: add back in more description
 QString PoiPolygonMatch::toString() const
 {
-  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poiEid.toString()).
-    arg(_polyEid.toString()).arg(_class.toString());
+  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poi->getElementId().toString()).
+    arg(_poly->getElementId().toString()).arg(_class.toString());
 }
 
 }

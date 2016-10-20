@@ -40,13 +40,19 @@
 namespace hoot
 {
 
+class PoiPolygonEvidenceScorer;
+
 /**
  * This is a very simple mechanism for matching POIs to polygons. See "Building to POI Conflation"
  * in the Hootenanny Algorithms document for more details.
  */
 class PoiPolygonMatch : public Match, public MatchDetails
 {
+
 public:
+
+  static const unsigned int MATCH_EVIDENCE_THRESHOLD;
+  static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
@@ -111,14 +117,20 @@ public:
 
 private:
 
+  //TODO: can probably get rid of these two eid's
   ElementId _eid1;
   ElementId _eid2;
   shared_ptr<const PoiPolygonRfClassifier> _rf;
   static QString _matchName;
-  ElementId _poiEid, _polyEid;
+  //ElementId _poiEid, _polyEid;
+  ConstElementPtr _poi;
+  ConstElementPtr _poly;
+  shared_ptr<Geometry> _poiGeom;
+  shared_ptr<Geometry> _polyGeom;
   MatchClassification _class;
   int _badGeomCount;
   ConstOsmMapPtr _map;
+  bool _e1IsPoi;
 
   double _distance;
   double _nameScore;
@@ -133,20 +145,25 @@ private:
   double _typeScoreThreshold;
 
   static QString _testUuid;
+  bool _testFeatureFound;
   static QMultiMap<QString, double> _poiMatchRefIdsToDistances;
   static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
-  //QString _t1BestKvp;
-  //QString _t2BestKvp;
 
   set<ElementId> _areaNeighborIds;
   set<ElementId> _poiNeighborIds;
 
-  static void _printMatchDistanceInfo(const QString matchType,
-                                      const QMultiMap<QString, double>& distanceInfo);
+  void _separateElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+
+  bool _parseGeometries();
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
+
+  void _recordDistanceTruth(const PoiPolygonEvidenceScorer& evidenceScorer);
+
+  static void _printMatchDistanceInfo(const QString matchType,
+                                      const QMultiMap<QString, double>& distanceInfo);
 
 };
 

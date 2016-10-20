@@ -41,7 +41,8 @@ class PoiPolygonEvidenceScorer
 public:
 
   PoiPolygonEvidenceScorer(double matchDistance, double _reviewDistance, double distance,
-                           double typeScoreThreshold, double nameScoreThreshold, ConstOsmMapPtr map,
+                           double typeScoreThreshold, double nameScoreThreshold,
+                           unsigned int matchEvidenceThreshold, ConstOsmMapPtr map,
                            QString testUuid);
 
   int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
@@ -63,6 +64,7 @@ private:
   double _distance;
   double _typeScoreThreshold;
   double _nameScoreThreshold;
+  unsigned int _matchEvidenceThreshold;
 
   double _typeScore;
   bool _typeMatch;

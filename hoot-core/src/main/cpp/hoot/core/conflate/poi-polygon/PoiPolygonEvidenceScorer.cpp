@@ -39,13 +39,16 @@ namespace hoot
 
 PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double reviewDistance,
                                                    double distance, double typeScoreThreshold,
-                                                   double nameScoreThreshold, ConstOsmMapPtr map,
+                                                   double nameScoreThreshold,
+                                                   unsigned int matchEvidenceThreshold,
+                                                   ConstOsmMapPtr map,
                                                    QString testUuid) :
 _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
 _distance(distance),
 _typeScoreThreshold(typeScoreThreshold),
 _nameScoreThreshold(nameScoreThreshold),
+_matchEvidenceThreshold(matchEvidenceThreshold),
 _map(map),
 _testUuid(testUuid)
 {
@@ -141,7 +144,7 @@ int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElemen
   _testFeatureFound =
     poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
 
-  int evidence = 0;
+  unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
 
@@ -167,7 +170,7 @@ int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElemen
 
   //no point in calc'ing the address match if we already have a match from the other evidence
   //TODO: make threshold levels constants
-  if (evidence >= 3)
+  if (evidence >= _matchEvidenceThreshold)
   {
     evidence += _getAddressEvidence(poi, poly);
   }
