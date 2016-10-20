@@ -159,6 +159,8 @@ public:
 
   ConstNetworkVertexPtr getToVertex() const;
 
+  bool isEdgeClosed() const;
+
   /**
    * Returns true if v is at the beginning or end of the string.
    */

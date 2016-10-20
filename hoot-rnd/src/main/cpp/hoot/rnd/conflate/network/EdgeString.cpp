@@ -353,6 +353,20 @@ ConstNetworkVertexPtr EdgeString::getToVertex() const
   return getTo()->getVertex(EdgeLocation::SLOPPY_EPSILON);
 }
 
+bool EdgeString::isEdgeClosed() const
+{
+  bool result = false;
+
+  // if the end of the subline isn't at a vertex.
+  if (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
+    _edges.back().getSubline()->isZeroLength())
+  {
+    result = true;
+  }
+
+  return result;
+}
+
 bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
 {
   bool result = false;
