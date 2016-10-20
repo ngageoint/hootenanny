@@ -39,6 +39,7 @@
         <commons-compress.version>1.0</commons-compress.version>
         <commons-codec.version>1.7</commons-codec.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
+        <commons-exec.version>1.3</commons-exec.version>
         <joda-time.version>2.3</joda-time.version>
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
@@ -50,12 +51,13 @@
         <antlr-runtime.version>3.4</antlr-runtime.version>
 
         <!-- Unit test tools section -->
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <mockito-all.version>1.9.5</mockito-all.version>
+        <mockito-all.version>1.10.19</mockito-all.version>
         <easymock.version>3.2</easymock.version>
-        <cpsuite.version>1.2.5</cpsuite.version>
-        <powermock.version>1.5.6</powermock.version>
+        <easymockclassextension.version>3.2</easymockclassextension.version>
+        <cpsuite.version>1.2.6</cpsuite.version>
+        <powermock.version>1.6.5</powermock.version>
     </properties>
 
     <repositories>
@@ -136,8 +138,8 @@
                     parallelism, but haven't been able to get them to work...so forking instead. -->
                     <!-- parallel>methods</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads -->
-                    <forkCount>4</forkCount>
-                    <reuseForks>true</reuseForks>
+                    <!--forkCount>4</forkCount-->
+                    <!--reuseForks>true</reuseForks-->
                     <printSummary>false</printSummary>
                     <groups>hoot.services.UnitTest</groups>
                     <skipTests>${skip.hoot.services.tests}</skipTests>
@@ -336,7 +338,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>db.properties</file>
+                                <file>src/main/resources/db/db.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -352,6 +354,13 @@
                 <groupId>org.glassfish.jersey</groupId>
                 <artifactId>jersey-bom</artifactId>
                 <version>${jersey.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -448,6 +457,11 @@
             <artifactId>commons-httpclient</artifactId>
             <version>${commons-httpclient.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>${commons-exec.version}</version>
+        </dependency>
 
         <!-- date/time parsing -->
         <dependency>
@@ -503,6 +517,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-spring</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
@@ -537,7 +556,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -548,17 +566,22 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
         </dependency>
 
         <!-- Jersey is for hosting RESTful web service endpoints -->
@@ -586,6 +609,20 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-multipart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-metainf-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-spring3</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-web</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
@@ -728,12 +765,12 @@
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymockclassextension</artifactId>
-            <version>${easymock.version}</version>
+            <version>${easymockclassextension.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- cpsuite allows for having separate unit and integration test suites -->
         <dependency>
-            <groupId>cpsuite</groupId>
+            <groupId>com.googlecode.cedar-common</groupId>
             <artifactId>cpsuite</artifactId>
             <version>${cpsuite.version}</version>
             <scope>test</scope>

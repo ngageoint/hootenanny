@@ -32,9 +32,10 @@
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/algorithms/KskipBigramDistance.h>
+#include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MaxWordSetDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
@@ -159,6 +160,19 @@ void BuildingRfClassifier::_createAllExtractors() const
   {
     _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
   }
+
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new KskipBigramDistance())));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new MaxWordSetDistance(new KskipBigramDistance()))));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new MeanWordSetDistance(new KskipBigramDistance()))));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new TranslateStringDistance(new KskipBigramDistance()))));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new TranslateStringDistance(new MaxWordSetDistance(new KskipBigramDistance())))));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    new TranslateStringDistance(new MeanWordSetDistance(new KskipBigramDistance())))));
 }
 
 void BuildingRfClassifier::_createBestExtractors() const
@@ -168,18 +182,12 @@ void BuildingRfClassifier::_createBestExtractors() const
   // this set was determined with experimentation using the Jakarta building data and weka.
   _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.0)));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.3)));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(new CentroidDistanceExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
-  //_extractors.push_back(shared_ptr<FeatureExtractor>(new OverlapExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new SmallerOverlapExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(1.45))))));
-
   _extractors.push_back(shared_ptr<FeatureExtractor>(
     new EdgeDistanceExtractor(new QuantileAggregator(0.4))));
-//  _extractors.push_back(shared_ptr<FeatureExtractor>(
-//    new EdgeDistanceExtractor(new QuantileAggregator(0.95))));
-
 }
 
 void BuildingRfClassifier::_createExtractors() const

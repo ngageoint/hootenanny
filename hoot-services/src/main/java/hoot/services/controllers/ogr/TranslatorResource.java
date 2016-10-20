@@ -38,61 +38,19 @@ import javax.ws.rs.core.Response;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.nodejs.ServerControllerBase;
 
 
+@Controller
 @Path("")
 public class TranslatorResource extends ServerControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
 
-    private static final Object procLock = new Object();
-    private static final Object portLock = new Object();
+    private static Process translationServiceProcess;
 
-    private static String currentPort;
-    private static Process transProc;
-
-    public TranslatorResource() {
-    }
-
-    public void startTranslationService() {
-        // set default default port and threadcount
-        try {
-            // Make sure to wipe out previosuly running servers.
-            stopServer(HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
-
-            // Probably an overkill but just in-case using synch lock
-            String currPort = TRANSLATION_SERVER_PORT;
-            synchronized (portLock) {
-                currentPort = currPort;
-            }
-
-            synchronized (procLock) {
-                String currThreadCnt = TRANSLATION_SERVER_THREAD_COUNT;
-                transProc = startServer(currPort, currThreadCnt, HOME_FOLDER + "/scripts/" + TRANSLATION_SERVER_SCRIPT);
-            }
-        }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-        }
-    }
-
-    public static void stopTranslationService() {
-        // This also gets called automatically from HootServletContext when
-        // service exits but should not be reliable since there are many path where it will not be invoked.
-        try {
-            // Destroy the reference to the process directly here via the Java
-            // API vs having the base class kill it with a unix command. Killing it via command causes
-            // the stxxl temp files created by hoot threads not to be cleaned up.
-            // stopServer(homeFolder + "/scripts/" + translationServerScript);
-            transProc.destroy();
-        }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-        }
-    }
+    public TranslatorResource() {}
 
     /**
      * Gets current status of translation server.
@@ -107,17 +65,54 @@ public class TranslatorResource extends ServerControllerBase {
     public Response isTranslationServiceRunning() {
         boolean isRunning;
         try {
-            isRunning = getStatus(transProc);
+            isRunning = getStatus(translationServiceProcess);
         }
-        catch (Exception ex) {
-            String msg = "Error starting translation service request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting status of Translation Service.  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("isRunning", isRunning);
-        res.put("port", currentPort);
+        JSONObject json = new JSONObject();
+        json.put("isRunning", isRunning);
+        json.put("port", TRANSLATION_SERVER_PORT);
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
+    }
+
+    public static void startTranslationService() {
+        try {
+            String translationServiceScript = HOME_FOLDER + TRANSLATION_SERVER_SCRIPT;
+
+            // Make sure to wipe out previously running servers.
+            stopServer(translationServiceScript);
+
+            logger.info("Starting Translation Service by running {} script", translationServiceScript);
+
+            // start Translaction Service
+            translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
+                    translationServiceScript);
+
+            logger.info("Translation Service started");
+        }
+        catch (Exception e) {
+            String msg = "Error starting Translation Service.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    public static void stopTranslationService() {
+        // This also gets called automatically from HootServletContext when
+        // service exits but should not be reliable since there are many path where it will not be invoked.
+        try {
+            // Destroy the reference to the process directly here via the Java
+            // API vs having the base class kill it with a unix command. Killing it via command causes
+            // the stxxl temp files created by hoot threads not to be cleaned up.
+            // stopServer(homeFolder + "/scripts/" + translationServerScript);
+            translationServiceProcess.destroy();
+        }
+        catch (Exception e) {
+            String msg = "Error stopping Translation Service.  Cause: " + e.getMessage();
+            throw new RuntimeException(msg, e);
+        }
     }
 }

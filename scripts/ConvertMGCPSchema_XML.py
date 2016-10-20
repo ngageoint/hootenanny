@@ -500,7 +500,7 @@ def readFeatures(xmlDoc,funcList):
                 'GM_Surface':'none', 'GM_Curve':'none','GM_Point':'none' }
 
     # These attributes have non-standard defaults
-    customDefVal = {'ACC':'1', 'TXT':'N_A', 'SDP':'N_A', 'CON':'998'}
+    customDefVal = {'ACC':'1','TXT':'N_A','SDP':'N_A','CON':'998','FUN':'6'}
 
     tSchema = {}
 
@@ -544,7 +544,7 @@ def readFeatures(xmlDoc,funcList):
             # The short version of the feature definition
             if node.localName == 'typeName':
                 #print 'Feature Type: ', processSingleNode(node,'gco:LocalName')
-                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName')
+                tSchema[rawfCode]['desc'] = processSingleNode(node,'gco:LocalName').replace(' Area Feature','').replace(' Point Feature','').replace(' Line Feature','')
                 continue
 
             # The long version of the feature definition

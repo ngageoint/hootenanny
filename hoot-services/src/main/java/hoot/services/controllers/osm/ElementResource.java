@@ -27,8 +27,6 @@
 package hoot.services.controllers.osm;
 
 
-import java.io.IOException;
-import java.sql.Connection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +47,8 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 
 import com.querydsl.core.Tuple;
@@ -60,14 +60,15 @@ import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
 /**
  * Service endpoint for retrieving elements by ID
  */
+@Controller
 @Path("/api/0.6")
+@Transactional
 public class ElementResource {
     private static final Logger logger = LoggerFactory.getLogger(ElementResource.class);
 
@@ -76,8 +77,7 @@ public class ElementResource {
     private static final Pattern UNIQUE_ELEMENT_ID_PATTERN = Pattern.compile(UNIQUE_ELEMENT_ID_REGEX);
 
 
-    public ElementResource() {
-    }
+    public ElementResource() {}
 
     /**
      * Returns a single element item's XML for a given map without its element
@@ -106,8 +106,8 @@ public class ElementResource {
         }
 
         Document elementDoc;
-        try (Connection conn = DbUtils.createConnection()) {
-            elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, false, conn);
+        try {
+            elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, false);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -116,13 +116,6 @@ public class ElementResource {
             String msg = "Error getting element elementId = " +
                     elementId + ", elementType = " + elementType + ", mapId = " + mapId;
             throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();
@@ -155,10 +148,9 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Document elementDoc = null;
-        try (Connection conn = DbUtils.createConnection()) {
-            elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true,
-                    false, conn);
+        Document elementDoc;
+        try {
+            elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementTypeVal, true, false);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -166,13 +158,6 @@ public class ElementResource {
         catch (Exception e) {
             String msg = "Error getting element by unique id.  elementId = " + elementId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();
@@ -205,24 +190,16 @@ public class ElementResource {
         }
 
         Document elementDoc = null;
-        try (Connection conn = DbUtils.createConnection()) {
-            elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, true, conn);
+        try {
+            elementDoc = getElementXml(mapId, elementId, elementTypeVal, false, true);
         }
         catch (WebApplicationException wae) {
             throw wae;
         }
         catch (Exception e) {
-            e.printStackTrace();
             String msg = "Error getting full element data!" +
                     "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();
@@ -261,9 +238,8 @@ public class ElementResource {
         }
 
         Document elementDoc = null;
-        try (Connection conn = DbUtils.createConnection()) {
-            elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementType, true, true,
-                    conn);
+        try {
+            elementDoc = getElementXml(elementIdParts[0], Long.parseLong(elementIdParts[2]), elementType, true, true);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -273,22 +249,15 @@ public class ElementResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
-        }
-
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementXml(String mapId, long elementId, ElementType elementType,
-            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) {
+            boolean multiLayerUniqueElementIds, boolean addChildren) {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist")
@@ -305,15 +274,14 @@ public class ElementResource {
         elementIds.add(elementId);
 
         List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType,
-                elementIds, dbConn);
+                elementIds);
 
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
             String msg = "Element with ID: " + elementId + " and type: " + elementType + " does not exist.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
-        Element element = ElementFactory.create(elementType, elementRecords.get(0), dbConn,
-                Long.parseLong(mapId));
+        Element element = ElementFactory.create(elementType, elementRecords.get(0), Long.parseLong(mapId));
 
         Users usersTable = elementRecords.get(0).get(QUsers.users);
         Document elementDoc = null;
@@ -364,8 +332,8 @@ public class ElementResource {
         }
 
         Document elementDoc;
-        try (Connection conn = DbUtils.createConnection()) {
-            elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true, conn);
+        try {
+            elementDoc = getElementsXml(mapId, elemIds, elementTypeVal, false, true);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -376,21 +344,15 @@ public class ElementResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        try {
-            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000));
-        }
-        catch (IOException ignored) {
-        }
-
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
     private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,
-            boolean multiLayerUniqueElementIds, boolean addChildren, Connection dbConn) {
+            boolean multiLayerUniqueElementIds, boolean addChildren) {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, dbConn, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist") ||
@@ -410,14 +372,14 @@ public class ElementResource {
         }
 
         List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType,
-                elementIds, dbConn);
+                elementIds);
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
             String msg = "Elements with IDs: " + StringUtils.join(elementIdsStr, ",")
                     + " and type: " + elementType + " does not exist.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
-        Document elementDoc = null;
+        Document elementDoc;
         try {
             elementDoc = XmlDocumentBuilder.create();
         }
@@ -429,7 +391,7 @@ public class ElementResource {
         elementDoc.appendChild(elementRootXml);
 
         for (Tuple elementRecord : elementRecords) {
-            Element element = ElementFactory.create(elementType, elementRecord, dbConn, Long.parseLong(mapId));
+            Element element = ElementFactory.create(elementType, elementRecord, Long.parseLong(mapId));
             Users usersTable = elementRecord.get(QUsers.users);
             org.w3c.dom.Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
                     usersTable.getDisplayName(), multiLayerUniqueElementIds, addChildren);

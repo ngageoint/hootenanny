@@ -440,6 +440,11 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/aggregator/MinAggregator.cpp \
     src/main/cpp/hoot/core/algorithms/aggregator/RmseAggregator.cpp \
     src/main/cpp/hoot/core/algorithms/aggregator/SigmaAggregator.cpp \
+    src/main/cpp/hoot/core/algorithms/zindex/BBox.cpp \
+    src/main/cpp/hoot/core/algorithms/zindex/LongBox.cpp \
+    src/main/cpp/hoot/core/algorithms/zindex/Range.cpp \
+    src/main/cpp/hoot/core/algorithms/zindex/ZCurveRanger.cpp \
+    src/main/cpp/hoot/core/algorithms/zindex/ZValue.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCountCmd.cpp \
     src/main/cpp/hoot/core/scoring/AttributeCount.cpp \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.cpp \
@@ -506,6 +511,7 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/WayMatchStringSplitter.cpp \
     src/main/cpp/hoot/core/filters/ParallelWayCriterion.cpp \
@@ -740,6 +746,11 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/aggregator/MinAggregator.h \
     src/main/cpp/hoot/core/algorithms/aggregator/MaxAggregator.h \
     src/main/cpp/hoot/core/algorithms/aggregator/RmseAggregator.h \
+    src/main/cpp/hoot/core/algorithms/zindex/BBox.h \
+    src/main/cpp/hoot/core/algorithms/zindex/LongBox.h \
+    src/main/cpp/hoot/core/algorithms/zindex/Range.h \
+    src/main/cpp/hoot/core/algorithms/zindex/ZCurveRanger.h \
+    src/main/cpp/hoot/core/algorithms/zindex/ZValue.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatch.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMergerCreator.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatchCreator.h \
@@ -1027,6 +1038,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
+    src/main/cpp/hoot/core/algorithms/KskipBigramDistance.h \
     src/main/cpp/hoot/core/filters/ArbitraryCriterion.h \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
     src/main/cpp/hoot/core/visitors/FindWaysVisitor.h \

@@ -1,11 +1,3 @@
-# Hootenanny Change Log: 0.2.26
-
-**PENDING**
-
-# Hootenanny Change Log: 0.2.24
-
-**PENDING**
-
 # Hootenanny Change Log: 0.2.23
 * [hootenanny-ui #297:](https://github.com/ngageoint/hootenanny-ui/issues/297) Merge VersionInfo.js and About.js
 * [hootenanny-ui #290:](https://github.com/ngageoint/hootenanny-ui/issues/290) Export hangs after resolving all reviews with cropped Haiti Port Au Prince data

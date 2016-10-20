@@ -43,8 +43,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+
+import hoot.services.controllers.ingest.RasterToTilesService;
 
 
+@Controller
 @Path("/clipdataset")
 public class ClipDatasetResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
@@ -86,6 +90,7 @@ public class ClipDatasetResource extends JobControllerBase {
 
             // Density Raster
             JSONArray rasterTilesArgs = new JSONArray();
+
             JSONObject rasterTilesparam = new JSONObject();
             rasterTilesparam.put("value", clipOutputName);
             rasterTilesparam.put("paramtype", String.class.getName());
@@ -98,18 +103,14 @@ public class ClipDatasetResource extends JobControllerBase {
             rasterTilesparam.put("isprimitivetype", "false");
             rasterTilesArgs.add(rasterTilesparam);
 
-            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                           "hoot.services.controllers.ingest.RasterToTilesService",
+            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
                            "ingestOSMResourceDirect");
 
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(clipCommand);
             jobArgs.add(ingestOSMResource);
 
-            postChainJobRquest(uuid, jobArgs.toJSONString());
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            postChainJobRequest(uuid, jobArgs.toJSONString());
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;

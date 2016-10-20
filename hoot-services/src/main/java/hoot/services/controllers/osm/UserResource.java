@@ -27,10 +27,8 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.models.db.QUsers.users;
+import static hoot.services.utils.DbUtils.createQuery;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -47,33 +45,30 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.querydsl.sql.Configuration;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
 /**
  * Service endpoint for OSM user information
  */
+@Controller
 @Path("/user/{userId}")
+@Transactional
 public class UserResource {
     private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
-    public UserResource() {
-    }
+    public UserResource() {}
 
     /**
      * Service method endpoint for retrieving OSM user information
@@ -92,14 +87,13 @@ public class UserResource {
     @GET
     @Produces(MediaType.TEXT_XML)
     public Response get(@PathParam("userId") String userId) {
-        logger.debug("Retrieving user with ID: {} ...", userId.trim());
+        Document responseDoc;
 
-        Document responseDoc = null;
-        try (Connection conn = DbUtils.createConnection()) {
+        try {
             long userIdNum;
             try {
                 // input mapId may be a map ID or a map name
-                userIdNum = ModelDaoUtils.getRecordIdForInputString(userId, conn, users, users.id, users.displayName);
+                userIdNum = ModelDaoUtils.getRecordIdForInputString(userId, users, users.id, users.displayName);
             }
             catch (Exception e) {
                 if (e.getMessage().startsWith("Multiple records exist") ||
@@ -114,11 +108,7 @@ public class UserResource {
             }
 
             // there is only ever one test user
-            Users user = new SQLQuery<>(conn, DbUtils.getConfiguration())
-                    .select(users)
-                    .from(users)
-                    .where(users.id.eq(userIdNum))
-                    .fetchOne();
+            Users user = createQuery().select(users).from(users).where(users.id.eq(userIdNum)).fetchOne();
 
             if (user == null) {
                 String message = "No user exists with ID: " + userId + ".  Please request a valid user.";
@@ -127,15 +117,12 @@ public class UserResource {
 
             responseDoc = writeResponse(new User(user));
         }
-        catch (SQLException | ParserConfigurationException e) {
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (Exception e) {
             String message = "Error fetching OSM user data!";
             throw new WebApplicationException(e, Response.serverError().entity(message).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(responseDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(responseDoc)).build();
@@ -143,8 +130,7 @@ public class UserResource {
 
     /**
      * Service method endpoint for retrieving OSM user information. This rest
-     * end point retrieves user based on user email. If it does not exist then
-     * it creates first.
+     * end point retrieves user based on user email. If it does not exist then it creates first.
      * 
      * @param userEmail
      *            User email to save/get
@@ -154,22 +140,16 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public UserSaveResponse getSaveUser(@QueryParam("userEmail") String userEmail) {
-        UserSaveResponse response;
-        try (Connection connection = DbUtils.createConnection()) {
-            Users user = getOrSaveByEmail(userEmail, connection);
-            if (user == null) {
-                String msg = "SQL Insert failed.";
-                throw new WebApplicationException(Response.serverError().entity(msg).build());
-            }
-
-            response = new UserSaveResponse(user);
+        Users user;
+        try {
+            user = getOrSaveByEmail(userEmail);
         }
-        catch (SQLException e) {
+        catch (Exception e) {
             String msg = "Error saving user: " + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return response;
+        return new UserSaveResponse(user);
     }
 
     /**
@@ -183,40 +163,34 @@ public class UserResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public UsersGetResponse getAllUsers() {
-        try (Connection connection = DbUtils.createConnection()) {
-            List<Users> res = retrieveAll(connection);
-            UsersGetResponse response = new UsersGetResponse(res);
-            return response;
+        List<Users> users;
+        try {
+            users = retrieveAllUsers();
         }
-        catch (Exception ex) {
-            String message = "Error getting all users: " + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(message).build());
+        catch (Exception e) {
+            String msg = "Error getting all users: " + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return new UsersGetResponse(users);
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {
-        logger.debug("Building response...");
-
         Document responseDoc = XmlDocumentBuilder.create();
         Element osmElement = OsmResponseHeaderGenerator.getOsmHeader(responseDoc);
-        Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */-1);
+        Element userElement = user.toXml(osmElement, /* user.numChangesetsModified() */ -1);
         osmElement.appendChild(userElement);
         responseDoc.appendChild(osmElement);
 
         return responseDoc;
     }
 
-    private static List<Users> retrieveAll(Connection connection) {
-        List<Users> users = new SQLQuery<>(connection, DbUtils.getConfiguration())
-                .select(QUsers.users)
-                .from(QUsers.users)
-                .orderBy(QUsers.users.displayName.asc())
-                .fetch();
-        return users;
+    private static List<Users> retrieveAllUsers() {
+        return createQuery().select(QUsers.users).from(QUsers.users).orderBy(QUsers.users.displayName.asc()).fetch();
     }
 
-    private static Users getOrSaveByEmail(String userEmail, Connection connection) {
-        Users users = (new SQLQuery<>(connection, DbUtils.getConfiguration()))
+    private static Users getOrSaveByEmail(String userEmail) {
+        Users users = createQuery()
                 .select(QUsers.users)
                 .from(QUsers.users)
                 .where(QUsers.users.email.equalsIgnoreCase(userEmail))
@@ -224,9 +198,13 @@ public class UserResource {
 
         // none then create
         if (users == null) {
-            long nCreated = insert(userEmail, connection);
-            if (nCreated > 0) {
-                users = (new SQLQuery<>(connection, DbUtils.getConfiguration()))
+            long rowCount = createQuery().insert(QUsers.users)
+                    .columns(QUsers.users.email, QUsers.users.displayName)
+                    .values(userEmail, userEmail)
+                    .execute();
+
+            if (rowCount > 0) {
+                users = createQuery()
                         .select(QUsers.users)
                         .from(QUsers.users)
                         .where(QUsers.users.email.equalsIgnoreCase(userEmail))
@@ -235,18 +213,5 @@ public class UserResource {
         }
 
         return users;
-    }
-
-    private static long insert(String email, Connection connection) {
-        SQLInsertClause cl = createInsertClause(email, connection);
-        long nInserted = cl.execute();
-        return nInserted;
-    }
-
-    private static SQLInsertClause createInsertClause(String email, Connection connection) {
-        Configuration configuration = DbUtils.getConfiguration();
-        SQLInsertClause cl = new SQLInsertClause(connection, configuration, users).
-                columns(users.email, users.displayName).values(email, email);
-        return cl;
     }
 }

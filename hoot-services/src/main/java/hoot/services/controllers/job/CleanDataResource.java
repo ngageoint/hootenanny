@@ -41,8 +41,10 @@ import javax.ws.rs.core.Response;
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/cleandata")
 public class CleanDataResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(CleanDataResource.class);
@@ -62,8 +64,7 @@ public class CleanDataResource extends JobControllerBase {
      * 
      * POST hoot-services/job/cleandata/execute
      * 
-     * { "INPUT_TYPE":"DB", "INPUT":"DcGisRoads", "OUTPUT_TYPE":"DB",
-     * "OUTPUT":"DcGisRoadsOUt5" }
+     * { "INPUT_TYPE":"DB", "INPUT":"DcGisRoads", "OUTPUT_TYPE":"DB", "OUTPUT":"DcGisRoadsOUt5" }
      * 
      * @param params
      *            [OMS|DB]
@@ -79,13 +80,10 @@ public class CleanDataResource extends JobControllerBase {
         try {
             JSONArray commandArgs = parseParams(params);
             String argStr = createPostBody(commandArgs);
-            postJobRquest(uuid, argStr);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            postJobRequest(uuid, argStr);
         }
         catch (Exception e) {
-            String msg = "Error processing data clean request: " + e.getMessage();
+            String msg = "Error processing data clean request.   Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

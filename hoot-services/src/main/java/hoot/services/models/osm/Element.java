@@ -26,7 +26,11 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
+import static hoot.services.models.db.QChangesets.changesets;
+import static hoot.services.models.db.QUsers.users;
+import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,21 +54,13 @@ import org.w3c.dom.NodeList;
 
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
-import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QCurrentNodes;
-import hoot.services.models.db.QCurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelations;
-import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.models.db.QCurrentWays;
-import hoot.services.models.db.QUsers;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
+import hoot.services.utils.PostgresUtils;
 
 
 /**
@@ -75,12 +71,6 @@ import hoot.services.utils.DbUtils.EntityChangeType;
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger logger = LoggerFactory.getLogger(Element.class);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
-
-    protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
-    protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-    protected static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-    protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-    protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 
@@ -110,11 +100,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * upload request
      */
     private long requestChangesetId = -1;
-
-    /**
-     * a JDBC Connection
-     */
-    protected Connection conn;
 
     /**
      * The element's ID before it is updated by a changeset diff
@@ -167,14 +152,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         this.requestChangesetId = id;
     }
 
-    public Connection getDbConnection() {
-        return conn;
-    }
-
-    public void setDbConnection(Connection connection) {
-        conn = connection;
-    }
-
     public static DateTimeFormatter getTimeFormatter() {
         return TIME_FORMATTER;
     }
@@ -219,9 +196,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         this.entityChangeType = entityChangeType;
     }
 
-    public Element(Connection conn) {
-        this.conn = conn;
-    }
+    public Element() {}
 
     /**
      * Returns the ID of the element associated services database record
@@ -348,7 +323,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             }
 
             element.setAttribute("id", id);
-
             element.setAttribute("visible", String.valueOf(MethodUtils.invokeMethod(record, "getVisible")));
             element.setAttribute("version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion")));
             element.setAttribute("changeset", String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId")));
@@ -462,15 +436,13 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      *            type of elements to be returned
      * @param elementIds
      *            IDs of the elements to be returned
-     * @param dbConn
-     *            JDBC Connection
      * @return a set of element records
      */
-    static List<?> getElementRecords(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn) {
-        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+    static List<?> getElementRecords(long mapId, ElementType elementType, Set<Long> elementIds) {
+        Element prototype = ElementFactory.create(mapId, elementType);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .select(prototype.getElementTable())
                     .from(prototype.getElementTable())
                     .where(prototype.getElementIdField().in(elementIds))
@@ -491,21 +463,16 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      *            type of elements to be returned
      * @param elementIds
      *            IDs of the elements to be returned
-     * @param dbConn
-     *            JDBC Connection
      * @return a set of element records
      */
-    public static List<?> getElementRecordsWithUserInfo(long mapId, ElementType elementType, Set<Long> elementIds,
-            Connection dbConn) {
-        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+    public static List<?> getElementRecordsWithUserInfo(long mapId, ElementType elementType, Set<Long> elementIds) {
+        Element prototype = ElementFactory.create(mapId, elementType);
 
         if (!elementIds.isEmpty()) {
-            QChangesets changesets = QChangesets.changesets;
-            QUsers users = QUsers.users;
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(String.valueOf(mapId)))
+            return createQuery(String.valueOf(mapId))
                     .select(prototype.getElementTable(), users, changesets)
                     .from(prototype.getElementTable())
-                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id))
+                    .join(changesets).on(prototype.getChangesetIdField().eq(changesets.id))
                     .join(users).on(changesets.userId.eq(users.id))
                     .where(prototype.getElementIdField().in(elementIds))
                     .orderBy(prototype.getElementIdField().asc())
@@ -532,17 +499,12 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * @param warnOnNothingRemoved
      *            if true, a warning will be logged if no related records were
      *            removed
-     * @param dbConn
-     *            JDBC Connection
      */
     public static void removeRelatedRecords(long mapId, RelationalPathBase<?> relatedRecordTable,
-            NumberPath<Long> joinField, Set<Long> elementIds, boolean warnOnNothingRemoved, Connection dbConn) {
-        logger.debug("Removing related records...");
-
+            NumberPath<Long> joinField, Set<Long> elementIds, boolean warnOnNothingRemoved) {
         long recordsProcessed = 0;
         if ((relatedRecordTable != null) && (joinField != null)) {
-            SQLDeleteClause sqldelete = new SQLDeleteClause(dbConn, DbUtils.getConfiguration(mapId),
-                    relatedRecordTable);
+            SQLDeleteClause sqldelete = createQuery(mapId).delete(relatedRecordTable);
 
             recordsProcessed = 0;
 
@@ -576,15 +538,13 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      *            the type of element to check existence for
      * @param elementIds
      *            a collection of element IDs
-     * @param dbConn
-     *            JDBC Connection
      * @return true if element exist for every input element ID; false otherwise
      */
-    public static boolean allElementsExist(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn) {
-        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+    public static boolean allElementsExist(long mapId, ElementType elementType, Set<Long> elementIds) {
+        Element prototype = ElementFactory.create(mapId, elementType);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .from(prototype.getElementTable())
                     .where(prototype.getElementIdField().in(elementIds))
                     .fetchCount() == elementIds.size();
@@ -602,16 +562,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      *            the type of element to check visibility for
      * @param elementIds
      *            a collection of element IDs
-     * @param dbConn
-     *            JDBC Connection
      * @return true if every node associated with the corresponding input node
      *         ID is visible
      */
-    public static boolean allElementsVisible(long mapId, ElementType elementType, Set<Long> elementIds, Connection dbConn) {
-        Element prototype = ElementFactory.create(mapId, elementType, dbConn);
+    public static boolean allElementsVisible(long mapId, ElementType elementType, Set<Long> elementIds) {
+        Element prototype = ElementFactory.create(mapId, elementType);
 
         if (!elementIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
+            return createQuery(mapId)
                     .from(prototype.getElementTable())
                     .where(prototype.getElementIdField().in(elementIds)
                             .and(prototype.getElementVisibilityField().eq(true)))
@@ -701,8 +659,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Parses tags from the element XML and returns them in a map
      */
     static Map<String, String> parseTags(org.w3c.dom.Node elementXml) {
-        logger.debug("Parsing element tags...");
-
         Map<String, String> tags = new HashMap<>();
         try {
             // using xpath api here to get the tags is *very* slow, since it
@@ -730,14 +686,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     org.w3c.dom.Element addTagsXml(org.w3c.dom.Element elementXml) {
         try {
             Document doc = elementXml.getOwnerDocument();
+
             // We want tags map sorted
             Map<String, String> tags = new TreeMap<>(this.getTags());
 
             for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
                 org.w3c.dom.Element tagElement = doc.createElement("tag");
                 tagElement.setAttribute("k", tagEntry.getKey());
-                tagElement.setAttribute("v",
-                        hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
+                tagElement.setAttribute("v", encodeURIComponentForJavaScript(tagEntry.getValue()));
                 elementXml.appendChild(tagElement);
             }
 

@@ -26,17 +26,14 @@
  */
 package hoot.services.controllers.info;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -45,29 +42,23 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import hoot.services.UnitTest;
+import hoot.services.testsupport.HootServicesJerseyTestAbstract;
 
 
-//Use PowerMock here instead of Mockito, so we can mock a static method.
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ BuildInfo.class })
-public class AboutResourceTest extends JerseyTest {
+public class AboutResourceTest extends HootServicesJerseyTestAbstract {
 
     public AboutResourceTest() {}
 
-    @Override
-    protected Application configure() {
-        return new ResourceConfig(AboutResource.class);
-    }
-
-
-    private static void mockBuildInfo() throws IOException {
+    private static void mockBuildInfo() {
         // mock the existence of the build info properties
         Properties buildInfoProps = new Properties();
         buildInfoProps.setProperty("name", "Hootenanny Web Services");
         buildInfoProps.setProperty("version", "0.0.1");
         buildInfoProps.setProperty("user", "testuser");
         PowerMockito.mockStatic(BuildInfo.class);
-        PowerMockito.when(BuildInfo.getInstance()).thenReturn(buildInfoProps);
+        PowerMockito.when(BuildInfo.getInfo()).thenReturn(buildInfoProps);
     }
 
     @Test
@@ -75,35 +66,25 @@ public class AboutResourceTest extends JerseyTest {
     public void getServicesVersionInfo() throws IOException {
         mockBuildInfo();
 
-        VersionInfo responseData = null;
-        try {
-            responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        VersionInfo responseData =
+                target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
 
-        Assert.assertEquals("Hootenanny Web Services", responseData.getName());
-        Assert.assertEquals("0.0.1", responseData.getVersion());
-        Assert.assertEquals("testuser", responseData.getBuiltBy());
+        assertEquals("Hootenanny Web Services", responseData.getName());
+        assertEquals("0.0.1", responseData.getVersion());
+        assertEquals("testuser", responseData.getBuiltBy());
     }
 
     @Test
     @Category(UnitTest.class)
-    public void getCoreVersionInfo() throws IOException {
+    public void getCoreVersionInfo() throws Exception {
         mockBuildInfo();
 
-        VersionInfo responseData = null;
-        try {
-            responseData = target("/about/coreVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        VersionInfo responseData =
+                target("/about/coreVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
 
-        Assert.assertEquals("Hootenanny Core", responseData.getName());
-        Assert.assertEquals("0.2.23_1036_ga13f8a9_dirty", responseData.getVersion());
-        Assert.assertNotNull("vagrant", responseData.getBuiltBy());
+        assertEquals("Hootenanny Core", responseData.getName());
+        assertEquals("0.2.23_1036_ga13f8a9_dirty", responseData.getVersion());
+        assertNotNull("vagrant", responseData.getBuiltBy());
     }
 
     @Test
@@ -111,18 +92,13 @@ public class AboutResourceTest extends JerseyTest {
     public void getCoreVersionDetail() throws IOException {
         mockBuildInfo();
 
-        CoreDetail responseData = null;
-        try {
-            responseData = target("/about/coreVersionDetail").request(MediaType.APPLICATION_JSON).get(CoreDetail.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response: " + e.getResponse());
-        }
+        CoreDetail responseData =
+                target("/about/coreVersionDetail").request(MediaType.APPLICATION_JSON).get(CoreDetail.class);
 
         // not a great way to test this, but haven't thought of anything better yet
         String firstEnvInfo = responseData.getEnvironmentInfo()[0];
-        Assert.assertFalse(firstEnvInfo.contains("Built"));
-        Assert.assertTrue(firstEnvInfo.contains("VersionCmd"));
+        assertFalse(firstEnvInfo.contains("Built"));
+        assertTrue(firstEnvInfo.contains("VersionCmd"));
     }
 
     @Test
@@ -132,50 +108,44 @@ public class AboutResourceTest extends JerseyTest {
         PowerMockito.mockStatic(BuildInfo.class);
 
         // simulate the build.info file not existing
-        PowerMockito.when(BuildInfo.getInstance()).thenThrow(IOException.class);
+        PowerMockito.when(BuildInfo.getInfo()).thenThrow(IOException.class);
 
-        VersionInfo responseData = null;
-        try {
-            responseData = target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
-        }
-        catch (WebApplicationException e) {
-            Assert.fail("Unexpected response; " + e.getResponse());
-        }
+        VersionInfo responseData =
+                target("/about/servicesVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
 
-        Assert.assertEquals("unknown", responseData.getName());
-        Assert.assertEquals("unknown", responseData.getVersion());
-        Assert.assertEquals("unknown", responseData.getBuiltBy());
+        assertEquals("unknown", responseData.getName());
+        assertEquals("unknown", responseData.getVersion());
+        assertEquals("unknown", responseData.getBuiltBy());
     }
 
     @Test
     @Category(UnitTest.class)
     public void testCoreVersionParser() throws Exception {
         AboutResource aboutResource = new AboutResource();
-        Method privateMethod = AboutResource.class.getDeclaredMethod("parseCoreVersionOutOf", String.class,
-                Boolean.TYPE);
+        Method privateMethod = AboutResource.class.getDeclaredMethod("parseCoreVersionOutOf", String.class, Boolean.TYPE);
         privateMethod.setAccessible(true);
 
         String returnValue = (String) privateMethod.invoke(aboutResource,
                 "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", false);
-        Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "This is just a line" + System.lineSeparator() +
                         "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", true);
-        Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
                         + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)" + System.lineSeparator() +
                         "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant",
                 true);
-        Assert.assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
+        assertEquals("Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant", returnValue);
 
         returnValue = (String) privateMethod.invoke(aboutResource,
                 "14:27:08.974 WARN ...rc/main/cpp/hoot/core/Hoot.cpp( 135) " + System.lineSeparator() + " "
                         + "Cannot load library HootHadoop: (libhdfs.so.0: cannot open shared object file: No such file or directory)",
                 true);
 
-        Assert.assertEquals("Unable to determine!", returnValue);
+        assertEquals("Unable to determine!", returnValue);
     }
 }

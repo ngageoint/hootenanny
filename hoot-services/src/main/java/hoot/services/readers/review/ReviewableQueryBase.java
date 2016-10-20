@@ -26,23 +26,15 @@
  */
 package hoot.services.readers.review;
 
-import java.sql.Connection;
-
 
 class ReviewableQueryBase {
-    private final Connection connection;
     private long mapId = -1;
-
-    protected Connection getConnection() {
-        return connection;
-    }
 
     protected long getMapId() {
         return mapId;
     }
 
-    ReviewableQueryBase(Connection connection, long mapId) {
-        this.connection = connection;
+    ReviewableQueryBase(long mapId) {
         this.mapId = mapId;
     }
 }

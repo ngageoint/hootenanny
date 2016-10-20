@@ -27,29 +27,26 @@
 package hoot.services.readers.review;
 
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
-
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableStatistics;
-import hoot.services.utils.DbUtils;
 
 
 class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);
 
-    ReviewableStatisticsQuery(Connection connection, long mapId) {
-        super(connection, mapId);
+    ReviewableStatisticsQuery(long mapId) {
+        super(mapId);
     }
 
     private long getTotalReviewablesCount() {
-        return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
+        return createQuery(super.getMapId())
                 .select()
                 .from(currentRelations)
                 .where(Expressions.booleanTemplate("tags->'type' = 'review'"))
@@ -57,7 +54,7 @@ class ReviewableStatisticsQuery extends ReviewableQueryBase implements IReviewab
     }
 
     private long getRemainingReviewablesCount() {
-        return new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration(super.getMapId()))
+        return createQuery(super.getMapId())
                 .select()
                 .from(currentRelations)
                 .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'"))

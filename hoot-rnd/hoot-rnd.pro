@@ -52,6 +52,18 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkExtractorTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeMatchTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeSublineMatchTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeStringTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeSublineTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/EdgeLocationTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp
 
 HEADERS += \
 

@@ -40,14 +40,15 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 
+@Controller
 @Path("/document")
 public class DocsResource {
     private static final Logger logger = LoggerFactory.getLogger(DocsResource.class);
 
-    public DocsResource() {
-    }
+    public DocsResource() {}
 
     /**
      * REST end point for user document

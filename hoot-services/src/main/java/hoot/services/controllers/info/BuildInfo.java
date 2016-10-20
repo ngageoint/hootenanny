@@ -56,7 +56,7 @@ final class BuildInfo {
      *
      * @return a set of build info properties
      */
-    public static synchronized Properties getInstance() {
+    public static Properties getInfo() {
         return info;
     }
 }

@@ -10,7 +10,7 @@ Feature: Manage Tab
             | Datasets |
             | Translation Assistant |
             | Translations |
-            | WFS Exports |
+            #| WFS Exports |
             | Basemaps |
             | Log |
             | Reports |
@@ -19,7 +19,8 @@ Feature: Manage Tab
 
     Scenario: Checking content of tabs
         When I click on the "Datasets" option in the "settingsSidebar"
-        And I should see "Add Dataset"
+        And I should see "Import Single Dataset"
+        And I should see "Import Multiple Datasets"
         And I should see "Add Folder"
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
         And I should see "Upload file(s)"
@@ -27,7 +28,7 @@ Feature: Manage Tab
         And I should see "Tag Schema"
         Then I click on the "Translations" option in the "settingsSidebar"
         And I should see "Add New Translation"
-        Then I click on the "WFS Exports" option in the "settingsSidebar"
+        #Then I click on the "WFS Exports" option in the "settingsSidebar"
         Then I click on the "Basemaps" option in the "settingsSidebar"
         And I should see "New Basemap"
         Then I click on the "Log" option in the "settingsSidebar"
@@ -86,7 +87,7 @@ Feature: Manage Tab
         And I click the "Add Dataset" context menu item
         And I select the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select "/test-files/dcpoi_clip.osm" dataset
-        And I fill "importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
+        And I fill "#importDatasetLayerName" with "dcpoi_clip_Cucumber_manage"
         Then I should see element "[id='importDatasetLayerName']" with value "dcpoi_clip_Cucumber_manage"
         And I should see element "#importDatasetPathName" with no value and placeholder "TestFolder/TestSubFolder"
         When I press "big.loud" span with text "Import"

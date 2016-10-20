@@ -61,10 +61,12 @@ import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.utils.CaseInsensitiveStringList;
 
 
+@Controller
 @Path("/customscript")
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
@@ -140,12 +142,9 @@ public class CustomScriptResource {
         try {
             saveArr.add(saveScript(scriptName, scriptDescription, script));
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error processing script save for: " + scriptName;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(saveArr.toString()).build();
@@ -169,11 +168,8 @@ public class CustomScriptResource {
 
             response.setScriptsModified(scriptsModified.toArray(new String[scriptsModified.size()]));
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception e) {
-            String msg = "Error processing save scripts request!";
+            String msg = "Error processing save scripts request.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -235,12 +231,9 @@ public class CustomScriptResource {
 
             retList.addAll(sortedScripts.values());
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error getting scripts list: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting scripts list.  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(retList.toString()).build();
@@ -373,9 +366,6 @@ public class CustomScriptResource {
                 }
             }
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptName;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -456,9 +446,6 @@ public class CustomScriptResource {
                 throw new IOException("Invalid script path: " + scriptPath);
             }
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception ex) {
             String msg = "Error getting script: " + scriptPath;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
@@ -505,9 +492,6 @@ public class CustomScriptResource {
                     }
                 }
             }
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error deleting script: " + scriptName;
@@ -558,9 +542,6 @@ public class CustomScriptResource {
             }
 
             response.setScriptsModified(scriptsDeleted.toArray(new String[scriptsDeleted.size()]));
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception ex) {
             String msg = "Error deleting scripts!";

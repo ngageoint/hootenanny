@@ -243,7 +243,6 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/Optimization/StateDescription.cpp \
     src/main/cpp/tgs/Optimization/VariableDescription.cpp \
     src/main/cpp/tgs/Optimization/State.cpp \
-    src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp
 
 cppunit:SOURCES += \
     src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
@@ -280,7 +279,8 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
     src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
     src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
-    src/test/cpp/tgs/LruCacheTest.cpp
+    src/test/cpp/tgs/LruCacheTest.cpp \
+    src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \

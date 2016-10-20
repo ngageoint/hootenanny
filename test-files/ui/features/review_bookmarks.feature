@@ -2,6 +2,7 @@ Feature: Review Bookmarks
 
     Scenario: Conflate AllDataTypes
         Given I am on Hootenanny
+        And I resize the window
         And I click Get Started
         And I press "Add Reference Dataset"
         And I click the "AllDataTypesACucumber" Dataset
@@ -113,7 +114,7 @@ Feature: Review Bookmarks
 
     Scenario: Delete Layer with active bookmark
         Then I click on the "Datasets" option in the "settingsSidebar"
-        And I click on "#btnDatasetRefresh"
+        And I press "Refresh Datasets"
         And I wait
         When I click the "mergedBookmarkTest" Dataset
         When I context click the "mergedBookmarkTest" Dataset

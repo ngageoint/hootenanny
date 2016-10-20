@@ -41,8 +41,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-import hoot.services.HootProperties;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
 
@@ -50,31 +51,15 @@ import hoot.services.nativeinterfaces.NativeInterfaceException;
 /**
  * Endpoint for returning information about Hootenanny core and services
  */
+@Controller
 @Path("/about")
 public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
-    public AboutResource() {
-    }
+    @Autowired
+    private JobExecutionManager jobExecutionManager;
 
-    private static Properties getBuildInfo() {
-        Properties buildInfo;
-
-        try {
-            buildInfo = BuildInfo.getInstance();
-        }
-        catch (Exception e) {
-            logger.warn("About Resource unable to find the services build.info file.  "
-                    + "Web Services version information will be unavailable.", e);
-
-            buildInfo = new Properties();
-            buildInfo.setProperty("name", "unknown");
-            buildInfo.setProperty("version", "unknown");
-            buildInfo.setProperty("user", "unknown");
-        }
-
-        return buildInfo;
-    }
+    public AboutResource() {}
 
     /**
      * Service method endpoint for retrieving the Hootenanny services version.
@@ -90,49 +75,103 @@ public class AboutResource {
         VersionInfo versionInfo;
 
         try {
-            logger.debug("Retrieving services version...");
-
             Properties buildInfo = getBuildInfo();
             versionInfo = new VersionInfo();
             versionInfo.setName(buildInfo.getProperty("name"));
             versionInfo.setVersion(buildInfo.getProperty("version"));
             versionInfo.setBuiltBy(buildInfo.getProperty("user"));
-
-            logger.debug("Returning response: {} ...", versionInfo);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
-            String msg = "Error retrieving services version info!";
+            String msg = "Error retrieving services version info!  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return versionInfo;
     }
 
-    private static String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
-        JSONObject command = new JSONObject();
-        command.put("exectype", "hoot");
-        command.put("exec", "version");
+    /**
+     * Service method endpoint for retrieving the Hootenanny core (command line
+     * application) version.
+     * <p>
+     * GET hoot-services/info/about/coreVersionInfo</URL>
+     *
+     * @return JSON containing Hoot core version information
+     */
+    @GET
+    @Path("/coreVersionInfo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public VersionInfo getCoreVersionInfo() {
+        VersionInfo versionInfo;
 
-        JSONArray params = new JSONArray();
-
-        if (withDetails) {
-            JSONObject param = new JSONObject();
-            param.put("", "--debug");
-            params.add(param);
+        try {
+            String versionStr = this.getCoreInfo(false);
+            String[] versionInfoParts = versionStr.split(" ");
+            versionInfo = new VersionInfo();
+            versionInfo.setName("Hootenanny Core");
+            versionInfo.setVersion(versionInfoParts[1]);
+            versionInfo.setBuiltBy(versionInfoParts[4]);
+        }
+        catch (Exception e) {
+            String msg = "Error retrieving core version info!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        command.put("params", params);
-        command.put("caller", AboutResource.class.getSimpleName());
+        return versionInfo;
+    }
 
-        JobExecutionManager jobExecutionManager = ((JobExecutionManager) HootProperties.getSpringContext()
-                .getBean("jobExecutionManagerNative"));
+    /**
+     * Service method endpoint for retrieving withDetails environment
+     * information about the Hootenanny core (command line application)
+     * <p>
+     * GET hoot-services/info/about/coreVersionDetail</URL>
+     *
+     * @return JSON Array containing Hoot core version detail
+     */
+    @GET
+    @Path("/coreVersionDetail")
+    @Produces(MediaType.APPLICATION_JSON)
+    public CoreDetail getCoreVersionDetail() {
+        CoreDetail coreDetail;
 
-        String output = jobExecutionManager.execWithResult(command).get("stdout").toString();
+        try {
+            String versionStr = this.getCoreInfo(true);
 
-        return parseCoreVersionOutOf(output, withDetails);
+            // get rid of the first line that has the hoot core version info in it; call coreVersionInfo for that
+            String[] versionInfoParts = versionStr.split(System.lineSeparator());
+            List<String> versionInfoPartsModified = new ArrayList<>();
+
+            for (int i = 1; i < versionInfoParts.length; i++) {
+                versionInfoPartsModified.add(versionInfoParts[i]);
+            }
+
+            coreDetail = new CoreDetail();
+            coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
+        }
+        catch (Exception e) {
+            String msg = "Error retrieving core version info!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return coreDetail;
+    }
+
+    private static Properties getBuildInfo() {
+        Properties buildInfo;
+
+        try {
+            buildInfo = BuildInfo.getInfo();
+        }
+        catch (Exception e) {
+            logger.warn("About Resource unable to find the services build.info file.  "
+                    + "Web Services version information will be unavailable.", e);
+
+            buildInfo = new Properties();
+            buildInfo.setProperty("name", "unknown");
+            buildInfo.setProperty("version", "unknown");
+            buildInfo.setProperty("user", "unknown");
+        }
+
+        return buildInfo;
     }
 
     private static String parseCoreVersionOutOf(String text, boolean withDetails) {
@@ -160,83 +199,24 @@ public class AboutResource {
         return coreVersion;
     }
 
-    /**
-     * Service method endpoint for retrieving the Hootenanny core (command line
-     * application) version.
-     * <p>
-     * GET hoot-services/info/about/coreVersionInfo</URL>
-     *
-     * @return JSON containing Hoot core version information
-     */
-    @GET
-    @Path("/coreVersionInfo")
-    @Produces(MediaType.APPLICATION_JSON)
-    public VersionInfo getCoreVersionInfo() {
-        VersionInfo versionInfo;
+    private String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
+        JSONObject command = new JSONObject();
+        command.put("exectype", "hoot");
+        command.put("exec", "version");
 
-        try {
-            logger.debug("Retrieving services version...");
+        JSONArray params = new JSONArray();
 
-            String versionStr = getCoreInfo(false);
-            String[] versionInfoParts = versionStr.split(" ");
-            versionInfo = new VersionInfo();
-            versionInfo.setName("Hootenanny Core");
-            versionInfo.setVersion(versionInfoParts[1]);
-            versionInfo.setBuiltBy(versionInfoParts[4]);
-
-            logger.debug("Returning response: {} ...", versionInfo);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception e) {
-            String msg = "Error retrieving core version info!";
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        if (withDetails) {
+            JSONObject param = new JSONObject();
+            param.put("", "--debug");
+            params.add(param);
         }
 
-        return versionInfo;
-    }
+        command.put("params", params);
+        command.put("caller", AboutResource.class.getSimpleName());
 
-    /**
-     * Service method endpoint for retrieving withDetails environment
-     * information about the Hootenanny core (command line application)
-     * <p>
-     * GET hoot-services/info/about/coreVersionDetail</URL>
-     *
-     * @return JSON Array containing Hoot core version detail
-     */
-    @GET
-    @Path("/coreVersionDetail")
-    @Produces(MediaType.APPLICATION_JSON)
-    public CoreDetail getCoreVersionDetail() {
-        CoreDetail coreDetail;
+        String output = this.jobExecutionManager.exec(command).get("stdout").toString();
 
-        try {
-            logger.debug("Retrieving services version...");
-
-            String versionStr = getCoreInfo(true);
-
-            // get rid of the first line that has the hoot core version info in it; call coreVersionInfo for that
-            String[] versionInfoParts = versionStr.split(System.lineSeparator());
-            List<String> versionInfoPartsModified = new ArrayList<>();
-
-            for (int i = 1; i < versionInfoParts.length; i++) {
-                versionInfoPartsModified.add(versionInfoParts[i]);
-            }
-
-            coreDetail = new CoreDetail();
-            coreDetail.setEnvironmentInfo(versionInfoPartsModified.toArray(new String[versionInfoPartsModified.size()]));
-
-            logger.debug("Returning response: {} ...", coreDetail);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception e) {
-            String msg = "Error retrieving core version info!";
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        return coreDetail;
+        return parseCoreVersionOutOf(output, withDetails);
     }
 }

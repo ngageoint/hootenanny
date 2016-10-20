@@ -26,7 +26,8 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,16 +37,12 @@ import org.slf4j.LoggerFactory;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQuery;
-
-import hoot.services.utils.DbUtils;
 
 
 public final class ModelDaoUtils {
     private static final Logger logger = LoggerFactory.getLogger(ModelDaoUtils.class);
 
-    private ModelDaoUtils() {
-    }
+    private ModelDaoUtils() {}
 
     /**
      * Returns the record ID associated with the record request input string for
@@ -55,15 +52,13 @@ public final class ModelDaoUtils {
      * 
      * @param input
      *            can be either a map ID or a map name
-     * @param dbConn
-     *            JDBC Connection
      * @return if a record ID string is passed in, it is verified and returned;
      *         if a record name string is passed in, it is verified that only
      *         one record of the requested type exists with the given name, and
      *         its ID is returned
      */
-    public static long getRecordIdForInputString(String input, Connection dbConn,
-            RelationalPathBase<?> table, NumberPath<Long> idField, StringPath nameField) {
+    public static long getRecordIdForInputString(String input, RelationalPathBase<?> table,
+            NumberPath<Long> idField, StringPath nameField) {
 
         if (StringUtils.isEmpty(input)) {
             throw new IllegalArgumentException("No record exists with ID: " + input
@@ -75,7 +70,7 @@ public final class ModelDaoUtils {
             logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
                     input, table.getTableName());
 
-            long recordCount = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
+            long recordCount = createQuery()
                     .from(table)
                     .where(idField.eq(Long.valueOf(input)))
                     .fetchCount();
@@ -100,7 +95,7 @@ public final class ModelDaoUtils {
 
             // there has to be a better way to do this against the generated
             // code but haven't been able to get it to work yet
-            List<Long> records = new SQLQuery<>(dbConn, DbUtils.getConfiguration())
+            List<Long> records = createQuery()
                     .select(idField)
                     .from(table)
                     .where(nameField.eq(input))

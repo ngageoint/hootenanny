@@ -27,32 +27,29 @@
 package hoot.services.readers.review;
 
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
-
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
-import hoot.services.utils.DbUtils;
 
 
 class ReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableQuery.class);
     private long sortOrder = -1;
 
-    ReviewableQuery(Connection connection, long mapId, long sortOrder) {
-        super(connection, mapId);
+    ReviewableQuery(long mapId, long sortOrder) {
+        super(mapId);
         this.sortOrder = sortOrder;
     }
 
     @Override
     public ReviewQueryMapper execQuery() {
-        Long result = new SQLQuery<Long>(this.getConnection(), DbUtils.getConfiguration(getMapId()))
+        Long result = createQuery(getMapId())
                 .select(currentRelations.id)
                 .from(currentRelations)
                 .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'")

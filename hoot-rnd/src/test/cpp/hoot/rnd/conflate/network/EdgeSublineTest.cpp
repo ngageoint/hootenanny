@@ -26,14 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/rnd/conflate/network/EdgeSubline.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
-#include <hoot/rnd/conflate/network/EdgeMatchSetFinder.h>
-#include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
 namespace hoot
 {
@@ -41,100 +35,198 @@ namespace hoot
 class EdgeSublineTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeSublineTest);
-  CPPUNIT_TEST(touchesTest1);
-  CPPUNIT_TEST(unionTest1);
+  CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST(invalidTest);
+  CPPUNIT_TEST(zeroLengthTest);
+  CPPUNIT_TEST(backwardTest);
+  CPPUNIT_TEST(overlapsTest);
+  CPPUNIT_TEST(reverseTest);
+  CPPUNIT_TEST(createFullSublineTest);
+  CPPUNIT_TEST(equalTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void touchesTest1()
+  void basicTest()
   {
-    TestUtils::resetEnvironment();
+    OsmMapPtr map(new OsmMap());
 
-    WayPtr w1(new Way(Status::Invalid, -1, 15));
-    NetworkVertexPtr v1(new NetworkVertex(w1));
-    WayPtr w2(new Way(Status::Invalid, -2, 15));
-    NetworkVertexPtr v2(new NetworkVertex(w2));
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
 
-    NetworkEdgePtr e1(new NetworkEdge(v1, v2, false));
+    EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
-    {
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.25, 0.5));
-      HOOT_STR_EQUALS(true, s1->intersects(s2));
-    }
+    CPPUNIT_ASSERT(edgeSubline.isValid());
+    CPPUNIT_ASSERT(!edgeSubline.isZeroLength());
+    CPPUNIT_ASSERT(!edgeSubline.isBackwards());
 
-    {
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.3, 0.5));
-      HOOT_STR_EQUALS(true, s1->intersects(s2));
-    }
+    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge);
+    CPPUNIT_ASSERT(edgeSubline.getStart() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeSubline.getEnd() == edgeLocEnd);
+    CPPUNIT_ASSERT(edgeSubline.getFormer() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeSubline.getLatter() == edgeLocEnd);
 
-    {
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.30001, 0.5));
-      HOOT_STR_EQUALS(false, s1->intersects(s2));
-    }
-
-    {
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.2, 0.3));
-      HOOT_STR_EQUALS(true, s1->intersects(s2));
-    }
+    CPPUNIT_ASSERT(edgeSubline.contains(vertex1));
+    CPPUNIT_ASSERT(!edgeSubline.contains(vertex2));
   }
 
-  void unionTest1()
+  void invalidTest()
   {
-    TestUtils::resetEnvironment();
+    OsmMapPtr map(new OsmMap());
 
-    WayPtr w1(new Way(Status::Invalid, -1, 15));
-    NetworkVertexPtr v1(new NetworkVertex(w1));
-    WayPtr w2(new Way(Status::Invalid, -2, 15));
-    NetworkVertexPtr v2(new NetworkVertex(w2));
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, -0.1));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
 
-    NetworkEdgePtr e1(new NetworkEdge(v1, v2, false));
+    EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
-    {
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.25, 0.5));
-      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.2 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.5 } }",
-        s1->unionSubline(s2));
-    }
-
-    {
-      // one line contains the other, should still work.
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.1, 0.5));
-      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.1 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.5 } }",
-        s1->unionSubline(s2));
-    }
-
-    {
-      // both backwards, the result should be backwards.
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.3, 0.2));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 1.0, 0.25));
-      HOOT_STR_EQUALS("{ _start: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 1 }, _end: { _e: (0) Way:-1 --  -- (1) Way:-2, _portion: 0.2 } }",
-        s1->unionSubline(s2));
-    }
-
-    {
-      DisableLog dl;
-      // going in two different directions.
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.3, 0.2));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.25, 1.0));
-      CPPUNIT_ASSERT_THROW(s1->unionSubline(s2), IllegalArgumentException);
-    }
-
-    {
-      DisableLog dl;
-      // lines don't touch
-      EdgeSublinePtr s1(new EdgeSubline(e1, 0.2, 0.3));
-      EdgeSublinePtr s2(new EdgeSubline(e1, 0.5, 1.0));
-      CPPUNIT_ASSERT_THROW(s1->unionSubline(s2), IllegalArgumentException);
-    }
+    CPPUNIT_ASSERT(!edgeSubline.isValid());
   }
+
+  void zeroLengthTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
+
+    EdgeSubline edgeSubline(edgeLocStart, edgeLocStart);
+
+    CPPUNIT_ASSERT(edgeSubline.isZeroLength());
+  }
+
+  void backwardTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.7));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.0));
+
+    EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
+
+    CPPUNIT_ASSERT(edgeSubline.isBackwards());
+  }
+
+  void overlapsTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+          new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+          new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge1, 0.7));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLoc1, edgeLoc2));
+    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge1, 0.2));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLoc1, edgeLoc3));
+    CPPUNIT_ASSERT(edgeSubline1->overlaps(edgeSubline2));
+
+    ConstEdgeLocationPtr edgeLoc4(new EdgeLocation(edge1, 0.8));
+    ConstEdgeLocationPtr edgeLoc5(new EdgeLocation(edge1, 1.0));
+    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLoc4, edgeLoc5));
+    CPPUNIT_ASSERT(!edgeSubline1->overlaps(edgeSubline3));
+  }
+
+  void reverseTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.7));
+
+    EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
+    edgeSubline.reverse();
+
+    CPPUNIT_ASSERT(edgeSubline.isValid());
+    CPPUNIT_ASSERT(!edgeSubline.isZeroLength());
+    CPPUNIT_ASSERT(edgeSubline.isBackwards());
+
+    CPPUNIT_ASSERT(edgeSubline.getEdge() == edge1);
+    CPPUNIT_ASSERT(edgeSubline.getStart() == edgeLocEnd);
+    CPPUNIT_ASSERT(edgeSubline.getEnd() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeSubline.getFormer() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeSubline.getLatter() == edgeLocEnd);
+  }
+
+  void createFullSublineTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+
+    EdgeSublinePtr edgeSubline = EdgeSubline::createFullSubline(edge1);
+
+    CPPUNIT_ASSERT(edgeSubline->isValid());
+    CPPUNIT_ASSERT(!edgeSubline->isZeroLength());
+    CPPUNIT_ASSERT(!edgeSubline->isBackwards());
+
+    CPPUNIT_ASSERT(edgeSubline->getEdge() == edge1);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, edgeSubline->getStart()->getPortion(), 0.0);
+    CPPUNIT_ASSERT(edgeSubline->getStart()->isFirst());
+    CPPUNIT_ASSERT(!edgeSubline->getStart()->isLast());
+    CPPUNIT_ASSERT(edgeSubline->getStart()->isExtreme());
+    CPPUNIT_ASSERT(edgeSubline->getStart()->isValid());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, edgeSubline->getEnd()->getPortion(), 0.0);
+    CPPUNIT_ASSERT(!edgeSubline->getEnd()->isFirst());
+    CPPUNIT_ASSERT(edgeSubline->getEnd()->isLast());
+    CPPUNIT_ASSERT(edgeSubline->getEnd()->isExtreme());
+    CPPUNIT_ASSERT(edgeSubline->getEnd()->isValid());
+  }
+
+  void equalTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
+
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    CPPUNIT_ASSERT(edgeSubline1 == edgeSubline2);
+
+    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline4(new EdgeSubline(edgeLocEnd, edgeLocStart));
+    CPPUNIT_ASSERT(edgeSubline3 != edgeSubline4);
+  }
+
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeSublineTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeSublineTest, "quick");
 
 }

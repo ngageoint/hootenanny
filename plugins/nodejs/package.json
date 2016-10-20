@@ -1,0 +1,23 @@
+{
+  "name": "node-hoot-translate",
+  "version": "0.0.0",
+  "description": "Hoot translations in pure javascript",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "cover": "node_modules/.bin/istanbul cover _mocha --"
+  },
+  "author": "DigitalGlobe",
+  "license": "GPLv3",
+  "dependencies": {
+    "node-uuid": "~1.4.7",
+    "debug": "~2.2.0"
+  },
+  "devDependencies": {
+    "istanbul": "~0.4.5",
+    "eslint": "~3.4.0"
+  }
+}

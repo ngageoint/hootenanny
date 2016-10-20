@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.job;
 
-import java.sql.Connection;
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -37,26 +39,24 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.sql.Configuration;
-import com.querydsl.sql.dml.SQLInsertClause;
-import com.querydsl.sql.dml.SQLUpdateClause;
-
-import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.models.review.ReviewBookmarkSaveRequest;
 import hoot.services.readers.review.ReviewBookmarkRetriever;
-import hoot.services.utils.DbUtils;
 
 
-class ReviewBookmarksSaver {
+@Component
+@Transactional
+public class ReviewBookmarksSaver {
     private static final Logger logger = LoggerFactory.getLogger(ReviewBookmarksSaver.class);
 
-    private final Connection conn;
+    @Autowired
+    private ReviewBookmarkRetriever reviewBookmarkRetriever;
 
-    ReviewBookmarksSaver(Connection cn) {
-        conn = cn;
-    }
+    public ReviewBookmarksSaver() {}
 
     /**
      * Saves review tags. It first checks to see if exists and if not insert
@@ -66,12 +66,11 @@ class ReviewBookmarksSaver {
      *            - request object containing inserted/updated fields
      * @return - numbers of saved tags
      */
-    long save(ReviewBookmarkSaveRequest request) {
+     long save(ReviewBookmarkSaveRequest request) {
         long nSaved;
-        ReviewBookmarkRetriever retriever = new ReviewBookmarkRetriever(conn);
 
         if (request.getBookmarkId() > -1) {
-            List<ReviewBookmarks> res = retriever.retrieve(request.getBookmarkId());
+            List<ReviewBookmarks> res = reviewBookmarkRetriever.retrieve(request.getBookmarkId());
             nSaved = res.isEmpty() ? insert(request) : update(request, res.get(0));
         }
         else {
@@ -90,11 +89,9 @@ class ReviewBookmarksSaver {
      * @return - total numbers of inserted
      */
     private long insert(ReviewBookmarkSaveRequest request) {
-        Configuration configuration = DbUtils.getConfiguration();
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-        return  new SQLInsertClause(conn, configuration, reviewBookmarks)
+        return createQuery().insert(reviewBookmarks)
                 .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
                         reviewBookmarks.createdBy, reviewBookmarks.detail)
                 .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
@@ -118,9 +115,7 @@ class ReviewBookmarksSaver {
         reviewBookmarksDto.setLastModifiedBy(request.getUserId());
         reviewBookmarksDto.setDetail(jasonToHStore(request.getDetail()));
 
-        Configuration configuration = DbUtils.getConfiguration();
-        QReviewBookmarks reviewBookmarks = QReviewBookmarks.reviewBookmarks;
-        return new SQLUpdateClause(conn, configuration, reviewBookmarks)
+        return createQuery().update(reviewBookmarks)
                 .populate(reviewBookmarksDto)
                 .where(reviewBookmarks.id.eq(reviewBookmarksDto.getId()))
                 .execute();
@@ -133,7 +128,7 @@ class ReviewBookmarksSaver {
      *            - json containing tags kv
      * @return - Expression Object for QueryDSL consumption
      */
-    private static Object jasonToHStore(JSONObject tags) {
+    private Object jasonToHStore(JSONObject tags) {
         Map<String, String> hStoreObject = new HashMap<>();
 
         if (tags != null) {

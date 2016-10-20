@@ -142,7 +142,7 @@ public final class MultipartSerializer {
                         String filename = StringUtils.join(subArr, '.');
                         if (extension.equalsIgnoreCase("OSM") || extension.equalsIgnoreCase("GEONAMES")
                                 || extension.equalsIgnoreCase("SHP") || extension.equalsIgnoreCase("ZIP")
-                                || extension.equalsIgnoreCase("PBF")) {
+                                || extension.equalsIgnoreCase("PBF") || extension.equalsIgnoreCase("TXT")) {
                             uploadedFiles.put(filename, extension);
                             uploadedFilesPaths.put(filename, fileName);
                             logger.debug("Saving uploaded:{}", filename);

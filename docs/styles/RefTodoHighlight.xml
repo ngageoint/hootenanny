@@ -3666,7 +3666,7 @@ For external files the <rules> should have following elements:
 
 	<rule>
 		<condition k="REF2" v="todo"/>
-		<icon annotate="true" src="/home/jason.surratt/local/etc/sad.png" priority="10000"/>
+		<icon annotate="true" src="sad.png" priority="10000"/>
 	</rule>
 
 	<rule>

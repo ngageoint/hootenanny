@@ -29,8 +29,7 @@ package hoot.services.readers.review;
 import static hoot.services.HootProperties.RANDOM_QUERY_SEED;
 import static hoot.services.HootProperties.SEED_RANDOM_QUERIES;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
-
-import java.sql.Connection;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,18 +37,16 @@ import org.slf4j.LoggerFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.models.review.ReviewQueryMapper;
 import hoot.services.models.review.ReviewableItem;
-import hoot.services.utils.DbUtils;
 
 
 class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQuery {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);
 
-    RandomReviewableQuery(Connection connection, long mapid) {
-        super(connection, mapid);
+    RandomReviewableQuery(long mapid) {
+        super(mapid);
 
         // TODO: Since this code will affect all subsequent calls to
         // random(), it is better moved to
@@ -58,7 +55,7 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
         if (Boolean.parseBoolean(SEED_RANDOM_QUERIES)) {
             double seed = Double.parseDouble(RANDOM_QUERY_SEED);
             if ((seed >= -1.0) && (seed <= 1.0)) {
-                new SQLQuery<>(super.getConnection(), DbUtils.getConfiguration())
+                createQuery()
                         .select(Expressions.numberTemplate(Double.class, "setseed(" + seed + ");"))
                         .from()
                         .fetch();
@@ -70,7 +67,7 @@ class RandomReviewableQuery extends ReviewableQueryBase implements IReviewableQu
     public ReviewQueryMapper execQuery() {
         ReviewableItem reviewableItem = new ReviewableItem(-1, getMapId(), -1);
 
-        Tuple result = new SQLQuery<Tuple>(this.getConnection(), DbUtils.getConfiguration(getMapId()))
+        Tuple result = createQuery(getMapId())
                 .select(currentRelations.id, Expressions.stringTemplate("tags->'hoot:review:sort_order'"))
                 .from(currentRelations)
                 .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'"))

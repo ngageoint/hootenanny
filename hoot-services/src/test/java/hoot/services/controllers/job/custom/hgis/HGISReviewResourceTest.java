@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.job.custom.hgis;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -34,7 +37,6 @@ import javax.ws.rs.core.Response.Status;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.ArgumentCaptor;
@@ -42,6 +44,7 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
+import hoot.services.controllers.job.JobControllerBase;
 
 
 public class HGISReviewResourceTest {
@@ -56,12 +59,11 @@ public class HGISReviewResourceTest {
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
-        Mockito.doNothing().when(spy).postChainJobRquest(Matchers.anyString(), argCaptor.capture());
+        Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(Matchers.anyString(), argCaptor.capture());
         PrepareForValidationRequest request = new PrepareForValidationRequest();
         request.setSourceMap("testSrc1");
         request.setOutputMap("out1");
 
-        /* PrepareForValidationResponse resp = */
         spy.prepareItemsForValidationReview(request);
 
         List<String> args = argCaptor.getAllValues();
@@ -71,24 +73,27 @@ public class HGISReviewResourceTest {
 
         JSONObject command = (JSONObject) result.get(0);
 
-        Assert.assertEquals("custom/HGIS/PrepareForValidation.sh", command.get("exec"));
-        Assert.assertEquals("bash", command.get("exectype"));
-        Assert.assertNotNull(command.get("params"));
+        assertEquals("custom/HGIS/PrepareForValidation.sh", command.get("exec"));
+        assertEquals("bash", command.get("exectype"));
+        assertNotNull(command.get("params"));
+
         JSONArray arr = (JSONArray) command.get("params");
         String connStr = spy.generateDbMapParam("testSrc1");
-        Assert.assertEquals(((JSONObject) arr.get(0)).get("SOURCE"), connStr);
+
+        assertEquals(((JSONObject) arr.get(0)).get("SOURCE"), connStr);
         connStr = spy.generateDbMapParam("out1");
-        Assert.assertEquals(((JSONObject) arr.get(1)).get("OUTPUT"), connStr);
+        assertEquals(((JSONObject) arr.get(1)).get("OUTPUT"), connStr);
 
         command = (JSONObject) result.get(1);
 
-        Assert.assertEquals("hoot.services.controllers.job.custom.hgis.HGISReviewResource", command.get("class"));
-        Assert.assertEquals("updateMapsTag", command.get("method"));
-        Assert.assertEquals("reflection", command.get("exectype"));
-        Assert.assertNotNull(command.get("params"));
+        assertEquals("hoot.services.controllers.job.custom.hgis.HGISReviewResource", command.get("class"));
+        assertEquals("updateMapsTag", command.get("method"));
+        assertEquals("reflection", command.get("exectype"));
+        assertNotNull(command.get("params"));
+
         arr = (JSONArray) command.get("params");
 
-        Assert.assertEquals("out1", ((JSONObject) arr.get(0)).get("value"));
+        assertEquals("out1", ((JSONObject) arr.get(0)).get("value"));
     }
 
     @Test(expected = WebApplicationException.class)
@@ -102,7 +107,7 @@ public class HGISReviewResourceTest {
             real.prepareItemsForValidationReview(request);
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             throw e;
         }
     }
@@ -118,7 +123,7 @@ public class HGISReviewResourceTest {
             real.prepareItemsForValidationReview(request);
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             throw e;
         }
     }
@@ -134,15 +139,15 @@ public class HGISReviewResourceTest {
 
             ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
-            Mockito.doNothing().when(spy).postJobRquest(Matchers.anyString(), argCaptor.capture());
+            Mockito.doNothing().when(spy).postJobRequest(Matchers.anyString(), argCaptor.capture());
             PrepareForValidationRequest request = new PrepareForValidationRequest();
             request.setSourceMap("testSrc1");
             request.setOutputMap("out1");
-            /* PrepareForValidationResponse resp = */
+
             spy.prepareItemsForValidationReview(request);
         }
         catch (WebApplicationException e) {
-            Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             throw e;
         }
     }

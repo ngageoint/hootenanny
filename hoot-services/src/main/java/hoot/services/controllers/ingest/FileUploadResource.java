@@ -57,11 +57,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
 
+@Controller
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
@@ -167,6 +169,16 @@ public class FileUploadResource extends JobControllerBase {
                     osmCnt += (Integer) zipStat.get("osmcnt");
                     geonamesCnt += (Integer) zipStat.get("geonamescnt");
                 }
+
+                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
+                    inputFileName = fName + ".geonames";
+                    String directory = HOME_FOLDER + "/upload/" + jobId;
+                    // we need to rename the file for hoot to ingest
+                    new File(directory + File.separator + inputsList.get(0)).renameTo(new File(directory + File.separator + inputFileName));
+                    inputsList.set(0, inputFileName);
+                    reqList = new JSONArray();
+                    buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat);
+                }
             }
 
             if (((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt) > 0) && ((osmZipCnt + osmCnt) > 0)) {
@@ -221,7 +233,7 @@ public class FileUploadResource extends JobControllerBase {
 
             logger.debug("Posting Job Request for Job :{} With Args: {}", batchJobId, jobArgs.toJSONString());
 
-            postChainJobRquest(batchJobId, jobArgs.toJSONString());
+            postChainJobRequest(batchJobId, jobArgs.toJSONString());
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();
@@ -381,8 +393,8 @@ public class FileUploadResource extends JobControllerBase {
         rasterTilesparam.put("isprimitivetype", "false");
         rasterTilesArgs.add(rasterTilesparam);
 
-        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                "hoot.services.controllers.ingest.RasterToTilesService", "ingestOSMResourceDirect", internalJobId);
+        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
+                "ingestOSMResourceDirect", internalJobId);
 
         jobArgs.add(etlCommand);
         jobArgs.add(ingestOSMResource);
@@ -441,7 +453,7 @@ public class FileUploadResource extends JobControllerBase {
             reqList.add(reqType);
             osmCnt++;
         }
-        else if (ext.equalsIgnoreCase("geonames")) {
+        else if (ext.equalsIgnoreCase("geonames") || ext.equalsIgnoreCase("txt")) {
             JSONObject reqType = new JSONObject();
             reqType.put("type", "GEONAMES");
             reqType.put("name", inputFileName);

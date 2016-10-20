@@ -50,6 +50,11 @@ When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I should (not )?see a way map feature with OSM id "([^"]*)"$/) do |negate, id|
+  expectation = negate ? 0 : 1
+  find('div.layer-data').assert_selector('path[class*=" ' + id + '"]',:maximum => expectation)
+end
+
 When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -233,6 +238,18 @@ When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
 end
 
+When(/^I click the control "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control,  arg1]
+end
+
+When(/^I click the control shift "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :shift, arg1]
+end
+
+When(/^I click the control alt "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :alt, arg1]
+end
+
 When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
   find(el).native.send_keys(key)
 end
@@ -267,8 +284,12 @@ end
 
 When(/^I select the "([^"]*)" option labelled "([^"]*)"$/) do |opt, lbl|
   combobox = page.find('label', :text=> lbl).find(:xpath,"..")
-  combobox.find('.combobox-caret').click
-  page.find('div.combobox').find('a', :text=> opt).click
+  begin
+    page.find('div.combobox').find('a', :text=> opt).click
+  rescue Capybara::ElementNotFound
+    combobox.find('.combobox-caret').click
+    page.find('div.combobox').find('a', :text=> opt).click
+  end
 end
 
 When(/^I select the "([^"]*)" option in "([^"]*)"$/) do |opt, el|
@@ -297,6 +318,10 @@ When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
   elements[0].click
 end
 
+And(/^I click the "([^"]*)" preset$/) do |label|
+  find('button.preset-list-button', :text=>label).click
+end
+
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   find('#' + el).click_at(x,y)
   sleep 3
@@ -313,7 +338,7 @@ When(/^I double-click the "([^"]*)"$/) do |el|
 end
 
 When(/^I fill "([^"]*)" with "([^"]*)"$/) do |el, value|
-  find('#' + el).set(value)
+  find(el).set(value)
   sleep 1
 end
 
@@ -422,6 +447,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.should have_content(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I wait ([0-9]*) "([^"]*)" to see css "([^"]*)"$/) do |timeout, unit, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.should have_css(text)
   Capybara.default_max_wait_time = oldTimeout
 end
 
@@ -547,9 +586,12 @@ Then(/^I should (not )?see an image footprint on the map$/) do |negate|
 end
 
 Then(/^I should (not )?see an image overlay on the map$/) do |negate|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 30
   io = all('div.layer-overlay').last
   expectation = negate ? :should_not : :should
   io.send(expectation, have_css('img.tile'))
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|
@@ -653,7 +695,7 @@ When(/^I select "([^"]*)" basemap/) do |file|
   end
 end
 
-When(/^I click the map background button$/) do
+When(/^I click the Background settings button$/) do
   find('div.background-control').find('button').click
 end
 
@@ -749,3 +791,91 @@ Then(/^I wait ([0-9]+) seconds to see "([^"]*)" on the map$/) do |wait, el|
   page.should have_css(el)
   Capybara.default_max_wait_time = oldTimeout
 end
+
+When(/^I click the review item column in the tag table$/) do
+  page.all('td.f1').first.click
+end
+
+Then(/^I should see a node element "([^"]*)" with a selected highlight$/) do |id|
+  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el[:class].include?('selected').should eq true
+end
+
+Then(/^I should see element "([^"]*)" with a yellow highlight$/) do |id|
+  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el[:class].include?('edited').should eq true
+  el[:class].include?('unsaved').should eq true
+end
+
+When(/^I click to expand Map Data$/) do
+  el = find('div.map-control.map-data-control')
+  el.click
+end
+
+Then(/^I turn on highlight edited features$/) do
+  el = find('div.highlight-edited')
+  el.click
+end
+
+
+When(/^I click paste tags, overwrite$/) do
+  page.all('button.col6')[0].click
+end
+
+When(/^I click paste tags, append$/) do
+  page.all('button.col6')[1].click
+end
+
+When(/^I click undo$/) do
+  page.all('button.col6')[2].click
+end
+
+When(/^I click redo$/) do
+  page.all('button.col6')[3].click
+end
+
+When(/^I expand the tag list toggle$/) do
+  ttg = page.all('a.hide-toggle')[1]
+  unless ttg.has_css?('hide-toggle expanded')
+    ttg.click
+  end
+end
+
+Then(/^I should see the last element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  lel = page.all(id).last
+  lel.value.should eq value
+end
+
+When(/^I expand the sidebar$/) do
+  resizer = page.find('#resizer')
+  resizer.drag_by(150, 0)
+end
+
+#for hidden features
+Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
+  el = page.find(input).should be_visible
+end
+
+Then(/^I should not see the "([^"]*)" on the page$/) do |input|
+  el = page.should have_no_css(input, :visible => true)
+end
+
+# for invalid features
+Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq true
+end
+
+Then(/^I should_not see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq false
+end
+
+
+# for placeholders
+Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
+end
+

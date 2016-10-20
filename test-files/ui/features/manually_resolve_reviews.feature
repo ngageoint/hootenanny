@@ -51,6 +51,55 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
+    #Click the review item box
+    And I hover over "#map"
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    When I click the review item column in the tag table
+    Then I should see "Edit feature: "
+    And I press "Next"
+    And I hover over "#map"
+    Then I should not see "Edit feature: "
+    #Click the review against item box
+    #Click random feature
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 5 (Resolved: 3)"
     Then I wait 5 seconds to see "g.activeReviewFeature" on the map

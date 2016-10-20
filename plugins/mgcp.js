@@ -329,6 +329,66 @@ mgcp = {
 
 
     // ##### Start of the xxToOsmxx Block #####
+
+    // Untangle MGCP attributes & OSM tags.
+    // Some people have been editing OSM files and inserting MGCP attributes
+    untangleAttributes: function (attrs, tags)
+    {
+        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // We need to unpack this before we can do anything.
+        if (attrs.other_tags)
+        {
+            var tList = attrs.other_tags.split('","');
+
+            delete attrs.other_tags;
+
+            for (var val in tList)
+            {
+                vList = tList[val].split('"=>"');
+
+                attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+                // Debug
+                //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+            }
+        }
+
+        for (var col in attrs)
+        {
+            // Find an FCODE
+            if (col in mgcp.fcodeLookup['F_CODE'])
+            {
+                attrs.F_CODE = col;
+                delete attrs[col];
+
+                continue;
+            }
+
+            // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
+            if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
+
+            // Look for Attributes
+            if (col in mgcp.rules.numBiased) continue;
+
+            if (col in mgcp.rules.txtBiased) continue;
+
+            if (col in mgcp.lookup) continue;
+
+            // Drop the "GEOM" attribute
+            if (col == 'GEOM')
+            {
+                delete attrs[col];
+                continue;
+            }
+
+            // Not an Attribute so push it to the tags object
+            tags[col] = attrs[col];
+            delete attrs[col];
+        }
+
+    }, // End attribute attributeUntangle
+
+
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // Drop the FCSUBTYPE since we don't use it
@@ -351,7 +411,6 @@ mgcp = {
         // Unit conversion. Some attributes are in centimetres, others in decimetres
         // var unitList = { 'GAW':100, 'HCA':10, 'WD1':10, 'WD2':10, 'WD3':10, 'WT2':10 };
 
-        // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
         {
             // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
@@ -540,33 +599,27 @@ mgcp = {
         // if ('ACC' in attrs)
         if (translate.isOK(attrs.ACC))
         {
-            if (attrs.ACC == '2')
+            switch (attrs.ACC)
             {
-                accuracy = accuracy * 2;
-                // Add note: Accuracy: Approximate
-            }
-            else if (attrs.ACC == '3')
-            {
-                accuracy = accuracy * 4;
-                // Add note: Accuracy: Doubtful
-            }
-            else if (attrs.ACC == '5')
-            {
-                accuracy = -1;
-                // Add note: Accuracy: Disputed
-            }
-            else if (attrs.ACC == '6')
-            {
-                // Add note: Accuracy: Undisputed
-            }
-            else if (attrs.ACC == '7')
-            {
-                // Add note: Accuracy: Precise
-            }
-            else if (attrs.ACC == '8')
-            {
-                accuracy = -1;
-                // Add note: Accuracy: Abrogated
+                case '2':
+                    accuracy = accuracy * 2; // Add note: Accuracy: Approximate
+                    break;
+
+                case '3':
+                    accuracy = accuracy * 4; // Add note: Accuracy: Doubtful
+                    break;
+
+                case '5':
+                    accuracy = -1; // Add note: Accuracy: Disputed }
+                    break;
+
+                case '6': // Add note: Accuracy: Undisputed
+                case '7': // Add note: Accuracy: Precise
+                    break;
+
+                case '8':
+                    accuracy = -1; // Add note: Accuracy: Abrogated
+                    break;
             }
         }
 
@@ -576,13 +629,47 @@ mgcp = {
         }
 
         // #####
-        // #
-        // # Now the funky rules start. These account for common tables that are shared between various
-        // # features
-        // #
-        // #####
+        if (attrs.HWT && attrs.HWT !== '0')
+        {
+            tags.amenity = 'place_of_worship';
 
-        if (attrs.HWT && attrs.HWT !== '0') tags.amenity = 'place_of_worship';
+            if (tags.building)
+            {
+                switch (tags.building)
+                {
+                    case 'cathedral':
+                    case 'chapel':
+                    case 'church':
+                        tags.religion = 'christian';
+                        break;
+
+                    case 'marabout':
+                    case 'mosque':
+                        tags.religion = 'muslim';
+                        break;
+
+                    case 'synagogue':
+                        tags.religion = 'jewish';
+                        break;
+
+                    case 'stupa':
+                        religion = 'buddhist';
+                        break;
+
+                    // In the spec, these don't specify a religion.
+                    // case 'religious_community':
+                    // case 'pagoda':
+                    // case 'shrine':
+                    // case 'tabernacle':
+                    // case 'temple':
+                } // End switch
+            }
+
+            if (tags['tower:type'] == 'minaret')
+            {
+                tags.religion = 'muslim';
+            }
+        } // End HWT
 
         // Add the LayerName to the source
         if ((! tags.source) && layerName !== '') tags.source = 'mgcp:' + layerName.toLowerCase();
@@ -620,22 +707,40 @@ mgcp = {
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
-            ["t.religion","t.landuse = 'cemetery'"],
             ["t.public_transport == 'station'","t.bus = 'yes'"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
-            ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"]
+            ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
+            ["t.water && !(t.natural)","t.natural = 'water'"]
             ];
 
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
         translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
 
-        translate.fixConstruction(tags, 'highway');
-        translate.fixConstruction(tags, 'railway');
+        // Lifecycle tags
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
 
         // Add 'building = yes' to amenities if we don't already have one
         if (tags.amenity && !tags.building)
@@ -657,6 +762,7 @@ mgcp = {
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
         // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
+        // Some FCODE specific rules
         switch (attrs.F_CODE)
         {
             case undefined: // Break early if no value
@@ -700,6 +806,28 @@ mgcp = {
                         tags.place = 'hamlet';
                         break;
                 } // End switch
+
+                switch (tags.use) // Fixup the landuse tags
+                {
+                    case undefined: // Break early if no value
+                        break;
+
+                    case 'industrial':
+                        tags.landuse = 'industrial';
+                        delete tags.use;
+                        break;
+
+                    case 'commercial':
+                        tags.landuse = 'commercial';
+                        delete tags.use;
+                        break;
+
+                    case 'residential':
+                        tags.landuse = 'residential';
+                        delete tags.use;
+                        break;
+                } // End switch
+
                 break;
 
             case 'BH070': // Ford
@@ -751,11 +879,27 @@ mgcp = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
-
-                tags.note = tObj.text;
             }
 
+            if (tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
         } // End process tags.note
+
+        // AC000 (Processing Facility) vs AL010 (Facility)
+        // In TDS, this is just AL010. Therefore, make it AL010 and use a custom rule if we are exporting
+        // We are assumeing that it should produce something.
+        if (tags.facility == 'processing')
+        {
+            if (! tags.product) tags.product = 'unknown';
+            tags.facility = 'yes';
+        }
+
 
     }, // End of applyToOsmPostProcessing
 
@@ -797,13 +941,6 @@ mgcp = {
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
-            ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
-            ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
-            ["t.landuse == 'farm'","t.landuse = 'farmland'"],
-            ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
-            ["t.landuse == 'grass' || t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'grassland'; delete t.landuse"],
-            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
@@ -828,13 +965,71 @@ mgcp = {
         // translate.applyComplexRules(tags,attrs,rulesList);
         translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
 
+        // Sort out landuse
+        switch (tags.landuse)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'brownfield':
+                tags.landuse = 'built_up_area';
+                tags.condition = 'destroyed';
+                break
+
+            case 'construction':
+                tags.condition = 'construction';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'commercial':
+            case 'retail':
+                tags.use = 'commercial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'farm':
+            case 'allotments':
+                tags.landuse = 'farmland';
+                break;
+
+            case 'farmyard': // NOTE: This is different to farm.
+                tags.facility = 'yes';
+                tags.use = 'agriculture';
+                delete tags.landuse;
+                break;
+
+            case 'grass':
+            case 'meadow':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'grassland';
+                delete tags.landuse;
+                break;
+
+            case 'industrial':
+                tags.use = 'industrial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'military':
+                tags.military = 'installation';
+                delete tags.landuse;
+                break;
+
+            case 'residential':
+                tags.use = 'residential';
+                tags.landuse = 'built_up_area';
+                break;
+
+
+        } // End switch landuse
+
+
         // Fix up OSM 'walls' around facilities
         if (tags.barrier == 'wall' && geometryType == 'Area')
         {
             attrs.F_CODE = 'AL010'; // Facility
             delete tags.barrier; // Take away the walls...
         }
-
 
         // An "amenitiy" can be a building or a thing.
         // If appropriate, make the "amenity" into a building.
@@ -871,6 +1066,14 @@ mgcp = {
 
             // If we don't have a Feature Function then assign one.
             if (!attrs.FFN) attrs.FFN = facilityList[tags.amenity];
+        }
+
+        // AL010 (Facility) vs AC000 (Processing Facility)
+        if (tags.facility && tags.product)
+        {
+            tags.facility = 'processing';
+
+            if (tags.product == 'unknown') delete tags.product;
         }
 
         // Cutlines and Highways.
@@ -1039,9 +1242,6 @@ mgcp = {
         // Mapping Senior Citizens home to Accomodation. Not great
         if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
 
-        // Unknown House of Worship
-        if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
-
         // These FCODES have "No prescribed attributes" in TRDv40
         // Therefore:
         // - clean up the the attrs.
@@ -1089,6 +1289,18 @@ mgcp = {
                 {
                     attrs.SMC = attrs.MCC;
                     delete attrs.MCC;
+                }
+                break;
+
+            case 'AL015': // General Building
+                // Unknown House of Worship
+                if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
+
+                if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
+                {
+                    // Debug
+                    //print('AL015: Setting HWT 998');
+                    attrs.HWT = '998';
                 }
                 break;
 
@@ -1183,6 +1395,10 @@ mgcp = {
                 if (attrs.CSP == '15') attrs.F_CODE = 'EA040';
                 // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
                 break;
+
+            case 'ED030': // Mangrove Swamp
+                if (! attrs.TID) attrs.TID = '1001'; // Tidal
+                break;
         } // End switch FCODE
 
         if (mgcp.mgcpPostRules == undefined)
@@ -1234,7 +1450,6 @@ mgcp = {
     toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // This is the output
-        // fCode = '';
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
@@ -1269,6 +1484,20 @@ mgcp = {
             mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
         }
 
+        // Untangle MGCP attributes & OSM tags.
+        // NOTE: This could get wrapped with an ENV variable so it only gets called during import
+        mgcp.untangleAttributes(attrs, tags);
+
+        // Debug:
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+
+            var kList = Object.keys(tags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        }
+
         // pre processing
         mgcp.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
@@ -1292,6 +1521,7 @@ mgcp = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1415,67 +1645,64 @@ mgcp = {
         // push the feature to the o2s layer
         if (!layerNameLookup[tableName])
         {
-            // tableName = layerNameLookup[tableName];
-            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
-
-            if (config.getOgrPartialTranslate() == 'true')
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (config.getOgrThrowError() == 'true')
             {
-                tableName = 'Partial';
-                attrs.FCODE = 'Partial';
-                delete attrs.F_CODE;
-
-                // If we have unused tags, add them to partial feature.
-                if (Object.keys(notUsedTags).length > 0)
+                if (! attrs.F_CODE)
                 {
-                    for (var i in notUsedTags)
-                    {
-                        attrs['OSM:' + i] = notUsedTags[i];
-                    }
-                }
-            }
-            else
-            {
-                tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-                // Dump out what attributes we have converted before they get wiped out
-                if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
-
-                for (var i in tags)
-                {
-                    // Clean out all of the "source:XXX" tags to save space
-                    if (i.indexOf('source:') !== -1) delete tags[i];
-                    if (i.indexOf('error:') !== -1) delete tags[i];
-                    if (i.indexOf('hoot:') !== -1) delete tags[i];
-                }
-
-                var str = JSON.stringify(tags);
-
-                // Shapefiles can't handle fields > 254 chars.
-                // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-                // A nicer thing would be to arrange the tags until they fit neatly
-                if (str.length < 255 || config.getOgrSplitO2s() == 'false')
-                {
-                    // return {attrs:{tag1:str}, tableName: tableName};
-                    attrs = {tag1:str};
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
                 }
                 else
                 {
-                    // Not good. Will fix with the rewrite of the tag splitting code
-                    if (str.length > 1012)
-                    {
-                        hoot.logVerbose('o2s tags truncated to fit in available space.');
-                        str = str.substring(0,1012);
-                    }
-
-                    // Now split the text across the available tags
-                    attrs = {tag1:str.substring(0,253),
-                            tag2:str.substring(253,506),
-                            tag3:str.substring(506,759),
-                            tag4:str.substring(759,1012)};
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in MGCP TRD4'}, tableName: ''});
+                    return returnData;
                 }
             }
 
-             returnData.push({attrs: attrs, tableName: tableName});
+            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Dump out what attributes we have converted before they get wiped out
+            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+
+            for (var i in tags)
+            {
+                // Clean out all of the "source:XXX" tags to save space
+                if (i.indexOf('source:') !== -1) delete tags[i];
+                if (i.indexOf('error:') !== -1) delete tags[i];
+                if (i.indexOf('hoot:') !== -1) delete tags[i];
+            }
+
+            var str = JSON.stringify(tags);
+
+            // Shapefiles can't handle fields > 254 chars.
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            {
+                //return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // Now split the text across the available tags
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
+            }
+
+            returnData.push({attrs: attrs, tableName: tableName});
         }
         else // We have a feature
         {

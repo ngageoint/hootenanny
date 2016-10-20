@@ -15,7 +15,9 @@ make -sj`nproc` plugins-test
 export HOOT_TEST_DIFF=--diff
 # Running glacial tests here because we're not sure core-coverage runs them
 echo "Running glacial tests..."
-bin/HootTest $HOOT_TEST_DIFF --glacial
+# Removing Poi test to troubleshoot hanging jobs on Jenkins
+bin/HootTest $HOOT_TEST_DIFF --glacial --exclude=".*ConflatePoiStatsTest.*"
+#bin/HootTest $HOOT_TEST_DIFF --glacial
 
 # This is done in VagrantBuild.sh
 # cd $HOOT_HOME/docs
@@ -29,6 +31,3 @@ make -sj`nproc` core-coverage
 
 echo "Building services coverage reports..."
 make -sj`nproc` services-coverage
-
-echo "Building UI coverage reports..."
-make ui-coverage

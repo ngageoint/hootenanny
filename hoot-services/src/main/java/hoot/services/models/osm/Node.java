@@ -26,10 +26,14 @@
  */
 package hoot.services.models.osm;
 
-import java.sql.Connection;
-import java.util.ArrayList;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+import static hoot.services.models.db.QCurrentWays.currentWays;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,16 +44,13 @@ import com.querydsl.core.types.dsl.BooleanPath;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLExpressions;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLInsertClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.QuadTileCalculator;
-import hoot.services.utils.DbUtils.EntityChangeType;
 
 
 /**
@@ -58,16 +59,13 @@ import hoot.services.utils.DbUtils.EntityChangeType;
 public class Node extends Element {
     private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
-    public Node(Long mapId, Connection dbConnection) {
-        super(dbConnection);
+    public Node(Long mapId) {
         super.elementType = ElementType.Node;
         super.record = new CurrentNodes();
-
         setMapId(mapId);
     }
 
-    public Node(Long mapId, Connection dbConnection, CurrentNodes record) {
-        super(dbConnection);
+    public Node(Long mapId, CurrentNodes record) {
         super.elementType = ElementType.Node;
 
         CurrentNodes nodeRecord = new CurrentNodes();
@@ -102,7 +100,7 @@ public class Node extends Element {
             nodeRecord = (CurrentNodes) record;
         }
         else {
-            nodeRecord = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+            nodeRecord = createQuery(getMapId())
                     .select(currentNodes)
                     .from(currentNodes)
                     .where(currentNodes.id.eq(getId()))
@@ -114,31 +112,6 @@ public class Node extends Element {
     }
 
     /**
-     * Returns the nodes specified in the collection of nodes IDs
-     *
-     * @param mapId
-     *            ID of the map the nodes belong to
-     * @param nodeIds
-     *            a collection of node IDs
-     * @param dbConn
-     *            JDBC Connection
-     * @return a collection of node records
-     */
-    static List<CurrentNodes> getNodes(long mapId, Set<Long> nodeIds, Connection dbConn) {
-        // This seems redundant when compared to Element::getElementRecords
-
-        if (!nodeIds.isEmpty()) {
-            return new SQLQuery<>(dbConn, DbUtils.getConfiguration(mapId))
-                    .select(currentNodes)
-                    .from(currentNodes)
-                    .where(currentNodes.id.in(nodeIds))
-                    .fetch();
-        }
-
-        return new ArrayList<>();
-    }
-
-    /**
      * Populates the element model object based on osm diff data
      *
      * @param xml
@@ -146,8 +119,6 @@ public class Node extends Element {
      */
     @Override
     public void fromXml(org.w3c.dom.Node xml) {
-        logger.debug("Parsing node...");
-
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
         CurrentNodes nodeRecord = (CurrentNodes) record;
@@ -168,9 +139,8 @@ public class Node extends Element {
             throw new RuntimeException("Coordinates for node with ID: " + getId() + " not within world boundary.");
         }
 
-        // If the node is being deleted, we still need to make sure that the
-        // coords passed in match what's on the server, since we'll be relying on them
-        // to compute the changeset bounds.
+        // If the node is being deleted, we still need to make sure that the coords passed in match what's on the
+        // server, since we'll be relying on them to compute the changeset bounds.
         nodeRecord.setLatitude(latitude);
         nodeRecord.setLongitude(longitude);
 
@@ -192,16 +162,14 @@ public class Node extends Element {
 
         // From the Rails port of OSM API:
         // ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
-        SQLQuery<Long> owningWaysQuery =
-                new SQLQuery<>(super.getDbConnection(), DbUtils.getConfiguration(super.getMapId()))
+        List<Long> owningWayIds = createQuery(super.getMapId())
                 .select(currentWayNodes.wayId)
                 .distinct()
                 .from(currentWays)
                 .join(currentWayNodes).on(currentWays.id.eq(currentWayNodes.wayId))
                 .where(currentWays.visible.eq(true).and(currentWayNodes.nodeId.eq(super.getId())))
-                .orderBy(currentWayNodes.wayId.asc());
-
-        List<Long> owningWayIds = owningWaysQuery.fetch();
+                .orderBy(currentWayNodes.wayId.asc())
+                .fetch();
 
         if (!owningWayIds.isEmpty()) {
             throw new OSMAPIPreconditionException("Node with ID = " + super.getId() + " is still used by other way(s): "
@@ -211,7 +179,7 @@ public class Node extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Node", :member_id => id }).
-        SQLQuery<Long> owningRelationsQuery = new SQLQuery<>(conn, DbUtils.getConfiguration(getMapId()))
+        List<Long> owningRelationsIds = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelations)
@@ -219,9 +187,8 @@ public class Node extends Element {
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
                         .and(currentRelationMembers.memberId.eq(super.getId())))
-                .orderBy(currentRelationMembers.relationId.asc());
-
-        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
+                .orderBy(currentRelationMembers.relationId.asc())
+                .fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(
@@ -260,7 +227,7 @@ public class Node extends Element {
             element.setAttribute("lon", String.valueOf(nodeRecord.getLongitude()));
         }
 
-        org.w3c.dom.Element elementWithTags = addTagsXml(element);
+        org.w3c.dom.Element elementWithTags = super.addTagsXml(element);
         if (elementWithTags == null) {
             return element;
         }
@@ -365,64 +332,5 @@ public class Node extends Element {
      */
     public NumberPath<Long> getRelatedRecordMapIdField() {
         return null;
-    }
-
-    /**
-     * Inserts a new node into the services database
-     *
-     * @param changesetId
-     *            corresponding changeset ID for the node to be inserted
-     * @param mapId
-     *            corresponding map ID for the node to be inserted
-     * @param latitude
-     *            latitude coordinate for the node to be inserted
-     * @param longitude
-     *            longitude coordinate for the node to be inserted
-     * @param tags
-     *            element tags
-     * @param conn
-     *            JDBC Connection
-     * @return ID of the newly created node
-     */
-    public static long insertNew(long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) {
-
-        long nextNodeId = new SQLQuery<>(conn, DbUtils.getConfiguration(mapId))
-                .select(SQLExpressions.nextval(Long.class, "current_nodes_id_seq"))
-                .fetchOne();
-
-        insertNew(nextNodeId, changesetId, mapId, latitude, longitude, tags, conn);
-
-        return nextNodeId;
-    }
-
-    /**
-     * Inserts a new node into the services database with the specified ID;
-     * useful for testing
-     *
-     * @param nodeId
-     *            ID to assign to the new node
-     * @param changesetId
-     *            corresponding changeset ID for the node to be inserted
-     * @param mapId
-     *            corresponding map ID for the node to be inserted
-     * @param latitude
-     *            latitude coordinate for the node to be inserted
-     * @param longitude
-     *            longitude coordinate for the node to be inserted
-     * @param tags
-     *            element tags
-     * @param conn
-     *            JDBC Connection
-     */
-    public static void insertNew(long nodeId, long changesetId, long mapId, double latitude, double longitude,
-            java.util.Map<String, String> tags, Connection conn) {
-
-        new SQLInsertClause(conn, DbUtils.getConfiguration(mapId), currentNodes)
-                .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
-                        currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
-                .values(nodeId, latitude, longitude, changesetId,
-                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
-                .execute();
     }
 }

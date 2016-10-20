@@ -27,6 +27,7 @@
 package hoot.services.controllers.info;
 
 import static hoot.services.HootProperties.*;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -40,11 +41,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.utils.DbUtils;
+import com.querydsl.core.types.dsl.Expressions;
 
 
+@Controller
 @Path("/map")
+@Transactional(readOnly = true)
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
@@ -58,8 +63,7 @@ public class MapInfoResource {
     };
 
 
-    public MapInfoResource() {
-    }
+    public MapInfoResource() {}
 
     /**
      * Service method endpoint for retrieving the physical size of a map record.
@@ -81,17 +85,14 @@ public class MapInfoResource {
             for (String mapId : mapids) {
                 if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
                     for (String table : maptables) {
-                        combinedMapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
+                        combinedMapSize += getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
             }
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String message = "Error getting combined map size for: " + mapIds;
-            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
+        catch (Exception e) {
+            String message = "Error getting combined map size for: " + mapIds + ".  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         JSONObject entity = new JSONObject();
@@ -122,7 +123,7 @@ public class MapInfoResource {
                 long mapSize = 0;
                 for (String table : maptables) {
                     if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                        mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
+                        mapSize += getTableSizeInBytes(table + "_" + mapId);
                     }
                 }
                 JSONObject layer = new JSONObject();
@@ -131,12 +132,9 @@ public class MapInfoResource {
                 layers.add(layer);
             }
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String message = "Error getting map size: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
+        catch (Exception e) {
+            String message = "Error getting map size.  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         JSONObject entity = new JSONObject();
@@ -162,5 +160,15 @@ public class MapInfoResource {
         entity.put("export_threshold", EXPORT_SIZE_THRESHOLD);
 
         return Response.ok(entity.toJSONString()).build();
+    }
+
+    /**
+     * Returns table size in byte
+     */
+    private static long getTableSizeInBytes(String tableName) {
+        return createQuery()
+                .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
+                .from()
+                .fetchOne();
     }
 }

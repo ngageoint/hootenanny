@@ -45,22 +45,35 @@
     </appender>
 
     <logger name="hoot.services" additivity="false">
-        <level value="debug"/>
+        <level value="info"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <!-- Controls org.glassfish.jersey.filter.LoggingFilter's logging.  Set to 'info' for detailed
+      logging of HTTP request/response messages received and sent by the Jersey Framework -->
+    <logger name="hoot.services.HootServicesJerseyApplication" additivity="false">
+        <level value="error"/>
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
+    <logger name="hoot.services.JerseyEventLogger" additivity="false">
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="org.deegree" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="com.querydsl" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
     <logger name="org.springframework" additivity="false">
-        <level value="error"/>
+        <level value="info"/>
         <appender-ref ref="ConsoleAppender" />
     </logger>
 
@@ -70,7 +83,7 @@
     </logger>
 
     <root>
-        <level value="debug" />
+        <level value="info" />
         <appender-ref ref="ConsoleAppender" />
     </root>
 

@@ -26,18 +26,16 @@
  */
 package hoot.services.controllers.osm;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.utils.DbUtils;
 
@@ -45,12 +43,13 @@ import hoot.services.utils.DbUtils;
 /**
  * Service endpoint for authenticated OSM user detail information
  */
+@Controller
 @Path("api/0.6/user/details")
+@Transactional(readOnly = true)
 public class UserDetailsResource {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsResource.class);
 
-    public UserDetailsResource() {
-    }
+    public UserDetailsResource() {}
 
     /**
      * Service method endpoint for retrieving OSM user detail information for
@@ -74,21 +73,11 @@ public class UserDetailsResource {
     @GET
     @Produces(MediaType.TEXT_XML)
     public Response getDetails() {
-        logger.debug("Retrieving logged in user details...");
-
         // For now, we're just grabbing the first user in the db, since we don't
         // have any authentication in place to get the correct user. Worst case, for now, you see
         // incorrect user information from iD editor...not a big deal since authentication doesn't exist
         // anyway. When hoot gets user authentication, then this obviously has to be updated.
-        long userId = -1;
-
-        try (Connection conn = DbUtils.createConnection()) {
-            userId = DbUtils.getTestUserId(conn);
-        }
-        catch (SQLException e) {
-            String msg = "Error getting OSM user info: " + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
+        long userId = DbUtils.getTestUserId();
 
         return (new UserResource()).get(String.valueOf(userId));
     }

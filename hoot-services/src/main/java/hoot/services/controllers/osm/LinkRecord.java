@@ -32,6 +32,10 @@ package hoot.services.controllers.osm;
 
 public class LinkRecord {
     private long id;
+    private long mapId;
+    private long folderId;
+
+    public LinkRecord() {}
 
     public long getId() {
         return id;
@@ -41,8 +45,6 @@ public class LinkRecord {
         this.id = id;
     }
 
-    private long mapId;
-
     public long getMapId() {
         return mapId;
     }
@@ -51,17 +53,11 @@ public class LinkRecord {
         this.mapId = mapId;
     }
 
-    private long folderId;
-
     public long getFolderId() {
         return folderId;
     }
 
     public void setFolderId(long folderId) {
         this.folderId = folderId;
-    }
-
-    public LinkRecord() {
-
     }
 }

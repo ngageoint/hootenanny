@@ -31,9 +31,9 @@ else
 endif
 	echo Running user interface tests...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format progress $(CUKE_OPTS)
 else
-	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty
+	TOMCAT_PORT=$(TOMCAT_PORT) xvfb-run --server-args="-screen 0, 1024x768x24" cucumber --format pretty  $(CUKE_OPTS)
 endif
 	echo ""
 

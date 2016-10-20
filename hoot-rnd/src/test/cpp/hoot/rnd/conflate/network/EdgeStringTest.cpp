@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
-#include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/core/TestUtils.h>
 
 namespace hoot
 {
@@ -38,139 +36,517 @@ namespace hoot
 class EdgeStringTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeStringTest);
-  CPPUNIT_TEST(trimTest);
+  CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST(calculateLengthTest);
+  CPPUNIT_TEST(edgeWithInvalidNumMembersTest);
+  CPPUNIT_TEST(getEdgeAtOffsetTest);
+  CPPUNIT_TEST(overlapTest);
+  CPPUNIT_TEST(overlapEdgeTest);
+  CPPUNIT_TEST(overlapSublineTest);
+  CPPUNIT_TEST(reverseTest);
+  CPPUNIT_TEST(partialTest);
+  CPPUNIT_TEST(stubTest);
+  CPPUNIT_TEST(edgeClosedTest);
+  CPPUNIT_TEST(addDisconnectedEdgeTest);
+  CPPUNIT_TEST(equalsTest);
+  CPPUNIT_TEST(containsEdgeStringTest);
+  CPPUNIT_TEST(appendSublineTest);
+  CPPUNIT_TEST(hashTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  NetworkEdgePtr _e12, _e23, _e34, _e46;
-  OsmMapPtr _map;
 
-  OsmNetworkPtr createSampleNetwork()
+  void basicTest()
   {
     TestUtils::resetEnvironment();
-    _map.reset(new OsmMap());
-    OsmMap::resetCounters();
-    auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
-    MapProjector::projectToPlanar(_map, *env);
 
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
 
-    NodePtr n1(new Node(Status::Invalid, -1, 0, 0, 15.0));
-    NetworkVertexPtr v1(new NetworkVertex(n1));
-    NodePtr n2(new Node(Status::Invalid, -2, 0, 100, 15.0));
-    NetworkVertexPtr v2(new NetworkVertex(n2));
-    NodePtr n3(new Node(Status::Invalid, -3, 0, 300, 15.0));
-    NetworkVertexPtr v3(new NetworkVertex(n3));
-    NodePtr n4(new Node(Status::Invalid, -4, 100, 300, 15.0));
-    NetworkVertexPtr v4(new NetworkVertex(n4));
-    NodePtr n5(new Node(Status::Invalid, -5, 150, 350, 15.0));
-    NetworkVertexPtr v5(new NetworkVertex(n5));
-    NodePtr n6(new Node(Status::Invalid, -6, 200, 300, 15.0));
-    NetworkVertexPtr v6(new NetworkVertex(n6));
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    edgeStr.appendEdge(edge2);
 
-    WayPtr w1(new Way(Status::Invalid, -1, 15.0));
-    w1->addNode(-1);
-    w1->addNode(-2);
-    WayPtr w2(new Way(Status::Invalid, -2, 15.0));
-    w2->addNode(-2);
-    w2->addNode(-3);
-    WayPtr w3(new Way(Status::Invalid, -3, 15.0));
-    w3->addNode(-3);
-    w3->addNode(-4);
-    WayPtr w4(new Way(Status::Invalid, -4, 15.0));
-    w4->addNode(-4);
-    w4->addNode(-5);
-    w4->addNode(-6);
+    CPPUNIT_ASSERT_EQUAL(2, edgeStr.getCount());
+    CPPUNIT_ASSERT(!edgeStr.isEdgeClosed());
+    CPPUNIT_ASSERT(edgeStr.contains(edge1));
+    CPPUNIT_ASSERT(edgeStr.contains(edge2));
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    CPPUNIT_ASSERT(edgeStr.getFrom() == edgeLoc1);
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge2, 1.0));
+    CPPUNIT_ASSERT(edgeStr.getTo() == edgeLoc2);
+    CPPUNIT_ASSERT(edgeStr.getFirstEdge() == edge1);
+    CPPUNIT_ASSERT(edgeStr.getLastEdge() == edge2);
 
-    _map->addElement(n1);
-    _map->addElement(n2);
-    _map->addElement(n3);
-    _map->addElement(n4);
-    _map->addElement(n5);
-    _map->addElement(n6);
-    _map->addElement(w1);
-    _map->addElement(w2);
-    _map->addElement(w3);
-    _map->addElement(w4);
+    CPPUNIT_ASSERT(edgeStr.getFromVertex() == vertex1);
+    CPPUNIT_ASSERT(edgeStr.getToVertex() == vertex3);
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex1));
+    CPPUNIT_ASSERT(!edgeStr.isAtExtreme(vertex2));
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex3));
+    CPPUNIT_ASSERT(edgeStr.isFromOnVertex());
+    CPPUNIT_ASSERT(edgeStr.isToOnVertex());
+    CPPUNIT_ASSERT(edgeStr.contains(vertex1));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex2));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex3));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex1));
+    CPPUNIT_ASSERT(edgeStr.containsInteriorVertex(vertex2));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex3));
 
-    _e12.reset(new NetworkEdge(v1, v2, false));
-    _e23.reset(new NetworkEdge(v2, v3, false));
-    _e34.reset(new NetworkEdge(v3, v4, false));
-    _e46.reset(new NetworkEdge(v4, v6, false));
+    CPPUNIT_ASSERT(!edgeStr.isFullPartial());
+    CPPUNIT_ASSERT(!edgeStr.isStub());
 
-    _e12->addMember(w1);
-    _e23->addMember(w2);
-    _e34->addMember(w3);
-    _e46->addMember(w4);
-
-    OsmNetworkPtr network1(new OsmNetwork());
-    network1->addVertex(v1);
-    network1->addVertex(v2);
-    network1->addVertex(v3);
-    network1->addVertex(v4);
-    network1->addVertex(v5);
-    network1->addVertex(v6);
-
-    network1->addEdge(_e12);
-    network1->addEdge(_e23);
-    network1->addEdge(_e34);
-    network1->addEdge(_e46);
-
-    return network1;
+    HOOT_STR_EQUALS(
+      "{ _start: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 --  --> (1) Node:-2, _portion: 1 } }",
+      edgeStr.getAllEdges()[0].getSubline()->toString());
+    HOOT_STR_EQUALS(
+      "{ _start: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 --  --> (2) Node:-3, _portion: 1 } }",
+      edgeStr.getAllEdges()[1].getSubline()->toString());
   }
 
-  void trimTest()
+  void calculateLengthTest()
   {
-    OsmNetworkPtr n = createSampleNetwork();
+    OsmMapPtr map(new OsmMap());
+    QList<NodePtr> nodes;
+    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
+    nodes.append(node1);
+    ConstNetworkVertexPtr vertex1(new NetworkVertex(node1));
+    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 10, 0);
+    nodes.append(node2);
+    ConstNetworkVertexPtr vertex2(new NetworkVertex(node2));
+    NetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstWayPtr way = TestUtils::createWay(map, nodes);
+    edge1->addMember(way);
+    MapProjector::projectToPlanar(map);
 
-    EdgeStringPtr str;
-    str.reset(new EdgeString());
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e12, 0.4)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e12, 1.0)))));
-    str->appendEdge(_e23);
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e34, 0.0)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e34, 0.6)))));
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1111782.53516264, edgeStr.calculateLength(map), 0.0001);
+  }
 
-    // trim the first and last edge
-    str->trim(_map, 35, 300);
-    HOOT_STR_EQUALS("[3]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.75 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 } }, { _start: { _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 0 }, _end: { _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 0.4 } }}",
-      str);
+  void edgeWithInvalidNumMembersTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    QList<NodePtr> nodes;
+    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
+    nodes.append(node1);
+    ConstNetworkVertexPtr vertex1(new NetworkVertex(node1));
+    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 10, 0);
+    nodes.append(node2);
+    ConstNetworkVertexPtr vertex2(new NetworkVertex(node2));
+    NetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstWayPtr way1 = TestUtils::createWay(map, nodes);
+    edge1->addMember(way1);
+    ConstWayPtr way2 = TestUtils::createWay(map, nodes);
+    edge1->addMember(way2);
 
-    str.reset(new EdgeString());
-    str->appendEdge(_e12);
+    const QString expectedErrMsg = "Edges with multiple members are not yet supported.";
 
-    // trim a single subline
-    str->trim(_map, 35, 82);
-    HOOT_STR_EQUALS("[1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.35 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.82 } }}",
-      str);
+    //edge with multiple members
 
-    str.reset(new EdgeString());
-    str->appendEdge(_e12);
-    str->appendEdge(_e23);
+    EdgeString edgeStr1;
+    edgeStr1.appendEdge(edge1);
 
-    // trim off a whole subline
-    str->trim(_map, 35, 82);
-    HOOT_STR_EQUALS("[1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.35 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.82 } }}",
-      str);
+    QString exceptionMsg("");
+    try
+    {
+      edgeStr1.calculateLength(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(expectedErrMsg, exceptionMsg.toStdString());
 
-    str.reset(new EdgeString());
-    str->appendEdge(_e12);
-    str->appendEdge(_e23);
+    //edge with no members
 
-    // don't trim anything
-    str->trim(_map, 0, 300);
-    HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 } }}",
-      str);
+    NetworkEdgePtr edge2(new NetworkEdge(vertex1, vertex2, true));
+    EdgeString edgeStr2;
+    edgeStr2.appendEdge(edge2);
+    exceptionMsg = "";
+    try
+    {
+      edgeStr2.calculateLength(map);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(expectedErrMsg, exceptionMsg.toStdString());
+  }
 
-    str.reset(new EdgeString());
-    str->appendEdge(_e12);
-    str->appendEdge(_e23);
+  void getEdgeAtOffsetTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    QList<NodePtr> nodes;
+    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
+    nodes.append(node1);
+    ConstNetworkVertexPtr vertex1(new NetworkVertex(node1));
+    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 10, 0);
+    nodes.append(node2);
+    ConstNetworkVertexPtr vertex2(new NetworkVertex(node2));
+    NetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstWayPtr way = TestUtils::createWay(map, nodes);
+    edge1->addMember(way);
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    NetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+    edge2->addMember(way);
+    MapProjector::projectToPlanar(map);
 
-    // trim off a whole subline
-    str->trim(_map, 100, 120);
-    HOOT_STR_EQUALS("[1]{{ _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0.1 } }}",
-      str);
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    edgeStr.appendEdge(edge2);
+    CPPUNIT_ASSERT(edge1 == edgeStr.getEdgeAtOffset(map, 0.0));
+    CPPUNIT_ASSERT(edge2 == edgeStr.getEdgeAtOffset(map, edgeStr.calculateLength(map)));
+  }
+
+  void overlapTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge1, 0.5));
+    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge1, 0.7));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLoc1, edgeLoc2));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLoc1, edgeLoc3));
+    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLoc2, edgeLoc3));
+
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edgeSubline1);
+    EdgeStringPtr edgeStr2(new EdgeString());
+    edgeStr2->appendEdge(edgeSubline2);
+    EdgeStringPtr edgeStr3(new EdgeString());
+    edgeStr3->appendEdge(edgeSubline3);
+
+    CPPUNIT_ASSERT(edgeStr1->overlaps(edgeStr2));
+    CPPUNIT_ASSERT(!edgeStr1->overlaps(edgeStr3));
+  }
+
+  void overlapEdgeTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge1, 0.5));
+    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge2, 0.7));
+    ConstEdgeSublinePtr edgeSubline(new EdgeSubline(edgeLoc1, edgeLoc2));
+
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edgeSubline);
+
+    CPPUNIT_ASSERT(edgeStr1->overlaps(edgeLoc1->getEdge()));
+    CPPUNIT_ASSERT(!edgeStr1->overlaps(edgeLoc3->getEdge()));
+  }
+
+  void overlapSublineTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge1, 0.5));
+    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge1, 0.7));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLoc1, edgeLoc2));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLoc1, edgeLoc3));
+    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLoc2, edgeLoc3));
+
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edgeSubline1);
+
+    CPPUNIT_ASSERT(edgeStr1->overlaps(edgeSubline2));
+    CPPUNIT_ASSERT(!edgeStr1->overlaps(edgeSubline3));
+  }
+
+  void reverseTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    edgeStr.appendEdge(edge2);
+    edgeStr.reverse();
+
+    CPPUNIT_ASSERT_EQUAL(2, edgeStr.getCount());
+    CPPUNIT_ASSERT(edgeStr.contains(edge1));
+    CPPUNIT_ASSERT(edgeStr.contains(edge2));
+    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
+    CPPUNIT_ASSERT(edgeStr.getTo() == edgeLoc1);
+    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge2, 1.0));
+    CPPUNIT_ASSERT(edgeStr.getFrom() == edgeLoc2);
+    CPPUNIT_ASSERT(edgeStr.getFirstEdge() == edge2);
+    CPPUNIT_ASSERT(edgeStr.getLastEdge() == edge1);
+
+    CPPUNIT_ASSERT(edgeStr.getFromVertex() == vertex3);
+    CPPUNIT_ASSERT(edgeStr.getToVertex() == vertex1);
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex1));
+    CPPUNIT_ASSERT(!edgeStr.isAtExtreme(vertex2));
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex3));
+    CPPUNIT_ASSERT(edgeStr.isFromOnVertex());
+    CPPUNIT_ASSERT(edgeStr.isToOnVertex());
+    CPPUNIT_ASSERT(edgeStr.contains(vertex1));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex2));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex3));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex1));
+    CPPUNIT_ASSERT(edgeStr.containsInteriorVertex(vertex2));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex3));
+  }
+
+  void partialTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstEdgeLocationPtr edgeLocStart1(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLocStart2(new EdgeLocation(edge1, 0.1));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.9));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart1, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart2, edgeLocEnd));
+
+    EdgeString edgeStr1;
+    edgeStr1.appendEdge(edgeSubline1);
+    CPPUNIT_ASSERT(edgeStr1.isPartial());
+    CPPUNIT_ASSERT(!edgeStr1.isFullPartial());
+
+    EdgeString edgeStr2;
+    edgeStr2.appendEdge(edgeSubline2);
+    CPPUNIT_ASSERT(edgeStr2.isPartial());
+    CPPUNIT_ASSERT(edgeStr2.isFullPartial());
+  }
+
+  void stubTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex1, true));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    CPPUNIT_ASSERT(edgeStr.isStub());
+  }
+
+  void edgeClosedTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
+    ConstEdgeSublinePtr edgeSubline(new EdgeSubline(edgeLocStart, edgeLocStart));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edgeSubline);
+    CPPUNIT_ASSERT(edgeStr.isEdgeClosed());
+
+    QString exceptionMsg("");
+    try
+    {
+      edgeStr.appendEdge(edgeSubline);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Illegal argument, you attempted to add an edge to an edge string that is already closed. Ends in a partial match?",
+      exceptionMsg.toStdString());
+  }
+
+  void addDisconnectedEdgeTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkVertexPtr vertex4(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex3, vertex4, true));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edge1);
+    QString exceptionMsg("");
+    try
+    {
+      edgeStr.appendEdge(edge2);
+    }
+    catch (HootException e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Error attempting to append an edge that isn't connected.", exceptionMsg.toStdString());
+  }
+
+  void equalsTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edge1);
+    edgeStr1->appendEdge(edge2);
+
+    EdgeStringPtr edgeStr2(new EdgeString());
+    edgeStr2->appendEdge(edge1);
+    edgeStr2->appendEdge(edge2);
+
+    ConstEdgeStringPtr edgeStr4 = edgeStr1->clone();
+    ConstEdgeStringPtr edgeStr5 = edgeStr2->clone();
+    CPPUNIT_ASSERT(edgeStr4 == edgeStr5);
+
+    EdgeStringPtr edgeStr3(new EdgeString());
+    edgeStr3->appendEdge(edge1);
+
+    ConstEdgeStringPtr edgeStr6 = edgeStr3->clone();
+    CPPUNIT_ASSERT(!(edgeStr4 == edgeStr6));
+  }
+
+  void containsEdgeStringTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+    ConstNetworkVertexPtr vertex4(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 30, 0)));
+    ConstNetworkEdgePtr edge3(new NetworkEdge(vertex3, vertex4, true));
+
+    EdgeStringPtr edgeStr1(new EdgeString());
+    edgeStr1->appendEdge(edge1);
+    edgeStr1->appendEdge(edge2);
+
+    EdgeStringPtr edgeStr2(new EdgeString());
+    edgeStr2->appendEdge(edge2);
+
+    EdgeStringPtr edgeStr3(new EdgeString());
+    edgeStr3->appendEdge(edge3);
+
+    CPPUNIT_ASSERT(edgeStr1->contains(edgeStr2));
+    CPPUNIT_ASSERT(!edgeStr1->contains(edgeStr3));
+  }
+
+  void appendSublineTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 1.0));
+    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    ConstEdgeLocationPtr edgeLocStart2(new EdgeLocation(edge2, 0.0));
+    ConstEdgeLocationPtr edgeLocEnd2(new EdgeLocation(edge2, 1.0));
+    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart2, edgeLocEnd2));
+
+    EdgeString edgeStr;
+    edgeStr.appendEdge(edgeSubline1);
+    edgeStr.appendEdge(edgeSubline2);
+
+    CPPUNIT_ASSERT_EQUAL(2, edgeStr.getCount());
+    CPPUNIT_ASSERT(!edgeStr.isEdgeClosed());
+    CPPUNIT_ASSERT(edgeStr.contains(edge1));
+    CPPUNIT_ASSERT(edgeStr.contains(edge2));
+    CPPUNIT_ASSERT(edgeStr.getFrom() == edgeLocStart);
+    CPPUNIT_ASSERT(edgeStr.getTo() == edgeLocEnd2);
+    CPPUNIT_ASSERT(edgeStr.getFirstEdge() == edge1);
+    CPPUNIT_ASSERT(edgeStr.getLastEdge() == edge2);
+
+    CPPUNIT_ASSERT(edgeStr.getFromVertex() == vertex1);
+    CPPUNIT_ASSERT(edgeStr.getToVertex() == vertex3);
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex1));
+    CPPUNIT_ASSERT(!edgeStr.isAtExtreme(vertex2));
+    CPPUNIT_ASSERT(edgeStr.isAtExtreme(vertex3));
+    CPPUNIT_ASSERT(edgeStr.isFromOnVertex());
+    CPPUNIT_ASSERT(edgeStr.isToOnVertex());
+    CPPUNIT_ASSERT(edgeStr.contains(vertex1));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex2));
+    CPPUNIT_ASSERT(edgeStr.contains(vertex3));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex1));
+    CPPUNIT_ASSERT(edgeStr.containsInteriorVertex(vertex2));
+    CPPUNIT_ASSERT(!edgeStr.containsInteriorVertex(vertex3));
+
+    CPPUNIT_ASSERT(!edgeStr.isFullPartial());
+    CPPUNIT_ASSERT(!edgeStr.isStub());
+  }
+
+  void hashTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    ConstNetworkVertexPtr vertex1(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+    ConstNetworkVertexPtr vertex2(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkVertexPtr vertex3(
+      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 20, 0)));
+    ConstNetworkEdgePtr edge2(new NetworkEdge(vertex2, vertex3, true));
+
+    EdgeStringPtr edgeStr(new EdgeString());
+    edgeStr->appendEdge(edge1);
+    edgeStr->appendEdge(edge2);
+
+    QHash<EdgeStringPtr, QString> edgeStrings;
+    edgeStrings.insert(edgeStr, "test");
+    CPPUNIT_ASSERT_EQUAL(1, edgeStrings.size());
+    CPPUNIT_ASSERT(edgeStrings.value(edgeStr) == "test");
+    CPPUNIT_ASSERT(edgeStrings.key("test") == edgeStr);
   }
 };
 

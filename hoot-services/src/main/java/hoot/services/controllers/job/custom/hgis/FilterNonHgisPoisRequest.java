@@ -29,6 +29,7 @@ package hoot.services.controllers.job.custom.hgis;
 
 public class FilterNonHgisPoisRequest {
     private String source;
+    private String output;
 
     public String getSource() {
         return this.source;
@@ -37,8 +38,6 @@ public class FilterNonHgisPoisRequest {
     public void setSource(String src) {
         this.source = src;
     }
-
-    private String output;
 
     public String getOutput() {
         return this.output;
