@@ -59,6 +59,9 @@ private:
   void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
   void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
   void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
+  void _parseAddressesAsRange(const QString houseNum, const QString street, QStringList& addresses);
+  void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses);
+  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress);
 
 };
 
