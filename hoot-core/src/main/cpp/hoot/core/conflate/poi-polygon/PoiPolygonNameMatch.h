@@ -40,7 +40,7 @@ class PoiPolygonNameMatch
 {
 public:
 
-  PoiPolygonNameMatch(double nameScoreThreshold, const QString testUuid);
+  PoiPolygonNameMatch(double nameScoreThreshold);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
@@ -52,8 +52,6 @@ public:
 private:
 
   double _nameScoreThreshold;
-
-  QString _testUuid;
 
 };
 

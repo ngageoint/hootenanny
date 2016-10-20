@@ -78,6 +78,7 @@ private:
   bool _closeMatch;
 
   QString _testUuid;
+  bool _testFeatureFound;
 
   int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
   int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);

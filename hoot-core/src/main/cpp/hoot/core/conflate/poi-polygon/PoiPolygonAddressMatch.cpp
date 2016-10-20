@@ -195,6 +195,9 @@ void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr rela
 
 bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPtr poi)
 {
+  const bool testFeatureFound =
+    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
+
   QStringList polyAddresses;
 
   //see if the poly has any address
@@ -236,8 +239,7 @@ bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPt
     {
       const QString poiAddress = poiAddresses.at(j);
 
-      if (Log::getInstance().getLevel() == Log::Debug &&
-           (poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid))
+      if (testFeatureFound)
       {
         LOG_VARD(polyAddress);
         LOG_VARD(poiAddress);

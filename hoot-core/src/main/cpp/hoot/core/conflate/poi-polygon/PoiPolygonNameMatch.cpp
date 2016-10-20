@@ -37,9 +37,8 @@
 namespace hoot
 {
 
-PoiPolygonNameMatch::PoiPolygonNameMatch(double nameScoreThreshold,const QString testUuid = "") :
-_nameScoreThreshold(nameScoreThreshold),
-_testUuid(testUuid)
+PoiPolygonNameMatch::PoiPolygonNameMatch(double nameScoreThreshold) :
+_nameScoreThreshold(nameScoreThreshold)
 {
 
 }

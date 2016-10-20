@@ -118,6 +118,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     /*LOG_WARN*/LOG_DEBUG("Invalid poly geometry.");
     return false;
   }
+  const bool testFeatureFound =
+    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
 
   //The rules below are roughly grouped by processing expense (more granular ordering can still be
   //done to further reduce runtime), with the rules requiring the least expensive computations
@@ -147,8 +149,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //If the poi is a rec center and the poly is not a rec center or a building, return a miss.
   if (poiIsRecCenter && !polyIsRecCenter && !polyIsBuilding)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #1...");
     }
@@ -162,8 +163,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //TODO: make is sport method
   if (poi->getTags().contains("sport") && polyIsPark && _distance == 0)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #2...");
     }
@@ -176,8 +176,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poi->getTags().get("place").toLower() == "neighbourhood" &&
            !poly->getTags().contains("place"))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #3...");
     }
@@ -192,8 +191,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
            poi->getTags().get("amenity").toLower() == "atm" ||
            poi->getTags().get("man_made").toLower() == "surveillance")
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #4...");
     }
@@ -205,8 +203,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poi->getTags().get("barrier").toLower() == "gate" &&
            poly->getTags().get("amenity").toLower() == "parking")
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #5...");
     }
@@ -218,8 +215,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //TODO: may make some previous rules obsolete
   if (poiIsPark && polyIsSport)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #6...");
     }
@@ -231,8 +227,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //TODO: make is sport/school methods
   if (poi->getTags().get("amenity").toLower() == "school" && poly->getTags().contains("sport"))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #7...");
     }
@@ -247,8 +242,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
            !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
              OsmSchemaCategory::building()))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #8...");
     }
@@ -261,8 +255,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poly->getTags().get("tunnel") == "yes" && poiHasType &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #9...");
     }
@@ -276,8 +269,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
            _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #10...");
     }
@@ -291,8 +283,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
            OsmSchema::getInstance().getCategories(
              poi->getTags()).intersects(OsmSchemaCategory::building()))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #11...");
     }
@@ -307,8 +298,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
            _distance > _matchDistance &&
            (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #12...");
     }
@@ -323,8 +313,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //*
   if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #13...");
     }
@@ -356,8 +345,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //looking at its type.
   if (poiName.contains("play area") && polyArea > 25000) //TODO: move this value to a config?
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #14...");
     }
@@ -368,7 +356,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Don't review park poi's against large non-park polys.
   //TODO: !polyIsPark conditional adds two wrong matches to C but takes one away from D; look
   //into it
-  //*
   if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
            (((poly->getTags().contains("landuse") && !poi->getTags().contains("landuse")) ||
            (poly->getTags().contains("natural") && !poi->getTags().contains("natural")) ||
@@ -377,8 +364,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             poly->getTags().get("place").toLower() == "neighbourhood")) &&
            polyArea > 50000)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #15...");
     }
@@ -403,7 +389,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   bool poiOnBuilding = false;
 
   PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
-  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
+  PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
 
   set<ElementId>::const_iterator areaNeighborItr = _areaNeighborIds.begin();
   while (areaNeighborItr != _areaNeighborIds.end())
@@ -431,9 +417,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
         else if (areaGeom.get())
         {
-          /*if (Log::getInstance().getLevel() == Log::Debug &&
-              (poi->getTags().get("uuid") == _testUuid ||
-               poly->getTags().get("uuid") == _testUuid))
+          /*if (testFeatureFound)
           {
             LOG_VARD(area->getTags().get("uuid"))
             LOG_VARD(_isPlayground(area));
@@ -459,9 +443,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             {
               poiContainedInAnotherParkPoly = true;
 
-              if (Log::getInstance().getLevel() == Log::Debug &&
-                  (poly->getTags().get("uuid") == _testUuid ||
-                   poi->getTags().get("uuid") == _testUuid))
+              if (testFeatureFound)
               {
                 LOG_DEBUG(
                   "poi examined and found to be contained within a park poly outside of this match " <<
@@ -504,9 +486,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   poiToOtherParkPolyNodeDist = areaLineStr->distance(_poiGeom.get());
                 }
 
-                if (Log::getInstance().getLevel() == Log::Debug &&
-                    (poi->getTags().get("uuid") == _testUuid ||
-                     poly->getTags().get("uuid") == _testUuid))
+                if (testFeatureFound)
                 {
                   LOG_DEBUG(
                     "poly examined and found very close to a another park poly: " << poly->toString());
@@ -519,9 +499,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           {
             polyContainsPlayAreaOrPlaygroundPoly = true;
 
-            if (Log::getInstance().getLevel() == Log::Debug &&
-                (poi->getTags().get("uuid") == _testUuid ||
-                 poly->getTags().get("uuid") == _testUuid))
+            if (testFeatureFound)
             {
               LOG_DEBUG("poly examined and found to contain a playground poly: " << poly->toString());
               LOG_DEBUG("playground poly it contains: " << area->toString());
@@ -578,8 +556,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
       poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #16...");
     }
@@ -598,8 +575,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     if (_exactNameMatch)
     {
       //Only misnomer for "ReviewReducer"...can we get rid of this?
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+      if (testFeatureFound)
       {
         LOG_DEBUG("Returning review per rule #17...");
       }
@@ -607,8 +583,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
     else
     {
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+      if (testFeatureFound)
       {
         LOG_DEBUG("Returning miss per rule #17...");
       }
@@ -623,8 +598,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
            otherParkPolyNameMatch && !polyIsPlayground)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #18...");
     }
@@ -641,8 +615,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //at the very least end up as a review.
   if (poiIsPlayArea && polyIsPark && polyContainsPlayAreaOrPlaygroundPoly)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #19...");
     }
@@ -654,8 +627,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //reviews in another one that its not contained in.
   if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #20...");
     }
@@ -667,8 +639,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //matched against anything else.
   if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithExactTypeMatch)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #21...");
     }
@@ -679,8 +650,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //If a building is a building don't review it against a non-building poly.
   if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #22...");
     }
@@ -720,9 +690,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               !poiNeighbor->getTags().get("name").trimmed().isEmpty();
           }
 
-          if (Log::getInstance().getLevel() == Log::Debug &&
-              (poly->getTags().get("uuid") == _testUuid ||
-               poi->getTags().get("uuid") == _testUuid))
+          if (testFeatureFound)
           {
             LOG_DEBUG(
               "poly examined and found to contain another park or playground poi " <<
@@ -751,8 +719,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poiIsPlayArea && !poiIsPlayground && polyIsPark && _distance == 0 &&
            polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
   {
-    if (Log::getInstance().getLevel() == Log::Debug &&
-        (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+    if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #23...");
     }

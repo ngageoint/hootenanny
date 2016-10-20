@@ -44,6 +44,9 @@ _testUuid(testUuid)
 double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                       QString& t2BestKvp)
 {
+  const bool testFeatureFound =
+    e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid;
+
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
 
@@ -66,19 +69,9 @@ double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2,
     }
   }
 
-  /*const QString religion1Val = t1.get("religion").toLower().trimmed();
-  const QString religion2Val = t2.get("religion").toLower().trimmed();
-  if (!religion1Val.isEmpty() && !religion1Val.isEmpty() &&
-      OsmSchema::getInstance().score("religion=" + religion1Val, "religion=" + religion2Val) == 0.0)
-  {
-    LOG_DEBUG("Failed type match on different religions.");
-    return false;
-  }*/
-
   const double typeScore = _getTagScore(e1, e2, t1BestKvp, t2BestKvp);
 
-  if (e1->getTags().get("uuid") == _testUuid ||
-      e2->getTags().get("uuid") == _testUuid)
+  if (testFeatureFound)
   {
     LOG_VARD(typeScore);
   }

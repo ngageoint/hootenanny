@@ -59,8 +59,7 @@ int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
   const double reviewDistancePlusCe = _reviewDistance + ce;
   _closeMatch = _distance <= reviewDistancePlusCe;
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+  if (_testFeatureFound)
   {
     LOG_VARD(_closeMatch);
     LOG_VARD(_distance);
@@ -100,8 +99,7 @@ int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElement
   }
   _typeMatch = _typeScore >= _typeScoreThreshold;
   int evidence = _typeMatch ? 1 : 0;
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+  if (_testFeatureFound)
   {
     LOG_VARD(_typeScore);
     LOG_VARD(_typeMatch);
@@ -113,13 +111,12 @@ int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameMatch nameScorer(_nameScoreThreshold, _testUuid);
+  PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
   _nameScore = nameScorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
   int evidence = _nameMatch ? 1 : 0;
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+  if (_testFeatureFound)
   {
     LOG_VARD(_nameMatch);
     LOG_VARD(_exactNameMatch);
@@ -132,8 +129,7 @@ int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi, ConstElem
 {
   const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
   int evidence = addressMatch ? 1 : 0;
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+  if (_testFeatureFound)
   {
     LOG_VARD(addressMatch);
   }
@@ -142,6 +138,9 @@ int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi, ConstElem
 
 int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  _testFeatureFound =
+    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
+
   int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
