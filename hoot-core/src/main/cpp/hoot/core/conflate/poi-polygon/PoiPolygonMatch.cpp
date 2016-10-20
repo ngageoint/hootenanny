@@ -339,12 +339,12 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
         _map, _areaNeighborIds, _poiNeighborIds, _distance, evidenceScorer.getNameScore(),
         evidenceScorer.getNameMatch(), evidenceScorer.getExactNameMatch(), _typeScoreThreshold,
         evidenceScorer.getTypeScore(), evidenceScorer.getTypeMatch(), _matchDistance,
-        _reviewDistance, _polyGeom, _poiGeom, evidence, _testUuid)
+        _reviewDistance, _polyGeom, _poiGeom, _testUuid)
         .triggersRule(_poi, _poly, externalMatchClass);
     if (reviewReductionRuleTriggered)
     {
       //This could just be set to miss, except there is one case in ReviewReducer where a review is
-      //returned instead of a miss....may need to refactor that out.
+      //returned instead of a miss....may need to refactor that behavior out.
       _class = externalMatchClass;
     }
   }

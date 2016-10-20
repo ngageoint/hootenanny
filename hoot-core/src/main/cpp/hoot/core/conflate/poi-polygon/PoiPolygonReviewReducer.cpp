@@ -69,7 +69,6 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                      double reviewDistance,
                                                      shared_ptr<Geometry> polyGeom,
                                                      shared_ptr<Geometry> poiGeom,
-                                                     const int evidence,
                                                      const QString testUuid = "") :
 _map(map),
 _areaNeighborIds(areaNeighborIds),
@@ -86,7 +85,6 @@ _reviewDistance(reviewDistance),
 _polyGeom(polyGeom),
 _poiGeom(poiGeom),
 _badGeomCount(0),
-_evidence(evidence),
 _testUuid(testUuid)
 {
   //TODO: can probably get rid of this list and make the logic work against all landuse
