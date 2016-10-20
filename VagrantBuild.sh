@@ -10,6 +10,11 @@ source ./SetupEnv.sh
 echo "### Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 
+# Going to remove this so that it gets updated
+if [ -f missing ]; then
+  rm -f missing
+fi
+
 aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
