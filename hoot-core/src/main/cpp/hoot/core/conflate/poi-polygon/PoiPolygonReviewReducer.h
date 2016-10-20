@@ -54,9 +54,9 @@ public:
                             const set<ElementId>& poiNeighborIds, double distance,
                             double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                             double typeScoreThreshold, double typeScore, bool typeMatch,
-                            double matchDistance, shared_ptr<Geometry> polyGeom,
-                            shared_ptr<Geometry> poiGeom, const int evidence,
-                            const QString testUuid);
+                            double matchDistance, double reviewDistance,
+                            shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
+                             const int evidence, const QString testUuid);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
 
@@ -75,6 +75,7 @@ private:
   double _typeScore;
   bool _typeMatch;
   double _matchDistance;
+  double _reviewDistance;
 
   //static vector<SchemaVertex> _allTags;
   static QSet<QString> _allTagKeys;

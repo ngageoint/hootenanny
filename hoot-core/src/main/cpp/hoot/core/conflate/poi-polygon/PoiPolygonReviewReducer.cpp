@@ -66,6 +66,7 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                      double typeScore,
                                                      bool typeMatch,
                                                      double matchDistance,
+                                                     double reviewDistance,
                                                      shared_ptr<Geometry> polyGeom,
                                                      shared_ptr<Geometry> poiGeom,
                                                      const int evidence,
@@ -81,6 +82,7 @@ _typeScoreThreshold(typeScoreThreshold),
 _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistance(matchDistance),
+_reviewDistance(reviewDistance),
 _polyGeom(polyGeom),
 _poiGeom(poiGeom),
 _badGeomCount(0),
@@ -154,7 +156,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //Don't match sports fields to parks.  This seems a little simplistic, but has has positive
+  //Don't match sports fields to parks.  This seems a little simplistic, but has had positive
   //results so far.
   //TODO: Is this rule superceded by #11?
   //TODO: make is sport method
@@ -686,7 +688,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //PoiPolygonEvidenceScorer evidenceScorer();
   set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
   while (poiNeighborItr != _poiNeighborIds.end())
   {
@@ -729,6 +730,32 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
           }
         }
+
+        /*const double distanceFromNeighborPoiToPoly = _polyGeom->distance(poiNeighborGeom.get());
+        PoiPolygonEvidenceScorer evidenceScorer(_matchDistance, _reviewDistance,
+          distanceFromNeighborPoiToPoly, _typeScoreThreshold, _nameScoreThreshold, _map,
+          _testUuid);
+        const int neighborEvidence = evidenceScorer.calculateEvidence(poiNeighbor, poly);
+        if (neighborEvidence > _evidence)
+        {
+          LOG_DEBUG(
+            "neighbor poi examined and found to have better evidence than the poi currently " <<
+            "being compared: " << poi->toString());
+          LOG_DEBUG("neighbor poi: " << poiNeighbor->toString());
+          LOG_VARD(distanceFromNeighborPoiToPoly);
+          LOG_VARD(_evidence);
+          LOG_VARD(neighborEvidence);
+
+          //miss when another POI in the surrounding area has a better evidence match with the poly than
+          //this one
+          if (Log::getInstance().getLevel() == Log::Debug &&
+              (poi->getTags().get("uuid") == _testUuid || poly->getTags().get("uuid") == _testUuid))
+          {
+            LOG_DEBUG("Returning miss per rule #24...");
+          }
+          matchClass.setMiss();
+          return true;
+        }*/
       }
       catch (const geos::util::TopologyException& e)
       {
@@ -744,10 +771,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
     poiNeighborItr++;
   }
-
-  //TODO: add a rule that misses when another POI has a better evidence match with the poly than
-  //this one
-
 
   //If this isn't a park or playground poi, then don't match it to any park poly that contains
   //another park or playground poi.

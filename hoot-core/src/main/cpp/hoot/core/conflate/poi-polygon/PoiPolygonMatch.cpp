@@ -43,7 +43,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
+QString PoiPolygonMatch::_testUuid = "{ce5a91a1-7620-5102-ae3c-42206a765464}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -331,8 +331,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       PoiPolygonReviewReducer(
         _map, _areaNeighborIds, _poiNeighborIds, _distance, evidenceScorer.getNameScore(),
         evidenceScorer.getNameMatch(), evidenceScorer.getExactNameMatch(), _typeScoreThreshold,
-        evidenceScorer.getTypeScore(), evidenceScorer.getTypeMatch(), _matchDistance, polyGeom,
-        poiGeom, evidence, _testUuid)
+        evidenceScorer.getTypeScore(), evidenceScorer.getTypeMatch(), _matchDistance,
+        _reviewDistance, polyGeom, poiGeom, evidence, _testUuid)
         .triggersRule(poi, poly, externalMatchClass);
     if (reviewReductionRuleTriggered)
     {
