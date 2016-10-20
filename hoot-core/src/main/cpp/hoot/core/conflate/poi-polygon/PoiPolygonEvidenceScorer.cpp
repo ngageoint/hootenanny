@@ -54,7 +54,8 @@ _testUuid(testUuid)
 {
 }
 
-int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
+unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
+                                                            ConstElementPtr poly)
 {
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;
@@ -87,11 +88,11 @@ int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi, ConstEle
     max(
       distanceCalc.getReviewDistanceForType(_t1BestKvp),
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
-  int evidence = _distance <= _matchDistance ? 2 : 0;
+  unsigned int evidence = _distance <= _matchDistance ? 2 : 0;
   return evidence;
 }
 
-int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
+unsigned int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
   _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
@@ -101,7 +102,7 @@ int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElement
     _typeScoreThreshold = 0.3; //TODO: move to config
   }
   _typeMatch = _typeScore >= _typeScoreThreshold;
-  int evidence = _typeMatch ? 1 : 0;
+  unsigned int evidence = _typeMatch ? 1 : 0;
   if (_testFeatureFound)
   {
     LOG_VARD(_typeScore);
@@ -112,13 +113,13 @@ int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElement
   return evidence;
 }
 
-int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
+unsigned int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
   _nameScore = nameScorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
-  int evidence = _nameMatch ? 1 : 0;
+  unsigned int evidence = _nameMatch ? 1 : 0;
   if (_testFeatureFound)
   {
     LOG_VARD(_nameMatch);
@@ -128,10 +129,11 @@ int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, ConstElement
   return evidence;
 }
 
-int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
+unsigned int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi,
+                                                           ConstElementPtr poly)
 {
   const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
-  int evidence = addressMatch ? 1 : 0;
+  unsigned int evidence = addressMatch ? 1 : 0;
   if (_testFeatureFound)
   {
     LOG_VARD(addressMatch);
@@ -139,7 +141,7 @@ int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi, ConstElem
   return evidence;
 }
 
-int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
+unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   _testFeatureFound =
     poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;

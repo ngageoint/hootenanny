@@ -45,7 +45,7 @@ public:
                            unsigned int matchEvidenceThreshold, ConstOsmMapPtr map,
                            QString testUuid);
 
-  int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   QString getType1BestKvp() const { return _t1BestKvp; }
   QString getType2BestKvp() const { return _t2BestKvp; }
@@ -82,10 +82,10 @@ private:
   QString _testUuid;
   bool _testFeatureFound;
 
-  int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
 };
 
