@@ -137,8 +137,8 @@ private:
   static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
-  QString _t1BestKvp;
-  QString _t2BestKvp;
+  //QString _t1BestKvp;
+  //QString _t2BestKvp;
 
   set<ElementId> _areaNeighborIds;
   set<ElementId> _poiNeighborIds;
