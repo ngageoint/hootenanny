@@ -461,7 +461,7 @@ conf/words1.sqlite:
 	([ -e /tmp/words1.sqlite.bz2 ] && \
 	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
-	(wget -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
+	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
 	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 

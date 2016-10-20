@@ -26,43 +26,120 @@
  */
 package hoot.services.controllers.info;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Map;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
-import org.json.simple.JSONObject;
-import org.junit.Assert;
+import java.io.File;
+import java.net.URL;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.io.FileUtils;
+import org.hamcrest.CoreMatchers;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootServicesJerseyTestAbstract;
 
 
-public class AdvancedOptResourceTest {
+public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
+
+    private static File homeFolder;
+    private static String original_HOME_FOLDER;
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        original_HOME_FOLDER = HOME_FOLDER;
+        homeFolder = new File(FileUtils.getTempDirectory(), "AdvancedOptResourceTest");
+        FileUtils.forceMkdir(homeFolder);
+        assertTrue(homeFolder.exists());
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
+
+        File testFolder = new File(homeFolder, "conf");
+        FileUtils.forceMkdir(testFolder);
+
+        File dest = new File(testFolder, "conflationRefOps.json");
+        URL inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationRefOps.json");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        dest = new File(testFolder, "conflateAdvOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflateAdvOps.json");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        dest = new File(testFolder, "conflationAverageOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationAverageOps.json");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        dest = new File(testFolder, "conflationHorizontalOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationHorizontalOps.json");
+        FileUtils.copyURLToFile(inputUrl, dest);
+
+        dest = new File(testFolder, "ConfigOptions.asciidoc");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/ConfigOptions.asciidoc");
+        FileUtils.copyURLToFile(inputUrl, dest);
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        FileUtils.deleteDirectory(homeFolder);
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+    }
 
     @Test
     @Category(UnitTest.class)
-    public void testGetOptions() throws Exception {
+    public void testGetOptionsWhenConflationTypeReference() throws Exception {
+        Response responseData =
+                target("/advancedopts/getoptions")
+                        .queryParam("conftype", "reference")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
 
-        AdvancedOptResource adv = new AdvancedOptResource();
-        Field field = adv.getClass().getDeclaredField("doc");
-        field.setAccessible(true);
-        field.set(adv, new JSONObject());
+        String jsonStr = responseData.readEntity(String.class);
+        assertThat(jsonStr, CoreMatchers.containsString("reference_conflation_options"));
+    }
 
-        Method getParseAsciidocMethod = AdvancedOptResource.class.getDeclaredMethod("parseAsciidoc");
-        getParseAsciidocMethod.setAccessible(true);
-        getParseAsciidocMethod.invoke(adv);
+    @Test
+    @Category(UnitTest.class)
+    public void testGetOptionsWhenConflationTypeAverage() throws Exception {
+        Response responseData =
+                target("/advancedopts/getoptions")
+                        .queryParam("conftype", "average")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
 
-        JSONObject opt = (JSONObject) ((JSONObject) field.get(adv)).get("javascript.translator.path");
-        Assert.assertEquals("A list of paths to include in the javascript translator search path.",
-                            opt.get("Description").toString());
+        String jsonStr = responseData.readEntity(String.class);
+        assertThat(jsonStr, CoreMatchers.containsString("average_conflation_options"));
+    }
 
-        JSONObject defList = (JSONObject) opt.get("Default List");
+    @Test
+    @Category(UnitTest.class)
+    public void testGetOptionsWhenConflationTypeHorizontal() throws Exception {
+        Response responseData =
+                target("/advancedopts/getoptions")
+                        .queryParam("conftype", "horizontal")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
 
-        for (Object o : defList.entrySet()) {
-            Map.Entry pair = (Map.Entry) o;
-            Assert.assertTrue(!pair.getKey().toString().isEmpty());
-            Assert.assertTrue(pair.getValue().toString().isEmpty());
-        }
+        String jsonStr = responseData.readEntity(String.class);
+        assertThat(jsonStr, CoreMatchers.containsString("horizontal_conflation_options"));
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetOptionsWhenConflationTypeAdvanced() throws Exception {
+        Response responseData =
+                target("/advancedopts/getoptions")
+                        .queryParam("conftype", "custom")
+                        .request(MediaType.APPLICATION_JSON)
+                        .get();
+
+        String jsonStr = responseData.readEntity(String.class);
+        assertThat(jsonStr, CoreMatchers.containsString("hoot_cleaning_options"));
     }
 }

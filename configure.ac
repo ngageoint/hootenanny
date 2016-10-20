@@ -3,8 +3,8 @@
 
 AC_PREREQ([2.65])
 m4_include([m4/version.m4])
-AC_INIT([hootenanny], VERSION_NUMBER, [jason.surratt@digitalglobe.com])
-AM_INIT_AUTOMAKE(hootenanny, [VERSION_NUMBER])
+AC_INIT([hootenanny], [VERSION_NUMBER], [jason.surratt@digitalglobe.com])
+AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 
 ###

@@ -31,7 +31,7 @@ describe('compare translation methods', function() {
         var mgcp_xml = hoot.OsmWriter.toString(map);
 
         var osm_json = emgcp_osm.toOSM({
-            "Feature Code": "AL015:General Building Point Feature",
+            "Feature Code": "AL015:General Building",
             "Feature Function": "Restaurant",
             "MGCP Feature universally unique identifier": "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4"
         }, '', 'Point');
@@ -58,7 +58,7 @@ describe('compare translation methods', function() {
         // Test the conversion of osm to emgcp without using hoot to translate an osm map
         var osm2mgcp = emgcp.toEnglish(osm, '', 'Point');
 
-        var expected = { 'Feature Code': 'AL020:Built-Up Area Area Feature',
+        var expected = { 'Feature Code': 'AL020:Built-Up Area',
                          Name: 'Manitou Springs',
                          'MGCP Feature universally unique identifier': '4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4',
                          'Associated Text': '<OSM>{"poi":"yes"}</OSM>',

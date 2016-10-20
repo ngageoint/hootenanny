@@ -22,24 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.models.review;
+package hoot.services.testsupport;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import java.util.logging.Logger;
 
-import hoot.services.UnitTest;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
+import org.springframework.context.ApplicationContext;
+
+import hoot.services.controllers.filters.CorsResponseFilter;
 
 
-public class ReviewableItemTest {
-    @Test
-    @Category(UnitTest.class)
-    public void testToString() throws Exception {
-        ReviewableItem o = new ReviewableItem(5, 3, 4);
-        String expected = "{\"sortorder\":5,\"relationid\":4,\"mapid\":3}";
-        String actual = o.toString();
+public class HootServicesJerseyTestApplication extends ResourceConfig {
+    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
 
-        org.junit.Assert.assertEquals(expected, actual);
+    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
+        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+
+        super.register(MultiPartFeature.class);
+        super.register(CorsResponseFilter.class);
+        super.register(RequestContextFilter.class);
+
+        super.property("contextConfig", applicationContext);
     }
 }

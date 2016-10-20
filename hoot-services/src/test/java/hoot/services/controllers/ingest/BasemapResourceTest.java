@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -35,64 +36,51 @@ import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 public class BasemapResourceTest {
-    private static final File homeFolder;
-    private static final String tileServerPath;
-    private static final String ingestStagingPath;
-    private static final String original_HOME_FOLDER;
-    private static final String original_TILE_SERVER_PATH;
-    private static final String original_INGEST_STAGING_PATH;
-
-    static {
-        try {
-            original_HOME_FOLDER = HOME_FOLDER;
-            homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
-            FileUtils.forceMkdir(homeFolder);
-            Assert.assertTrue(homeFolder.exists());
-            HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
-
-            //tileServerPath=$(homeFolder)/ingest/processed
-
-            original_TILE_SERVER_PATH = TILE_SERVER_PATH;
-            File processedFolder = new File(homeFolder, "ingest/processed");
-            FileUtils.forceMkdir(processedFolder);
-            Assert.assertTrue(processedFolder.exists());
-            tileServerPath = processedFolder.getAbsolutePath();
-            Assert.assertNotNull(tileServerPath);
-            Assert.assertTrue(!tileServerPath.isEmpty());
-            HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
-
-            //ingestStagingPath=$(homeFolder)/ingest/upload
-            original_INGEST_STAGING_PATH = INGEST_STAGING_PATH;
-            File ingestStagingFolder = new File(homeFolder, "/ingest/upload");
-            FileUtils.forceMkdir(ingestStagingFolder);
-            Assert.assertTrue(ingestStagingFolder.exists());
-            ingestStagingPath = ingestStagingFolder.getAbsolutePath();
-            Assert.assertNotNull(ingestStagingPath);
-            Assert.assertTrue(!ingestStagingPath.isEmpty());
-            HootCustomPropertiesSetter.setProperty("INGEST_STAGING_PATH", ingestStagingFolder.getAbsolutePath());
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private static File homeFolder;
+    private static String tileServerPath;
+    private static String ingestStagingPath;
+    private static String original_HOME_FOLDER;
+    private static String original_TILE_SERVER_PATH;
+    private static String original_INGEST_STAGING_PATH;
 
     @BeforeClass
-    public static void oneTimeSetup() {
+    public static void beforeClass() throws Exception {
+        original_HOME_FOLDER = HOME_FOLDER;
+        homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+        FileUtils.forceMkdir(homeFolder);
+        assertTrue(homeFolder.exists());
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
+
+        original_TILE_SERVER_PATH = TILE_SERVER_PATH;
+        File processedFolder = new File(homeFolder, "ingest/processed");
+        FileUtils.forceMkdir(processedFolder);
+        assertTrue(processedFolder.exists());
+        tileServerPath = processedFolder.getAbsolutePath();
+        assertNotNull(tileServerPath);
+        assertTrue(!tileServerPath.isEmpty());
+
+        HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
+        original_INGEST_STAGING_PATH = INGEST_STAGING_PATH;
+        File ingestStagingFolder = new File(homeFolder, "/ingest/upload");
+        FileUtils.forceMkdir(ingestStagingFolder);
+        assertTrue(ingestStagingFolder.exists());
+        ingestStagingPath = ingestStagingFolder.getAbsolutePath();
+        assertNotNull(ingestStagingPath);
+        assertTrue(!ingestStagingPath.isEmpty());
+        HootCustomPropertiesSetter.setProperty("INGEST_STAGING_PATH", ingestStagingFolder.getAbsolutePath());
     }
 
     @AfterClass
-    public static void oneTimeTearDown() throws Exception {
+    public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
         HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", original_TILE_SERVER_PATH);
@@ -131,7 +119,7 @@ public class BasemapResourceTest {
             }
         }
 
-        Assert.assertTrue(found);
+        assertTrue(found);
         FileUtils.forceDelete(f);
         FileUtils.forceDelete(f2);
     }
@@ -147,11 +135,11 @@ public class BasemapResourceTest {
 
         toggleBaseMapMethod.invoke(null, "controltest", false);
         file = new File(ingestStagingPath + "/BASEMAP/controltest.disabled");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         toggleBaseMapMethod.invoke(null, "controltest", true);
         file = new File(ingestStagingPath + "/BASEMAP/controltest.enabled");
-        Assert.assertTrue(file.exists());
+        assertTrue(file.exists());
 
         FileUtils.forceDelete(file);
     }
@@ -164,17 +152,17 @@ public class BasemapResourceTest {
         File dir = new File(tileServerPath + "/BASEMAP/" + testMapName);
         FileUtils.forceMkdir(dir);
 
-        Assert.assertTrue(dir.exists());
+        assertTrue(dir.exists());
 
         File controlFile = new File(ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
         FileUtils.touch(controlFile);
-        Assert.assertTrue(controlFile.exists());
+        assertTrue(controlFile.exists());
 
         Method deleteBaseMapMethod = BasemapResource.class.getDeclaredMethod("deleteBaseMapHelper", String.class);
         deleteBaseMapMethod.setAccessible(true);
         deleteBaseMapMethod.invoke(null, testMapName);
 
-        Assert.assertFalse(dir.exists());
-        Assert.assertFalse(controlFile.exists());
+        assertFalse(dir.exists());
+        assertFalse(controlFile.exists());
     }
 }

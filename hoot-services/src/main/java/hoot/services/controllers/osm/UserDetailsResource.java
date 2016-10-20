@@ -45,7 +45,7 @@ import hoot.services.utils.DbUtils;
  */
 @Controller
 @Path("api/0.6/user/details")
-@Transactional
+@Transactional(readOnly = true)
 public class UserDetailsResource {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsResource.class);
 
@@ -73,8 +73,6 @@ public class UserDetailsResource {
     @GET
     @Produces(MediaType.TEXT_XML)
     public Response getDetails() {
-        logger.debug("Retrieving logged in user details...");
-
         // For now, we're just grabbing the first user in the db, since we don't
         // have any authentication in place to get the correct user. Worst case, for now, you see
         // incorrect user information from iD editor...not a big deal since authentication doesn't exist
