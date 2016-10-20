@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,23 +62,23 @@ void CookieCutterOp::apply(shared_ptr<OsmMap>& map)
   unknown2Remover.setRecursive(true);
   refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodeMap().size());
-    
+
   //create an alpha shape based on the ref map (unknown1)
-  OsmMapPtr cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generate(refMap);
+  OsmMapPtr cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
   LOG_VARD(cutShapeMap->getNodeMap().size());
-    
+
   //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
   OsmMapPtr doughMap(new OsmMap(map));
   RemoveElementsVisitor unknown1Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
   unknown1Remover.setRecursive(true);
   doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodeMap().size());
-  
+
   //cookie cut the alpha shape obtained from the ref map out of the source map
   CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodeMap().size());
-    
+
   //combine the ref map back with the source map; Effectively, we've replaced all of the data in the
   //source map whose AOI coincides with the ref map with the ref map's data.
   refMap->setProjection(cookieCutMap->getProjection());

@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 
+// geos
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -42,8 +45,8 @@ public:
 
   PoiPolygonEvidenceScorer(double matchDistance, double _reviewDistance, double distance,
                            double typeScoreThreshold, double nameScoreThreshold,
-                           unsigned int matchEvidenceThreshold, ConstOsmMapPtr map,
-                           QString testUuid);
+                           unsigned int matchEvidenceThreshold, shared_ptr<Geometry> poiGeom,
+                           ConstOsmMapPtr map, QString testUuid);
 
   unsigned int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -75,6 +78,8 @@ private:
   QString _t1BestKvp;
   QString _t2BestKvp;
 
+  shared_ptr<Geometry> _poiGeom;
+
   ConstOsmMapPtr _map;
 
   bool _closeMatch;
@@ -83,6 +88,7 @@ private:
   bool _testFeatureFound;
 
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poly);
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);

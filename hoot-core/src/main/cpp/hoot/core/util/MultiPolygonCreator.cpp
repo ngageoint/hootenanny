@@ -363,8 +363,7 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     }
     else
     {
-      //TODO: change back
-      /*LOG_WARN*/LOG_DEBUG("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
+      LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
                partials[i]->getElementId());
     }
   }

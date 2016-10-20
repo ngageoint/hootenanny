@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,14 +41,34 @@ _buffer(buffer)
 {
 }
 
-OsmMapPtr AlphaShapeGenerator::generate(OsmMapPtr cutterShapeMap)
+OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
-  MapProjector::projectToPlanar(cutterShapeMap);
+  shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+
+  shared_ptr<OsmMap> result;
+
+  result.reset(new OsmMap(inputMap->getProjection()));
+  // add the resulting alpha shape for debugging.
+  GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
+
+  const RelationMap& rm = result->getRelationMap();
+  for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
+  {
+    Relation* r = result->getRelation(it->first).get();
+    r->setTag("area", "yes");
+  }
+
+  return result;
+}
+
+shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
+{
+  MapProjector::projectToPlanar(inputMap);
 
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;
-  points.reserve(cutterShapeMap->getNodeMap().size());
-  const NodeMap& nodes = cutterShapeMap->getNodeMap();
+  points.reserve(inputMap->getNodeMap().size());
+  const NodeMap& nodes = inputMap->getNodeMap();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     pair<double, double> p;
@@ -71,20 +91,7 @@ OsmMapPtr AlphaShapeGenerator::generate(OsmMapPtr cutterShapeMap)
     LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
 
-  shared_ptr<OsmMap> result;
-
-  result.reset(new OsmMap(cutterShapeMap->getProjection()));
-  // add the resulting alpha shape for debugging.
-  GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
-
-  const RelationMap& rm = result->getRelationMap();
-  for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
-  {
-    Relation* r = result->getRelation(it->first).get();
-    r->setTag("area", "yes");
-  }
-
-  return result;
+  return cutterShape;
 }
 
 }

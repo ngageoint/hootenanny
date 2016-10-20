@@ -49,8 +49,7 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      //TODO: change back to warn
-      /*LOG_WARN*/LOG_DEBUG("Removing missing " << missing.toString() << " in " <<
+      LOG_WARN("Removing missing " << missing.toString() << " in " <<
                referer.toString() << ".");
     }
     else

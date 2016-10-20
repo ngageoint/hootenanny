@@ -434,8 +434,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
-        //TODO: change back to warn
-        /*LOG_WARN*/LOG_DEBUG("Missing uuid for " + p.toString());
+        LOG_WARN("Missing uuid for " + p.toString());
         continue;
       }
 

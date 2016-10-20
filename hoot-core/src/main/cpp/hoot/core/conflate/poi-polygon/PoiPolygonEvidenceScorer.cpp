@@ -28,6 +28,8 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/AlphaShapeGenerator.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include "PoiPolygonTypeMatch.h"
 #include "PoiPolygonNameMatch.h"
@@ -41,6 +43,7 @@ PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double 
                                                    double distance, double typeScoreThreshold,
                                                    double nameScoreThreshold,
                                                    unsigned int matchEvidenceThreshold,
+                                                   shared_ptr<Geometry> poiGeom,
                                                    ConstOsmMapPtr map,
                                                    QString testUuid) :
 _matchDistance(matchDistance),
@@ -49,6 +52,7 @@ _distance(distance),
 _typeScoreThreshold(typeScoreThreshold),
 _nameScoreThreshold(nameScoreThreshold),
 _matchEvidenceThreshold(matchEvidenceThreshold),
+_poiGeom(poiGeom),
 _map(map),
 _testUuid(testUuid)
 {
@@ -89,6 +93,27 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
       distanceCalc.getReviewDistanceForType(_t1BestKvp),
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
   unsigned int evidence = _distance <= _matchDistance ? 2 : 0;
+
+  return evidence;
+}
+
+unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstElementPtr poly)
+{
+  unsigned int evidence = 0;
+  OsmMapPtr polyMap(new OsmMap());
+  ElementPtr polyTemp(poly->clone());
+  polyMap->addElement(polyTemp);
+  //TODO: move alpha shape init values to config?
+  shared_ptr<Geometry> polyAlphaShape =
+      AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+  const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());
+  evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
+  if (_testFeatureFound)
+  {
+    LOG_VARD(alphaShapeDist);
+    const bool withinAlphaShapeDist = alphaShapeDist <= _matchDistance;
+    LOG_VARD(withinAlphaShapeDist);
+  }
   return evidence;
 }
 
@@ -171,16 +196,30 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
   //ADDRESS
 
   //no point in calc'ing the address match if we already have a match from the other evidence
-  //TODO: make threshold levels constants
-  if (evidence >= _matchEvidenceThreshold)
+  //LOG_VARD(_matchEvidenceThreshold);
+  if (evidence < _matchEvidenceThreshold)
   {
     evidence += _getAddressEvidence(poi, poly);
+    //TODO: move to config
+    if (evidence < _matchEvidenceThreshold && _distance <= 35.0 &&
+        poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
+    {
+      evidence += _getConvexPolyDistanceEvidence(poly);
+    }
+    else
+    {
+      LOG_DEBUG("Skipped distance matching 2.");
+    }
   }
   else
   {
     LOG_DEBUG("Skipped address matching.");
   }
 
+  if (_testFeatureFound)
+  {
+    LOG_VARD(evidence);
+  }
   return evidence;
 }
 
