@@ -86,12 +86,15 @@ public class ReportsResource {
         try {
             report = getReportFile(id);
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
         catch (Exception e) {
-            String msg = "Error returning report with id = " + id + ", reportname = "  + name;
+            String msg = "Error returning report with id = " + id + ", reportname = "  + name +
+                    ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        if (report == null) {
+            String msg = "Report with id = " + id + " not found!";
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
         }
 
         ResponseBuilder responseBuilder = Response.ok(report, "application/pdf");
@@ -110,18 +113,15 @@ public class ReportsResource {
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getReport() {
+    public Response getReportList() {
         JSONArray reports;
 
         try {
             reports = getReportsList();
         }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String message = "Error getting reports list!";
-            throw new WebApplicationException(ex, Response.serverError().entity(message).build());
+        catch (Exception e) {
+            String message = "Error getting reports list!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
         }
 
         return Response.ok(reports.toJSONString()).build();
@@ -132,37 +132,45 @@ public class ReportsResource {
      * 
      * hoot-services/info/reports/delete?id=123-456
      *
-     * @param id
+     * @param reportId
      *            Report id for deletion
      * @return JSON Object
      */
     @GET
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response delReport(@QueryParam("id") String id) {
-        boolean isDeleted;
+    public Response deleteReport(@QueryParam("id") String reportId) {
+        boolean wasDeleted;
 
         try {
-            isDeleted = deleteReport(id);
+            File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, reportId);
+            if ((folder != null) && folder.exists()) {
+                FileUtils.forceDelete(folder);
+                wasDeleted = true;
+            }
+            else {
+                String msg = "Folder with id = " + reportId + " under " + REPORTS_PATH + " wasn't found!";
+                throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+            }
         }
         catch (WebApplicationException wae) {
             throw wae;
         }
         catch (Exception e) {
-            String msg = "Error deleting report file with id = " + id;
+            String msg = "Error deleting report with id = " + reportId + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         JSONObject entity = new JSONObject();
-        entity.put("id", id);
-        entity.put("deleted", String.valueOf(isDeleted));
+        entity.put("id", reportId);
+        entity.put("deleted", String.valueOf(wasDeleted));
 
         return Response.ok(entity.toJSONString()).build();
     }
 
     // Gets the meta data of the report
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
-        JSONObject res = new JSONObject();
+        JSONObject metadata = new JSONObject();
 
         File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
 
@@ -172,18 +180,16 @@ public class ReportsResource {
             if (file.exists()) {
                 String meta = FileUtils.readFileToString(file, "UTF-8");
                 JSONParser p = new JSONParser();
-                res = (JSONObject) p.parse(meta);
+                metadata = (JSONObject) p.parse(meta);
             }
         }
 
-        return res;
+        return metadata;
     }
 
-    // gets the list of meta data. This could get slow if there is large numbers of reports
-    // One solution may be using Runtime to do bash to get folder count natively
-    // and that should be the fastest way..
     private static JSONArray getReportsList() {
-        JSONArray res = new JSONArray();
+        JSONArray reportsList = new JSONArray();
+
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
@@ -209,38 +215,26 @@ public class ReportsResource {
             }
         }
 
-        res.addAll(sorted.values());
+        reportsList.addAll(sorted.values());
 
-        return res;
+        return reportsList;
     }
 
     // retrieves the report file
-    private static File getReportFile(String id) throws IOException, ParseException {
-        File res = null;
+    private static File getReportFile(String reportId) throws IOException, ParseException {
+        File reportFile = null;
 
-        JSONObject meta = getMetaData(id);
-        Object oRepPath = meta.get("reportpath");
-        if (oRepPath != null) {
-            String repPath = oRepPath.toString();
+        JSONObject meta = getMetaData(reportId);
+
+        Object reportPath = meta.get("reportpath");
+        if (reportPath != null) {
+            String repPath = reportPath.toString();
             File file = new File(repPath);
             if (file.exists()) {
-                res = file;
+                reportFile = file;
             }
         }
 
-        return res;
-    }
-
-    // deletes requested report by deleting folder
-    private static boolean deleteReport(String id) throws IOException {
-        boolean deleted = false;
-
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
-        if ((folder != null) && folder.exists()) {
-            FileUtils.forceDelete(folder);
-            deleted = true;
-        }
-
-        return deleted;
+        return reportFile;
     }
 }

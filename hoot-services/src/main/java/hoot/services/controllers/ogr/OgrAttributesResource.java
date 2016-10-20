@@ -28,6 +28,7 @@ package hoot.services.controllers.ogr;
 
 import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
 import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,8 +98,7 @@ public class OgrAttributesResource extends JobControllerBase {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
-                                  FormDataMultiPart multiPart) {
+    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType, FormDataMultiPart multiPart) {
         JSONObject response = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
@@ -168,11 +168,11 @@ public class OgrAttributesResource extends JobControllerBase {
 
             String argStr = createPostBody(params);
 
-            postJobRquest(jobId, argStr);
+            postJobRequest(jobId, argStr);
         }
-        catch (Exception ex) {
-            String msg = "Upload failed for job with id = " + jobId + "!  Cause: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         response.put("jobId", jobId);
@@ -198,20 +198,19 @@ public class OgrAttributesResource extends JobControllerBase {
     @GET
     @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getAttributes(@PathParam("id") String id,
-                                  @QueryParam("deleteoutput") String doDelete) {
+    public Response getAttributes(@PathParam("id") String id, @QueryParam("deleteoutput") String doDelete) {
         String script;
         try {
-            File file = new File(HOME_FOLDER + "/tmp/" + id + ".out");
+            File file = new File(TEMP_OUTPUT_PATH, id + ".out");
             script = FileUtils.readFileToString(file, "UTF-8");
 
             if ("true".equalsIgnoreCase(doDelete)) {
                 FileUtils.deleteQuietly(file);
             }
         }
-        catch (Exception ex) {
-            String msg = "Error getting attribute: " + id + " Error: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error getting attribute: " + id + ".  Cause : " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(script).build();

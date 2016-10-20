@@ -26,10 +26,9 @@
  */
 package hoot.services;
 
-import static hoot.services.HootProperties.TILE_SERVER_PATH;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -37,17 +36,14 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.ogr.TranslatorResource;
 import hoot.services.controllers.ogr.P2PResource;
+import hoot.services.controllers.ogr.TranslatorResource;
 
 
 public class HootServletContext implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        TranslatorResource.startTranslationService();
-        P2PResource.startP2PService();
-
         // Bridge/route all JUL log records to the SLF4J API.
         // Some third-party components use Java Util Logging (JUL). We want to
         // route those calls through SLF4J.
@@ -55,13 +51,22 @@ public class HootServletContext implements ServletContextListener {
 
         HootProperties.init();
 
-        // Doing this to make sure we create ingest folder
-        try {
-            createTileServerPath(TILE_SERVER_PATH);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error creating tile server path: " + TILE_SERVER_PATH, ioe);
-        }
+        createIngestFolder();
+
+        createUploadFolder();
+
+        TranslatorResource.startTranslationService();
+
+        P2PResource.startP2PService();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        TranslatorResource.stopTranslationService();
+
+        P2PResource.stopP2PService();
+
+        FileUtils.deleteQuietly(new File(TEMP_OUTPUT_PATH));
     }
 
     private static void initSLF4JBridgeHandler() {
@@ -73,16 +78,21 @@ public class HootServletContext implements ServletContextListener {
         SLF4JBridgeHandler.install();
     }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        TranslatorResource.stopTranslationService();
-        P2PResource.stopP2PService();
+    private static void createIngestFolder() {
+        File ingestFolder = new File(TILE_SERVER_PATH);
+        if (!ingestFolder.exists()) {
+            if (!ingestFolder.mkdir()) {
+                throw new RuntimeException("Error creating " + ingestFolder.getAbsolutePath() + " directory!");
+            }
+        }
     }
 
-    private static void createTileServerPath(String path) throws IOException {
-        File file = new File(path);
-        if (!file.exists()) {
-            FileUtils.forceMkdir(file);
+    private static void createUploadFolder() {
+        File uploadDir = new File(UPLOAD_FOLDER);
+        if (!uploadDir.exists()) {
+            if (!uploadDir.mkdir()) {
+                throw new RuntimeException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+            }
         }
     }
 }

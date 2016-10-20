@@ -42,7 +42,7 @@ describe('TranslationServer', function () {
     //             english: true
     //         });
     //         assert.equal(data.attrs['Name'], '23RD ST NW');
-    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road Line Feature');
+    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road');
     //         assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
     //     });
 
@@ -50,7 +50,7 @@ describe('TranslationServer', function () {
     //         var data = server.translate({
     //             tags: {
     //                 //'error:circular': '5',
-    //                 'Feature Code': 'AP030:Road Line Feature',
+    //                 'Feature Code': 'AP030:Road',
     //                 //'hoot:status': '1',
     //                 'Name': '23RD ST NW',
     //                 'Thoroughfare Class': 'Unknown'
@@ -113,7 +113,7 @@ describe('TranslationServer', function () {
     //             english: true
     //         });
     //         assert.equal(data.attrs['Geographic Name Information : Full Name'], '23RD ST NW');
-    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road Line Feature');
+    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road');
     //         assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
     //     });
 
@@ -121,7 +121,7 @@ describe('TranslationServer', function () {
     //         var data = server.translate({
     //             tags: {
     //                 //'error:circular': '5',
-    //                 'Feature Code': 'AP030:Road Line Feature',
+    //                 'Feature Code': 'AP030:Road',
     //                 //'hoot:status': '1',
     //                 'Geographic Name Information : Full Name': '23RD ST NW'
     //                 //'hoot': 'DcGisRoadsCucumber'
@@ -170,14 +170,14 @@ describe('TranslationServer', function () {
         var MgcpResult = [{
                                 name: "PAL015",
                                 fcode: "AL015",
-                                desc: "General Building Point Feature",
+                                desc: "General Building",
                                 geom: "Point",
                                 idx: -1
                             },
                             {
                                 name: "PAL020",
                                 fcode: "AL020",
-                                desc: "Built-Up Area Point Feature",
+                                desc: "Built-Up Area",
                                 geom: "Point",
                                 idx: -1
                             }];
@@ -203,7 +203,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/osmtotds'
             });
-            assert.equal(schema.desc, 'General Building Point Feature');
+            assert.equal(schema.desc, 'General Building');
             assert.equal(schema.columns[0].name, 'ACC');
             assert.equal(schema.columns[0].enumerations[0].name, 'Accurate');
             assert.equal(schema.columns[0].enumerations[0].value, '1');
@@ -282,6 +282,23 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle osmtotds POST of building area feature', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="building" v="yes"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/osmtotds'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AL015:General Building");
+                assert.equal(result.osm.way[0].tag[1].$.k, "MGCP Feature universally unique identifier");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+            });
+        });
+
         // it('should return error message for invalide F_CODE/geom combination in osmtotds POST', function() {
         //     var osm2trans = server.handleInputs({
         //         osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',
@@ -325,7 +342,7 @@ describe('TranslationServer', function () {
         it('should handle tdstoosm POST', function() {
             //http://localhost:8094/tdstoosm
             var trans2osm = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-9" lon="-104.907037158172" lat="38.8571566428667" version="0"><tag k="Horizontal Accuracy Category" v="Accurate"/><tag k="Built-up Area Density Category" ve="Unknown"/><tag k="Commercial Copyright Notice" v="UNK"/><tag k="Feature Code" v="AL020:Built-Up Area Area Feature"/><tag k="Functional Use" v="Other"/><tag k="Condition of Facility" v="Unknown"/><tag k="Name" v="Manitou Springs"/><tag k="Named Feature Identifier" v="UNK"/><tag k="Name Identifier" v="UNK"/><tag k="Relative Importance" v="Unknown"/><tag k="Source Description" v="N_A"/><tag k="Source Date and Time" v="UNK"/><tag k="Source Type" v="Unknown"/><tag k="Associated Text" v="&lt;OSM&gt;{&quot;poi&quot;:&quot;yes&quot;}&lt;/OSM&gt;"/><tag k="MGCP Feature universally unique identifier" v="c6df0618-ce96-483c-8d6a-afa33541646c"/></node></osm>',
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-9" lon="-104.907037158172" lat="38.8571566428667" version="0"><tag k="Horizontal Accuracy Category" v="Accurate"/><tag k="Built-up Area Density Category" ve="Unknown"/><tag k="Commercial Copyright Notice" v="UNK"/><tag k="Feature Code" v="AL020:Built-Up Area"/><tag k="Functional Use" v="Other"/><tag k="Condition of Facility" v="Unknown"/><tag k="Name" v="Manitou Springs"/><tag k="Named Feature Identifier" v="UNK"/><tag k="Name Identifier" v="UNK"/><tag k="Relative Importance" v="Unknown"/><tag k="Source Description" v="N_A"/><tag k="Source Date and Time" v="UNK"/><tag k="Source Type" v="Unknown"/><tag k="Associated Text" v="&lt;OSM&gt;{&quot;poi&quot;:&quot;yes&quot;}&lt;/OSM&gt;"/><tag k="MGCP Feature universally unique identifier" v="c6df0618-ce96-483c-8d6a-afa33541646c"/></node></osm>',
                 method: 'POST',
                 translation: 'MGCP',
                 path: '/tdstoosm'
@@ -526,7 +543,7 @@ describe('TranslationServer', function () {
             });
             assert(schm.length <= 100, 'Schema search results greater than requested');
             assert(schm.some(function(d) {
-                return d.desc === 'Railway Line Feature';
+                return d.desc === 'Railway';
             }));
         });
 

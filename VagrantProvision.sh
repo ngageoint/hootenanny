@@ -151,7 +151,8 @@ if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
     mkdir -p $HOME/bin
     if [ ! -f chromedriver_linux64.zip ]; then
-      wget --quiet http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
+      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
