@@ -46,7 +46,7 @@ public:
   PoiPolygonEvidenceScorer(double matchDistance, double _reviewDistance, double distance,
                            double typeScoreThreshold, double nameScoreThreshold,
                            unsigned int matchEvidenceThreshold, shared_ptr<Geometry> poiGeom,
-                           ConstOsmMapPtr map, QString testUuid);
+                           long surroundingPolyCount, ConstOsmMapPtr map, QString testUuid);
 
   unsigned int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -79,6 +79,8 @@ private:
   QString _t2BestKvp;
 
   shared_ptr<Geometry> _poiGeom;
+
+  long _surroundingPolyCount;
 
   ConstOsmMapPtr _map;
 

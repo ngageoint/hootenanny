@@ -26,16 +26,22 @@
  */
 #include "PoiPolygonMatchDistanceCalculator.h"
 
+// Hoot
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 PoiPolygonMatchDistanceCalculator::PoiPolygonMatchDistanceCalculator(double matchDistanceDefault,
                                                                      double reviewDistanceDefault,
-                                                                     const Tags& polyTags) :
+                                                                     const Tags& polyTags,
+                                                                     long searchRadius,
+                                                                     long surroundingPolyCount) :
 _matchDistanceDefault(matchDistanceDefault),
 _reviewDistanceDefault(reviewDistanceDefault),
-_polyTags(polyTags)
+_polyTags(polyTags),
+_searchRadius(searchRadius),
+_surroundingPolyCount(surroundingPolyCount)
 {
 
 }
@@ -56,8 +62,38 @@ double PoiPolygonMatchDistanceCalculator::getReviewDistanceForType(const QString
   {
     return 150.0;
   }
-
   return _reviewDistanceDefault;
+}
+
+void PoiPolygonMatchDistanceCalculator::modifyDistanceForPolyDensity(double& distance)
+{
+  //area of the search radius circle
+  const double searchRadiusArea = M_PI * pow(_searchRadius, 2);
+  //polys per square meter
+  const double polyDensity = _surroundingPolyCount / searchRadiusArea;
+  //tweak the match and review distances based on the surrounding poly density; as the density
+  //increases, lower them both
+  //C densities (roughly): .00014 to .011
+  if (polyDensity > 0.01)
+  {
+    distance -= (distance * 0.8);
+  }
+  else if (polyDensity >= 0.005 && polyDensity <= 0.01)
+  {
+    distance -= (distance * 0.7);
+  }
+  else if (polyDensity >= 0.001 && polyDensity <= 0.005)
+  {
+    distance -= (distance * 0.6);
+  }
+  else if (polyDensity >= 0.0005 && polyDensity <= 0.001)
+  {
+    distance -= (distance * 0.1);
+  }
+
+  LOG_VARD(searchRadiusArea);
+  LOG_VARD(polyDensity);
+  LOG_VARD(distance);
 }
 
 }

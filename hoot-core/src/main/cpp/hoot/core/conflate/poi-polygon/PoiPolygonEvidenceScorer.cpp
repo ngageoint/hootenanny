@@ -44,6 +44,7 @@ PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double 
                                                    double nameScoreThreshold,
                                                    unsigned int matchEvidenceThreshold,
                                                    shared_ptr<Geometry> poiGeom,
+                                                   long surroundingPolyCount,
                                                    ConstOsmMapPtr map,
                                                    QString testUuid) :
 _matchDistance(matchDistance),
@@ -53,6 +54,7 @@ _typeScoreThreshold(typeScoreThreshold),
 _nameScoreThreshold(nameScoreThreshold),
 _matchEvidenceThreshold(matchEvidenceThreshold),
 _poiGeom(poiGeom),
+_surroundingPolyCount(surroundingPolyCount),
 _map(map),
 _testUuid(testUuid)
 {
@@ -61,7 +63,11 @@ _testUuid(testUuid)
 unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
                                                             ConstElementPtr poly)
 {
-  PoiPolygonMatchDistanceCalculator distanceCalc(_matchDistance, _reviewDistance, poly->getTags());
+  //search radius taken from PoiPolygonMatchCreator
+  PoiPolygonMatchDistanceCalculator distanceCalc(
+    _matchDistance, _reviewDistance, poly->getTags(),
+    poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance(),
+    _surroundingPolyCount);
   _matchDistance =
     max(
       distanceCalc.getMatchDistanceForType(_t1BestKvp),
@@ -70,6 +76,9 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
     max(
       distanceCalc.getReviewDistanceForType(_t1BestKvp),
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
+  //LOG_VARE(_reviewDistance);
+  distanceCalc.modifyDistanceForPolyDensity(_reviewDistance);
+  //LOG_VARE(_reviewDistance);
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;

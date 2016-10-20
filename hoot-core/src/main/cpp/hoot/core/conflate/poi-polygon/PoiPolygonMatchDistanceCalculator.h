@@ -28,7 +28,7 @@
 #define POIPOLYGONMATCHDISTANCECALCULATOR_H
 
 // Hoot
-#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Element.h>
 
 // Qt
 #include <QString>
@@ -45,10 +45,12 @@ class PoiPolygonMatchDistanceCalculator
 public:
 
   PoiPolygonMatchDistanceCalculator(double matchDistanceDefault, double reviewDistanceDefault,
-                                    const Tags& polyTags);
+                                    const Tags& polyTags, long searchRadius,
+                                    long surroundingPolyCount);
 
   double getMatchDistanceForType(const QString typeKvp) const;
   double getReviewDistanceForType(const QString typeKvp) const;
+  void modifyDistanceForPolyDensity(double& distance);
 
 private:
 
@@ -56,6 +58,10 @@ private:
   double _reviewDistanceDefault;
 
   Tags _polyTags;
+  long _searchRadius;
+  long _surroundingPolyCount;
+
+  QString _testUuid;
 
 };
 
