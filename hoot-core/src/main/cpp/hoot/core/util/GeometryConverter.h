@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,8 +61,8 @@ using namespace geos::geom;
 /**
  * GeometryConverter is undergoing a transition. We've moving from using the element's pointers to
  * the OsmMap to an internal pointer. Ultimately this will fix some circular errors (see #4120).
- * For new code please use the constructor that takes a map, old code should be transitioned
- * eventually.
+ * For new code please use the constructor that takes a map.
+ * @todo old code should be transitioned eventually.
  */
 class GeometryConverter
 {
