@@ -788,31 +788,6 @@ bool PoiPolygonReviewReducer::_isBuildingIsh(ConstElementPtr element) const
 
 bool PoiPolygonReviewReducer::_hasMoreThanOneType(ConstElementPtr element) const
 {
-//  int typeCount = 0;
-//  QStringList typesParsed;
-//  if (_allTags.size() == 0)
-//  {
-//    _allTags = OsmSchema::getInstance().getAllTags();
-//  }
-//  for (vector<SchemaVertex>::const_iterator it = _allTags.begin(); it != _allTags.end(); ++it)
-//  {
-//    SchemaVertex vertex = *it;
-//    //LOG_DEBUG("Key: " << vertex.key);
-//    //there may be duplicate keys in allTags
-//    if (element->getTags().contains(vertex.key) && !typesParsed.contains(vertex.key))
-//    {
-//      LOG_DEBUG("Has key: " << vertex.key);
-//      typeCount++;
-//      if (typeCount > 1)
-//      {
-//        return true;
-//      }
-//    }
-
-//    typesParsed.append(vertex.key);
-//  }
-//  return false;
-
   int typeCount = 0;
   QStringList typesParsed;
   if (_allTagKeys.size() == 0)
