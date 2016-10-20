@@ -34,15 +34,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/algorithms/Translator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
 
 #include "PoiPolygonReviewReducer.h"
-/*#include "PoiPolygonTypeMatch.h"
-#include "PoiPolygonNameMatch.h"
-#include "PoiPolygonAddressMatch.h"
-#include "PoiPolygonMatchDistanceCalculator.h"*/
 #include "PoiPolygonEvidenceScorer.h"
 
 namespace hoot

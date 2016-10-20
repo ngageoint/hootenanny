@@ -46,6 +46,7 @@
 
 #include "PoiPolygonTypeMatch.h"
 #include "PoiPolygonNameMatch.h"
+#include "PoiPolygonEvidenceScorer.h"
 
 // std
 #include <float.h>
@@ -53,7 +54,6 @@
 namespace hoot
 {
 
-//vector<SchemaVertex> PoiPolygonRuleApplier::_allTags;
 QSet<QString> PoiPolygonReviewReducer::_allTagKeys;
 
 PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
@@ -121,8 +121,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //done to further reduce runtime), with the rules requiring the least expensive computations
   //occurring earlier.
 
-  //bool triggersParkRule = false;
-
   const QString poiName = poi->getTags().get("name").toLower();
 
   const bool poiHasType =
@@ -153,7 +151,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #1...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -169,7 +166,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #2...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -184,7 +180,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #3...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -201,7 +196,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #4...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -215,7 +209,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #5...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -229,7 +222,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #6...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -243,7 +235,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #7...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -260,7 +251,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #8...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -275,7 +265,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #9...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -291,7 +280,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #10...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -307,7 +295,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #11...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -324,7 +311,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #12...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -341,7 +327,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #13...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -367,7 +352,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //just parks and not specifically as play areas, if they are tagged at all, so we're just scanning
   //the name tag here to determine if something is a play area vs actually verifying that face by
   //looking at its type.
-  //*
   if (poiName.contains("play area") && polyArea > 25000) //TODO: move this value to a config?
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -376,7 +360,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #14...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -398,7 +381,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #15...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -416,7 +398,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   bool containedOtherParkOrPlaygroundPoiHasName = false;
   bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
   bool anotherPolyContainsPoiWithTypeMatch = false;
-  //bool poiCloseToAnotherPolyWithTypeMatch = false;
   bool poiOnBuilding = false;
 
   PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
@@ -567,10 +548,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             {
               anotherPolyContainsPoiWithTypeMatch = true;
             }
-            /*else if (areaGeom->distance(_poiGeom.get()) <= _matchDistance)
-            {
-              poiCloseToAnotherPolyWithTypeMatch = true;
-            }*/
           }
         }
       }
@@ -595,7 +572,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
   //ring of this poly and the other park poly has a name.
-  //*
   if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
       poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
       poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName)
@@ -606,7 +582,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #16...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -637,14 +612,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       }
       matchClass.setMiss();
     }
-    //triggersParkRule = true;
     return true;
   }
 
   //If the poi is a park, the poly it is being compared to is not a park or building, and that poly
   //is "very close" to another park poly that has a name match with the poi, then declare a miss
   //(exclude poly playgrounds from this).
-  //*
   if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
            otherParkPolyNameMatch && !polyIsPlayground)
   {
@@ -654,7 +627,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #18...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
@@ -665,7 +637,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //We're not, however, trying to match playground poi's to play area or playground poly, b/c
   //sometimes those need to be matched to the surrounding park polys...that situation should
   //at the very least end up as a review.
-  //*
   if (poiIsPlayArea && polyIsPark && polyContainsPlayAreaOrPlaygroundPoly)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -674,13 +645,11 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #19...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
   //If a park poi is contained within one park poly, then there's no reason for it to trigger
   //reviews in another one that its not contained in.
-  //*
   if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -689,13 +658,11 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #20...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
   //If a sport poi is contained within an exact type match sport poi poly, don't let it be
   //matched against anything else.
-  //*
   if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithExactTypeMatch)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -704,12 +671,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #21...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
   //If a building is a building don't review it against a non-building poly.
-  //*
   if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
   {
     if (Log::getInstance().getLevel() == Log::Debug &&
@@ -718,10 +683,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #22...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
+  //PoiPolygonEvidenceScorer evidenceScorer();
   set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
   while (poiNeighborItr != _poiNeighborIds.end())
   {
@@ -786,7 +751,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //If this isn't a park or playground poi, then don't match it to any park poly that contains
   //another park or playground poi.
-  //*
   if (poiIsPlayArea && !poiIsPlayground && polyIsPark && _distance == 0 &&
            polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
   {
@@ -796,11 +760,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #23...");
     }
     matchClass.setMiss();
-    //triggersParkRule = true;
     return true;
   }
 
-  //return triggersParkRule;
   return false;
 }
 
