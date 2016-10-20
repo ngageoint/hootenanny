@@ -43,8 +43,8 @@ namespace hoot
 class PoiPolygonEvidenceScorer;
 
 /**
- * This is a very simple mechanism for matching POIs to polygons. See "Building to POI Conflation"
- * in the Hootenanny Algorithms document for more details.
+ * This is a additive, rules based mechanism for matching POIs to polygons. See "POI to
+ * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  */
 class PoiPolygonMatch : public Match, public MatchDetails
 {
