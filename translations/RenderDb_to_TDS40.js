@@ -47,7 +47,7 @@ function layerNameFilter()
 // Create the output Schema
 function getDbSchema()
 {
-    return tds40.getDbSchema();
+    return tds.getDbSchema();
 }
 
 
@@ -56,7 +56,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return tds40.toOsm(attrs, layerName, geometryType);
+    return tds.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -79,6 +79,6 @@ function translateToOgr(tags, elementType, geometryType)
         delete tags.tags;
     }
 
-    return tds40.toNfdd(tags, elementType, geometryType)
+    return tds.toNfdd(tags, elementType, geometryType)
 
 } // End of translateToOgr

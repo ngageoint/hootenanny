@@ -29,6 +29,7 @@
 // Convert RenderDb to TDSv61
 //
 
+hoot.require('SchemaTools');
 hoot.require('tds61');
 hoot.require('tds61_schema');
 hoot.require('tds61_rules');
