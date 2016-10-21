@@ -61,9 +61,10 @@ Feature: Resolve all reviews feature
     Then I should not see "Next"
     Then I should see "All Reviews Resolved!"
 
-  Scenario: I can export the merged dataset
-    When I click on "input.fill-darken0[type='submit']"
-    Then I type "export_conflated" in input "fileExportOutputName"
-    Then I click on "input.fill-dark[type='submit']"
-    And I wait 5 "minutes" to not see "Output Name"
-    Then the download file "export_conflated.zip" should exist
+  # Disable until resolved in https://github.com/ngageoint/hootenanny/issues/1147
+  # Scenario: I can export the merged dataset
+  #   When I click on "input.fill-darken0[type='submit']"
+  #   Then I type "export_conflated" in input "fileExportOutputName"
+  #   Then I click on "input.fill-dark[type='submit']"
+  #   And I wait 5 "minutes" to not see "Output Name"
+  #   Then the download file "export_conflated.zip" should exist
