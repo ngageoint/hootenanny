@@ -70,8 +70,7 @@ function translateToOgr(tags, elementType, geometryType)
     if (tags.tags)
     {
         // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-        // Trying to split on ", instead of just , due to having comma's inside the data values. Arrrggghhh!
-        var tList = tags['tags'].split('\",');
+        var tList = tags['tags'].split('",');
 
         for (var i = 0, tLen = tList.length; i < tLen; i++)
         {
@@ -85,4 +84,3 @@ function translateToOgr(tags, elementType, geometryType)
     return tds61.toNfdd(tags, elementType, geometryType)
 
 } // End of translateToOgr
-
