@@ -199,8 +199,8 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 });
 
 /* Run the server. */
-var server = app.listen(8101, function() {
-    console.log("Listening on port 8101");
+var server = app.listen(config.settings.port, function() {
+    console.log("Listening on port " + config.settings.port);
 });
 
 //http://glynnbird.tumblr.com/post/54739664725/graceful-server-shutdown-with-nodejs-and-express
