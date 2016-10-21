@@ -50,7 +50,8 @@ public:
 
   double getMatchDistanceForType(const QString typeKvp) const;
   double getReviewDistanceForType(const QString typeKvp) const;
-  void modifyDistanceForPolyDensity(double& distance);
+  void modifyReviewDistanceForPolyDensity(double& distance);
+  void modifyMatchDistanceForPolyDensity(double& distance);
 
 private:
 
@@ -62,6 +63,8 @@ private:
   long _surroundingPolyCount;
 
   QString _testUuid;
+
+  double _getPolyDensity() const;
 
 };
 

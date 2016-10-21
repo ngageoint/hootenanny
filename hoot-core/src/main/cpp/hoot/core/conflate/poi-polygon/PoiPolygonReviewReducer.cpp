@@ -41,7 +41,6 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-//#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/algorithms/Translator.h>
 
 #include "PoiPolygonTypeMatch.h"
@@ -222,8 +221,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //Don't review schools against their sports fields.
-  //TODO: make is sport/school methods
-  if (poi->getTags().get("amenity").toLower() == "school" && poly->getTags().contains("sport"))
+  //TODO: make is school methods
+  if (poi->getTags().get("amenity").toLower() == "school" && polyIsSport)
   {
     if (testFeatureFound)
     {
@@ -341,6 +340,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //just parks and not specifically as play areas, if they are tagged at all, so we're just scanning
   //the name tag here to determine if something is a play area vs actually verifying that face by
   //looking at its type.
+  //TODO: move type to method
   if (poiName.contains("play area") && polyArea > 25000) //TODO: move this value to a config?
   {
     if (testFeatureFound)
@@ -458,8 +458,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               //When just using intersection as the criteria, only found one instance when something
               //was considered as "very close" to a park poly when I didn't want it to be...so these
               //values set very low to weed that instance out...overlap at least.
-              //TODO: not sure angle hist is actually doing much here.  Maybe I need to pull the
-              //area to area search dist down even more...or bring back in edge dist?
               if (parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
               {
                 polyVeryCloseToAnotherParkPoly = true;
@@ -730,6 +728,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   return false;
 }
+
+//TODO: reduce the rec center rules down to one method, if possible
 
 bool PoiPolygonReviewReducer::_isRecCenter(ConstElementPtr element) const
 {
