@@ -46,9 +46,16 @@ _surroundingPolyCount(surroundingPolyCount)
 
 }
 
-double PoiPolygonMatchDistanceCalculator::getMatchDistanceForType(const QString /*typeKvp*/) const
+double PoiPolygonMatchDistanceCalculator::getMatchDistanceForType(const QString typeKvp) const
 {
-  //TODO: haven't actually done anything here yet
+  if (typeKvp == "amenity=kindergarten")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "amenity=fire_station")
+  {
+    return 2.0;
+  }
   return _matchDistanceDefault;
 }
 
@@ -56,13 +63,78 @@ double PoiPolygonMatchDistanceCalculator::getReviewDistanceForType(const QString
 {
   if (typeKvp == "leisure=park")
   {
-    return 25.0;
+    return 25.0; //52.0
   }
   else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
            (_polyTags.get("subway") == "yes" || _polyTags.get("tunnel") == "yes"))
   {
     return 150.0;
   }
+  else if (typeKvp == "amenity=post_office")
+  {
+    return 82.0;
+  }
+  else if (typeKvp == "amenity=toilets")
+  {
+    return 43.0;
+  }
+  else if (typeKvp == "amenity=school")
+  {
+    return 23.0;
+  }
+  else if (typeKvp == "amenity=kindergarten")
+  {
+    return 1.0;
+  }
+  else if (typeKvp == "amenity=fire_station")
+  {
+    return 2.0;
+  }
+  else if (typeKvp == "man_made=water_works")
+  {
+    return 84.0;
+  }
+  else if (typeKvp == "tourism=picnic_site")
+  {
+    return 5.0;
+  }
+  else if (typeKvp == "tourism=museum")
+  {
+    return 31.0;
+  }
+  else if (typeKvp == "tourism=attraction")
+  {
+    return 60.0;
+  }
+  else if (typeKvp == "amenity=parking")
+  {
+    return 47.0;
+  }
+  else if (typeKvp == "amenity=restaurant")
+  {
+    return 49.0;
+  }
+  else if (typeKvp == "tourism=hotel")
+  {
+    return 57.0;
+  }
+  else if (typeKvp == "amenity=fast_food")
+  {
+    return 38.0;
+  }
+  else if (typeKvp == "office=company")
+  {
+    return 75.0;
+  }
+  else if (typeKvp == "amenity=embassy")
+  {
+    return 80.0;
+  }
+  else if (typeKvp == "amenity=cinema")
+  {
+    return 32.0;
+  }
+
   return _reviewDistanceDefault;
 }
 
