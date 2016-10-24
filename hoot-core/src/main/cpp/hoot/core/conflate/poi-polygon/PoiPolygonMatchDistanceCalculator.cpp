@@ -70,7 +70,7 @@ double PoiPolygonMatchDistanceCalculator::_getPolyDensity() const
 {
   //area of the search radius circle
   const double searchRadiusArea = M_PI * pow(_searchRadius, 2);
-  LOG_VARD(searchRadiusArea);
+  //LOG_VARD(searchRadiusArea);
   //polys per square meter
   return _surroundingPolyCount / searchRadiusArea;
 }
@@ -84,8 +84,8 @@ void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double
   //tweak the match distance based on the surrounding poly density; ?
   //TODO: finish
 
-  LOG_VARD(polyDensity);
-  LOG_VARD(distance);
+  //LOG_VARD(polyDensity);
+  //LOG_VARD(distance);
 }
 
 void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(double& distance)
@@ -95,15 +95,15 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
   //increases, lower it
   if (polyDensity > 0.01)
   {
-    distance -= (distance * 0.8);
+    distance -= (distance * 0.4);
   }
   else if (polyDensity >= 0.005 && polyDensity <= 0.01)
   {
-    distance -= (distance * 0.7);
+    distance -= (distance * 0.3);
   }
   else if (polyDensity >= 0.001 && polyDensity <= 0.005)
   {
-    distance -= (distance * 0.6);
+    distance -= (distance * 0.2);
   }
   else if (polyDensity >= 0.0005 && polyDensity <= 0.001)
   {
@@ -111,8 +111,8 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
   }
 
   //TODO: change back
-  LOG_VARE(polyDensity);
-  LOG_VARD(distance);
+  //LOG_VARE(polyDensity);
+  //LOG_VARD(distance);
 }
 
 }
