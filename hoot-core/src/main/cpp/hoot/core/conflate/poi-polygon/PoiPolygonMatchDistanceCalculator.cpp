@@ -48,6 +48,7 @@ _surroundingPolyCount(surroundingPolyCount)
 
 double PoiPolygonMatchDistanceCalculator::getMatchDistanceForType(const QString /*typeKvp*/) const
 {
+  //TODO: haven't actually done anything here yet
   return _matchDistanceDefault;
 }
 
@@ -75,7 +76,7 @@ double PoiPolygonMatchDistanceCalculator::_getPolyDensity() const
 }
 
 //C densities (roughly): .00014 to .011
-//D densities (roughly): ?
+//D densities (roughly): .0008 to .01
 
 void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double& distance)
 {
