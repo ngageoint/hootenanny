@@ -76,7 +76,7 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
     max(
       distanceCalc.getReviewDistanceForType(_t1BestKvp),
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
-  //distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
+  distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
   distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistance);
 
   // calculate the 2 sigma for the distance between the two objects

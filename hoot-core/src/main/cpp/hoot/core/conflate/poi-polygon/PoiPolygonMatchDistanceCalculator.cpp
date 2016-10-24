@@ -81,8 +81,16 @@ double PoiPolygonMatchDistanceCalculator::_getPolyDensity() const
 void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double& distance)
 {
   const double polyDensity = _getPolyDensity();
-  //tweak the match distance based on the surrounding poly density; ?
-  //TODO: finish
+  //tweak the match distance based on the surrounding poly density; as the density decreases,
+  //raise it
+  if (polyDensity >= 0.0005 && polyDensity <= 0.001)
+  {
+    distance += (distance * 0.4);
+  }
+  else if (polyDensity >= 0.001 && polyDensity <= 0.005)
+  {
+    distance += (distance * 0.3);
+  }
 
   //LOG_VARD(polyDensity);
   //LOG_VARD(distance);
@@ -93,11 +101,7 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
   const double polyDensity = _getPolyDensity();
   //tweak the review distance based on the surrounding poly density; as the density
   //increases, lower it
-  if (polyDensity > 0.01)
-  {
-    distance -= (distance * 0.4);
-  }
-  else if (polyDensity >= 0.005 && polyDensity <= 0.01)
+  if (polyDensity >= 0.005)
   {
     distance -= (distance * 0.3);
   }
@@ -110,8 +114,7 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
     distance -= (distance * 0.1);
   }
 
-  //TODO: change back
-  //LOG_VARE(polyDensity);
+  //LOG_VARD(polyDensity);
   //LOG_VARD(distance);
 }
 
