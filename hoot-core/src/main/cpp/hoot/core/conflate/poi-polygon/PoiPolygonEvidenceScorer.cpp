@@ -78,10 +78,14 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
     max(
       distanceCalc.getReviewDistanceForType(_t1BestKvp),
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
-  distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
-  distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistance);
-  //distanceCalc.modifyMatchDistanceForPoiDensity(_matchDistance);
-  //distanceCalc.modifyReviewDistanceForPoiDensity(_reviewDistance);
+  if (poi->getTags().get("station") != "light_rail" &&
+      poi->getTags().get("amenity") != "fuel")
+  {
+    distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
+    distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistance);
+    //distanceCalc.modifyMatchDistanceForPoiDensity(_matchDistance);
+    //distanceCalc.modifyReviewDistanceForPoiDensity(_reviewDistance);
+  }
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;

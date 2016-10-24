@@ -129,6 +129,7 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
 }
 
 //C poi densities (roughly): .00004 to .003
+//D poi densities (roughly): ?
 
 void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPoiDensity(double& /*distance*/)
 {
