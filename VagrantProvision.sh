@@ -541,6 +541,15 @@ npm install --silent
 # Clean up after the npm install
 rm -rf $HOME/tmp
 
+echo "### Installing renderdb-export-server..."
+sudo cp $HOOT_HOME/renderdb-export-server/init.d/renderdb-export-server /etc/init.d
+sudo chmod a+x /etc/init.d/renderdb-export-server
+# Make sure all npm modules are installed
+cd $HOOT_HOME/renderdb-export-server
+npm install --silent
+# Clean up after the npm install
+rm -rf $HOME/tmp
+
 cd $HOOT_HOME
 
 rm -rf $HOOT_HOME/ingest
