@@ -45,6 +45,7 @@ PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double 
                                                    unsigned int matchEvidenceThreshold,
                                                    shared_ptr<Geometry> poiGeom,
                                                    long surroundingPolyCount,
+                                                   long surroundingPoiCount,
                                                    ConstOsmMapPtr map,
                                                    QString testUuid) :
 _matchDistance(matchDistance),
@@ -55,6 +56,7 @@ _nameScoreThreshold(nameScoreThreshold),
 _matchEvidenceThreshold(matchEvidenceThreshold),
 _poiGeom(poiGeom),
 _surroundingPolyCount(surroundingPolyCount),
+_surroundingPoiCount(surroundingPoiCount),
 _map(map),
 _testUuid(testUuid)
 {
@@ -67,7 +69,7 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
   PoiPolygonMatchDistanceCalculator distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
     poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance(),
-    _surroundingPolyCount);
+    _surroundingPolyCount, _surroundingPoiCount);
   _matchDistance =
     max(
       distanceCalc.getMatchDistanceForType(_t1BestKvp),
@@ -78,6 +80,8 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
       distanceCalc.getReviewDistanceForType(_t2BestKvp));
   distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
   distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistance);
+  //distanceCalc.modifyMatchDistanceForPoiDensity(_matchDistance);
+  //distanceCalc.modifyReviewDistanceForPoiDensity(_reviewDistance);
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;
@@ -112,7 +116,6 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
   OsmMapPtr polyMap(new OsmMap());
   ElementPtr polyTemp(poly->clone());
   polyMap->addElement(polyTemp);
-  //TODO: move alpha shape init values to config?
   shared_ptr<Geometry> polyAlphaShape =
       AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
   const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());

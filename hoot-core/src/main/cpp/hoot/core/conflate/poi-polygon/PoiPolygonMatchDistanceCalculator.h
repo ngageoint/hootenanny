@@ -46,12 +46,14 @@ public:
 
   PoiPolygonMatchDistanceCalculator(double matchDistanceDefault, double reviewDistanceDefault,
                                     const Tags& polyTags, long searchRadius,
-                                    long surroundingPolyCount);
+                                    long surroundingPolyCount, long surroundingPoiCount);
 
   double getMatchDistanceForType(const QString typeKvp) const;
   double getReviewDistanceForType(const QString typeKvp) const;
   void modifyReviewDistanceForPolyDensity(double& distance);
   void modifyMatchDistanceForPolyDensity(double& distance);
+  void modifyReviewDistanceForPoiDensity(double& distance);
+  void modifyMatchDistanceForPoiDensity(double& distance);
 
 private:
 
@@ -61,10 +63,12 @@ private:
   Tags _polyTags;
   long _searchRadius;
   long _surroundingPolyCount;
+  long _surroundingPoiCount;
 
   QString _testUuid;
 
   double _getPolyDensity() const;
+  double _getPoiDensity() const;
 
 };
 

@@ -319,7 +319,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   PoiPolygonEvidenceScorer evidenceScorer(
     _matchDistance, _reviewDistance, _distance, _typeScoreThreshold, _nameScoreThreshold,
-    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyNeighborIds.size(), _map, _testUuid);
+    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyNeighborIds.size(), _poiNeighborIds.size(), _map,
+    _testUuid);
   const unsigned int evidence = evidenceScorer.calculateEvidence(_poi, _poly);
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {

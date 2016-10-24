@@ -36,12 +36,14 @@ PoiPolygonMatchDistanceCalculator::PoiPolygonMatchDistanceCalculator(double matc
                                                                      double reviewDistanceDefault,
                                                                      const Tags& polyTags,
                                                                      long searchRadius,
-                                                                     long surroundingPolyCount) :
+                                                                     long surroundingPolyCount,
+                                                                     long surroundingPoiCount) :
 _matchDistanceDefault(matchDistanceDefault),
 _reviewDistanceDefault(reviewDistanceDefault),
 _polyTags(polyTags),
 _searchRadius(searchRadius),
-_surroundingPolyCount(surroundingPolyCount)
+_surroundingPolyCount(surroundingPolyCount),
+_surroundingPoiCount(surroundingPoiCount)
 {
 
 }
@@ -147,8 +149,17 @@ double PoiPolygonMatchDistanceCalculator::_getPolyDensity() const
   return _surroundingPolyCount / searchRadiusArea;
 }
 
-//C densities (roughly): .00014 to .011
-//D densities (roughly): .0008 to .01
+double PoiPolygonMatchDistanceCalculator::_getPoiDensity() const
+{
+  //area of the search radius circle
+  const double searchRadiusArea = M_PI * pow(_searchRadius, 2);
+  //LOG_VARD(searchRadiusArea);
+  //polys per square meter
+  return _surroundingPoiCount / searchRadiusArea;
+}
+
+//C poly densities (roughly): .00014 to .011
+//D poly densities (roughly): .0008 to .01
 
 void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double& distance)
 {
@@ -188,6 +199,35 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
 
   //LOG_VARD(polyDensity);
   //LOG_VARD(distance);
+}
+
+//C poi densities (roughly): .00004 to .003
+
+void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPoiDensity(double& /*distance*/)
+{
+  //const double poiDensity = _getPoiDensity();
+
+
+
+  //LOG_VAR(poiDensity);
+  //LOG_VARD(distance);
+}
+
+void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPoiDensity(double& distance)
+{
+  const double poiDensity = _getPoiDensity();
+  if (poiDensity >= 0.0005 /*&& poiDensity <= 0.003*/)
+  {
+    distance -= (distance * 0.2);
+  }
+  else if (poiDensity >= 0.0001 && poiDensity <= 0.001)
+  {
+    distance -= (distance * 0.1);
+  }
+  /*else if (poiDensity >= 0.0001 && poiDensity <= 0.0005)
+  {
+    distance -= (distance * 0.2);
+  }*/
 }
 
 }
