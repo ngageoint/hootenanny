@@ -46,6 +46,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -764,6 +765,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestFgdb() throws Exception {
