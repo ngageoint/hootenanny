@@ -439,13 +439,13 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       averageDistance = sumDist / (double)distances.size();
 
       //TODO: change back to info or debug later
-      LOG_ERROR(matchType.toUpper() << " distance info for type: " << type);
-      LOG_VARE(maxDistance);
-      LOG_VARE(minimumDistance);
-      LOG_VARE(averageDistance);
-      LOG_VARE(numberOfEntries);
-      LOG_VARE(distancesStr);
-      LOG_ERROR("**************************");
+      LOG_INFO(matchType.toUpper() << " distance info for type: " << type);
+      LOG_VAR(maxDistance);
+      LOG_VAR(minimumDistance);
+      LOG_VAR(averageDistance);
+      LOG_VAR(numberOfEntries);
+      LOG_VAR(distancesStr);
+      LOG_INFO("**************************");
     }
   }
 }
