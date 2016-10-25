@@ -88,30 +88,44 @@ double PoiPolygonMatchDistanceCalculator::_getPoiDensity() const
 //C poly densities (roughly): .00014 to .011
 //D poly densities (roughly): .0008 to .01
 
-void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double& distance)
+void PoiPolygonMatchDistanceCalculator::modifyMatchDistanceForPolyDensity(double& /*distance*/)
 {
-  const double polyDensity = _getPolyDensity();
+  //const double polyDensity = _getPolyDensity();
   //tweak the match distance based on the surrounding poly density; as the density decreases,
   //raise it
-  if (polyDensity >= 0.0005 && polyDensity <= 0.001)
+  /*if (polyDensity >= 0.0005 && polyDensity <= 0.001)
   {
     distance += (distance * 0.4);
   }
   else if (polyDensity >= 0.001 && polyDensity <= 0.005)
   {
     distance += (distance * 0.3);
+  }*/
+
+  /*if (polyDensity <= 0.001)
+  {
+    distance += (distance * 0.4);
   }
+  else if (polyDensity >= 0.001 && polyDensity <= 0.005)
+  {
+    distance += (distance * 0.3);
+  }*/
+
+  /*if (polyDensity <= 0.005)
+  {
+    distance += (distance * 0.5);
+  }*/
 
   //LOG_VARD(polyDensity);
   //LOG_VARD(distance);
 }
 
-void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(double& distance)
+void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(double& /*distance*/)
 {
-  const double polyDensity = _getPolyDensity();
+  //const double polyDensity = _getPolyDensity();
   //tweak the review distance based on the surrounding poly density; as the density
   //increases, lower it
-  if (polyDensity >= 0.005)
+  /*if (polyDensity >= 0.005)
   {
     distance -= (distance * 0.3);
   }
@@ -122,7 +136,15 @@ void PoiPolygonMatchDistanceCalculator::modifyReviewDistanceForPolyDensity(doubl
   else if (polyDensity >= 0.0005 && polyDensity <= 0.001)
   {
     distance -= (distance * 0.1);
+  }*/
+  /*if (polyDensity <= 0.001)
+  {
+    distance += (distance * 0.2);
   }
+  else if (polyDensity >= 0.001 && polyDensity <= 0.005)
+  {
+    distance += (distance * 0.1);
+  }*/
 
   //LOG_VARD(polyDensity);
   //LOG_VARD(distance);

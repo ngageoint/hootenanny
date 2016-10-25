@@ -184,5 +184,24 @@
         "isA": "leisure",
         "name": "leisure=water_park",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "leisure",
+        "name": "leisure=golf_course",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "sport=golf",
+                "weight": 0.9
+            }
+        ]
     }
 ]
