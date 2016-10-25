@@ -25,36 +25,37 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PoiPolygonMergerJs.h"
+#include "AreaMergerJs.h"
 
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/PluginContext.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
+#include <hoot/core/conflate/polygon/AreaMerger.h>
 
 namespace hoot
 {
 
-HOOT_JS_REGISTER(PoiPolygonMergerJs)
+HOOT_JS_REGISTER(AreaMergerJs)
 
 
-PoiPolygonMergerJs::PoiPolygonMergerJs()
+AreaMergerJs::AreaMergerJs()
 {
 }
 
-PoiPolygonMergerJs::~PoiPolygonMergerJs()
+AreaMergerJs::~AreaMergerJs()
 {
 }
 
-void PoiPolygonMergerJs::Init(v8::Handle<v8::Object> exports)
+void AreaMergerJs::Init(v8::Handle<v8::Object> exports)
 {
   exports->Set(
-    v8::String::NewSymbol("poiPolyMerge"),
-    v8::FunctionTemplate::New(jsPoiPolyMerge)->GetFunction());
+    v8::String::NewSymbol("areaMerge"),
+    v8::FunctionTemplate::New(jsAreaMerge)->GetFunction());
 }
 
-v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& args)
+v8::Handle<v8::Value> AreaMergerJs::jsAreaMerge(const v8::Arguments& args)
 {
   HandleScope scope;
   try
@@ -64,13 +65,13 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
       return
         v8::ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException("Expected on argument for 'poiPolyMerge'.")));
+            IllegalArgumentException("Expected on argument for 'areaMerge'.")));
     }
 
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
     OsmMapPtr map(mapJs->getMap());
 
-    PoiPolygonMerger::merge(map);
+    AreaMerger::merge(map);
 
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);

@@ -746,17 +746,21 @@ QString MatchComparator::toString() const
   result += QString("  nodes: %1\n").arg(_elementWrongCounts[ElementType::Node]);
   result += QString("  ways: %1\n").arg(_elementWrongCounts[ElementType::Way]);
   result += QString("  relations: %1\n").arg(_elementWrongCounts[ElementType::Relation]);
-  result += QString("total correct match count: %1\n")
-              .arg(_confusion[MatchType::Match][MatchType::Match] +
-                   _confusion[MatchType::Review][MatchType::Review]);
+  const int totalCorrect =
+    _confusion[MatchType::Match][MatchType::Match] +
+    _confusion[MatchType::Review][MatchType::Review];
+  result += QString("total correct match count: %1\n").arg(totalCorrect);
   result += QString("total wrong match count: %1\n")
               .arg(_confusion[MatchType::Miss][MatchType::Match] +
                    _confusion[MatchType::Miss][MatchType::Review] +
                    _confusion[MatchType::Match][MatchType::Miss] +
                    _confusion[MatchType::Match][MatchType::Review]);
-  result += QString("total unnecessary review count: %1\n")
-              .arg(_confusion[MatchType::Review][MatchType::Miss] +
-                   _confusion[MatchType::Review][MatchType::Match]);
+  const int totalUnnecessaryReviews =
+    _confusion[MatchType::Review][MatchType::Miss] +
+    _confusion[MatchType::Review][MatchType::Match];
+  result += QString("total unnecessary review count: %1\n").arg(totalUnnecessaryReviews);
+  result += QString("ratio of unnecessary reviews to correct matches: %1\n")
+    .arg((double)totalUnnecessaryReviews / (double)totalCorrect);
   result += "\n";
 
   return result;

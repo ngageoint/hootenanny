@@ -47,7 +47,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
   ////
-  // See "Hootenanny - POI to Building" powerpoint for more details.
+  /// See "Hootenanny - POI to Building" powerpoint for more details.
   ////
 
   // merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
