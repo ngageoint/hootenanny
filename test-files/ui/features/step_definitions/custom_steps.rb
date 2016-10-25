@@ -211,7 +211,7 @@ When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
 end
 
 When(/^I context click "([^"]*)"$/) do |txt|
-  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+  page.find('tspan',:text=>txt, :match => :prefer_exact).context_click
 end
 
 
@@ -858,6 +858,12 @@ end
 
 Then(/^I should not see the "([^"]*)" on the page$/) do |input|
   el = page.should have_no_css(input, :visible => true)
+end
+
+#for invalidName warning
+Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
+  el = find('input' + el)
+  el[:class].include?('invalidName').should eq true
 end
 
 # for invalid features
