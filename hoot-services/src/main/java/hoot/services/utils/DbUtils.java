@@ -219,16 +219,16 @@ public final class DbUtils {
         Long mapId = null;
 
         try (Connection connection = getConnection()) {
+            String currentCatalog;
+            try {
+                currentCatalog = connection.getCatalog();
+            }
+            catch (SQLException e) {
+                throw new RuntimeException("Error retrieving current catalog name!", e);
+            }
+
             if (!mapIds.isEmpty()) {
                 mapId = mapIds.get(0);
-
-                String currentCatalog;
-                try {
-                    currentCatalog = connection.getCatalog();
-                }
-                catch (SQLException e) {
-                    throw new RuntimeException("Error retrieving current catalog name!", e);
-                }
 
                 String dbNameByMapId = currentCatalog + "_renderdb_" + mapId;
                 try {
@@ -246,6 +246,10 @@ public final class DbUtils {
                         throw e2;
                     }
                 }
+            }
+            else {
+                String dbNameByMapName = currentCatalog + "_renderdb_" + mapName;
+                deleteDb(dbNameByMapName, connection);
             }
         }
         catch (SQLException e) {

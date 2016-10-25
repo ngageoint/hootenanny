@@ -26,9 +26,13 @@
  */
 package hoot.services.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static hoot.services.testsupport.MapUtils.insertMap;
+import static hoot.services.utils.DbUtils.getConnection;
+import static org.junit.Assert.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +79,7 @@ public class DbUtilsTest {
     @Transactional
     public void testUpdateMapsTableTags() throws Exception {
         long userId = MapUtils.insertUser();
-        long mapId = MapUtils.insertMap(userId);
+        long mapId = insertMap(userId);
         JSONParser parser = new JSONParser();
         Map<String, String> tags = new HashMap<>();
         String k1 = "input1";
@@ -218,5 +222,110 @@ public class DbUtilsTest {
         JSONObject exJson = (JSONObject) parser.parse(expected.replaceAll("'", "\""));
         JSONObject outJson = (JSONObject) parser.parse(output.replaceAll("\\\\\"", "\""));
         assertEquals(exJson, outJson);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDeleteDatabaseByName() throws Exception {
+        try (Connection connection = getConnection()) {
+            // Enable autoCommit
+            connection.setAutoCommit(true);
+
+            String currentCatalog = connection.getCatalog();
+            String dbName = currentCatalog + "_renderdb_" + "test9999";
+
+            boolean databaseExists;
+            String sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    databaseExists = rs.next();
+                }
+            }
+
+            if (databaseExists) {
+                sql = "DROP DATABASE \"" + dbName + "\"";
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.executeUpdate();
+                }
+            }
+
+            sql = "CREATE DATABASE \"" + dbName + "\"";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.executeUpdate();
+            }
+
+            DbUtils.deleteRenderDb("test9999");
+
+            sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    databaseExists = rs.next();
+                }
+            }
+
+            assertFalse(databaseExists);
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDeleteDatabaseById() throws Exception {
+        Long mapId;
+
+        try (Connection connection = getConnection()) {
+            long userId = MapUtils.insertUser();
+            mapId = MapUtils.insertMap(userId);
+
+            // Enable autoCommit
+            connection.setAutoCommit(true);
+
+            String currentCatalog = connection.getCatalog();
+            String dbName = currentCatalog + "_renderdb_" + mapId;
+
+            boolean databaseExists;
+            String sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    databaseExists = rs.next();
+                }
+            }
+
+            if (databaseExists) {
+                sql = "DROP DATABASE \"" + dbName + "\"";
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.executeUpdate();
+                }
+            }
+
+            sql = "CREATE DATABASE \"" + dbName + "\"";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.executeUpdate();
+            }
+
+            DbUtils.deleteRenderDb("map-with-id-" + mapId);
+
+            sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    databaseExists = rs.next();
+                }
+            }
+
+            assertFalse(databaseExists);
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @Transactional
+    public void testDeleteRenderDBByWrongNameWithException() throws Exception {
+        try {
+            DbUtils.deleteRenderDb("non-existing-db");
+        }
+        catch (RuntimeException re) {
+            assertTrue(re.getMessage().startsWith("Error deleting renderdb for map with name"));
+            throw re;
+        }
     }
 }
