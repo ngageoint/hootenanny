@@ -43,7 +43,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{f70c7b9f-a276-5bbc-8149-23c103de2228}";
+QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -322,6 +322,10 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyNeighborIds.size(), _poiNeighborIds.size(), _map,
     _testUuid);
   const unsigned int evidence = evidenceScorer.calculateEvidence(_poi, _poly);
+  if (_testFeatureFound)
+  {
+    LOG_VARD(evidence);
+  }
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();

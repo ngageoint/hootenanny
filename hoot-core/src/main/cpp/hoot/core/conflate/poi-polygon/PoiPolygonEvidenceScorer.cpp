@@ -220,14 +220,11 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     {
       evidence += _getConvexPolyDistanceEvidence(poly);
     }
-    else
-    {
-      LOG_DEBUG("Skipped distance matching 2.");
-    }
   }
-  else
+
+  if (evidence == 0 && _nameScore >= 0.4 && _typeScore >= 0.6)
   {
-    LOG_DEBUG("Skipped address matching.");
+    evidence++;
   }
 
   if (_testFeatureFound)
