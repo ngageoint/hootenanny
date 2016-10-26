@@ -171,7 +171,7 @@ unsigned int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, Con
 unsigned int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
-  const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).calculateMatch(poly, poi);
+  const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).isMatch(poly, poi);
   unsigned int evidence = addressMatch ? 1 : 0;
   if (_testFeatureFound)
   {
@@ -207,13 +207,14 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
 
   evidence += _getNameEvidence(poi, poly);
 
-  //ADDRESS
-
   //no point in calc'ing the address match if we already have a match from the other evidence
   //LOG_VARD(_matchEvidenceThreshold);
   if (evidence < _matchEvidenceThreshold)
   {
-    evidence += _getAddressEvidence(poi, poly);
+    if (ConfigOptions().getPoiPolygonEnableAddressMatching())
+    {
+      evidence += _getAddressEvidence(poi, poly);
+    }
     //TODO: move to config
     if (evidence < _matchEvidenceThreshold && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))

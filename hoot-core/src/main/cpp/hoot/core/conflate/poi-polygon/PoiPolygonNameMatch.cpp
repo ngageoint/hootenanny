@@ -40,7 +40,6 @@ namespace hoot
 PoiPolygonNameMatch::PoiPolygonNameMatch(double nameScoreThreshold) :
 _nameScoreThreshold(nameScoreThreshold)
 {
-
 }
 
 double PoiPolygonNameMatch::getNameScore(ConstElementPtr e1, ConstElementPtr e2) const

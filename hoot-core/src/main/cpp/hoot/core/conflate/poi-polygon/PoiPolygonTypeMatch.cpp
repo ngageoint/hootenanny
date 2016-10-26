@@ -44,11 +44,10 @@ PoiPolygonTypeMatch::PoiPolygonTypeMatch(double typeScoreThreshold,
 _typeScoreThreshold(typeScoreThreshold),
 _testUuid(testUuid)
 {
-
 }
 
 double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                      QString& t2BestKvp)
+                                         QString& t2BestKvp)
 {
   const bool testFeatureFound =
     e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid;
@@ -181,16 +180,7 @@ QStringList PoiPolygonTypeMatch::_getRelatedTags(const Tags& tags) const
   return tagsList;
 }
 
-//TODO: reduce the rec center rules down to one method
-
-/*bool PoiPolygonReviewReducer::_isRecCenter(ConstElementPtr element) const
-{
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return elementName.contains("recreation center") || elementName.contains("rec center");
-}*/
-
-bool PoiPolygonTypeMatch::isRecCenter2(ConstElementPtr element)
+bool PoiPolygonTypeMatch::isRecCenter(ConstElementPtr element)
 {
   const QString elementName =
     Translator::getInstance().toEnglish(element->getTags().get("name").toLower());

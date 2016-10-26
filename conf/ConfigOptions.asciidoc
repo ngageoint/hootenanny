@@ -1665,6 +1665,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.enable.address.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, POI to polygon conflation will not take address tags into account.  Disable this if your
+data has no address information or you know the information to be inaccurate.
+
 === poi.polygon.match.threshold
 
 * Data Type: double
@@ -1726,6 +1734,16 @@ See also:
 
 If true, debug match distance output will be obtained from manually matched source data and printed
 if running 'hoot score-matches' with POI to polygon conflation.
+
+=== poi.polygon.reduce.reviews
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI to polygon conflation will attempt to reduce unnecessary reviews by applying a custom
+rule set.  If you find reducing the reviews with this setting leads to poor conflation results,
+disable this setting.  This setting is likely temporary and will be removed in the future after
+more POI to polygon conflation testing has occurred.
 
 === poi.polygon.review.threshold
 

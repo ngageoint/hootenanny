@@ -49,7 +49,7 @@ public:
 
   PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
 
-  bool calculateMatch(ConstElementPtr poly, ConstElementPtr poi);
+  bool isMatch(ConstElementPtr poly, ConstElementPtr poi);
 
 private:
 

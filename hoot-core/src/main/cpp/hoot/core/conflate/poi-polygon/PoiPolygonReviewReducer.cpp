@@ -127,7 +127,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool poiIsParkish = PoiPolygonTypeMatch::isParkish(poi);
   const bool poiIsPlayArea = PoiPolygonTypeMatch::isPlayArea(poi);
   const bool poiIsPlayground = PoiPolygonTypeMatch::isPlayground(poi);
-  const bool poiIsRecCenter = PoiPolygonTypeMatch::isRecCenter2(poi);
+  const bool poiIsRecCenter = PoiPolygonTypeMatch::isRecCenter(poi);
   const bool poiIsSport = PoiPolygonTypeMatch::isSport(poi);
 
   const QString polyName = poly->getTags().get("name").toLower().trimmed();
@@ -135,7 +135,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsPark = PoiPolygonTypeMatch::isPark(poly);
   const bool polyIsPlayground = PoiPolygonTypeMatch::isPlayground(poly);
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsRecCenter = PoiPolygonTypeMatch::isRecCenter2(poly);
+  const bool polyIsRecCenter = PoiPolygonTypeMatch::isRecCenter(poly);
   const bool polyIsSport = PoiPolygonTypeMatch::isSport(poly);
   const bool polyHasName = PoiPolygonNameMatch::elementHasName(poly);
 
@@ -741,7 +741,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  bool poiNeighborWithAddressContainedInPoly = false;
+  //bool poiNeighborWithAddressContainedInPoly = false;
 
   set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
   while (poiNeighborItr != _poiNeighborIds.end())
@@ -788,12 +788,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           }
         }
 
-        //TODO:
-        if (poiNeighbor->getTags().get("name").toLower() ==
-            poly->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower())
-        {
-          poiNeighborWithAddressContainedInPoly = true;
-        }
+//        //TODO: make work for all name tags
+//        const QString poiNeighborName = poiNeighbor->getTags().get("name").toLower().trimmed();
+//        const QString polyAddress =
+//          poly->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
+//        if (!poiNeighborName.isEmpty() && !polyAddress.isEmpty() && poiNeighborName ==  polyAddress)
+//        {
+//          poiNeighborWithAddressContainedInPoly = true;
+//        }
       }
       catch (const geos::util::TopologyException& e)
       {
@@ -829,15 +831,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //TODO:
-  if (poiNeighborWithAddressContainedInPoly)
-  {
-    if (testFeatureFound)
-    {
-      LOG_DEBUG("Returning miss per rule #24...");
-    }
-    matchClass.setReview();
-    return true;
-  }
+//  if (poiNeighborWithAddressContainedInPoly)
+//  {
+//    if (testFeatureFound)
+//    {
+//      LOG_DEBUG("Returning miss per rule #24...");
+//    }
+//    matchClass.setReview();
+//    return true;
+//  }
 
   return false;
 }

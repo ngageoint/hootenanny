@@ -57,8 +57,7 @@ public:
 
   static bool isPark(ConstElementPtr element);
   static bool isParkish(ConstElementPtr element);
-  //bool _isRecCenter(ConstElementPtr element) const;
-  static bool isRecCenter2(ConstElementPtr element);
+  static bool isRecCenter(ConstElementPtr element);
   static bool isPlayground(ConstElementPtr element);
   static bool isPlayArea(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);

@@ -193,7 +193,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr rela
   }
 }
 
-bool PoiPolygonAddressMatch::calculateMatch(ConstElementPtr poly, ConstElementPtr poi)
+bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
 {
   const bool testFeatureFound =
     poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;

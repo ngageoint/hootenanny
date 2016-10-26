@@ -337,15 +337,12 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     _class.setReview();
   }
 
-  //LOG_VARD(PoiPolygonTypeMatch::hasType(_poi));
-  //LOG_VARD(PoiPolygonTypeMatch::isRecCenter2(_poi));
-  //LOG_VARD(PoiPolygonTypeMatch::isBuildingIsh(_poly));
-  //LOG_VARD(PoiPolygonNameMatch::elementHasName(_poly));
   //TODO: find some way to trigger and test rule 24 w/o adding a huge amount of runtime
-  if (evidence > 0 ||
-      //TODO: hack
-      (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter2(_poi) &&
-       PoiPolygonTypeMatch::isBuildingIsh(_poly)))
+  if (ConfigOptions().getPoiPolygonReduceReviews() &&
+      (evidence > 0 ||
+       //TODO: hack
+       (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter(_poi) &&
+        PoiPolygonTypeMatch::isBuildingIsh(_poly))))
   {
     MatchClassification externalMatchClass;
     //TODO: pass in evidence scorer here to clean this constructor up ??
