@@ -749,8 +749,8 @@ QString MatchComparator::toString() const
   const int totalCorrect =
     _confusion[MatchType::Match][MatchType::Match] +
     _confusion[MatchType::Review][MatchType::Review];
-  result += QString("total correct match count: %1\n").arg(totalCorrect);
-  result += QString("total wrong match count: %1\n")
+  result += QString("correct match count: %1\n").arg(totalCorrect);
+  result += QString("wrong match count: %1\n")
               .arg(_confusion[MatchType::Miss][MatchType::Match] +
                    _confusion[MatchType::Miss][MatchType::Review] +
                    _confusion[MatchType::Match][MatchType::Miss] +
@@ -758,10 +758,9 @@ QString MatchComparator::toString() const
   const int totalUnnecessaryReviews =
     _confusion[MatchType::Review][MatchType::Miss] +
     _confusion[MatchType::Review][MatchType::Match];
-  result += QString("total unnecessary review count: %1\n").arg(totalUnnecessaryReviews);
+  result += QString("unnecessary review count: %1\n").arg(totalUnnecessaryReviews);
   result += QString("ratio of unnecessary reviews to correct matches: %1\n")
     .arg((double)totalUnnecessaryReviews / (double)totalCorrect);
-  result += "\n";
 
   return result;
 }
