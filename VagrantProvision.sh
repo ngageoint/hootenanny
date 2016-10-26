@@ -156,14 +156,15 @@ if [ ! -f bin/chromedriver ]; then
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
 else
-  if [[ "$(chromedriver --version)" != "ChromeDriver 2.24."* ]]; then
+  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+  if [[ "$(chromedriver --version)" != "ChromeDriver $(LATEST_RELEASE).*" ]]; then
     echo "### Updating Chromedriver"
+    rm chromedriver
     rm chromedriver_linux64.zip
-    LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     unzip -d $HOME/bin chromedriver_linux64.zip
     # HIT [Y] to respond to prompt
-    echo "Y"
+    echo "y"
   fi
 fi
 
