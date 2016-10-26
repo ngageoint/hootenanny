@@ -147,6 +147,32 @@ QString NetworkMatch::toString() const
     arg(hoot::toString(_pairs)).arg(getScore());
 }
 
+bool NetworkMatch::isSameAs(const NetworkMatch* other) const
+{
+  set< pair<ElementId, ElementId> > s = other->getMatchPairs();
+
+  // See if all element ids are the same
+  for (set< pair<ElementId, ElementId> >::const_iterator it = s.begin(); it != s.end(); ++it)
+  {
+    const pair<ElementId, ElementId>& ip = *it;
+
+    for (set< pair<ElementId, ElementId> >::const_iterator jt = _pairs.begin(); jt != _pairs.end();
+      ++jt)
+    {
+      const pair<ElementId, ElementId>& jp = *jt;
+
+      if ((ip.first == jp.first && ip.second == jp.second)
+          || (ip.first == jp.second && ip.second == jp.first))
+      {
+        // They are the same!
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();

@@ -73,6 +73,11 @@ private:
    * Returns true if one or more matches are conflicting matches.
    */
   bool _isConflictingSet(const MatchSet& matches) const;
+
+  /**
+   * Removes duplicate matches in the MatchSet
+   */
+  void _removeDuplicates(MatchSet& matches) const;
 };
 
 }

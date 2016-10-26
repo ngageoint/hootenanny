@@ -56,9 +56,12 @@ NetworkMergerCreator::NetworkMergerCreator()
   _minSplitSize = ConfigOptions(conf()).getWayMergerMinSplitSize();
 }
 
-bool NetworkMergerCreator::createMergers(const MatchSet& matches,
+bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
   vector<Merger*>& mergers) const
 {
+  MatchSet matches = matchesIn;
+  _removeDuplicates(matches);
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -226,4 +229,28 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   return conflicting;
 }
 
+// I dislike the nested for loop here - but whatcha gonna do? Maybe not create
+// duplicate matches in the first place
+void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
+{
+  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+    MatchSet::iterator jt = it;
+
+    for (++jt; jt != matches.end(); ++jt)
+    {
+      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
+
+      if (nmi->isSameAs(nmj))
+      {
+        MatchSet::iterator tmp = it;
+        ++tmp;
+        matches.erase(it);
+        it = jt = tmp;
+      }
+    }
+  }
 }
+
+} // namespace hoot
