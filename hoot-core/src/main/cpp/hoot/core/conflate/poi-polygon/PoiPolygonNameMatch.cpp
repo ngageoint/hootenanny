@@ -71,4 +71,10 @@ double PoiPolygonNameMatch::getExactNameScore(ConstElementPtr e1, ConstElementPt
    return ExactStringDistance().compare(e1Name.toLower(), e2Name.toLower());
 }
 
+//TODO: make work for all name tag types
+bool PoiPolygonNameMatch::elementHasName(ConstElementPtr element)
+{
+  return !element->getTags().get("name").trimmed().isEmpty();
+}
+
 }

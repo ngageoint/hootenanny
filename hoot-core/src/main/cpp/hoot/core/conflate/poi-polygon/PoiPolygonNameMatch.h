@@ -49,6 +49,8 @@ public:
   double getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
   double getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
+  static bool elementHasName(ConstElementPtr element);
+
 private:
 
   double _nameScoreThreshold;

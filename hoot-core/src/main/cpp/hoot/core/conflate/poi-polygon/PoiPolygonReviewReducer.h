@@ -77,8 +77,6 @@ private:
   double _matchDistance;
   double _reviewDistance;
 
-  //static vector<SchemaVertex> _allTags;
-  static QSet<QString> _allTagKeys;
   QStringList _genericLandUseTagVals;
 
   shared_ptr<Geometry> _polyGeom;
@@ -87,16 +85,6 @@ private:
   int _badGeomCount;
 
   QString _testUuid;
-
-  bool _isPark(ConstElementPtr element) const;
-  bool _isParkish(ConstElementPtr element) const;
-  bool _isRecCenter(ConstElementPtr element) const;
-  bool _isRecCenter2(ConstElementPtr element) const;
-  bool _isPlayground(ConstElementPtr element) const;
-  bool _isPlayArea(ConstElementPtr element) const;
-  bool _isSport(ConstElementPtr element) const;
-  bool _isBuildingIsh(ConstElementPtr element) const;
-  bool _hasMoreThanOneType(ConstElementPtr element) const;
 
 };
 

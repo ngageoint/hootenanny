@@ -36,6 +36,8 @@
 #include <hoot/core/util/ElementConverter.h>
 
 #include "PoiPolygonReviewReducer.h"
+#include "PoiPolygonTypeMatch.h"
+#include "PoiPolygonNameMatch.h"
 #include "PoiPolygonEvidenceScorer.h"
 
 namespace hoot
@@ -43,7 +45,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
+QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -335,7 +337,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     _class.setReview();
   }
 
-  if (evidence > 0)
+  //LOG_VARD(PoiPolygonTypeMatch::hasType(_poi));
+  //LOG_VARD(PoiPolygonTypeMatch::isRecCenter2(_poi));
+  //LOG_VARD(PoiPolygonTypeMatch::isBuildingIsh(_poly));
+  //LOG_VARD(PoiPolygonNameMatch::elementHasName(_poly));
+  if (evidence > 0 ||
+      //TODO: hack
+      (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter2(_poi) &&
+       PoiPolygonTypeMatch::isBuildingIsh(_poly) /*&& !PoiPolygonNameMatch::elementHasName(_poly)*/))
   {
     MatchClassification externalMatchClass;
     //TODO: pass in evidence scorer here to clean this constructor up ??

@@ -29,12 +29,18 @@
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/algorithms/Translator.h>
+
+// Qt
+#include <QSet>
 
 namespace hoot
 {
 
+QSet<QString> PoiPolygonTypeMatch::_allTagKeys;
+
 PoiPolygonTypeMatch::PoiPolygonTypeMatch(double typeScoreThreshold,
-                                   const QString testUuid = "") :
+                                         const QString testUuid = "") :
 _typeScoreThreshold(typeScoreThreshold),
 _testUuid(testUuid)
 {
@@ -173,6 +179,110 @@ QStringList PoiPolygonTypeMatch::_getRelatedTags(const Tags& tags) const
   }
 
   return tagsList;
+}
+
+//TODO: reduce the rec center rules down to one method
+
+/*bool PoiPolygonReviewReducer::_isRecCenter(ConstElementPtr element) const
+{
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+  return elementName.contains("recreation center") || elementName.contains("rec center");
+}*/
+
+bool PoiPolygonTypeMatch::isRecCenter2(ConstElementPtr element)
+{
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+  return elementName.contains("recreation center") || elementName.contains("rec center") ||
+    elementName.contains("rec ctr") || elementName.contains("clubhouse") ||
+    elementName.contains("fieldhouse");
+}
+
+bool PoiPolygonTypeMatch::isPlayground(ConstElementPtr element)
+{
+  const Tags& tags = element->getTags();
+  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
+  return tags.get("leisure") == "playground" || elementName.contains("playground");
+}
+
+bool PoiPolygonTypeMatch::isPlayArea(ConstElementPtr element)
+{
+  return element->getTags().get("name").toLower().contains("play area");
+}
+
+bool PoiPolygonTypeMatch::isPark(ConstElementPtr element)
+{
+  return !OsmSchema::getInstance().isBuilding(element) &&
+         (element->getTags().get("leisure") == "park");
+}
+
+bool PoiPolygonTypeMatch::isParkish(ConstElementPtr element)
+{
+  if (OsmSchema::getInstance().isBuilding(element))
+  {
+    return false;
+  }
+  const QString leisureVal = element->getTags().get("leisure").toLower();
+  return leisureVal == "garden" || leisureVal == "dog_park";
+}
+
+bool PoiPolygonTypeMatch::isSport(ConstElementPtr element)
+{
+  return element->getTags().contains("sport");
+}
+
+bool PoiPolygonTypeMatch::isBuildingIsh(ConstElementPtr element)
+{
+  const QString elementName =
+    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+  return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
+    elementName.contains("bldg");
+}
+
+bool PoiPolygonTypeMatch::hasMoreThanOneType(ConstElementPtr element)
+{
+  int typeCount = 0;
+  QStringList typesParsed;
+  if (_allTagKeys.size() == 0)
+  {
+    _allTagKeys = OsmSchema::getInstance().getAllTagKeys();
+    _allTagKeys.remove("REF1");
+    _allTagKeys.remove("REF2");
+    _allTagKeys.remove("uuid");
+  }
+  /*QStringList ignoreKeys;
+  ignoreKeys.append("REF1");
+  ignoreKeys.append("REF2");
+  ignoreKeys.append("uuid");*/
+
+  const Tags elementTags = element->getTags();
+  for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
+  {
+    const QString elementTagKey = it.key();
+    //LOG_DEBUG("Key: " << vertex.key);
+    //there may be duplicate keys in allTags
+    if (/*!ignoreKeys.contains(elementTagKey) && */_allTagKeys.contains(elementTagKey) &&
+        !typesParsed.contains(elementTagKey))
+    {
+      LOG_DEBUG("Has key: " << elementTagKey);
+      typeCount++;
+      if (typeCount > 1)
+      {
+        return true;
+      }
+    }
+
+    typesParsed.append(elementTagKey);
+  }
+  return false;
+}
+
+bool PoiPolygonTypeMatch::hasType(ConstElementPtr element)
+{
+  return
+    OsmSchema::getInstance().getCategories(element->getTags()).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 }
 
 }

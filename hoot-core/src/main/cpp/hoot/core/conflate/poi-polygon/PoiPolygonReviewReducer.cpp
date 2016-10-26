@@ -53,8 +53,6 @@
 namespace hoot
 {
 
-QSet<QString> PoiPolygonReviewReducer::_allTagKeys;
-
 PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& polyNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
@@ -101,7 +99,7 @@ _testUuid(testUuid)
 }
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly,
-                                       MatchClassification& matchClass)
+                                           MatchClassification& matchClass)
 {
   if (!_poiGeom.get())
   {
@@ -122,26 +120,44 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //done to further reduce runtime), with the rules requiring the least expensive computations
   //occurring earlier.
 
-  const QString poiName = poi->getTags().get("name").toLower();
+  const QString poiName = poi->getTags().get("name").toLower().trimmed();
+  const bool poiHasType = PoiPolygonTypeMatch::hasType(poi);
+  const bool poiIsPark = PoiPolygonTypeMatch::isPark(poi);
+  const bool poiIsParkish = PoiPolygonTypeMatch::isParkish(poi);
+  const bool poiIsPlayArea = PoiPolygonTypeMatch::isPlayArea(poi);
+  const bool poiIsPlayground = PoiPolygonTypeMatch::isPlayground(poi);
+  const bool poiIsRecCenter = PoiPolygonTypeMatch::isRecCenter2(poi);
+  const bool poiIsSport = PoiPolygonTypeMatch::isSport(poi);
 
-  const bool poiHasType =
-    OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool poiIsPark = _isPark(poi);
-  const bool poiIsParkish = _isParkish(poi);
-  const bool poiIsPlayArea = _isPlayArea(poi);
-  const bool poiIsPlayground = _isPlayground(poi);
-  const bool poiIsRecCenter = _isRecCenter(poi);
-  const bool poiIsSport = _isSport(poi);
-
-  const bool polyHasType =
-    OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool polyIsPark = _isPark(poly);
-  const bool polyIsPlayground = _isPlayground(poly);
+  const QString polyName = poly->getTags().get("name").toLower().trimmed();
+  const bool polyHasType = PoiPolygonTypeMatch::hasType(poly);
+  const bool polyIsPark = PoiPolygonTypeMatch::isPark(poly);
+  const bool polyIsPlayground = PoiPolygonTypeMatch::isPlayground(poly);
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
-  const bool polyIsRecCenter = _isRecCenter(poly);
-  const bool polyIsSport = _isSport(poly);
+  const bool polyIsRecCenter = PoiPolygonTypeMatch::isRecCenter2(poly);
+  const bool polyIsSport = PoiPolygonTypeMatch::isSport(poly);
+  const bool polyHasName = PoiPolygonNameMatch::elementHasName(poly);
+
+  if (testFeatureFound)
+  {
+    LOG_VARD(poiName);
+    LOG_VARD(poiHasType);
+    LOG_VARD(poiIsPark);
+    LOG_VARD(poiIsParkish);
+    LOG_VARD(poiIsPlayArea);
+    LOG_VARD(poiIsPlayground);
+    LOG_VARD(poiIsRecCenter);
+    LOG_VARD(poiIsSport);
+
+    LOG_VARD(polyName);
+    LOG_VARD(polyHasType);
+    LOG_VARD(polyIsPark);
+    LOG_VARD(polyIsPlayground);
+    LOG_VARD(polyIsBuilding);
+    LOG_VARD(polyIsRecCenter);
+    LOG_VARD(polyIsSport);
+    LOG_VARD(polyHasName);
+  }
 
   //If the poi is a rec center and the poly is not a rec center or a building, return a miss.
   if (poiIsRecCenter && !polyIsRecCenter && !polyIsBuilding)
@@ -171,7 +187,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Be a little stricter on place related reviews.
   //TODO: make is place method
   if (poi->getTags().get("place").toLower() == "neighbourhood" &&
-           !poly->getTags().contains("place"))
+      !poly->getTags().contains("place"))
   {
     if (testFeatureFound)
     {
@@ -198,7 +214,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Gates and Parking are two separate things.
   if (poi->getTags().get("barrier").toLower() == "gate" &&
-           poly->getTags().get("amenity").toLower() == "parking")
+      poly->getTags().get("amenity").toLower() == "parking")
   {
     if (testFeatureFound)
     {
@@ -235,9 +251,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Similar to previous, except more focused for restrooms.
   //TODO: make is restroom method - alternatively use building in the schema for this
   if (poiHasType && polyHasType && !_typeScore == 1.0 &&
-           poi->getTags().get("amenity").toLower() == "toilets" &&
-           !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
-             OsmSchemaCategory::building()))
+      poi->getTags().get("amenity").toLower() == "toilets" &&
+      !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
+        OsmSchemaCategory::building()))
   {
     if (testFeatureFound)
     {
@@ -250,7 +266,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Need to be stricter on tunnels since we don't want above ground things to review against them.
   //TODO: make is underground method or schema change
   if (poly->getTags().get("tunnel") == "yes" && poiHasType &&
-           (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
+      (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (testFeatureFound)
     {
@@ -263,8 +279,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Be more strict reviewing parking lots against other features.
   //TODO: make is parking method
   if (poiHasType && polyHasType && poly->getTags().get("amenity") == "parking" &&
-           _distance > _matchDistance &&
-           (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
+      _distance > _matchDistance &&
+      (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (testFeatureFound)
     {
@@ -277,8 +293,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //Be more strict reviewing natural features against building features.
   //TODO: make is natural method
   if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
-           OsmSchema::getInstance().getCategories(
-             poi->getTags()).intersects(OsmSchemaCategory::building()))
+      OsmSchema::getInstance().getCategories(
+        poi->getTags()).intersects(OsmSchemaCategory::building()))
   {
     if (testFeatureFound)
     {
@@ -292,8 +308,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //be more strict with their reviews.
   //TODO: make is landuse method
   if (_genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-           _distance > _matchDistance &&
-           (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
+      _distance > _matchDistance &&
+      (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     if (testFeatureFound)
     {
@@ -303,25 +319,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool polyHasMoreThanOneType = _hasMoreThanOneType(poly);
-
-  //This is a simple rule to prevent matching poi's not at all like a park with park polys.
-  //TODO: this may render some of the previous rules obsolete.
-  //*
-  if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
-  {
-    if (testFeatureFound)
-    {
-      LOG_DEBUG("Returning miss per rule #13...");
-    }
-    matchClass.setMiss();
-    return true;
-  }
-
   double polyArea = -1.0;
   try
   {
     polyArea = _polyGeom->getArea();
+    if (testFeatureFound)
+    {
+      LOG_VARD(polyArea);
+    }
   }
   catch (const geos::util::TopologyException& e)
   {
@@ -380,6 +385,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   bool otherParkPolyHasName = false;
   bool polyContainsPlayAreaOrPlaygroundPoly = false;
   bool poiContainedInAnotherParkPoly = false;
+  bool polyContainedInAnotherParkPoly = false;
   bool polyContainsAnotherParkOrPlaygroundPoi = false;
   bool containedOtherParkOrPlaygroundPoiHasName = false;
   bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
@@ -431,7 +437,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             LOG_VARD(t2);
           }*/
 
-          if (_isPark(polyNeighbor))
+          if (PoiPolygonTypeMatch::isPark(polyNeighbor))
           {
             otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
             otherParkPolyNameScore = nameScorer.getNameScore(poi, polyNeighbor);
@@ -448,6 +454,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   "comparison: " << poi->toString());
                 LOG_DEBUG("park poly it is very close to: " << polyNeighbor->toString());
               }
+            }
+
+            if (polyNeighborGeom->contains(_polyGeom.get()))
+            {
+              //TODO: probably need to be specific that the poi and the poly are in the same park...
+              //TODO: log
+              polyContainedInAnotherParkPoly = true;
             }
 
             if (polyNeighborGeom->intersects(_polyGeom.get()))
@@ -492,7 +505,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
               }
             }
           }
-          else if ((_isPlayground(polyNeighbor) || _isPlayArea(polyNeighbor)) &&
+          else if ((PoiPolygonTypeMatch::isPlayground(polyNeighbor) ||
+                    PoiPolygonTypeMatch::isPlayArea(polyNeighbor)) &&
                    _polyGeom->contains(polyNeighborGeom.get()))
           {
             polyContainsPlayAreaOrPlaygroundPoly = true;
@@ -507,7 +521,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           else if (poiIsSport)
           {
             //this is a little loose, b/c there could be more than one type match set of tags...
-            if (_isSport(polyNeighbor) && polyNeighborGeom->contains(_poiGeom.get()) &&
+            if (PoiPolygonTypeMatch::isSport(polyNeighbor) &&
+                polyNeighborGeom->contains(_poiGeom.get()) &&
                 typeScorer.isExactTypeMatch(poi, polyNeighbor))
             {
               sportPoiOnOtherSportPolyWithExactTypeMatch = true;
@@ -548,6 +563,26 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
 
+  if (testFeatureFound)
+  {
+    LOG_VARD(polyVeryCloseToAnotherParkPoly);
+    LOG_VARD(parkPolyAngleHistVal);
+    LOG_VARD(parkPolyOverlapVal);
+    LOG_VARD(otherParkPolyNameMatch);
+    LOG_VARD(otherParkPolyNameScore);
+    LOG_VARD(poiToPolyNodeDist);
+    LOG_VARD(poiToOtherParkPolyNodeDist);
+    LOG_VARD(otherParkPolyHasName);
+    LOG_VARD(polyContainsPlayAreaOrPlaygroundPoly);
+    LOG_VARD(poiContainedInAnotherParkPoly);
+    LOG_VARD(polyContainsAnotherParkOrPlaygroundPoi);
+    LOG_VARD(containedOtherParkOrPlaygroundPoiHasName);
+    LOG_VARD(sportPoiOnOtherSportPolyWithExactTypeMatch);
+    LOG_VARD(anotherPolyContainsPoiWithTypeMatch);
+    LOG_VARD(poiOnBuilding);
+    LOG_VARD(poiContainedInParkPoly);
+  }
+
   //If the POI is inside a poly that is very close to another park poly, declare miss if
   //the distance to the outer ring of the other park poly is shorter than the distance to the outer
   //ring of this poly and the other park poly has a name.
@@ -563,39 +598,11 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
-  //to another park poly, we want to be more restrictive on type matching, but only if the poi has
-  //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
-  //cause a review here, rather than a miss.
-  //*
-  if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
-           !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
-  {
-    if (_exactNameMatch)
-    {
-      //Only misnomer for "ReviewReducer"...can we get rid of this?
-      if (testFeatureFound)
-      {
-        LOG_DEBUG("Returning review per rule #17...");
-      }
-      matchClass.setReview();
-    }
-    else
-    {
-      if (testFeatureFound)
-      {
-        LOG_DEBUG("Returning miss per rule #17...");
-      }
-      matchClass.setMiss();
-    }
-    return true;
-  }
-
   //If the poi is a park, the poly it is being compared to is not a park or building, and that poly
   //is "very close" to another park poly that has a name match with the poi, then declare a miss
   //(exclude poly playgrounds from this).
   if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-           otherParkPolyNameMatch && !polyIsPlayground)
+      otherParkPolyNameMatch && !polyIsPlayground)
   {
     if (testFeatureFound)
     {
@@ -646,14 +653,90 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+  const bool poiIsBuildingIsh = PoiPolygonTypeMatch::isBuildingIsh(poi);
+  if (testFeatureFound)
+  {
+    LOG_VARD(poiIsBuildingIsh)
+  }
+
   //If a building is a building don't review it against a non-building poly.
-  if (_isBuildingIsh(poi) && poiOnBuilding && !polyIsBuilding)
+  if (poiIsBuildingIsh && poiOnBuilding && !polyIsBuilding)
   {
     if (testFeatureFound)
     {
       LOG_DEBUG("Returning miss per rule #22...");
     }
     matchClass.setMiss();
+    return true;
+  }
+
+  const bool polyIsBuildingIsh = PoiPolygonTypeMatch::isBuildingIsh(poly);
+  const bool polyHasMoreThanOneType = PoiPolygonTypeMatch::hasMoreThanOneType(poly);
+  bool polyHasSpecificType = polyHasType;
+  if ((poly->getTags().get("building") == "yes" || poly->getTags().get("poi") == "yes") &&
+      !polyHasMoreThanOneType)
+  {
+    polyHasSpecificType = false;
+  }
+
+  if (testFeatureFound)
+  {
+    LOG_VARD(polyIsBuildingIsh);
+    LOG_VARD(polyHasMoreThanOneType);
+    LOG_VARD(polyHasSpecificType);
+  }
+
+  //TODO:
+  if (poiContainedInParkPoly && !poiHasType && poiIsRecCenter && polyIsBuildingIsh &&
+      (!polyHasSpecificType || !polyHasName) && polyContainedInAnotherParkPoly)
+  {
+    //misnomer for "ReviewReducer"...can we refactor this out?
+    if (testFeatureFound)
+    {
+      LOG_DEBUG("Returning review per rule #23a...");
+    }
+    matchClass.setReview();
+    return true;
+  }
+
+  //This is a simple rule to prevent matching poi's not at all like a park with park polys.
+  //TODO: this may render some of the previous rules obsolete.
+  //*
+  if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
+  {
+    if (testFeatureFound)
+    {
+      LOG_DEBUG("Returning miss per rule #13...");
+    }
+    matchClass.setMiss();
+    return true;
+  }
+
+  //If the poi is not a park and being compared to a park polygon or a polygon that is "very close"
+  //to another park poly, we want to be more restrictive on type matching, but only if the poi has
+  //any type at all.  If the poi has no type, then behave as normal.  Also, let an exact name match
+  //cause a review here, rather than a miss.
+  //*
+  if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
+      !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
+  {
+    if (_exactNameMatch)
+    {
+      //misnomer for "ReviewReducer"...can we refactor this out?
+      if (testFeatureFound)
+      {
+        LOG_DEBUG("Returning review per rule #17...");
+      }
+      matchClass.setReview();
+    }
+    else
+    {
+      if (testFeatureFound)
+      {
+        LOG_DEBUG("Returning miss per rule #17...");
+      }
+      matchClass.setMiss();
+    }
     return true;
   }
 
@@ -679,8 +762,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
         }*/
 
-        if ((_isPark(poiNeighbor) || _isPlayground(poiNeighbor)) &&
-            !_isPlayArea(poiNeighbor) && _polyGeom->contains(poiNeighborGeom.get()))
+        if ((PoiPolygonTypeMatch::isPark(poiNeighbor) ||
+             PoiPolygonTypeMatch::isPlayground(poiNeighbor)) &&
+            !PoiPolygonTypeMatch::isPlayArea(poiNeighbor) &&
+            _polyGeom->contains(poiNeighborGeom.get()))
         {
           polyContainsAnotherParkOrPlaygroundPoi = true;
           if (!containedOtherParkOrPlaygroundPoiHasName)
@@ -713,106 +798,24 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     poiNeighborItr++;
   }
 
+  if (testFeatureFound)
+  {
+    LOG_VARD(containedOtherParkOrPlaygroundPoiHasName);
+  }
+
   //If this isn't a park or playground poi, then don't match it to any park poly that contains
   //another park or playground poi.
   if (poiIsPlayArea && !poiIsPlayground && polyIsPark && _distance == 0 &&
-           polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
+      polyContainsAnotherParkOrPlaygroundPoi && containedOtherParkOrPlaygroundPoiHasName)
   {
     if (testFeatureFound)
     {
-      LOG_DEBUG("Returning miss per rule #23...");
+      LOG_DEBUG("Returning miss per rule #23b...");
     }
     matchClass.setMiss();
     return true;
   }
 
-  return false;
-}
-
-//TODO: reduce the rec center rules down to one method, if possible
-
-bool PoiPolygonReviewReducer::_isRecCenter(ConstElementPtr element) const
-{
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return elementName.contains("recreation center") || elementName.contains("rec center");
-}
-
-bool PoiPolygonReviewReducer::_isRecCenter2(ConstElementPtr element) const
-{
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return elementName.contains("recreation center") || elementName.contains("rec center") ||
-    elementName.contains("clubhouse") || elementName.contains("fieldhouse");
-}
-
-bool PoiPolygonReviewReducer::_isPlayground(ConstElementPtr element) const
-{
-  const Tags& tags = element->getTags();
-  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
-  return tags.get("leisure") == "playground" || elementName.contains("playground");
-}
-
-bool PoiPolygonReviewReducer::_isPlayArea(ConstElementPtr element) const
-{
-  return element->getTags().get("name").toLower().contains("play area");
-}
-
-bool PoiPolygonReviewReducer::_isPark(ConstElementPtr element) const
-{
-  return !OsmSchema::getInstance().isBuilding(element) &&
-         (element->getTags().get("leisure") == "park");
-}
-
-bool PoiPolygonReviewReducer::_isParkish(ConstElementPtr element) const
-{
-  if (OsmSchema::getInstance().isBuilding(element))
-  {
-    return false;
-  }
-  const QString leisureVal = element->getTags().get("leisure").toLower();
-  return leisureVal == "garden" || leisureVal == "dog_park";
-}
-
-bool PoiPolygonReviewReducer::_isSport(ConstElementPtr element) const
-{
-  return element->getTags().contains("sport");
-}
-
-bool PoiPolygonReviewReducer::_isBuildingIsh(ConstElementPtr element) const
-{
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
-    elementName.contains("bldg");
-}
-
-bool PoiPolygonReviewReducer::_hasMoreThanOneType(ConstElementPtr element) const
-{
-  int typeCount = 0;
-  QStringList typesParsed;
-  if (_allTagKeys.size() == 0)
-  {
-    _allTagKeys = OsmSchema::getInstance().getAllTagKeys();
-  }
-  const Tags elementTags = element->getTags();
-  for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
-  {
-    const QString elementTagKey = it.key();
-    //LOG_DEBUG("Key: " << vertex.key);
-    //there may be duplicate keys in allTags
-    if (_allTagKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
-    {
-      LOG_DEBUG("Has key: " << elementTagKey);
-      typeCount++;
-      if (typeCount > 1)
-      {
-        return true;
-      }
-    }
-
-    typesParsed.append(elementTagKey);
-  }
   return false;
 }
 

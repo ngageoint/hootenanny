@@ -55,9 +55,21 @@ public:
                    QString& t2BestKvp);
   bool isTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
+  static bool isPark(ConstElementPtr element);
+  static bool isParkish(ConstElementPtr element);
+  //bool _isRecCenter(ConstElementPtr element) const;
+  static bool isRecCenter2(ConstElementPtr element);
+  static bool isPlayground(ConstElementPtr element);
+  static bool isPlayArea(ConstElementPtr element);
+  static bool isSport(ConstElementPtr element);
+  static bool isBuildingIsh(ConstElementPtr element);
+  static bool hasMoreThanOneType(ConstElementPtr element);
+  static bool hasType(ConstElementPtr element);
+
 private:
 
   double _typeScoreThreshold;
+  static QSet<QString> _allTagKeys;
 
   QString _testUuid;
 
