@@ -962,14 +962,8 @@ public class MapResource extends JobControllerBase {
             // THIS WILL NEED TO CHANGE when we implement handle map by Id
             // instead of name..
 
-            List<Long> mapIds = DbUtils.getMapIdsByName(mapName);
-            if (!mapIds.isEmpty()) {
-                // we are expecting the last one of duplicate name to be the one
-                // resulted from the conflation
-                // This can be wrong if there is race condition. REMOVE THIS
-                // once core
-                // implement map Id return
-                long mapId = mapIds.get(mapIds.size() - 1);
+            Long mapId = DbUtils.getMapIdByName(mapName);
+            if (mapId != null) {
                 jobStatusManager.addJob(jobId);
 
                 // Hack alert!

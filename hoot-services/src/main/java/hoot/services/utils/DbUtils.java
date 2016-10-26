@@ -27,9 +27,6 @@
 package hoot.services.utils;
 
 
-import static hoot.services.models.db.QCurrentNodes.currentNodes;
-import static hoot.services.models.db.QCurrentRelations.currentRelations;
-import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.models.db.QMaps.maps;
 
 import java.sql.Connection;
@@ -39,7 +36,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,10 +62,6 @@ import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
-import hoot.services.models.db.CurrentNodes;
-import hoot.services.models.db.CurrentRelations;
-import hoot.services.models.db.CurrentWays;
-import hoot.services.models.db.QReviewBookmarks;
 import hoot.services.models.db.QUsers;
 
 
@@ -161,26 +153,17 @@ public final class DbUtils {
     }
 
     /**
-     * Gets the map id list from map name
+     * Gets the map id from map name
      *
      * @param mapName map name
-     * @return List of map ids
+     * @return map ID
      */
-    public static List<Long> getMapIdsByName(String mapName) {
-        return createQuery()
-                .select(maps.id)
-                .from(maps)
-                .where(maps.displayName.eq(mapName))
-                .orderBy(maps.id.asc())
-                .fetch();
+    public static Long getMapIdByName(String mapName) {
+        return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName)).fetchOne();
     }
 
     public static String getDisplayNameById(long mapId) {
-        return createQuery()
-                .select(maps.displayName)
-                .from(maps)
-                .where(maps.id.eq(mapId))
-                .fetchFirst();
+        return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId)).fetchOne();
     }
 
     /**
@@ -206,180 +189,9 @@ public final class DbUtils {
         }
     }
 
-    // remove this. replace by calling hoot core layer delete native command
-
-    /**
-     * Drops the postgis render db created for hoot map dataset
-     *
-     * @param mapName
-     *            map name
-     */
-    public static void deleteRenderDb(String mapName) {
-        List<Long> mapIds = getMapIdsByName(mapName);
-        Long mapId = null;
-
-        try (Connection connection = getConnection()) {
-            String currentCatalog;
-            try {
-                currentCatalog = connection.getCatalog();
-            }
-            catch (SQLException e) {
-                throw new RuntimeException("Error retrieving current catalog name!", e);
-            }
-
-            if (!mapIds.isEmpty()) {
-                mapId = mapIds.get(0);
-
-                String dbNameByMapId = currentCatalog + "_renderdb_" + mapId;
-                try {
-                    deleteDb(dbNameByMapId, connection);
-                }
-                catch (SQLException e1) {
-                    logger.warn("Error deleting {} database by map ID!", dbNameByMapId, e1);
-
-                    String dbNameByMapName = currentCatalog + "_renderdb_" + mapName;
-                    try {
-                        deleteDb(dbNameByMapName, connection);
-                    }
-                    catch (SQLException e2) {
-                        logger.warn("Couldn't delete {} by map name either!", dbNameByMapName, e2);
-                        throw e2;
-                    }
-                }
-            }
-            else {
-                String dbNameByMapName = currentCatalog + "_renderdb_" + mapName;
-                deleteDb(dbNameByMapName, connection);
-            }
-        }
-        catch (SQLException e) {
-            String message;
-            if (mapId != null) {
-                message = "Error deleting renderdb for map with ID = " + mapId;
-            }
-            else {
-                message = "Error deleting renderdb for map with name = " + mapName;
-            }
-
-            throw new RuntimeException(message, e);
-        }
-    }
-
-    private static void deleteDb(String dbName, Connection connection) throws SQLException {
-        // Straight SQL below. No DDL support in QueryDSL anymore. Have to do it the old-fashioned way.
-
-        try {
-            // NOTE: DROP DATABASE sql call cannot be run inside of a transaction.  That's why
-            // for the duration of this method we set auto commit to true to enable
-            // short running transactions - one transaction per execute* call.
-
-            if (!connection.getAutoCommit()) {
-                // Enable autoCommit
-                connection.setAutoCommit(true);
-            }
-
-            // 1) Make sure no one can connect to 'dbName' database.  Requires db owner privileges to execute.
-
-            String sql = "UPDATE pg_database SET datallowconn = 'false' WHERE datname = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setString(1, dbName);
-                stmt.executeUpdate();
-            }
-
-            // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
-            //    Requires superuser privileges.
-
-            String postgresqlDBVersion;  //Example: "PostgreSQL 9.2.1"
-
-            sql = "SELECT version()";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-                    postgresqlDBVersion = rs.getString(1);
-                }
-            }
-
-            if (postgresqlDBVersion.substring(11, 14).compareTo("9.2") < 0) {
-                // For Postgresql < 9.2 use:
-                sql = "SELECT pg_terminate_backend(pg_stat_activity.procpid) " +
-                        "FROM pg_stat_activity " +
-                        "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, dbName);
-                    stmt.executeQuery();
-                }
-            }
-            else {
-                // For Postgresql >= 9.2 use:
-                sql = "SELECT pg_terminate_backend(pg_stat_activity.pid) " +
-                        "FROM pg_stat_activity " +
-                        "WHERE pg_stat_activity.datname = ? AND pid <> pg_backend_pid()";
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, dbName);
-                    stmt.executeQuery();
-                }
-            }
-
-            // 3) Drop the database as the last step.  Requires database owner privilege.
-
-            sql = "DROP DATABASE \"" + dbName + "\"";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.executeUpdate();
-            }
-        }
-        finally {
-            // Disable auto commit
-            connection.setAutoCommit(false);
-        }
-    }
-
-    // remove this. replace by calling hoot core layer delete native command
-
-    /**
-     *
-     * @param mapName map name
-     */
-    public static void deleteOSMRecordByName(String mapName) {
-        List<Long> mapIds = createQuery()
-                .select(maps.id)
-                .from(maps)
-                .where(maps.displayName.equalsIgnoreCase(mapName))
-                .fetch();
-
-        if (!mapIds.isEmpty()) {
-            Long mapId = mapIds.get(0);
-
-            deleteMapRelatedTablesByMapId(mapId);
-
-            createQuery()
-                    .delete(maps)
-                    .where(maps.displayName.eq(mapName))
-                    .execute();
-        }
-    }
-    
-    /**
-    *
-    * @param mapName map name
-    */
-    public static void deleteBookmarksById(String mapName) {
-        List<Long> mapIds = getMapIdsByName(mapName);
-
-        if (!mapIds.isEmpty()) {
-            long mapId = mapIds.get(0);
-            createQuery()
-                    .delete(QReviewBookmarks.reviewBookmarks)
-                    .where(QReviewBookmarks.reviewBookmarks.mapId.eq(mapId))
-                    .execute();
-        }
-    }
-
     public static long getTestUserId() {
         // there is only ever one test user
-        return createQuery()
-                .select(QUsers.users.id)
-                .from(QUsers.users)
-                .fetchFirst();
+        return createQuery().select(QUsers.users.id).from(QUsers.users).fetchFirst();
     }
 
     public static long updateMapsTableTags(Map<String, String> tags, long mapId) {
@@ -393,11 +205,7 @@ public final class DbUtils {
     public static Map<String, String> getMapsTableTags(long mapId) {
         Map<String, String> tags = new HashMap<>();
 
-        List<Object> results = createQuery(mapId)
-                .select(maps.tags)
-                .from(maps)
-                .where(maps.id.eq(mapId))
-                .fetch();
+        List<Object> results = createQuery(mapId).select(maps.tags).from(maps).where(maps.id.eq(mapId)).fetch();
 
         if (!results.isEmpty()) {
             Object oTag = results.get(0);
@@ -409,8 +217,6 @@ public final class DbUtils {
 
     public static long batchRecords(long mapId, List<?> records, RelationalPathBase<?> t,
             List<List<BooleanExpression>> predicateslist, RecordBatchType recordBatchType, int maxRecordBatchSize) {
-        logger.debug("Batch element {}...", recordBatchType);
-
         if (recordBatchType == RecordBatchType.INSERT) {
             SQLInsertClause insert = createQuery(mapId).insert(t);
             long nBatch = 0;
@@ -500,88 +306,6 @@ public final class DbUtils {
         }
     }
 
-    public static long batchRecordsDirectWays(long mapId, List<?> records,
-            RecordBatchType recordBatchType, int maxRecordBatchSize) {
-
-        logger.debug("Batch way {}...", recordBatchType);
-
-        if (recordBatchType == RecordBatchType.INSERT) {
-            return batchRecords(mapId, records, currentWays, null, RecordBatchType.INSERT, maxRecordBatchSize);
-        }
-        else if (recordBatchType == RecordBatchType.UPDATE) {
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentWays way = (CurrentWays) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentWays.id.eq(way.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentWays, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
-        }
-        else { //recordBatchType == RecordBatchType.DELETE
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentWays way = (CurrentWays) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentWays.id.eq(way.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentWays, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
-        }
-    }
-
-    public static long batchRecordsDirectNodes(long mapId, List<?> records, RecordBatchType recordBatchType,
-            int maxRecordBatchSize) {
-        logger.debug("Batch node {}...", recordBatchType);
-
-        if (recordBatchType == RecordBatchType.INSERT) {
-            return batchRecords(mapId, records, currentNodes, null, RecordBatchType.INSERT, maxRecordBatchSize);
-        }
-        else if (recordBatchType == RecordBatchType.UPDATE) {
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentNodes node = (CurrentNodes) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentNodes.id.eq(node.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentNodes, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
-        }
-        else { //recordBatchType == RecordBatchType.DELETE
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentNodes node = (CurrentNodes) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentNodes.id.eq(node.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentNodes, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
-        }
-    }
-
-    public static long batchRecordsDirectRelations(long mapId, List<?> records, RecordBatchType recordBatchType,
-            int maxRecordBatchSize) {
-        logger.debug("Batch relation {}...", recordBatchType);
-
-        if (recordBatchType == RecordBatchType.INSERT) {
-            return batchRecords(mapId, records, currentRelations, null, RecordBatchType.INSERT, maxRecordBatchSize);
-        }
-        else if (recordBatchType == RecordBatchType.UPDATE) {
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentRelations relation = (CurrentRelations) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(relation.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentRelations, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
-        }
-        else { //recordBatchType == RecordBatchType.DELETE
-            List<List<BooleanExpression>> predicateList = new LinkedList<>();
-            for (Object o : records) {
-                CurrentRelations relation = (CurrentRelations) o;
-                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(relation.getId()))));
-            }
-
-            return batchRecords(mapId, records, currentRelations, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
-        }
-    }
-
     public static void deleteTables(List<String> tables) throws SQLException {
         try (Connection conn = getConnection()) {
             for (String table : tables) {
@@ -598,7 +322,7 @@ public final class DbUtils {
         List<String> tables = new ArrayList<>();
 
         try (Connection conn = getConnection()) {
-            String sql = "SELECT table_name " + "" +
+            String sql = "SELECT table_name " +
                     "FROM information_schema.tables " +
                     "WHERE table_schema='public' AND table_name LIKE " + "'" + filterPrefix.replace('-', '_')
                     + "_%'";
