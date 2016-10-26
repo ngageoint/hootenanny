@@ -250,11 +250,8 @@ bool PoiPolygonTypeMatch::hasMoreThanOneType(ConstElementPtr element)
     _allTagKeys.remove("REF1");
     _allTagKeys.remove("REF2");
     _allTagKeys.remove("uuid");
+    _allTagKeys.remove("name");
   }
-  /*QStringList ignoreKeys;
-  ignoreKeys.append("REF1");
-  ignoreKeys.append("REF2");
-  ignoreKeys.append("uuid");*/
 
   const Tags elementTags = element->getTags();
   for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
@@ -262,8 +259,7 @@ bool PoiPolygonTypeMatch::hasMoreThanOneType(ConstElementPtr element)
     const QString elementTagKey = it.key();
     //LOG_DEBUG("Key: " << vertex.key);
     //there may be duplicate keys in allTags
-    if (/*!ignoreKeys.contains(elementTagKey) && */_allTagKeys.contains(elementTagKey) &&
-        !typesParsed.contains(elementTagKey))
+    if (_allTagKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
     {
       LOG_DEBUG("Has key: " << elementTagKey);
       typeCount++;

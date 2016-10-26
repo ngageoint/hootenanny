@@ -45,7 +45,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{b18057ff-736d-5d20-b873-837f0c172e33}";
+QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -344,7 +344,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   if (evidence > 0 ||
       //TODO: hack
       (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter2(_poi) &&
-       PoiPolygonTypeMatch::isBuildingIsh(_poly) /*&& !PoiPolygonNameMatch::elementHasName(_poly)*/))
+       PoiPolygonTypeMatch::isBuildingIsh(_poly)))
   {
     MatchClassification externalMatchClass;
     //TODO: pass in evidence scorer here to clean this constructor up ??
