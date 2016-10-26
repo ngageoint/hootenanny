@@ -46,6 +46,7 @@
 #include "PoiPolygonTypeMatch.h"
 #include "PoiPolygonNameMatch.h"
 #include "PoiPolygonEvidenceScorer.h"
+#include "PoiPolygonAddressMatch.h"
 
 // std
 #include <float.h>
@@ -740,6 +741,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+  bool poiNeighborWithAddressContainedInPoly = false;
+
   set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
   while (poiNeighborItr != _poiNeighborIds.end())
   {
@@ -762,25 +765,34 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
         }*/
 
-        if ((PoiPolygonTypeMatch::isPark(poiNeighbor) ||
-             PoiPolygonTypeMatch::isPlayground(poiNeighbor)) &&
-            !PoiPolygonTypeMatch::isPlayArea(poiNeighbor) &&
-            _polyGeom->contains(poiNeighborGeom.get()))
+        if (_polyGeom->contains(poiNeighborGeom.get()))
         {
-          polyContainsAnotherParkOrPlaygroundPoi = true;
-          if (!containedOtherParkOrPlaygroundPoiHasName)
+          if ((PoiPolygonTypeMatch::isPark(poiNeighbor) ||
+               PoiPolygonTypeMatch::isPlayground(poiNeighbor)) &&
+              !PoiPolygonTypeMatch::isPlayArea(poiNeighbor))
           {
-            containedOtherParkOrPlaygroundPoiHasName =
-              !poiNeighbor->getTags().get("name").trimmed().isEmpty();
-          }
+            polyContainsAnotherParkOrPlaygroundPoi = true;
+            if (!containedOtherParkOrPlaygroundPoiHasName)
+            {
+              containedOtherParkOrPlaygroundPoiHasName =
+                !poiNeighbor->getTags().get("name").trimmed().isEmpty();
+            }
 
-          if (testFeatureFound)
-          {
-            LOG_DEBUG(
-              "poly examined and found to contain another park or playground poi " <<
-              poly->toString());
-            LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
+            if (testFeatureFound)
+            {
+              LOG_DEBUG(
+                "poly examined and found to contain another park or playground poi " <<
+                poly->toString());
+              LOG_DEBUG("park/playground poi it is very close to: " << poiNeighbor->toString());
+            }
           }
+        }
+
+        //TODO:
+        if (poiNeighbor->getTags().get("name").toLower() ==
+            poly->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower())
+        {
+          poiNeighborWithAddressContainedInPoly = true;
         }
       }
       catch (const geos::util::TopologyException& e)
@@ -813,6 +825,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       LOG_DEBUG("Returning miss per rule #23b...");
     }
     matchClass.setMiss();
+    return true;
+  }
+
+  //TODO:
+  if (poiNeighborWithAddressContainedInPoly)
+  {
+    if (testFeatureFound)
+    {
+      LOG_DEBUG("Returning miss per rule #24...");
+    }
+    matchClass.setReview();
     return true;
   }
 

@@ -45,7 +45,7 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{d1012bc9-92bc-5931-aac2-aa5702f42b8b}";
+QString PoiPolygonMatch::_testUuid = "{1c3e97f5-7430-5a1f-b030-9ce1e7038682}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -341,6 +341,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   //LOG_VARD(PoiPolygonTypeMatch::isRecCenter2(_poi));
   //LOG_VARD(PoiPolygonTypeMatch::isBuildingIsh(_poly));
   //LOG_VARD(PoiPolygonNameMatch::elementHasName(_poly));
+  //TODO: find some way to trigger and test rule 24 w/o adding a huge amount of runtime
   if (evidence > 0 ||
       //TODO: hack
       (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter2(_poi) &&
