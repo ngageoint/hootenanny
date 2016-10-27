@@ -165,7 +165,7 @@ public class MapResourcesCleaner {
                     // For Postgresql < 9.2 use:
                     sql = "SELECT pg_terminate_backend(pg_stat_activity.procpid) " +
                           "FROM pg_stat_activity " +
-                          "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
+                          "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid()";
                     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                         stmt.setString(1, dbName);
                         try (ResultSet rs = stmt.executeQuery()) {
