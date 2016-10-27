@@ -146,53 +146,67 @@ public class MapResourcesCleaner {
                 connection.setAutoCommit(true);
             }
 
-            // 1) Make sure no one can connect to 'dbName' database.  Requires db owner privileges to execute.
+            boolean databaseExists;
 
-            String sql = "UPDATE pg_database SET datallowconn = 'false' WHERE datname = ?";
+            String sql = "SELECT 1 from pg_database WHERE datname = ?";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, dbName);
-                stmt.executeUpdate();
-            }
-
-            // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
-            //    Requires superuser privileges.
-
-            String postgresqlDBVersion;  //Example: "PostgreSQL 9.2.1"
-
-            sql = "SELECT version()";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-                    postgresqlDBVersion = rs.getString(1);
+                    databaseExists = rs.next();
                 }
             }
 
-            if (postgresqlDBVersion.substring(11, 14).compareTo("9.2") < 0) {
-                // For Postgresql < 9.2 use:
-                sql = "SELECT pg_terminate_backend(pg_stat_activity.procpid) " +
-                        "FROM pg_stat_activity " +
-                        "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
+            if (databaseExists) {
+                // 1) Make sure no one can connect to 'dbName' database.  Requires db owner privileges to execute.
+
+                sql = "UPDATE pg_database SET datallowconn = 'false' WHERE datname = ?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setString(1, dbName);
-                    try (ResultSet rs = stmt.executeQuery()){}
+                    stmt.executeUpdate();
                 }
-            }
-            else {
-                // For Postgresql >= 9.2 use:
-                sql = "SELECT pg_terminate_backend(pg_stat_activity.pid) " +
-                        "FROM pg_stat_activity " +
-                        "WHERE pg_stat_activity.datname = ? AND pid <> pg_backend_pid()";
+
+                // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
+                //    Requires superuser privileges.
+
+                String postgresqlDBVersion;  //Example: "PostgreSQL 9.2.1"
+
+                sql = "SELECT version()";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, dbName);
-                    try (ResultSet rs = stmt.executeQuery()){}
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        rs.next();
+                        postgresqlDBVersion = rs.getString(1);
+                    }
                 }
-            }
 
-            // 3) Drop the database as the last step.  Requires database owner privilege.
+                if (postgresqlDBVersion.substring(11, 14).compareTo("9.2") < 0) {
+                    // For Postgresql < 9.2 use:
+                    sql = "SELECT pg_terminate_backend(pg_stat_activity.procpid) " +
+                            "FROM pg_stat_activity " +
+                            "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
+                    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                        stmt.setString(1, dbName);
+                        try (ResultSet rs = stmt.executeQuery()) {
+                        }
+                    }
+                }
+                else {
+                    // For Postgresql >= 9.2 use:
+                    sql = "SELECT pg_terminate_backend(pg_stat_activity.pid) " +
+                            "FROM pg_stat_activity " +
+                            "WHERE pg_stat_activity.datname = ? AND pid <> pg_backend_pid()";
+                    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                        stmt.setString(1, dbName);
+                        try (ResultSet rs = stmt.executeQuery()) {
+                        }
+                    }
+                }
 
-            sql = "DROP DATABASE \"" + dbName + "\"";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.executeUpdate();
+                // 3) Drop the database as the last step.  Requires database owner privilege.
+
+                sql = "DROP DATABASE \"" + dbName + "\"";
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.executeUpdate();
+                }
             }
         }
         finally {

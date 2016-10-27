@@ -29,7 +29,6 @@ package hoot.services.job;
 
 import static hoot.services.utils.DbUtils.getConnection;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -147,18 +146,6 @@ public class MapResourcesCleanerTest {
             }
 
             assertFalse(databaseExists);
-        }
-    }
-
-    @Test(expected = RuntimeException.class)
-    @Category(UnitTest.class)
-    public void testDeleteRenderDBByWrongNameWithException() throws Exception {
-        try {
-            mapResourcesCleaner.exec("non-existing-db");
-        }
-        catch (RuntimeException re) {
-            assertTrue(re.getMessage().startsWith("Error deleting layer where mapName ="));
-            throw re;
         }
     }
 }
