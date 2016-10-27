@@ -121,6 +121,7 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
   ElementPtr polyTemp(poly->clone());
   polyMap->addElement(polyTemp);
   shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+  //TODO: oddly, even if the area is zero calc'ing the distance can have a positive effect
   /*if (polyAlphaShape->getArea() == 0.0)
   {
     return evidence;

@@ -86,12 +86,12 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
 
   const bool poiHasType = PoiPolygonTypeMatch::hasType(poi);
   const bool poiIsRecCenter = PoiPolygonTypeMatch::isRecCenter(poi);
+  const QString poiAddress =
+    poi->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
 
   const bool polyHasName = PoiPolygonNameMatch::elementHasName(poly);
   const bool polyIsPark = PoiPolygonTypeMatch::isPark(poly);
   const bool polyHasType = PoiPolygonTypeMatch::hasType(poly);
-  const QString polyAddress =
-    poly->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
   const bool polyIsBuildingIsh = PoiPolygonTypeMatch::isBuildingIsh(poly);
   const bool polyHasMoreThanOneType = PoiPolygonTypeMatch::hasMoreThanOneType(poly);
   bool polyHasSpecificType = polyHasType;
@@ -105,10 +105,14 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
   {
     LOG_VARD(poiHasType);
     LOG_VARD(poiIsRecCenter);
+    LOG_VARD(poiAddress);
 
     LOG_VARD(polyHasName);
     LOG_VARD(polyIsPark);
     LOG_VARD(polyHasType);
+    LOG_VARD(polyIsBuildingIsh);
+    LOG_VARD(polyHasMoreThanOneType);
+    LOG_VARD(polyHasSpecificType);
   }
 
   bool poiContainedInAnotherParkPoly = false;
@@ -117,13 +121,8 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
   //PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
   //PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
 
-  if (testFeatureFound)
-  {
-    LOG_VARD(polyIsBuildingIsh);
-    LOG_VARD(polyHasMoreThanOneType);
-    LOG_VARD(polyHasSpecificType);
-  }
-
+  //specific condition set here to minimize run time.  obviously, as more rules are added, this
+  //condition could get unwieldy
   if (!poiHasType && poiIsRecCenter && polyIsBuildingIsh && (!polyHasSpecificType || !polyHasName))
   {
     set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
@@ -228,7 +227,7 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
     _isRecCenterMatch = true;
   }
 
-  if (polyAddress.isEmpty())
+  if (poiAddress.isEmpty())
   {
     return;
   }
@@ -239,11 +238,8 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
     ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
     if (poiNeighbor->getElementId() != poi->getElementId())
     {
-      shared_ptr<Geometry> poiNeighborGeom ;
       try
       {
-        poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
         /*if (Log::getInstance().getLevel() == Log::Debug &&
             (poi->getTags().get("uuid") == _testUuid ||
              poly->getTags().get("uuid") == _testUuid))
@@ -257,9 +253,22 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
 
         //TODO: make work for all name tags
         const QString poiNeighborName = poiNeighbor->getTags().get("name").toLower().trimmed();
-        if (!poiNeighborName.isEmpty() && poiNeighborName == polyAddress)
+        if (testFeatureFound)
         {
-          _poiNeighborWithAddressContainedInPoly = true;
+          LOG_VARD(poiNeighborName);
+        }
+        if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
+        {
+          shared_ptr<Geometry> poiNeighborGeom =
+            ElementConverter(_map).convertToGeometry(poiNeighbor);
+          if (_polyGeom->contains(poiNeighborGeom.get()))
+          {
+            _poiNeighborWithAddressContainedInPoly = true;
+            if (testFeatureFound)
+            {
+              LOG_VARD(_poiNeighborWithAddressContainedInPoly);
+            }
+          }
         }
       }
       catch (const geos::util::TopologyException& e)
