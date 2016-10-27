@@ -12,6 +12,37 @@ exports.experimental = true;
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
+var soundexExtractor = new hoot.NameExtractor(
+    new hoot.Soundex());
+var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
+    new hoot.MeanWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.5})));
+var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
+    new hoot.MaxWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
+var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
+    new hoot.MinSumWordSetDistance(
+        {"token.separator": "[\\s-,';]+"},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.15}))));
+var weightedWordDistance = new hoot.NameExtractor(
+    new hoot.WeightedWordDistance(
+        {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
+        new hoot.TranslateStringDistance(
+            // runs just a little faster w/ tokenize off
+            {"translate.string.distance.tokenize": "false"},
+            new hoot.LevenshteinDistance(
+                {"levenshtein.distance.alpha": 1.5}))));
+
 /*
 This matches areas to areas (area=yes), where an area is a non-building polygon.  
 
@@ -68,30 +99,7 @@ exports.matchScore = function(map, e1, e2)
   var edgeDist = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
 
-  //J48
-  /*if (overlap <= 0.560415)
-  {
-    if (overlap > 0.176336 && bufferedOverlap <= 0.253544)
-    {
-      result = { match: 1.0, miss: 0.0, review: 0.0 };
-    }
-  }
-  else
-  {
-    if (overlap <= 0.820063)
-    {
-      if (smallerOverlap <= 0.993863)
-      {
-        result = { match: 1.0, miss: 0.0, review: 0.0 };
-      }
-    }
-    else
-    {
-      result = { match: 1.0, miss: 0.0, review: 0.0 };
-    }
-  }*/
-
-  //REP
+  //REP - This was derived against only one dataset, so obviously needs more refinement.
   if (bufferedOverlap < 0.57)
   {
     if (overlap >= 0.18 && edgeDist >= 0.99)
@@ -143,29 +151,6 @@ exports.mergePair = function(map, e1, e2)
     return e1;
 };
 
-/**
- * The internals of geometry merging can become quite complex. Typically this 
- * method will simply call another hoot method to perform the appropriate merging
- * of geometries.
- * 
- * If this method is exported then the mergePair method should not be exported.
- * 
- * @param map The map that is being conflated
- * @param pairs An array of ElementId pairs that will be merged.
- * @param replaced An empty array is passed in, the method should fill the array
- *      with all the replacements that occur during the merge process (e.g. if two
- *      elements (way:1 & way:2) are merged into one element (way:3), then the 
- *      replaced array should contain [[way:1, way:3], [way:1, way:3]] where all
- *      the "way:*" objects are of the ElementId type.
- */
-/*exports.mergeSets = function(map, pairs, replaced) 
-{
-  hoot.log("Merging elements.");
-  // snap the ways in the second input to the first input. Use the default tag 
-  // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced);
-};*/
-
 exports.getMatchFeatureDetails = function(map, e1, e2)
 {
   var featureDetails = [];
@@ -173,16 +158,16 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
   featureDetails["smallerOverlap"] = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
   featureDetails["overlap"] = new hoot.OverlapExtractor().extract(map, e1, e2);
   featureDetails["angleHist"] = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
-  featureDetails["sampledAngleHist"] = new hoot.SampledAngleHistogramExtractor().extract(map, e1, e2);
   featureDetails["edgeDist"] = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
-  featureDetails["weightedMetricDist"] = new hoot.WeightedMetricDistanceExtractor().extract(map, e1, e2);
   featureDetails["bufferedOverlap"] = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
-  featureDetails["centroidDist"] = new hoot.CentroidDistanceExtractor().extract(map, e1, e2);
   featureDetails["hausDist"] = new hoot.HausdorffDistanceExtractor().extract(map, e1, e2);
   featureDetails["attrDist"] = new hoot.AttributeDistanceExtractor().extract(map, e1, e2);
-  featureDetails["distScore"] = new hoot.DistanceScoreExtractor().extract(map, e1, e2);
-  featureDetails["lengthScore"] = new hoot.LengthScoreExtractor().extract(map, e1, e2);
-  featureDetails["euclidDist"] = new hoot.EuclideanDistanceExtractor().extract(map, e1, e2);
+  featureDetails["attrScore"] = new hoot.AttributeScoreExtractor().extract(map, e1, e2);
+  featureDetails["soundex"] = soundexExtractor.extract(map, e1, e2);
+  featureDetails["mean"] = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
+  featureDetails["max"] = translateMaxWordSetLevenshtein_1_15.extract(map, e1, e2);
+  featureDetails['weightedWordDistance'] = weightedWordDistance.extract(map, e1, e2);
+  featureDetails['weightedPlusMean'] = weightedWordDistance.extract(map, e1, e2);
   
   return featureDetails;
 };

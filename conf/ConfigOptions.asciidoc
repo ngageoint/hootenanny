@@ -781,7 +781,7 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -794,6 +794,7 @@ Some of the possible options include:
 * `hoot::PoiPolygonMatchCreator` - Matches POI's and buldings the Unify algorithm.
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
   algorithm.
+* `hoot::ScriptMatchCreator,Area.js` - Matches non-building polygon areas.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
   script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
@@ -843,7 +844,7 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -1670,8 +1671,9 @@ See also:
 * Data Type: bool
 * Default Value: `true`
 
-If false, POI to polygon conflation will not take address tags into account.  Disable this if your
-data has no address information or you know the information to be inaccurate.
+If false, POI to polygon conflation will not take address tags into account.  Disable this to
+boost runtime performance if your data has little or no address information or you know the address
+information to be inaccurate.
 
 === poi.polygon.match.threshold
 
@@ -1734,16 +1736,6 @@ See also:
 
 If true, debug match distance output will be obtained from manually matched source data and printed
 if running 'hoot score-matches' with POI to polygon conflation.
-
-=== poi.polygon.reduce.reviews
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, POI to polygon conflation will attempt to reduce unnecessary reviews by applying a custom
-rule set.  If you find reducing the reviews with this setting leads to poor conflation results,
-disable this setting.  This setting is likely temporary and will be removed in the future after
-more POI to polygon conflation testing has occurred.
 
 === poi.polygon.review.threshold
 

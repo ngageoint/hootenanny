@@ -313,7 +313,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _class.setMiss();
 
   _separateElementsByGeometryType(eid1, eid2);
-
   if (!_parseGeometries())
   {
     return;
