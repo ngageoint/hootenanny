@@ -35,6 +35,7 @@
 #include "PoiPolygonNameMatch.h"
 #include "PoiPolygonAddressMatch.h"
 #include "PoiPolygonMatchDistanceCalculator.h"
+#include "PoiPolygonMatchRules.h"
 
 namespace hoot
 {
@@ -44,9 +45,10 @@ PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double 
                                                    double nameScoreThreshold,
                                                    unsigned int matchEvidenceThreshold,
                                                    shared_ptr<Geometry> poiGeom,
-                                                   long surroundingPolyCount,
-                                                   long surroundingPoiCount,
+                                                   shared_ptr<Geometry> polyGeom,
                                                    ConstOsmMapPtr map,
+                                                   set<ElementId> polyNeighborIds,
+                                                   set<ElementId> poiNeighborIds,
                                                    QString testUuid) :
 _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
@@ -55,9 +57,10 @@ _typeScoreThreshold(typeScoreThreshold),
 _nameScoreThreshold(nameScoreThreshold),
 _matchEvidenceThreshold(matchEvidenceThreshold),
 _poiGeom(poiGeom),
-_surroundingPolyCount(surroundingPolyCount),
-_surroundingPoiCount(surroundingPoiCount),
+_polyGeom(polyGeom),
 _map(map),
+_polyNeighborIds(polyNeighborIds),
+_poiNeighborIds(poiNeighborIds),
 _testUuid(testUuid)
 {
 }
@@ -68,8 +71,7 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonMatchDistanceCalculator distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
-    poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance(),
-    _surroundingPolyCount, _surroundingPoiCount);
+    poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
   _matchDistance =
     max(
       distanceCalc.getMatchDistanceForType(_t1BestKvp),
@@ -119,10 +121,10 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
   ElementPtr polyTemp(poly->clone());
   polyMap->addElement(polyTemp);
   shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
-  if (polyAlphaShape->getArea() == 0.0)
+  /*if (polyAlphaShape->getArea() == 0.0)
   {
     return evidence;
-  }
+  }*/
   const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
   if (_testFeatureFound)
@@ -226,9 +228,22 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     }
   }
 
-  if (evidence == 0 && _nameScore >= 0.4 && _typeScore >= 0.6)
+  if (evidence == 0)
   {
-    evidence++;
+    if (_nameScore >= 0.4 && _typeScore >= 0.6) //TODO: move values to config
+    {
+      evidence++;
+    }
+    else
+    {
+      PoiPolygonMatchRules matchRules(
+        _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom, _testUuid);
+      matchRules.collectInfo(poi, poly);
+      if (matchRules.ruleTriggered())
+      {
+        evidence++;
+      }
+    }
   }
 
   if (_testFeatureFound)

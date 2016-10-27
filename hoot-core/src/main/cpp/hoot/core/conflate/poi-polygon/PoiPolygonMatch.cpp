@@ -35,7 +35,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 
-#include "PoiPolygonReviewReducer.h"
 #include "PoiPolygonTypeMatch.h"
 #include "PoiPolygonNameMatch.h"
 #include "PoiPolygonEvidenceScorer.h"
@@ -320,7 +319,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   PoiPolygonEvidenceScorer evidenceScorer(
     _matchDistance, _reviewDistance, _distance, _typeScoreThreshold, _nameScoreThreshold,
-    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyNeighborIds.size(), _poiNeighborIds.size(), _map,
+    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyGeom, _map, _polyNeighborIds, _poiNeighborIds,
     _testUuid);
   const unsigned int evidence = evidenceScorer.calculateEvidence(_poi, _poly);
   if (_testFeatureFound)

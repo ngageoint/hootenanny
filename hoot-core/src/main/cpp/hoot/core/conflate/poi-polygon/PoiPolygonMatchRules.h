@@ -45,20 +45,23 @@ class SchemaVertex;
  * that does so over the course of time testing against different datasets should be removed
  * from this class.
  */
-class PoiPolygonReviewReducer
+class PoiPolygonMatchRules
 {
 
 public:
 
-  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
-                            const set<ElementId>& poiNeighborIds, double distance,
-                            double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
-                            double typeScoreThreshold, double typeScore, bool typeMatch,
-                            double matchDistance, double reviewDistance,
-                            shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
-                            const QString testUuid);
+  PoiPolygonMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
+                          const set<ElementId>& poiNeighborIds, double distance,
+                          shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
+                          const QString testUuid);
 
-  bool triggersRule(ConstElementPtr poi, ConstElementPtr poly, MatchClassification& matchClass);
+  void collectInfo(ConstElementPtr poi, ConstElementPtr poly);
+
+  bool isRecCenterMatch() const { return _isRecCenterMatch; }
+  bool poiNeighborWithAddressContainedInPoly() const
+  { return _poiNeighborWithAddressContainedInPoly; }
+  bool ruleTriggered() const
+  { return _isRecCenterMatch || _poiNeighborWithAddressContainedInPoly; }
 
 private:
 
@@ -68,19 +71,14 @@ private:
   set<ElementId> _poiNeighborIds;
 
   double _distance;
-  double _nameScoreThreshold;
-  bool _nameMatch;
-  bool _exactNameMatch;
-  double _typeScoreThreshold;
-  double _typeScore;
-  bool _typeMatch;
-  double _matchDistance;
-  double _reviewDistance;
 
   shared_ptr<Geometry> _polyGeom;
   shared_ptr<Geometry> _poiGeom;
 
   int _badGeomCount;
+
+  bool _isRecCenterMatch;
+  bool _poiNeighborWithAddressContainedInPoly;
 
   QString _testUuid;
 

@@ -45,6 +45,9 @@ class PoiPolygonMatchDistanceCalculator
 public:
 
   PoiPolygonMatchDistanceCalculator(double matchDistanceDefault, double reviewDistanceDefault,
+                                    const Tags& polyTags, long searchRadius);
+
+  PoiPolygonMatchDistanceCalculator(double matchDistanceDefault, double reviewDistanceDefault,
                                     const Tags& polyTags, long searchRadius,
                                     long surroundingPolyCount, long surroundingPoiCount);
 

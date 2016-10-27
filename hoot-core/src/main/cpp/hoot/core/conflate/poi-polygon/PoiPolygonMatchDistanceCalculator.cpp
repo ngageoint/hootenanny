@@ -35,6 +35,19 @@ namespace hoot
 PoiPolygonMatchDistanceCalculator::PoiPolygonMatchDistanceCalculator(double matchDistanceDefault,
                                                                      double reviewDistanceDefault,
                                                                      const Tags& polyTags,
+                                                                     long searchRadius) :
+_matchDistanceDefault(matchDistanceDefault),
+_reviewDistanceDefault(reviewDistanceDefault),
+_polyTags(polyTags),
+_searchRadius(searchRadius),
+_surroundingPolyCount(-1),
+_surroundingPoiCount(-1)
+{
+}
+
+PoiPolygonMatchDistanceCalculator::PoiPolygonMatchDistanceCalculator(double matchDistanceDefault,
+                                                                     double reviewDistanceDefault,
+                                                                     const Tags& polyTags,
                                                                      long searchRadius,
                                                                      long surroundingPolyCount,
                                                                      long surroundingPoiCount) :
@@ -45,7 +58,6 @@ _searchRadius(searchRadius),
 _surroundingPolyCount(surroundingPolyCount),
 _surroundingPoiCount(surroundingPoiCount)
 {
-
 }
 
 double PoiPolygonMatchDistanceCalculator::getMatchDistanceForType(const QString /*typeKvp*/) const

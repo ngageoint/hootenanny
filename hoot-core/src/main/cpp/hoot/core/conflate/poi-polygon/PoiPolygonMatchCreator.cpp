@@ -192,8 +192,8 @@ public:
   {
     if (isMatchCandidate(e))
     {
-      //collectSurroundingPolyIds(e);
-      //collectSurroundingPoiIds(e);
+      collectSurroundingPolyIds(e);
+      collectSurroundingPoiIds(e);
       checkForMatch(e);
     }
   }
