@@ -24,9 +24,11 @@ Feature: Generate Conflation Report
         And I fill "saveAs" input with "Conflate_Report"
         And I should see "Generate Report?"
         And I select the "true" option in "#containerofisGenerateReport"
-        And I press tab
-        And I press tab
-        And I press enter
+        # And I press tab
+        # And I press tab
+        # And I press enter
+        And I hover over "#conflate2"
+        And I scroll element into view and press "conflate2"
         Then I wait 30 "seconds" to see "Conflating …"
         Then I wait 3 "minutes" to see "Conflate_Report"
         Then I should see "Complete Review"
