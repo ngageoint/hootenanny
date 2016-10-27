@@ -47,14 +47,13 @@ public:
   static const QString FULL_ADDRESS_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME_2;
 
-  PoiPolygonAddressMatch(const ConstOsmMapPtr& map, const QString testUuid);
+  PoiPolygonAddressMatch(const ConstOsmMapPtr& map);
 
   bool isMatch(ConstElementPtr poly, ConstElementPtr poi);
 
 private:
 
   const ConstOsmMapPtr _map;
-  QString _testUuid;
 
   void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
   void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);

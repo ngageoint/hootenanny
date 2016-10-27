@@ -48,8 +48,7 @@ PoiPolygonEvidenceScorer::PoiPolygonEvidenceScorer(double matchDistance, double 
                                                    shared_ptr<Geometry> polyGeom,
                                                    ConstOsmMapPtr map,
                                                    set<ElementId> polyNeighborIds,
-                                                   set<ElementId> poiNeighborIds,
-                                                   QString testUuid) :
+                                                   set<ElementId> poiNeighborIds) :
 _matchDistance(matchDistance),
 _reviewDistance(reviewDistance),
 _distance(distance),
@@ -60,8 +59,7 @@ _poiGeom(poiGeom),
 _polyGeom(polyGeom),
 _map(map),
 _polyNeighborIds(polyNeighborIds),
-_poiNeighborIds(poiNeighborIds),
-_testUuid(testUuid)
+_poiNeighborIds(poiNeighborIds)
 {
 }
 
@@ -93,23 +91,21 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
   const double reviewDistancePlusCe = _reviewDistance + ce;
   _closeMatch = _distance <= reviewDistancePlusCe;
-  if (_testFeatureFound)
-  {
-    LOG_VARD(_closeMatch);
-    LOG_VARD(_distance);
-    LOG_VARD(_matchDistance);
-    LOG_VARD(_reviewDistance);
-    LOG_VARD(reviewDistancePlusCe);
-    LOG_VARD(ce);
-    LOG_VARD(poi->getCircularError());
-    LOG_VARD(poly->getCircularError());
-  }
   //close match is a requirement, regardless of the evidence count
   if (!_closeMatch)
   {
     return 0;
   }
   unsigned int evidence = _distance <= _matchDistance ? 2 : 0;
+
+  LOG_VART(_closeMatch);
+  LOG_VART(_distance);
+  LOG_VART(_matchDistance);
+  LOG_VART(_reviewDistance);
+  LOG_VART(reviewDistancePlusCe);
+  LOG_VART(ce);
+  LOG_VART(poi->getCircularError());
+  LOG_VART(poly->getCircularError());
 
   return evidence;
 }
@@ -121,25 +117,22 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
   ElementPtr polyTemp(poly->clone());
   polyMap->addElement(polyTemp);
   shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
-  //TODO: oddly, even if the area is zero calc'ing the distance can have a positive effect
+  //oddly, even if the area is zero calc'ing the distance can have a positive effect
   /*if (polyAlphaShape->getArea() == 0.0)
   {
     return evidence;
   }*/
   const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
-  if (_testFeatureFound)
-  {
-    LOG_VARD(alphaShapeDist);
-    const bool withinAlphaShapeDist = alphaShapeDist <= _matchDistance;
-    LOG_VARD(withinAlphaShapeDist);
-  }
+
+  LOG_VART(alphaShapeDist);
+
   return evidence;
 }
 
 unsigned int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
+  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold);
   _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
   if (poi->getTags().get("historic") == "monument")
   {
@@ -148,13 +141,12 @@ unsigned int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, Con
   }
   _typeMatch = _typeScore >= _typeScoreThreshold;
   unsigned int evidence = _typeMatch ? 1 : 0;
-  if (_testFeatureFound)
-  {
-    LOG_VARD(_typeScore);
-    LOG_VARD(_typeMatch);
-    LOG_VARD(_t1BestKvp);
-    LOG_VARD(_t2BestKvp);
-  }
+
+  LOG_VART(_typeScore);
+  LOG_VART(_typeMatch);
+  LOG_VART(_t1BestKvp);
+  LOG_VART(_t2BestKvp);
+
   return evidence;
 }
 
@@ -165,31 +157,24 @@ unsigned int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, Con
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
   unsigned int evidence = _nameMatch ? 1 : 0;
-  if (_testFeatureFound)
-  {
-    LOG_VARD(_nameMatch);
-    LOG_VARD(_exactNameMatch);
-    LOG_VARD(_nameScore);
-  }
+
+  LOG_VART(_nameMatch);
+  LOG_VART(_exactNameMatch);
+  LOG_VART(_nameScore);
+
   return evidence;
 }
 
 unsigned int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
-  const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).isMatch(poly, poi);
-  if (_testFeatureFound)
-  {
-    LOG_VARD(addressMatch);
-  }
+  const bool addressMatch = PoiPolygonAddressMatch(_map).isMatch(poly, poi);
+  LOG_VART(addressMatch);
   return addressMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _testFeatureFound =
-    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
-
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -220,7 +205,7 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     {
       evidence += _getAddressEvidence(poi, poly);
     }
-    //TODO: move to config
+    //TODO: move values to config
     if (evidence < _matchEvidenceThreshold && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
     {
@@ -237,7 +222,7 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     else if (ConfigOptions().getPoiPolygonEnableMatchRules())
     {
       PoiPolygonMatchRules matchRules(
-        _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom, _testUuid);
+        _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom);
       matchRules.collectInfo(poi, poly);
       if (matchRules.ruleTriggered())
       {
@@ -246,10 +231,7 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     }
   }
 
-  if (_testFeatureFound)
-  {
-    LOG_VARD(evidence);
-  }
+  LOG_VART(evidence);
   return evidence;
 }
 

@@ -52,8 +52,7 @@ public:
 
   PoiPolygonMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
                           const set<ElementId>& poiNeighborIds, double distance,
-                          shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom,
-                          const QString testUuid);
+                          shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom);
 
   void collectInfo(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -79,8 +78,6 @@ private:
 
   bool _isRecCenterMatch;
   bool _poiNeighborWithAddressContainedInPoly;
-
-  QString _testUuid;
 
 };
 

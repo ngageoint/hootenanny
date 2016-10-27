@@ -40,7 +40,7 @@ class PoiPolygonTypeMatch
 {
 public:
 
-  PoiPolygonTypeMatch(double typeScoreThreshold, const QString testUuid);
+  PoiPolygonTypeMatch(double typeScoreThreshold);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -69,8 +69,6 @@ private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
-
-  QString _testUuid;
 
   double _getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);

@@ -336,8 +336,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<con
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
   map->visitRo(v);
 
-  if (/*Log::getInstance().getLevel() == Log::Debug &&*/
-      ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }

@@ -39,19 +39,14 @@ namespace hoot
 
 QSet<QString> PoiPolygonTypeMatch::_allTagKeys;
 
-PoiPolygonTypeMatch::PoiPolygonTypeMatch(double typeScoreThreshold,
-                                         const QString testUuid = "") :
-_typeScoreThreshold(typeScoreThreshold),
-_testUuid(testUuid)
+PoiPolygonTypeMatch::PoiPolygonTypeMatch(double typeScoreThreshold) :
+_typeScoreThreshold(typeScoreThreshold)
 {
 }
 
 double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                                          QString& t2BestKvp)
 {
-  const bool testFeatureFound =
-    e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid;
-
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
 
@@ -69,18 +64,13 @@ double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2,
         //Don't fail on "other", since that's not very descriptive.
         t1Cuisine != "other" && t2Cuisine != "other")
     {
-      LOG_DEBUG("Failed type match on different cuisines.");
+      LOG_TRACE("Failed type match on different cuisines.");
       return false;
     }
   }
 
   const double typeScore = _getTagScore(e1, e2, t1BestKvp, t2BestKvp);
-
-  if (testFeatureFound)
-  {
-    LOG_VARD(typeScore);
-  }
-
+  LOG_VART(typeScore);
   return typeScore;
 }
 
@@ -91,7 +81,7 @@ double PoiPolygonTypeMatch::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
 }
 
 bool PoiPolygonTypeMatch::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                   QString& t2BestKvp)
+                                      QString& t2BestKvp)
 {
   return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
 }
@@ -115,7 +105,7 @@ bool PoiPolygonTypeMatch::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e
 }
 
 double PoiPolygonTypeMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                      QString& t2BestKvp)
+                                         QString& t2BestKvp)
 {
   double result = 0.0;
   t1BestKvp = "";
@@ -145,13 +135,9 @@ double PoiPolygonTypeMatch::_getTagScore(ConstElementPtr e1, ConstElementPtr e2,
       }
       result = max(score, result);
 
-      if (Log::getInstance().getLevel() == Log::Debug &&
-          (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
-      {
-        LOG_VARD(t1List.at(i));
-        LOG_VARD(t2List.at(j));
-        LOG_VARD(result);
-      }
+      LOG_VART(t1List.at(i));
+      LOG_VART(t2List.at(j));
+      LOG_VART(result);
     }
   }
 
@@ -189,17 +175,17 @@ bool PoiPolygonTypeMatch::isRecCenter(ConstElementPtr element)
     elementName.contains("fieldhouse");
 }
 
-bool PoiPolygonTypeMatch::isPlayground(ConstElementPtr element)
-{
-  const Tags& tags = element->getTags();
-  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
-  return tags.get("leisure") == "playground" || elementName.contains("playground");
-}
+//bool PoiPolygonTypeMatch::isPlayground(ConstElementPtr element)
+//{
+//  const Tags& tags = element->getTags();
+//  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
+//  return tags.get("leisure") == "playground" || elementName.contains("playground");
+//}
 
-bool PoiPolygonTypeMatch::isPlayArea(ConstElementPtr element)
-{
-  return element->getTags().get("name").toLower().contains("play area");
-}
+//bool PoiPolygonTypeMatch::isPlayArea(ConstElementPtr element)
+//{
+//  return element->getTags().get("name").toLower().contains("play area");
+//}
 
 bool PoiPolygonTypeMatch::isPark(ConstElementPtr element)
 {
@@ -207,20 +193,20 @@ bool PoiPolygonTypeMatch::isPark(ConstElementPtr element)
          (element->getTags().get("leisure") == "park");
 }
 
-bool PoiPolygonTypeMatch::isParkish(ConstElementPtr element)
-{
-  if (OsmSchema::getInstance().isBuilding(element))
-  {
-    return false;
-  }
-  const QString leisureVal = element->getTags().get("leisure").toLower();
-  return leisureVal == "garden" || leisureVal == "dog_park";
-}
+//bool PoiPolygonTypeMatch::isParkish(ConstElementPtr element)
+//{
+//  if (OsmSchema::getInstance().isBuilding(element))
+//  {
+//    return false;
+//  }
+//  const QString leisureVal = element->getTags().get("leisure").toLower();
+//  return leisureVal == "garden" || leisureVal == "dog_park";
+//}
 
-bool PoiPolygonTypeMatch::isSport(ConstElementPtr element)
-{
-  return element->getTags().contains("sport");
-}
+//bool PoiPolygonTypeMatch::isSport(ConstElementPtr element)
+//{
+//  return element->getTags().contains("sport");
+//}
 
 bool PoiPolygonTypeMatch::isBuildingIsh(ConstElementPtr element)
 {
@@ -247,11 +233,10 @@ bool PoiPolygonTypeMatch::hasMoreThanOneType(ConstElementPtr element)
   for (Tags::const_iterator it = elementTags.begin(); it != elementTags.end(); ++it)
   {
     const QString elementTagKey = it.key();
-    //LOG_DEBUG("Key: " << vertex.key);
     //there may be duplicate keys in allTags
     if (_allTagKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
     {
-      LOG_DEBUG("Has key: " << elementTagKey);
+      LOG_TRACE("Has key: " << elementTagKey);
       typeCount++;
       if (typeCount > 1)
       {

@@ -44,7 +44,6 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-QString PoiPolygonMatch::_testUuid = "{1c3e97f5-7430-5a1f-b030-9ce1e7038682}";
 QMultiMap<QString, double> PoiPolygonMatch::_poiMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_polyMatchRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonMatch::_poiReviewRefIdsToDistances;
@@ -139,17 +138,11 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  /*if (tags.get("uuid") == _testUuid)
-  {
-    LOG_VARD(inABuildingOrPoiCategory);
-    LOG_VARD(e.toString());
-  }*/
-  if (/*!inABuildingOrPoiCategory &&*/
-      (tags.get("barrier").toLower() == "fence"
+  if (tags.get("barrier").toLower() == "fence"
       || tags.get("landuse").toLower() == "grass"
       || tags.get("natural").toLower() == "tree_row"
       || tags.get("natural").toLower() == "scrub"
-      || tags.get("highway").toLower() == "residential"))
+      || tags.get("highway").toLower() == "residential")
   {
     return false;
   }
@@ -159,24 +152,7 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 
 bool PoiPolygonMatch::isPoi(const Element& e)
 {
-  /*if (Log::getInstance().getLevel() == Log::Debug && e.getTags().get("uuid") == _testUuid)
-  {
-    LOG_DEBUG("poi candidate:");
-    LOG_VARD(e.getTags().get("uuid"));
-    LOG_VARD(e.getTags().getNames().size());
-    LOG_VARD(e.getTags().getNames());
-    LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).toString());
-    LOG_VARD(OsmSchema::getInstance().getCategories(e.getTags()).intersects(
-               OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
-    LOG_VARD(
-      OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
-    LOG_VARD(
-      OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::poi()));
-    LOG_VARD(e.getTags());
-  }*/
-
-  //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix.
-  //TODO: replace logic in rule applier with commented out ones
+  //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix
   const Tags& tags = e.getTags();
   if (tags.get("natural").toLower() == "tree"
       || tags.get("amenity").toLower() == "drinking_water"
@@ -186,7 +162,6 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   {
     return false;
   }
-
   return e.getElementType() == ElementType::Node &&
          (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
            OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
@@ -195,8 +170,7 @@ bool PoiPolygonMatch::isPoi(const Element& e)
 
 bool PoiPolygonMatch::isArea(const Element& e)
 {
-  const Tags& tags = e.getTags();
-  return isPoly(e) && !OsmSchema::getInstance().isBuilding(tags, e.getElementType());
+  return isPoly(e) && !OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType());
 }
 
 void PoiPolygonMatch::_separateElementsByGeometryType(const ElementId& eid1, const ElementId& eid2)
@@ -204,16 +178,12 @@ void PoiPolygonMatch::_separateElementsByGeometryType(const ElementId& eid1, con
   ConstElementPtr e1 = _map->getElement(eid1);
   ConstElementPtr e2 = _map->getElement(eid2);
 
-  if (Log::getInstance().getLevel() == Log::Debug &&
-      (e1->getTags().get("uuid") == _testUuid || e2->getTags().get("uuid") == _testUuid))
-  {
-    LOG_VARD(_eid1);
-    LOG_VARD(e1->getTags().get("uuid"));
-    LOG_VARD(e1->getTags());
-    LOG_VARD(_eid2);
-    LOG_VARD(e2->getTags().get("uuid"));
-    LOG_VARD(e2->getTags());
-  }
+  LOG_VART(_eid1);
+  LOG_VART(e1->getTags().get("uuid"));
+  LOG_VART(e1->getTags());
+  LOG_VART(_eid2);
+  LOG_VART(e2->getTags().get("uuid"));
+  LOG_VART(e2->getTags());
 
   _e1IsPoi = false;
   if (isPoi(*e1) && isPoly(*e2))
@@ -234,9 +204,6 @@ void PoiPolygonMatch::_separateElementsByGeometryType(const ElementId& eid1, con
     throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
                                    eid2.toString());
   }
-
-  _testFeatureFound =
-    _poly->getTags().get("uuid") == _testUuid || _poi->getTags().get("uuid") == _testUuid;
 }
 
 bool PoiPolygonMatch::_parseGeometries()
@@ -245,60 +212,26 @@ bool PoiPolygonMatch::_parseGeometries()
   try
   {
     _polyGeom = ElementConverter(_map).convertToGeometry(_poly);
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    //may need a better way to handle this...(already tried using isValid())
+    if (QString::fromStdString(_polyGeom->toString()).toUpper().contains("EMPTY"))
     {
-      //TODO: change back to warn?
-      /*LOG_WARN*/LOG_DEBUG(
-        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << _poly->toString() << "\n" << e.what());
-      _badGeomCount++;
+      if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+      {
+        LOG_WARN("Invalid polygon passed to PoiPolygonMatchCreator: " << _polyGeom->toString());
+        _badGeomCount++;
+      }
+      return false;
     }
-    return false;
-  }
-  //may need a better way to handle this...(already tried using isValid())
-  if (QString::fromStdString(_polyGeom->toString()).toUpper().contains("EMPTY"))
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-    {
-      //TODO: change back to warn?
-      /*LOG_WARN*/LOG_DEBUG("Invalid polygon passed to PoiPolygonMatchCreator: " << _polyGeom->toString());
-      _badGeomCount++;
-    }
-    return false;
-  }
-
-  try
-  {
     _poiGeom = ElementConverter(_map).convertToGeometry(_poi);
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-    {
-      //TODO: change back to warn?
-      /*LOG_WARN*/LOG_DEBUG(
-        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << _poi->toString() << "\n" << e.what());
-      _badGeomCount++;
-    }
-    return false;
-  }
-
-  try
-  {
     _distance = _polyGeom->distance(_poiGeom.get());
   }
   catch (const geos::util::TopologyException& e)
   {
     if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
     {
-      //TODO: change back to warn?
-      /*LOG_WARN*/LOG_DEBUG(
-        "Calculating the distance between the POI " << _poi->toString() << "\n and polygon " <<
-        _poly->toString() << "\n caused topology exception on conversion to a " << e.what());
+      LOG_WARN(
+        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+        "geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
       _badGeomCount++;
     }
     return false;
@@ -319,13 +252,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   PoiPolygonEvidenceScorer evidenceScorer(
     _matchDistance, _reviewDistance, _distance, _typeScoreThreshold, _nameScoreThreshold,
-    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyGeom, _map, _polyNeighborIds, _poiNeighborIds,
-    _testUuid);
+    MATCH_EVIDENCE_THRESHOLD, _poiGeom, _polyGeom, _map, _polyNeighborIds, _poiNeighborIds);
   const unsigned int evidence = evidenceScorer.calculateEvidence(_poi, _poly);
-  if (_testFeatureFound)
-  {
-    LOG_VARD(evidence);
-  }
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
@@ -335,11 +263,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
     _class.setReview();
   }
 
-  if (_testFeatureFound)
-  {
-    LOG_VARD(_class);
-    LOG_DEBUG("**************************");
-  }
+  LOG_VART(_class);
+  LOG_TRACE("**************************");
 
   if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
@@ -424,7 +349,6 @@ void PoiPolygonMatch::_printMatchDistanceInfo(const QString matchType,
       distancesStr.chop(2);
       averageDistance = sumDist / (double)distances.size();
 
-      //TODO: change back to info or debug later
       LOG_INFO(matchType.toUpper() << " distance info for type: " << type);
       LOG_VAR(maxDistance);
       LOG_VAR(minimumDistance);

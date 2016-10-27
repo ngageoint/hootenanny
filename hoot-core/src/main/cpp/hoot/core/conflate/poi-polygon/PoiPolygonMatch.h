@@ -144,8 +144,6 @@ private:
   double _nameScoreThreshold;
   double _typeScoreThreshold;
 
-  static QString _testUuid;
-  bool _testFeatureFound;
   static QMultiMap<QString, double> _poiMatchRefIdsToDistances;
   static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;

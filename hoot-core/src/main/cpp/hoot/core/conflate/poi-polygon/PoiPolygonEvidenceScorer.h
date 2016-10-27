@@ -48,7 +48,7 @@ public:
                            unsigned int matchEvidenceThreshold, shared_ptr<Geometry> poiGeom,
                            shared_ptr<Geometry> polyGeom,
                            ConstOsmMapPtr map, set<ElementId> polyNeighborIds,
-                           set<ElementId> poiNeighborIds, QString testUuid);
+                           set<ElementId> poiNeighborIds);
 
   unsigned int calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -92,9 +92,6 @@ private:
 
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
-
-  QString _testUuid;
-  bool _testFeatureFound;
 
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poly);

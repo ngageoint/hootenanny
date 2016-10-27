@@ -48,8 +48,7 @@ PoiPolygonMatchRules::PoiPolygonMatchRules(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance,
                                                      shared_ptr<Geometry> polyGeom,
-                                                     shared_ptr<Geometry> poiGeom,
-                                                     const QString testUuid = "") :
+                                                     shared_ptr<Geometry> poiGeom) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -58,8 +57,7 @@ _polyGeom(polyGeom),
 _poiGeom(poiGeom),
 _badGeomCount(0),
 _isRecCenterMatch(false),
-_poiNeighborWithAddressContainedInPoly(false),
-_testUuid(testUuid)
+_poiNeighborWithAddressContainedInPoly(false)
 {
 }
 
@@ -67,18 +65,14 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
 {
   if (!_poiGeom.get())
   {
-    //TODO: change back to warn?
-    /*LOG_WARN*/LOG_DEBUG("Invalid poi geometry.");
+    LOG_WARN("Invalid poi geometry.");
     return;
   }
   if (!_polyGeom.get())
   {
-    //TODO: change back to warn?
-    /*LOG_WARN*/LOG_DEBUG("Invalid poly geometry.");
+    LOG_WARN("Invalid poly geometry.");
     return;
   }
-  const bool testFeatureFound =
-    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
 
   //The rules below are roughly grouped by processing expense (more granular ordering can still be
   //done to further reduce runtime), with the rules requiring the least expensive computations
@@ -101,25 +95,19 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
     polyHasSpecificType = false;
   }
 
-  if (testFeatureFound)
-  {
-    LOG_VARD(poiHasType);
-    LOG_VARD(poiIsRecCenter);
-    LOG_VARD(poiAddress);
+  LOG_VART(poiHasType);
+  LOG_VART(poiIsRecCenter);
+  LOG_VART(poiAddress);
 
-    LOG_VARD(polyHasName);
-    LOG_VARD(polyIsPark);
-    LOG_VARD(polyHasType);
-    LOG_VARD(polyIsBuildingIsh);
-    LOG_VARD(polyHasMoreThanOneType);
-    LOG_VARD(polyHasSpecificType);
-  }
+  LOG_VART(polyHasName);
+  LOG_VART(polyIsPark);
+  LOG_VART(polyHasType);
+  LOG_VART(polyIsBuildingIsh);
+  LOG_VART(polyHasMoreThanOneType);
+  LOG_VART(polyHasSpecificType);
 
   bool poiContainedInAnotherParkPoly = false;
   bool polyContainedInAnotherParkPoly = false;
-
-  //PoiPolygonTypeMatch typeScorer(_typeScoreThreshold, _testUuid);
-  //PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
 
   //specific condition set here to minimize run time.  obviously, as more rules are added, this
   //condition could get unwieldy
@@ -142,50 +130,30 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
           {
             if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
             {
-              //TODO: change back
-              /*LOG_WARN*/LOG_DEBUG(
-                "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-                polyNeighborGeom->toString());
+              LOG_TRACE(
+                "Invalid area neighbor polygon: " << polyNeighborGeom->toString());
               _badGeomCount++;
             }
           }
           else if (polyNeighborGeom.get())
           {
-            /*if (testFeatureFound)
-            {
-              LOG_VARD(area->getTags().get("uuid"))
-              LOG_VARD(_isPlayground(area));
-              LOG_VARD(_isPlayArea(area));
-              LOG_VARD(_polyGeom->contains(areaGeom.get()));
-              LOG_VARD(_isSport(area));
-              LOG_VARD(poiIsSport);
-              LOG_VARD(areaGeom->contains(_poiGeom.get()));
-              LOG_VARD(typeScorer.isExactTypeMatch(poi, area));
-              QString t1, t2;
-              LOG_VARD(typeScorer.getTypeScore(poi, area, t1, t2));
-              LOG_VARD(t1);
-              LOG_VARD(t2);
-            }*/
-
             if (PoiPolygonTypeMatch::isPark(polyNeighbor))
             {
               if (polyNeighborGeom->contains(_poiGeom.get()))
               {
                 poiContainedInAnotherParkPoly = true;
 
-                if (testFeatureFound)
-                {
-                  LOG_DEBUG(
-                    "poi examined and found to be contained within a park poly outside of this match " <<
-                    "comparison: " << poi->toString());
-                  LOG_DEBUG("park poly it is very close to: " << polyNeighbor->toString());
-                }
+                LOG_TRACE(
+                      "poi examined and found to be contained within a park poly outside of this "
+                      "match comparison: " << poi->toString());
+                LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
+
               }
 
               if (polyNeighborGeom->contains(_polyGeom.get()))
               {
-                //TODO: probably need to be specific that the poi and the poly are in the same park...
-                //TODO: log
+                //may need to be specific that the poi and the poly are in the same
+                //park...
                 polyContainedInAnotherParkPoly = true;
               }
             }
@@ -210,20 +178,14 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
 
-  if (testFeatureFound)
-  {
-    LOG_VARD(poiContainedInAnotherParkPoly);
-    LOG_VARD(poiContainedInParkPoly);
-  }
+  LOG_VART(poiContainedInAnotherParkPoly);
+  LOG_VART(poiContainedInParkPoly);
 
-  //TODO:
+  //TODO: explain
   if (poiContainedInParkPoly && !poiHasType && poiIsRecCenter && polyIsBuildingIsh &&
       (!polyHasSpecificType || !polyHasName) && polyContainedInAnotherParkPoly)
   {
-    if (testFeatureFound)
-    {
-      LOG_DEBUG("Returning review per rule #23a...");
-    }
+    LOG_TRACE("Found evidence per rule #1...");
     _isRecCenterMatch = true;
   }
 
@@ -240,23 +202,10 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
     {
       try
       {
-        /*if (Log::getInstance().getLevel() == Log::Debug &&
-            (poi->getTags().get("uuid") == _testUuid ||
-             poly->getTags().get("uuid") == _testUuid))
-        {
-          LOG_VARD(poiNeighbor->getTags().get("uuid"))
-          LOG_VARD(_elementIsPark(poiNeighbor));
-          LOG_VARD(_elementIsPlayground(poiNeighbor));
-          LOG_VARD(_elementIsPlayArea(poiNeighbor))
-          LOG_VARD(polyGeom->contains(poiNeighborGeom.get()));
-        }*/
-
         //TODO: make work for all name tags
         const QString poiNeighborName = poiNeighbor->getTags().get("name").toLower().trimmed();
-        if (testFeatureFound)
-        {
-          LOG_VARD(poiNeighborName);
-        }
+        LOG_VART(poiNeighborName);
+
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
           shared_ptr<Geometry> poiNeighborGeom =
@@ -264,10 +213,7 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
           if (_polyGeom->contains(poiNeighborGeom.get()))
           {
             _poiNeighborWithAddressContainedInPoly = true;
-            if (testFeatureFound)
-            {
-              LOG_VARD(_poiNeighborWithAddressContainedInPoly);
-            }
+            LOG_VART(_poiNeighborWithAddressContainedInPoly);
           }
         }
       }
@@ -275,10 +221,9 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
       {
         if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
         {
-          //TODO: change back
-          /*LOG_WARN*/LOG_DEBUG(
-            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-            "geometry: " << poiNeighbor->toString() << "\n" << e.what());
+          LOG_TRACE(
+            "Feature passed to PoiPolygonMatchCreator caused topology exception on "
+            "conversion to a geometry: " << poiNeighbor->toString() << "\n" << e.what());
           _badGeomCount++;
         }
       }

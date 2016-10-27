@@ -40,10 +40,8 @@ const QString PoiPolygonAddressMatch::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME = "address";
 const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
-PoiPolygonAddressMatch::PoiPolygonAddressMatch(const ConstOsmMapPtr& map,
-                                               const QString testUuid = "") :
-_map(map),
-_testUuid(testUuid)
+PoiPolygonAddressMatch::PoiPolygonAddressMatch(const ConstOsmMapPtr& map) :
+_map(map)
 {
 }
 
@@ -58,24 +56,21 @@ void PoiPolygonAddressMatch::_parseAddressesAsRange(const QString houseNum, cons
   //in the wild.
 
   QStringList houseNumParts = houseNum.split("-");
-  //LOG_VARD(houseNumParts);
   if (houseNumParts.size() == 2)
   {
     bool startHouseNumParsedOk = false;
     const int startHouseNum = houseNumParts[0].toInt(&startHouseNumParsedOk);
-    //LOG_VARD(startHouseNum);
     if (startHouseNumParsedOk)
     {
       bool endHouseNumParsedOk = false;
       const int endHouseNum = houseNumParts[1].toInt(&endHouseNumParsedOk);
-      //LOG_VARD(endHouseNum);
       if (endHouseNumParsedOk && startHouseNum < endHouseNum)
       {
         QString combinedAddress;
         for (int i = startHouseNum; i < endHouseNum + 1; i++)
         {
           combinedAddress = QString::number(i) + " " + street;
-          //LOG_VARD(combinedAddress);
+          LOG_VART(combinedAddress);
           addresses.append(combinedAddress);
         }
       }
@@ -90,9 +85,7 @@ void PoiPolygonAddressMatch::_parseAddressesInAltFormat(const Tags& tags, QStrin
   if (!addressTagValAltFormatRaw.isEmpty())
   {
     addressTagValAltFormatRaw = addressTagValAltFormatRaw.replace(ESZETT, ESZETT_REPLACE);
-    //LOG_VARD(addressTagValAltFormatRaw);
     const QStringList addressParts = addressTagValAltFormatRaw.split(QRegExp("\\s"));
-    //LOG_VARD(addressParts);
     if (addressParts.length() >= 2)
     {
       QString addressTagValAltFormat = "";
@@ -103,22 +96,17 @@ void PoiPolygonAddressMatch::_parseAddressesInAltFormat(const Tags& tags, QStrin
         addressParts[ctr].toInt(&ok);
         ctr++;
       }
-      //LOG_VARD(ctr);
-      //LOG_VARD(ok);
       if (ok && ctr > 1)
       {
         const QString houseNum = addressParts[ctr - 1];
-        //LOG_VARD(houseNum);
         addressTagValAltFormat += houseNum;
-        //LOG_VARD(addressTagValAltFormat);
         for (int i = 0; i < (ctr - 1); i++)
         {
           addressTagValAltFormat += " ";
           addressTagValAltFormat += addressParts[i];
-          //LOG_VARD(addressTagValAltFormat);
         }
         addressTagValAltFormat = addressTagValAltFormat.trimmed();
-        //LOG_VARD(addressTagValAltFormat);
+        LOG_VART(addressTagValAltFormat);
         addresses.append(addressTagValAltFormat);
       }
     }
@@ -195,9 +183,6 @@ void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr rela
 
 bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
 {
-  const bool testFeatureFound =
-    poly->getTags().get("uuid") == _testUuid || poi->getTags().get("uuid") == _testUuid;
-
   QStringList polyAddresses;
 
   //see if the poly has any address
@@ -218,7 +203,7 @@ bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
   }
   if (polyAddresses.size() == 0)
   {
-    //LOG_DEBUG("No poly addresses.");
+    LOG_TRACE("No poly addresses.");
     return false;
   }
 
@@ -227,7 +212,7 @@ bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
   _collectAddressesFromElement(poi, poiAddresses);
   if (poiAddresses.size() == 0)
   {
-    //LOG_DEBUG("No POI addresses.");
+    LOG_TRACE("No POI addresses.");
     return false;
   }
 
@@ -239,16 +224,10 @@ bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
     {
       const QString poiAddress = poiAddresses.at(j);
 
-      if (testFeatureFound)
-      {
-        LOG_VARD(polyAddress);
-        LOG_VARD(poiAddress);
-      }
-
       //exact match
       if (addrComp.compare(polyAddress, poiAddress) == 1.0)
       {
-        LOG_DEBUG("Found address match.");
+        LOG_TRACE("Found address match.");
         return true;
       }
       //subletter fuzziness
@@ -265,13 +244,11 @@ bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
 bool PoiPolygonAddressMatch::_addressesMatchesOnSubLetter(const QString polyAddress,
                                                          const QString poiAddress)
 {
-  /*
-   * we're also going to allow sub letter differences be
-   //matches; ex "34 elm street" matches "34a elm street".  This is b/c the subletters are
-   sometimes left out of the addresses, and we'd like to at least end up with a review in that
-   situation.
+  /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
+   * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses,
+   * and we'd like to at least end up with a review in that situation.
    */
-  //TODO: this may be able to be cleaned up with better use of regex's
+  //this may be able to be cleaned up with better use of regex's
   const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
   assert(polyAddressParts.length() > 0);
   const QStringList poiAddressParts = poiAddress.split(QRegExp("\\s"));
@@ -285,7 +262,6 @@ bool PoiPolygonAddressMatch::_addressesMatchesOnSubLetter(const QString polyAddr
 
   QString poiAddressTemp = poiAddressParts[0];
   const QString poiHouseNumStr = poiAddressTemp.replace(QRegExp("[a-z]+"), "");
-  //LOG_VARD(poiHouseNumStr);
   bool poiHouseNumOk = false;
   /*const int poiHouseNum = */polyHouseNumStr.toInt(&poiHouseNumOk);
 
@@ -298,19 +274,19 @@ bool PoiPolygonAddressMatch::_addressesMatchesOnSubLetter(const QString polyAddr
     {
       subletterCleanedPolyAddress += " " + polyAddressParts[k];
     }
-    //LOG_VARD(subletterCleanedPolyAddress);
+    LOG_VART(subletterCleanedPolyAddress);
 
     QString subletterCleanedPoiAddress = poiHouseNumStr;
     for (int k = 1; k < poiAddressParts.length(); k++)
     {
       subletterCleanedPoiAddress += " " + poiAddressParts[k];
     }
-    //LOG_VARD(subletterCleanedPoiAddress);
+    LOG_VART(subletterCleanedPoiAddress);
 
     ExactStringDistance addrComp;
     if (addrComp.compare(subletterCleanedPolyAddress, subletterCleanedPoiAddress) == 1.0)
     {
-      LOG_DEBUG("Found address match.");
+      LOG_TRACE("Found address match.");
       return true;
     }
   }
