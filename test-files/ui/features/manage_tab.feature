@@ -52,6 +52,7 @@ Feature: Manage Tab
         Then I fill "NewFolderName" input with "ManageTabTest"
         And I press "big.loud" span with text "Add Folder"
         # Move datasets into folder
+        And I hover over "#datasettable"
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
         And I context click "AllDataTypesACucumber"
         And I should see "Delete (2)"
