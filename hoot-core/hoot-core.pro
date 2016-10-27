@@ -544,8 +544,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonEvidenceScorer.cpp \
-    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp
+    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1094,6 +1094,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonEvidenceScorer.h \
-    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h
+    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h
 

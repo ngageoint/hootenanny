@@ -24,39 +24,45 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONRFCLASSIFIER_H
-#define POIPOLYGONRFCLASSIFIER_H
+#ifndef POIPOLYGONDISTANCETRUTHRECORDER_H
+#define POIPOLYGONDISTANCETRUTHRECORDER_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/MatchClassification.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
+// Qt
+#include <QString>
+#include <QMultiMap>
 
 namespace hoot
 {
 
-class PoiPolygonRfClassifier
+/**
+ *
+ */
+class PoiPolygonDistanceTruthRecorder
 {
 
 public:
 
-  PoiPolygonRfClassifier();
-
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2) const;
+  static void recordDistanceTruth(const QString t1BestKvp, const QString t2BestKvp,
+                                  const double elementDistance, ConstElementPtr poi,
+                                  ConstElementPtr poly, const bool element1IsPoi);
+  static void resetMatchDistanceInfo();
+  static void printMatchDistanceInfo();
 
 private:
 
-  vector< shared_ptr<const FeatureExtractor> > _extractors;
+  static QMultiMap<QString, double> _poiMatchRefIdsToDistances;
+  static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
+  static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
+  static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
 
-  void _createExtractors();
+  static void _printMatchDistanceInfo(const QString matchType,
+                                      const QMultiMap<QString, double>& distanceInfo);
+
 };
-
-typedef shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
 
 }
 
-#endif // POIPOLYGONRFCLASSIFIER_H
+#endif // POIPOLYGONDISTANCETRUTHRECORDER_H

@@ -40,8 +40,6 @@
 namespace hoot
 {
 
-class PoiPolygonEvidenceScorer;
-
 /**
  * This is a additive, rules based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
@@ -117,12 +115,10 @@ public:
 
 private:
 
-  //TODO: can probably get rid of these two eid's
   ElementId _eid1;
   ElementId _eid2;
   shared_ptr<const PoiPolygonRfClassifier> _rf;
   static QString _matchName;
-  //ElementId _poiEid, _polyEid;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
   shared_ptr<Geometry> _poiGeom;
@@ -133,35 +129,32 @@ private:
   bool _e1IsPoi;
 
   double _distance;
+  bool _closeMatch;
   double _nameScore;
-  bool _nameMatch;
-  bool _exactNameMatch;
   double _typeScore;
-  bool _typeMatch;
 
   double _matchDistance;
   double _reviewDistance;
   double _nameScoreThreshold;
   double _typeScoreThreshold;
 
-  static QMultiMap<QString, double> _poiMatchRefIdsToDistances;
-  static QMultiMap<QString, double> _poiReviewRefIdsToDistances;
-  static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
-  static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
-
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
 
-  void _separateElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
-
-  bool _parseGeometries();
+  QString _t1BestKvp;
+  QString _t2BestKvp;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  void _recordDistanceTruth(const PoiPolygonEvidenceScorer& evidenceScorer);
+  void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+  bool _parseGeometries();
 
-  static void _printMatchDistanceInfo(const QString matchType,
-                                      const QMultiMap<QString, double>& distanceInfo);
+  unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poly);
+  unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
 };
 

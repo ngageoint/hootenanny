@@ -27,11 +27,10 @@
 #include "PoiPolygonCustomMatchRules.h"
 
 // geos
-#include <geos/geom/LineString.h>
+//#include <geos/geom/LineString.h>
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 

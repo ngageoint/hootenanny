@@ -45,11 +45,11 @@ class PoiPolygonDistanceMatcher
 public:
 
   PoiPolygonDistanceMatcher(double matchDistanceDefault, double reviewDistanceDefault,
-                                    const Tags& polyTags, long searchRadius);
+                            const Tags& polyTags, long searchRadius);
 
   PoiPolygonDistanceMatcher(double matchDistanceDefault, double reviewDistanceDefault,
-                                    const Tags& polyTags, long searchRadius,
-                                    long surroundingPolyCount, long surroundingPoiCount);
+                            const Tags& polyTags, long searchRadius,
+                            long surroundingPolyCount, long surroundingPoiCount);
 
   double getMatchDistanceForType(const QString typeKvp) const;
   double getReviewDistanceForType(const QString typeKvp) const;

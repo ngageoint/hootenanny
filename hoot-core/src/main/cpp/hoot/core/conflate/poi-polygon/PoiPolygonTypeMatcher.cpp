@@ -27,7 +27,6 @@
 #include "PoiPolygonTypeMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/Translator.h>
 
@@ -44,8 +43,8 @@ _typeScoreThreshold(typeScoreThreshold)
 {
 }
 
-double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                         QString& t2BestKvp)
+double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e2,
+                                           QString& t1BestKvp, QString& t2BestKvp)
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
@@ -74,38 +73,8 @@ double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e
   return typeScore;
 }
 
-double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e2)
-{
-  QString t1BestKvp, t2BestKvp;
-  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp);
-}
-
-bool PoiPolygonTypeMatcher::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                      QString& t2BestKvp)
-{
-  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
-}
-
-bool PoiPolygonTypeMatcher::isTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
-{
-  QString t1BestKvp, t2BestKvp;
-  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) >= _typeScoreThreshold;
-}
-
-bool PoiPolygonTypeMatcher::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                      QString& t2BestKvp)
-{
-  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;
-}
-
-bool PoiPolygonTypeMatcher::isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2)
-{
-  QString t1BestKvp, t2BestKvp;
-  return getTypeScore(e1, e2, t1BestKvp, t2BestKvp) == 1.0;
-}
-
-double PoiPolygonTypeMatcher::_getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                                         QString& t2BestKvp)
+double PoiPolygonTypeMatcher::_getTagScore(ConstElementPtr e1, ConstElementPtr e2,
+                                           QString& t1BestKvp, QString& t2BestKvp)
 {
   double result = 0.0;
   t1BestKvp = "";
@@ -175,38 +144,11 @@ bool PoiPolygonTypeMatcher::isRecCenter(ConstElementPtr element)
     elementName.contains("fieldhouse");
 }
 
-//bool PoiPolygonTypeMatch::isPlayground(ConstElementPtr element)
-//{
-//  const Tags& tags = element->getTags();
-//  const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
-//  return tags.get("leisure") == "playground" || elementName.contains("playground");
-//}
-
-//bool PoiPolygonTypeMatch::isPlayArea(ConstElementPtr element)
-//{
-//  return element->getTags().get("name").toLower().contains("play area");
-//}
-
 bool PoiPolygonTypeMatcher::isPark(ConstElementPtr element)
 {
   return !OsmSchema::getInstance().isBuilding(element) &&
          (element->getTags().get("leisure") == "park");
 }
-
-//bool PoiPolygonTypeMatch::isParkish(ConstElementPtr element)
-//{
-//  if (OsmSchema::getInstance().isBuilding(element))
-//  {
-//    return false;
-//  }
-//  const QString leisureVal = element->getTags().get("leisure").toLower();
-//  return leisureVal == "garden" || leisureVal == "dog_park";
-//}
-
-//bool PoiPolygonTypeMatch::isSport(ConstElementPtr element)
-//{
-//  return element->getTags().contains("sport");
-//}
 
 bool PoiPolygonTypeMatcher::isBuildingIsh(ConstElementPtr element)
 {

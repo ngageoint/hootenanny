@@ -27,12 +27,11 @@
 #include "PoiPolygonNameMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -50,24 +49,6 @@ double PoiPolygonNameMatcher::getNameScore(ConstElementPtr e1, ConstElementPtr e
         new MeanWordSetDistance(
           new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
    .extract(e1, e2);
-}
-
-double PoiPolygonNameMatcher::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
-{
-  const QString e1Name = e1->getTags().get("name");
-  const QString e2Name = e2->getTags().get("name");
-  if (e1Name.trimmed().isEmpty() && e2Name.trimmed().isEmpty())
-  {
-    return 0.0;
-  }
-  //TODO: fix
-  /*return
-    NameExtractor(
-      new TranslateStringDistance(
-        new MeanWordSetDistance(
-          new ExactStringDistance())))
-   .extract(e1, e2);*/
-   return ExactStringDistance().compare(e1Name.toLower(), e2Name.toLower());
 }
 
 //TODO: make work for all name tag types

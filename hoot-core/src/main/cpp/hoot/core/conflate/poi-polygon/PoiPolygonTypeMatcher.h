@@ -47,21 +47,11 @@ public:
    */
   double getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);
-  double getTypeScore(ConstElementPtr e1, ConstElementPtr e2);
-  bool isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                      QString& t2BestKvp);
-  bool isExactTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
-  bool isTypeMatch(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                   QString& t2BestKvp);
-  bool isTypeMatch(ConstElementPtr e1, ConstElementPtr e2);
 
   static bool isPark(ConstElementPtr element);
-  static bool isParkish(ConstElementPtr element);
   static bool isRecCenter(ConstElementPtr element);
-  static bool isPlayground(ConstElementPtr element);
-  static bool isPlayArea(ConstElementPtr element);
-  static bool isSport(ConstElementPtr element);
   static bool isBuildingIsh(ConstElementPtr element);
+
   static bool hasMoreThanOneType(ConstElementPtr element);
   static bool hasType(ConstElementPtr element);
 
