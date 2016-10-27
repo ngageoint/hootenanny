@@ -235,7 +235,7 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     {
       evidence++;
     }
-    else
+    else if (ConfigOptions().getPoiPolygonEnableMatchRules())
     {
       PoiPolygonMatchRules matchRules(
         _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom, _testUuid);

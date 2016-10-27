@@ -1670,9 +1670,19 @@ See also:
 * Data Type: bool
 * Default Value: `true`
 
-If false, POI to polygon conflation will not take address tags into account.  Disable this to
-boost runtime performance if your data has little or no address information or you know the address
-information to be inaccurate.
+If false, POI to polygon conflation will not take address tags into account.  Disable this setting
+to boost runtime performance if your data has little or no address information or you know the
+address information to be inaccurate.
+
+=== poi.polygon.enable.match.rules
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, POI to polygon conflation will not execute custom matching rules and will only use the
+simpler, evidence based additive model for determining matches.  Disable this setting to boost
+runtime performance if your data is not covered by any of the rules.  See PoiPolygonMatchRules for
+more details.  This setting will likely be removed in the future.
 
 === poi.polygon.match.threshold
 
