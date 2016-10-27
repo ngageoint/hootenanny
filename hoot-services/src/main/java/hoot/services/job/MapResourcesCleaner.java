@@ -76,6 +76,10 @@ public class MapResourcesCleaner {
     private static void deleteLayerBy(String mapName) {
         Long mapId = getMapIdByName(mapName);
 
+        if (mapId == null) {
+            throw new IllegalArgumentException(mapName + " doesn't have a corresponding map ID associated with it!");
+        }
+
         deleteBookmarksBy(mapId);
         deleteRenderDBBy(mapName, mapId);
         deleteOSMRecordByName(mapId);
@@ -83,58 +87,37 @@ public class MapResourcesCleaner {
 
     /**
      * Drops the postgis render db created for hoot map dataset
-     *
-     * @param mapName
-     *            map name
      */
     private static void deleteRenderDBBy(String mapName, Long mapId) {
+
         try (Connection connection = getConnection()) {
-            String catalog;
-            try {
-                catalog = connection.getCatalog();
-            }
-            catch (SQLException e) {
-                throw new RuntimeException("Error retrieving current catalog name!", e);
-            }
+            String catalog = connection.getCatalog();
 
-            if (mapId != null) {
-                String dbNameByMapId = catalog + "_renderdb_" + mapId;
-                try {
-                    deletePostgresqlDB(dbNameByMapId, connection);
-                }
-                catch (SQLException e1) {
-                    logger.warn("Error deleting {} database by map ID!", dbNameByMapId, e1);
+            String dbNameByMapId = catalog + "_renderdb_" + mapId;
 
-                    String dbNameByMapName = catalog + "_renderdb_" + mapName;
-                    try {
-                        deletePostgresqlDB(dbNameByMapName, connection);
-                    }
-                    catch (SQLException e2) {
-                        logger.warn("Couldn't delete {} by map name either!", dbNameByMapName, e2);
-                        throw e2;
-                    }
-                }
-            }
-            else {
+            // First, try to delete by mapId
+            boolean deleted = deletePostgresqlDBBy(dbNameByMapId, connection);
+
+            if (!deleted) {
                 String dbNameByMapName = catalog + "_renderdb_" + mapName;
-                deletePostgresqlDB(dbNameByMapName, connection);
+
+                // dbNameByMapId doesn't appear to exist.  Try deleting by mapName
+                deleted = deletePostgresqlDBBy(dbNameByMapName, connection);
+
+                if (!deleted) {
+                    logger.debug("Neither {} nor {} appear to present to be deleted!", dbNameByMapId, dbNameByMapName);
+                }
             }
         }
         catch (SQLException e) {
-            String message;
-            if (mapId != null) {
-                message = "Error deleting renderdb for map with ID = " + mapId;
-            }
-            else {
-                message = "Error deleting renderdb for map with name = " + mapName;
-            }
-
-            throw new RuntimeException(message, e);
+            throw new RuntimeException("Error deleting renderdb for map with name = " + mapName, e);
         }
     }
 
-    private static void deletePostgresqlDB(String dbName, Connection connection) throws SQLException {
+    private static boolean deletePostgresqlDBBy(String dbName, Connection connection) throws SQLException {
         // Straight SQL below. No DDL support in QueryDSL anymore. Have to do it the old-fashioned way.
+
+        boolean deleted = false;
 
         try {
             // NOTE: DROP DATABASE sql call cannot be run inside of a transaction.  That's why
@@ -165,7 +148,7 @@ public class MapResourcesCleaner {
                     stmt.executeUpdate();
                 }
 
-                // 2) Force disconnection of all clients connected database, using pg_terminate_backend.
+                // 2) Force disconnect of all clients connected to the database, using pg_terminate_backend.
                 //    Requires superuser privileges.
 
                 String postgresqlDBVersion;  //Example: "PostgreSQL 9.2.1"
@@ -181,8 +164,8 @@ public class MapResourcesCleaner {
                 if (postgresqlDBVersion.substring(11, 14).compareTo("9.2") < 0) {
                     // For Postgresql < 9.2 use:
                     sql = "SELECT pg_terminate_backend(pg_stat_activity.procpid) " +
-                            "FROM pg_stat_activity " +
-                            "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
+                          "FROM pg_stat_activity " +
+                          "WHERE pg_stat_activity.datname = ? AND procpid <> pg_backend_pid();";
                     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                         stmt.setString(1, dbName);
                         try (ResultSet rs = stmt.executeQuery()) {
@@ -192,8 +175,8 @@ public class MapResourcesCleaner {
                 else {
                     // For Postgresql >= 9.2 use:
                     sql = "SELECT pg_terminate_backend(pg_stat_activity.pid) " +
-                            "FROM pg_stat_activity " +
-                            "WHERE pg_stat_activity.datname = ? AND pid <> pg_backend_pid()";
+                          "FROM pg_stat_activity " +
+                          "WHERE pg_stat_activity.datname = ? AND pid <> pg_backend_pid()";
                     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                         stmt.setString(1, dbName);
                         try (ResultSet rs = stmt.executeQuery()) {
@@ -207,24 +190,24 @@ public class MapResourcesCleaner {
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.executeUpdate();
                 }
+
+                deleted = true;
             }
         }
         finally {
             // Disable auto commit
             connection.setAutoCommit(false);
         }
+
+        return deleted;
     }
 
     private static void deleteOSMRecordByName(Long mapId) {
-        if (mapId != null) {
-            deleteMapRelatedTablesByMapId(mapId);
-            createQuery().delete(maps).where(maps.id.eq(mapId)).execute();
-        }
+        deleteMapRelatedTablesByMapId(mapId);
+        createQuery().delete(maps).where(maps.id.eq(mapId)).execute();
     }
 
     private static void deleteBookmarksBy(Long mapId) {
-        if (mapId != null) {
-            createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
-        }
+        createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 }

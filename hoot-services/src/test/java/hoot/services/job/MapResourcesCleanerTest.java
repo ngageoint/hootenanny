@@ -62,53 +62,8 @@ public class MapResourcesCleanerTest {
     @Category(UnitTest.class)
     public void testDeleteDatabaseByName() throws Exception {
         try (Connection connection = getConnection()) {
-            // Enable autoCommit
-            connection.setAutoCommit(true);
-
-            String currentCatalog = connection.getCatalog();
-            String dbName = currentCatalog + "_renderdb_" + "test9999";
-
-            boolean databaseExists;
-            String sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery()) {
-                    databaseExists = rs.next();
-                }
-            }
-
-            if (databaseExists) {
-                sql = "DROP DATABASE \"" + dbName + "\"";
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.executeUpdate();
-                }
-            }
-
-            sql = "CREATE DATABASE \"" + dbName + "\"";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.executeUpdate();
-            }
-
-            mapResourcesCleaner.exec("test9999");
-
-            sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery()) {
-                    databaseExists = rs.next();
-                }
-            }
-
-            assertFalse(databaseExists);
-        }
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testDeleteDatabaseById() throws Exception {
-        Long mapId;
-
-        try (Connection connection = getConnection()) {
-            long userId = MapUtils.insertUser();
-            mapId = MapUtils.insertMap(userId);
+            Long userId = MapUtils.insertUser();
+            Long mapId = MapUtils.insertMap(userId);
 
             // Enable autoCommit
             connection.setAutoCommit(true);
@@ -133,7 +88,7 @@ public class MapResourcesCleanerTest {
 
             sql = "CREATE DATABASE \"" + dbName + "\"";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.executeUpdate();
+                int count = stmt.executeUpdate();
             }
 
             mapResourcesCleaner.exec("map-with-id-" + mapId);
