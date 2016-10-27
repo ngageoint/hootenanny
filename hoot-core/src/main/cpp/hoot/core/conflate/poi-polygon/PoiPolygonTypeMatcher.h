@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONTYPEMATCH_H
-#define POIPOLYGONTYPEMATCH_H
+#ifndef POIPOLYGONTYPEMATCHER_H
+#define POIPOLYGONTYPEMATCHER_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -36,11 +36,11 @@ namespace hoot
 /**
  * Scores element type similarity
  */
-class PoiPolygonTypeMatch
+class PoiPolygonTypeMatcher
 {
 public:
 
-  PoiPolygonTypeMatch(double typeScoreThreshold);
+  PoiPolygonTypeMatcher(double typeScoreThreshold);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -78,4 +78,4 @@ private:
 
 }
 
-#endif // POIPOLYGONTYPEMATCH_H
+#endif // POIPOLYGONTYPEMATCHER_H

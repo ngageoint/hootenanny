@@ -536,16 +536,15 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchRules.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatch.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatch.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatcher.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatcher.cpp \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.cpp \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchDistanceCalculator.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonEvidenceScorer.cpp \
-    src/main/cpp/hoot/core/conflate/polygon/AreaMerger.cpp \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp
 
 HEADERS += \
@@ -1088,14 +1087,13 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchRules.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatch.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatch.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatch.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatcher.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatcher.h \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchDistanceCalculator.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonEvidenceScorer.h \
-    src/main/cpp/hoot/core/conflate/polygon/AreaMerger.h \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h
 

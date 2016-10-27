@@ -59,7 +59,7 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
-    const set<ElementId>& areaIds, const set<ElementId>& poiIds);
+    const set<ElementId>& polyNeighborIds, const set<ElementId>& poiNeighborIds);
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,

@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONREVIEWREDUCER_H
-#define POIPOLYGONREVIEWREDUCER_H
+#ifndef POIPOLYGONCUSTOMMATCHRULES_H
+#define POIPOLYGONCUSTOMMATCHRULES_H
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -45,14 +45,14 @@ class SchemaVertex;
  * that does so over the course of time testing against different datasets should be removed
  * from this class.
  */
-class PoiPolygonMatchRules
+class PoiPolygonCustomMatchRules
 {
 
 public:
 
-  PoiPolygonMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
-                          const set<ElementId>& poiNeighborIds, double distance,
-                          shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom);
+  PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
+                       const set<ElementId>& poiNeighborIds, double distance,
+                       shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom);
 
   void collectInfo(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -83,4 +83,4 @@ private:
 
 }
 
-#endif // POIPOLYGONREVIEWREDUCER_H
+#endif // POIPOLYGONCUSTOMMATCHRULES_H

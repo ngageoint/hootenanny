@@ -24,46 +24,39 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSMATCH_H
-#define POIPOLYGONADDRESSMATCH_H
+#ifndef POIPOLYGONNAMEMATCHER_H
+#define POIPOLYGONNAMEMATCHER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 /**
- * Determines if two features have an address match
+ * Scores element name similarity
  */
-class PoiPolygonAddressMatch
+class PoiPolygonNameMatcher
 {
 public:
 
-  static const QChar ESZETT;
-  static const QString ESZETT_REPLACE;
-  static const QString HOUSE_NUMBER_TAG_NAME;
-  static const QString STREET_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME;
-  static const QString FULL_ADDRESS_TAG_NAME_2;
+  PoiPolygonNameMatcher(double nameScoreThreshold);
 
-  PoiPolygonAddressMatch(const ConstOsmMapPtr& map);
+  /**
+   * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
+   * means one or both of the features have no names.
+   */
+  double getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
+  double getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
-  bool isMatch(ConstElementPtr poly, ConstElementPtr poi);
+  static bool elementHasName(ConstElementPtr element);
 
 private:
 
-  const ConstOsmMapPtr _map;
-
-  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
-  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
-  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
-  void _parseAddressesAsRange(const QString houseNum, const QString street, QStringList& addresses);
-  void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses);
-  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress);
+  double _nameScoreThreshold;
 
 };
 
 }
 
-#endif // POIPOLYGONADDRESSMATCH_H
+#endif // POIPOLYGONNAMEMATCHER_H

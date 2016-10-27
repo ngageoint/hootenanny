@@ -95,7 +95,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
+    src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
@@ -132,7 +133,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h \
     src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h \
-    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h
+    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h \
+    src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.h
 
 FORMS +=
 

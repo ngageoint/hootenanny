@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonMatchRules.h"
+#include "PoiPolygonCustomMatchRules.h"
 
 // geos
 #include <geos/geom/LineString.h>
@@ -35,15 +35,15 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 
-#include "PoiPolygonTypeMatch.h"
-#include "PoiPolygonNameMatch.h"
-#include "PoiPolygonAddressMatch.h"
+#include "PoiPolygonTypeMatcher.h"
+#include "PoiPolygonNameMatcher.h"
+#include "PoiPolygonAddressMatcher.h"
 
 
 namespace hoot
 {
 
-PoiPolygonMatchRules::PoiPolygonMatchRules(const ConstOsmMapPtr& map,
+PoiPolygonCustomMatchRules::PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& polyNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance,
@@ -61,7 +61,7 @@ _poiNeighborWithAddressContainedInPoly(false)
 {
 }
 
-void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
+void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
 {
   if (!_poiGeom.get())
   {
@@ -78,16 +78,16 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
   //done to further reduce runtime), with the rules requiring the least expensive computations
   //occurring earlier.
 
-  const bool poiHasType = PoiPolygonTypeMatch::hasType(poi);
-  const bool poiIsRecCenter = PoiPolygonTypeMatch::isRecCenter(poi);
+  const bool poiHasType = PoiPolygonTypeMatcher::hasType(poi);
+  const bool poiIsRecCenter = PoiPolygonTypeMatcher::isRecCenter(poi);
   const QString poiAddress =
-    poi->getTags().get(PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
+    poi->getTags().get(PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
 
-  const bool polyHasName = PoiPolygonNameMatch::elementHasName(poly);
-  const bool polyIsPark = PoiPolygonTypeMatch::isPark(poly);
-  const bool polyHasType = PoiPolygonTypeMatch::hasType(poly);
-  const bool polyIsBuildingIsh = PoiPolygonTypeMatch::isBuildingIsh(poly);
-  const bool polyHasMoreThanOneType = PoiPolygonTypeMatch::hasMoreThanOneType(poly);
+  const bool polyHasName = PoiPolygonNameMatcher::elementHasName(poly);
+  const bool polyIsPark = PoiPolygonTypeMatcher::isPark(poly);
+  const bool polyHasType = PoiPolygonTypeMatcher::hasType(poly);
+  const bool polyIsBuildingIsh = PoiPolygonTypeMatcher::isBuildingIsh(poly);
+  const bool polyHasMoreThanOneType = PoiPolygonTypeMatcher::hasMoreThanOneType(poly);
   bool polyHasSpecificType = polyHasType;
   if ((poly->getTags().get("building") == "yes" || poly->getTags().get("poi") == "yes") &&
       !polyHasMoreThanOneType)
@@ -137,7 +137,7 @@ void PoiPolygonMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly
           }
           else if (polyNeighborGeom.get())
           {
-            if (PoiPolygonTypeMatch::isPark(polyNeighbor))
+            if (PoiPolygonTypeMatcher::isPark(polyNeighbor))
             {
               if (polyNeighborGeom->contains(_poiGeom.get()))
               {

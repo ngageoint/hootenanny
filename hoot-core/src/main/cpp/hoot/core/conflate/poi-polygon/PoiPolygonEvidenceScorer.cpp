@@ -31,11 +31,11 @@
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/schema/OsmSchema.h>
 
-#include "PoiPolygonTypeMatch.h"
-#include "PoiPolygonNameMatch.h"
-#include "PoiPolygonAddressMatch.h"
-#include "PoiPolygonMatchDistanceCalculator.h"
-#include "PoiPolygonMatchRules.h"
+#include "PoiPolygonTypeMatcher.h"
+#include "PoiPolygonNameMatcher.h"
+#include "PoiPolygonAddressMatcher.h"
+#include "PoiPolygonDistanceMatcher.h"
+#include "PoiPolygonCustomMatchRules.h"
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ unsigned int PoiPolygonEvidenceScorer::_getDistanceEvidence(ConstElementPtr poi,
                                                             ConstElementPtr poly)
 {
   //search radius taken from PoiPolygonMatchCreator
-  PoiPolygonMatchDistanceCalculator distanceCalc(
+  PoiPolygonDistanceMatcher distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
     poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
   _matchDistance =
@@ -132,7 +132,7 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
 
 unsigned int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonTypeMatch typeScorer(_typeScoreThreshold);
+  PoiPolygonTypeMatcher typeScorer(_typeScoreThreshold);
   _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
   if (poi->getTags().get("historic") == "monument")
   {
@@ -152,7 +152,7 @@ unsigned int PoiPolygonEvidenceScorer::_getTypeEvidence(ConstElementPtr poi, Con
 
 unsigned int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameMatch nameScorer(_nameScoreThreshold);
+  PoiPolygonNameMatcher nameScorer(_nameScoreThreshold);
   _nameScore = nameScorer.getNameScore(poi, poly);
   _nameMatch = _nameScore >= _nameScoreThreshold;
   _exactNameMatch = nameScorer.getExactNameScore(poi, poly) == 1.0;
@@ -168,7 +168,7 @@ unsigned int PoiPolygonEvidenceScorer::_getNameEvidence(ConstElementPtr poi, Con
 unsigned int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
-  const bool addressMatch = PoiPolygonAddressMatch(_map).isMatch(poly, poi);
+  const bool addressMatch = PoiPolygonAddressMatcher(_map).isMatch(poly, poi);
   LOG_VART(addressMatch);
   return addressMatch ? 1 : 0;
 }
@@ -221,7 +221,7 @@ unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, Co
     }
     else if (ConfigOptions().getPoiPolygonEnableMatchRules())
     {
-      PoiPolygonMatchRules matchRules(
+      PoiPolygonCustomMatchRules matchRules(
         _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom);
       matchRules.collectInfo(poi, poly);
       if (matchRules.ruleTriggered())

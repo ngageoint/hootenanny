@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonAddressMatch.h"
+#include "PoiPolygonAddressMatcher.h"
 
 // hoot
 #include <hoot/core/algorithms/Translator.h>
@@ -33,19 +33,19 @@
 namespace hoot
 {
 
-const QChar PoiPolygonAddressMatch::ESZETT(0x00DF);
-const QString PoiPolygonAddressMatch::ESZETT_REPLACE = "ss";
-const QString PoiPolygonAddressMatch::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-const QString PoiPolygonAddressMatch::STREET_TAG_NAME = "addr:street";
-const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME = "address";
-const QString PoiPolygonAddressMatch::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+const QChar PoiPolygonAddressMatcher::ESZETT(0x00DF);
+const QString PoiPolygonAddressMatcher::ESZETT_REPLACE = "ss";
+const QString PoiPolygonAddressMatcher::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString PoiPolygonAddressMatcher::STREET_TAG_NAME = "addr:street";
+const QString PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME = "address";
+const QString PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
-PoiPolygonAddressMatch::PoiPolygonAddressMatch(const ConstOsmMapPtr& map) :
+PoiPolygonAddressMatcher::PoiPolygonAddressMatcher(const ConstOsmMapPtr& map) :
 _map(map)
 {
 }
 
-void PoiPolygonAddressMatch::_parseAddressesAsRange(const QString houseNum, const QString street,
+void PoiPolygonAddressMatcher::_parseAddressesAsRange(const QString houseNum, const QString street,
                                                     QStringList& addresses)
 {
   //address ranges; e.g. 1-3 elm street is an address range that includes the addresses:
@@ -78,7 +78,7 @@ void PoiPolygonAddressMatch::_parseAddressesAsRange(const QString houseNum, cons
   }
 }
 
-void PoiPolygonAddressMatch::_parseAddressesInAltFormat(const Tags& tags, QStringList& addresses)
+void PoiPolygonAddressMatcher::_parseAddressesInAltFormat(const Tags& tags, QStringList& addresses)
 {
   QString addressTagValAltFormatRaw =
     Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME_2)).trimmed().toLower();
@@ -113,7 +113,7 @@ void PoiPolygonAddressMatch::_parseAddressesInAltFormat(const Tags& tags, QStrin
   }
 }
 
-void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr element,
+void PoiPolygonAddressMatcher::_collectAddressesFromElement(ConstElementPtr element,
                                                           QStringList& addresses)
 {
   const Tags tags = element->getTags();
@@ -154,7 +154,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromElement(ConstElementPtr elemen
   _parseAddressesInAltFormat(tags, addresses);
 }
 
-void PoiPolygonAddressMatch::_collectAddressesFromWay(ConstWayPtr way, QStringList& addresses)
+void PoiPolygonAddressMatcher::_collectAddressesFromWay(ConstWayPtr way, QStringList& addresses)
 {
   const vector<long> wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
@@ -163,7 +163,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromWay(ConstWayPtr way, QStringLi
   }
 }
 
-void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr relation,
+void PoiPolygonAddressMatcher::_collectAddressesFromRelation(ConstRelationPtr relation,
                                                            QStringList& addresses)
 {
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -181,7 +181,7 @@ void PoiPolygonAddressMatch::_collectAddressesFromRelation(ConstRelationPtr rela
   }
 }
 
-bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
+bool PoiPolygonAddressMatcher::isMatch(ConstElementPtr poly, ConstElementPtr poi)
 {
   QStringList polyAddresses;
 
@@ -241,7 +241,7 @@ bool PoiPolygonAddressMatch::isMatch(ConstElementPtr poly, ConstElementPtr poi)
   return false;
 }
 
-bool PoiPolygonAddressMatch::_addressesMatchesOnSubLetter(const QString polyAddress,
+bool PoiPolygonAddressMatcher::_addressesMatchesOnSubLetter(const QString polyAddress,
                                                          const QString poiAddress)
 {
   /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches

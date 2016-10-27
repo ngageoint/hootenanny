@@ -52,8 +52,6 @@ QMultiMap<QString, double> PoiPolygonMatch::_polyReviewRefIdsToDistances;
 const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
 const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
 
-//TODO: reduce these constructors
-
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf) :

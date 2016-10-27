@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonNameMatch.h"
+#include "PoiPolygonNameMatcher.h"
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
@@ -37,12 +37,12 @@
 namespace hoot
 {
 
-PoiPolygonNameMatch::PoiPolygonNameMatch(double nameScoreThreshold) :
+PoiPolygonNameMatcher::PoiPolygonNameMatcher(double nameScoreThreshold) :
 _nameScoreThreshold(nameScoreThreshold)
 {
 }
 
-double PoiPolygonNameMatch::getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
+double PoiPolygonNameMatcher::getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
   return
     NameExtractor(
@@ -52,7 +52,7 @@ double PoiPolygonNameMatch::getNameScore(ConstElementPtr e1, ConstElementPtr e2)
    .extract(e1, e2);
 }
 
-double PoiPolygonNameMatch::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
+double PoiPolygonNameMatcher::getExactNameScore(ConstElementPtr e1, ConstElementPtr e2) const
 {
   const QString e1Name = e1->getTags().get("name");
   const QString e2Name = e2->getTags().get("name");
@@ -71,7 +71,7 @@ double PoiPolygonNameMatch::getExactNameScore(ConstElementPtr e1, ConstElementPt
 }
 
 //TODO: make work for all name tag types
-bool PoiPolygonNameMatch::elementHasName(ConstElementPtr element)
+bool PoiPolygonNameMatcher::elementHasName(ConstElementPtr element)
 {
   return !element->getTags().get("name").trimmed().isEmpty();
 }
