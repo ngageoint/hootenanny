@@ -338,7 +338,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   }
 
   //TODO: find some way to trigger and test rule 24 w/o adding a huge amount of runtime
-  if (ConfigOptions().getPoiPolygonReduceReviews() &&
+  /*if (ConfigOptions().getPoiPolygonReduceReviews() &&
       (evidence > 0 ||
        //TODO: hack
        (!PoiPolygonTypeMatch::hasType(_poi) && PoiPolygonTypeMatch::isRecCenter(_poi) &&
@@ -359,7 +359,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
       //returned instead of a miss....may need to refactor that behavior out.
       _class = externalMatchClass;
     }
-  }
+  }*/
 
   if (_testFeatureFound)
   {
