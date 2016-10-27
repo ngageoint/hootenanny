@@ -121,7 +121,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POI Count"));
@@ -241,7 +241,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POI Count"));
