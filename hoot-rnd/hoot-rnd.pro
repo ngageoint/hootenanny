@@ -58,7 +58,8 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/EdgeLocationTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/polygon/AreaMergerTest.cpp
 
 HEADERS += \
 

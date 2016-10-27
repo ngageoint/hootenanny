@@ -781,7 +781,7 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js`
+* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::PoiPolygonMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -794,7 +794,6 @@ Some of the possible options include:
 * `hoot::PoiPolygonMatchCreator` - Matches POI's and buldings the Unify algorithm.
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
   algorithm.
-* `hoot::ScriptMatchCreator,Area.js` - Matches non-building polygon areas.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
   script should be in `$HOOT_HOME/rules/<yourscript.js>`.
 
