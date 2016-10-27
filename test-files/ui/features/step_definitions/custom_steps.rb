@@ -383,6 +383,14 @@ When(/^I press the left arrow key$/) do
   find('body').native.send_keys(:arrow_left)
 end
 
+When(/^I press tab$/) do
+  find('body').native.send_keys(:tab)
+end
+
+When(/^I press enter$/) do
+  find('body').native.send_keys(:enter)
+end
+
 When(/^I press the right arrow key$/) do
   find('body').native.send_keys(:arrow_right)
 end
