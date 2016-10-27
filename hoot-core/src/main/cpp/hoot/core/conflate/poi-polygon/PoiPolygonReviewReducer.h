@@ -77,8 +77,6 @@ private:
   double _matchDistance;
   double _reviewDistance;
 
-  QStringList _genericLandUseTagVals;
-
   shared_ptr<Geometry> _polyGeom;
   shared_ptr<Geometry> _poiGeom;
 

@@ -118,8 +118,11 @@ unsigned int PoiPolygonEvidenceScorer::_getConvexPolyDistanceEvidence(ConstEleme
   OsmMapPtr polyMap(new OsmMap());
   ElementPtr polyTemp(poly->clone());
   polyMap->addElement(polyTemp);
-  shared_ptr<Geometry> polyAlphaShape =
-      AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+  shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+  if (polyAlphaShape->getArea() == 0.0)
+  {
+    return evidence;
+  }
   const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
   if (_testFeatureFound)

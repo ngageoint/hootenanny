@@ -44,6 +44,10 @@ _buffer(buffer)
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
   shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+  if (cutterShape->getArea() == 0.0)
+  {
+    LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
+  }
 
   shared_ptr<OsmMap> result;
 
@@ -84,11 +88,6 @@ shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
     alphaShape.insert(points);
     cutterShape = alphaShape.toGeometry();
     cutterShape.reset(cutterShape->buffer(_buffer));
-  }
-
-  if (cutterShape->getArea() == 0.0)
-  {
-    LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
 
   return cutterShape;
