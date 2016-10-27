@@ -149,26 +149,24 @@ QString NetworkMatch::toString() const
 
 bool NetworkMatch::isSameAs(const NetworkMatch* other) const
 {
-  set< pair<ElementId, ElementId> > s = other->getMatchPairs();
+  QString this1 = getEdgeMatch()->getString1()->toString();
+  QString other1 = other->getEdgeMatch()->getString1()->toString();
+  QString this2 = getEdgeMatch()->getString2()->toString();
+  QString other2 = other->getEdgeMatch()->getString2()->toString();
 
-  // See if all element ids are the same
-  for (set< pair<ElementId, ElementId> >::const_iterator it = s.begin(); it != s.end(); ++it)
-  {
-    const pair<ElementId, ElementId>& ip = *it;
+  // Portions can be slightly different sometimes
+  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
 
-    for (set< pair<ElementId, ElementId> >::const_iterator jt = _pairs.begin(); jt != _pairs.end();
-      ++jt)
-    {
-      const pair<ElementId, ElementId>& jp = *jt;
+  //LOG_INFO(this1);
+  //LOG_INFO(other1);
+  //LOG_INFO(this2);
+  //LOG_INFO(other2);
 
-      if ((ip.first == jp.first && ip.second == jp.second)
-          || (ip.first == jp.second && ip.second == jp.first))
-      {
-        // They are the same!
-        return true;
-      }
-    }
-  }
+  if (0 == this1.compare(other1) && 0 == this2.compare(other2))
+    return true;
 
   return false;
 }

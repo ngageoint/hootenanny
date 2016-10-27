@@ -346,11 +346,13 @@ void ConflictsNetworkMatcher::_iterateSimple()
   const double partialHandicap = _partialHandicap;
   const double stubHandicap = _stubHandicap;
   double aggression = _aggression;
+
   // we'll create a new copy of the scores in this function and assign to the authoritative copy at
   // the end.
   EdgeScoreMap newScores, newWeights;
   double weightSum = EPSILON;
   int count = 0;
+
   // go through all matches
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
@@ -363,10 +365,12 @@ void ConflictsNetworkMatcher::_iterateSimple()
     {
       handicap = stubHandicap;
     }
+
 //    if (em->containsPartial())
 //    {
 //      aggression += 8;
 //    }
+
     double numerator = _scores[em] * handicap;
     double denominator = numerator;
     LOG_VAR(numerator);
@@ -468,8 +472,13 @@ void ConflictsNetworkMatcher::_iterateSimple()
     newScores[em] = pow(numerator / denominator, aggression);
     newWeights[em] = denominator;
     weightSum += denominator;
-    LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
-      newWeights[em]);
+
+    LOG_INFO("\ns1: " << em->getString1() << "\ns2: " << em->getString2() << "\n"
+             << numerator << "/" << denominator << " " << newScores[em]
+             << " " << newWeights[em] << "\n\n");
+
+    //LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
+    //         newWeights[em]);
   }
 
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
@@ -509,20 +518,26 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 void ConflictsNetworkMatcher::_seedEdgeScores()
 {
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
+
   // our stubs don't need to be bidirectional since they don't create new nodes.
   finder.setAddStubsInBothDirections(false);
   finder.setIncludePartialMatches(true);
 
   int count = 0;
+
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
     PROGRESS_INFO(count++ << " / " << em.size());
     ConstNetworkEdgePtr e1 = it.value();
+
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
+
     env.expandBy(_details->getSearchRadius(it.value()));
+    LOG_INFO("Search Radius: " << _details->getSearchRadius(it.value()));
+
     IntersectionIterator iit = _createIterator(env, _edge2Index);
 
     while (iit.next())

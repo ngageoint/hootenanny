@@ -341,8 +341,14 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
 
   Meters srh = ConfigOptions().getSearchRadiusHighway();
   double sr = srh <= 0.0 ? getSearchRadius(w1, w2) : srh;
+
+  // Gonna round this up to the nearest whole
+  // If this doesn't work out, consider adding some rounding or slop or whatever to
+  // WayLocation::move(Meters distance) [which is, like, 7 layers deeper in the onion]
+  sr = ceil(sr); // fixes conflicts/highway-021
   LOG_VART(srh);
   LOG_VART(sr);
+
   //_sublineMatcher->setMinSplitSize(sr / 2.0);
   // calculated the shared sublines
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, sr);
