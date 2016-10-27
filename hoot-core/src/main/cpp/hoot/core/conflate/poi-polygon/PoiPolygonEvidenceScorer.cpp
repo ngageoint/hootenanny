@@ -178,12 +178,11 @@ unsigned int PoiPolygonEvidenceScorer::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
   const bool addressMatch = PoiPolygonAddressMatch(_map, _testUuid).isMatch(poly, poi);
-  unsigned int evidence = addressMatch ? 1 : 0;
   if (_testFeatureFound)
   {
     LOG_VARD(addressMatch);
   }
-  return evidence;
+  return addressMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonEvidenceScorer::calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
