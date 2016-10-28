@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/algorithms/zindex/Range.h>
 
 // Qt
 #include <QFile>
@@ -100,6 +101,8 @@ public:
 
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
+  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
+
   shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
@@ -154,6 +157,7 @@ private:
   bool _inTransaction;
 
   shared_ptr<QSqlQuery> _selectElementsForMap;
+  shared_ptr<QSqlQuery> _selectTagsForNode;
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
@@ -167,6 +171,9 @@ private:
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
+  QString _getTableName(const ElementType& elementType);
+  QString _getTileWhereCondition(QString bbox);
+  QString _getIdWhereCondition(QString idCol, QStringList ids);
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }

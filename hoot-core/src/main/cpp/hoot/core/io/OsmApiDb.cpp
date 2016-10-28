@@ -36,6 +36,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
+#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+
 
 // qt
 #include <QStringList>
@@ -171,6 +174,7 @@ void OsmApiDb::_init()
 void OsmApiDb::_resetQueries()
 {
   _selectElementsForMap.reset();
+  _selectTagsForNode.reset();
   _selectTagsForWay.reset();
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
@@ -228,6 +232,26 @@ void OsmApiDb::commit()
     throw HootException("Error committing transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
+}
+
+QString OsmApiDb::_getTableName(const ElementType& elementType)
+{
+  if (elementType == ElementType::Node)
+  {
+    return "current_nodes";
+  }
+  else if (elementType == ElementType::Way)
+  {
+    return "current_ways";
+  }
+  else if (elementType == ElementType::Relation)
+  {
+    return "current_relations";
+  }
+  else
+  {
+    throw HootException("Unsupported element type.");
+  }
 }
 
 /**************************************************************
@@ -341,81 +365,90 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
-                                                      const ElementType& elementType,
-                                                      const QString& bbox)
+shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox)
 {
-  LOG_DEBUG("IN selectBoundedElement");
-
-  QStringList bboxParts = bbox.split(",");
-  double minLat = bboxParts[1].toDouble()*(double)COORDINATE_SCALE;
-  double minLon = bboxParts[0].toDouble()*(double)COORDINATE_SCALE;
-  double maxLat = bboxParts[3].toDouble()*(double)COORDINATE_SCALE;
-  double maxLon = bboxParts[2].toDouble()*(double)COORDINATE_SCALE;
-
+  //prepare sql query
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
-  // setup base sql query string
-  QString sql =  "SELECT ";
-
-  /// @todo This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
-  /// type but not others. - may be OBE after #772
-  if (elementType == ElementType::Node)
+  QString sql =  "SELECT * FROM ";
+  //if element id is giving, use it directly
+  if (elementId > -1)
   {
-    sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
-      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
+    sql += _getTableName(elementType) + " WHERE visible = true ";
+    if (elementType == ElementType::Node)
     {
-      sql += " AND (id = :elementId) ";
+      sql += "AND (" + _getTileWhereCondition(bbox) + ")";
     }
-    sql += " AND visible = true ";
-  }
-  else if (elementType == ElementType::Way)
-  {
-    sql += "* FROM current_ways ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
-    }
-    else
-    {
-      sql += " WHERE visible = true ";
-    }
-  }
-  else if (elementType == ElementType::Relation)
-  {
-    sql += "* FROM current_relations ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
-    }
-    else
-    {
-      sql += " WHERE visible = true ";
-    }
+    sql += " AND (id = :elementId)";
   }
   else
   {
-    throw HootException("selectBoundedElements cannot operate on an unknown data type.");
+    sql += " current_nodes WHERE visible = true AND (" + _getTileWhereCondition(bbox) + ")";
+
+    //get node ids so we can select ways or relations related to those node ids
+    if (elementType != ElementType::Node)
+    {
+      QStringList nodeIds;
+      QSqlQuery nodeIdsQuery(_db);
+      nodeIdsQuery.setForwardOnly(true);
+      nodeIdsQuery.prepare(sql);
+      if (nodeIdsQuery.exec() == false)
+      {
+        QString err = nodeIdsQuery.lastError().text();
+        LOG_WARN(sql);
+        throw HootException("Error selecting elements of type: " + elementType.toString() +
+          " Error: " + err);
+      }
+      while(nodeIdsQuery.next())
+      {
+        nodeIds << nodeIdsQuery.value(0).toString();;
+      }
+
+      //select way ids or relation ids depends on node ids
+      QString idsQuery = "SELECT ";
+      QStringList ids;
+      if (elementType == ElementType::Way)
+      {
+        idsQuery += "way_id FROM current_way_nodes WHERE " + _getIdWhereCondition("node_id", nodeIds);
+      }
+      else if (elementType == ElementType::Relation)
+      {
+        idsQuery += "relation_id FROM current_relation_members WHERE member_type='Node' AND (" + _getIdWhereCondition("member_id", nodeIds) + ")";
+      }
+      QSqlQuery idsSqlQuery(_db);
+      idsSqlQuery.setForwardOnly(true);
+      idsSqlQuery.prepare(idsQuery);
+      if (idsSqlQuery.exec() == false)
+      {
+        QString err = idsSqlQuery.lastError().text();
+        LOG_WARN(idsQuery);
+        throw HootException("Error selecting elements of type: " + elementType.toString() +
+          " Error: " + err);
+      }
+      while(idsSqlQuery.next())
+      {
+        ids << idsSqlQuery.value(0).toString();
+      }
+      ids.removeDuplicates();
+
+      //format sql for ways or relations
+      if (ids.size() > 0)
+      {
+        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" + _getIdWhereCondition("id", ids) + ")";
+      }
+      else
+      {
+        //will return 0 records
+        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (id=-1)";
+      }
+
+    }
   }
-
-  // sort them in descending order, set limit and offset
   sql += " ORDER BY id DESC";
-
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);
 
-  // add the element id value if needed by inserting where the marker was placed
   if (elementId > -1)
   {
     _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
@@ -430,8 +463,67 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
       " Error: " + err);
   }
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectBoundedElements...");
   return _selectElementsForMap;
+}
+
+QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
+{
+  QString sql = "";
+  for (int i = 0; i < ids.size(); i++)
+  {
+    if (i == ids.size() - 1)
+    {
+      sql += idCol + "=" + ids.at(i);
+    }
+    else
+    {
+      sql += idCol + "=" + ids.at(i) + " or ";
+    }
+  }
+  return sql;
+}
+
+QString OsmApiDb::_getTileWhereCondition(QString bbox)
+{
+  //get tile id ranges
+  QStringList bboxParts = bbox.split(",");
+  double minLat = bboxParts[1].toDouble();
+  double minLon = bboxParts[0].toDouble();
+  double maxLat = bboxParts[3].toDouble();
+  double maxLon = bboxParts[2].toDouble();
+
+  vector<double> minV;
+  minV.push_back(-90.0);
+  minV.push_back(-180.0);
+  vector<double> maxV;
+  maxV.push_back(90.0);
+  maxV.push_back(180.0);
+  ZValue zv(2, 16, minV, maxV);
+  ZCurveRanger ranger(zv);
+
+  vector<double> minB;
+  minB.push_back(minLat);
+  minB.push_back(minLon);
+  vector<double> maxB;
+  maxB.push_back(maxLat);
+  maxB.push_back(maxLon);
+
+  BBox b(minB, maxB);
+  vector<Range> ranges = ranger.decomposeRange(b, 1);
+
+  QString sql = "";
+  for (uint i = 0; i < ranges.size(); i++)
+  {
+    if (i == ranges.size() - 1)
+    {
+      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " + QString::number(ranges[i].getMax()) + ")";
+    }
+    else
+    {
+      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " + QString::number(ranges[i].getMax()) + ") or ";
+    }
+  }
+  return sql;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
@@ -505,6 +597,27 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   }
 
   return _selectTagsForWay;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
+{
+  if (!_selectTagsForNode)
+  {
+    _selectTagsForNode.reset(new QSqlQuery(_db));
+    _selectTagsForNode->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "node_id, k, v FROM current_node_tags where node_id = :nodeId";
+    _selectTagsForNode->prepare( sql );
+  }
+
+  _selectTagsForNode->bindValue(":nodeId", (qlonglong)nodeId);
+  if (_selectTagsForNode->exec() == false)
+  {
+    throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
+      " Error: " + _selectTagsForNode->lastError().text());
+  }
+
+  return _selectTagsForNode;
 }
 
 /************************************************************************
