@@ -48,21 +48,17 @@ public:
 
   virtual string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 
+  /**
+   * Returns a score from 0 to 1 representing the similarity of the feature types.
+   *
+   * @param map map containing the elements whose score is to be determined
+   * @param poi a POI element
+   * @param poly a polygon element
+   */
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
                          const shared_ptr<const Element>& poly) const;
 
   virtual void setConfiguration(const Settings& conf);
-
-  /**
-   * Returns a score from 0 to 1 representing the similarity of the feature types.
-   *
-   * @param e1 the first element to examine
-   * @param e2 the second element to examine
-   * @param t1BestKvp the highest scoring type key value pair for the first element
-   * @param t2BestKvp the highest scoring type key value pair for the second element
-   * @return the type score for the input elements
-   */
-
 
   /**
    * Determines if an element is a park
@@ -104,9 +100,6 @@ public:
    */
   static bool hasType(ConstElementPtr element);
 
-  QString getT1BestKvp() const { return _t1BestKvp; }
-  QString getT2BestKvp() const { return _t2BestKvp; }
-
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
 
   void setDistance(double distance) { _distance = distance; }
@@ -115,8 +108,6 @@ private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
-  QString _t1BestKvp;
-  QString _t2BestKvp;
   double _distance;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;

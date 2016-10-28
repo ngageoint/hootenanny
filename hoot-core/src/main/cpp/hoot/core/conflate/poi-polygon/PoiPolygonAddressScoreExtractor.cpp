@@ -29,6 +29,10 @@
 // hoot
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/algorithms/LevenshteinDistance.h>
+#include <hoot/core/algorithms/MeanWordSetDistance.h>
+#include <hoot/core/schema/TranslateStringDistance.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/Factory.h>
 
 namespace hoot
@@ -47,11 +51,11 @@ PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor()
 {
 }
 
-//void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
-//{
-//  //ConfigOptions config = ConfigOptions(conf);
-//  //setSampleDistance(config.getWayAngleSampleDistance());
-//}
+void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  setExactAddressMatching(config.getPoiPolygonExactAddressMatching());
+}
 
 double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
                                                 const shared_ptr<const Element>& poi,
@@ -90,7 +94,19 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
     return 0.0;
   }
 
-  ExactStringDistance addrComp;
+  StringDistancePtr addrComp;
+  if (_exactAddressMatching)
+  {
+    addrComp.reset(new ExactStringDistance());
+  }
+  else
+  {
+    addrComp.reset(
+      new TranslateStringDistance(
+        new MeanWordSetDistance(
+          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
+  }
+
   for (int i = 0; i < polyAddresses.size(); i++)
   {
     const QString polyAddress = polyAddresses.at(i);
@@ -99,7 +115,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
       const QString poiAddress = poiAddresses.at(j);
 
       //exact match
-      if (addrComp.compare(polyAddress, poiAddress) == 1.0)
+      if (addrComp->compare(polyAddress, poiAddress) == 1.0)
       {
         LOG_TRACE("Found address match.");
         return 1.0;

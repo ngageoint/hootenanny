@@ -30,15 +30,15 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
-//#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * Determines if two features have an address match
+ * Calculates the address similarity score of two features
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase//, public Configurable
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -56,19 +56,23 @@ public:
   virtual string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
 
   /**
-   * Determines if two features have an address match
+   * Calculates the address similarity score of two features
    *
-   * @param poly a polygon element
+   * @param map map containing the elements whose score is to be determined
    * @param poi a POI element
-   * @return true if the two features have an address match
+   * @param poly a polygon element
+   * @return
    */
-
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
                          const shared_ptr<const Element>& poly) const;
 
-  //virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf);
+
+  void setExactAddressMatching(bool exactMatching) { _exactAddressMatching = exactMatching; }
 
 private:
+
+  bool _exactAddressMatching;
 
   void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses) const;
   void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses, const OsmMap& map) const;

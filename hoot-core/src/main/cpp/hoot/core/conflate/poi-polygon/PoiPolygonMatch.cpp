@@ -254,10 +254,11 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   PoiPolygonDistanceMatcher distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
     poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
-  _matchDistance =
-    max(
-      distanceCalc.getMatchDistanceForType(_t1BestKvp),
-      distanceCalc.getMatchDistanceForType(_t2BestKvp));
+//  _matchDistance =
+//    max(
+//      distanceCalc.getMatchDistanceForType(_t1BestKvp),
+//      distanceCalc.getMatchDistanceForType(_t2BestKvp));
+  //TODO: fix
   _reviewDistance =
     max(
       distanceCalc.getReviewDistanceForType(_t1BestKvp),

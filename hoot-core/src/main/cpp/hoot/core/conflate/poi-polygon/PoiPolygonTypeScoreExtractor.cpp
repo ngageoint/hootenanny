@@ -76,7 +76,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
         t1Cuisine != "other" && t2Cuisine != "other")
     {
       LOG_TRACE("Failed type match on different cuisines.");
-      return false;
+      return 0.0;
     }
   }
 
@@ -124,7 +124,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi, ConstElem
   if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      t1BestKvp,t2BestKvp, _distance, poi, poly);
+      t1BestKvp, t2BestKvp, _distance, poi, poly);
   }
 
   return result;

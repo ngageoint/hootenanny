@@ -1683,6 +1683,13 @@ If true, POI to polygon conflation will execute custom matching rules in additio
 simpler, evidence based additive model for determining matches.  This setting allows for conflation
 customization but may result in a longer runtime.  See PoiPolygonMatchRules for more details.
 
+=== poi.polygon.exact.address.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO:
+
 === poi.polygon.match.threshold
 
 * Data Type: double
