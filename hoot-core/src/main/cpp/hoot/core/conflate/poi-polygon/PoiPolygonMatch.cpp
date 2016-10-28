@@ -407,7 +407,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     {
       evidence++;
     }
-    else if (ConfigOptions().getPoiPolygonEnableMatchRules())
+    else if (ConfigOptions().getPoiPolygonEnableCustomMatchRules())
     {
       PoiPolygonCustomMatchRules matchRules(
         _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom);

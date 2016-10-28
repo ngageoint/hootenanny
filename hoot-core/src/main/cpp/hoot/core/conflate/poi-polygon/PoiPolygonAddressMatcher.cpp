@@ -46,7 +46,7 @@ _map(map)
 }
 
 void PoiPolygonAddressMatcher::_parseAddressesAsRange(const QString houseNum, const QString street,
-                                                    QStringList& addresses)
+                                                      QStringList& addresses)
 {
   //address ranges; e.g. 1-3 elm street is an address range that includes the addresses:
   //"1 elm street", "2 elm street", and "3 elm street".  I've only seen this on the houseNum
@@ -114,7 +114,7 @@ void PoiPolygonAddressMatcher::_parseAddressesInAltFormat(const Tags& tags, QStr
 }
 
 void PoiPolygonAddressMatcher::_collectAddressesFromElement(ConstElementPtr element,
-                                                          QStringList& addresses)
+                                                            QStringList& addresses)
 {
   const Tags tags = element->getTags();
 
@@ -164,7 +164,7 @@ void PoiPolygonAddressMatcher::_collectAddressesFromWay(ConstWayPtr way, QString
 }
 
 void PoiPolygonAddressMatcher::_collectAddressesFromRelation(ConstRelationPtr relation,
-                                                           QStringList& addresses)
+                                                             QStringList& addresses)
 {
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
@@ -233,6 +233,7 @@ bool PoiPolygonAddressMatcher::isMatch(ConstElementPtr poly, ConstElementPtr poi
       //subletter fuzziness
       else if (_addressesMatchesOnSubLetter(polyAddress, poiAddress))
       {
+        LOG_TRACE("Found address match.");
         return true;
       }
     }
@@ -242,17 +243,23 @@ bool PoiPolygonAddressMatcher::isMatch(ConstElementPtr poly, ConstElementPtr poi
 }
 
 bool PoiPolygonAddressMatcher::_addressesMatchesOnSubLetter(const QString polyAddress,
-                                                         const QString poiAddress)
+                                                            const QString poiAddress)
 {
   /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
-   * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses,
-   * and we'd like to at least end up with a review in that situation.
+   * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
+   * accident, and we'd like to at least end up with a review in that situation.
    */
   //this may be able to be cleaned up with better use of regex's
   const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
-  assert(polyAddressParts.length() > 0);
+  if (polyAddressParts.length() > 0)
+  {
+    return false;
+  }
   const QStringList poiAddressParts = poiAddress.split(QRegExp("\\s"));
-  assert(poiAddressParts.length() > 0);
+  if (poiAddressParts.length() > 0)
+  {
+    return false;
+  }
 
   QString polyAddressTemp = polyAddressParts[0];
   const QString polyHouseNumStr = polyAddressTemp.replace(QRegExp("[a-z]+"), "");
@@ -286,7 +293,6 @@ bool PoiPolygonAddressMatcher::_addressesMatchesOnSubLetter(const QString polyAd
     ExactStringDistance addrComp;
     if (addrComp.compare(subletterCleanedPolyAddress, subletterCleanedPoiAddress) == 1.0)
     {
-      LOG_TRACE("Found address match.");
       return true;
     }
   }
