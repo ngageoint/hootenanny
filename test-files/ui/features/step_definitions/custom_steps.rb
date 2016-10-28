@@ -493,7 +493,8 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
 end
 
 When(/^I close the UI alert$/) do
-  find('#alerts').all('.x')[0].click
+  alerts = find('#alerts')
+  alerts.all('.x')[0].click unless alerts.nil?
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
