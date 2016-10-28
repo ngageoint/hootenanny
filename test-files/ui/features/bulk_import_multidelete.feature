@@ -24,7 +24,6 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         Then I wait 2 "minutes" to not see "Bulk Import Datasets"
         Then I wait 2 "minutes" to see "dcpoi_clip_bulkImport_Cucumber"
         And I wait 2 "minutes" to see "mapcruzinpoi_clip_bulkImport_Cucumber"
-        Then I close the UI alert
 
     Scenario: Bulk Import Dataset with custom suffix
         When I click on the "Datasets" option in the "settingsSidebar"
@@ -46,7 +45,6 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         Then I wait 30 "seconds" to not see "Bulk Import Datasets"
         Then I wait 30 "seconds" to see "dcpoi_clip_customSuffix"
         And I wait 2 "minutes" to see "mapcruzinpoi_clip_customSuffix"
-        Then I close the UI alert
 
     Scenario: Import Directory with Custom Suffix
         When I click on the "Datasets" option in the "settingsSidebar"
@@ -59,7 +57,6 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         When I press "big.loud" span with text "Close"
         Then I wait 10 "seconds" to see "AllDataTypesA_directoryImport"
         #Then I wait 10 "seconds" to see "AllDataTypesB_directoryImport"
-        Then I close the UI alert        
 
     Scenario: Multiselect Delete
         When I click the "dcpoi_clip_bulkImport_Cucumber" Dataset and the "mapcruzinpoi_clip_bulkImport_Cucumber" Dataset
