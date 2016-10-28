@@ -211,7 +211,7 @@ When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
 end
 
 When(/^I context click "([^"]*)"$/) do |txt|
-  page.find('tspan',:text=>txt, :match => :prefer_exact).context_click
+  page.find('span',:text=>txt, :match => :prefer_exact).context_click
 end
 
 
@@ -885,3 +885,17 @@ Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do 
   el['placeholder'].should eq value
 end
 
+Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |negate, text, timeout, unit|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  expectation = negate ? 0 : 1
+  find('#datasettable').assert_selector('text',:text=>text, :match => :prefer_exact ,:maximum => expectation)
+  Capybara.default_max_wait_time = oldTimeout
+end
