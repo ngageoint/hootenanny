@@ -50,8 +50,8 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 }
 
 double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
-                                             const shared_ptr<const Element>& poi,
-                                             const shared_ptr<const Element>& poly) const
+                                             const ConstElementPtr& poi,
+                                             const ConstElementPtr& poly) const
 {
   return
     NameExtractor(

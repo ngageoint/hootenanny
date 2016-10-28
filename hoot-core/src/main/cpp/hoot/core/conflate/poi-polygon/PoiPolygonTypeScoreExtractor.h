@@ -55,8 +55,8 @@ public:
    * @param poi a POI element
    * @param poly a polygon element
    */
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
-                         const shared_ptr<const Element>& poly) const;
+  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
+                         const ConstElementPtr& poly) const;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -110,7 +110,7 @@ private:
   static QSet<QString> _allTagKeys;
   double _distance;
 
-  double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
+  double _getTagScore(const ConstElementPtr& poi, const ConstElementPtr& poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
 
 };

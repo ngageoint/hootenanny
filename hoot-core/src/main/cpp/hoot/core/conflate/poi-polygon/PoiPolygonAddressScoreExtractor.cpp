@@ -58,8 +58,8 @@ void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 }
 
 double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
-                                                const shared_ptr<const Element>& poi,
-                                                const shared_ptr<const Element>& poly) const
+                                                const ConstElementPtr& poi,
+                                                const ConstElementPtr& poly) const
 {
   QStringList polyAddresses;
 
@@ -203,7 +203,7 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementPtr element,
-                                                            QStringList& addresses) const
+                                                                   QStringList& addresses) const
 {
   const Tags tags = element->getTags();
 

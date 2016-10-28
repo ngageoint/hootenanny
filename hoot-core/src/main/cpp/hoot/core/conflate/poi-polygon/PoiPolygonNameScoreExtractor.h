@@ -49,8 +49,8 @@ public:
 
   virtual string getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
-                         const shared_ptr<const Element>& poly) const;
+  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
+                         const ConstElementPtr& poly) const;
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1

@@ -63,8 +63,8 @@ public:
    * @param poly a polygon element
    * @return
    */
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
-                         const shared_ptr<const Element>& poly) const;
+  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
+                         const ConstElementPtr& poly) const;
 
   virtual void setConfiguration(const Settings& conf);
 

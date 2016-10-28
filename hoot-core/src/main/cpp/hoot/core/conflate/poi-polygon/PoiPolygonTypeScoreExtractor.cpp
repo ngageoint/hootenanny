@@ -55,8 +55,8 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 }
 
 double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
-                                             const shared_ptr<const Element>& poi,
-                                             const shared_ptr<const Element>& poly) const
+                                             const ConstElementPtr& poi,
+                                             const ConstElementPtr& poly) const
 {
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
@@ -85,7 +85,8 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   return typeScore;
 }
 
-double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi, ConstElementPtr poly) const
+double PoiPolygonTypeScoreExtractor::_getTagScore(const ConstElementPtr& poi,
+                                                  const ConstElementPtr& poly) const
 {
   double result = 0.0;
   QString t1BestKvp;
