@@ -124,6 +124,7 @@ Feature: Manage Tab
 
     Scenario: Add dataset as reference and secondary dataset
         # Add as reference
+        And I hover over "#datasettable"
         And I should see "DC_poi_clip_cucumber"
         And I click the "DC_poi_clip_cucumber" Dataset
         And I context click the "DC_poi_clip_cucumber" Dataset
