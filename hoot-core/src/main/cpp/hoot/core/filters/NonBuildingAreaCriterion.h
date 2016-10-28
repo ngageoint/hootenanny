@@ -35,6 +35,9 @@ namespace hoot
 
 /**
  * A filter that will either keep or remove areas, but not if the areas are also buildings.
+ *
+ * TODO: should be able to accomplish the same thing with a not building and is area chain but
+ * couldn't.  See comments in train-area/RemoveIrrelevants.js
  */
 class NonBuildingAreaCriterion : public ElementCriterion
 {
