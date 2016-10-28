@@ -42,6 +42,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 
+QString PoiPolygonTypeScoreExtractor::t1BestKvp;
+QString PoiPolygonTypeScoreExtractor::t2BestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
@@ -85,12 +87,12 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   return typeScore;
 }
 
-double PoiPolygonTypeScoreExtractor::_getTagScore(const ConstElementPtr& poi,
-                                                  const ConstElementPtr& poly) const
+double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
+                                                  ConstElementPtr poly) const
 {
   double result = 0.0;
-  QString t1BestKvp;
-  QString t2BestKvp;
+  //QString t1BestKvp;
+  //QString t2BestKvp;
 
   const QStringList t1List = _getRelatedTags(poi->getTags());
   const QStringList t2List = _getRelatedTags(poly->getTags());

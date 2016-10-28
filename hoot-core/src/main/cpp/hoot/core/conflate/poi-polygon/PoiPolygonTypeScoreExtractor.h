@@ -42,6 +42,10 @@ class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
+  //TODO: hack to get around constness of extract method
+  static QString t1BestKvp;
+  static QString t2BestKvp;
+
   static string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor();
@@ -110,7 +114,7 @@ private:
   static QSet<QString> _allTagKeys;
   double _distance;
 
-  double _getTagScore(const ConstElementPtr& poi, const ConstElementPtr& poly) const;
+  double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
 
 };

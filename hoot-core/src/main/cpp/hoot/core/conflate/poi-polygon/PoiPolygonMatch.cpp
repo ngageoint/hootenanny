@@ -258,11 +258,10 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 //    max(
 //      distanceCalc.getMatchDistanceForType(_t1BestKvp),
 //      distanceCalc.getMatchDistanceForType(_t2BestKvp));
-  //TODO: fix
   _reviewDistance =
     max(
-      distanceCalc.getReviewDistanceForType(_t1BestKvp),
-      distanceCalc.getReviewDistanceForType(_t2BestKvp));
+      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t1BestKvp),
+      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t2BestKvp));
   /*if (poi->getTags().get("station") != "light_rail" &&
       poi->getTags().get("amenity") != "fuel")
   {
@@ -361,21 +360,17 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 {
   unsigned int evidence = 0;
 
+  //need to get type evidence first, b/c the best type kvp can influence the behavior of the
+  //distance matching
+  evidence += _getTypeEvidence(poi, poly);
+
   evidence += _getDistanceEvidence(poi, poly);
 
   //close match is a requirement, regardless of the evidence count
-  if (!_closeMatch && !ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  if (!_closeMatch)
   {
     //don't exit early here if printing truths, b/c we need to calculate type match for that first
     //before exiting
-    return 0;
-  }
-
-  evidence += _getTypeEvidence(poi, poly);
-
-  //second chance to exit early if printing distance truths
-  if (!_closeMatch)
-  {
     return 0;
   }
 
