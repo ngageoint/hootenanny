@@ -62,17 +62,6 @@ _poiNeighborWithAddressContainedInPoly(false)
 
 void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
 {
-  if (!_poiGeom.get())
-  {
-    LOG_WARN("Invalid poi geometry.");
-    return;
-  }
-  if (!_polyGeom.get())
-  {
-    LOG_WARN("Invalid poly geometry.");
-    return;
-  }
-
   //The rules below are roughly grouped by processing expense (more granular ordering can still be
   //done to further reduce runtime), with the rules requiring the least expensive computations
   //occurring earlier.
@@ -129,7 +118,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
           {
             if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
             {
-              LOG_TRACE(
+              LOG_WARN(
                 "Invalid area neighbor polygon: " << polyNeighborGeom->toString());
               _badGeomCount++;
             }
@@ -162,8 +151,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
         {
           if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
           {
-            //TODO: change back
-            /*LOG_WARN*/LOG_DEBUG(
+            LOG_WARN(
               "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
               "geometry: " << polyNeighbor->toString() << "\n" << e.what());
             _badGeomCount++;
@@ -220,7 +208,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
       {
         if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
         {
-          LOG_TRACE(
+          LOG_WARN(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on "
             "conversion to a geometry: " << poiNeighbor->toString() << "\n" << e.what());
           _badGeomCount++;

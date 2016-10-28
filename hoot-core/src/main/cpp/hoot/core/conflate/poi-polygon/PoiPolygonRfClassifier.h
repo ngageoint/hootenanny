@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ *
+ */
 class PoiPolygonRfClassifier
 {
 

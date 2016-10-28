@@ -49,6 +49,13 @@ public:
 
   PoiPolygonAddressMatcher(const ConstOsmMapPtr& map);
 
+  /**
+   * Determines if two features have an address match
+   *
+   * @param poly a polygon element
+   * @param poi a POI element
+   * @return true if the two features have an address match
+   */
   bool isMatch(ConstElementPtr poly, ConstElementPtr poi);
 
 private:

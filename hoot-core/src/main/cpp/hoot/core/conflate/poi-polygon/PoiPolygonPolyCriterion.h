@@ -44,7 +44,7 @@ public:
 
   PoiPolygonPolyCriterion();
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new PoiPolygonPolyCriterion(); }
 

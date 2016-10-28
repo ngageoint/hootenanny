@@ -40,10 +40,17 @@ class MatchClassification;
 class SchemaVertex;
 
 /**
- * A custom set of rules intended to reduce the number of unnecesary reviews between POI's
- * and polygons with the goal of never causing a miss where there should be a match.  Any rule
- * that does so over the course of time testing against different datasets should be removed
- * from this class.
+ * A set of custom rules that allow for additional match tweaking beyond the additive model used
+ * in PoiPolygonMatch.
+ *
+ * Originally, this class was used to reduce unnecessary reviews only and had several custom rules.
+ * It was successful at doing that without introducing incorrect matches when running PoiPolygon
+ * conflation in isolation, but when combined with other conflation types, errors were introduced.
+ * The remaining rules are very specific and only have a small impact on the test data we've used
+ * so far.  Therefore, this class is disabled by default.  Its left intact, though, in case a
+ * situation is ever encountered where a custom rule could benefit the conflation of a particualar
+ * dataset.  In the case that this happens, moving this logic into hoot-js might end up making more
+ * sense.
  */
 class PoiPolygonCustomMatchRules
 {
@@ -54,11 +61,20 @@ public:
                              const set<ElementId>& poiNeighborIds, double distance,
                              shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom);
 
+  /**
+   * Collects information from the elements passed in and their relationships to other elements
+   * around them.  Can be an expensive operation as it potentially loops through many surrounding
+   * elements.
+   *
+   * @param poi a POI element to collect information from
+   * @param poly a polygon element to collect information from
+   */
   void collectInfo(ConstElementPtr poi, ConstElementPtr poly);
-
-  bool isRecCenterMatch() const { return _isRecCenterMatch; }
-  bool poiNeighborWithAddressContainedInPoly() const
-  { return _poiNeighborWithAddressContainedInPoly; }
+  /**
+   * Determines if any custom rule was triggered.
+   *
+   * @return true if a rule was triggered
+   */
   bool ruleTriggered() const
   { return _isRecCenterMatch || _poiNeighborWithAddressContainedInPoly; }
 
@@ -69,6 +85,7 @@ private:
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
 
+  //distance between the poi and poly
   double _distance;
 
   shared_ptr<Geometry> _polyGeom;
@@ -76,7 +93,10 @@ private:
 
   int _badGeomCount;
 
+  //a custom recreation center match was found
   bool _isRecCenterMatch;
+  //a custom match was found where a POI has an address that matches the address of another POI
+  //contained with the polygon its being compared to in collectInfo
   bool _poiNeighborWithAddressContainedInPoly;
 
 };

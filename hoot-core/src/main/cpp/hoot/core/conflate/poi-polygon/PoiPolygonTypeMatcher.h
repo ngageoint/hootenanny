@@ -44,15 +44,54 @@ public:
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
+   *
+   * @param e1 the first element to examine
+   * @param e2 the second element to examine
+   * @param t1BestKvp the highest scoring type key value pair for the first element
+   * @param t2BestKvp the highest scoring type key value pair for the second element
+   * @return the type score for the input elements
    */
   double getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
                       QString& t2BestKvp);
 
+  /**
+   * Determines if an element is a park
+   *
+   * @param element the element to examine
+   * @return true if it is a park; false otherwise
+   */
   static bool isPark(ConstElementPtr element);
+
+  /**
+   * Determines if an element is a recreation center
+   *
+   * @param element the element to examine
+   * @return true if it is a recreation center; false otherwise
+   */
   static bool isRecCenter(ConstElementPtr element);
+
+  /**
+   * Determines if an element is like a building in any way
+   *
+   * @param element the element to examine
+   * @return true if it like a building; false otherwise
+   */
   static bool isBuildingIsh(ConstElementPtr element);
 
+  /**
+   * Determines if an element has more than one type associated with it
+   *
+   * @param element the element to examine
+   * @return true if it has more than one type; false otherwise
+   */
   static bool hasMoreThanOneType(ConstElementPtr element);
+
+  /**
+   * Determines if an element has a type associated with it
+   *
+   * @param element the element to examine
+   * @return true if it has a type; false otherwise
+   */
   static bool hasType(ConstElementPtr element);
 
 private:

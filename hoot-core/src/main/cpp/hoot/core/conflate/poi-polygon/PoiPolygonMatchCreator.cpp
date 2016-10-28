@@ -37,11 +37,11 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include "PoiPolygonMatch.h"
 #include <hoot/core/visitors/IndexElementsVisitor.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h>
+
+#include "PoiPolygonMatch.h"
+#include "PoiPolygonPolyCriterion.h"
+#include "PoiPolygonPoiCriterion.h"
 
 // Standard
 #include <fstream>
@@ -66,7 +66,9 @@ using namespace Tgs;
  */
 class PoiPolygonMatchVisitor : public ElementVisitor
 {
+
 public:
+
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold, shared_ptr<PoiPolygonRfClassifier> rf) :
     _map(map),
@@ -236,7 +238,6 @@ public:
       shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _polyIndex.reset(new HilbertRTree(mps, 2));
 
-      //shared_ptr<PoiPolygonAreaCriterion> crit(new PoiPolygonAreaCriterion());
       shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
       IndexElementsVisitor v(_polyIndex,
@@ -288,15 +289,12 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
-  // Used for finding neighbors
-  shared_ptr<HilbertRTree> _index;
+  shared_ptr<HilbertRTree> _index; // Used for finding neighbors
   deque<ElementId> _indexToEid;
-  // used for finding surrounding polys
-  shared_ptr<HilbertRTree> _polyIndex;
+  shared_ptr<HilbertRTree> _polyIndex; // used for finding surrounding polys
   deque<ElementId> _polyIndexToEid;
   set<ElementId> _surroundingPolyIds;
-  // used for finding surrounding poi's
-  shared_ptr<HilbertRTree> _poiIndex;
+  shared_ptr<HilbertRTree> _poiIndex; // used for finding surrounding poi's
   deque<ElementId> _poiIndexToEid;
   set<ElementId> _surroundingPoiIds;
 
@@ -308,7 +306,7 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 }
 
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-  ElementId eid2)
+                                           ElementId eid2)
 {
   Match* result = 0;
 
@@ -329,7 +327,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 }
 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
-  ConstMatchThresholdPtr threshold)
+                                           ConstMatchThresholdPtr threshold)
 {
   PoiPolygonMatch::resetMatchDistanceInfo();
 
@@ -346,12 +344,14 @@ vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
 {
   vector<Description> result;
 
-  result.push_back(Description(className(), "POI to Polygon Match Creator", MatchCreator::POI, true));
+  result.push_back(
+    Description(className(), "POI to Polygon Match Creator", MatchCreator::POI, true));
 
   return result;
 }
 
-bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
+                                              const ConstOsmMapPtr& /*map*/)
 {
   return PoiPolygonMatchVisitor::isMatchCandidate(element);
 }

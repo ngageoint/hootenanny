@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- * This is a additive, rules based mechanism for matching POIs to polygons. See "POI to
+ * This is a additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  */
 class PoiPolygonMatch : public Match, public MatchDetails
@@ -110,7 +110,14 @@ public:
    */
   static bool isArea(const Element& e);
 
+  /**
+   * Pass through to the same method in PoiPolygonDistanceTruthRecorder
+   */
   static void printMatchDistanceInfo();
+
+  /**
+   * Pass through to the same method in PoiPolygonDistanceTruthRecorder
+   */
   static void resetMatchDistanceInfo();
 
 private:
@@ -128,12 +135,15 @@ private:
   ConstOsmMapPtr _map;
   bool _e1IsPoi;
 
+  //
   double _distance;
   bool _closeMatch;
   double _nameScore;
   double _typeScore;
 
+  //
   double _matchDistance;
+  //
   double _reviewDistance;
   double _nameScoreThreshold;
   double _typeScoreThreshold;
@@ -141,7 +151,9 @@ private:
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
 
+  //
   QString _t1BestKvp;
+  //
   QString _t2BestKvp;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);

@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
+ * Determines if two features have an distance match
  *
+ * //TODO: encapsulate some of the distance logic in PoiPolygonMatch into here
  */
 class PoiPolygonDistanceMatcher
 {
@@ -51,10 +53,39 @@ public:
                             const Tags& polyTags, long searchRadius, long surroundingPolyCount,
                             long surroundingPoiCount);
 
+  /**
+   * Returns a custom match distance for the given type
+   *
+   * @param typeKvp a type key value pair; 'key=value'
+   * @return the match distance for the given type
+   */
   double getMatchDistanceForType(const QString typeKvp) const;
+
+  /**
+   * Returns a custom review distance for the given type
+   *
+   * @param typeKvp a type key value pair; 'key=value'
+   * @return the review distance for the given type
+   */
   double getReviewDistanceForType(const QString typeKvp) const;
-  void modifyReviewDistanceForPolyDensity(double& distance);
+
+  //The density based match/review distance modifications proved to have no positive effect for
+  //the data tested.  The logic is being left intact in case we find a use for the technique with
+  //future datasets.
+
+  /**
+   * Adjusts the match distance based on the polygon density in the surrounding search radius area
+   *
+   * @param distance the current match distance
+   */
   void modifyMatchDistanceForPolyDensity(double& distance);
+
+  /**
+   * Adjusts the review distance based on the polygon density in the surrounding search radius area
+   *
+   * @param distance the current review distance
+   */
+  void modifyReviewDistanceForPolyDensity(double& distance);
 
 private:
 

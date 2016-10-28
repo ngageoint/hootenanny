@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,6 +36,7 @@ namespace hoot
 
 class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
+
 public:
 
   static string className() { return "hoot::PoiPolygonMergerCreator"; }
@@ -56,6 +57,7 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
 private:
+
   const OsmMap* _map;
 
   Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;

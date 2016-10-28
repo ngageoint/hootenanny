@@ -38,17 +38,37 @@ namespace hoot
 {
 
 /**
- *
+ * Records the actual distances between features involved in a manual match (both marked matches
+ * and reviews).  This information can be used to derive custom match/review distances for the
+ * additive model.  This logic is disabled by default.
  */
 class PoiPolygonDistanceTruthRecorder
 {
 
 public:
 
+  /**
+   * Records distance information for the input feature pair
+   *
+   * @param t1BestKvp the highest scoring type key value pair for the first element
+   * @param t2BestKvp the highest scoring type key value pair for the second element
+   * @param elementDistance the distance between the two elements
+   * @param poi the POI for which information is being recorded
+   * @param poly the polygon for which information is being recorded
+   * @param element1IsPoi true if element 1 is a POI; false otherwise
+   */
   static void recordDistanceTruth(const QString t1BestKvp, const QString t2BestKvp,
                                   const double elementDistance, ConstElementPtr poi,
                                   ConstElementPtr poly, const bool element1IsPoi);
+
+  /**
+   * Resets all recorded information
+   */
   static void resetMatchDistanceInfo();
+
+  /**
+   * Prints all recorded information
+   */
   static void printMatchDistanceInfo();
 
 private:

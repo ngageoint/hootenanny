@@ -45,9 +45,19 @@ public:
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
    * means one or both of the features have no names.
+   *
+   * @param e1 the first element to examine
+   * @param e2 the second element to examine
+   * @return a name score
    */
   double getNameScore(ConstElementPtr e1, ConstElementPtr e2) const;
 
+  /**
+   * Returns true if the input element has a populated name tag
+   *
+   * @param element the element to examine
+   * @return true if the element has a name tag; false otherwie
+   */
   static bool elementHasName(ConstElementPtr element);
 
 private:

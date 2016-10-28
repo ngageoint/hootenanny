@@ -249,7 +249,8 @@ bool PoiPolygonAddressMatcher::_addressesMatchesOnSubLetter(const QString polyAd
    * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
    * accident, and we'd like to at least end up with a review in that situation.
    */
-  //this may be able to be cleaned up with better use of regex's
+
+  //a lot in here may be able to be cleaned up with better use of regex's
   const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
   if (polyAddressParts.length() > 0)
   {
