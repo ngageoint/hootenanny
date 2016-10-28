@@ -534,7 +534,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.cpp \
     src/main/cpp/hoot/core/filters/AreaCriterion.cpp \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.cpp \
@@ -1085,7 +1084,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h \
     src/main/cpp/hoot/core/filters/AreaCriterion.h \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.h \
