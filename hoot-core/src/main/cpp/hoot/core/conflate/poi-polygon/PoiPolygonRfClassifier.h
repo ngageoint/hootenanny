@@ -29,11 +29,7 @@
 
 // hoot
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
 
 namespace hoot
 {
@@ -45,8 +41,8 @@ public:
 
   PoiPolygonRfClassifier();
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
+                                           ElementId eid2) const;
 
 private:
 
