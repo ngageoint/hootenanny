@@ -48,6 +48,19 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I wait 2 "minutes" to see "mapcruzinpoi_clip_customSuffix"
         Then I close the UI alert
 
+    Scenario: Import Directory with Custom Suffix
+        When I click on the "Datasets" option in the "settingsSidebar"
+        And I press "Import Directory"
+        And I select the "OSM or PBF" option in the "Select Import Type" combobox
+        And I select "AllDataTypesA.osm" and "AllDataTypesB.osm" from "/test-files/conflate/unified/" directory
+        Then I type "_directoryImport" in input "importDirectoryCustomSuffix"
+        When I press "big.loud" span with text "Import"
+        Then I wait 60 "seconds" to not see "Cancel"
+        When I press "big.loud" span with text "Close"
+        Then I wait 10 "seconds" to see "AllDataTypesA_directoryImport"
+        #Then I wait 10 "seconds" to see "AllDataTypesB_directoryImport"
+        Then I close the UI alert        
+
     Scenario: Multiselect Delete
         When I click the "dcpoi_clip_bulkImport_Cucumber" Dataset and the "mapcruzinpoi_clip_bulkImport_Cucumber" Dataset
         And I context click the "mapcruzinpoi_clip_bulkImport_Cucumber" Dataset
@@ -56,6 +69,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I accept the alert
         Then I should not see "dcpoi_clip_bulkImport_Cucumber" dataset after 30 "seconds"
         Then I should not see "mapcruzinpoi_clip_bulkImport_Cucumber" dataset after 30 "seconds"
+        #
         When I click the "dcpoi_clip_customSuffix" Dataset and the "mapcruzinpoi_clip_customSuffix" Dataset
         And I context click the "mapcruzinpoi_clip_customSuffix" Dataset
         And I click the "Delete" context menu item
@@ -63,4 +77,12 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I accept the alert
         Then I should not see "dcpoi_clip_customSuffix" dataset after 30 "seconds"
         Then I should not see "mapcruzinpoi_clip_customSuffix" dataset after 30 "seconds"
+        #When I click the "AllDataTypesA_directoryImport" Dataset  and the "AllDataTypesB_directoryImport" Dataset
+        And I click the "AllDataTypesA_directoryImport" Dataset
+        And I context click the "AllDataTypesA_directoryImport" Dataset
+        And I click the "Delete" context menu item
+        And I wait
+        And I accept the alert
+        Then I should not see "AllDataTypesA_directoryImport" dataset after 30 "seconds"
+        # Then I should not see "AllDataTypesB_directoryImport" dataset after 30 "seconds"
 

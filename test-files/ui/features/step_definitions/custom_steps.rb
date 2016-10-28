@@ -554,6 +554,15 @@ When(/^I select "([^"]*)" dataset/) do |file|
   end
 end
 
+When(/^I select "([^"]*)" and "([^"]*)" from "([^"]*)" directory/) do |fileA, fileB, directory|
+  pathA = ENV['HOOT_HOME'] + directory + fileA
+  pathB = ENV['HOOT_HOME'] + directory + fileB
+
+  include_hidden_fields do
+    page.attach_file 'ingestdirectoryuploader', pathA #[@pathA, @pathB], options={multiple}
+  end
+end
+
 Then(/^I take a screenshot/) do
   screenshot_and_save_page
 end
