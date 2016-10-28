@@ -160,7 +160,7 @@ else
   if [[ "$(chromedriver --version)" != "ChromeDriver $(LATEST_RELEASE).*" ]]; then
     echo "### Updating Chromedriver"
     rm $HOME/bin/chromedriver
-    rm $HOME/bin/chromedriver_linux64.zip
+    rm $HOME/chromedriver_linux64.zip
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     unzip -o -d $HOME/bin chromedriver_linux64.zip
   fi
