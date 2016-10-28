@@ -24,29 +24,101 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonAddressMatcher.h"
+#include "PoiPolygonAddressScoreExtractor.h"
 
 // hoot
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
 
-const QChar PoiPolygonAddressMatcher::ESZETT(0x00DF);
-const QString PoiPolygonAddressMatcher::ESZETT_REPLACE = "ss";
-const QString PoiPolygonAddressMatcher::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
-const QString PoiPolygonAddressMatcher::STREET_TAG_NAME = "addr:street";
-const QString PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME = "address";
-const QString PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 
-PoiPolygonAddressMatcher::PoiPolygonAddressMatcher(const ConstOsmMapPtr& map) :
-_map(map)
+const QChar PoiPolygonAddressScoreExtractor::ESZETT(0x00DF);
+const QString PoiPolygonAddressScoreExtractor::ESZETT_REPLACE = "ss";
+const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
+const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
+const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
+const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
+
+PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor()
 {
 }
 
-void PoiPolygonAddressMatcher::_parseAddressesAsRange(const QString houseNum, const QString street,
-                                                      QStringList& addresses)
+//void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
+//{
+//  //ConfigOptions config = ConfigOptions(conf);
+//  //setSampleDistance(config.getWayAngleSampleDistance());
+//}
+
+double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
+                                                const shared_ptr<const Element>& poi,
+                                                const shared_ptr<const Element>& poly) const
+{
+  QStringList polyAddresses;
+
+  //see if the poly has any address
+  _collectAddressesFromElement(poly, polyAddresses);
+
+  if (polyAddresses.size() == 0)
+  {
+    //if not, try to find the address from a poly way node instead
+    if (poly->getElementType() == ElementType::Way)
+    {
+      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
+    }
+    //if still no luck, try to find the address from a poly way node that is a relation member
+    else if (poly->getElementType() == ElementType::Relation)
+    {
+      _collectAddressesFromRelation(dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
+    }
+  }
+  if (polyAddresses.size() == 0)
+  {
+    LOG_TRACE("No poly addresses.");
+    return 0.0;
+  }
+
+  //see if the poi has an address
+  QStringList poiAddresses;
+  _collectAddressesFromElement(poi, poiAddresses);
+  if (poiAddresses.size() == 0)
+  {
+    LOG_TRACE("No POI addresses.");
+    return 0.0;
+  }
+
+  ExactStringDistance addrComp;
+  for (int i = 0; i < polyAddresses.size(); i++)
+  {
+    const QString polyAddress = polyAddresses.at(i);
+    for (int j = 0; j < poiAddresses.size(); j++)
+    {
+      const QString poiAddress = poiAddresses.at(j);
+
+      //exact match
+      if (addrComp.compare(polyAddress, poiAddress) == 1.0)
+      {
+        LOG_TRACE("Found address match.");
+        return 1.0;
+      }
+      //subletter fuzziness
+      else if (_addressesMatchesOnSubLetter(polyAddress, poiAddress))
+      {
+        LOG_TRACE("Found address match.");
+        return 1.0;
+      }
+    }
+  }
+
+  return 0.0;
+}
+
+void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString houseNum,
+                                                             const QString street,
+                                                             QStringList& addresses) const
 {
   //address ranges; e.g. 1-3 elm street is an address range that includes the addresses:
   //"1 elm street", "2 elm street", and "3 elm street".  I've only seen this on the houseNum
@@ -78,7 +150,8 @@ void PoiPolygonAddressMatcher::_parseAddressesAsRange(const QString houseNum, co
   }
 }
 
-void PoiPolygonAddressMatcher::_parseAddressesInAltFormat(const Tags& tags, QStringList& addresses)
+void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tags,
+                                                                 QStringList& addresses) const
 {
   QString addressTagValAltFormatRaw =
     Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME_2)).trimmed().toLower();
@@ -113,8 +186,8 @@ void PoiPolygonAddressMatcher::_parseAddressesInAltFormat(const Tags& tags, QStr
   }
 }
 
-void PoiPolygonAddressMatcher::_collectAddressesFromElement(ConstElementPtr element,
-                                                            QStringList& addresses)
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementPtr element,
+                                                            QStringList& addresses) const
 {
   const Tags tags = element->getTags();
 
@@ -154,96 +227,38 @@ void PoiPolygonAddressMatcher::_collectAddressesFromElement(ConstElementPtr elem
   _parseAddressesInAltFormat(tags, addresses);
 }
 
-void PoiPolygonAddressMatcher::_collectAddressesFromWay(ConstWayPtr way, QStringList& addresses)
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromWay(ConstWayPtr way,
+                                                               QStringList& addresses,
+                                                               const OsmMap& map) const
 {
   const vector<long> wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    _collectAddressesFromElement(_map->getElement(ElementType::Node, wayNodeIds.at(i)), addresses);
+    _collectAddressesFromElement(map.getElement(ElementType::Node, wayNodeIds.at(i)), addresses);
   }
 }
 
-void PoiPolygonAddressMatcher::_collectAddressesFromRelation(ConstRelationPtr relation,
-                                                             QStringList& addresses)
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelation(ConstRelationPtr relation,
+                                                                    QStringList& addresses,
+                                                                    const OsmMap& map) const
 {
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
-    ConstElementPtr member = _map->getElement(relationMembers[i].getElementId());
+    ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
     if (member->getElementType() == ElementType::Node)
     {
       _collectAddressesFromElement(member, addresses);
     }
     else if (member->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(member), addresses);
+      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(member), addresses, map);
     }
   }
 }
 
-bool PoiPolygonAddressMatcher::isMatch(ConstElementPtr poly, ConstElementPtr poi)
-{
-  QStringList polyAddresses;
-
-  //see if the poly has any address
-  _collectAddressesFromElement(poly, polyAddresses);
-
-  if (polyAddresses.size() == 0)
-  {
-    //if not, try to find the address from a poly way node instead
-    if (poly->getElementType() == ElementType::Way)
-    {
-      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(poly), polyAddresses);
-    }
-    //if still no luck, try to find the address from a poly way node that is a relation member
-    else if (poly->getElementType() == ElementType::Relation)
-    {
-      _collectAddressesFromRelation(dynamic_pointer_cast<const Relation>(poly), polyAddresses);
-    }
-  }
-  if (polyAddresses.size() == 0)
-  {
-    LOG_TRACE("No poly addresses.");
-    return false;
-  }
-
-  //see if the poi has an address
-  QStringList poiAddresses;
-  _collectAddressesFromElement(poi, poiAddresses);
-  if (poiAddresses.size() == 0)
-  {
-    LOG_TRACE("No POI addresses.");
-    return false;
-  }
-
-  ExactStringDistance addrComp;
-  for (int i = 0; i < polyAddresses.size(); i++)
-  {
-    const QString polyAddress = polyAddresses.at(i);
-    for (int j = 0; j < poiAddresses.size(); j++)
-    {
-      const QString poiAddress = poiAddresses.at(j);
-
-      //exact match
-      if (addrComp.compare(polyAddress, poiAddress) == 1.0)
-      {
-        LOG_TRACE("Found address match.");
-        return true;
-      }
-      //subletter fuzziness
-      else if (_addressesMatchesOnSubLetter(polyAddress, poiAddress))
-      {
-        LOG_TRACE("Found address match.");
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-bool PoiPolygonAddressMatcher::_addressesMatchesOnSubLetter(const QString polyAddress,
-                                                            const QString poiAddress)
+bool PoiPolygonAddressScoreExtractor::_addressesMatchesOnSubLetter(const QString polyAddress,
+                                                                   const QString poiAddress) const
 {
   /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
    * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by

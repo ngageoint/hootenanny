@@ -24,11 +24,13 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSMATCHER_H
-#define POIPOLYGONADDRESSMATCHER_H
+#ifndef POIPOLYGONADDRESSSCOREEXTRACTOR_H
+#define POIPOLYGONADDRESSSCOREEXTRACTOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
+//#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -36,9 +38,11 @@ namespace hoot
 /**
  * Determines if two features have an address match
  */
-class PoiPolygonAddressMatcher
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase//, public Configurable
 {
 public:
+
+  static string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
 
   static const QChar ESZETT;
   static const QString ESZETT_REPLACE;
@@ -47,7 +51,9 @@ public:
   static const QString FULL_ADDRESS_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME_2;
 
-  PoiPolygonAddressMatcher(const ConstOsmMapPtr& map);
+  PoiPolygonAddressScoreExtractor();
+
+  virtual string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
 
   /**
    * Determines if two features have an address match
@@ -56,21 +62,25 @@ public:
    * @param poi a POI element
    * @return true if the two features have an address match
    */
-  bool isMatch(ConstElementPtr poly, ConstElementPtr poi);
+
+  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
+                         const shared_ptr<const Element>& poly) const;
+
+  //virtual void setConfiguration(const Settings& conf);
 
 private:
 
-  const ConstOsmMapPtr _map;
-
-  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses);
-  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses);
-  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses);
-  void _parseAddressesAsRange(const QString houseNum, const QString street, QStringList& addresses);
-  void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses);
-  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress);
+  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses) const;
+  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses, const OsmMap& map) const;
+  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses,
+                                     const OsmMap& map) const;
+  void _parseAddressesAsRange(const QString houseNum, const QString street,
+                              QStringList& addresses) const;
+  void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses) const;
+  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 
 };
 
 }
 
-#endif // POIPOLYGONADDRESSMATCHER_H
+#endif // POIPOLYGONADDRESSSCOREEXTRACTOR_H

@@ -536,15 +536,15 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatcher.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatcher.cpp \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.cpp \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.cpp \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1086,12 +1086,12 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameMatcher.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeMatcher.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressMatcher.h \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.h \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.h
 

@@ -55,11 +55,10 @@ public:
    * @param elementDistance the distance between the two elements
    * @param poi the POI for which information is being recorded
    * @param poly the polygon for which information is being recorded
-   * @param element1IsPoi true if element 1 is a POI; false otherwise
    */
   static void recordDistanceTruth(const QString t1BestKvp, const QString t2BestKvp,
                                   const double elementDistance, ConstElementPtr poi,
-                                  ConstElementPtr poly, const bool element1IsPoi);
+                                  ConstElementPtr poly);
 
   /**
    * Resets all recorded information

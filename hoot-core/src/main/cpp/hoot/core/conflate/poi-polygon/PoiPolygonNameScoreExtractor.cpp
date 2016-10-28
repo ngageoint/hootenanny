@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonNameMatcher.h"
+#include "PoiPolygonNameScoreExtractor.h"
 
 // hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
@@ -32,27 +32,37 @@
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
 
-PoiPolygonNameMatcher::PoiPolygonNameMatcher(double nameScoreThreshold) :
-_nameScoreThreshold(nameScoreThreshold)
+HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
+
+PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor()
 {
 }
 
-double PoiPolygonNameMatcher::getNameScore(ConstElementPtr e1, ConstElementPtr e2) const
+void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  setNameScoreThreshold(config.getPoiPolygonMatchNameThreshold());
+}
+
+double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
+                                             const shared_ptr<const Element>& poi,
+                                             const shared_ptr<const Element>& poly) const
 {
   return
     NameExtractor(
       new TranslateStringDistance(
         new MeanWordSetDistance(
           new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
-   .extract(e1, e2);
+   .extract(poi, poly);
 }
 
 //TODO: make work for all name tag types
-bool PoiPolygonNameMatcher::elementHasName(ConstElementPtr element)
+bool PoiPolygonNameScoreExtractor::elementHasName(ConstElementPtr element)
 {
   return !element->getTags().get("name").trimmed().isEmpty();
 }

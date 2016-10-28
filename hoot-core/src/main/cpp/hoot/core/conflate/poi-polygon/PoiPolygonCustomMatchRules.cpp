@@ -34,9 +34,9 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 
-#include "PoiPolygonTypeMatcher.h"
-#include "PoiPolygonNameMatcher.h"
-#include "PoiPolygonAddressMatcher.h"
+#include "PoiPolygonTypeScoreExtractor.h"
+#include "PoiPolygonNameScoreExtractor.h"
+#include "PoiPolygonAddressScoreExtractor.h"
 
 
 namespace hoot
@@ -66,16 +66,16 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
   //done to further reduce runtime), with the rules requiring the least expensive computations
   //occurring earlier.
 
-  const bool poiHasType = PoiPolygonTypeMatcher::hasType(poi);
-  const bool poiIsRecCenter = PoiPolygonTypeMatcher::isRecCenter(poi);
+  const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
+  const bool poiIsRecCenter = PoiPolygonTypeScoreExtractor::isRecCenter(poi);
   const QString poiAddress =
-    poi->getTags().get(PoiPolygonAddressMatcher::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
+    poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
 
-  const bool polyHasName = PoiPolygonNameMatcher::elementHasName(poly);
-  const bool polyIsPark = PoiPolygonTypeMatcher::isPark(poly);
-  const bool polyHasType = PoiPolygonTypeMatcher::hasType(poly);
-  const bool polyIsBuildingIsh = PoiPolygonTypeMatcher::isBuildingIsh(poly);
-  const bool polyHasMoreThanOneType = PoiPolygonTypeMatcher::hasMoreThanOneType(poly);
+  const bool polyHasName = PoiPolygonNameScoreExtractor::elementHasName(poly);
+  const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
+  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
+  const bool polyIsBuildingIsh = PoiPolygonTypeScoreExtractor::isBuildingIsh(poly);
+  const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
   bool polyHasSpecificType = polyHasType;
   if ((poly->getTags().get("building") == "yes" || poly->getTags().get("poi") == "yes") &&
       !polyHasMoreThanOneType)
@@ -125,7 +125,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
           }
           else if (polyNeighborGeom.get())
           {
-            if (PoiPolygonTypeMatcher::isPark(polyNeighbor))
+            if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
             {
               if (polyNeighborGeom->contains(_poiGeom.get()))
               {

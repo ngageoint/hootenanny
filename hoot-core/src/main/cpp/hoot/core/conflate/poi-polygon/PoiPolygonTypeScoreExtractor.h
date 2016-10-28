@@ -24,11 +24,13 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONTYPEMATCHER_H
-#define POIPOLYGONTYPEMATCHER_H
+#ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
+#define POIPOLYGONTYPESCOREEXTRACTOR_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -36,11 +38,20 @@ namespace hoot
 /**
  * Scores element type similarity
  */
-class PoiPolygonTypeMatcher
+class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
-  PoiPolygonTypeMatcher(double typeScoreThreshold);
+  static string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
+
+  PoiPolygonTypeScoreExtractor();
+
+  virtual string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
+
+  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& poi,
+                         const shared_ptr<const Element>& poly) const;
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -51,8 +62,7 @@ public:
    * @param t2BestKvp the highest scoring type key value pair for the second element
    * @return the type score for the input elements
    */
-  double getTypeScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                      QString& t2BestKvp);
+
 
   /**
    * Determines if an element is a park
@@ -94,17 +104,26 @@ public:
    */
   static bool hasType(ConstElementPtr element);
 
+  QString getT1BestKvp() const { return _t1BestKvp; }
+  QString getT2BestKvp() const { return _t2BestKvp; }
+
+  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
+
+  void setDistance(double distance) { _distance = distance; }
+
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
+  QString _t1BestKvp;
+  QString _t2BestKvp;
+  double _distance;
 
-  double _getTagScore(ConstElementPtr e1, ConstElementPtr e2, QString& t1BestKvp,
-                      QString& t2BestKvp);
+  double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
 
 };
 
 }
 
-#endif // POIPOLYGONTYPEMATCHER_H
+#endif // POIPOLYGONTYPESCOREEXTRACTOR_H

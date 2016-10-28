@@ -70,6 +70,7 @@ public:
    * @param poly a polygon element to collect information from
    */
   void collectInfo(ConstElementPtr poi, ConstElementPtr poly);
+
   /**
    * Determines if any custom rule was triggered.
    *

@@ -25,21 +25,30 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonRfClassifier.h"
+#include "PoiPolygonNameScoreExtractor.h"
+#include "PoiPolygonTypeScoreExtractor.h"
+#include "PoiPolygonAddressScoreExtractor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
 
 PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 {
-  //_createExtractors();
+  _createExtractors();
 }
 
 void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
+
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonAddressScoreExtractor()));
 
   /*vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
     FeatureExtractor::className());

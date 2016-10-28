@@ -24,11 +24,15 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonTypeMatcher.h"
+#include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
+
+#include "PoiPolygonDistanceTruthRecorder.h"
 
 // Qt
 #include <QSet>
@@ -36,18 +40,26 @@
 namespace hoot
 {
 
-QSet<QString> PoiPolygonTypeMatcher::_allTagKeys;
+HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 
-PoiPolygonTypeMatcher::PoiPolygonTypeMatcher(double typeScoreThreshold) :
-_typeScoreThreshold(typeScoreThreshold)
+QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
+
+PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
 {
 }
 
-double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e2,
-                                           QString& t1BestKvp, QString& t2BestKvp)
+void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
-  const Tags& t1 = e1->getTags();
-  const Tags& t2 = e2->getTags();
+  ConfigOptions config = ConfigOptions(conf);
+  setTypeScoreThreshold(config.getPoiPolygonMatchTypeThreshold());
+}
+
+double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
+                                             const shared_ptr<const Element>& poi,
+                                             const shared_ptr<const Element>& poly) const
+{
+  const Tags& t1 = poi->getTags();
+  const Tags& t2 = poly->getTags();
 
   //be a little more restrictive with restaurants
   if (t1.get("amenity").toLower() == "restaurant" &&
@@ -68,20 +80,19 @@ double PoiPolygonTypeMatcher::getTypeScore(ConstElementPtr e1, ConstElementPtr e
     }
   }
 
-  const double typeScore = _getTagScore(e1, e2, t1BestKvp, t2BestKvp);
+  const double typeScore = _getTagScore(poi, poly);
   LOG_VART(typeScore);
   return typeScore;
 }
 
-double PoiPolygonTypeMatcher::_getTagScore(ConstElementPtr e1, ConstElementPtr e2,
-                                           QString& t1BestKvp, QString& t2BestKvp)
+double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi, ConstElementPtr poly) const
 {
   double result = 0.0;
-  t1BestKvp = "";
-  t2BestKvp = "";
+  QString t1BestKvp;
+  QString t2BestKvp;
 
-  const QStringList t1List = _getRelatedTags(e1->getTags());
-  const QStringList t2List = _getRelatedTags(e2->getTags());
+  const QStringList t1List = _getRelatedTags(poi->getTags());
+  const QStringList t2List = _getRelatedTags(poly->getTags());
 
   for (int i = 0; i < t1List.size(); i++)
   {
@@ -110,10 +121,16 @@ double PoiPolygonTypeMatcher::_getTagScore(ConstElementPtr e1, ConstElementPtr e
     }
   }
 
+  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  {
+    PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
+      t1BestKvp,t2BestKvp, _distance, poi, poly);
+  }
+
   return result;
 }
 
-QStringList PoiPolygonTypeMatcher::_getRelatedTags(const Tags& tags) const
+QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) const
 {
   QStringList tagsList;
 
@@ -135,7 +152,7 @@ QStringList PoiPolygonTypeMatcher::_getRelatedTags(const Tags& tags) const
   return tagsList;
 }
 
-bool PoiPolygonTypeMatcher::isRecCenter(ConstElementPtr element)
+bool PoiPolygonTypeScoreExtractor::isRecCenter(ConstElementPtr element)
 {
   const QString elementName =
     Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
@@ -144,13 +161,13 @@ bool PoiPolygonTypeMatcher::isRecCenter(ConstElementPtr element)
     elementName.contains("fieldhouse");
 }
 
-bool PoiPolygonTypeMatcher::isPark(ConstElementPtr element)
+bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
   return !OsmSchema::getInstance().isBuilding(element) &&
          (element->getTags().get("leisure") == "park");
 }
 
-bool PoiPolygonTypeMatcher::isBuildingIsh(ConstElementPtr element)
+bool PoiPolygonTypeScoreExtractor::isBuildingIsh(ConstElementPtr element)
 {
   const QString elementName =
     Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
@@ -158,7 +175,7 @@ bool PoiPolygonTypeMatcher::isBuildingIsh(ConstElementPtr element)
     elementName.contains("bldg");
 }
 
-bool PoiPolygonTypeMatcher::hasMoreThanOneType(ConstElementPtr element)
+bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
 {
   int typeCount = 0;
   QStringList typesParsed;
@@ -191,7 +208,7 @@ bool PoiPolygonTypeMatcher::hasMoreThanOneType(ConstElementPtr element)
   return false;
 }
 
-bool PoiPolygonTypeMatcher::hasType(ConstElementPtr element)
+bool PoiPolygonTypeScoreExtractor::hasType(ConstElementPtr element)
 {
   return
     OsmSchema::getInstance().getCategories(element->getTags()).intersects(

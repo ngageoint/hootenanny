@@ -36,10 +36,10 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 
-#include "PoiPolygonTypeMatcher.h"
-#include "PoiPolygonNameMatcher.h"
+#include "PoiPolygonTypeScoreExtractor.h"
+#include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistanceMatcher.h"
-#include "PoiPolygonAddressMatcher.h"
+#include "PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonCustomMatchRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 
@@ -246,12 +246,6 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   LOG_VART(_class);
   LOG_TRACE("**************************");
-
-  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
-  {
-    PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      _t1BestKvp,_t2BestKvp, _distance, _poi, _poly, _e1IsPoi);
-  }
 }
 
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -322,8 +316,9 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr pol
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonTypeMatcher typeScorer(_typeScoreThreshold);
-  _typeScore = typeScorer.getTypeScore(poi, poly, _t1BestKvp, _t2BestKvp);
+  PoiPolygonTypeScoreExtractor typeScorer;
+  typeScorer.setDistance(_distance);
+  _typeScore = typeScorer.extract(*_map, poi, poly);
   if (poi->getTags().get("historic") == "monument")
   {
     //monuments can represent just about any poi type, so lowering this some to account for that
@@ -342,8 +337,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  PoiPolygonNameMatcher nameScorer(_nameScoreThreshold);
-  _nameScore = nameScorer.getNameScore(poi, poly);
+  _nameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   unsigned int evidence = nameMatch ? 1 : 0;
 
@@ -356,7 +350,8 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
-  const bool addressMatch = PoiPolygonAddressMatcher(_map).isMatch(poly, poi);
+  const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poly, poi);
+  const bool addressMatch = addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1 : 0;
 }
