@@ -129,7 +129,7 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    LOG_INFO("Exporting model file...");
+    LOG_INFO("Writing .rf file...");
     ofstream fileStream;
     fileStream.open((output + ".rf").toStdString().data());
     rf.exportModel(fileStream);
