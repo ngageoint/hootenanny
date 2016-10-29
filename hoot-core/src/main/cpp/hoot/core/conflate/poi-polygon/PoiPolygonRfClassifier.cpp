@@ -48,9 +48,9 @@ void PoiPolygonRfClassifier::_createExtractors()
   _extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
-  shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(new PoiPolygonAddressScoreExtractor());
-  addressExtractor1->setExactAddressMatching(true);
-  _extractors.push_back(addressExtractor1);
+  //shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(new PoiPolygonAddressScoreExtractor());
+  //addressExtractor1->setExactAddressMatching(true);
+  //_extractors.push_back(addressExtractor1);
   shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(new PoiPolygonAddressScoreExtractor());
   addressExtractor1->setExactAddressMatching(false);
   _extractors.push_back(addressExtractor2);

@@ -64,7 +64,7 @@ _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
 _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
-_reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
+_reviewDistance(ConfigOptions().getPoiPolygonReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 {
@@ -86,7 +86,7 @@ _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
 _matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
-_reviewDistance(ConfigOptions().getPoiPolygonMatchReviewDistance()),
+_reviewDistance(ConfigOptions().getPoiPolygonReviewDistance()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
 _polyNeighborIds(polyNeighborIds),
@@ -253,7 +253,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistanceMatcher distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
-    poi->getCircularError() + ConfigOptions().getPoiPolygonMatchReviewDistance());
+    poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistance());
 //  _matchDistance =
 //    max(
 //      distanceCalc.getMatchDistanceForType(_t1BestKvp),
@@ -351,6 +351,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
   const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poly, poi);
+  //TODO: move score threshold to config
   const bool addressMatch = addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1 : 0;
