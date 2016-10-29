@@ -147,7 +147,10 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
         {
           combinedAddress = QString::number(i) + " " + street;
           LOG_VART(combinedAddress);
-          addresses.append(combinedAddress);
+          if (!addresses.contains(combinedAddress))
+          {
+            addresses.append(combinedAddress);
+          }
         }
       }
     }
@@ -184,7 +187,10 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
         }
         addressTagValAltFormat = addressTagValAltFormat.trimmed();
         LOG_VART(addressTagValAltFormat);
-        addresses.append(addressTagValAltFormat);
+        if (!addresses.contains(addressTagValAltFormat))
+        {
+          addresses.append(addressTagValAltFormat);
+        }
       }
     }
   }
@@ -209,7 +215,10 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
     if (!houseNum.contains("-"))
     {
       combinedAddress = houseNum + " " + street;
-      addresses.append(combinedAddress);
+      if (!addresses.contains(combinedAddress))
+      {
+        addresses.append(combinedAddress);
+      }
     }
     else
     {
@@ -223,7 +232,10 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
   if (!addressTagVal.isEmpty())
   {
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
-    addresses.append(addressTagVal);
+    if (!addresses.contains(addressTagVal))
+    {
+      addresses.append(addressTagVal);
+    }
   }
 
   //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
