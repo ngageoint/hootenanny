@@ -52,7 +52,7 @@ void PoiPolygonRfClassifier::_createExtractors()
   //addressExtractor1->setExactAddressMatching(true);
   //_extractors.push_back(addressExtractor1);
   shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(new PoiPolygonAddressScoreExtractor());
-  addressExtractor1->setExactAddressMatching(false);
+  addressExtractor2->setExactAddressMatching(false);
   _extractors.push_back(addressExtractor2);
 
   /*vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
