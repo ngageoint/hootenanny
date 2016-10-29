@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,7 +49,7 @@ namespace Tgs
 
   RandomForest::~RandomForest()
   {
-   
+
   }
 
   void RandomForest::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
@@ -175,7 +175,7 @@ namespace Tgs
         }
         std::cout << std::endl;
 
-        //std::cout << "Mode Trained " << std::endl;
+        //std::cout << "Model Trained " << std::endl;
         if(retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;

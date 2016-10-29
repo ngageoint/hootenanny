@@ -93,7 +93,7 @@ public:
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      LOG_INFO("Training on : " << args[i] << " and " << args[i + 1]);
+      LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
       shared_ptr<OsmMap> map(new OsmMap());
 
       loadMap(map, args[i], false, Status::Unknown1);
@@ -120,6 +120,7 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
+    LOG_INFO("Training on data with " << numFactors << " factors...");
     rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
@@ -128,6 +129,7 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
+    LOG_INFO("Exporting model file...");
     ofstream fileStream;
     fileStream.open((output + ".rf").toStdString().data());
     rf.exportModel(fileStream);
