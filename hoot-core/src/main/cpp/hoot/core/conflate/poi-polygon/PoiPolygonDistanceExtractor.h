@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONDISTANCESCOREEXTRACTOR_H
-#define POIPOLYGONSDISTANCESCOREEXTRACTOR_H
+#ifndef POIPOLYGONDISTANCEEXTRACTOR_H
+#define POIPOLYGONDISTANCEEXTRACTOR_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
@@ -39,16 +39,16 @@ namespace hoot
 /**
  *
  */
-class PoiPolygonDistanceScoreExtractor : public FeatureExtractorBase//, public Configurable
+class PoiPolygonDistanceExtractor : public FeatureExtractorBase//, public Configurable
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonDistanceScoreExtractor"; }
+  static string className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
-  PoiPolygonDistanceScoreExtractor();
+  PoiPolygonDistanceExtractor();
 
   virtual string getClassName() const
-  { return PoiPolygonDistanceScoreExtractor::className(); }
+  { return PoiPolygonDistanceExtractor::className(); }
 
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
@@ -59,4 +59,4 @@ public:
 
 }
 
-#endif // POIPOLYGONDISTANCESCOREEXTRACTOR_H
+#endif // POIPOLYGONDISTANCEEXTRACTOR_H

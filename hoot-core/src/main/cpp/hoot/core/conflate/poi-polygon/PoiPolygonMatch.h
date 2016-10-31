@@ -157,6 +157,7 @@ private:
   QString _t2BestKvp;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
+  void _calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonDistanceScoreExtractor.h"
+#include "PoiPolygonDistanceExtractor.h"
 
 // hoot
 //#include <hoot/core/util/ConfigOptions.h>
@@ -38,9 +38,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceScoreExtractor)
+HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 
-PoiPolygonDistanceScoreExtractor::PoiPolygonDistanceScoreExtractor()
+PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor()
 {
 }
 
@@ -50,7 +50,7 @@ PoiPolygonDistanceScoreExtractor::PoiPolygonDistanceScoreExtractor()
   //setNameScoreThreshold(config.getPoiPolygonMatchNameThreshold());
 }*/
 
-double PoiPolygonDistanceScoreExtractor::extract(const OsmMap& map,
+double PoiPolygonDistanceExtractor::extract(const OsmMap& map,
                                                  const ConstElementPtr& poi,
                                                  const ConstElementPtr& poly) const
 {

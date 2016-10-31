@@ -42,8 +42,8 @@
 #include "PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonCustomMatchRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
-#include "PoiPolygonDistanceScoreExtractor.h"
-#include "PoiPolygonAlphaShapeDistanceScoreExtractor.h"
+#include "PoiPolygonDistanceExtractor.h"
+#include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 namespace hoot
 {
@@ -71,6 +71,7 @@ _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 {
   _calculateMatch(eid1, eid2);
+  //_calculateMatchWeka(eid1, eid2);
 }
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -95,6 +96,7 @@ _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds)
 {
   _calculateMatch(eid1, eid2);
+  //_calculateMatchWeka(eid1, eid2);
 }
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
@@ -117,6 +119,7 @@ _nameScoreThreshold(nameScoreThreshold),
 _typeScoreThreshold(typeScoreThreshold)
 {
   _calculateMatch(eid1, eid2);
+  //_calculateMatchWeka(eid1, eid2);
 }
 
 //TODO: define a poi poly poly category??
@@ -197,6 +200,44 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
+void PoiPolygonMatch::_calculateMatchWeka(const ElementId& eid1, const ElementId& eid2)
+{
+  _class.setMiss();
+
+  _categorizeElementsByGeometryType(eid1, eid2);
+
+  try
+  {
+    const double distance = PoiPolygonDistanceExtractor().extract(*_map, _poi, _poly);
+    const double convexPolydistance =
+      PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, _poi, _poly);
+    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, _poi, _poly);
+    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, _poi, _poly);
+    PoiPolygonAddressScoreExtractor addressScoreExtractor;
+    addressScoreExtractor.setExactAddressMatching(false);
+    const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
+
+    //TODO: finish
+
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN(
+        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+    return;
+  }
+
+
+
+  LOG_VART(_class);
+  LOG_TRACE("**************************");
+}
+
 void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {
   _class.setMiss();
@@ -234,7 +275,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _distance = PoiPolygonDistanceScoreExtractor().extract(*_map, poi, poly);
+  _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
 
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
@@ -285,7 +326,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 {
   unsigned int evidence = 0;
   const double alphaShapeDist =
-    PoiPolygonAlphaShapeDistanceScoreExtractor().extract(*_map, poi, poly);
+    PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
   LOG_VART(alphaShapeDist);
   return evidence;

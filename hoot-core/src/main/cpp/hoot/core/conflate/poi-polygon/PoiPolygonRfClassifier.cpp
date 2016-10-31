@@ -28,8 +28,8 @@
 #include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonTypeScoreExtractor.h"
 #include "PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonDistanceScoreExtractor.h"
-#include "PoiPolygonAlphaShapeDistanceScoreExtractor.h"
+#include "PoiPolygonDistanceExtractor.h"
+#include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
@@ -48,9 +48,9 @@ void PoiPolygonRfClassifier::_createExtractors()
   _extractors.clear();
 
   //_extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonDistanceScoreExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(
-    new PoiPolygonAlphaShapeDistanceScoreExtractor()));
+    new PoiPolygonAlphaShapeDistanceExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
   //shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(new PoiPolygonAddressScoreExtractor());
