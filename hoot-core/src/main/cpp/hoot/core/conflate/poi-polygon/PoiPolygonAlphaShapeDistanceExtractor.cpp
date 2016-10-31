@@ -57,6 +57,8 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
 {
   try
   {
+    DisableLog dl(Log::Warn);
+
     ElementConverter elementConverter(map.shared_from_this());
     shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))

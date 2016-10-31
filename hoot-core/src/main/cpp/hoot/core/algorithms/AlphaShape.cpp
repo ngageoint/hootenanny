@@ -327,16 +327,10 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
   {
     if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      //cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
-      //cout << flush;
       LOG_TRACE("Progress: " << i << " of " << (randomized.size() - 1));
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  //if (Log::getInstance().getLevel() <= Log::Info)
-  //{
-    //cout << endl;
-  //}
 }
 
 shared_ptr<OsmMap> AlphaShape::toOsmMap()

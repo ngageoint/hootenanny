@@ -231,8 +231,6 @@ void PoiPolygonMatch::_calculateMatchWeka(const ElementId& eid1, const ElementId
     return;
   }
 
-
-
   LOG_VART(_class);
   LOG_TRACE("**************************");
 }
