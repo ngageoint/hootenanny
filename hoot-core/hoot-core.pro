@@ -539,12 +539,14 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.cpp \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.cpp \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAlphaShapeDistanceScoreExtractor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1088,10 +1090,12 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomMatchRules.h \
     src/main/cpp/hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceMatcher.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.h \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAlphaShapeDistanceScoreExtractor.h
 

@@ -27,9 +27,6 @@
 #ifndef POIPOLYGONCUSTOMMATCHRULES_H
 #define POIPOLYGONCUSTOMMATCHRULES_H
 
-// geos
-#include <geos/geom/Geometry.h>
-
 // Hoot
 #include <hoot/core/OsmMap.h>
 
@@ -58,8 +55,7 @@ class PoiPolygonCustomMatchRules
 public:
 
   PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
-                             const set<ElementId>& poiNeighborIds, double distance,
-                             shared_ptr<Geometry> polyGeom, shared_ptr<Geometry> poiGeom);
+                             const set<ElementId>& poiNeighborIds, double distance);
 
   /**
    * Collects information from the elements passed in and their relationships to other elements
@@ -88,9 +84,6 @@ private:
 
   //distance between the poi and poly
   double _distance;
-
-  shared_ptr<Geometry> _polyGeom;
-  shared_ptr<Geometry> _poiGeom;
 
   int _badGeomCount;
 

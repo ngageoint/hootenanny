@@ -28,10 +28,12 @@
 #include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonTypeScoreExtractor.h"
 #include "PoiPolygonAddressScoreExtractor.h"
+#include "PoiPolygonDistanceScoreExtractor.h"
+#include "PoiPolygonAlphaShapeDistanceScoreExtractor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+//#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
@@ -45,7 +47,10 @@ void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
+  //_extractors.push_back(shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonDistanceScoreExtractor()));
+  _extractors.push_back(shared_ptr<FeatureExtractor>(
+    new PoiPolygonAlphaShapeDistanceScoreExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
   _extractors.push_back(shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
   //shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(new PoiPolygonAddressScoreExtractor());

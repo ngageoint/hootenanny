@@ -159,11 +159,10 @@ private:
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
-  bool _parseGeometries();
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poly);
+  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);

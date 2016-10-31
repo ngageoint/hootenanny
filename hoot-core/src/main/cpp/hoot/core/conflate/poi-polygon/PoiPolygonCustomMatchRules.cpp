@@ -29,8 +29,10 @@
 // geos
 //#include <geos/geom/LineString.h>
 #include <geos/util/TopologyException.h>
+#include <geos/geom/Geometry.h>
 
 // hoot
+#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 
@@ -43,17 +45,13 @@ namespace hoot
 {
 
 PoiPolygonCustomMatchRules::PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map,
-                                                     const set<ElementId>& polyNeighborIds,
-                                                     const set<ElementId>& poiNeighborIds,
-                                                     double distance,
-                                                     shared_ptr<Geometry> polyGeom,
-                                                     shared_ptr<Geometry> poiGeom) :
+                                                       const set<ElementId>& polyNeighborIds,
+                                                       const set<ElementId>& poiNeighborIds,
+                                                       double distance) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _distance(distance),
-_polyGeom(polyGeom),
-_poiGeom(poiGeom),
 _badGeomCount(0),
 _isRecCenterMatch(false),
 _poiNeighborWithAddressContainedInPoly(false)
@@ -62,9 +60,13 @@ _poiNeighborWithAddressContainedInPoly(false)
 
 void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //The rules below are roughly grouped by processing expense (more granular ordering can still be
-  //done to further reduce runtime), with the rules requiring the least expensive computations
-  //occurring earlier.
+  ElementConverter elementConverter(_map);
+  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  {
+    throw geos::util::TopologyException();
+  }
+  shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
   const bool poiIsRecCenter = PoiPolygonTypeScoreExtractor::isRecCenter(poi);
@@ -127,7 +129,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
           {
             if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
             {
-              if (polyNeighborGeom->contains(_poiGeom.get()))
+              if (polyNeighborGeom->contains(poiGeom.get()))
               {
                 poiContainedInAnotherParkPoly = true;
 
@@ -138,7 +140,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
 
               }
 
-              if (polyNeighborGeom->contains(_polyGeom.get()))
+              if (polyNeighborGeom->contains(polyGeom.get()))
               {
                 //may need to be specific that the poi and the poly are in the same
                 //park...
@@ -197,7 +199,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
         {
           shared_ptr<Geometry> poiNeighborGeom =
             ElementConverter(_map).convertToGeometry(poiNeighbor);
-          if (_polyGeom->contains(poiNeighborGeom.get()))
+          if (polyGeom->contains(poiNeighborGeom.get()))
           {
             _poiNeighborWithAddressContainedInPoly = true;
             LOG_VART(_poiNeighborWithAddressContainedInPoly);

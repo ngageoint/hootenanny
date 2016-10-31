@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonDistanceMatcher.h"
+#include "PoiPolygonDistance.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-PoiPolygonDistanceMatcher::PoiPolygonDistanceMatcher(double matchDistanceDefault,
+PoiPolygonDistance::PoiPolygonDistance(double matchDistanceDefault,
                                                                      double reviewDistanceDefault,
                                                                      const Tags& polyTags,
                                                                      long searchRadius) :
@@ -45,7 +45,7 @@ _surroundingPoiCount(-1)
 {
 }
 
-PoiPolygonDistanceMatcher::PoiPolygonDistanceMatcher(double matchDistanceDefault,
+PoiPolygonDistance::PoiPolygonDistance(double matchDistanceDefault,
                                                                      double reviewDistanceDefault,
                                                                      const Tags& polyTags,
                                                                      long searchRadius,
@@ -60,12 +60,12 @@ _surroundingPoiCount(surroundingPoiCount)
 {
 }
 
-double PoiPolygonDistanceMatcher::getMatchDistanceForType(const QString /*typeKvp*/) const
+double PoiPolygonDistance::getMatchDistanceForType(const QString /*typeKvp*/) const
 {
   return _matchDistanceDefault;
 }
 
-double PoiPolygonDistanceMatcher::getReviewDistanceForType(const QString typeKvp) const
+double PoiPolygonDistance::getReviewDistanceForType(const QString typeKvp) const
 {
   if (typeKvp == "leisure=park")
   {
@@ -79,7 +79,7 @@ double PoiPolygonDistanceMatcher::getReviewDistanceForType(const QString typeKvp
   return _reviewDistanceDefault;
 }
 
-double PoiPolygonDistanceMatcher::_getPolyDensity() const
+double PoiPolygonDistance::_getPolyDensity() const
 {
   //area of the search radius circle
   const double searchRadiusArea = M_PI * pow(_searchRadius, 2);
@@ -88,7 +88,7 @@ double PoiPolygonDistanceMatcher::_getPolyDensity() const
   return _surroundingPolyCount / searchRadiusArea;
 }
 
-double PoiPolygonDistanceMatcher::_getPoiDensity() const
+double PoiPolygonDistance::_getPoiDensity() const
 {
   //area of the search radius circle
   const double searchRadiusArea = M_PI * pow(_searchRadius, 2);
@@ -97,7 +97,7 @@ double PoiPolygonDistanceMatcher::_getPoiDensity() const
   return _surroundingPoiCount / searchRadiusArea;
 }
 
-void PoiPolygonDistanceMatcher::modifyMatchDistanceForPolyDensity(double& distance)
+void PoiPolygonDistance::modifyMatchDistanceForPolyDensity(double& distance)
 {
   const double polyDensity = _getPolyDensity();
   LOG_VART(polyDensity);
@@ -114,7 +114,7 @@ void PoiPolygonDistanceMatcher::modifyMatchDistanceForPolyDensity(double& distan
   LOG_VART(distance);
 }
 
-void PoiPolygonDistanceMatcher::modifyReviewDistanceForPolyDensity(double& distance)
+void PoiPolygonDistance::modifyReviewDistanceForPolyDensity(double& distance)
 {
   const double polyDensity = _getPolyDensity();
   //tweak the review distance based on the surrounding poly density; as the density

@@ -27,7 +27,7 @@
 #include "PoiPolygonMatch.h"
 
 // geos
-#include <geos/geom/Geometry.h>
+//#include <geos/geom/Geometry.h>
 #include <geos/util/TopologyException.h>
 
 // hoot
@@ -38,7 +38,7 @@
 
 #include "PoiPolygonTypeScoreExtractor.h"
 #include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonDistanceMatcher.h"
+#include "PoiPolygonDistance.h"
 #include "PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonCustomMatchRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
@@ -197,44 +197,11 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
-bool PoiPolygonMatch::_parseGeometries()
-{
-  //TODO: temp suppress "unable to connect all ways..." message here?
-  try
-  {
-    _polyGeom = ElementConverter(_map).convertToGeometry(_poly);
-    //may need a better way to handle this...(already tried using isValid())
-    if (QString::fromStdString(_polyGeom->toString()).toUpper().contains("EMPTY"))
-    {
-      throw geos::util::TopologyException();
-    }
-    _poiGeom = ElementConverter(_map).convertToGeometry(_poi);
-    _distance = _polyGeom->distance(_poiGeom.get());
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-    {
-      LOG_WARN(
-        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-      _badGeomCount++;
-    }
-    return false;
-  }
-
-  return true;
-}
-
 void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {
   _class.setMiss();
 
   _categorizeElementsByGeometryType(eid1, eid2);
-  if (!_parseGeometries())
-  {
-    return;
-  }
 
   const unsigned int evidence = _calculateEvidence(_poi, _poly);
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
@@ -252,8 +219,10 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  _distance = PoiPolygonDistanceScoreExtractor().extract(*_map, poi, poly);
+
   //search radius taken from PoiPolygonMatchCreator
-  PoiPolygonDistanceMatcher distanceCalc(
+  PoiPolygonDistance distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
     poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
 //  _matchDistance =
@@ -296,23 +265,14 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   return evidence;
 }
 
-unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poly)
+unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
+                                                             ConstElementPtr poly)
 {
   unsigned int evidence = 0;
-  OsmMapPtr polyMap(new OsmMap());
-  ElementPtr polyTemp(poly->clone());
-  polyMap->addElement(polyTemp);
-  shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
-  //oddly, even if the area is zero calc'ing the distance can have a positive effect
-  /*if (polyAlphaShape->getArea() == 0.0)
-  {
-    return evidence;
-  }*/
-  const double alphaShapeDist = polyAlphaShape->distance(_poiGeom.get());
+  const double alphaShapeDist =
+    PoiPolygonAlphaShapeDistanceScoreExtractor().extract(*_map, poi, poly);
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
-
   LOG_VART(alphaShapeDist);
-
   return evidence;
 }
 
@@ -352,7 +312,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi,
                                                            ConstElementPtr poly)
 {
-  const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poly, poi);
+  const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
   //TODO: move score threshold to config
   const bool addressMatch = addressScore == 1.0;
   LOG_VART(addressMatch);
@@ -391,7 +351,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     if (evidence < MATCH_EVIDENCE_THRESHOLD && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
     {
-      evidence += _getConvexPolyDistanceEvidence(poly);
+      evidence += _getConvexPolyDistanceEvidence(poi, poly);
     }
   }
 
@@ -403,8 +363,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     }
     else if (ConfigOptions().getPoiPolygonEnableCustomMatchRules())
     {
-      PoiPolygonCustomMatchRules matchRules(
-        _map, _polyNeighborIds, _poiNeighborIds, _distance, _polyGeom, _poiGeom);
+      PoiPolygonCustomMatchRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
       matchRules.collectInfo(poi, poly);
       if (matchRules.ruleTriggered())
       {

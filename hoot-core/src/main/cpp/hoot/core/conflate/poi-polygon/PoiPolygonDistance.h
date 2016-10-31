@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONDISTANCEMATCHER_H
-#define POIPOLYGONDISTANCEMATCHER_H
+#ifndef POIPOLYGONDISTANCE_H
+#define POIPOLYGONDISTANCE_H
 
 // Hoot
 #include <hoot/core/elements/Element.h>
@@ -41,15 +41,15 @@ namespace hoot
  *
  * //TODO: encapsulate some of the distance logic in PoiPolygonMatch into here
  */
-class PoiPolygonDistanceMatcher
+class PoiPolygonDistance
 {
 
 public:
 
-  PoiPolygonDistanceMatcher(double matchDistanceDefault, double reviewDistanceDefault,
+  PoiPolygonDistance(double matchDistanceDefault, double reviewDistanceDefault,
                             const Tags& polyTags, long searchRadius);
 
-  PoiPolygonDistanceMatcher(double matchDistanceDefault, double reviewDistanceDefault,
+  PoiPolygonDistance(double matchDistanceDefault, double reviewDistanceDefault,
                             const Tags& polyTags, long searchRadius, long surroundingPolyCount,
                             long surroundingPoiCount);
 
@@ -103,4 +103,4 @@ private:
 
 }
 
-#endif // POIPOLYGONDISTANCEMATCHER_H
+#endif // POIPOLYGONDISTANCE_H
