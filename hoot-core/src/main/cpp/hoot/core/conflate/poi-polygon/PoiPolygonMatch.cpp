@@ -56,17 +56,17 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf) :
 Match(threshold),
+_map(map),
 _eid1(eid1),
 _eid2(eid2),
-_rf(rf),
-_map(map),
 _distance(-1.0),
-_nameScore(-1.0),
-_typeScore(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
+_typeScore(-1.0),
+_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
+_nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
-_typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
+_rf(rf)
 {
   _calculateMatch(eid1, eid2);
   //_calculateMatchWeka(eid1, eid2);
@@ -78,19 +78,19 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
                                  const set<ElementId>& polyNeighborIds = set<ElementId>(),
                                  const set<ElementId>& poiNeighborIds = set<ElementId>()) :
 Match(threshold),
+_map(map),
 _eid1(eid1),
 _eid2(eid2),
-_rf(rf),
-_map(map),
 _distance(-1.0),
-_nameScore(-1.0),
-_typeScore(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
-_nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
+_typeScore(-1.0),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
+_nameScore(-1.0),
+_nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _polyNeighborIds(polyNeighborIds),
-_poiNeighborIds(poiNeighborIds)
+_poiNeighborIds(poiNeighborIds),
+_rf(rf)
 {
   _calculateMatch(eid1, eid2);
   //_calculateMatchWeka(eid1, eid2);
@@ -102,17 +102,17 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
                                  double matchDistance, double reviewDistance,
                                  double nameScoreThreshold, double typeScoreThreshold) :
 Match(threshold),
+_map(map),
 _eid1(eid1),
 _eid2(eid2),
-_rf(rf),
-_map(map),
 _distance(-1.0),
-_nameScore(-1.0),
-_typeScore(-1.0),
 _matchDistanceThreshold(matchDistance),
 _reviewDistanceThreshold(reviewDistance),
+_typeScore(-1.0),
+_typeScoreThreshold(typeScoreThreshold),
+_nameScore(-1.0),
 _nameScoreThreshold(nameScoreThreshold),
-_typeScoreThreshold(typeScoreThreshold)
+_rf(rf)
 {
   _calculateMatch(eid1, eid2);
   //_calculateMatchWeka(eid1, eid2);

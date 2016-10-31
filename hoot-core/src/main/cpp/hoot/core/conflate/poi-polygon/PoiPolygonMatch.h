@@ -122,36 +122,41 @@ public:
 
 private:
 
+  static QString _matchName;
+
+  ConstOsmMapPtr _map;
+
   ElementId _eid1;
   ElementId _eid2;
-  shared_ptr<const PoiPolygonRfClassifier> _rf;
-  static QString _matchName;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
   shared_ptr<Geometry> _poiGeom;
   shared_ptr<Geometry> _polyGeom;
-  MatchClassification _class;
-  ConstOsmMapPtr _map;
   bool _e1IsPoi;
 
   //measured distance between the two elements
   double _distance;
-  //true if the distance between the elements, given CE, is within the review distance; absolute
-  //requirement for matching
-  bool _closeMatch;
-  double _nameScore;
-  double _typeScore;
-
   //max distance allowed between the elements where they can be considered a distance match
   double _matchDistanceThreshold;
   //max distance allowed between the elements where they can be considered for review
   double _reviewDistanceThreshold;
-  double _nameScoreThreshold;
+  //true if the distance between the elements, given CE, is within the review distance; absolute
+  //requirement for matching
+  bool _closeMatch;
+
+  double _typeScore;
   double _typeScoreThreshold;
+
+  double _nameScore;
+  double _nameScoreThreshold;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
+
+  MatchClassification _class;
+
+  shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
   void _calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
