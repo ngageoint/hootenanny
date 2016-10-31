@@ -329,7 +329,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   if (poi->getTags().get("historic") == "monument")
   {
     //monuments can represent just about any poi type, so lowering this some to account for that
-    _typeScoreThreshold = 0.3; //TODO: move to config
+    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
   }
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
   unsigned int evidence = typeMatch ? 1 : 0;
@@ -402,7 +402,9 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   if (evidence == 0)
   {
-    if (_nameScore >= 0.4 && _typeScore >= 0.6) //TODO: move values to config
+    //This is kind of a consolation prize...if there was no match, but name and type score have
+    //moderately high values, then make it a match.
+    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
     {
       evidence++;
     }
@@ -443,7 +445,6 @@ map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>
   return _rf->getFeatures(m, _eid1, _eid2);
 }
 
-//TODO: add back in more description
 QString PoiPolygonMatch::toString() const
 {
   return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poi->getElementId().toString()).

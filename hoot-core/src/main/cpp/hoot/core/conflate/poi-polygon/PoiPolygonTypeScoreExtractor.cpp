@@ -91,11 +91,13 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
                                                   ConstElementPtr poly) const
 {
   double result = 0.0;
-  //QString t1BestKvp;
-  //QString t2BestKvp;
 
   const QStringList t1List = _getRelatedTags(poi->getTags());
   const QStringList t2List = _getRelatedTags(poly->getTags());
+
+  QStringList excludeKvps;
+  excludeKvps.append("building=yes");
+  excludeKvps.append("poi=yes");
 
   for (int i = 0; i < t1List.size(); i++)
   {
@@ -106,12 +108,11 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
       if (score >= result)
       {
-        //TODO: convert these to a list
-        if (!t1Kvp.isEmpty() && t1Kvp != "building=yes" && t1Kvp != "poi=yes")
+        if (!t1Kvp.isEmpty() && !excludeKvps.contains(t1Kvp))
         {
           t1BestKvp = t1Kvp;
         }
-        if (!t2Kvp.isEmpty() && t2Kvp != "building=yes" && t2Kvp != "poi=yes")
+        if (!t2Kvp.isEmpty() && !excludeKvps.contains(t2Kvp))
         {
           t2BestKvp = t2Kvp;
         }
@@ -139,7 +140,6 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
   {
-    //TODO: hack - not sure the correct way to handle these concatenated values yet
     const QStringList values = it.value().split(";");
     for (int i = 0; i < values.size(); i++)
     {

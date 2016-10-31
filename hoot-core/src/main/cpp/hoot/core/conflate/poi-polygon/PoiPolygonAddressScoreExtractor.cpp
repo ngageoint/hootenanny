@@ -209,7 +209,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
   QString combinedAddress;
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
-    //hack - I thought this would have been eliminated by using the translated name comparison
+    //I thought this would have been eliminated by using the translated name comparison
     //logic...seems like it wasn't. - see #1169
     street = street.replace(ESZETT, ESZETT_REPLACE);
     if (!houseNum.contains("-"))

@@ -112,7 +112,6 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
         shared_ptr<Geometry> polyNeighborGeom;
         try
         {
-          //TODO: temp suppress "unable to connect all ways..." message here?
           polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
 
           if (polyNeighborGeom.get() &&
@@ -170,7 +169,8 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
   LOG_VART(poiContainedInAnotherParkPoly);
   LOG_VART(poiContainedInParkPoly);
 
-  //TODO: explain
+  //If a POI is in a park, and is rec center, force a review against any other building-like
+  //poly in the park.
   if (poiContainedInParkPoly && !poiHasType && poiIsRecCenter && polyIsBuildingIsh &&
       (!polyHasSpecificType || !polyHasName) && polyContainedInAnotherParkPoly)
   {
