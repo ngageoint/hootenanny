@@ -84,6 +84,14 @@ Then(/^I should see "([^"]*)"$/) do |text|
   expect(page).to have_content(text)
 end
 
+Then(/^I should see element "([^"]*)" classed "([^"]*)"$/ ) do |el, cls|
+  expect(page).to have_content(el + "." + cls)
+end
+
+Then(/^I should not see element "([^"]*)" classed "([^"]*)"$/ ) do |el, cls|
+  expect(page).to have_no_content(el + "." + cls)
+end
+
 Then(/^I should not see "([^"]*)"$/) do |text|
   #page.should have_no_content(text)
   expect(page).to have_no_content(text)
