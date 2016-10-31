@@ -216,7 +216,7 @@ void PoiPolygonMatch::_calculateMatchWeka(const ElementId& eid1, const ElementId
     addressScoreExtractor.setExactAddressMatching(false);
     const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
 
-    //TODO: finish
+
 
   }
   catch (const geos::util::TopologyException& e)
@@ -392,7 +392,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     {
       evidence += _getAddressEvidence(poi, poly);
     }
-    //TODO: move values to config
+    //TODO: move values to config - or consider removing this condition
     if (evidence < MATCH_EVIDENCE_THRESHOLD && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
     {

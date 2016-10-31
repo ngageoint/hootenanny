@@ -67,4 +67,10 @@ bool PoiPolygonNameScoreExtractor::elementHasName(ConstElementPtr element)
   return !element->getTags().get("name").trimmed().isEmpty();
 }
 
+//TODO: make work for all name tag types
+QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
+{
+  return element->getTags().get("name").toLower().trimmed();
+}
+
 }

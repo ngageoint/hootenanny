@@ -68,6 +68,14 @@ public:
    */
   static bool elementHasName(ConstElementPtr element);
 
+  /**
+   * Returns an element's name
+   *
+   * @param element the element to examine
+   * @return the element's name if it has one
+   */
+  static QString getElementName(ConstElementPtr element);
+
   virtual void setConfiguration(const Settings& conf);
 
   void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }

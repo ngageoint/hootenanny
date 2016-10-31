@@ -191,8 +191,7 @@ void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPt
     {
       try
       {
-        //TODO: make work for all name tags
-        const QString poiNeighborName = poiNeighbor->getTags().get("name").toLower().trimmed();
+        const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(poiNeighbor);
         LOG_VART(poiNeighborName);
 
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
