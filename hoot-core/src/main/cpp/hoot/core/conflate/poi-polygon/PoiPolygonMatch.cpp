@@ -203,7 +203,22 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
-  const unsigned int evidence = _calculateEvidence(_poi, _poly);
+  unsigned int evidence = -1;
+  try
+  {
+    evidence = _calculateEvidence(_poi, _poly);
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    {
+      LOG_WARN(
+        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+    return;
+  }
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
