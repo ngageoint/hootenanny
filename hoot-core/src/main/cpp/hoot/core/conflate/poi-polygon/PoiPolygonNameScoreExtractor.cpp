@@ -93,6 +93,7 @@ QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
       }
     }
   }
+  return "";
 }
 
 }
