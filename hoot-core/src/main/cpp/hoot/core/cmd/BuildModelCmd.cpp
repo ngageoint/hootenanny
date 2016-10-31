@@ -60,6 +60,13 @@ public:
 
   virtual int runSimple(QStringList args)
   {
+    bool exportArffOnly = false;
+    if (args.contains("--export-arff-only"))
+    {
+      args.removeAll("--export-arff-only");
+      exportArffOnly = true;
+    }
+
     if (args.size() < 3 || args.size() % 2 == 0)
     {
       cout << getHelp() << endl << endl;
@@ -106,6 +113,10 @@ public:
 
     ArffWriter aw(output + ".arff", true);
     aw.write(mfe.getSamples());
+    if (exportArffOnly)
+    {
+      return 0;
+    }
 
     // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
     // ideally we'll circle back and update RF to use null values.
