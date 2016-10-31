@@ -34,9 +34,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.anyLong;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -148,9 +146,8 @@ public class ExportJobResourceTest {
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            mapIds.add(new Long(1));
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Long mapId = 1L;
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
@@ -189,9 +186,8 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            mapIds.add(1L);
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Long mapId = 1L;
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
@@ -225,9 +221,8 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            mapIds.add(1L);
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Long mapId = 1L;
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
             // add no map tags
             Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong());
@@ -261,9 +256,8 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            mapIds.add(1L);
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Long mapId = 1L;
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
@@ -289,43 +283,6 @@ public class ExportJobResourceTest {
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
-    public void testExportToOsmApiDbMultipleMapsWithSameName() throws Exception {
-        try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
-            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
-
-            ExportJobResource spy = Mockito.spy(new ExportJobResource());
-
-            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            // add two map id's
-            mapIds.add(1L);
-            mapIds.add(2L);
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
-            java.util.Map<String, String> mapTags = new HashMap<>();
-            String exportTime = "2016-05-04 10:15";
-            mapTags.put("osm_api_db_export_time", exportTime);
-            Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong());
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
-        }
-        catch (WebApplicationException e) {
-            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("Multiple maps with name"));
-            throw e;
-        }
-        finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
-        }
-    }
-
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
     public void testExportToOsmApiDbMissingMap() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
@@ -337,9 +294,9 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
+            Long mapId = null;
             // add no map id's
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
             String exportTime = "2016-05-04 10:15";
             mapTags.put("osm_api_db_export_time", exportTime);
@@ -372,10 +329,9 @@ public class ExportJobResourceTest {
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
             Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
-            List<Long> mapIds = new ArrayList<>();
-            mapIds.add(1L);
+            Long mapId = 1L;
 
-            Mockito.doReturn(mapIds).when(spy).getMapIdsByName(anyString());
+            Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
             java.util.Map<String, String> mapTags = new HashMap<>();
 
             String exportTime = "2016-05-04 10:15";
