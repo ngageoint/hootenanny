@@ -42,6 +42,8 @@
 #include "PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonCustomMatchRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
+#include "PoiPolygonDistanceScoreExtractor.h"
+#include "PoiPolygonAlphaShapeDistanceScoreExtractor.h"
 
 namespace hoot
 {
@@ -63,8 +65,8 @@ _map(map),
 _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
-_matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
-_reviewDistance(ConfigOptions().getPoiPolygonReviewDistance()),
+_matchDistance(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
+_reviewDistance(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 {
@@ -85,8 +87,8 @@ _map(map),
 _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
-_matchDistance(ConfigOptions().getPoiPolygonMatchDistance()),
-_reviewDistance(ConfigOptions().getPoiPolygonReviewDistance()),
+_matchDistance(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
+_reviewDistance(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
 _polyNeighborIds(polyNeighborIds),
@@ -253,7 +255,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistanceMatcher distanceCalc(
     _matchDistance, _reviewDistance, poly->getTags(),
-    poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistance());
+    poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
 //  _matchDistance =
 //    max(
 //      distanceCalc.getMatchDistanceForType(_t1BestKvp),

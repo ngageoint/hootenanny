@@ -88,7 +88,7 @@ public:
   void checkForMatch(const shared_ptr<const Element>& e)
   {
     auto_ptr<Envelope> env(e->getEnvelope(_map));
-    env->expandBy(e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistance());
+    env->expandBy(e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
 
     // find other nearby candidates
     set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
@@ -187,7 +187,7 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
-    return e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistance();
+    return e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold();
   }
 
   virtual void visit(const ConstElementPtr& e)

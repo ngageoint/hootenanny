@@ -49,17 +49,16 @@ public:
 
   virtual string getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
 
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
-
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
    * means one or both of the features have no names.
    *
-   * @param e1 the first element to examine
-   * @param e2 the second element to examine
+   * @param poi the first element to examine
+   * @param poly the second element to examine
    * @return a name score
    */
+  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
+                         const ConstElementPtr& poly) const;
 
   /**
    * Returns true if the input element has a populated name tag

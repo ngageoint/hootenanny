@@ -1701,7 +1701,7 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.match.distance
+=== poi.polygon.match.distance.threshold
 
 * Data Type: double
 * Default Value: `5`
@@ -1717,7 +1717,7 @@ a close match based on distance criteria only.
 If the name similarity score is greater than this then the names are considered a match during POI
 to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no names present (null).
 
-=== poi.polygon.review.distance
+=== poi.polygon.review.distance.threshold
 
 * Data Type: double
 * Default Value: `125`
