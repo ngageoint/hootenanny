@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonCustomMatchRules.h"
+#include "PoiPolygonCustomRules.h"
 
 // geos
 //#include <geos/geom/LineString.h>
@@ -44,10 +44,10 @@
 namespace hoot
 {
 
-PoiPolygonCustomMatchRules::PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map,
-                                                       const set<ElementId>& polyNeighborIds,
-                                                       const set<ElementId>& poiNeighborIds,
-                                                       double distance) :
+PoiPolygonCustomRules::PoiPolygonCustomRules(const ConstOsmMapPtr& map,
+                                             const set<ElementId>& polyNeighborIds,
+                                             const set<ElementId>& poiNeighborIds,
+                                             double distance) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -58,7 +58,7 @@ _poiNeighborWithAddressContainedInPoly(false)
 {
 }
 
-void PoiPolygonCustomMatchRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
+void PoiPolygonCustomRules::collectInfo(ConstElementPtr poi, ConstElementPtr poly)
 {
   ElementConverter elementConverter(_map);
   shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);

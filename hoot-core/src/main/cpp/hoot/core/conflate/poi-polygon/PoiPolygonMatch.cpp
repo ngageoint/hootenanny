@@ -39,7 +39,7 @@
 #include "PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
 #include "PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonCustomMatchRules.h"
+#include "PoiPolygonCustomRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "PoiPolygonDistanceExtractor.h"
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
@@ -431,7 +431,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     }
     else if (ConfigOptions().getPoiPolygonEnableCustomMatchRules())
     {
-      PoiPolygonCustomMatchRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
+      PoiPolygonCustomRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
       matchRules.collectInfo(poi, poly);
       if (matchRules.ruleTriggered())
       {

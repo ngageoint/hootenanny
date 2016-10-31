@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONCUSTOMMATCHRULES_H
-#define POIPOLYGONCUSTOMMATCHRULES_H
+#ifndef POIPOLYGONCUSTOMHRULES_H
+#define POIPOLYGONCUSTOMRULES_H
 
 // Hoot
 #include <hoot/core/OsmMap.h>
@@ -49,12 +49,12 @@ class SchemaVertex;
  * dataset.  In the case that this happens, moving this logic into hoot-js might end up making more
  * sense.
  */
-class PoiPolygonCustomMatchRules
+class PoiPolygonCustomRules
 {
 
 public:
 
-  PoiPolygonCustomMatchRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
+  PoiPolygonCustomRules(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
                              const set<ElementId>& poiNeighborIds, double distance);
 
   /**
@@ -97,4 +97,4 @@ private:
 
 }
 
-#endif // POIPOLYGONCUSTOMMATCHRULES_H
+#endif // POIPOLYGONCUSTOMRULES_H
