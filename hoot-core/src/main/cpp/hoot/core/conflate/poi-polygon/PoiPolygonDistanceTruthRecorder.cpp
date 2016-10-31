@@ -38,24 +38,24 @@ QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyMatchRefIdsToDi
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_poiReviewRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyReviewRefIdsToDistances;
 
-void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(const QString t1BestKvp,
-                                                          const QString t2BestKvp,
-                                                          const double elementDistance,
-                                                          ConstElementPtr poi,
-                                                          ConstElementPtr poly)
+void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(ConstElementPtr poi,
+                                                          ConstElementPtr poly,
+                                                          const QString poiBestKvp,
+                                                          const QString polyBestKvp,
+                                                          const double elementDistance)
 {
   //output feature distances for all feature types which fell within the match threshold
   const QString ref2 = poi->getTags().get("REF2");
   const QString review = poi->getTags().get("REVIEW");
   if (ref2 == poly->getTags().get("REF1").split(";")[0])
   {
-    _poiMatchRefIdsToDistances.insert(t1BestKvp, elementDistance);
-    _polyMatchRefIdsToDistances.insert(t2BestKvp, elementDistance);
+    _poiMatchRefIdsToDistances.insert(poiBestKvp, elementDistance);
+    _polyMatchRefIdsToDistances.insert(polyBestKvp, elementDistance);
   }
   else if (review == poly->getTags().get("REF1").split(";")[0])
   {
-    _poiReviewRefIdsToDistances.insert(t1BestKvp, elementDistance);
-    _polyReviewRefIdsToDistances.insert(t2BestKvp, elementDistance);
+    _poiReviewRefIdsToDistances.insert(poiBestKvp, elementDistance);
+    _polyReviewRefIdsToDistances.insert(polyBestKvp, elementDistance);
   }
 }
 

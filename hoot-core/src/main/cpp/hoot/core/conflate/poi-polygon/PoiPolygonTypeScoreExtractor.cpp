@@ -42,8 +42,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 
-QString PoiPolygonTypeScoreExtractor::t1BestKvp;
-QString PoiPolygonTypeScoreExtractor::t2BestKvp;
+QString PoiPolygonTypeScoreExtractor::poiBestKvp;
+QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
@@ -92,43 +92,46 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 {
   double result = 0.0;
 
-  const QStringList t1List = _getRelatedTags(poi->getTags());
-  const QStringList t2List = _getRelatedTags(poly->getTags());
+  const QStringList poiTagList = _getRelatedTags(poi->getTags());
+  const QStringList polyTagList = _getRelatedTags(poly->getTags());
 
   QStringList excludeKvps;
   excludeKvps.append("building=yes");
   excludeKvps.append("poi=yes");
 
-  for (int i = 0; i < t1List.size(); i++)
+  for (int i = 0; i < poiTagList.size(); i++)
   {
-    for (int j = 0; j < t2List.size(); j++)
+    for (int j = 0; j < polyTagList.size(); j++)
     {
-      const QString t1Kvp = t1List.at(i).toLower();
-      const QString t2Kvp = t2List.at(j).toLower();
-      const double score = OsmSchema::getInstance().score(t1Kvp, t2Kvp);
+      const QString poiKvp = poiTagList.at(i).toLower();
+      const QString polyKvp = polyTagList.at(j).toLower();
+      const double score = OsmSchema::getInstance().score(poiKvp, polyKvp);
       if (score >= result)
       {
-        if (!t1Kvp.isEmpty() && !excludeKvps.contains(t1Kvp))
+        if (!poiKvp.isEmpty() && !excludeKvps.contains(poiKvp))
         {
-          t1BestKvp = t1Kvp;
+          poiBestKvp = poiKvp;
         }
-        if (!t2Kvp.isEmpty() && !excludeKvps.contains(t2Kvp))
+        if (!polyKvp.isEmpty() && !excludeKvps.contains(polyKvp))
         {
-          t2BestKvp = t2Kvp;
+          polyBestKvp = polyKvp;
         }
       }
       result = max(score, result);
 
-      LOG_VART(t1List.at(i));
-      LOG_VART(t2List.at(j));
+      LOG_VART(poiKvp);
+      LOG_VART(polyKvp);
       LOG_VART(result);
     }
   }
 
+  LOG_VART(poiBestKvp);
+  LOG_VART(polyBestKvp);
+
   if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      t1BestKvp, t2BestKvp, _distance, poi, poly);
+      poi, poly, poiBestKvp, polyBestKvp, _distance);
   }
 
   return result;

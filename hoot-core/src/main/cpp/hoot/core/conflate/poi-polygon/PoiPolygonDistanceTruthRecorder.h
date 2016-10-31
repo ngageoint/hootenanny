@@ -50,15 +50,15 @@ public:
   /**
    * Records distance information for the input feature pair
    *
-   * @param t1BestKvp the highest scoring type key value pair for the first element
-   * @param t2BestKvp the highest scoring type key value pair for the second element
-   * @param elementDistance the distance between the two elements
    * @param poi the POI for which information is being recorded
    * @param poly the polygon for which information is being recorded
+   * @param poiBestKvp the highest scoring type key value pair for the poi
+   * @param polyBestKvp the highest scoring type key value pair for the poly
+   * @param elementDistance the distance between the two elements
    */
-  static void recordDistanceTruth(const QString t1BestKvp, const QString t2BestKvp,
-                                  const double elementDistance, ConstElementPtr poi,
-                                  ConstElementPtr poly);
+  static void recordDistanceTruth(ConstElementPtr poi, ConstElementPtr poly,
+                                  const QString poiBestKvp, const QString polyBestKvp,
+                                  const double elementDistance);
 
   /**
    * Resets all recorded information

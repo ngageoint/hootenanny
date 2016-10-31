@@ -43,8 +43,10 @@ class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configu
 public:
 
   //hack to get around constness of extract method
-  static QString t1BestKvp;
-  static QString t2BestKvp;
+  //best type kvp match for the poi
+  static QString poiBestKvp;
+  //best type kvp match for the poly
+  static QString polyBestKvp;
 
   static string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 

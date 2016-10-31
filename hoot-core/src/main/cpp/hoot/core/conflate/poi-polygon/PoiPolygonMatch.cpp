@@ -33,7 +33,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/conflate/AlphaShapeGenerator.h>
 
 #include "PoiPolygonTypeScoreExtractor.h"
 #include "PoiPolygonNameScoreExtractor.h"
@@ -294,8 +293,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 //      distanceCalc.getMatchDistanceForType(_t2BestKvp));
   _reviewDistanceThreshold =
     max(
-      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t1BestKvp),
-      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t2BestKvp));
+      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::poiBestKvp),
+      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::polyBestKvp));
   //density based distance changes didn't have any positive effect experimentally; leaving it
   //commented out here in case there is need for further examination
   /*if (poi->getTags().get("station") != "light_rail" &&
@@ -358,8 +357,8 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
   LOG_VART(_typeScore);
   LOG_VART(typeMatch);
-  LOG_VART(PoiPolygonTypeScoreExtractor::t1BestKvp);
-  LOG_VART(PoiPolygonTypeScoreExtractor::t2BestKvp);
+  LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
+  LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
 
   return evidence;
 }
