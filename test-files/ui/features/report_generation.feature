@@ -22,12 +22,7 @@ Feature: Generate Conflation Report
         Then I should see "Conflate"
         And I press "Conflate"
         And I fill "saveAs" input with "Conflate_Report"
-        And I should see "Generate Report?"
         And I select the "true" option in "#containerofisGenerateReport"
-        # And I press tab
-        # And I press tab
-        # And I press enter
-        And I hover over "#conflate2"
         And I scroll element into view and press "conflate2"
         Then I wait 30 "seconds" to see "Conflating …"
         Then I wait 3 "minutes" to see "Conflate_Report"
@@ -35,12 +30,27 @@ Feature: Generate Conflation Report
         And I click the "Complete Review" link
         Then I should see "Resolve all remaining reviews"
         And I press "Resolve all remaining reviews"
+        When I click on "input#export_data"
+        And I click on "input#exit_conflate"
 
     Scenario: Check out the Report
         When I select the "sprocket" div
         And I click on the "Reports" option in the "settingsSidebar"
         And I should see "Conflate_Report"
-        And I click the "_icon.up" button
-        Then I press "Download"
+        When I click the "up" icon under the "Conflate_Report" link
+        Then I press "round" span with text "Download"
         And I wait 30 seconds
         Then the download file "Conflate_Report.pdf" should exist
+
+    Scenario: Delete the Datasets
+        When I click the "trash" icon under the "Conflate_Report" link
+        And I wait
+        And I accept the alert
+        Then I click on the "Datasets" option in the "settingsSidebar"
+        When I click the "Conflate_Report" Dataset
+        And I context click the "Conflate_Report" Dataset
+        And I click the "Delete" context menu item
+        And I wait
+        And I accept the alert
+        And I wait 30 "seconds" to not see "Conflate_Report"
+        
