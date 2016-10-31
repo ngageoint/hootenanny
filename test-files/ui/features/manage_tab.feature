@@ -53,7 +53,7 @@ Feature: Manage Tab
         And I press "big.loud" span with text "Add Folder"
         # Move datasets into folder
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
-        And I context click "AllDataTypesACucumber"
+        And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I select the "ManageTabTest" option in the "root" combobox
@@ -61,7 +61,7 @@ Feature: Manage Tab
         # Move datasets back out of folder
         Then I click the "ManageTabTest" Dataset
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
-        And I context click "AllDataTypesACucumber"
+        And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
