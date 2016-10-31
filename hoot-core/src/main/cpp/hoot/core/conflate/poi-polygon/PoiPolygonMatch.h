@@ -131,30 +131,27 @@ private:
   shared_ptr<Geometry> _poiGeom;
   shared_ptr<Geometry> _polyGeom;
   MatchClassification _class;
-  int _badGeomCount;
   ConstOsmMapPtr _map;
   bool _e1IsPoi;
 
-  //
+  //measured distance between the two elements
   double _distance;
+  //true if the distance between the elements, given CE, is within the review distance; absolute
+  //requirement for matching
   bool _closeMatch;
   double _nameScore;
   double _typeScore;
 
-  //
-  double _matchDistance;
-  //
-  double _reviewDistance;
+  //max distance allowed between the elements where they can be considered a distance match
+  double _matchDistanceThreshold;
+  //max distance allowed between the elements where they can be considered for review
+  double _reviewDistanceThreshold;
   double _nameScoreThreshold;
   double _typeScoreThreshold;
 
+  //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   set<ElementId> _polyNeighborIds;
   set<ElementId> _poiNeighborIds;
-
-  //
-  QString _t1BestKvp;
-  //
-  QString _t2BestKvp;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
   void _calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);

@@ -59,13 +59,12 @@ Match(threshold),
 _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
-_badGeomCount(0),
 _map(map),
 _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
-_matchDistance(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
-_reviewDistance(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
+_matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
+_reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold())
 {
@@ -82,13 +81,12 @@ Match(threshold),
 _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
-_badGeomCount(0),
 _map(map),
 _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
-_matchDistance(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
-_reviewDistance(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
+_matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
+_reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
 _polyNeighborIds(polyNeighborIds),
@@ -107,13 +105,12 @@ Match(threshold),
 _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
-_badGeomCount(0),
 _map(map),
 _distance(-1.0),
 _nameScore(-1.0),
 _typeScore(-1.0),
-_matchDistance(matchDistance),
-_reviewDistance(reviewDistance),
+_matchDistanceThreshold(matchDistance),
+_reviewDistanceThreshold(reviewDistance),
 _nameScoreThreshold(nameScoreThreshold),
 _typeScoreThreshold(typeScoreThreshold)
 {
@@ -121,15 +118,14 @@ _typeScoreThreshold(typeScoreThreshold)
   //_calculateMatchWeka(eid1, eid2);
 }
 
-//TODO: define a poi poly poly category??
-
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
-  //check this first, b/c some of these excluded features may have multiple type vals
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  //files
   if (tags.get("barrier").toLower() == "fence"
       || tags.get("landuse").toLower() == "grass"
       || tags.get("natural").toLower() == "tree_row"
@@ -144,8 +140,9 @@ bool PoiPolygonMatch::isPoly(const Element& e)
 
 bool PoiPolygonMatch::isPoi(const Element& e)
 {
-  //TODO: I haven't figure out a way to bypass hgispoi defining these as poi's yet...need to fix
   const Tags& tags = e.getTags();
+  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  //files
   if (tags.get("natural").toLower() == "tree"
       || tags.get("amenity").toLower() == "drinking_water"
       || tags.get("amenity").toLower() == "bench"
@@ -242,13 +239,13 @@ void PoiPolygonMatch::_calculateMatchWeka(const ElementId& /*eid1*/, const Eleme
 //  }
 //  catch (const geos::util::TopologyException& e)
 //  {
-//    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-//    {
+//    //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+//    //{
 //      LOG_WARN(
 //        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
 //        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-//      _badGeomCount++;
-//    }
+//      //_badGeomCount++;
+//    //}
 //    return;
 //  }
 
@@ -287,38 +284,42 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
-    _matchDistance, _reviewDistance, poly->getTags(),
+    _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
     poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
-//  _matchDistance =
+  //type based match distance changes didn't have any positive effect experimentally; leaving it
+  //commented out here in case there is need for further examination
+//  _matchDistanceThreshold =
 //    max(
 //      distanceCalc.getMatchDistanceForType(_t1BestKvp),
 //      distanceCalc.getMatchDistanceForType(_t2BestKvp));
-  _reviewDistance =
+  _reviewDistanceThreshold =
     max(
       distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t1BestKvp),
       distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::t2BestKvp));
+  //density based distance changes didn't have any positive effect experimentally; leaving it
+  //commented out here in case there is need for further examination
   /*if (poi->getTags().get("station") != "light_rail" &&
       poi->getTags().get("amenity") != "fuel")
   {
-    distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistance);
-    distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistance);
+    distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistanceThreshold);
+    distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistanceThreshold);
   }*/
 
   // calculate the 2 sigma for the distance between the two objects
   const double sigma1 = poi->getCircularError() / 2.0;
   const double sigma2 = poly->getCircularError() / 2.0;
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
-  const double reviewDistancePlusCe = _reviewDistance + ce;
+  const double reviewDistancePlusCe = _reviewDistanceThreshold + ce;
   _closeMatch = _distance <= reviewDistancePlusCe;
-  //close match is a requirement, regardless of the evidence count
+  //close match is a requirement for any matching, regardless of the evidence count
   if (!_closeMatch)
   {
     return 0;
   }
-  unsigned int evidence = _distance <= _matchDistance ? 2 : 0;
+  unsigned int evidence = _distance <= _matchDistanceThreshold ? 2 : 0;
 
-  LOG_VART(_matchDistance);
-  LOG_VART(_reviewDistance);
+  LOG_VART(_matchDistanceThreshold);
+  LOG_VART(_reviewDistanceThreshold);
   LOG_VART(poi->getCircularError());
   LOG_VART(poly->getCircularError());
   LOG_VART(reviewDistancePlusCe);
@@ -337,7 +338,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   //PoiPolygonDistanceExtractor will always be run before this one
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
-  evidence += alphaShapeDist <= _matchDistance ? 2 : 0;
+  evidence += alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
   LOG_VART(alphaShapeDist);
   return evidence;
 }
@@ -357,8 +358,8 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
   LOG_VART(_typeScore);
   LOG_VART(typeMatch);
-  LOG_VART(_t1BestKvp);
-  LOG_VART(_t2BestKvp);
+  LOG_VART(PoiPolygonTypeScoreExtractor::t1BestKvp);
+  LOG_VART(PoiPolygonTypeScoreExtractor::t2BestKvp);
 
   return evidence;
 }
@@ -375,11 +376,9 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   return evidence;
 }
 
-unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi,
-                                                           ConstElementPtr poly)
+unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
-  //TODO: move score threshold to config
   const bool addressMatch = addressScore == 1.0;
   LOG_VART(addressMatch);
   return addressMatch ? 1 : 0;
@@ -413,7 +412,11 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     {
       evidence += _getAddressEvidence(poi, poly);
     }
-    //TODO: move values to config - or consider removing this condition
+    //Tightening up the requirements for running the convex poly calculation here to improve
+    //runtime.  These requirements can possibly be removed, if deemed necessary.  The school
+    //requirement definitely seems unreasonable (although this type of evidence has only
+    //been found with school pois  in dataset C so far), but when removing it scores dropped for
+    //other datasets.  So, more investigation needs to be done here (see #1173).
     if (evidence < MATCH_EVIDENCE_THRESHOLD && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
     {
