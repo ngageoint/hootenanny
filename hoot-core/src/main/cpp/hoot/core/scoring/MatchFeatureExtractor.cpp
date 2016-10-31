@@ -249,7 +249,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
       }
     }
   }
-  LOG_INFO("Collected" << _samples.size() << " samples.");
+  LOG_INFO("Collected " << _samples.size() << " samples.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

@@ -27,7 +27,6 @@
 #include "PoiPolygonMatch.h"
 
 // geos
-//#include <geos/geom/Geometry.h>
 #include <geos/util/TopologyException.h>
 
 // hoot
@@ -244,22 +243,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
-  unsigned int evidence = -1;
-  try
-  {
-    evidence = _calculateEvidence(_poi, _poly);
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-    {
-      LOG_WARN(
-        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
-        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-      _badGeomCount++;
-    }
-    return;
-  }
+  const unsigned int evidence = _calculateEvidence(_poi, _poly);
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
@@ -276,6 +260,11 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
+  if (_distance == -1.0)
+  {
+    _closeMatch = false;
+    return 0;
+  }
 
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
@@ -325,6 +314,8 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
                                                              ConstElementPtr poly)
 {
   unsigned int evidence = 0;
+  //don't really need to put a distance == -1.0 check here for now, since we're assuming
+  //PoiPolygonDistanceExtractor will always be run before this one
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   evidence += alphaShapeDist <= _matchDistance ? 2 : 0;

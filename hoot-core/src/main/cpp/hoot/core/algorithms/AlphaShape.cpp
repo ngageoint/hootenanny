@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -327,15 +327,16 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
   {
     if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
-      cout << flush;
+      //cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
+      //cout << flush;
+      LOG_TRACE("Progress: " << i << " of " << (randomized.size() - 1));
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << endl;
-  }
+  //if (Log::getInstance().getLevel() <= Log::Info)
+  //{
+    //cout << endl;
+  //}
 }
 
 shared_ptr<OsmMap> AlphaShape::toOsmMap()

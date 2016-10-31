@@ -55,24 +55,34 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
                                                            const ConstElementPtr& poi,
                                                            const ConstElementPtr& poly) const
 {
-  ElementConverter elementConverter(map.shared_from_this());
-  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  try
   {
-    throw geos::util::TopologyException();
-  }
-  shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    ElementConverter elementConverter(map.shared_from_this());
+    shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+    {
+      throw geos::util::TopologyException();
+    }
+    shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
-  OsmMapPtr polyMap(new OsmMap());
-  ElementPtr polyTemp(poly->clone());
-  polyMap->addElement(polyTemp);
-  shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
-  //oddly, even if the area is zero calc'ing the distance can have a positive effect
-  /*if (polyAlphaShape->getArea() == 0.0)
+    OsmMapPtr polyMap(new OsmMap());
+    ElementPtr polyTemp(poly->clone());
+    polyMap->addElement(polyTemp);
+    shared_ptr<Geometry> polyAlphaShape = AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
+    //oddly, even if the area is zero calc'ing the distance can have a positive effect
+    /*if (polyAlphaShape->getArea() == 0.0)
+    {
+      return -1.0;
+    }*/
+    return polyAlphaShape->distance(poiGeom.get());
+  }
+  catch (const geos::util::TopologyException& e)
   {
+    LOG_TRACE(
+      "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+      "to a geometry: " << poly->toString() << "\n" << poi->toString() << "\n" << e.what());
     return -1.0;
-  }*/
-  return polyAlphaShape->distance(poiGeom.get());
+  }
 }
 
 }

@@ -54,14 +54,24 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map,
                                                  const ConstElementPtr& poi,
                                                  const ConstElementPtr& poly) const
 {
-  ElementConverter elementConverter(map.shared_from_this());
-  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  try
   {
-    throw geos::util::TopologyException();
+    ElementConverter elementConverter(map.shared_from_this());
+    shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+    {
+      throw geos::util::TopologyException();
+    }
+    shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    return polyGeom->distance(poiGeom.get());
   }
-  shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-  return polyGeom->distance(poiGeom.get());
+  catch (const geos::util::TopologyException& e)
+  {
+    LOG_TRACE(
+      "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+      "to a geometry: " << poly->toString() << "\n" << poi->toString() << "\n" << e.what());
+    return -1.0;
+  }
 }
 
 }
