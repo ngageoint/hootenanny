@@ -45,8 +45,8 @@ PoiPolygonAlphaShapeDistanceExtractor::PoiPolygonAlphaShapeDistanceExtractor()
 }
 
 double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
-                                                           const ConstElementPtr& poi,
-                                                           const ConstElementPtr& poly) const
+                                                      const ConstElementPtr& poi,
+                                                      const ConstElementPtr& poly) const
 {
   try
   {
