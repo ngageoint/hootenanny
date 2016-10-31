@@ -27,7 +27,6 @@
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
-//#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 
@@ -43,12 +42,6 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor()
 {
 }
-
-/*void PoiPolygonDistanceScoreExtractor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions config = ConfigOptions(conf);
-  //setNameScoreThreshold(config.getPoiPolygonMatchNameThreshold());
-}*/
 
 double PoiPolygonDistanceExtractor::extract(const OsmMap& map,
                                                  const ConstElementPtr& poi,

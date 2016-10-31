@@ -27,7 +27,6 @@
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
-//#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
@@ -44,12 +43,6 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAlphaShapeDistanceExtractor)
 PoiPolygonAlphaShapeDistanceExtractor::PoiPolygonAlphaShapeDistanceExtractor()
 {
 }
-
-/*void PoiPolygonAlphaShapeDistanceScoreExtractor::setConfiguration(const Settings& conf)
-{
-  ConfigOptions config = ConfigOptions(conf);
-  //setNameScoreThreshold(config.getPoiPolygonMatchNameThreshold());
-}*/
 
 double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
                                                            const ConstElementPtr& poi,

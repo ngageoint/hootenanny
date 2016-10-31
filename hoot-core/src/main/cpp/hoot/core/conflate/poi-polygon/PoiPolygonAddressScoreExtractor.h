@@ -61,7 +61,7 @@ public:
    * @param map map containing the elements whose score is to be determined
    * @param poi a POI element
    * @param poly a polygon element
-   * @return
+   * @return the address score
    */
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;

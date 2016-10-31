@@ -30,16 +30,15 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
-//#include <hoot/core/util/Configurable.h>
 
 
 namespace hoot
 {
 
 /**
- *
+ * Calculates the convex hull distance between a poi and a polygon
  */
-class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase//, public Configurable
+class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
@@ -50,10 +49,16 @@ public:
   virtual string getClassName() const
   { return PoiPolygonAlphaShapeDistanceExtractor::className(); }
 
+  /**
+   * Calculates the convex hull distance between a poi and a polygon
+   *
+   * @param map map containing the elements whose distance is to be determined
+   * @param poi a POI element
+   * @param poly a polygon element
+   * @return the distance between the two elements
+   */
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
-
-  //virtual void setConfiguration(const Settings& conf);
 
 };
 

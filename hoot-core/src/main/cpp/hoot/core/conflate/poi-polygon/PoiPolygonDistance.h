@@ -37,9 +37,7 @@ namespace hoot
 {
 
 /**
- * Determines if two features have an distance match
- *
- * //TODO: encapsulate some of the distance logic in PoiPolygonMatch into here
+ * Various utilities related to distance used when gather poi/polygon match evidence.
  */
 class PoiPolygonDistance
 {
