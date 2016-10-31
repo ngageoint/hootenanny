@@ -199,40 +199,61 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
-void PoiPolygonMatch::_calculateMatchWeka(const ElementId& eid1, const ElementId& eid2)
+void PoiPolygonMatch::_calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
 {
-  _class.setMiss();
+//  _class.setMiss();
 
-  _categorizeElementsByGeometryType(eid1, eid2);
+//  _categorizeElementsByGeometryType(eid1, eid2);
 
-  try
-  {
-    const double distance = PoiPolygonDistanceExtractor().extract(*_map, _poi, _poly);
-    const double convexPolydistance =
-      PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, _poi, _poly);
-    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, _poi, _poly);
-    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, _poi, _poly);
-    PoiPolygonAddressScoreExtractor addressScoreExtractor;
-    addressScoreExtractor.setExactAddressMatching(false);
-    const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
+//  try
+//  {
+//    const double distance = PoiPolygonDistanceExtractor().extract(*_map, _poi, _poly);
+//    //const double convexPolydistance =
+//      //PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, _poi, _poly);
+//    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, _poi, _poly);
+//    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, _poi, _poly);
+//    PoiPolygonAddressScoreExtractor addressScoreExtractor;
+//    addressScoreExtractor.setExactAddressMatching(false);
+//    const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
 
+//    /*if (distance <= 10.698997)
+//    {
+//      if (typeScore > 0.576)
+//      {
+//        if (nameScore > 0.782878)
+//        {
+//          if (typeScore <= 0.8)
+//          {
+//            if (typeScore <= 0.64)
+//            {
+//              _class.setMatch();
+//            }
+//          }
+//          else
+//          {
+//            if (distance <= 0.000371)
+//            {
+//              _class.setMatch();
+//            }
+//          }
+//        }
+//      }
+//    }*/
+//  }
+//  catch (const geos::util::TopologyException& e)
+//  {
+//    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+//    {
+//      LOG_WARN(
+//        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
+//        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
+//      _badGeomCount++;
+//    }
+//    return;
+//  }
 
-
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-    {
-      LOG_WARN(
-        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
-        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-      _badGeomCount++;
-    }
-    return;
-  }
-
-  LOG_VART(_class);
-  LOG_TRACE("**************************");
+//  LOG_VART(_class);
+//  LOG_TRACE("**************************");
 }
 
 void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
