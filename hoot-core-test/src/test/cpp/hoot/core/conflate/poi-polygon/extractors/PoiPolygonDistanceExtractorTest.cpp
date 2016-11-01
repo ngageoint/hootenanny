@@ -56,31 +56,16 @@ public:
 
   void runBasicTest()
   {
-//    OsmReader reader;
-//    OsmMap::resetCounters();
-//    shared_ptr<OsmMap> map(new OsmMap());
-//    reader.setDefaultStatus(Status::Unknown1);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_CNIGS_Rivers_REF1-cropped.osm",
-//      map);
-//    reader.setDefaultStatus(Status::Unknown2);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
-//      map);
-//    MapProjector::projectToPlanar(map);
+    PoiPolygonDistanceExtractor uut;
+    OsmMapPtr map(new OsmMap());
 
-//    SampledAngleHistogramExtractor angleHistogramExtractor;
-//    angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());
-//    angleHistogramExtractor.setSampleDistance(ConfigOptions().getWayAngleSampleDistance());
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-//      0.040583,
-//      angleHistogramExtractor.extract(
-//        *map,
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001f4b")[0]),
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])),
-//      1e-6);
-
-
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    NodePtr node1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, uut.extract(*map, node1, way1), 0.0001);
   }
 };
 

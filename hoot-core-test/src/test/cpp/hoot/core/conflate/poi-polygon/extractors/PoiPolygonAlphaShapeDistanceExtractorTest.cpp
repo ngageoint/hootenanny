@@ -26,13 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/MapProjector.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 using namespace hoot;
 
 // CPP Unit
@@ -56,31 +53,26 @@ public:
 
   void runBasicTest()
   {
-//    OsmReader reader;
-//    OsmMap::resetCounters();
-//    shared_ptr<OsmMap> map(new OsmMap());
-//    reader.setDefaultStatus(Status::Unknown1);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_CNIGS_Rivers_REF1-cropped.osm",
-//      map);
-//    reader.setDefaultStatus(Status::Unknown2);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
-//      map);
-//    MapProjector::projectToPlanar(map);
+    PoiPolygonAlphaShapeDistanceExtractor uut;
 
-//    SampledAngleHistogramExtractor angleHistogramExtractor;
-//    angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());
-//    angleHistogramExtractor.setSampleDistance(ConfigOptions().getWayAngleSampleDistance());
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-//      0.040583,
-//      angleHistogramExtractor.extract(
-//        *map,
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001f4b")[0]),
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])),
-//      1e-6);
-
-
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
+      false,
+      Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
+      false,
+      Status::Unknown2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0,
+      uut.extract(
+        *map,
+        TestUtils::getElementWithTag(map, "name", "test1"), //poly
+        TestUtils::getElementWithTag(map, "name", "test2")), //poi
+      0.0001);
   }
 };
 
