@@ -637,9 +637,19 @@ IMPORTANT:  File Geodatabase files, Shapefiles and .osm datasets are now support
 .Importing data into Hootenanny.
 image::user/images/id/hoot_add_dataset.png[scaledwidth="75%"]
 
+*_Import Directory_*
+
+When users want to add multiple datasets from the same directory, Hootenanny has a feature to import geospatial data from one directory as separate datasets.  After selecting 'Import Directory', the user is presented with a form with similar options to the _Import Single Dataset_ form.  The main difference is the user will select multiple datasets from one directory with each being loaded as a separate dataset.  While the user can select multiple datasets in the _Import Single Dataset_, they will be combined into one dataset.  Each dataset will be loaded into the designated folder and with the selected translation schema.  The user also has the option to apply a custom suffix to each dataset to avoid naming conflicts or for data management.  Currently, the import directory form supports the following import types: Shapfile and OpenStreetMap (.osm or .pbf).
+
+If there is a conflict with a dataset in the _Import Files List_, it will highlight as red.  Hovering over the dataset will reveal the issue, which can include a dataset already having the name or an unallowed character within the dataset name.  The dataset name cannot be changed in the form; the user can either change the name in the local folder or add a custom suffix.
+
 *_Bulk Import_*
 
-To ingest multiple datasets in bulk mode, Hootenanny provides a bulk importer where additional data can be added as rows to a form that handles the ingest data job.  To access this feature, right-click on the Add Datasets button as shown below and select the Bulk Import option.  A _Bulk Importer_ menu will appear with each row representing a unique dataset to import along with any relevant import options.  Click import when finished to submit the job.
+Differing from importing datasets from one directory, users can use the _Bulk Import_ tool to import datasets in separate transactions.  The user can add up to 10 rows as 10 different import jobs.  The user can select a different translation and folder path for each row.  The bulk import form also allows a user to change the layer name.  Currently, the bulk import supports the following import types: Shapefile, OpenStreetmap, Geonames, and File Geodatabase. 
+
+If there is a conflict with a dataset name it will highlight as red.  Hovering over the dataset will reveal the issue, which can include a dataset already having the name or an unallowed character within the dataset name.  The user can either change the _Save As_ name or apply a custom suffix to each dataset to avoid naming conflicts or for data management.  The custom suffix will be applied to all datasets being imported.
+
+After starting Import, a log will appear by clicking _Show More_, which will provide the user with updates during the import process.
 
 [[HootBulkImport]]
 .Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import.
