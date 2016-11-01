@@ -44,12 +44,12 @@ class PoiPolygonDistance
 
 public:
 
-  PoiPolygonDistance(double matchDistanceDefault, double reviewDistanceDefault,
-                            const Tags& polyTags, long searchRadius);
+  PoiPolygonDistance(double matchDistanceThresholdDefault, double reviewDistanceThresholdDefault,
+                     const Tags& polyTags, long searchRadius);
 
-  PoiPolygonDistance(double matchDistanceDefault, double reviewDistanceDefault,
-                            const Tags& polyTags, long searchRadius, long surroundingPolyCount,
-                            long surroundingPoiCount);
+  PoiPolygonDistance(double matchDistanceThresholdDefault, double reviewDistanceThresholdDefault,
+                     const Tags& polyTags, long searchRadius, long surroundingPolyCount,
+                     long surroundingPoiCount);
 
   /**
    * Returns a custom match distance for the given type
@@ -87,8 +87,8 @@ public:
 
 private:
 
-  double _matchDistanceDefault;
-  double _reviewDistanceDefault;
+  double _matchDistanceThresholdDefault;
+  double _reviewDistanceThresholdDefault;
   Tags _polyTags;
   long _searchRadius;
   long _surroundingPolyCount;

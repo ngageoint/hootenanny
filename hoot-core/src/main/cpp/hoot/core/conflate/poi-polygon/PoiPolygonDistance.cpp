@@ -32,12 +32,11 @@
 namespace hoot
 {
 
-PoiPolygonDistance::PoiPolygonDistance(double matchDistanceDefault,
-                                                                     double reviewDistanceDefault,
-                                                                     const Tags& polyTags,
-                                                                     long searchRadius) :
-_matchDistanceDefault(matchDistanceDefault),
-_reviewDistanceDefault(reviewDistanceDefault),
+PoiPolygonDistance::PoiPolygonDistance(double matchDistanceThresholdDefault,
+                                       double reviewDistanceThresholdDefault,
+                                       const Tags& polyTags, long searchRadius) :
+_matchDistanceThresholdDefault(matchDistanceThresholdDefault),
+_reviewDistanceThresholdDefault(reviewDistanceThresholdDefault),
 _polyTags(polyTags),
 _searchRadius(searchRadius),
 _surroundingPolyCount(-1),
@@ -45,14 +44,12 @@ _surroundingPoiCount(-1)
 {
 }
 
-PoiPolygonDistance::PoiPolygonDistance(double matchDistanceDefault,
-                                                                     double reviewDistanceDefault,
-                                                                     const Tags& polyTags,
-                                                                     long searchRadius,
-                                                                     long surroundingPolyCount,
-                                                                     long surroundingPoiCount) :
-_matchDistanceDefault(matchDistanceDefault),
-_reviewDistanceDefault(reviewDistanceDefault),
+PoiPolygonDistance::PoiPolygonDistance(double matchDistanceThresholdDefault,
+                                       double reviewDistanceThresholdDefault,
+                                       const Tags& polyTags, long searchRadius,
+                                       long surroundingPolyCount, long surroundingPoiCount) :
+_matchDistanceThresholdDefault(matchDistanceThresholdDefault),
+_reviewDistanceThresholdDefault(reviewDistanceThresholdDefault),
 _polyTags(polyTags),
 _searchRadius(searchRadius),
 _surroundingPolyCount(surroundingPolyCount),
@@ -62,7 +59,7 @@ _surroundingPoiCount(surroundingPoiCount)
 
 double PoiPolygonDistance::getMatchDistanceForType(const QString /*typeKvp*/) const
 {
-  return _matchDistanceDefault;
+  return _matchDistanceThresholdDefault;
 }
 
 double PoiPolygonDistance::getReviewDistanceForType(const QString typeKvp) const
@@ -76,7 +73,7 @@ double PoiPolygonDistance::getReviewDistanceForType(const QString typeKvp) const
   {
     return 150.0;
   }
-  return _reviewDistanceDefault;
+  return _reviewDistanceThresholdDefault;
 }
 
 double PoiPolygonDistance::_getPolyDensity() const

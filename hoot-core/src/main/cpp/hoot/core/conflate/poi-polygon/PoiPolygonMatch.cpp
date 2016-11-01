@@ -102,15 +102,15 @@ _rf(rf)
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 double matchDistance, double reviewDistance,
+                                 double matchDistanceThreshold, double reviewDistanceThreshold,
                                  double nameScoreThreshold, double typeScoreThreshold) :
 Match(threshold),
 _map(map),
 _eid1(eid1),
 _eid2(eid2),
 _distance(-1.0),
-_matchDistanceThreshold(matchDistance),
-_reviewDistanceThreshold(reviewDistance),
+_matchDistanceThreshold(matchDistanceThreshold),
+_reviewDistanceThreshold(reviewDistanceThreshold),
 _closeMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(typeScoreThreshold),
@@ -318,12 +318,11 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
   const double reviewDistancePlusCe = _reviewDistanceThreshold + ce;
   _closeMatch = _distance <= reviewDistancePlusCe;
-  //close match is a requirement for any matching, regardless of the evidence count
+  //close match is a requirement for any matching, regardless of the final total evidence count
   if (!_closeMatch)
   {
     return 0;
   }
-  unsigned int evidence = _distance <= _matchDistanceThreshold ? 2 : 0;
 
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_reviewDistanceThreshold);
@@ -334,22 +333,20 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeMatch);
 
-  return evidence;
+  return _distance <= _matchDistanceThreshold ? 2 : 0;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
                                                              ConstElementPtr poly)
 {
-  unsigned int evidence = 0;
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
-  evidence += alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
 
   LOG_VART(alphaShapeDist);
 
-  return evidence;
+  return alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -363,24 +360,22 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
     _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
   }
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
-  unsigned int evidence = typeMatch ? 1 : 0;
 
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
 
-  return evidence;
+  return typeMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   _nameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
-  unsigned int evidence = nameMatch ? 1 : 0;
 
   LOG_VART(nameMatch);
 
-  return evidence;
+  return nameMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -403,7 +398,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getDistanceEvidence(poi, poly);
 
-  //close match is a requirement, regardless of the evidence count
+  //see comment in _getDistanceEvidence
   if (!_closeMatch)
   {
     return 0;

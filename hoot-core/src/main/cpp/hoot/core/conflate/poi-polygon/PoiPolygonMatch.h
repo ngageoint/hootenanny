@@ -121,9 +121,13 @@ public:
   static void resetMatchDistanceInfo();
 
   double getDistance() const { return _distance; }
+  double getMatchDistanceThreshold() const { return _matchDistanceThreshold; }
+  double getReviewDistanceThreshold() const { return _reviewDistanceThreshold; }
   bool getCloseMatch() const { return _closeMatch; }
   double getTypeScore() const { return _typeScore; }
+  double getTypeScoreThreshold() const { return _typeScoreThreshold; }
   double getNameScore() const { return _nameScore; }
+  double getNameScoreThreshold() const { return _nameScoreThreshold; }
   bool getAddressMatch() const { return _addressMatch; }
 
 private:
