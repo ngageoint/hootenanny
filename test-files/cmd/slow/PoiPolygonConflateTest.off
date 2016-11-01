@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# There are issues with inconsistent review tag ordering.  See #1178.
+
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/PoiPolygonConflateTest
 

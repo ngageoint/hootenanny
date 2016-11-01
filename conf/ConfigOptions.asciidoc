@@ -1709,7 +1709,7 @@ See also:
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
 a close match based on distance criteria only.
 
-=== poi.polygon.match.name.threshold
+=== poi.polygon.name.score.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -1725,7 +1725,7 @@ to polygon matching.  Scores are 0 to 1 for similarity and -1 if there are no na
 How far away from a polygon should name matches be considered reviews. This is a fixed value in
 meters that is added to the CE calculation.
 
-=== poi.polygon.match.type.threshold
+=== poi.polygon.type.score.threshold
 
 * Data Type: double
 * Default Value: `0.7`

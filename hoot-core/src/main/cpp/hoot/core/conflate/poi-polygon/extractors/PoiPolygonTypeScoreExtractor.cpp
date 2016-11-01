@@ -53,7 +53,7 @@ PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setTypeScoreThreshold(config.getPoiPolygonMatchTypeThreshold());
+  setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
 }
 
 double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,

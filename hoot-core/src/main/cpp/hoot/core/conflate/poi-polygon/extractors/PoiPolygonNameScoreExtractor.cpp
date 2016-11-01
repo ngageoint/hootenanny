@@ -46,7 +46,7 @@ PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor()
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setNameScoreThreshold(config.getPoiPolygonMatchNameThreshold());
+  setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
 }
 
 double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
