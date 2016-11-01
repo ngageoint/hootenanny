@@ -26,7 +26,6 @@
  */
 
 // Hoot
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/filters/AreaCriterion.h>
 
 // Qt
