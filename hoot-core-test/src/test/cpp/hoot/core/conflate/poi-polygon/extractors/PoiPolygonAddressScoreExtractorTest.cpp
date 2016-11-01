@@ -45,14 +45,14 @@ namespace hoot
 class PoiPolygonAddressScoreExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
-  //CPPUNIT_TEST(runTagTest);
-  //CPPUNIT_TEST(runExactMatchingFalseTest);
-  //CPPUNIT_TEST(runCombinedTagTest);
-  //CPPUNIT_TEST(runRangeTest);
-  //CPPUNIT_TEST(runAltFormatTest);
-  //CPPUNIT_TEST(runSubLetterTest);
+  CPPUNIT_TEST(runTagTest);
+  CPPUNIT_TEST(runExactMatchingFalseTest);
+  CPPUNIT_TEST(runCombinedTagTest);
+  CPPUNIT_TEST(runRangeTest);
+  CPPUNIT_TEST(runAltFormatTest);
+  CPPUNIT_TEST(runSubLetterTest);
   CPPUNIT_TEST(runWayTest);
-  //CPPUNIT_TEST(runRelationTest);
+  CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -214,7 +214,61 @@ public:
 
   void runRelationTest()
   {
+    PoiPolygonAddressScoreExtractor uut;
+    uut.setExactAddressMatching(true);
+    OsmMapPtr map(new OsmMap());
 
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    node1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node1);
+    RelationPtr relation1(new Relation(Status::Unknown2, -1, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    node2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addNode(node2);
+    relation1->addElement("test", node2->getElementId());
+    map->addRelation(relation1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
+
+    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
+    node3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    node3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node3);
+    RelationPtr relation2(new Relation(Status::Unknown2, -2, 15.0));
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    way1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way1);
+    relation2->addElement("test", way1->getElementId());
+    map->addRelation(relation2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, relation2), 0.0);
+
+    NodePtr node4(new Node(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0));
+    node4->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    node4->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node4);
+    RelationPtr relation3(new Relation(Status::Unknown2, -3, 15.0));
+    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    node5->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
+    node5->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
+    map->addNode(node5);
+    relation3->addElement("test", node5->getElementId());
+    map->addRelation(relation3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.0);
+
+    NodePtr node6(new Node(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0));
+    node6->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
+    node6->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
+    map->addNode(node6);
+    RelationPtr relation4(new Relation(Status::Unknown2, -4, 15.0));
+    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    way3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
+    way3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way3);
+    relation4->addElement("test", way3->getElementId());
+    map->addRelation(relation4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.0);
   }
 };
 
