@@ -37,6 +37,8 @@ namespace hoot
 
 /**
  * Calculates the address similarity score of two features
+ *
+ * @todo This doesn't handle abbreviations.
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
