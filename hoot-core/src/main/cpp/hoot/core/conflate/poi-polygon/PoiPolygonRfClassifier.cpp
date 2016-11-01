@@ -25,11 +25,11 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonRfClassifier.h"
-#include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonTypeScoreExtractor.h"
-#include "PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonDistanceExtractor.h"
-#include "PoiPolygonAlphaShapeDistanceExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
+#include "extractors/PoiPolygonDistanceExtractor.h"
+#include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
 #include <hoot/core/Factory.h>

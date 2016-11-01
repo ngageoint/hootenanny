@@ -32,7 +32,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-#include "PoiPolygonDistanceTruthRecorder.h"
+#include "../PoiPolygonDistanceTruthRecorder.h"
 
 // Qt
 #include <QSet>

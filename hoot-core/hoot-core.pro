@@ -1082,10 +1082,10 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h \
     src/main/cpp/hoot/core/filters/AreaCriterion.h \
     src/main/cpp/hoot/core/filters/WayCriterion.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomRules.h \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.h \

@@ -40,8 +40,8 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 
 #include "PoiPolygonMatch.h"
-#include "PoiPolygonPolyCriterion.h"
-#include "PoiPolygonPoiCriterion.h"
+#include "filters/PoiPolygonPolyCriterion.h"
+#include "filters/PoiPolygonPoiCriterion.h"
 
 // Standard
 #include <fstream>
@@ -62,7 +62,7 @@ HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 using namespace Tgs;
 
 /**
- * Searches the specified map for any match potentials.
+ * Searches the specified map for any poi/polygon match potentials
  */
 class PoiPolygonMatchVisitor : public ElementVisitor
 {
@@ -194,8 +194,13 @@ public:
   {
     if (isMatchCandidate(e))
     {
-      collectSurroundingPolyIds(e);
-      collectSurroundingPoiIds(e);
+      //Technically, the density based density matches depends on this data too, but since that
+      //code has been disabled, this check is good enough.
+      if (ConfigOptions().getPoiPolygonEnableCustomRules())
+      {
+        collectSurroundingPolyIds(e);
+        collectSurroundingPoiIds(e);
+      }
       checkForMatch(e);
     }
   }

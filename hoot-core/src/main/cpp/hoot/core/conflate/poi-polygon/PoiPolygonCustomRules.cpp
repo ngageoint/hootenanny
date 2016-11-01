@@ -36,9 +36,9 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 
-#include "PoiPolygonTypeScoreExtractor.h"
-#include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonAddressScoreExtractor.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 
 namespace hoot
