@@ -112,16 +112,28 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
           new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
   }
 
+  double bestAddressScore = -1.0;
   for (int i = 0; i < polyAddresses.size(); i++)
   {
     const QString polyAddress = polyAddresses.at(i);
     for (int j = 0; j < poiAddresses.size(); j++)
     {
       const QString poiAddress = poiAddresses.at(j);
+      LOG_VART(poiAddress);
+      LOG_VART(polyAddress);
       addressScore = addrComp->compare(polyAddress, poiAddress);
       LOG_VART(addressScore);
-      return addressScore;
+      if (addressScore > bestAddressScore)
+      {
+        bestAddressScore = addressScore;
+      }
     }
+  }
+  if (bestAddressScore > 0.0)
+  {
+    addressScore = bestAddressScore;
+    LOG_VART(addressScore);
+    return addressScore;
   }
 
   addressScore = 0.0;
