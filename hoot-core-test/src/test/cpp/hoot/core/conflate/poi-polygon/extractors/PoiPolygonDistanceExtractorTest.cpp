@@ -49,12 +49,12 @@ namespace hoot
 class PoiPolygonDistanceExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonDistanceExtractorTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runBasicTest()
   {
 //    OsmReader reader;
 //    OsmMap::resetCounters();

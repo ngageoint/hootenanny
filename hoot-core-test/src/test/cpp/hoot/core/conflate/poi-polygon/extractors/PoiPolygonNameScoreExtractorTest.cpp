@@ -49,12 +49,14 @@ namespace hoot
 class PoiPolygonNameScoreExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(scoreTest);
+  CPPUNIT_TEST(elementHasNameTest);
+  CPPUNIT_TEST(elementNameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void scoreTest()
   {
     /*OsmReader reader;
     OsmMap::resetCounters();
@@ -79,6 +81,16 @@ public:
         map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001f4b")[0]),
         map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])),
       1e-6)*/;
+  }
+
+  void elementHasNameTest()
+  {
+
+  }
+
+  void elementNameTest()
+  {
+
   }
 };
 
