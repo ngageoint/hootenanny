@@ -20,8 +20,10 @@ This guide is intended as a general purpose reference to understand various comp
 Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is only supported in Chrome (recommended) and/or Chromium.
 
 [[HootiD-UILayout]]
-.Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Layer directory structure with scrolling and resize options. *H*: Recently Used Layers dropdown lists most recent layers accessed. *I*: Layer color picker. *J* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *K*: Add Secondary Dataset button.  *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
+.Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Add Secondary Dataset button. *H*: Layer directory structure with scrolling and resize options. *I*: Recently Used Layers dropdown lists most recent layers accessed. *J*: Layer color picker. *K* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_UI_layout.png[]
+
+_Note: Some screenshots may not reflect the latest version of Hootenanny UI._
 
 === Adding Layers to the Map
 
@@ -248,23 +250,25 @@ The following table provides all of the available shortcut keys for accessing Ho
 | 3 | Create new area feature
 | 6 | Measure length
 | 7 | Measure area
-| 8 | Clip to bounding box
-| 9 | Clip to visual extent
-| Ctrl + z | Undo
-| Ctrl + y | Redo
-| Ctrl + s | Save
+| 8 | Clip Dataset(s)
+| Ctrl + b | Bookmark current review
 | Ctrl + c | Copies feature geometry and tags
+| Ctrl + s | Save
 | Ctrl + v | Pastes selected feature geometry/tags
-| Ctrl + Shift + v | Pastes selected tags using the overwrite option
 | Ctrl + Alt + v | Pastes selected tags using the append option
+| Ctrl + Shift + v | Pastes selected tags using the overwrite option
+| Ctrl + y | Redo
+| Ctrl + z | Undo
 | Ctrl + Backspace | Deletes object permanently
 | Shift + Left mouse click | Selects multiple features geometry/tags within layer
-| Shift + R | Shows review relations for a selected feature within a layer (in review mode) 
-| Alt + b | Switches b/w layers during post-conflation conflict review
+| Shift + r | Shows review relations for a selected feature within a layer (in review mode) 
+| Shift + t | Switches between layers during post-conflation conflict review
+| Alt + i | Open Image Carousel
 | Alt + n | Toggles layer visibility on/off
 | + | Zoom in one level
 | - | Zoom out one level
 | / | Toggles display of overview map and map-in-map results (in review mode)
+| ↓,↑,←,→ | Pan map in direction
 | a | Continue drawing a line at the selected node
 | b | Display background layer switcher
 | c | Open image carousel
@@ -276,13 +280,11 @@ The following table provides all of the available shortcut keys for accessing Ho
 | n | Advances to next review (in review mode) 
 | o | Make feature a circle (must be poly or closed loop line)
 | p | Steps back to previous review (in review mode) 
-| r | rotate object around center or resolved (in review mode) 
+| r | Rotate object around center or resolved (in review mode) 
 | s | Straighten a line or square corner of area
-| t | In review mode with a feature selected, toggles between input/conflated layers
 | x | Split line into two at selected node
-| ↓,↑,←,→ | Pan map in direction
 | v | Make line go in opposite direction
-| w | Toggles Wireframe vector display on/off
+| w | Toggles wireframe vector display on/off
 | Enter/Esc | Stops drawing feature
 | F11 | Sets browser to full screen
 |======
