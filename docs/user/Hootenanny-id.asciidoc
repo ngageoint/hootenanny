@@ -642,6 +642,10 @@ When users want to add multiple datasets from the same directory, Hootenanny has
 
 If there is a conflict with a dataset in the _Import Files List_, it will highlight as red.  Hovering over the dataset will reveal the issue, which can include a dataset already having the name or an unallowed character within the dataset name.  The dataset name cannot be changed in the form; the user can either change the name in the local folder or add a custom suffix.
 
+[[AddNewDirectory]]
+.Importing data into Hootenanny.
+image::user/images/id/hoot_add_directory.png[scaledwidth="75%"]
+
 *_Bulk Import_*
 
 Differing from importing datasets from one directory, users can use the _Bulk Import_ tool to import datasets in separate transactions.  The user can add up to 10 rows as 10 different import jobs.  The user can select a different translation and folder path for each row.  The bulk import form also allows a user to change the layer name.  Currently, the bulk import supports the following import types: Shapefile, OpenStreetmap, Geonames, and File Geodatabase. 
