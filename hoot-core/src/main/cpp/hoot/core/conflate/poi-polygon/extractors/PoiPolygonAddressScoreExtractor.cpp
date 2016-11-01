@@ -61,23 +61,24 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
                                                 const ConstElementPtr& poi,
                                                 const ConstElementPtr& poly) const
 {
-  QStringList polyAddresses;
   double addressScore = -1.0;
 
+  QStringList polyAddresses;
   //see if the poly has any address
+  LOG_VART(poly->toString());
   _collectAddressesFromElement(poly, polyAddresses);
-
   if (polyAddresses.size() == 0)
   {
     //if not, try to find the address from a poly way node instead
     if (poly->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
+      _collectAddressesFromWayNodes(dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
     }
-    //if still no luck, try to find the address from a poly way node that is a relation member
+    //if still no luck, try to find the address from a poly relation member
     else if (poly->getElementType() == ElementType::Relation)
     {
-      _collectAddressesFromRelation(dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
+      _collectAddressesFromRelationMembers(
+        dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
     }
   }
   if (polyAddresses.size() == 0)
@@ -87,9 +88,11 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
     LOG_VART(addressScore);
     return addressScore;
   }
+  LOG_VART(polyAddresses);
 
   //see if the poi has an address
   QStringList poiAddresses;
+  LOG_VART(poi->toString());
   _collectAddressesFromElement(poi, poiAddresses);
   if (poiAddresses.size() == 0)
   {
@@ -98,6 +101,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
     LOG_VART(addressScore);
     return addressScore;
   }
+  LOG_VART(poiAddresses);
 
   StringDistancePtr addrComp;
   if (_exactAddressMatching)
@@ -167,9 +171,9 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
         for (int i = startHouseNum; i < endHouseNum + 1; i++)
         {
           combinedAddress = QString::number(i) + " " + street;
-          LOG_VART(combinedAddress);
           if (!addresses.contains(combinedAddress))
           {
+            LOG_VART(combinedAddress);
             addresses.append(combinedAddress);
           }
         }
@@ -178,6 +182,9 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   }
 }
 
+//street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
+//parse through the tokens until you come to a number; assume that is the house number and
+//everything before it is the street name
 void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tags,
                                                                  QStringList& addresses) const
 {
@@ -207,9 +214,9 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
           addressTagValAltFormat += addressParts[i];
         }
         addressTagValAltFormat = addressTagValAltFormat.trimmed();
-        LOG_VART(addressTagValAltFormat);
         if (!addresses.contains(addressTagValAltFormat))
         {
+          LOG_VART(addressTagValAltFormat);
           addresses.append(addressTagValAltFormat);
         }
       }
@@ -238,6 +245,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
       combinedAddress = houseNum + " " + street;
       if (!addresses.contains(combinedAddress))
       {
+        LOG_VART(combinedAddress);
         addresses.append(combinedAddress);
       }
     }
@@ -255,19 +263,17 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
     if (!addresses.contains(addressTagVal))
     {
+      LOG_VART(addressTagVal);
       addresses.append(addressTagVal);
     }
   }
 
-  //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
-  //parse through the tokens until you come to a number; assume that is the house number and
-  //everything before it is the street name
   _parseAddressesInAltFormat(tags, addresses);
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromWay(ConstWayPtr way,
-                                                               QStringList& addresses,
-                                                               const OsmMap& map) const
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(ConstWayPtr way,
+                                                                    QStringList& addresses,
+                                                                    const OsmMap& map) const
 {
   const vector<long> wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
@@ -276,22 +282,20 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromWay(ConstWayPtr way,
   }
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelation(ConstRelationPtr relation,
-                                                                    QStringList& addresses,
-                                                                    const OsmMap& map) const
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(ConstRelationPtr relation,
+                                                                           QStringList& addresses,
+                                                                           const OsmMap& map) const
 {
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
-    if (member->getElementType() == ElementType::Node)
+    _collectAddressesFromElement(member, addresses);
+    if (member->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromElement(member, addresses);
+      _collectAddressesFromWayNodes(dynamic_pointer_cast<const Way>(member), addresses, map);
     }
-    else if (member->getElementType() == ElementType::Way)
-    {
-      _collectAddressesFromWay(dynamic_pointer_cast<const Way>(member), addresses, map);
-    }
+    //haven't seen any address relations within relations, so skipping that for now
   }
 }
 

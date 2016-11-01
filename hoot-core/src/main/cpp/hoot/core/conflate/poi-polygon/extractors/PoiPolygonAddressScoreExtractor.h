@@ -77,8 +77,9 @@ private:
   bool _exactAddressMatching;
 
   void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses) const;
-  void _collectAddressesFromWay(ConstWayPtr way, QStringList& addresses, const OsmMap& map) const;
-  void _collectAddressesFromRelation(ConstRelationPtr relation, QStringList& addresses,
+  void _collectAddressesFromWayNodes(ConstWayPtr way, QStringList& addresses,
+                                     const OsmMap& map) const;
+  void _collectAddressesFromRelationMembers(ConstRelationPtr relation, QStringList& addresses,
                                      const OsmMap& map) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QStringList& addresses) const;
