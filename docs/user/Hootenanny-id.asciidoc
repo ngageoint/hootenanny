@@ -625,9 +625,6 @@ image::user/images/id/hoot_ui_manage.png[scaledwidth="75%"]
 
 The Datasets settings page provides users with different options for managing data in Hootenanny including data ingest (shapefile, osm, geonames, FGDB), data management and data export from Hootenanny into pre-defined output formats and translation schemas.  To access this feature click on Datasets from the Manage Settings page.
 
-.Datasets settings. Users can add new datasets, add a new folder and manage existing datasets.
-image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"]
-
 ===== Data Ingest
 
 When users click on Add Data, a dialog box displaying different options for importing datasets appears. For _Import Type_, users can select a shapefile(s), filegeodatabase, .osm file, geonames text file, etc. or than can upload a .zip containing either a shapefile, filegeodatabase or .osm dataset.  
