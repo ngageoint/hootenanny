@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/filters/NonBuildingAreaCriterion.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 
 // Qt
 #include <QDir>
@@ -47,22 +46,16 @@ public:
 
   void runBasicTest()
   {
-//    OsmMapPtr map(new OsmMap());
-//    OsmMapReaderFactory::getInstance().read(map, "test-files/filters/ComplexBuildings.osm");
+    NonBuildingAreaCriterion uut;
 
-//    BuildingCriterion uut;
-//    uut.setOsmMap(map.get());
-//    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
-//    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));
-//    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "bestbuy")));
-//    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "pho")));
-//    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "panera")));
-//    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
-//    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
-//    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "paneragroup")));
-//    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
+    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    way1->getTags().set("building", "yes");
+    way1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
-
+    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    way2->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(way2));
   }
 };
 

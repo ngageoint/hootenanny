@@ -26,7 +26,7 @@
  */
 
 
-// Hoot
+// Hoots
 #include <hoot/core/filters/WayCriterion.h>
 
 // Qt
