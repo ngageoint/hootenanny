@@ -58,7 +58,7 @@ public class ReviewTestUtils {
         elementWriter.write(mapId, changesetId,
                 FileUtils
                         .readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                                .getResource("hoot/services/review/allDataTypesConflatedOut.osm").getPath()))
+                                .getResource("hoot.services.review/allDataTypesConflatedOut.osm").getPath()))
                         .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\""));
         parsedElementIdsToElementsByType = elementWriter.getParsedElementIdsToElementsByType();
         return changesetId;
