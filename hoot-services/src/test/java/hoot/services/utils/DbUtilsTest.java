@@ -26,6 +26,7 @@
  */
 package hoot.services.utils;
 
+import static hoot.services.testsupport.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -75,7 +76,7 @@ public class DbUtilsTest {
     @Transactional
     public void testUpdateMapsTableTags() throws Exception {
         long userId = MapUtils.insertUser();
-        long mapId = MapUtils.insertMap(userId);
+        long mapId = insertMap(userId);
         JSONParser parser = new JSONParser();
         Map<String, String> tags = new HashMap<>();
         String k1 = "input1";

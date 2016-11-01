@@ -19,6 +19,7 @@
     "MGCP": "translations/MGCP_TRD4.js"
   },
   "settings": {
-    "cleanupDelay": 30000
+    "cleanupDelay": 30000,
+    "port": 8101
   }
 }

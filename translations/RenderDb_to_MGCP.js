@@ -69,14 +69,11 @@ function translateToOgr(tags, elementType, geometryType)
 
     if (tags.tags)
     {
-        // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-        var tList = tags['tags'].split(',');
+        var tStr = tags['tags'].toString();
 
-        for (var i = 0, tLen = tList.length; i < tLen; i++)
-        {
-            var rTag = tList[i].replace(/\"/g,'').split('=>');
-            tags[rTag[0].trim()] = rTag[1].trim();
-        }
+        var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
+
+        for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
 
         delete tags.tags;
     }
@@ -84,4 +81,3 @@ function translateToOgr(tags, elementType, geometryType)
     return mgcp.toMgcp(tags, elementType, geometryType)
 
 } // End of translateToOgr
-
