@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
-#include <hoot/core/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 using namespace hoot;
 

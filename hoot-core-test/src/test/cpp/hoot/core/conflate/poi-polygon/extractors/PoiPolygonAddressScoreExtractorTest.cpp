@@ -26,12 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 using namespace hoot;
 
@@ -62,29 +58,14 @@ public:
 
   void runNodeTest()
   {
-//    OsmReader reader;
-//    OsmMap::resetCounters();
-//    shared_ptr<OsmMap> map(new OsmMap());
-//    reader.setDefaultStatus(Status::Unknown1);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_CNIGS_Rivers_REF1-cropped.osm",
-//      map);
-//    reader.setDefaultStatus(Status::Unknown2);
-//    reader.read(
-//      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
-//      map);
-//    MapProjector::projectToPlanar(map);
+    PoiPolygonAddressScoreExtractor uut;
+    OsmMapPtr map;
 
-//    SampledAngleHistogramExtractor angleHistogramExtractor;
-//    angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());
-//    angleHistogramExtractor.setSampleDistance(ConfigOptions().getWayAngleSampleDistance());
-//    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-//      0.040583,
-//      angleHistogramExtractor.extract(
-//        *map,
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001f4b")[0]),
-//        map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])),
-//      1e-6);
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("name", "blah");
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set("name", "blah");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
 
   }
