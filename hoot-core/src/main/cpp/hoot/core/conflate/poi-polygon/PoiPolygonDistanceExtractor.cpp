@@ -43,9 +43,8 @@ PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor()
 {
 }
 
-double PoiPolygonDistanceExtractor::extract(const OsmMap& map,
-                                                 const ConstElementPtr& poi,
-                                                 const ConstElementPtr& poly) const
+double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
+                                            const ConstElementPtr& poly) const
 {
   try
   {

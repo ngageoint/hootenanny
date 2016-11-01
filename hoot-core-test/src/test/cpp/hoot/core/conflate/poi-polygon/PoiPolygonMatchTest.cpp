@@ -102,6 +102,11 @@ public:
     {
       PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
                           shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+      LOG_VARE(uut.getDistance());
+      LOG_VARE(uut.getCloseMatch());
+      LOG_VARE(uut.getTypeScore());
+      LOG_VARE(uut.getNameScore());
+      LOG_VARE(uut.getAddressMatch());
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
     }
   }

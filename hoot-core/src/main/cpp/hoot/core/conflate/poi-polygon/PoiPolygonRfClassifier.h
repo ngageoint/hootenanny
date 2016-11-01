@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- *
+ * This class lets you extract feature information by using the build-model command to export
+ * an .arff file, which can be viewed in Weka.
  */
 class PoiPolygonRfClassifier
 {

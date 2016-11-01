@@ -62,6 +62,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
                                                 const ConstElementPtr& poly) const
 {
   QStringList polyAddresses;
+  double addressScore = -1.0;
 
   //see if the poly has any address
   _collectAddressesFromElement(poly, polyAddresses);
@@ -82,7 +83,9 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
   if (polyAddresses.size() == 0)
   {
     LOG_TRACE("No poly addresses.");
-    return 0.0;
+    addressScore = 0.0;
+    LOG_VART(addressScore);
+    return addressScore;
   }
 
   //see if the poi has an address
@@ -91,7 +94,9 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
   if (poiAddresses.size() == 0)
   {
     LOG_TRACE("No POI addresses.");
-    return 0.0;
+    addressScore = 0.0;
+    LOG_VART(addressScore);
+    return addressScore;
   }
 
   StringDistancePtr addrComp;
@@ -113,11 +118,15 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
     for (int j = 0; j < poiAddresses.size(); j++)
     {
       const QString poiAddress = poiAddresses.at(j);
-      return addrComp->compare(polyAddress, poiAddress);
+      addressScore = addrComp->compare(polyAddress, poiAddress);
+      LOG_VART(addressScore);
+      return addressScore;
     }
   }
 
-  return 0.0;
+  addressScore = 0.0;
+  LOG_VART(addressScore);
+  return addressScore;
 }
 
 void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString houseNum,
@@ -273,64 +282,5 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelation(ConstRelatio
     }
   }
 }
-
-//bool PoiPolygonAddressScoreExtractor::_addressesMatchesOnSubLetter(const QString polyAddress,
-//                                                                   const QString poiAddress) const
-//{
-//  /* we're also going to allow sub letter differences be matches; ex "34 elm street" matches
-//   * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
-//   * accident, and we'd like to at least end up with a review in that situation.
-//   */
-
-//  //a lot in here may be able to be cleaned up with better use of regex's
-//  const QStringList polyAddressParts = polyAddress.split(QRegExp("\\s"));
-//  if (polyAddressParts.length() > 0)
-//  {
-//    return false;
-//  }
-//  const QStringList poiAddressParts = poiAddress.split(QRegExp("\\s"));
-//  if (poiAddressParts.length() > 0)
-//  {
-//    return false;
-//  }
-
-//  QString polyAddressTemp = polyAddressParts[0];
-//  const QString polyHouseNumStr = polyAddressTemp.replace(QRegExp("[a-z]+"), "");
-//  LOG_VARD(polyHouseNumStr);
-//  bool polyHouseNumOk = false;
-//  /*const int polyHouseNum = */polyHouseNumStr.toInt(&polyHouseNumOk);
-
-//  QString poiAddressTemp = poiAddressParts[0];
-//  const QString poiHouseNumStr = poiAddressTemp.replace(QRegExp("[a-z]+"), "");
-//  bool poiHouseNumOk = false;
-//  /*const int poiHouseNum = */polyHouseNumStr.toInt(&poiHouseNumOk);
-
-//  //don't think this check is needed since the addresses have already been parsed...but will
-//  //leave it here for now
-//  if (polyHouseNumOk && poiHouseNumOk)
-//  {
-//    QString subletterCleanedPolyAddress = polyHouseNumStr;
-//    for (int k = 1; k < polyAddressParts.length(); k++)
-//    {
-//      subletterCleanedPolyAddress += " " + polyAddressParts[k];
-//    }
-//    LOG_VART(subletterCleanedPolyAddress);
-
-//    QString subletterCleanedPoiAddress = poiHouseNumStr;
-//    for (int k = 1; k < poiAddressParts.length(); k++)
-//    {
-//      subletterCleanedPoiAddress += " " + poiAddressParts[k];
-//    }
-//    LOG_VART(subletterCleanedPoiAddress);
-
-//    ExactStringDistance addrComp;
-//    if (addrComp.compare(subletterCleanedPolyAddress, subletterCleanedPoiAddress) == 1.0)
-//    {
-//      return true;
-//    }
-//  }
-
-//  return false;
-//}
 
 }

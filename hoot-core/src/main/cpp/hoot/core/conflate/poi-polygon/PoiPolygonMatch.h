@@ -120,6 +120,12 @@ public:
    */
   static void resetMatchDistanceInfo();
 
+  double getDistance() const { return _distance; }
+  bool getCloseMatch() const { return _closeMatch; }
+  double getTypeScore() const { return _typeScore; }
+  double getNameScore() const { return _nameScore; }
+  bool getAddressMatch() const { return _addressMatch; }
+
 private:
 
   static QString _matchName;
@@ -149,6 +155,8 @@ private:
 
   double _nameScore;
   double _nameScoreThreshold;
+
+  bool _addressMatch;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   set<ElementId> _polyNeighborIds;

@@ -61,10 +61,12 @@ _eid2(eid2),
 _distance(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
+_closeMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
+_addressMatch(false),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -83,10 +85,12 @@ _eid2(eid2),
 _distance(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
+_closeMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonMatchTypeThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonMatchNameThreshold()),
+_addressMatch(false),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)
@@ -107,10 +111,12 @@ _eid2(eid2),
 _distance(-1.0),
 _matchDistanceThreshold(matchDistance),
 _reviewDistanceThreshold(reviewDistance),
+_closeMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(typeScoreThreshold),
 _nameScore(-1.0),
 _nameScoreThreshold(nameScoreThreshold),
+_addressMatch(false),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -195,6 +201,8 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
+//Weka didn't help any with improving this matching.  Leaving this method here in case anyone
+//wants to explore in weka with this again.
 void PoiPolygonMatch::_calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
 {
 //  _class.setMiss();
@@ -338,7 +346,9 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   evidence += alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
+
   LOG_VART(alphaShapeDist);
+
   return evidence;
 }
 
@@ -355,7 +365,6 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
   unsigned int evidence = typeMatch ? 1 : 0;
 
-  LOG_VART(_typeScore);
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
@@ -370,7 +379,6 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   unsigned int evidence = nameMatch ? 1 : 0;
 
   LOG_VART(nameMatch);
-  LOG_VART(_nameScore);
 
   return evidence;
 }
@@ -378,17 +386,19 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
-  const bool addressMatch = addressScore == 1.0;
-  LOG_VART(addressMatch);
-  return addressMatch ? 1 : 0;
+  _addressMatch = addressScore == 1.0;
+
+  LOG_VART(_addressMatch);
+
+  return _addressMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   unsigned int evidence = 0;
 
-  //need to get type evidence first, b/c the best type kvp can influence the behavior of the
-  //distance matching
+  //need to get type evidence before distance evidence, b/c the best type kvp can influence the
+  //behavior of the distance matching
   evidence += _getTypeEvidence(poi, poly);
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -396,8 +406,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //close match is a requirement, regardless of the evidence count
   if (!_closeMatch)
   {
-    //don't exit early here if printing truths, b/c we need to calculate type match for that first
-    //before exiting
     return 0;
   }
 
@@ -412,10 +420,11 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       evidence += _getAddressEvidence(poi, poly);
     }
     //Tightening up the requirements for running the convex poly calculation here to improve
-    //runtime.  These requirements can possibly be removed, if deemed necessary.  The school
-    //requirement definitely seems unreasonable (although this type of evidence has only
-    //been found with school pois  in dataset C so far), but when removing it scores dropped for
-    //other datasets.  So, more investigation needs to be done here (see #1173).
+    //runtime.  These requirements can possibly be removed at some point in the future, if proven
+    //necessary.  The school requirement definitely seems too type specific (this type of evidence
+    //has actually only been found with school pois in one test dataset so far), but when
+    //removing it scores dropped for other datasets.  So, more investigation needs to be done to
+    //clean the school restriction up (see #1173).
     if (evidence < MATCH_EVIDENCE_THRESHOLD && _distance <= 35.0 &&
         poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
     {
@@ -431,7 +440,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     {
       evidence++;
     }
-    else if (ConfigOptions().getPoiPolygonEnableCustomMatchRules())
+    else if (ConfigOptions().getPoiPolygonEnableCustomRules())
     {
       PoiPolygonCustomRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
       matchRules.collectInfo(poi, poly);
@@ -470,8 +479,16 @@ map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>
 
 QString PoiPolygonMatch::toString() const
 {
-  return QString("PoiPolygonMatch %1 %2 P: %3").arg(_poi->getElementId().toString()).
-    arg(_poly->getElementId().toString()).arg(_class.toString());
+  return
+    QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address match: %8")
+      .arg(_poi->getElementId().toString())
+      .arg(_poly->getElementId().toString())
+      .arg(_class.toString())
+      .arg(_distance)
+      .arg(_closeMatch)
+      .arg(_typeScore)
+      .arg(_nameScore)
+      .arg(_addressMatch);
 }
 
 }

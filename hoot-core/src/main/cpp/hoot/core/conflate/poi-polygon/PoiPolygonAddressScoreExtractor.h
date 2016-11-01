@@ -81,7 +81,6 @@ private:
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QStringList& addresses) const;
   void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses) const;
-  //bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 
 };
 

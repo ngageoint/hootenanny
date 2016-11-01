@@ -1060,7 +1060,7 @@ script.
 === ogr.log.limit
 
 * Data Type: double
-* Default Value: `999`
+* Default Value: `3`
 
 The number of identical log messages that will be emitted before they're silenced.
 
@@ -1674,7 +1674,7 @@ If false, POI to polygon conflation will not take address tags into account.  Di
 to boost runtime performance if your data has little or no address information or you know the
 address information to be inaccurate.
 
-=== poi.polygon.enable.custom.match.rules
+=== poi.polygon.enable.custom.rules
 
 * Data Type: bool
 * Default Value: `false`

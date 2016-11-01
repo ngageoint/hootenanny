@@ -53,17 +53,19 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  return
+  const double nameScore =
     NameExtractor(
       new TranslateStringDistance(
         new MeanWordSetDistance(
           new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
    .extract(poi, poly);
+  LOG_VART(nameScore);
+  return nameScore;
 }
 
 bool PoiPolygonNameScoreExtractor::elementHasName(ConstElementPtr element)
 {
-  QStringList names = element->getTags().getNames();
+  const QStringList names = element->getTags().getNames();
   for (int i = 0; i < names.size(); i++)
   {
     if (!element->getTags().get("name").trimmed().isEmpty())
