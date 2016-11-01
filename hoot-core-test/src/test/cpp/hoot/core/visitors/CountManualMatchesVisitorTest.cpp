@@ -28,10 +28,6 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/visitors/AddGeometryTypeVisitor.h>
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 // Qt
@@ -53,26 +49,14 @@ public:
 
   void runBasicTest()
   {
-//    OsmMap::resetCounters();
-//    shared_ptr<OsmMap> map(new OsmMap());
-//    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-//    n1->getTags()["name"] = "strange test";
-//    map->addNode(n1);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon2.osm", false, Status::Unknown2);
 
-//    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-//    w1->setTag("highway", "road");
-//    map->addWay(w1);
-
-//    AddGeometryTypeVisitor v;
-//    map->visitRw(v);
-
-//    QString ss1 = n1->getTags().toString().replace("\n", " ");
-//    CPPUNIT_ASSERT_EQUAL(string("geometry_type = Point name = strange test "), ss1.toStdString());
-
-//    QString ss2 = w1->getTags().toString().replace("\n", " ");
-//    CPPUNIT_ASSERT_EQUAL(string("geometry_type = LineString highway = road "), ss2.toStdString());
-
-
+    CountManualMatchesVisitor uut;
+    map->visitRo(uut);
+    int numMatchesMade = (int)uut.getStat();
+    CPPUNIT_ASSERT_EQUAL(37, numMatchesMade);
   }
 
 };

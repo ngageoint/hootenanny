@@ -39,7 +39,7 @@ namespace hoot
 using namespace std;
 
 /**
- *
+ * Counts matches made with ref tags by a manual matcher
  */
 class CountManualMatchesVisitor : public ElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
