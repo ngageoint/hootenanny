@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+mkdir -p $HOOT_HOME/tmp/
+mkdir -p test-output/cmd/PoiPolygonConflateTest
+
+#standalone
+hoot conflate --error -D uuid.helper.repeatable=true -D match.creators="hoot::PoiPolygonMatchCreator" -D merger.creators="hoot::PoiPolygonMergerCreator" test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon1.osm test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon2.osm test-output/cmd/PoiPolygonConflateTest/output1.osm
+hoot is-match test-output/cmd/PoiPolygonConflateTest/output1.osm test-files/cmd/slow/PoiPolygonConflateTest/output1.osm || diff test-output/cmd/PoiPolygonConflateTest/output1.osm test-files/cmd/slow/PoiPolygonConflateTest/output1.osm
+
+#combined
+hoot conflate --error -D uuid.helper.repeatable=true test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon1.osm test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon2.osm test-output/cmd/PoiPolygonConflateTest/output2.osm
+hoot is-match test-output/cmd/PoiPolygonConflateTest/output2.osm test-files/cmd/slow/PoiPolygonConflateTest/output2.osm || diff test-output/cmd/PoiPolygonConflateTest/output2.osm test-files/cmd/slow/PoiPolygonConflateTest/output2.osm
