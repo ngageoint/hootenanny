@@ -20,8 +20,10 @@ This guide is intended as a general purpose reference to understand various comp
 Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is only supported in Chrome (recommended) and/or Chromium.
 
 [[HootiD-UILayout]]
-.Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Layer directory structure with scrolling and resize options. *H*: Recently Used Layers dropdown lists most recent layers accessed. *I*: Layer color picker. *J* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *K*: Add Secondary Dataset button.  *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
+.Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Add Secondary Dataset button. *H*: Layer directory structure with scrolling and resize options. *I*: Recently Used Layers dropdown lists most recent layers accessed. *J*: Layer color picker. *K* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_UI_layout.png[]
+
+_Note: Some screenshots may not reflect the latest version of Hootenanny UI._
 
 === Adding Layers to the Map
 
@@ -248,23 +250,25 @@ The following table provides all of the available shortcut keys for accessing Ho
 | 3 | Create new area feature
 | 6 | Measure length
 | 7 | Measure area
-| 8 | Clip to bounding box
-| 9 | Clip to visual extent
-| Ctrl + z | Undo
-| Ctrl + y | Redo
-| Ctrl + s | Save
+| 8 | Clip Dataset(s)
+| Ctrl + b | Bookmark current review
 | Ctrl + c | Copies feature geometry and tags
+| Ctrl + s | Save
 | Ctrl + v | Pastes selected feature geometry/tags
-| Ctrl + Shift + v | Pastes selected tags using the overwrite option
 | Ctrl + Alt + v | Pastes selected tags using the append option
+| Ctrl + Shift + v | Pastes selected tags using the overwrite option
+| Ctrl + y | Redo
+| Ctrl + z | Undo
 | Ctrl + Backspace | Deletes object permanently
 | Shift + Left mouse click | Selects multiple features geometry/tags within layer
-| Shift + R | Shows review relations for a selected feature within a layer (in review mode) 
-| Alt + b | Switches b/w layers during post-conflation conflict review
+| Shift + r | Shows review relations for a selected feature within a layer (in review mode) 
+| Shift + t | Switches between layers during post-conflation conflict review
+| Alt + i | Open Image Carousel
 | Alt + n | Toggles layer visibility on/off
 | + | Zoom in one level
 | - | Zoom out one level
 | / | Toggles display of overview map and map-in-map results (in review mode)
+| ↓,↑,←,→ | Pan map in direction
 | a | Continue drawing a line at the selected node
 | b | Display background layer switcher
 | c | Open image carousel
@@ -276,13 +280,11 @@ The following table provides all of the available shortcut keys for accessing Ho
 | n | Advances to next review (in review mode) 
 | o | Make feature a circle (must be poly or closed loop line)
 | p | Steps back to previous review (in review mode) 
-| r | rotate object around center or resolved (in review mode) 
+| r | Rotate object around center or resolved (in review mode) 
 | s | Straighten a line or square corner of area
-| t | In review mode with a feature selected, toggles between input/conflated layers
 | x | Split line into two at selected node
-| ↓,↑,←,→ | Pan map in direction
 | v | Make line go in opposite direction
-| w | Toggles Wireframe vector display on/off
+| w | Toggles wireframe vector display on/off
 | Enter/Esc | Stops drawing feature
 | F11 | Sets browser to full screen
 |======
@@ -623,9 +625,6 @@ image::user/images/id/hoot_ui_manage.png[scaledwidth="75%"]
 
 The Datasets settings page provides users with different options for managing data in Hootenanny including data ingest (shapefile, osm, geonames, FGDB), data management and data export from Hootenanny into pre-defined output formats and translation schemas.  To access this feature click on Datasets from the Manage Settings page.
 
-.Datasets settings. Users can add new datasets, add a new folder and manage existing datasets.
-image::user/images/id/hoot_dataset_tab.png[scaledwidth="75%"]
-
 ===== Data Ingest
 
 When users click on Add Data, a dialog box displaying different options for importing datasets appears. For _Import Type_, users can select a shapefile(s), filegeodatabase, .osm file, geonames text file, etc. or than can upload a .zip containing either a shapefile, filegeodatabase or .osm dataset.  
@@ -637,9 +636,23 @@ IMPORTANT:  File Geodatabase files, Shapefiles and .osm datasets are now support
 .Importing data into Hootenanny.
 image::user/images/id/hoot_add_dataset.png[scaledwidth="75%"]
 
+*_Import Directory_*
+
+When users want to add multiple datasets from the same directory, Hootenanny has a feature to import geospatial data from one directory as separate datasets.  After selecting 'Import Directory', the user is presented with a form with similar options to the _Import Single Dataset_ form.  The main difference is the user will select multiple datasets from one directory with each being loaded as a separate dataset.  While the user can select multiple datasets in the _Import Single Dataset_, they will be combined into one dataset.  Each dataset will be loaded into the designated folder and with the selected translation schema.  The user also has the option to apply a custom suffix to each dataset to avoid naming conflicts or for data management.  Currently, the import directory form supports the following import types: Shapfile and OpenStreetMap (.osm or .pbf).
+
+If there is a conflict with a dataset in the _Import Files List_, it will highlight as red.  Hovering over the dataset will reveal the issue, which can include a dataset already having the name or an unallowed character within the dataset name.  The dataset name cannot be changed in the form; the user can either change the name in the local folder or add a custom suffix.
+
+[[AddNewDirectory]]
+.Importing data into Hootenanny.
+image::user/images/id/hoot_add_directory.png[scaledwidth="75%"]
+
 *_Bulk Import_*
 
-To ingest multiple datasets in bulk mode, Hootenanny provides a bulk importer where additional data can be added as rows to a form that handles the ingest data job.  To access this feature, right-click on the Add Datasets button as shown below and select the Bulk Import option.  A _Bulk Importer_ menu will appear with each row representing a unique dataset to import along with any relevant import options.  Click import when finished to submit the job.
+Differing from importing datasets from one directory, users can use the _Bulk Import_ tool to import datasets in separate transactions.  The user can add up to 10 rows as 10 different import jobs.  The user can select a different translation and folder path for each row.  The bulk import form also allows a user to change the layer name.  Currently, the bulk import supports the following import types: Shapefile, OpenStreetmap, Geonames, and File Geodatabase. 
+
+If there is a conflict with a dataset name it will highlight as red.  Hovering over the dataset will reveal the issue, which can include a dataset already having the name or an unallowed character within the dataset name.  The user can either change the _Save As_ name or apply a custom suffix to each dataset to avoid naming conflicts or for data management.  The custom suffix will be applied to all datasets being imported.
+
+After starting Import, a log will appear by clicking _Show More_, which will provide the user with updates during the import process.
 
 [[HootBulkImport]]
 .Bulk Import in Hootenanny.  To access right-click on the Add Dataset button and populate each field.  Note that larger datasets will require more time to import.
