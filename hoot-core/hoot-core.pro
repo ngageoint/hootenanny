@@ -531,21 +531,21 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPolyCriterion.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.cpp \
     src/main/cpp/hoot/core/filters/AreaCriterion.cpp \
     src/main/cpp/hoot/core/filters/WayCriterion.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonPoiCriterion.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonCustomRules.cpp \
     src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
     src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.cpp \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceExtractor.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1091,9 +1091,9 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.h \
     src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonNameScoreExtractor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonTypeScoreExtractor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAddressScoreExtractor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceExtractor.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h
 

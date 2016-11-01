@@ -182,7 +182,18 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterionTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/AreaCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/WayCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/NonBuildingAreaCriterionTest.cpp \
+    src/test/cpp/hoot/core/visitors/CountManualMatchesVisitorTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \

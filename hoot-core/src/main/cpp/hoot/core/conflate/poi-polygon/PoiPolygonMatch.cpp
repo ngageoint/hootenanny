@@ -34,14 +34,14 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 
-#include "PoiPolygonTypeScoreExtractor.h"
-#include "PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonTypeScoreExtractor.h"
+#include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
-#include "PoiPolygonAddressScoreExtractor.h"
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 #include "PoiPolygonCustomRules.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
-#include "PoiPolygonDistanceExtractor.h"
-#include "PoiPolygonAlphaShapeDistanceExtractor.h"
+#include "extractors/PoiPolygonDistanceExtractor.h"
+#include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
 namespace hoot
 {
