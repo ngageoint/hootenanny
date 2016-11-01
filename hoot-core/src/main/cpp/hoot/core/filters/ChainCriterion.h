@@ -77,7 +77,7 @@ public:
 
   virtual bool isSatisfied(const shared_ptr<const Element>& e) const
   {
-    for (/*size_t*/int i = 0; i < _filters.size(); i++)
+    for (size_t i = 0; i < _filters.size(); i++)
     {
       if (!_filters[i]->isSatisfied(e))
       {
@@ -91,18 +91,14 @@ public:
   virtual ElementCriterion* clone() { return new ChainCriterion(_filters); }
 
 protected:
-  ChainCriterion(/*vector*/QList< shared_ptr<ElementCriterion> > filters)
+  ChainCriterion(vector< shared_ptr<ElementCriterion> > filters)
   {
-    for (/*size_t*/int i = 0; i < filters.size(); i++)
+    for (size_t i = 0; i < filters.size(); i++)
       _filters.push_back(shared_ptr<ElementCriterion>(filters[i]->clone()));
   }
 
-  /*vector*/QList< shared_ptr<ElementCriterion> > _filters;
+  vector< shared_ptr<ElementCriterion> > _filters;
 
-private:
-
-  //TODO: hack
-  friend class RemoveRef2VisitorMultipleCriterion;
 };
 
 }

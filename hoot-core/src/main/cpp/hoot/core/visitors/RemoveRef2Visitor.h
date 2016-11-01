@@ -73,13 +73,9 @@ public:
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-protected:
-
-  //TODO: hack
-  ElementCriterionPtr _criterion;
-
 private:
 
+  ElementCriterionPtr _criterion;
   OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;

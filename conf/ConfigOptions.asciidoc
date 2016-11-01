@@ -1688,7 +1688,7 @@ customization but may result in a longer runtime.  See PoiPolygonMatchRules for 
 * Data Type: bool
 * Default Value: `true`
 
-TODO:
+If true, an exact string match is required for matching addresses.  default is true.
 
 === poi.polygon.match.threshold
 

@@ -1,0 +1,115 @@
+21:19:04.608 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/cmd/slow/PoiPolygonTest/PoiPolygon1.osm with test-files/cmd/slow/PoiPolygonTest/PoiPolygon2.osm and writing the output to test-output/cmd/PoiPolygonTest/output1.osm
+21:19:04.608 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 583569
+21:19:04.609 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/PoiPolygon1.osm ...
+21:19:04.715 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/PoiPolygon2.osm ...
+21:19:04.719 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 1.20298e+06
+21:19:04.719 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+21:19:04.719 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+21:19:04.719 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 4760         Reprojecting 1000 / 4760         Reprojecting 2000 / 4760         Reprojecting 3000 / 4760         Reprojecting 4000 / 4760         
+21:19:04.752 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+21:19:04.752 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
+21:19:04.813 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+21:19:04.813 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
+21:19:04.814 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+21:19:04.814 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
+
+21:19:04.816 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+21:19:04.822 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+21:19:04.822 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
+21:19:04.822 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
+
+21:19:04.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+21:19:04.830 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+21:19:04.833 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:19:04.835 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
+21:19:04.852 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+21:19:04.915 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+21:19:15.241 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+21:19:15.242 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+Reprojecting 0 / 4752         Reprojecting 1000 / 4752         Reprojecting 2000 / 4752         Reprojecting 3000 / 4752         Reprojecting 4000 / 4752         
+21:19:15.249 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:19:15.250 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-886.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-885.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-884.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-883.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-882.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4736 in Relation:-845.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-440 in Relation:-781.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-664 in Relation:-590.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-665 in Relation:-589.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-682 in Relation:-583.
+21:19:15.251 WARN  ...portMissingElementsVisitor.cpp(  64) Reached maximum number of missing reports. No longer reporting.
+21:19:15.252 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+21:19:15.254 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+21:19:15.255 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+21:19:15.274 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 4741         Reprojecting 1000 / 4741         Reprojecting 2000 / 4741         Reprojecting 3000 / 4741         Reprojecting 4000 / 4741         
+21:19:15.530 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/PoiPolygonTest/output1.osm ...
+21:19:15.681 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/output1.osm ...
+21:19:16.007 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/cmd/slow/PoiPolygonTest/PoiPolygon1.osm with test-files/cmd/slow/PoiPolygonTest/PoiPolygon2.osm and writing the output to test-output/cmd/PoiPolygonTest/output2.osm
+21:19:16.007 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 583569
+21:19:16.008 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/PoiPolygon1.osm ...
+21:19:16.113 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/PoiPolygon2.osm ...
+21:19:16.117 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 1.20298e+06
+21:19:16.117 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+21:19:16.117 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+21:19:16.117 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 4760         Reprojecting 1000 / 4760         Reprojecting 2000 / 4760         Reprojecting 3000 / 4760         Reprojecting 4000 / 4760         
+21:19:16.149 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+21:19:16.149 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
+21:19:16.207 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+21:19:16.207 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
+21:19:16.207 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+21:19:16.207 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
+
+21:19:16.209 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+21:19:16.215 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+21:19:16.215 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
+21:19:16.215 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
+
+21:19:16.219 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+21:19:16.223 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+21:19:16.226 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:19:16.228 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
+21:19:16.244 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+21:19:16.307 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+21:19:16.337 INFO  ...lygon/BuildingMatchCreator.cpp( 250) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
+21:19:16.337 INFO  ...lygon/BuildingMatchCreator.cpp( 269) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
+21:19:16.924 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: -1 mean: -nan
+21:19:17.327 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+21:19:17.344 INFO  .../core/conflate/RubberSheet.cpp( 326) Found 0 potential ties.
+21:19:17.344 INFO  .../core/conflate/RubberSheet.cpp( 364) Found 0 confident ties.
+21:19:17.344 INFO  ...ate/SearchRadiusCalculator.cpp( 153) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+21:19:27.809 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
+21:19:27.809 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
+21:19:27.809 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
+21:19:27.809 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
+21:19:28.217 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+21:19:28.232 INFO  .../core/conflate/RubberSheet.cpp( 326) Found 0 potential ties.
+21:19:28.232 INFO  .../core/conflate/RubberSheet.cpp( 364) Found 0 confident ties.
+21:19:28.232 INFO  ...ate/SearchRadiusCalculator.cpp( 153) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+21:19:28.280 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+21:19:28.280 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+Reprojecting 0 / 4750         Reprojecting 1000 / 4750         Reprojecting 2000 / 4750         Reprojecting 3000 / 4750         Reprojecting 4000 / 4750         
+21:19:28.288 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:19:28.289 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-886.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-885.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-884.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-883.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-882.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4727 in Relation:-860.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4727 in Relation:-859.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4727 in Relation:-858.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4736 in Relation:-845.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4742 in Relation:-833.
+21:19:28.290 WARN  ...portMissingElementsVisitor.cpp(  64) Reached maximum number of missing reports. No longer reporting.
+21:19:28.291 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+21:19:28.293 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+21:19:28.294 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+21:19:28.316 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 4734         Reprojecting 1000 / 4734         Reprojecting 2000 / 4734         Reprojecting 3000 / 4734         Reprojecting 4000 / 4734         
+21:19:28.575 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/PoiPolygonTest/output2.osm ...
+21:19:28.724 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonTest/output2.osm ...
