@@ -28,8 +28,8 @@ build-info:
 config: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf
 
 run-liquibase:
-	rm -f ./src/main/resources/db/liquibase.properties
-	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
+	rm -f ./liquibase/liquibase.properties
+	../scripts/ReplaceEnvironmentVariables.sh ./liquibase/liquibase.properties.in ./liquibase/liquibase.properties
 	mvn $(MVN_QUIET) liquibase:update
 
 #add -X param temporarily to mvn-build command to debug mvn execution
@@ -45,10 +45,12 @@ docs: config
 
 clean: config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
-	rm -f db.properties
+	rm -rf ./db.properties
 	rm -rf ./src/main/java/hoot/services/db2
-	rm -f src/main/resources/db/db.properties
-	rm -rf target/site/apidocs
+	rm -rf ./src/main/resources/db/liquibase.properties
+	rm -rf ./src/main/resources/conf/hoot-services.conf
+	rm -rf ./src/main/resources/db/db.properties
+	rm -rf ./target/site/apidocs
 
 # Both commands now do the same thing.
 clean-db: clean-db-force
@@ -65,7 +67,7 @@ coverage:
 	cp -R target/site/cobertura ../coverage
 	mv ../coverage/cobertura ../coverage/services
 
-clean-coverage:
+clean-coverage:su
 	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
 	rm -rf target/site/cobertura
 	rm -rf target/cobertura

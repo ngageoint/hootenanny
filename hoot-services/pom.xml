@@ -200,9 +200,9 @@
                 <version>3.1.0</version>
                 <configuration>
                     <contexts>default</contexts>
-                    <propertyFile>src/main/resources/db/liquibase.properties</propertyFile>
+                    <propertyFile>liquibase/liquibase.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                    <changeLogFile>src/main/resources/db/db.changelog-master.xml</changeLogFile>
+                    <changeLogFile>liquibase/db.changelog-master.xml</changeLogFile>
                     <logging>warning</logging>
                 </configuration>
 
