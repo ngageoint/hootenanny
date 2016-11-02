@@ -138,11 +138,11 @@ public:
       //If an item was merged during conflation, its uuid is its original uuid prepended or appended
       //with the uuid's of the merged items.  So, add map entries for all the uuid parts, if it
       //contains multiple features.
-      const QStringList uuidParts = uuid.split(";");
-      for (int i = 0; i < uuidParts.size(); i++)
-      {
-        _uuidToEid.insert(uuidParts.at(i), e->getElementId());
-      }
+//      const QStringList uuidParts = uuid.split(";");
+//      for (int i = 0; i < uuidParts.size(); i++)
+//      {
+//        _uuidToEid.insert(uuidParts.at(i), e->getElementId());
+//      }
     }
   }
 

@@ -122,6 +122,18 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       LOG_VART(poiKvp);
       LOG_VART(polyKvp);
       LOG_VART(result);
+
+      if (result == 1.0)
+      {
+        if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+        {
+          LOG_VART(poiBestKvp);
+          LOG_VART(polyBestKvp);
+          PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
+            poi, poly, poiBestKvp, polyBestKvp, _featureDistance);
+        }
+        return result;
+      }
     }
   }
 

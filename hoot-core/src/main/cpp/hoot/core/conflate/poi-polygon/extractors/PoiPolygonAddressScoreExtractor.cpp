@@ -164,6 +164,8 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   //with a space (which isn't hard to handle), but also won't worry about it until its seen
   //in the wild.
 
+  //This can probably be cleaned up with regex's.
+
   QStringList houseNumParts = houseNum.split("-");
   if (houseNumParts.size() == 2)
   {
@@ -190,12 +192,15 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesAsRange(const QString house
   }
 }
 
-//street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
-//parse through the tokens until you come to a number; assume that is the house number and
-//everything before it is the street name
 void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tags,
                                                                  QStringList& addresses) const
 {
+  //street name and house num reversed: ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN
+  //parse through the tokens until you come to a number; assume that is the house number and
+  //everything before it is the street name
+
+  //This can probably be cleaned up with regex's.
+
   QString addressTagValAltFormatRaw =
     Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME_2)).trimmed().toLower();
   if (!addressTagValAltFormatRaw.isEmpty())
@@ -239,12 +244,12 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
 
   //address parts in separate tags (most common situation)
   QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
-  houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
   QString street =
     Translator::getInstance().toEnglish(tags.get(STREET_TAG_NAME)).trimmed().toLower();
   QString combinedAddress;
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
+    houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
     //I thought this would have been eliminated by using the translated name comparison
     //logic...seems like it wasn't. - see #1169
     street = street.replace(ESZETT, ESZETT_REPLACE);
@@ -263,20 +268,26 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
     }
   }
 
-  //full address in one tag
-  QString addressTagVal =
-    Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME)).trimmed().toLower();
-  if (!addressTagVal.isEmpty())
+  if (addresses.size() == 0)
   {
-    addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
-    if (!addresses.contains(addressTagVal))
+    //full address in one tag
+    QString addressTagVal =
+      Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME)).trimmed().toLower();
+    if (!addressTagVal.isEmpty())
     {
-      LOG_VART(addressTagVal);
-      addresses.append(addressTagVal);
+      addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
+      if (!addresses.contains(addressTagVal))
+      {
+        LOG_VART(addressTagVal);
+        addresses.append(addressTagVal);
+      }
     }
   }
 
-  _parseAddressesInAltFormat(tags, addresses);
+  if (addresses.size() == 0)
+  {
+    _parseAddressesInAltFormat(tags, addresses);
+  }
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(ConstWayPtr way,

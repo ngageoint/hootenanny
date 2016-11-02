@@ -130,9 +130,6 @@ _rf(rf)
 bool PoiPolygonMatch::isPoly(const Element& e)
 {
   const Tags& tags = e.getTags();
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //types we don't care about at all - see #1172 as to why this can't be handled in the schema
   //files
   if (tags.get("barrier").toLower() == "fence"
@@ -143,6 +140,10 @@ bool PoiPolygonMatch::isPoly(const Element& e)
   {
     return false;
   }
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(tags).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  //isArea includes building too
   return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
          (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 }
@@ -160,10 +161,11 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   {
     return false;
   }
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(tags).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   return e.getElementType() == ElementType::Node &&
-         (OsmSchema::getInstance().getCategories(e.getTags()).intersects(
-           OsmSchemaCategory::building() | OsmSchemaCategory::poi()) ||
-          e.getTags().getNames().size() > 0);
+         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 }
 
 bool PoiPolygonMatch::isArea(const Element& e)
@@ -347,9 +349,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   //PoiPolygonDistanceExtractor will always be run before this one
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
-
   LOG_VART(alphaShapeDist);
-
   return alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
 }
 
@@ -358,17 +358,15 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   PoiPolygonTypeScoreExtractor typeScorer;
   typeScorer.setFeatureDistance(_distance);
   _typeScore = typeScorer.extract(*_map, poi, poly);
-  if (poi->getTags().get("historic") == "monument")
-  {
-    //monuments can represent just about any poi type, so lowering this some to account for that
-    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
-  }
+//  if (poi->getTags().get("historic") == "monument")
+//  {
+//    //monuments can represent just about any poi type, so lowering this some to account for that
+//    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
+//  }
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
-
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
-
   return typeMatch ? 1 : 0;
 }
 
@@ -376,9 +374,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 {
   _nameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
-
   LOG_VART(nameMatch);
-
   return nameMatch ? 1 : 0;
 }
 
@@ -386,9 +382,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
 {
   _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
-
   LOG_VART(addressMatch);
-
   return addressMatch ? 1 : 0;
 }
 
@@ -435,11 +429,11 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     //This is kind of a consolation prize...if there was no match, but name and type score have
     //moderately high values, then make it a match.
-    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
+    /*if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
     {
       evidence++;
     }
-    else if (ConfigOptions().getPoiPolygonEnableCustomRules())
+    else*/ if (ConfigOptions().getPoiPolygonEnableCustomRules())
     {
       PoiPolygonCustomRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
       matchRules.collectInfo(poi, poly);
