@@ -38,7 +38,7 @@
 #include <hoot/core/scoring/MapScoringStatusAndRefTagValidator.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/CountManualMatchesVisitor.h>
+//#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -55,14 +55,14 @@ public:
 
   ScoreMatchesCmd() { }
 
-  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, shared_ptr<MatchThreshold> mt,
-    bool showConfusion, double& score)
-  {
-    return evaluateThreshold(maps, output, mt, showConfusion, score, -1);
-  }
+//  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, shared_ptr<MatchThreshold> mt,
+//    bool showConfusion, double& score)
+//  {
+//    return evaluateThreshold(maps, output, mt, showConfusion, score, -1);
+//  }
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, shared_ptr<MatchThreshold> mt,
-    bool showConfusion, double& score, long numManualMatches)
+    bool showConfusion, double& score/*, long numManualMatches*/)
   {
     MatchComparator comparator;
 
@@ -95,10 +95,10 @@ public:
         cout << "Threshold: " << mt->toString() << endl;
       }
       cout << comparator.toString() /*<< endl*/;
-      if (numManualMatches != -1)
-      {
-        cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << endl;
-      }
+//      if (numManualMatches != -1)
+//      {
+//        cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << endl;
+//      }
     }
     QString line = QString("%1,%2,%3,%4\n").arg(-1)
         .arg(comparator.getPercentCorrect())
@@ -121,7 +121,7 @@ public:
     {
       double score;
       shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
-      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score, -1);
+      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score/*, -1*/);
       return score;
     }
 
@@ -188,14 +188,14 @@ public:
     vector<OsmMapPtr> maps;
     QString output = args.last();
     //for calculating the actual number of manual matches made
-    shared_ptr<OsmMap> ref2Map(new OsmMap());
+    //shared_ptr<OsmMap> ref2Map(new OsmMap());
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
       shared_ptr<OsmMap> map(new OsmMap());
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);
-      loadMap(ref2Map, args[i + 1], false, Status::Unknown2);
+      //loadMap(ref2Map, args[i + 1], false, Status::Unknown2);
 
       if (!MapScoringStatusAndRefTagValidator::allTagsAreValid(map))
       {
@@ -212,9 +212,9 @@ public:
       maps.push_back(map);
     }
 
-    shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
-    ref2Map->visitRo(*manualMatchVisitor);
-    const long numManualMatches = manualMatchVisitor->getStat();
+    //shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
+    //ref2Map->visitRo(*manualMatchVisitor);
+    //const long numManualMatches = manualMatchVisitor->getStat();
 
     LOG_VARD(maps.size());
     shared_ptr<OsmMap> mapCopy(maps[0]);
@@ -229,7 +229,7 @@ public:
     {
       double score;
       shared_ptr<MatchThreshold> mt;
-      QString result = evaluateThreshold(maps, output, mt, showConfusion, score, numManualMatches);
+      QString result = evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
 
       cout << result;
     }
