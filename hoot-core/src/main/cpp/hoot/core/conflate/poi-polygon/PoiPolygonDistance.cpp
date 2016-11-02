@@ -57,18 +57,19 @@ _surroundingPoiCount(surroundingPoiCount)
 {
 }
 
-double PoiPolygonDistance::getMatchDistanceForType(const QString /*typeKvp*/) const
+double PoiPolygonDistance::getMatchDistanceForType(const Tags& /*tags*/) const
 {
   return _matchDistanceThresholdDefault;
 }
 
-double PoiPolygonDistance::getReviewDistanceForType(const QString typeKvp) const
+double PoiPolygonDistance::getReviewDistanceForType(const Tags& tags) const
 {
-  if (typeKvp == "leisure=park")
+  if (tags.get("leisure") == "park")
   {
     return 25.0;
   }
-  else if ((typeKvp == "station=light_rail" || typeKvp == "railway=platform") &&
+  else if ((tags.get("station") == "light_rail" || tags.get("railway") == "platform") &&
+           //passing in the poly tags separately is a little awkward...need to rethink this
            (_polyTags.get("subway") == "yes" || _polyTags.get("tunnel") == "yes"))
   {
     return 150.0;

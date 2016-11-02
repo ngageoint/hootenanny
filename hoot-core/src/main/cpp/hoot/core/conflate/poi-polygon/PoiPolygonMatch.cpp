@@ -307,8 +307,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 //      distanceCalc.getMatchDistanceForType(_t2BestKvp));
   _reviewDistanceThreshold =
     max(
-      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::poiBestKvp),
-      distanceCalc.getReviewDistanceForType(PoiPolygonTypeScoreExtractor::polyBestKvp));
+      distanceCalc.getReviewDistanceForType(_poi->getTags()),
+      distanceCalc.getReviewDistanceForType(_poly->getTags()));
   //density based distance changes didn't have any positive effect experimentally; leaving it
   //commented out here in case there is need for further examination
   /*if (poi->getTags().get("station") != "light_rail" &&
@@ -390,38 +390,47 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 {
   unsigned int evidence = 0;
 
-  //need to get type evidence before distance evidence, b/c the best type kvp can influence the
-  //behavior of the distance matching
-  evidence += _getTypeEvidence(poi, poly);
-
   evidence += _getDistanceEvidence(poi, poly);
-
   //see comment in _getDistanceEvidence
   if (!_closeMatch)
   {
     return 0;
   }
 
-  evidence += _getNameEvidence(poi, poly);
+  //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //no point in calc'ing the address match if we already have a match from the other evidence
-  //LOG_VARD(_matchEvidenceThreshold);
-  if (evidence < MATCH_EVIDENCE_THRESHOLD)
+  //We only want to run this if the previous match distance calculation was too large.
+  //Tightening up the requirements for running the convex poly calculation here to improve
+  //runtime.  These requirements can possibly be removed at some point in the future, if proven
+  //necessary.  The school requirement definitely seems too type specific (this type of evidence
+  //has actually only been found with school pois in one test dataset so far), but when
+  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
+  //clean the school restriction up (see #1173).
+  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
+      OsmSchema::getInstance().isBuilding(poly))
   {
-    if (ConfigOptions().getPoiPolygonEnableAddressMatching())
+    evidence += _getConvexPolyDistanceEvidence(poi, poly);
+  }
+
+  evidence += _getNameEvidence(poi, poly);
+  //if we already have a match, no point in doing more calculations
+  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  {
+    return evidence;
+  }
+
+  evidence += _getTypeEvidence(poi, poly);
+  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  {
+    return evidence;
+  }
+
+  if (ConfigOptions().getPoiPolygonEnableAddressMatching())
+  {
+    evidence += _getAddressEvidence(poi, poly);
+    if (evidence >= MATCH_EVIDENCE_THRESHOLD)
     {
-      evidence += _getAddressEvidence(poi, poly);
-    }
-    //Tightening up the requirements for running the convex poly calculation here to improve
-    //runtime.  These requirements can possibly be removed at some point in the future, if proven
-    //necessary.  The school requirement definitely seems too type specific (this type of evidence
-    //has actually only been found with school pois in one test dataset so far), but when
-    //removing it scores dropped for other datasets.  So, more investigation needs to be done to
-    //clean the school restriction up (see #1173).
-    if (evidence < MATCH_EVIDENCE_THRESHOLD && _distance <= 35.0 &&
-        poi->getTags().get("amenity") == "school" && OsmSchema::getInstance().isBuilding(poly))
-    {
-      evidence += _getConvexPolyDistanceEvidence(poi, poly);
+      return evidence;
     }
   }
 

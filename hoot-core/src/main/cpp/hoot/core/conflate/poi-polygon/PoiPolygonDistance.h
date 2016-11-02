@@ -54,18 +54,18 @@ public:
   /**
    * Returns a custom match distance for the given type
    *
-   * @param typeKvp a type key value pair; 'key=value'
+   * @param tags the tags containing the type to return a custom distance for
    * @return the match distance for the given type
    */
-  double getMatchDistanceForType(const QString typeKvp) const;
+  double getMatchDistanceForType(const Tags& tags) const;
 
   /**
    * Returns a custom review distance for the given type
    *
-   * @param typeKvp a type key value pair; 'key=value'
+   * @param tags the tags containing the type to return a custom distance for
    * @return the review distance for the given type
    */
-  double getReviewDistanceForType(const QString typeKvp) const;
+  double getReviewDistanceForType(const Tags& tags) const;
 
   //The density based match/review distance modifications proved to have no positive effect for
   //the data tested.  The logic is being left intact in case we find a use for the technique with
