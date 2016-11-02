@@ -212,6 +212,8 @@ public:
       maps.push_back(map);
     }
 
+    //This logic is oddly affecting some test scores.  Since this isn't a critical feature,
+    //disabling it for now.  #1185 created to fix it.
     //shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
     //ref2Map->visitRo(*manualMatchVisitor);
     //const long numManualMatches = manualMatchVisitor->getStat();
