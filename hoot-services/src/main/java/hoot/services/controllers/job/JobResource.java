@@ -53,8 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.job.JobStatusManager;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
+import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;

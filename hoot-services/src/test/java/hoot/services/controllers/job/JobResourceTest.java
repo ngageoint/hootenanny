@@ -53,7 +53,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import hoot.services.UnitTest;
-import hoot.services.job.JobStatusManager;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 import hoot.services.testsupport.HootServicesSpringTestConfig;
 
@@ -73,7 +72,7 @@ public class JobResourceTest {
             Assert.assertTrue(homeFolder.exists());
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
-            URL inputUrl = JobResourceTest.class.getResource("/hoot/services/validators/job/services_fields_metadata.json");
+            URL inputUrl = JobResourceTest.class.getResource("/hoot.services.controllers.job/services_fields_metadata.json");
             File dest = new File(new File(homeFolder, "scripts"), "services_fields_metadata.json");
             FileUtils.copyURLToFile(inputUrl, dest);
         }
