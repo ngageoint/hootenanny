@@ -42,6 +42,8 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 
 const QChar PoiPolygonAddressScoreExtractor::ESZETT(0x00DF);
 const QString PoiPolygonAddressScoreExtractor::ESZETT_REPLACE = "ss";
+
+//I believe these are all OSM standard tag names, so don't need to be in a configuration file.
 const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
@@ -130,6 +132,11 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
       if (addressScore > bestAddressScore)
       {
         bestAddressScore = addressScore;
+      }
+      if (bestAddressScore == 1.0)
+      {
+        LOG_VART(bestAddressScore);
+        return bestAddressScore;
       }
     }
   }
