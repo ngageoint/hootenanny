@@ -43,7 +43,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAddressScoreExtractor)
 const QChar PoiPolygonAddressScoreExtractor::ESZETT(0x00DF);
 const QString PoiPolygonAddressScoreExtractor::ESZETT_REPLACE = "ss";
 
-//I believe these are all OSM standard tag names, so don't need to be in a configuration file.
+//These seem to be all OSM standard tag names, so don't need to be in a configuration file.
 const QString PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString PoiPolygonAddressScoreExtractor::STREET_TAG_NAME = "addr:street";
 const QString PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME = "address";
@@ -56,11 +56,10 @@ PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor()
 void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  setExactAddressMatching(config.getPoiPolygonExactAddressMatching());
+  setAddressScoreThreshold(config.getPoiPolygonAddressScoreThreshold());
 }
 
-double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
-                                                const ConstElementPtr& poi,
+double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
                                                 const ConstElementPtr& poly) const
 {
   double addressScore = -1.0;
@@ -106,8 +105,10 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map,
   LOG_VART(poiAddresses);
 
   StringDistancePtr addrComp;
-  if (_exactAddressMatching)
+  if (_addressScoreThreshold == 1.0)
   {
+    //Using this when score is equal to 1.0, since it seem some non-exact address were slipping
+    //through when using the other comparator...probably need to look into it.
     addrComp.reset(new ExactStringDistance());
   }
   else

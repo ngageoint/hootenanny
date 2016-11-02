@@ -60,7 +60,7 @@ public:
   void runTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
+    LOG_VAR(uut.getAddressScoreThreshold());
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -73,13 +73,13 @@ public:
     node2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "567 first street");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
   void runExactMatchingFalseTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(false);
+    uut.setAddressScoreThreshold(0.6);
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -92,7 +92,6 @@ public:
   void runCombinedTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -109,13 +108,12 @@ public:
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
     way2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
   void runRangeTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -140,13 +138,12 @@ public:
     WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
     way3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
     way3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node3, way3), 0.01);
   }
 
   void runAltFormatTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -161,13 +158,12 @@ public:
       PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "first street 567");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
   void runSubLetterTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map;
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -182,7 +178,6 @@ public:
   void runWayTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -209,13 +204,12 @@ public:
     map->addNode(node4);
     way2->addNode(node4->getId());
     map->addWay(way2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node3, way2), 0.01);
   }
 
   void runRelationTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    uut.setExactAddressMatching(true);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -255,7 +249,7 @@ public:
     map->addNode(node5);
     relation3->addElement("test", node5->getElementId());
     map->addRelation(relation3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node4, relation3), 0.01);
 
     NodePtr node6(new Node(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0));
     node6->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
@@ -268,7 +262,7 @@ public:
     map->addWay(way3);
     relation4->addElement("test", way3->getElementId());
     map->addRelation(relation4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node6, relation4), 0.01);
   }
 };
 

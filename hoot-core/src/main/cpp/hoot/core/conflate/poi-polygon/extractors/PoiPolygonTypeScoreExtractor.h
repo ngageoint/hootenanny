@@ -106,15 +106,17 @@ public:
    */
   static bool hasType(ConstElementPtr element);
 
+  double getTypeScoreThreshold() { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
 
-  void setDistance(double distance) { _distance = distance; }
+  double getFeatureDistance() { return _featureDistance; }
+  void setFeatureDistance(double distance) { _featureDistance = distance; }
 
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
-  double _distance;
+  double _featureDistance;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;

@@ -48,6 +48,7 @@ public:
 
   static const QChar ESZETT;
   static const QString ESZETT_REPLACE;
+
   static const QString HOUSE_NUMBER_TAG_NAME;
   static const QString STREET_TAG_NAME;
   static const QString FULL_ADDRESS_TAG_NAME;
@@ -70,11 +71,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setExactAddressMatching(bool exactMatching) { _exactAddressMatching = exactMatching; }
+  double getAddressScoreThreshold() { return _addressScoreThreshold; }
+  void setAddressScoreThreshold(double threshold) { _addressScoreThreshold = threshold; }
 
 private:
 
-  bool _exactAddressMatching;
+  double _addressScoreThreshold;
 
   void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses) const;
   void _collectAddressesFromWayNodes(ConstWayPtr way, QStringList& addresses,

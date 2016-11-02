@@ -66,7 +66,8 @@ _typeScore(-1.0),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
-_addressMatch(false),
+_addressScore(-1.0),
+_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -90,7 +91,8 @@ _typeScore(-1.0),
 _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
-_addressMatch(false),
+_addressScore(-1.0),
+_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)
@@ -103,7 +105,8 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
                                  double matchDistanceThreshold, double reviewDistanceThreshold,
-                                 double nameScoreThreshold, double typeScoreThreshold) :
+                                 double nameScoreThreshold, double typeScoreThreshold,
+                                 double addressScoreThreshold) :
 Match(threshold),
 _map(map),
 _eid1(eid1),
@@ -116,7 +119,8 @@ _typeScore(-1.0),
 _typeScoreThreshold(typeScoreThreshold),
 _nameScore(-1.0),
 _nameScoreThreshold(nameScoreThreshold),
-_addressMatch(false),
+_addressScore(-1.0),
+_addressScoreThreshold(addressScoreThreshold),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -352,7 +356,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   PoiPolygonTypeScoreExtractor typeScorer;
-  typeScorer.setDistance(_distance);
+  typeScorer.setFeatureDistance(_distance);
   _typeScore = typeScorer.extract(*_map, poi, poly);
   if (poi->getTags().get("historic") == "monument")
   {
@@ -380,12 +384,12 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  const double addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
-  _addressMatch = addressScore == 1.0;
+  _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
+  const bool addressMatch = _addressScore == 1.0;
 
-  LOG_VART(_addressMatch);
+  LOG_VART(addressMatch);
 
-  return _addressMatch ? 1 : 0;
+  return addressMatch ? 1 : 0;
 }
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -475,7 +479,7 @@ map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>
 QString PoiPolygonMatch::toString() const
 {
   return
-    QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address match: %8")
+    QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address score: %8")
       .arg(_poi->getElementId().toString())
       .arg(_poly->getElementId().toString())
       .arg(_class.toString())
@@ -483,7 +487,7 @@ QString PoiPolygonMatch::toString() const
       .arg(_closeMatch)
       .arg(_typeScore)
       .arg(_nameScore)
-      .arg(_addressMatch);
+      .arg(_addressScore);
 }
 
 }

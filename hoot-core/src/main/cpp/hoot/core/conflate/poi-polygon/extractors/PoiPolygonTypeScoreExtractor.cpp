@@ -131,7 +131,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
-      poi, poly, poiBestKvp, polyBestKvp, _distance);
+      poi, poly, poiBestKvp, polyBestKvp, _featureDistance);
   }
 
   return result;

@@ -62,7 +62,7 @@ public:
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
     double matchDistance, double reviewDistance, double nameScoreThreshold,
-    double typeScoreThreshold);
+    double typeScoreThreshold, double addressScoreThreshold);
 
   virtual const MatchClassification& getClassification() const { return _class; }
 
@@ -128,7 +128,8 @@ public:
   double getTypeScoreThreshold() const { return _typeScoreThreshold; }
   double getNameScore() const { return _nameScore; }
   double getNameScoreThreshold() const { return _nameScoreThreshold; }
-  bool getAddressMatch() const { return _addressMatch; }
+  double getAddressScore() const { return _addressScore; }
+  double getAddressScoreThreshold() const { return _addressScoreThreshold; }
 
 private:
 
@@ -160,7 +161,8 @@ private:
   double _nameScore;
   double _nameScoreThreshold;
 
-  bool _addressMatch;
+  double _addressScore;
+  double _addressScoreThreshold;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   set<ElementId> _polyNeighborIds;

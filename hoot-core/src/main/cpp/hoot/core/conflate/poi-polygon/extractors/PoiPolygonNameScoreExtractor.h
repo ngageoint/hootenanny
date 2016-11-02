@@ -78,6 +78,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  double getNameScoreThreshold() { return _nameScoreThreshold; }
   void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
 
 private:

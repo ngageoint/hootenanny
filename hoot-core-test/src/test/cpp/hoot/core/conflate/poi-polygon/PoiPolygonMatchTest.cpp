@@ -61,7 +61,7 @@ public:
 
     {
       PoiPolygonMatch uut(map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
     }
 
@@ -70,7 +70,7 @@ public:
 
     {
       PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
     }
   }
@@ -93,7 +93,7 @@ public:
 
     {
       PoiPolygonMatch uut(map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
     }
 
@@ -102,7 +102,7 @@ public:
 //    n1->setX(-8);
 //    {
 //      PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
-//                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+//                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
 //      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
 //    }
   }
@@ -125,7 +125,7 @@ public:
 
     {
       PoiPolygonMatch uut(map, w1->getElementId(), n1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
     }
 
@@ -133,7 +133,7 @@ public:
     n1->setX(-5);
     {
       PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
     }
 
@@ -141,7 +141,7 @@ public:
     n1->setX(-7);
     {
       PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
-                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8);
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
     }
   }
