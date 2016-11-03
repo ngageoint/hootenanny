@@ -40,17 +40,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.nodejs.ServerControllerBase;
-
 
 @Controller
 @Path("")
-public class TranslatorResource extends ServerControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(TranslatorResource.class);
+public class OSM2TDSTranslationServiceResource extends NodejsService {
+    private static final Logger logger = LoggerFactory.getLogger(OSM2TDSTranslationServiceResource.class);
 
+    //The purpose of the translationService is to provide the hoot-ui fast way to translate OSM to TDS and TDS to OSM.
+    // OSM - Open Street Maps (https://en.wikipedia.org/wiki/OpenStreetMap)
+    // TDS - Topographic Data Store (http://www.gwg.nga.mil/documents/asfe/NSG%20TDS%20Content%20Spec%20V2.0.htm)
     private static Process translationServiceProcess;
 
-    public TranslatorResource() {}
+    public OSM2TDSTranslationServiceResource() {}
 
     /**
      * Gets current status of translation server.
@@ -68,7 +69,7 @@ public class TranslatorResource extends ServerControllerBase {
             isRunning = getStatus(translationServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of Translation Service.  Cause: " + e.getMessage();
+            String msg = "Error getting status of OSM-To-TDS Translation Service.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -86,16 +87,16 @@ public class TranslatorResource extends ServerControllerBase {
             // Make sure to wipe out previously running servers.
             stopServer(translationServiceScript);
 
-            logger.info("Starting Translation Service by running {} script", translationServiceScript);
+            logger.info("Starting OSM-To-TDS Translation Service by running {} script", translationServiceScript);
 
             // start Translaction Service
             translationServiceProcess = startServer(TRANSLATION_SERVER_PORT, TRANSLATION_SERVER_THREAD_COUNT,
                     translationServiceScript);
 
-            logger.info("Translation Service started");
+            logger.info("OSM-To-TDS Translation Service started");
         }
         catch (Exception e) {
-            String msg = "Error starting Translation Service.  Cause: " + e.getMessage();
+            String msg = "Error starting OSM-To-TDS Translation Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
@@ -111,7 +112,7 @@ public class TranslatorResource extends ServerControllerBase {
             translationServiceProcess.destroy();
         }
         catch (Exception e) {
-            String msg = "Error stopping Translation Service.  Cause: " + e.getMessage();
+            String msg = "Error stopping OSM-To-TDS Translation Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }

@@ -63,8 +63,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.utils.CaseInsensitiveStringList;
-
 
 @Controller
 @Path("/customscript")
@@ -681,5 +679,22 @@ public class CustomScriptResource {
         }
 
         return canExport;
+    }
+
+    /**
+     * A case insensitive string list
+     */
+    static class CaseInsensitiveStringList extends ArrayList<String> {
+
+        @Override
+        public boolean contains(Object o) {
+            String paramStr = (String) o;
+            for (String s : this) {
+                if (paramStr.equalsIgnoreCase(s)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

@@ -67,7 +67,7 @@ coverage:
 	cp -R target/site/cobertura ../coverage
 	mv ../coverage/cobertura ../coverage/services
 
-clean-coverage:su
+clean-coverage:
 	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
 	rm -rf target/site/cobertura
 	rm -rf target/cobertura

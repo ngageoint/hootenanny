@@ -66,10 +66,10 @@ import hoot.services.utils.MultipartSerializer;
 
 @Controller
 @Path("/info")
-public class OgrAttributesResource extends JobControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(OgrAttributesResource.class);
+public class OGRAttributesResource extends JobControllerBase {
+    private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
 
-    public OgrAttributesResource() {
+    public OGRAttributesResource() {
         super(GET_OGR_ATTRIBUTE_SCRIPT);
     }
 

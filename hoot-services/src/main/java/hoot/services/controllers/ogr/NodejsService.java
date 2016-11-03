@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.nodejs;
+package hoot.services.controllers.ogr;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,10 +37,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class ServerControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(ServerControllerBase.class);
+abstract class NodejsService {
+    private static final Logger logger = LoggerFactory.getLogger(NodejsService.class);
 
-    protected static Process startServer(String port, String threadCount, String serverScript) throws IOException {
+    static Process startServer(String port, String threadCount, String serverScript) throws IOException {
         List<String> command = new ArrayList<>();
         command.add("node");
         command.add(serverScript);
@@ -72,7 +72,7 @@ public abstract class ServerControllerBase {
         return serverProcess;
     }
 
-    protected static void stopServer(String processSignature) throws IOException {
+    static void stopServer(String processSignature) throws IOException {
         closeAllServers(processSignature);
     }
 
@@ -81,7 +81,7 @@ public abstract class ServerControllerBase {
         return Integer.parseInt(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 
-    protected static boolean getStatus(Process serverProc) {
+    static boolean getStatus(Process serverProc) {
         // We first get the server process ID
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
             Integer transServerPID = getProcessId();

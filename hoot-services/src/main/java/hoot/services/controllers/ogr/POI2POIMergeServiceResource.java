@@ -40,20 +40,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.nodejs.ServerControllerBase;
-
 
 @Controller
-public class P2PResource extends ServerControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(P2PResource.class);
+public class POI2POIMergeServiceResource extends NodejsService {
+    private static final Logger logger = LoggerFactory.getLogger(POI2POIMergeServiceResource.class);
 
+    // The purpose of this service is to provide the hoot-ui fast way to merge POI to POI.
     private static Process p2PServiceProcess;
 
-    public P2PResource() {}
+    public POI2POIMergeServiceResource() {}
 
     /**
-     * Destroys all POI to POI server process where it effectively shutting them
-     * down.
+     * Destroys all POI to POI server process where it effectively shutting them down.
      * 
      * GET hoot-services/services/p2pserver/stop
      * 
@@ -72,7 +70,7 @@ public class P2PResource extends ServerControllerBase {
             stopP2PService();
         }
         catch (Exception e) {
-            String msg = "Error stopping Point-To-Polygon service: " + e;
+            String msg = "Error stopping POI-To-POI Merge Service: " + e;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -99,7 +97,7 @@ public class P2PResource extends ServerControllerBase {
             isRunning = getStatus(p2PServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of Point-To-Polygon Service.  Cause: " + e.getMessage();
+            String msg = "Error getting status of POI-To-POI Merge Service.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -117,15 +115,14 @@ public class P2PResource extends ServerControllerBase {
             // Make sure to wipe out previosuly running servers.
             stopServer(p2PServiceScript);
 
-
-            logger.info("Starting Point-To-Polygon Service by running {} script", p2PServiceScript);
+            logger.info("Starting POI-To-POI Merge Service by running {} script", p2PServiceScript);
 
             p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
 
-            logger.info("Point-To-Polygon Service started");
+            logger.info("POI-To-POI Service started");
         }
         catch (Exception e) {
-            String msg = "Error starting Point-To-Polygon Service.  Cause: " + e.getMessage();
+            String msg = "Error starting POI-To-POI Merge Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
@@ -141,7 +138,7 @@ public class P2PResource extends ServerControllerBase {
             p2PServiceProcess.destroy();
         }
         catch (Exception e) {
-            String msg = "Error stopping Translation Service.  Cause: " + e.getMessage();
+            String msg = "Error stopping POI-To-POI Merge Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
