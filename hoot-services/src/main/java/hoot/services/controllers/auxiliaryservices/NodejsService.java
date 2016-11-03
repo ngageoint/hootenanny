@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.ogr;
+package hoot.services.controllers.auxiliaryservices;
 
 import java.io.BufferedReader;
 import java.io.IOException;
