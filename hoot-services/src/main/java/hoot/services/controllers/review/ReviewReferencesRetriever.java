@@ -44,7 +44,6 @@ import hoot.services.controllers.review.model.ElementInfo;
 import hoot.services.controllers.review.model.ReviewRef;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Element;
-import hoot.services.utils.ReviewUtils;
 
 
 /**
@@ -76,7 +75,7 @@ final class ReviewReferencesRetriever {
      * @return a list containing all features the input feature needs to be
      *         reviewed with
      */
-    public static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
+    static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
         long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId());
 
         // check for query element aexistence

@@ -26,8 +26,8 @@
  */
 package hoot.services.controllers.review;
 
-import static hoot.services.HootProperties.MAX_QUERY_NODES;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.util.ArrayList;
@@ -48,7 +48,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -70,9 +69,7 @@ import hoot.services.controllers.review.model.ReviewResolverResponse;
 import hoot.services.controllers.review.model.ReviewableItem;
 import hoot.services.controllers.review.model.ReviewableStatistics;
 import hoot.services.geo.BoundingBox;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Changeset;
-import hoot.services.utils.ReviewUtils;
 
 
 /**
@@ -83,21 +80,6 @@ import hoot.services.utils.ReviewUtils;
 @Transactional
 public class ReviewResource {
     private static final Logger logger = LoggerFactory.getLogger(ReviewResource.class);
-    private static final long MAX_RESULT_SIZE;
-
-    static {
-        long value;
-
-        try {
-            value = Long.parseLong(MAX_QUERY_NODES);
-        }
-        catch (NumberFormatException ignored) {
-            value = 60000;
-            logger.error("maxQueryNodes is not a valid number.  Defaulting to {}", value);
-        }
-
-        MAX_RESULT_SIZE = value;
-    }
 
     public ReviewResource() {}
 
@@ -121,23 +103,13 @@ public class ReviewResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewResolverResponse resolveAllReviews(ReviewResolverRequest request) {
-        logger.debug("Setting all items reviewed for map with ID: {}...", request.getMapId());
-
         long changesetId = -1;
         try {
             long mapIdNum = MapResource.validateMap(request.getMapId());
 
             long userId;
             try {
-                logger.debug("Retrieving user ID associated with map having ID: {} ...", request.getMapId());
-
-                userId = createQuery()
-                        .select(QMaps.maps.userId)
-                        .from(QMaps.maps)
-                        .where(QMaps.maps.id.eq(mapIdNum))
-                        .fetchOne();
-
-                logger.debug("Retrieved user ID: {}", userId);
+                userId = createQuery().select(maps.userId).from(maps).where(maps.id.eq(mapIdNum)).fetchOne();
             }
             catch (Exception e) {
                 String message = "Error locating user associated with map having ID: "
@@ -160,8 +132,6 @@ public class ReviewResource {
                     + request.getMapId() + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        logger.debug("Set all items reviewed for map with ID: {} using changesetId: {}", request.getMapId(), changesetId);
 
         return new ReviewResolverResponse(changesetId);
     }
@@ -191,8 +161,6 @@ public class ReviewResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewRefsResponses getReviewReferences(ReviewRefsRequest request) {
-        logger.debug("Returning review references...");
-
         ReviewRefsResponses response = new ReviewRefsResponses();
 
         try {
@@ -204,7 +172,6 @@ public class ReviewResource {
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
                 List<ReviewRef> references = ReviewReferencesRetriever.getAllReferences(elementInfo);
-                logger.debug("Returning {} review references for requesting element: {}", references.size(), elementInfo);
                 responseRefs.setReviewRefs(references.toArray(new ReviewRef[references.size()]));
                 responseRefs.setQueryElementInfo(elementInfo);
                 responseRefsList.add(responseRefs);
@@ -219,14 +186,11 @@ public class ReviewResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        logger.debug("response : {}", StringUtils.abbreviate(response.toString(), 1000));
-
         return response;
     }
 
     /**
-     * To retrieve the random reviewable item. If a reviewable is not available
-     * then return 0 result count
+     * To retrieve the random reviewable item. If a reviewable is not available then return 0 result count
      * 
      * GET hoot-services/job/review/random?mapid=15
      * 
@@ -238,16 +202,17 @@ public class ReviewResource {
     @Path("/random")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getRandomReviewable(@QueryParam("mapid") Long mapId) {
+        ReviewableItem randomReviewableItem;
+
         try {
-            return ReviewableReader.getRandomReviewableItem(mapId);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            randomReviewableItem = ReviewableReader.getRandomReviewableItem(mapId);
         }
         catch (Exception e) {
             String msg = "Error getting random reviewable item: " + mapId + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return randomReviewableItem;
     }
 
     /**
@@ -271,6 +236,8 @@ public class ReviewResource {
     public ReviewableItem getNextReviewable(@QueryParam("mapid") Long mapId,
                                             @QueryParam("offsetseqid") Long offsetSeqId,
                                             @QueryParam("direction") String direction) {
+        ReviewableItem reviewableItem;
+
         try {
             // if nextSquence is - or out of index value we will get random
             long nextSequence = offsetSeqId + 1;
@@ -278,22 +245,19 @@ public class ReviewResource {
                 nextSequence = offsetSeqId - 1;
             }
 
-            ReviewableItem ret = ReviewableReader.getReviewableItem(mapId, nextSequence);
+            reviewableItem = ReviewableReader.getReviewableItem(mapId, nextSequence);
 
             // get random if we can not find immediate next sequence item
-            if (ret.getResultCount() < 1) {
-                ret = getRandomReviewable(mapId);
+            if (reviewableItem.getResultCount() < 1) {
+                reviewableItem = this.getRandomReviewable(mapId);
             }
-
-            return ret;
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String msg = "Error getting next reviewable item: " + mapId + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return reviewableItem;
     }
 
     /**
@@ -313,16 +277,17 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableItem getReviewable(@QueryParam("mapid") Long mapId,
                                         @QueryParam("offsetseqid") Long offsetSeqId) {
+        ReviewableItem reviewableItem;
+
         try {
-            return ReviewableReader.getReviewableItem(mapId, offsetSeqId);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            reviewableItem = ReviewableReader.getReviewableItem(mapId, offsetSeqId);
         }
         catch (Exception e) {
             String msg = "Error getting reviewable item: " + mapId + " (" + e.getMessage() + ")";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return reviewableItem;
     }
 
     /**
@@ -339,20 +304,13 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") Long mapId) {
         ReviewableStatistics reviewableStatistics;
-        if (mapId == -1) { // OSM API db
-            reviewableStatistics = new ReviewableStatistics();
+
+        try {
+            reviewableStatistics = ReviewableReader.getReviewablesStatistics(mapId);
         }
-        else {
-            try {
-                reviewableStatistics = ReviewableReader.getReviewablesStatistics(mapId);
-            }
-            catch (WebApplicationException wae) {
-                throw wae;
-            }
-            catch (Exception e) {
-                String msg = "Error getting reviewables statistics: " + mapId + " (" + e.getMessage() + ")";
-                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-            }
+        catch (Exception e) {
+            String msg = "Error getting reviewables statistics: " + mapId + " (" + e.getMessage() + ")";
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return reviewableStatistics;
@@ -361,14 +319,12 @@ public class ReviewResource {
     /**
      * To retrieve GeoJson of all reviewable items within bounding box
      * 
-     * GET
-     * hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&
-     * maxlon=180&maxlat=90
+     * GET hoot-services/job/review/allreviewables?mapid=53&minlon=-180&minlat=-90&maxlon=180&maxlat=90
      * 
      * @param mapId
      *            Target map id
      * @param minLon
-     *            Target map id
+     *            Minimum longitude
      * @param minLat
      *            Minimum latitude
      * @param maxLon
@@ -390,20 +346,18 @@ public class ReviewResource {
         response.put("features", new JSONArray());
 
         try {
-            AllReviewableItems result =
-                    ReviewableReader.getAllReviewableItems(mapId, new BoundingBox(minLon, minLat, maxLon, maxLat));
+            AllReviewableItems result = ReviewableReader.getAllReviewableItems(mapId,
+                    new BoundingBox(minLon, minLat, maxLon, maxLat));
             response = new JSONObject();
 
             if (result.getOverflow()) {
-                response.put("warning", "The result size is greater than maximum limit of:" + MAX_RESULT_SIZE
-                        + ". Returning truncated data.");
+                response.put("warning", "The result size is greater than maximum limit of:" +
+                        AllReviewableItemsQuery.MAX_RESULT_SIZE +
+                        ". Returning truncated data.");
             }
 
             response.put("total", result.getReviewableItems().size());
             response.put("geojson", result.toGeoJson());
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
         }
         catch (Exception e) {
             String msg = "Error getting reviewable item: " + mapId + " (" + e.getMessage() + ")";
@@ -436,14 +390,13 @@ public class ReviewResource {
          * the changeset id for each review relation - increment the version for
          * each review relation
          */
-        long numRecordsUpdated = createQuery(mapId).update(currentRelations)
+        long numRecordsUpdated = createQuery(mapId)
+                .update(currentRelations)
                 .where(Expressions.booleanTemplate("tags->'type' = 'review'"))
                 .set(Arrays.asList(currentRelations.changesetId, currentRelations.version, currentRelations.tags),
                      Arrays.asList(changesetId, Expressions.stringTemplate("version + 1"),
                                    Expressions.stringTemplate("tags || hstore('hoot:review:needs', 'no')")))
                 .execute();
-
-        logger.debug("{} records updated.", numRecordsUpdated);
 
         return changesetId;
     }

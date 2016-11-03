@@ -67,28 +67,15 @@ import hoot.services.utils.DbUtils;
  */
 class AllReviewableItemsQuery extends ReviewableQueryAbstract {
     private static final Logger logger = LoggerFactory.getLogger(AllReviewableItemsQuery.class);
-    private static final long MAX_RESULT_SIZE;
     private static final Path<Void> currentRelMembersSubQPath = Expressions.path(Void.class, "currentRelMembersSubQ");
     private static final Path<Void> reviewableCurrentRelSubQPath = Expressions.path(Void.class, "reviewableCurrentRelSubQ");
 
     private final BoundingBox bbox;
 
-    static {
-        long value;
-        try {
-            value = Long.parseLong(MAX_QUERY_NODES);
-        }
-        catch (NumberFormatException ignored) {
-            value = 60000;
-            logger.info("Defaulting MAX_RESULT_SIZE to {}", value);
-        }
-
-        MAX_RESULT_SIZE = value;
-    }
+    static final long MAX_RESULT_SIZE = Long.parseLong(MAX_QUERY_NODES);
 
     AllReviewableItemsQuery(long mapid, BoundingBox bbox) {
         super(mapid);
-        // maxQueryNodes
         this.bbox = bbox;
     }
 

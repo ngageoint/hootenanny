@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.controllers.review;
 
 import java.sql.SQLException;
 
@@ -40,11 +40,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Various utilities for conflated data reviewing
  */
-public final class ReviewUtils {
+final class ReviewUtils {
     private static final Logger logger = LoggerFactory.getLogger(ReviewUtils.class);
 
-    private ReviewUtils() {
-    }
+    private ReviewUtils() {}
 
     /**
      * Handles all thrown exceptions from review services
@@ -55,7 +54,7 @@ public final class ReviewUtils {
      *            text to prepend to the error message
      * //TODO: go through and clean out these message text checks
      */
-    public static void handleError(Exception e, String errorMessageStart) {
+    static void handleError(Exception e, String errorMessageStart) {
         Status status = null;
         if (!StringUtils.isEmpty(e.getMessage())) {
             if (e.getMessage().contains("Invalid input parameter") || e.getMessage().contains("Invalid reviewed item")

@@ -29,7 +29,6 @@ package hoot.services.controllers.review;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -54,7 +53,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.controllers.review.model.ReviewBookmarkDelRequest;
 import hoot.services.controllers.review.model.ReviewBookmarkDelResponse;
 import hoot.services.controllers.review.model.ReviewBookmarkSaveRequest;
 import hoot.services.controllers.review.model.ReviewBookmarksGetResponse;
@@ -103,15 +101,13 @@ public class ReviewBookmarkResource {
                         String sNewId = UUID.randomUUID().toString();
                         sNewId = sNewId.replace('-', '0');
                         note.put("id", sNewId);
-                        Calendar calendar = Calendar.getInstance();
-                        long now = calendar.getTimeInMillis();
+                        long now = System.currentTimeMillis();
                         note.put("createdAt", now);
                         note.put("modifiedAt", now);
                     }
 
                     if (!note.containsKey("modifiedAt")) {
-                        Calendar calendar = Calendar.getInstance();
-                        long now = calendar.getTimeInMillis();
+                        long now = System.currentTimeMillis();
                         note.put("modifiedAt", now);
                     }
                 }
@@ -362,11 +358,10 @@ public class ReviewBookmarkResource {
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
     public ReviewBookmarkDelResponse delReviewBookmark(@QueryParam("bookmarkId") Long bookmarkId) {
-        ReviewBookmarkDelRequest request = new ReviewBookmarkDelRequest(bookmarkId);
         ReviewBookmarkDelResponse response = new ReviewBookmarkDelResponse();
 
         try {
-            long count = remove(request);
+            long count = remove(bookmarkId);
             response.setDeleteCount(count);
         }
         catch (Exception ex) {
@@ -380,11 +375,11 @@ public class ReviewBookmarkResource {
     /**
      * Removes review tag.
      *
-     * @param request
-     *            - Request containing mapid and relationid
+     * @param bookmarkId
+     *            - bookmark ID
      * @return - total numbers of removed
      */
-    private static long remove(ReviewBookmarkDelRequest request) {
-        return createQuery().delete(reviewBookmarks).where(reviewBookmarks.id.eq(request.getBookmarkId())).execute();
+    private static long remove(Long bookmarkId) {
+        return createQuery().delete(reviewBookmarks).where(reviewBookmarks.id.eq(bookmarkId)).execute();
     }
 }
