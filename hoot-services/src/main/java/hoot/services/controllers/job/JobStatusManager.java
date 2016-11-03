@@ -31,7 +31,6 @@ import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,7 +211,7 @@ public class JobStatusManager {
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
             if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
                 currentJobStatus.setPercentComplete(100.0);
-                currentJobStatus.setEnd(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
             }
 
             currentJobStatus.setStatus(newStatus.ordinal());
@@ -227,7 +226,7 @@ public class JobStatusManager {
             currentJobStatus = new JobStatus();
             currentJobStatus.setJobId(jobId);
             currentJobStatus.setStatus(newStatus.ordinal());
-            Timestamp ts = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
             currentJobStatus.setStart(ts);
 
             if ((newStatus == COMPLETE) || (newStatus == FAILED)) {

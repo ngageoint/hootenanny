@@ -31,7 +31,6 @@ import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.xml.transform.TransformerException;
@@ -130,7 +129,7 @@ public class Changeset extends Changesets {
      *            ID of the changeset to close
      */
     public static void closeChangeset(long mapId, long changesetId) {
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         closeChangeset(mapId, changesetId, now);
     }
 
@@ -160,7 +159,7 @@ public class Changeset extends Changesets {
     private boolean isOpen() {
         Changesets changesetRecord = getChangesetUsing(mapId, getId());
 
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
 
         return changesetRecord.getClosedAt().after(now) &&
                 (changesetRecord.getNumChanges() < Integer.parseInt(MAXIMUM_CHANGESET_ELEMENTS));
@@ -170,7 +169,7 @@ public class Changeset extends Changesets {
      * Close this changeset
      */
     public void close() {
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
 
         if (closeChangeset(mapId, getId(), now) != 1) {
             throw new RuntimeException("Error closing changeset where mapId = " +

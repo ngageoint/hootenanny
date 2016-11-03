@@ -34,7 +34,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -733,7 +732,7 @@ public class Map extends Maps {
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
             mapLayer.setName("OSM_API_DB_" + OSM_API_DB_NAME);
-            mapLayer.setDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            mapLayer.setDate(new Timestamp(System.currentTimeMillis()));
             mapLayerList.add(mapLayer);
         }
 
