@@ -36,8 +36,8 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.ogr.POI2POIMergeServiceResource;
-import hoot.services.controllers.ogr.OSM2TDSTranslationServiceResource;
+import hoot.services.controllers.auxiliaryservices.POI2POIMergeServiceResource;
+import hoot.services.controllers.auxiliaryservices.OSM2TDSTranslationServiceResource;
 
 
 public class HootServletContext implements ServletContextListener {

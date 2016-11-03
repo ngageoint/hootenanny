@@ -29,6 +29,7 @@ package hoot.services.controllers.review;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,6 +53,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.sql.SQLQuery;
 
 import hoot.services.controllers.review.model.ReviewBookmarkDelResponse;
 import hoot.services.controllers.review.model.ReviewBookmarkSaveRequest;
@@ -91,12 +95,12 @@ public class ReviewBookmarkResource {
         ReviewBookmarksSaveResponse response = new ReviewBookmarksSaveResponse();
 
         try {
-            JSONObject oDetail = request.getDetail();
-            Object oNotes = oDetail.get("bookmarknotes");
-            if (oNotes != null) {
-                JSONArray aNotes = (JSONArray) oNotes;
-                for (Object aNote : aNotes) {
-                    JSONObject note = (JSONObject) aNote;
+            JSONObject detail = request.getDetail();
+            Object notes = detail.get("bookmarknotes");
+            if (notes != null) {
+                JSONArray jsonArray = (JSONArray) notes;
+                for (Object jsonObject : jsonArray) {
+                    JSONObject note = (JSONObject) jsonObject;
                     if (!note.containsKey("id")) {
                         String sNewId = UUID.randomUUID().toString();
                         sNewId = sNewId.replace('-', '0');
@@ -113,8 +117,8 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            long nSaved = ReviewBookmarksSaver.save(request);
-            response.setSavedCount(nSaved);
+            long count = save(request);
+            response.setSavedCount(count);
         }
         catch (Exception ex) {
             String msg = "Error saving review bookmark: " + " (" + ex.getMessage() + ")";
@@ -152,33 +156,33 @@ public class ReviewBookmarkResource {
         try {
             List<ReviewBookmarks> reviewBookmarks;
             if (bookmarkId != null) {
-                reviewBookmarks = ReviewBookmarkRetriever.retrieve(bookmarkId);
+                reviewBookmarks = retrieveBy(bookmarkId);
             }
             else {
-                reviewBookmarks = ReviewBookmarkRetriever.retrieve(mapId, relationId);
+                reviewBookmarks = retrieveBy(mapId, relationId);
             }
 
-            for (ReviewBookmarks mk : reviewBookmarks) {
-                Object oDetail = mk.getDetail();
+            for (ReviewBookmarks reviewBookmark : reviewBookmarks) {
+                Object detail = reviewBookmark.getDetail();
 
-                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
+                Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(detail);
 
-                JSONObject oBmkDetail = new JSONObject();
+                JSONObject json = new JSONObject();
 
-                appendHstoreElement(hstoreMap.get("bookmarkdetail"), oBmkDetail, "bookmarkdetail");
+                appendHstoreElement(hstoreMap.get("bookmarkdetail"), json, "bookmarkdetail");
 
                 String bmkNotes = hstoreMap.get("bookmarknotes");
                 if ((bmkNotes != null) && (!bmkNotes.isEmpty())) {
                     bmkNotes = bmkNotes.replace("\\\"", "\"");
                     bmkNotes = bmkNotes.replace("\\\\", "\\");
                     JSONParser parser = new JSONParser();
-                    JSONArray oParsed = (JSONArray) parser.parse(bmkNotes);
-                    oBmkDetail.put("bookmarknotes", oParsed);
+                    JSONArray jsonArray = (JSONArray) parser.parse(bmkNotes);
+                    json.put("bookmarknotes", jsonArray);
                 }
 
-                appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), oBmkDetail, "bookmarkreviewitem");
+                appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), json, "bookmarkreviewitem");
 
-                mk.setDetail(oBmkDetail);
+                reviewBookmark.setDetail(json);
             }
 
             response.setReviewBookmarks(reviewBookmarks);
@@ -196,7 +200,7 @@ public class ReviewBookmarkResource {
 
     /**
      * Helper function to handle JSON string conversion to Hstore friendly format
-     * 
+     *
      * @throws ParseException
      */
     private static void appendHstoreElement(String rawElem, JSONObject oBmkDetail, String elemName)
@@ -207,7 +211,6 @@ public class ReviewBookmarkResource {
             bmkElem = bmkElem.replace("\\\\", "\\");
             JSONParser parser = new JSONParser();
             JSONObject oParsed = (JSONObject) parser.parse(bmkElem);
-
             oBmkDetail.put(elemName, oParsed);
         }
     }
@@ -240,14 +243,14 @@ public class ReviewBookmarkResource {
     @GET
     @Path("/getall")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksGetResponse getAllReviewBookmark(@QueryParam("orderBy") String orderByCol,
-                                                           @QueryParam("asc") String asc,
-                                                           @QueryParam("limit") String limitSize,
-                                                           @QueryParam("offset") String offset,
-                                                           @QueryParam("filterby") String filterBy,
-                                                           @QueryParam("filterbyval") String filterByVal,
-                                                           @QueryParam("createFilterVal") String filterByCreatedVal,
-                                                           @QueryParam("layerFilterVal") String filterByLayerVal) {
+    public ReviewBookmarksGetResponse getAllReviewBookmarks(@QueryParam("orderBy") String orderByCol,
+                                                            @QueryParam("asc") String asc,
+                                                            @QueryParam("limit") String limitSize,
+                                                            @QueryParam("offset") String offset,
+                                                            @QueryParam("filterby") String filterBy,
+                                                            @QueryParam("filterbyval") String filterByVal,
+                                                            @QueryParam("createFilterVal") String filterByCreatedVal,
+                                                            @QueryParam("layerFilterVal") String filterByLayerVal) {
         ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
 
         try {
@@ -289,27 +292,20 @@ public class ReviewBookmarkResource {
                 }
             }
 
-            List<ReviewBookmarks> res = ReviewBookmarkRetriever.retrieveAll(orderByCol, isAsc, limit,
-                    offsetCnt, creatorArray, layerArray);
+            List<ReviewBookmarks> reviewBookmarks = retrieveAll(orderByCol, isAsc, limit, offsetCnt, creatorArray, layerArray);
 
-            for (ReviewBookmarks mk : res) {
-                Object oDetail = mk.getDetail();
+            for (ReviewBookmarks reviewBookmark : reviewBookmarks) {
+                Object oDetail = reviewBookmark.getDetail();
                 Map<String, String> hstoreMap = PostgresUtils.postgresObjToHStore(oDetail);
 
-                String bmkDetail = hstoreMap.get("bookmarkdetail");
-                if ((bmkDetail != null) && (!bmkDetail.isEmpty())) {
-                    bmkDetail = bmkDetail.replace("\\\"", "\"");
-                    bmkDetail = bmkDetail.replace("\\\\", "\\");
-                    JSONParser parser = new JSONParser();
-                    JSONObject oParsed = (JSONObject) parser.parse(bmkDetail);
+                JSONObject json = new JSONObject();
 
-                    JSONObject oBmkDetail = new JSONObject();
-                    oBmkDetail.put("bookmarkdetail", oParsed);
+                appendHstoreElement(hstoreMap.get("bookmarkdetail"), json, "bookmarkdetail");
 
-                    mk.setDetail(oBmkDetail);
-                }
+                reviewBookmark.setDetail(json);
             }
-            response.setReviewBookmarks(res);
+
+            response.setReviewBookmarks(reviewBookmarks);
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
@@ -333,7 +329,7 @@ public class ReviewBookmarkResource {
         ReviewBookmarksStatResponse response = new ReviewBookmarksStatResponse();
 
         try {
-            long bookmarksCount = ReviewBookmarkRetriever.getBookmarksCount();
+            long bookmarksCount = getBookmarksCount();
             response.setTotalCount(bookmarksCount);
         }
         catch (Exception ex) {
@@ -381,5 +377,184 @@ public class ReviewBookmarkResource {
      */
     private static long remove(Long bookmarkId) {
         return createQuery().delete(reviewBookmarks).where(reviewBookmarks.id.eq(bookmarkId)).execute();
+    }
+
+    private static List<ReviewBookmarks> retrieveBy(long mapId, long relationId) {
+        return createQuery()
+                .select(reviewBookmarks)
+                .from(reviewBookmarks)
+                .where(reviewBookmarks.mapId.eq(mapId).and(reviewBookmarks.relationId.eq(relationId)))
+                .fetch();
+    }
+
+    private static List<ReviewBookmarks> retrieveBy(long bookmarkId) {
+        return createQuery()
+                .select(reviewBookmarks)
+                .from(reviewBookmarks)
+                .where(reviewBookmarks.id.eq(bookmarkId))
+                .fetch();
+    }
+
+    /**
+     * Retrieves all review tags
+     *
+     * @param orderByCol
+     *            - order by column to sort
+     * @param isAsc
+     *            - is order by asc | desc
+     * @param limit
+     *            - limit for numbers of returned results
+     * @param offset
+     *            - offset row for paging
+     * @return - list of Review tags
+     */
+    private static List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
+            long offset, Long[] creatorArray, Long[] layerArray) {
+        SQLQuery<ReviewBookmarks> query = createQuery().query()
+                .select(reviewBookmarks).from(reviewBookmarks);
+
+        if ((creatorArray != null) && (layerArray != null)) {
+            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
+                    .and(reviewBookmarks.mapId.in((Number[]) layerArray)));
+        }
+        else if ((creatorArray != null) && (layerArray == null)) {
+            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray));
+        }
+        else if ((creatorArray == null) && (layerArray != null)) {
+            query.where(reviewBookmarks.mapId.in((Number[]) layerArray));
+        }
+        else {
+            query.from(reviewBookmarks);
+        }
+
+        query.orderBy(getSpecifier(orderByCol, isAsc));
+
+        if (limit > -1) {
+            query.limit(limit);
+        }
+
+        if (offset > -1) {
+            query.offset(offset);
+        }
+
+        return query.fetch();
+    }
+
+    /**
+     * Get the total counts of all review tags
+     *
+     * @return - numbers of toal count
+     */
+    private static long getBookmarksCount() {
+        return createQuery().from(reviewBookmarks).fetchCount();
+    }
+
+
+    /**
+     * Filter for allowed columns for order by
+     *
+     * @param orderByCol
+     *            - String representation of order by column
+     * @param isAsc
+     *            - asc | dsc
+     * @return - OrderSpecifier
+     */
+    private static OrderSpecifier<?> getSpecifier(String orderByCol, boolean isAsc) {
+        OrderSpecifier<?> order = reviewBookmarks.id.asc();
+        if (orderByCol != null) {
+            switch (orderByCol) {
+                case "id":
+                    order = (isAsc) ? reviewBookmarks.id.asc() : reviewBookmarks.id.desc();
+                    break;
+                case "createdAt":
+                    order = (isAsc) ? reviewBookmarks.createdAt.asc() : reviewBookmarks.createdAt.desc();
+                    break;
+                case "createdBy":
+                    order = (isAsc) ? reviewBookmarks.createdBy.asc() : reviewBookmarks.createdBy.desc();
+                    break;
+                case "lastModifiedAt":
+                    order = (isAsc) ? reviewBookmarks.lastModifiedAt.asc() : reviewBookmarks.lastModifiedAt.desc();
+                    break;
+                case "lastModifiedBy":
+                    order = (isAsc) ? reviewBookmarks.lastModifiedBy.asc() : reviewBookmarks.lastModifiedBy.desc();
+                    break;
+                case "mapId":
+                    order = (isAsc) ? reviewBookmarks.mapId.asc() : reviewBookmarks.mapId.desc();
+                    break;
+                case "relationId":
+                    order = (isAsc) ? reviewBookmarks.relationId.asc() : reviewBookmarks.relationId.desc();
+                    break;
+                default:
+                    order = reviewBookmarks.id.asc();
+                    break;
+            }
+        }
+
+        return order;
+    }
+
+    /**
+     * Saves review tags. It first checks to see if exists and if not insert
+     * else update
+     *
+     * @param request
+     *            - request object containing inserted/updated fields
+     * @return - numbers of saved tags
+     */
+    private static long save(ReviewBookmarkSaveRequest request) {
+        long savedCount;
+
+        if (request.getBookmarkId() > -1) {
+            List<ReviewBookmarks> result = retrieveBy(request.getBookmarkId());
+            savedCount = result.isEmpty() ? insert(request) : update(request, result.get(0));
+        }
+        else {
+            // insert
+            savedCount = insert(request);
+        }
+
+        return savedCount;
+    }
+
+    /**
+     * Inserts review tag into database
+     *
+     * @param request
+     *            - request object containing inserted fields
+     * @return - total numbers of inserted
+     */
+    private static long insert(ReviewBookmarkSaveRequest request) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        return createQuery()
+                .insert(reviewBookmarks)
+                .columns(reviewBookmarks.mapId, reviewBookmarks.relationId, reviewBookmarks.createdAt,
+                        reviewBookmarks.createdBy, reviewBookmarks.detail)
+                .values(request.getMapId(), request.getRelationId(), now, request.getUserId(),
+                        PostgresUtils.jsonToHStore(request.getDetail()))
+                .execute();
+    }
+
+    /**
+     * Updates review tag.
+     *
+     * @param request
+     *            - request object containing updated fields
+     * @param reviewBookmark
+     *            - Current review tag
+     * @return total numbers of updated
+     */
+    private static long update(ReviewBookmarkSaveRequest request, ReviewBookmarks reviewBookmark) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        reviewBookmark.setLastModifiedAt(now);
+        reviewBookmark.setLastModifiedBy(request.getUserId());
+        reviewBookmark.setDetail(PostgresUtils.jsonToHStore(request.getDetail()));
+
+        return createQuery()
+                .update(reviewBookmarks)
+                .populate(reviewBookmark)
+                .where(reviewBookmarks.id.eq(reviewBookmark.getId()))
+                .execute();
     }
 }

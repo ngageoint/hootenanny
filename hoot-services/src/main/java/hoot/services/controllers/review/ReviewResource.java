@@ -26,15 +26,19 @@
  */
 package hoot.services.controllers.review;
 
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
 import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -48,6 +52,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -69,7 +74,9 @@ import hoot.services.controllers.review.model.ReviewResolverResponse;
 import hoot.services.controllers.review.model.ReviewableItem;
 import hoot.services.controllers.review.model.ReviewableStatistics;
 import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Changeset;
+import hoot.services.models.osm.Element;
 
 
 /**
@@ -121,7 +128,7 @@ public class ReviewResource {
                 changesetId = setAllReviewsResolved(mapIdNum, userId);
             }
             catch (Exception e) {
-                ReviewUtils.handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
+                handleError(e, "Error setting all records to reviewed for map ID: " + request.getMapId());
             }
         }
         catch (WebApplicationException wae) {
@@ -171,7 +178,7 @@ public class ReviewResource {
                 // element can be involved in many different relations and since we do not know the
                 // element's parent relation (or even if there is one)
                 // we are forced return all including self. (Client need to handle self)
-                List<ReviewRef> references = ReviewReferencesRetriever.getAllReferences(elementInfo);
+                List<ReviewRef> references = getAllReferences(elementInfo);
                 responseRefs.setReviewRefs(references.toArray(new ReviewRef[references.size()]));
                 responseRefs.setQueryElementInfo(elementInfo);
                 responseRefsList.add(responseRefs);
@@ -205,7 +212,7 @@ public class ReviewResource {
         ReviewableItem randomReviewableItem;
 
         try {
-            randomReviewableItem = ReviewableReader.getRandomReviewableItem(mapId);
+            randomReviewableItem = getRandomReviewableItem(mapId);
         }
         catch (Exception e) {
             String msg = "Error getting random reviewable item: " + mapId + " (" + e.getMessage() + ")";
@@ -245,7 +252,7 @@ public class ReviewResource {
                 nextSequence = offsetSeqId - 1;
             }
 
-            reviewableItem = ReviewableReader.getReviewableItem(mapId, nextSequence);
+            reviewableItem = getReviewableItem(mapId, nextSequence);
 
             // get random if we can not find immediate next sequence item
             if (reviewableItem.getResultCount() < 1) {
@@ -280,7 +287,7 @@ public class ReviewResource {
         ReviewableItem reviewableItem;
 
         try {
-            reviewableItem = ReviewableReader.getReviewableItem(mapId, offsetSeqId);
+            reviewableItem = getReviewableItem(mapId, offsetSeqId);
         }
         catch (Exception e) {
             String msg = "Error getting reviewable item: " + mapId + " (" + e.getMessage() + ")";
@@ -302,15 +309,20 @@ public class ReviewResource {
     @GET
     @Path("/statistics")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewableStatistics getReviewableSstatistics(@QueryParam("mapId") Long mapId) {
+    public ReviewableStatistics getReviewableStatistics(@QueryParam("mapId") Long mapId) {
         ReviewableStatistics reviewableStatistics;
 
-        try {
-            reviewableStatistics = ReviewableReader.getReviewablesStatistics(mapId);
+        if (mapId == -1) { // OSM API db
+            reviewableStatistics = new ReviewableStatistics();
         }
-        catch (Exception e) {
-            String msg = "Error getting reviewables statistics: " + mapId + " (" + e.getMessage() + ")";
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        else {
+            try {
+                reviewableStatistics = getReviewablesStatistics(mapId);
+            }
+            catch (Exception e) {
+                String msg = "Error getting reviewables statistics: " + mapId + " (" + e.getMessage() + ")";
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
         }
 
         return reviewableStatistics;
@@ -346,8 +358,7 @@ public class ReviewResource {
         response.put("features", new JSONArray());
 
         try {
-            AllReviewableItems result = ReviewableReader.getAllReviewableItems(mapId,
-                    new BoundingBox(minLon, minLat, maxLon, maxLat));
+            AllReviewableItems result = getAllReviewableItems(mapId, new BoundingBox(minLon, minLat, maxLon, maxLat));
             response = new JSONObject();
 
             if (result.getOverflow()) {
@@ -399,5 +410,166 @@ public class ReviewResource {
                 .execute();
 
         return changesetId;
+    }
+
+    private static ReviewableItem getReviewableItem(long mapId, long sortOrder) {
+        return (ReviewableItem) getReviewableQuery(mapId, sortOrder).execQuery();
+    }
+
+    private static ReviewableItem getRandomReviewableItem(long mapId) {
+        return (ReviewableItem) getRandomReviewableQuery(mapId).execQuery();
+    }
+
+    private static ReviewableStatistics getReviewablesStatistics(long mapId) {
+        return (ReviewableStatistics) getReviewableStatisticsQuery(mapId).execQuery();
+    }
+
+    private static AllReviewableItems getAllReviewableItems(long mapId, BoundingBox bbox) {
+        return (AllReviewableItems) getAllReviewableItemsQuery(mapId, bbox).execQuery();
+    }
+
+    private static ReviewableQuery getReviewableQuery(long mapId, long seqId) {
+        return new ReviewableQuery(mapId, seqId);
+    }
+
+    private static RandomReviewableQuery getRandomReviewableQuery(long mapId) {
+        return new RandomReviewableQuery(mapId);
+    }
+
+    private static ReviewableStatisticsQuery getReviewableStatisticsQuery(long mapId) {
+        return new ReviewableStatisticsQuery(mapId);
+    }
+
+    private static AllReviewableItemsQuery getAllReviewableItemsQuery(long mapId, BoundingBox bbox) {
+        return new AllReviewableItemsQuery(mapId, bbox);
+    }
+
+    private static List<Long> getAllReviewRelations(ElementInfo queryElementInfo, long mapId) {
+        return createQuery(mapId)
+                .select(currentRelationMembers.relationId)
+                .from(currentRelationMembers)
+                .join(currentRelations).on(currentRelationMembers.relationId.eq(currentRelations.id))
+                .where(currentRelationMembers.memberId.eq(queryElementInfo.getId())
+                        .and(currentRelationMembers.memberType.eq(
+                                Element.elementEnumForElementType(
+                                        Element.elementTypeFromString(queryElementInfo.getType())))))
+                .fetch();
+    }
+
+    /**
+     * Retrieves all other unresolved element references to reviews for a given
+     * element
+     *
+     * @param queryElementInfo
+     *            element whose review references are to be retrieved
+     * @return a list containing all features the input feature needs to be
+     *         reviewed with
+     */
+    private static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
+        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId());
+
+        // check for query element existence
+        Set<Long> elementIds = new HashSet<>();
+        elementIds.add(queryElementInfo.getId());
+
+        if ((StringUtils.trimToNull(queryElementInfo.getType()) == null) || !Element.allElementsExist(mapIdNum,
+                Element.elementTypeFromString(queryElementInfo.getType()), elementIds)) {
+            handleError(new Exception("Element with ID: " + queryElementInfo + " and type: "
+                    + queryElementInfo.getType() + " does not exist."), "");
+        }
+
+        // select all review relation id's from current relation members where
+        // member id = requesting element's member id and the element type = the requesting element type
+        List<Long> allReviewRelationIds = getAllReviewRelations(queryElementInfo, mapIdNum);
+
+        List<ReviewRef> references = new ArrayList<>();
+        if (!allReviewRelationIds.isEmpty()) {
+            // select all relation members where themember's id is not equal to the requesting element's id and the
+            // member's type is not = to the requesting element's type
+            List<CurrentRelationMembers> referencedMembers = createQuery(mapIdNum)
+                    .select(currentRelationMembers)
+                    .from(currentRelationMembers)
+                    .where(currentRelationMembers.relationId.in(allReviewRelationIds))
+                    .orderBy(currentRelationMembers.relationId.asc(),
+                            currentRelationMembers.memberId.asc(),
+                            currentRelationMembers.sequenceId.asc())
+                    .fetch();
+
+            // return all elements corresponding to the filtered down set of relation members
+            for (CurrentRelationMembers member : referencedMembers) {
+                references.add(new ReviewRef(queryElementInfo.getMapId(), member.getMemberId(),
+                        Element.elementTypeForElementEnum(member.getMemberType()).toString().toLowerCase(),
+                        member.getRelationId()));
+            }
+        }
+
+        return references;
+    }
+
+    /**
+     * Handles all thrown exceptions from review services
+     *
+     * @param e
+     *            a thrown exception
+     * @param errorMessageStart
+     *            text to prepend to the error message
+     * //TODO: go through and clean out these message text checks
+     */
+    private static void handleError(Exception e, String errorMessageStart) {
+        Status status = null;
+        if (!StringUtils.isEmpty(e.getMessage())) {
+            if (e.getMessage().contains("Invalid input parameter") || e.getMessage().contains("Invalid reviewed item")
+                    || e.getMessage().contains("Error parsing unique ID tag") || e.getMessage().contains("empty String")
+                    || e.getMessage().contains("Invalid coordinate")) {
+                status = Status.BAD_REQUEST;
+            }
+            else if (e.getMessage().contains("record exists") || e.getMessage().contains("records exist")
+                    || e.getMessage().contains("to be updated does not exist")
+                    || e.getMessage().contains("does not exist")) {
+                status = Status.NOT_FOUND;
+            }
+            else if (e.getMessage().contains("Invalid version") || e.getMessage().contains("Invalid changeset ID")
+                    || e.getMessage().contains("references itself")
+                    || e.getMessage().contains("Changeset maximum element threshold exceeded")
+                    || e.getMessage().contains("was closed at") || e.getMessage().contains("has become out of sync")) {
+                status = Status.CONFLICT;
+            }
+            else if (e.getMessage().contains("exist specified for") || e.getMessage().contains("exist for")
+                    || e.getMessage().contains("is still used by")) {
+                status = Status.PRECONDITION_FAILED;
+            }
+        }
+
+        if (status == null) {
+            status = Status.INTERNAL_SERVER_ERROR;
+        }
+
+        String message = "Error " + errorMessageStart + ": ";
+        if ((e.getMessage() != null) && e.getMessage().contains("empty String")) {
+            // added for giving a better error message when passing invalid params to jersey
+            message += "Invalid input parameter";
+        }
+        else {
+            message += e.getMessage();
+        }
+
+        if (e instanceof SQLException) {
+            SQLException sqlException = (SQLException) e;
+            if (sqlException.getNextException() != null) {
+                message += "  " + sqlException.getNextException().getMessage();
+            }
+        }
+
+        if (e.getCause() instanceof SQLException) {
+            SQLException sqlException = (SQLException) e.getCause();
+            if (sqlException.getNextException() != null) {
+                message += "  " + sqlException.getNextException().getMessage();
+            }
+        }
+
+        String exceptionCode = status.getStatusCode() + ": " + status.getReasonPhrase();
+        logger.error("{} {}", exceptionCode, message, e);
+
+        throw new WebApplicationException(e, Response.status(status).entity(message).build());
     }
 }
