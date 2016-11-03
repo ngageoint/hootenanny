@@ -1,4 +1,0 @@
-{
-  "match.creators" : "hoot::PlacesPoiMatchCreator",
-  "merger.creators" : "hoot::PlacesPoiMergerCreator"
-}

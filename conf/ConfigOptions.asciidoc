@@ -781,7 +781,7 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator`
 
 List of MatchCreators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).
@@ -843,15 +843,13 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
 Possible values include:
 
 * `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
-  specified in `match.creators`.
-* `hoot::PlacesPoiMergerCreator` - Required if `hoot::PlacesPoiMatchCreator` is
   specified in `match.creators`.
 * `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
   is specified in `match.creators`.
@@ -1570,67 +1568,6 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 
 A list of scripts to include before loading the user's plugin script. The path will be search as:
 current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
-
-=== places.distance.weight
-
-* Data Type: double
-* Default Value: `0.1`
-
-The PLACES `wd` value for calculating goodness.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.goodness.threshold
-
-* Data Type: double
-* Default Value: `0.3`
-
-The PLACES goodness threshold.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.minimum.edit.similarity
-
-* Data Type: double
-* Default Value: `0.8`
-
-If the similarity score is less than this value then the POIs are not considered for match.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.poi.epsilon.distance
-
-* Data Type: double
-* Default Value: `0.001`
-
-Distance that is considered an exact match. Defaults to 1mm.
-
-=== places.string.weight
-
-* Data Type: double
-* Default Value: `0.9`
-
-The PLACES `ws` value for calculating goodness.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.tag.merger
-
-* Data Type: string
-* Default Value: `hoot::OverwriteTag2Merger`
-
-Possible options include:
-
-* `hoot::GeneralizeTagMerger`
-* `hoot::OverwriteTag2Merger`
 
 === poi.match.threshold
 
