@@ -297,7 +297,7 @@ fcodeCommon = {
       ['F_CODE','BI044','flood_control','yes'], // Flood Control Structure
       ['F_CODE','BI045','man_made','basin_gate'], // Basin Gate
       ['F_CODE','BI050','tower','water_intake'], // Water Intake Tower 
-      ['F_CODE','BI060','rwaterway','fish_pass'], // Fish Ladder
+      ['F_CODE','BI060','waterway','fish_pass'], // Fish Ladder
       ['F_CODE','BI070','man_made','gauging_station'], // Gauging Station
       ['F_CODE','BJ020','geological','moraine'], // Moraine
       ['F_CODE','BJ030','natural','glacier'], // Glacier 
@@ -352,7 +352,7 @@ fcodeCommon = {
       ['F_CODE','EE030','natural','desert'], // Desert
       ['F_CODE','FA000','boundary','administrative'], // Administrative Boundary
       ['F_CODE','FA012','protect_class','16'], // Contaminated Region
-      ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range 
+      ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range
       ['F_CODE','FA100','landuse','test_area'], // Test Area, Test Site
       ['F_CODE','FA110','boundary','date_line'], // International Date Line
       ['F_CODE','FA165','landuse','training_area'], // Training Area, Training Site
