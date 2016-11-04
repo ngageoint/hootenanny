@@ -169,8 +169,10 @@ public class ReviewBookmarkResource {
 
                 JSONObject json = new JSONObject();
 
+                // TODO: find out exactly why we need to do this
                 appendHstoreElement(hstoreMap.get("bookmarkdetail"), json, "bookmarkdetail");
 
+                // TODO: find out exactly why we need to do this
                 String bmkNotes = hstoreMap.get("bookmarknotes");
                 if ((bmkNotes != null) && (!bmkNotes.isEmpty())) {
                     bmkNotes = bmkNotes.replace("\\\"", "\"");
@@ -180,6 +182,7 @@ public class ReviewBookmarkResource {
                     json.put("bookmarknotes", jsonArray);
                 }
 
+                // TODO: find out exactly why we need to do this
                 appendHstoreElement(hstoreMap.get("bookmarkreviewitem"), json, "bookmarkreviewitem");
 
                 reviewBookmark.setDetail(json);
@@ -300,6 +303,7 @@ public class ReviewBookmarkResource {
 
                 JSONObject json = new JSONObject();
 
+                // TODO: find out exactly why we need to do this
                 appendHstoreElement(hstoreMap.get("bookmarkdetail"), json, "bookmarkdetail");
 
                 reviewBookmark.setDetail(json);
@@ -410,8 +414,7 @@ public class ReviewBookmarkResource {
      */
     private static List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
             long offset, Long[] creatorArray, Long[] layerArray) {
-        SQLQuery<ReviewBookmarks> query = createQuery().query()
-                .select(reviewBookmarks).from(reviewBookmarks);
+        SQLQuery<ReviewBookmarks> query = createQuery().query().select(reviewBookmarks).from(reviewBookmarks);
 
         if ((creatorArray != null) && (layerArray != null)) {
             query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
@@ -494,8 +497,7 @@ public class ReviewBookmarkResource {
     }
 
     /**
-     * Saves review tags. It first checks to see if exists and if not insert
-     * else update
+     * Saves review tags. It first checks to see if exists and if not insert else update
      *
      * @param request
      *            - request object containing inserted/updated fields

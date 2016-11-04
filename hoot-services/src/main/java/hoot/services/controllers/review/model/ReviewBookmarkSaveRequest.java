@@ -76,6 +76,8 @@ public class ReviewBookmarkSaveRequest {
     }
 
     public void setDetail(JSONObject detail) {
+        // TODO: Not sure why we need to do reparse.  When removed, createReviewBookmark() of ReviewBookmarkResource stops working.
+
         String jsonStr = detail.toJSONString();
         JSONParser p = new JSONParser();
         try {
