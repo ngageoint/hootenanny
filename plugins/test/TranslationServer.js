@@ -315,10 +315,10 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[1].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
                 assert.equal(result.osm.way[0].tag[2].$.k, "Thoroughfare Class");
                 assert.equal(result.osm.way[0].tag[2].$.v, "Unknown");
-                assert.equal(result.osm.way[0].tag[3].$.k, "Track or Lane Count");
-                assert.equal(result.osm.way[0].tag[3].$.v, "2");
-                assert.equal(result.osm.way[0].tag[4].$.k, "Width");
-                assert.equal(result.osm.way[0].tag[4].$.v, "20");
+                assert.equal(result.osm.way[0].tag[3].$.k, "Route Minimum Travelled Way Width");
+                assert.equal(result.osm.way[0].tag[3].$.v, "20");
+                assert.equal(result.osm.way[0].tag[4].$.k, "Track or Lane Count");
+                assert.equal(result.osm.way[0].tag[4].$.v, "2");
             });
         });
 
