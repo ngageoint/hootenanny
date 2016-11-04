@@ -72,7 +72,8 @@ public class JobResource {
     private static final Logger logger = LoggerFactory.getLogger(JobResource.class);
 
     // Thread pool for chain and job processing
-    private static final ExecutorService jobThreadExecutor;
+    private static final ExecutorService jobThreadExecutor =
+            Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
 
     @Autowired
     private JobExecutionManager jobExecMan;
@@ -80,18 +81,6 @@ public class JobResource {
     @Autowired
     private JobStatusManager jobStatusManager;
 
-
-    static {
-        int threadpoolSize = 5;
-        try {
-            threadpoolSize = Integer.parseInt(INTERNAL_JOB_THREAD_SIZE);
-        }
-        catch (NumberFormatException ignored) {
-            logger.error("Failed to get internalJobThreadSize.  Defaulting threadpool size to 5.");
-        }
-
-        jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
-    }
 
     public JobResource() {}
 

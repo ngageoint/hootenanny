@@ -24,23 +24,35 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
-public class ReviewBookmarksSaveResponse {
-    private long savedCount;
+/**
+ * Collection of review references
+ */
+public class ReviewRefsResponses {
+    private ReviewRefsResponse[] reviewRefsResponses;
 
-    public ReviewBookmarksSaveResponse() {}
+    public ReviewRefsResponses() {}
 
-    public void setSavedCount(long savedCount) {
-        this.savedCount = savedCount;
+    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
+        this.reviewRefsResponses = reviewRefsResponses;
     }
 
-    public long getSavedCount() {
-        return this.savedCount;
+    public ReviewRefsResponse[] getReviewRefsResponses() {
+        return reviewRefsResponses;
     }
 
-    public ReviewBookmarksSaveResponse(long savedCount) {
-        this.savedCount = savedCount;
+    public void setReviewRefsResponses(ReviewRefsResponse[] responses) {
+        this.reviewRefsResponses = responses;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ReviewRefsResponse refs : reviewRefsResponses) {
+            stringBuilder.append(refs);
+        }
+        return stringBuilder.toString();
     }
 }

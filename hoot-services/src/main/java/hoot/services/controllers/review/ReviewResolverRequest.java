@@ -24,37 +24,26 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
 /**
- * A request for review references
+ * Represents a request to mark all reviews resolved
  */
-public class ReviewRefsRequest {
-    private ElementInfo[] queryElements;
+public class ReviewResolverRequest {
+    private String mapId;
 
-    public ReviewRefsRequest() {}
+    public ReviewResolverRequest() {}
 
-    public ReviewRefsRequest(ElementInfo[] elementInfos) {
-        this.queryElements = elementInfos;
+    public ReviewResolverRequest(String mapId) {
+        this.mapId = mapId;
     }
 
-    public ElementInfo[] getQueryElements() {
-        return queryElements;
+    public String getMapId() {
+        return mapId;
     }
 
-    public void setQueryElements(ElementInfo[] infos) {
-        this.queryElements = infos;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (queryElements != null) {
-            for (ElementInfo queryElement : queryElements) {
-                stringBuilder.append(queryElement);
-            }
-        }
-        return stringBuilder.toString();
+    public void setMapId(String mapId) {
+        this.mapId = mapId;
     }
 }

@@ -24,36 +24,9 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
-
-import org.json.simple.JSONObject;
-
-import hoot.services.geo.BoundingBox;
+package hoot.services.controllers.review;
 
 
-public class ReviewableItemBboxInfo extends ReviewableItemBbox {
-    private String needReview;
-
-    public ReviewableItemBboxInfo(BoundingBox bbox, long mapId, long relationId, String needReview) {
-        super(bbox, mapId, relationId);
-        this.needReview = needReview;
-    }
-
-    public String getNeedReview() {
-        return needReview;
-    }
-
-    public void setNeedReview(String needReview) {
-        this.needReview = needReview;
-    }
-
-    @Override
-    public String toString() {
-        JSONObject o = new JSONObject();
-        o.put("bbox", this.getBbox());
-        o.put("mapid", this.getMapId());
-        o.put("relationid", this.getRelationId());
-        o.put("needreview", needReview);
-        return o.toJSONString();
-    }
+public interface ReviewQueryMapper {
+    String toString();
 }

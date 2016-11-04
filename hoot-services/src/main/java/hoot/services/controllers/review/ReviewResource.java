@@ -63,16 +63,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.controllers.osm.MapResource;
-import hoot.services.controllers.review.model.AllReviewableItems;
-import hoot.services.controllers.review.model.ElementInfo;
-import hoot.services.controllers.review.model.ReviewRef;
-import hoot.services.controllers.review.model.ReviewRefsRequest;
-import hoot.services.controllers.review.model.ReviewRefsResponse;
-import hoot.services.controllers.review.model.ReviewRefsResponses;
-import hoot.services.controllers.review.model.ReviewResolverRequest;
-import hoot.services.controllers.review.model.ReviewResolverResponse;
-import hoot.services.controllers.review.model.ReviewableItem;
-import hoot.services.controllers.review.model.ReviewableStatistics;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Changeset;

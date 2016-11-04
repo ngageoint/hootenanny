@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

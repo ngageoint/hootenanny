@@ -24,55 +24,23 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
-
-import org.json.simple.JSONObject;
-
-import hoot.services.geo.BoundingBox;
+package hoot.services.controllers.review;
 
 
-public class ReviewableItemBbox implements ReviewQueryMapper {
-    private long mapId;
-    private long relationId;
-    private BoundingBox bbox;
+public class ReviewBookmarksSaveResponse {
+    private long savedCount;
 
-    public ReviewableItemBbox(BoundingBox bbox, long mapId, long relationId) {
-        this.bbox = bbox;
-        this.mapId = mapId;
-        this.relationId = relationId;
+    public ReviewBookmarksSaveResponse() {}
+
+    public void setSavedCount(long savedCount) {
+        this.savedCount = savedCount;
     }
 
-    public long getRelationId() {
-        return relationId;
+    public long getSavedCount() {
+        return this.savedCount;
     }
 
-    public void setRelationId(long relationId) {
-        this.relationId = relationId;
-    }
-
-    public BoundingBox getBbox() {
-        return bbox;
-    }
-
-    public void setBbox(BoundingBox bbox) {
-        this.bbox = bbox;
-    }
-
-    public long getMapId() {
-        return mapId;
-    }
-
-    public void setMapId(long mapid) {
-        this.mapId = mapid;
-    }
-
-    @Override
-    public String toString() {
-        JSONObject o = new JSONObject();
-        o.put("bbox", bbox.toServicesString());
-        o.put("mapid", mapId);
-        o.put("relationid", relationId);
-
-        return o.toJSONString();
+    public ReviewBookmarksSaveResponse(long savedCount) {
+        this.savedCount = savedCount;
     }
 }

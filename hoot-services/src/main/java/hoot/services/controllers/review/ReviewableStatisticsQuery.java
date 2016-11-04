@@ -34,9 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.querydsl.core.types.dsl.Expressions;
 
-import hoot.services.controllers.review.model.ReviewQueryMapper;
-import hoot.services.controllers.review.model.ReviewableStatistics;
-
 
 class ReviewableStatisticsQuery extends ReviewableQueryAbstract {
     private static final Logger logger = LoggerFactory.getLogger(ReviewableStatisticsQuery.class);

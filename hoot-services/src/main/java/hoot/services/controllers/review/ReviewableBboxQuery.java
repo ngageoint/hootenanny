@@ -42,8 +42,6 @@ import org.slf4j.LoggerFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 
-import hoot.services.controllers.review.model.ReviewQueryMapper;
-import hoot.services.controllers.review.model.ReviewableItemBbox;
 import hoot.services.geo.BoundingBox;
 import hoot.services.utils.DbUtils;
 

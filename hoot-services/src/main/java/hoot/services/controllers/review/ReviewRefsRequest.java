@@ -24,9 +24,37 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
-public interface ReviewQueryMapper {
-    String toString();
+/**
+ * A request for review references
+ */
+public class ReviewRefsRequest {
+    private ElementInfo[] queryElements;
+
+    public ReviewRefsRequest() {}
+
+    public ReviewRefsRequest(ElementInfo[] elementInfos) {
+        this.queryElements = elementInfos;
+    }
+
+    public ElementInfo[] getQueryElements() {
+        return queryElements;
+    }
+
+    public void setQueryElements(ElementInfo[] infos) {
+        this.queryElements = infos;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (queryElements != null) {
+            for (ElementInfo queryElement : queryElements) {
+                stringBuilder.append(queryElement);
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

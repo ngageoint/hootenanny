@@ -24,49 +24,23 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
-public class ElementInfo {
-    private long id = -1;
-    private String type;
-    // can be map name or id
-    private String mapId;
+public class ReviewBookmarksStatResponse {
+    private long totalCount;
 
-    public ElementInfo() {}
+    public ReviewBookmarksStatResponse() {}
 
-    public ElementInfo(String mapId, long elementId, String type) {
-        this.mapId = mapId;
-        this.id = elementId;
-        this.type = type;
+    public ReviewBookmarksStatResponse(long totalCount) {
+        this.totalCount = totalCount;
     }
 
-    public long getId() {
-        return id;
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getMapId() {
-        return mapId;
-    }
-
-    public void setMapId(String id) {
-        this.mapId = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "map id: " + mapId + ", element id: " + id + ", element type: " + type;
+    public long getTotalCount() {
+        return this.totalCount;
     }
 }

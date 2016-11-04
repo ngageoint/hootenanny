@@ -684,7 +684,7 @@ public class CustomScriptResource {
     /**
      * A case insensitive string list
      */
-    static class CaseInsensitiveStringList extends ArrayList<String> {
+    private static class CaseInsensitiveStringList extends ArrayList<String> {
 
         @Override
         public boolean contains(Object o) {

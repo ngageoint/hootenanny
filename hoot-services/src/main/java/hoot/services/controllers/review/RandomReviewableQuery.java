@@ -38,9 +38,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 
-import hoot.services.controllers.review.model.ReviewQueryMapper;
-import hoot.services.controllers.review.model.ReviewableItem;
-
 
 class RandomReviewableQuery extends ReviewableQueryAbstract {
     private static final Logger logger = LoggerFactory.getLogger(RandomReviewableQuery.class);

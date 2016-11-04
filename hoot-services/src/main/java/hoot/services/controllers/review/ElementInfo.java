@@ -24,62 +24,49 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
-
-import org.json.simple.JSONObject;
+package hoot.services.controllers.review;
 
 
-public class ReviewableItem implements ReviewQueryMapper {
-    private long sortOrder;
-    private long mapId;
-    private long relationId;
-    private long resultCount;
+public class ElementInfo {
+    private long id = -1;
+    private String type;
+    // can be map name or id
+    private String mapId;
 
-    public ReviewableItem(long sortOrder, long mapid, long relationid) {
-        this.sortOrder = sortOrder;
-        this.mapId = mapid;
-        this.relationId = relationid;
+    public ElementInfo() {}
+
+    public ElementInfo(String mapId, long elementId, String type) {
+        this.mapId = mapId;
+        this.id = elementId;
+        this.type = type;
     }
 
-    public long getRelationId() {
-        return relationId;
+    public long getId() {
+        return id;
     }
 
-    public void setRelationId(long relationId) {
-        this.relationId = relationId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public long getSortOrder() {
-        return sortOrder;
-    }
-
-    public void setSortOrder(long sortOrder) {
-        this.sortOrder = sortOrder;
-    }
-
-    public long getMapId() {
+    public String getMapId() {
         return mapId;
     }
 
-    public void setMapId(long mapId) {
-        this.mapId = mapId;
+    public void setMapId(String id) {
+        this.mapId = id;
     }
 
-    public long getResultCount() {
-        return resultCount;
+    public String getType() {
+        return type;
     }
 
-    public void setResultCount(long cnt) {
-        resultCount = cnt;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        JSONObject o = new JSONObject();
-        o.put("sortorder", sortOrder);
-        o.put("mapid", mapId);
-        o.put("relationid", relationId);
-
-        return o.toJSONString();
+        return "map id: " + mapId + ", element id: " + id + ", element type: " + type;
     }
 }

@@ -24,35 +24,46 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
-
-import org.json.simple.JSONObject;
+package hoot.services.controllers.review;
 
 
-public class ReviewableStatistics implements ReviewQueryMapper {
-    private long totalCount;
-    private long unreviewedCount;
+/**
+ * Response to a review references web request
+ */
+public class ReviewRefsResponse {
+    private ReviewRef[] reviewRefs;
+    private ElementInfo queryElementInfo;
 
-    public ReviewableStatistics() {}
+    public ReviewRefsResponse() {}
 
-    public ReviewableStatistics(long totalCount, long unreviewedCount) {
-        this.totalCount = totalCount;
-        this.unreviewedCount = unreviewedCount;
+    public ReviewRefsResponse(ElementInfo requestingElementInfo, ReviewRef[] reviewReferences) {
+        this.queryElementInfo = requestingElementInfo;
+        this.reviewRefs = reviewReferences;
     }
 
-    public long getTotalCount() {
-        return totalCount;
+    public ReviewRef[] getReviewRefs() {
+        return reviewRefs;
     }
 
-    public long getUnreviewedCount() {
-        return unreviewedCount;
+    public void setReviewRefs(ReviewRef[] refs) {
+        this.reviewRefs = refs;
+    }
+
+    public ElementInfo getQueryElementInfo() {
+        return queryElementInfo;
+    }
+
+    public void setQueryElementInfo(ElementInfo info) {
+        this.queryElementInfo = info;
     }
 
     @Override
     public String toString() {
-        JSONObject o = new JSONObject();
-        o.put("totalCount", totalCount);
-        o.put("unreviewedCount", unreviewedCount);
-        return o.toJSONString();
+        StringBuilder stringBuilder = new StringBuilder("Request element ").append(queryElementInfo)
+                        .append(", Review references:").append(System.lineSeparator());
+        for (ReviewRef reviewRef : reviewRefs) {
+            stringBuilder.append(reviewRef).append(System.lineSeparator());
+        }
+        return stringBuilder.toString();
     }
 }

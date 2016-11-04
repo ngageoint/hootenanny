@@ -24,32 +24,23 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
-/**
- * Element information
- */
-public class ReviewRef extends ElementInfo {
-    private long reviewRelationId = -1;
+public class ReviewBookmarkDelResponse {
+    private long deleteCount;
 
-    public ReviewRef() {}
+    public ReviewBookmarkDelResponse() {}
 
-    public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {
-        super(mapId, elementId, elementType);
-        this.reviewRelationId = reviewRelationId;
+    public ReviewBookmarkDelResponse(long deleteCount) {
+        this.deleteCount = deleteCount;
     }
 
-    public long getReviewRelationId() {
-        return reviewRelationId;
+    public long getDeleteCount() {
+        return deleteCount;
     }
 
-    public void setReviewRelationId(long id) {
-        this.reviewRelationId = id;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + ", review relation id: " + reviewRelationId;
+    public void setDeleteCount(long nDel) {
+        this.deleteCount = nDel;
     }
 }

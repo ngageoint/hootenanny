@@ -24,35 +24,36 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
+
+import org.json.simple.JSONObject;
+
+import hoot.services.geo.BoundingBox;
 
 
-/**
- * Collection of review references
- */
-public class ReviewRefsResponses {
-    private ReviewRefsResponse[] reviewRefsResponses;
+public class ReviewableItemBboxInfo extends ReviewableItemBbox {
+    private String needReview;
 
-    public ReviewRefsResponses() {}
-
-    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
-        this.reviewRefsResponses = reviewRefsResponses;
+    public ReviewableItemBboxInfo(BoundingBox bbox, long mapId, long relationId, String needReview) {
+        super(bbox, mapId, relationId);
+        this.needReview = needReview;
     }
 
-    public ReviewRefsResponse[] getReviewRefsResponses() {
-        return reviewRefsResponses;
+    public String getNeedReview() {
+        return needReview;
     }
 
-    public void setReviewRefsResponses(ReviewRefsResponse[] responses) {
-        this.reviewRefsResponses = responses;
+    public void setNeedReview(String needReview) {
+        this.needReview = needReview;
     }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (ReviewRefsResponse refs : reviewRefsResponses) {
-            stringBuilder.append(refs);
-        }
-        return stringBuilder.toString();
+        JSONObject o = new JSONObject();
+        o.put("bbox", this.getBbox());
+        o.put("mapid", this.getMapId());
+        o.put("relationid", this.getRelationId());
+        o.put("needreview", needReview);
+        return o.toJSONString();
     }
 }

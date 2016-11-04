@@ -48,22 +48,10 @@ import org.slf4j.LoggerFactory;
 
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
-    private static final int JOB_RES_CONNECTION_TIMEOUT;
+    private static final int JOB_RES_CONNECTION_TIMEOUT = Integer.parseInt(INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI);
 
     protected String processScriptName;
 
-    static {
-        int value;
-        try {
-            value = Integer.parseInt(INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI);
-        }
-        catch (NumberFormatException ignored) {
-            value = 3000;
-            logger.error("internalJobRequestWaitTimeMilli is not a valid number!  Defaulting to {}", value);
-        }
-
-        JOB_RES_CONNECTION_TIMEOUT = value;
-    }
 
     public JobControllerBase(String processScriptName) {
         this.processScriptName = processScriptName;

@@ -57,11 +57,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.sql.SQLQuery;
 
-import hoot.services.controllers.review.model.ReviewBookmarkDelResponse;
-import hoot.services.controllers.review.model.ReviewBookmarkSaveRequest;
-import hoot.services.controllers.review.model.ReviewBookmarksGetResponse;
-import hoot.services.controllers.review.model.ReviewBookmarksSaveResponse;
-import hoot.services.controllers.review.model.ReviewBookmarksStatResponse;
 import hoot.services.models.db.ReviewBookmarks;
 import hoot.services.utils.PostgresUtils;
 

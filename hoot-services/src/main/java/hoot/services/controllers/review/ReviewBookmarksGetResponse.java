@@ -24,26 +24,27 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
+
+import java.util.List;
+
+import hoot.services.models.db.ReviewBookmarks;
 
 
-/**
- * Represents a response from marking all reviews resolved
- */
-public class ReviewResolverResponse {
-    private long changesetId;
+public class ReviewBookmarksGetResponse {
+    private List<ReviewBookmarks> reviewBookmarks;
 
-    public ReviewResolverResponse() {}
+    public ReviewBookmarksGetResponse() {}
 
-    public ReviewResolverResponse(long changesetId) {
-        this.changesetId = changesetId;
+    public ReviewBookmarksGetResponse(List<ReviewBookmarks> reviewBookmarks) {
+        this.reviewBookmarks = reviewBookmarks;
     }
 
-    public long getChangesetId() {
-        return changesetId;
+    public List<ReviewBookmarks> getReviewBookmarks() {
+        return this.reviewBookmarks;
     }
 
-    public void setChangesetId(long changesetId) {
-        this.changesetId = changesetId;
+    public void setReviewBookmarks(List<ReviewBookmarks> reviewBookmarks) {
+        this.reviewBookmarks = reviewBookmarks;
     }
 }

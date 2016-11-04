@@ -44,8 +44,6 @@ import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
-import hoot.services.controllers.review.model.ReviewResolverRequest;
-import hoot.services.controllers.review.model.ReviewResolverResponse;
 import hoot.services.testsupport.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
 

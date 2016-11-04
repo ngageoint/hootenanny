@@ -24,26 +24,55 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
+
+import org.json.simple.JSONObject;
+
+import hoot.services.geo.BoundingBox;
 
 
-/**
- * Represents a request to mark all reviews resolved
- */
-public class ReviewResolverRequest {
-    private String mapId;
+public class ReviewableItemBbox implements ReviewQueryMapper {
+    private long mapId;
+    private long relationId;
+    private BoundingBox bbox;
 
-    public ReviewResolverRequest() {}
-
-    public ReviewResolverRequest(String mapId) {
+    public ReviewableItemBbox(BoundingBox bbox, long mapId, long relationId) {
+        this.bbox = bbox;
         this.mapId = mapId;
+        this.relationId = relationId;
     }
 
-    public String getMapId() {
+    public long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
+    }
+
+    public BoundingBox getBbox() {
+        return bbox;
+    }
+
+    public void setBbox(BoundingBox bbox) {
+        this.bbox = bbox;
+    }
+
+    public long getMapId() {
         return mapId;
     }
 
-    public void setMapId(String mapId) {
-        this.mapId = mapId;
+    public void setMapId(long mapid) {
+        this.mapId = mapid;
+    }
+
+    @Override
+    public String toString() {
+        JSONObject o = new JSONObject();
+        o.put("bbox", bbox.toServicesString());
+        o.put("mapid", mapId);
+        o.put("relationid", relationId);
+
+        return o.toJSONString();
     }
 }

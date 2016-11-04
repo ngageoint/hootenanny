@@ -26,40 +26,60 @@
  */
 package hoot.services.controllers.review;
 
-import static hoot.services.models.db.QCurrentRelations.currentRelations;
-import static hoot.services.utils.DbUtils.createQuery;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.querydsl.core.types.dsl.Expressions;
+import org.json.simple.JSONObject;
 
 
-class ReviewableQuery extends ReviewableQueryAbstract {
-    private static final Logger logger = LoggerFactory.getLogger(ReviewableQuery.class);
-    private long sortOrder = -1;
+public class ReviewableItem implements ReviewQueryMapper {
+    private long sortOrder;
+    private long mapId;
+    private long relationId;
+    private long resultCount;
 
-    ReviewableQuery(long mapId, long sortOrder) {
-        super(mapId);
+    public ReviewableItem(long sortOrder, long mapid, long relationid) {
+        this.sortOrder = sortOrder;
+        this.mapId = mapid;
+        this.relationId = relationid;
+    }
+
+    public long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(long relationId) {
+        this.relationId = relationId;
+    }
+
+    public long getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(long sortOrder) {
         this.sortOrder = sortOrder;
     }
 
+    public long getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(long mapId) {
+        this.mapId = mapId;
+    }
+
+    public long getResultCount() {
+        return resultCount;
+    }
+
+    public void setResultCount(long cnt) {
+        resultCount = cnt;
+    }
+
     @Override
-    public ReviewQueryMapper execQuery() {
-        Long result = createQuery(getMapId())
-                .select(currentRelations.id)
-                .from(currentRelations)
-                .where(Expressions.booleanTemplate("tags->'hoot:review:needs' = 'yes'")
-                        .and(Expressions.booleanTemplate("tags->'hoot:review:sort_order'='" + sortOrder + "'")))
-                .fetchOne();
+    public String toString() {
+        JSONObject o = new JSONObject();
+        o.put("sortorder", sortOrder);
+        o.put("mapid", mapId);
+        o.put("relationid", relationId);
 
-        ReviewableItem reviewableItem = new ReviewableItem(sortOrder, getMapId(), -1);
-
-        if (result != null) {
-            reviewableItem.setRelationId(result);
-            reviewableItem.setResultCount(1);
-        }
-
-        return reviewableItem;
+        return o.toJSONString();
     }
 }

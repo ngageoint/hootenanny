@@ -241,4 +241,14 @@ public final class DbUtils {
 
         return tables;
     }
+
+    /**
+     * Returns table size in bytes
+     */
+    public static long getTableSizeInBytes(String tableName) {
+        return createQuery()
+                .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
+                .from()
+                .fetchOne();
+    }
 }

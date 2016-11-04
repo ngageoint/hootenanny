@@ -27,9 +27,6 @@
 package hoot.services.controllers.review;
 
 
-import hoot.services.controllers.review.model.ReviewQueryMapper;
-
-
 abstract class ReviewableQueryAbstract {
     private long mapId = -1;
 

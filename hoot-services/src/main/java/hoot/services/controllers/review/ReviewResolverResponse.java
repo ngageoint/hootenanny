@@ -24,23 +24,26 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.review.model;
+package hoot.services.controllers.review;
 
 
-public class ReviewBookmarkDelResponse {
-    private long deleteCount;
+/**
+ * Represents a response from marking all reviews resolved
+ */
+public class ReviewResolverResponse {
+    private long changesetId;
 
-    public ReviewBookmarkDelResponse() {}
+    public ReviewResolverResponse() {}
 
-    public ReviewBookmarkDelResponse(long deleteCount) {
-        this.deleteCount = deleteCount;
+    public ReviewResolverResponse(long changesetId) {
+        this.changesetId = changesetId;
     }
 
-    public long getDeleteCount() {
-        return deleteCount;
+    public long getChangesetId() {
+        return changesetId;
     }
 
-    public void setDeleteCount(long nDel) {
-        this.deleteCount = nDel;
+    public void setChangesetId(long changesetId) {
+        this.changesetId = changesetId;
     }
 }

@@ -46,10 +46,6 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
-import hoot.services.controllers.review.model.AllReviewableItems;
-import hoot.services.controllers.review.model.ReviewQueryMapper;
-import hoot.services.controllers.review.model.ReviewableItemBbox;
-import hoot.services.controllers.review.model.ReviewableItemBboxInfo;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.utils.DbUtils;
