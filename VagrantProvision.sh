@@ -155,6 +155,15 @@ if [ ! -f bin/chromedriver ]; then
       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
+else
+  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+  if [[ "$(chromedriver --version)" != "ChromeDriver $(LATEST_RELEASE).*" ]]; then
+    echo "### Updating Chromedriver"
+    rm $HOME/bin/chromedriver
+    rm $HOME/chromedriver_linux64.zip
+    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+    unzip -o -d $HOME/bin chromedriver_linux64.zip
+  fi
 fi
 
 sudo apt-get autoremove -y
