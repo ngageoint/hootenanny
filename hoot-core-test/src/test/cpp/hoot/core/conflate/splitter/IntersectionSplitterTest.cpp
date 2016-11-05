@@ -52,12 +52,15 @@ class IntersectionSplitterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
     CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST(runTestSimple);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runTest()
   {
+    QDir().mkpath("test-output/conflate/splitter");
+
     OsmReader reader;
 
     OsmMap::resetCounters();
@@ -70,12 +73,32 @@ public:
 
     OsmWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    QDir().mkpath("test-output/conflate/splitter");
     writer.write(map, "test-output/conflate/splitter/IntersectionSplitterTest.osm");
 
     HOOT_FILE_EQUALS("test-output/conflate/splitter/IntersectionSplitterTest.osm",
                      "test-files/conflate/splitter/IntersectionSplitterOut.osm");
   }
+
+  void runTestSimple()
+  {
+    QDir().mkpath("test-output/conflate/splitter");
+
+    OsmReader reader;
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/splitter/SimpleSplitter.osm", map);
+
+    IntersectionSplitter::splitIntersections(map);
+
+    OsmWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, "test-output/conflate/splitter/SimpleSplitterOutput.osm");
+
+    HOOT_FILE_EQUALS("test-output/conflate/splitter/SimpleSplitterOutput.osm",
+                     "test-files/conflate/splitter/SimpleSplitterExpected.osm");
+  }
+
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IntersectionSplitterTest);
