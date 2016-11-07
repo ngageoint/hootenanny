@@ -23,6 +23,7 @@ Feature: Manually resolve reviews feature
     Then I should see "Hide Table"
     Then I should see "name"
     Then I should see a "a.previous" on the map
+    Then I should see a "a.next" on the map
     Then I should see "Resolved"
     #Add a new point and edit name tag
     When I click the "add-point" button
