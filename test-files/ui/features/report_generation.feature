@@ -21,11 +21,11 @@ Feature: Generate Conflation Report
         Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
         Then I should see "Conflate"
         And I press "Conflate"
-        And I fill "saveAs" input with "Conflate_Report"
+        And I fill "saveAs" input with "Conflate_Report_Cucumber"
         And I select the "true" option in "#containerofisGenerateReport"
         And I scroll element into view and press "conflate2"
         Then I wait 30 "seconds" to see "Conflating …"
-        Then I wait 3 "minutes" to see "Conflate_Report"
+        Then I wait 3 "minutes" to see "Conflate_Report_Cucumber"
         Then I should see "Complete Review"
         And I click the "Complete Review" link
         Then I should see "Resolve all remaining reviews"
@@ -36,21 +36,20 @@ Feature: Generate Conflation Report
     Scenario: Check out the Report
         When I select the "sprocket" div
         And I click on the "Reports" option in the "settingsSidebar"
-        And I should see "Conflate_Report"
-        When I click the "up" icon under the "Conflate_Report" link
+        And I should see "Conflate_Report_Cucumber"
+        When I click the "up" icon under the "Conflate_Report_Cucumber" link
         Then I press "round" span with text "Download"
         And I wait 30 seconds
         Then the download file "Conflate_Report.pdf" should exist
 
     Scenario: Delete the Datasets
-        When I click the "trash" icon under the "Conflate_Report" link
+        When I click the "trash" icon under the "Conflate_Report_Cucumber" link
         And I wait
         And I accept the alert
         Then I click on the "Datasets" option in the "settingsSidebar"
-        When I click the "Conflate_Report" Dataset
-        And I context click the "Conflate_Report" Dataset
+        When I click the "Conflate_Report_Cucumber" Dataset
+        And I context click the "Conflate_Report_Cucumber" Dataset
         And I click the "Delete" context menu item
         And I wait
         And I accept the alert
-        And I wait 30 "seconds" to not see "Conflate_Report"
-        
+        And I wait 30 "seconds" to not see "Conflate_Report_Cucumber"
