@@ -151,7 +151,8 @@ void IntersectionSplitter::splitIntersections()
       cout << "  Intersection splitter todo: " << _todoNodes.size() << "       \r";
       cout.flush();
     }
-
+if (nodeId == -1833)
+  LOG_VAR(nodeId);
     // if the node is part of two or more ways
     if (_nodeToWays.count(nodeId) >= 2)
     {
@@ -200,6 +201,8 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   {
     bool split = true;
     QList<long> ways = _nodeToWays.values(nodeId);
+    int concurrent_count = 0;
+    int other_ways = ways.count() - 1;
     for (QList<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       //  Don't compare it against itself
@@ -212,12 +215,13 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       //  Endpoints of the other way should be split
       if (idx < 1 || idx > (long)compIds.size() - 1)
         continue;
-      //  Check both in forward and reverse for shared nodes in the way, if there are don't split
+      //  Check both in forward and reverse for shared nodes in the way
       if ((nodeIds[firstIndex - 1] == compIds[idx - 1] && nodeIds[firstIndex + 1] == compIds[idx + 1]) ||
           (nodeIds[firstIndex - 1] == compIds[idx + 1] && nodeIds[firstIndex + 1] == compIds[idx - 1]))
-        split = false;
+        concurrent_count++;
     }
-    if (split)
+    //  A split point is found when there is at least one non-concurrent way at this node
+    if (concurrent_count < other_ways)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
