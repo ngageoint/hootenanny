@@ -235,7 +235,7 @@ tds = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking enumerated values and populateing the OTH field.
+    //                feature, checking enumerated values and populating the OTH field.
     validateAttrs: function(geometryType,attrs) {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
