@@ -278,7 +278,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
           hasStatus = true;
           if (_textStatus)
           {
-            writer.writeAttribute("v", QString("%1").arg(n->getStatus().toTextStatus()));
+            writer.writeAttribute("v", n->getStatus().toTextStatus());
           }
           else
           {
@@ -322,7 +322,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "hoot:status");
-      writer.writeAttribute("v", QString("%1").arg(n->getStatus().toTextStatus()));
+      writer.writeAttribute("v", n->getStatus().toTextStatus());
       writer.writeEndElement();
     }
 
@@ -377,7 +377,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
           hasStatus = true;
           if (_textStatus)
           {
-            writer.writeAttribute("v", QString("%1").arg(w->getStatus().toTextStatus()));
+            writer.writeAttribute("v", w->getStatus().toTextStatus());
           }
           else
           {
@@ -416,7 +416,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
         writer.writeAttribute("k", "hoot:status");
         if (_textStatus)
         {
-          writer.writeAttribute("v", QString("%1").arg(w->getStatus().toTextStatus()));
+          writer.writeAttribute("v", w->getStatus().toTextStatus());
         }
         else
         {
@@ -474,7 +474,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
           hasStatus = true;
           if (_textStatus)
           {
-            writer.writeAttribute("v", QString("%1").arg(r->getStatus().toTextStatus()));
+            writer.writeAttribute("v", r->getStatus().toTextStatus());
           }
           else
           {
@@ -521,7 +521,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
         writer.writeAttribute("k", "hoot:status");
         if (_textStatus)
         {
-          writer.writeAttribute("v", QString("%1").arg(r->getStatus().toTextStatus()));
+          writer.writeAttribute("v", r->getStatus().toTextStatus());
         }
         else
         {
