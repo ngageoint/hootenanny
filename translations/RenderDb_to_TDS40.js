@@ -47,7 +47,7 @@ function layerNameFilter()
 // Create the output Schema
 function getDbSchema()
 {
-    return tds40.getDbSchema();
+    return tds.getDbSchema();
 }
 
 
@@ -56,7 +56,7 @@ function getDbSchema()
 // function translateAttributes(attrs, layerName, geometryType)
 function translateToOsm(attrs, layerName, geometryType)
 {
-    return tds40.toOsm(attrs, layerName, geometryType);
+    return tds.toOsm(attrs, layerName, geometryType);
 
 } // End of Translate Attributes
 
@@ -67,21 +67,18 @@ function translateToOgr(tags, elementType, geometryType)
 {
     // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
 
+    // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
     if (tags.tags)
     {
-        // The "tags" value is a string with this structure: "cables"=>"3", "voltage"=>"230000"
-        var tList = tags['tags'].split(',');
+        var tStr = tags['tags'].toString();
 
-        for (var i = 0, tLen = tList.length; i < tLen; i++)
-        {
-            var rTag = tList[i].replace(/\"/g,'').split('=>');
-            tags[rTag[0].trim()] = rTag[1].trim();
-        }
+        var tObj = JSON.parse('{' + tStr.split('=>').join(':') + '}');
+
+        for (var i in tObj) tags[i.replace(/\"/g,'').trim()] = tObj[i].replace(/\"/g,'').trim();
 
         delete tags.tags;
     }
 
-    return tds40.toNfdd(tags, elementType, geometryType)
+    return tds.toNfdd(tags, elementType, geometryType)
 
 } // End of translateToOgr
-

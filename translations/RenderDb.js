@@ -84,15 +84,24 @@ function translateToOgr(tags, elementType, geometryType)
     // There is no way we can translate these to a single geometry.
     if (geometryType == 'Collection') return null;
 
+    // Drop non usefull hoot tags.
+    if (tags['hoot:status'] == 'invalid')
+    {
+        delete tags['hoot:status'];
+    }
+
+
     // Clean out the Tags
     for (var i in tags)
     {
         // Drop Hoot specific stuff
-        if (i.indexOf('source:') !== -1 || i.indexOf('hoot:') !== -1 || i.indexOf('error:') !== -1)
+        // if (i.indexOf('hoot:') !== -1 || i.indexOf('error:') !== -1)
+        if (i.indexOf('error:') !== -1)
         {
             delete tags[i];
             continue;
         }
+
 
         // Look for the tag in the schema lookup tables. We assume that the initialize function has been run.
         if (renderDb[geometryType].indexOf(i) == -1)

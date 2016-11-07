@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,62 +24,37 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef RANGE_H
-#define RANGE_H
+package hoot.services.job;
 
-//Qt includes
-#include <QString>
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-namespace hoot
-{
+import hoot.services.models.db.JobStatus;
 
-using namespace std;
+@Component
+@Profile("test")
+public class JobStatusManagerStub extends JobStatusManager {
 
-/**
- * Range of values. Min is inclusive. Max is inclusive.
- */
+    @Override
+    public void addJob(String jobId) {}
 
-class Range
-{
-public:
+    @Override
+    public void updateJob(String jobId, String statusDetail) {}
 
-  static string className() { return "hoot::Range"; }
+    @Override
+    public void setComplete(String jobId) {}
 
-  Range() {}
+    @Override
+    public void setComplete(String jobId, String statusDetail) {}
 
-  Range(long int min, long int max);
+    @Override
+    public void setFailed(String jobId) {}
 
-  virtual ~Range() {}
+    @Override
+    public void setFailed(String jobId, String statusDetail) {}
 
-  bool hashCode();
-
-  bool operator>(Range r) { return (_min - r.getMin()) > 0; }
-
-  bool operator<(Range r) { return (_min - r.getMin()) < 0; }
-
-  bool operator=(Range r) { return _min == r.getMin(); }
-
-  bool in(long int l);
-
-  bool isValid();
-
-  void setInvalid();
-
-  QString toString();
-
-  long calculateSize() { return (_max - _min) + 1; }
-
-  long int getMin() { return _min; }
-
-  long int getMax() { return _max; }
-
-  void set(long int min, long int max);
-
-private:
-  long int _min;
-  long int _max;
-};
-
+    @Override
+    public JobStatus getJobStatusObj(String jobId) {
+        return null;
+    }
 }
-
-#endif // RANGE_H

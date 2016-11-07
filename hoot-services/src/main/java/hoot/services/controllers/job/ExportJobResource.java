@@ -230,30 +230,23 @@ public class ExportJobResource extends JobControllerBase {
 
     private Map getConflatedMap(JSONArray commandArgs) {
         String mapName = getParameterValue("input", commandArgs);
-        List<Long> mapIds = getMapIdsByName(mapName);
-
-        // we don't expect the services to try to export a map that has multiple
-        // name entries, but check for it anyway
-        if (mapIds.size() > 1) {
-            String msg = "Error exporting data.  Multiple maps with name: " + mapName;
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
+        Long mapId = getMapIdByName(mapName);
 
         // this may be checked somewhere else down the line...not sure
-        if (mapIds.isEmpty()) {
+        if (mapId == null) {
             String msg = "Error exporting data.  No map exists with name: " + mapName;
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        Map conflatedMap = new Map(mapIds.get(0));
+        Map conflatedMap = new Map(mapId);
         conflatedMap.setDisplayName(mapName);
 
         return conflatedMap;
     }
 
     // adding this to satisfy the mock
-    List<Long> getMapIdsByName(String conflatedMapName) {
-        return DbUtils.getMapIdsByName(conflatedMapName);
+    Long getMapIdByName(String conflatedMapName) {
+        return DbUtils.getMapIdByName(conflatedMapName);
     }
 
     // adding this to satisfy the mock
