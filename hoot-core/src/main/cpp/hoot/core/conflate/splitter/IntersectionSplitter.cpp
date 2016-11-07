@@ -188,7 +188,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   // if the first index wasn't an endpoint.
   if (firstIndex != -1)
   {
-    bool split = true;
     QList<long> ways = _nodeToWays.values(nodeId);
     int concurrent_count = 0;
     int other_ways = ways.count() - 1;
