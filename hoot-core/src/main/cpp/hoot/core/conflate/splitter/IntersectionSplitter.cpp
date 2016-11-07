@@ -54,25 +54,18 @@ IntersectionSplitter::IntersectionSplitter(shared_ptr<OsmMap> map)
 
 void IntersectionSplitter::_mapNodesToWay(shared_ptr<Way> way)
 {
-//stringstream oss;
-//oss << "Map Nodes To Way\n";
   long wId = way->getId();
-//oss << "Way: " << way->getTags().getNames()[0] << "(" << wId << ")\n";
 
   const std::vector<long>& nodes = way->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
   {
-//oss << "\tNode: " << _map->getNode(nodes[i])->getTags().getNames()[0];
     _nodeToWays.insert(nodes[i], wId);
 
     if (_nodeToWays.count(nodes[i]) > 1)
     {
-//oss << " * TODO";
       _todoNodes.insert(nodes[i]);
     }
-//oss << "\n";
   }
-//LOG_INFO(oss.str());
 }
 
 void IntersectionSplitter::_mapNodesToWays()
@@ -151,8 +144,6 @@ void IntersectionSplitter::splitIntersections()
       cout << "  Intersection splitter todo: " << _todoNodes.size() << "       \r";
       cout.flush();
     }
-if (nodeId == -1833)
-  LOG_VAR(nodeId);
     // if the node is part of two or more ways
     if (_nodeToWays.count(nodeId) >= 2)
     {
@@ -181,8 +172,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   }
 
   //LOG_DEBUG("Splitting way: " << way->getId() << " at node: " << node->getId());
-//NodePtr node = _map->getNode(nodeId);
-//LOG_INFO("Evaluating " << way->getTags().getNames()[0] << " at " << node->getTags().getNames()[0]);
+
   // find the first index of the split node that isn't an endpoint.
   int firstIndex = -1;
   const std::vector<long>& nodeIds = way->getNodeIds();
@@ -190,7 +180,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   {
     if (nodeIds[i] == nodeId)
     {
-//LOG_INFO("Found first index: " << i);
       firstIndex = i;
       break;
     }
@@ -251,8 +240,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       }
     }
   }
-//  else
-//    LOG_INFO("Endpoing found");
 }
 
 void IntersectionSplitter::apply(shared_ptr<OsmMap>& map)
