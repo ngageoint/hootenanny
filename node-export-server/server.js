@@ -74,7 +74,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     var output = 'export_' + id;
     var hootHome = process.env['HOOT_HOME'];
     var isFile = req.params.format === 'OSM XML';
-    var outDir = hootHome + '/renderdb-export-server/' + output;
+    var outDir = hootHome + '/node-export-server/' + output;
     var outFile = outDir + config.formats[req.params.format];
     if (req.params.format === 'File Geodatabase') outDir = outFile;
     var outzip = outDir + '.zip';

@@ -3,9 +3,6 @@
     "RenderDb": {
       "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
     },
-    "XML": {
-      "conn": "syriasample.osm"
-    },
     "API": {
       "conn": "http://192.168.33.12:3000/api/0.6/map"
     },
