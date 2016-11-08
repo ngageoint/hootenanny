@@ -144,8 +144,12 @@ bool PoiPolygonMatch::isPoly(const Element& e)
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //isArea includes building too
-  return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
-         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  const bool isPoly =
+    OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
+      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(e);
+  LOG_VART(isPoly);
+  return isPoly;
 }
 
 bool PoiPolygonMatch::isPoi(const Element& e)
@@ -164,8 +168,12 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  return e.getElementType() == ElementType::Node &&
-         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  const bool isPoi =
+    e.getElementType() == ElementType::Node &&
+      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(e);
+  LOG_VART(isPoi);
+  return isPoi;
 }
 
 bool PoiPolygonMatch::isArea(const Element& e)
