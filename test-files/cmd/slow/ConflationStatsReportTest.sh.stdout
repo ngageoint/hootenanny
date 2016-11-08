@@ -1,23 +1,42 @@
-completed test 1
-passed test 2
-passed test 3
-passed test 4
-Output files:
-areaHistogram.png
-conflatedFeature.png
-csr.asciidoc
-csr.html
-csr.osm
-csr.pdf
-csr2.osm
-csrStats.txt
-distancesHistogram.png
-featureCountHistogram1.png
-inputFeatures.png
-poiHistogram.png
-summaryChart.png
-tagCountHistogram1.png
-tagCountHistogram2.png
-uniqueHistogram.png
-PDF size in range.
-completed test 5
+11:45:26.024 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/csr/csr.osm ...
+11:45:26.030 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/csr/csr.osm ...
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.035 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 2
+11:45:26.036 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+1020d1019
+<         <tag k="hoot:review:members" v="2"/>
+1032d1030
+<         <tag k="hoot:review:members" v="2"/>
+1044d1041
+<         <tag k="hoot:review:members" v="2"/>
+1056d1052
+<         <tag k="hoot:review:members" v="2"/>
+1068d1063
+<         <tag k="hoot:review:members" v="2"/>
+1080d1074
+<         <tag k="hoot:review:members" v="2"/>
+1092d1085
+<         <tag k="hoot:review:members" v="2"/>
+1104d1096
+<         <tag k="hoot:review:members" v="2"/>

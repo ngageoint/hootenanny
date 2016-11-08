@@ -4,7 +4,7 @@
 
 NOTE: This description is current as of Hootenanny v0.2.18.
 
-The <<PoiConflation,PLACES>> algorithm in Hootenanny was designed specifically
+The PLACES algorithm formerly supported in Hootenanny was designed specifically
 to handle GeoNames style data. In the case of GeoNames it is very fast, but
 suffers from a few draw-backs.
 

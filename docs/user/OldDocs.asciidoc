@@ -13,7 +13,7 @@ Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 opera
 [[OldDocsConflation]]
 == Conflation
 
-[[POIConflation]]
+[[UnifyingPoi]]
 === POI Conflation
 
 Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using two general approaches: 

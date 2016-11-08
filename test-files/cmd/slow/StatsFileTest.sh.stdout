@@ -1,9 +1,9 @@
 ****Quick Stats****
-15:06:27.382 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+11:47:54.370 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-15:06:27.419 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-15:06:27.419 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
-15:06:27.419 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+11:47:54.406 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+11:47:54.406 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+11:47:54.406 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -14,14 +14,22 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.2233720368547758e+18
 Maximum Relation ID	-9.2233720368547758e+18
 ****JSON Stats****
-15:06:27.566 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+11:47:54.543 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-15:06:27.607 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-15:06:28.987 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
-15:06:28.987 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
+11:47:54.578 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+11:47:54.678 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+11:47:54.678 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 131 conflated or invalid features out of 131 total features.
+11:47:54.678 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+ Using default search radius value = 15
+11:47:55.917 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+11:47:55.918 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
 Reprojecting 0 / 116         
-15:06:29.023 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-15:06:30.855 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+11:47:55.951 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+11:47:55.960 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+11:47:55.961 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 128 conflated or invalid features out of 128 total features.
+11:47:55.961 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+ Using default search radius value = 15
+11:47:57.748 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 {
     "Node Count":
     [
