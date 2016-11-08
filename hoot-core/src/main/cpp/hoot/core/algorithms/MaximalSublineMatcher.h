@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINEMATCHER_H
 #define MAXIMALSUBLINEMATCHER_H
@@ -59,7 +59,7 @@ public:
 
   virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
 
-  //not used?  need some refactoring here
+  /// @todo not used?  need some refactoring here
   virtual void setHeadingDelta(Meters /*headingDelta*/) { }
 
 private:

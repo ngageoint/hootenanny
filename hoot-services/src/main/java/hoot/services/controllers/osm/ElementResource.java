@@ -27,7 +27,6 @@
 package hoot.services.controllers.osm;
 
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,13 +118,6 @@ public class ElementResource {
             throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
-        }
-
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
@@ -168,13 +160,6 @@ public class ElementResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
-        }
-
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
@@ -215,13 +200,6 @@ public class ElementResource {
             String msg = "Error getting full element data!" +
                     "  mapId = " + mapId + ", elementId = " + elementId + ", elementType = " + elementType;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();
@@ -269,13 +247,6 @@ public class ElementResource {
         catch (Exception e) {
             String msg = "Error getting full element data by unique id! elementId = " + elementId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...",
-                    StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 100));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();
@@ -371,12 +342,6 @@ public class ElementResource {
             String msg = "Error getting elements!" + "  mapId = " + mapId +
                     ", elementIds = " + elementIds + ", elementType = " + elemType;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        try {
-            logger.debug("Returning response: {} ...", StringUtils.abbreviate(XmlDocumentBuilder.toString(elementDoc), 10000));
-        }
-        catch (IOException ignored) {
         }
 
         return Response.ok(new DOMSource(elementDoc)).build();

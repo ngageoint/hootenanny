@@ -152,11 +152,6 @@ void BuildingMerger::apply(const OsmMapPtr& map,
     RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
     scrap->getTags().clear();
 
-    // if we created a relation, we now need to make sure the building part information is added
-    // properly
-    /// @todo synchronize building parts See ticket #2880
-    //_synchronizeParts(keeper);
-
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
       it != _pairs.end(); ++it)

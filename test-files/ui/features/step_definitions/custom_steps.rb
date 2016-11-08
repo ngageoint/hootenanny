@@ -211,7 +211,7 @@ When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
 end
 
 When(/^I context click "([^"]*)"$/) do |txt|
-  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+  page.find('span',:text=>txt, :match => :prefer_exact).context_click
 end
 
 
@@ -236,6 +236,18 @@ end
 
 When(/^I click the "([^"]*)" key$/) do |arg1|
   find("body").native.send_keys(arg1)
+end
+
+When(/^I click the control "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control,  arg1]
+end
+
+When(/^I click the control shift "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :shift, arg1]
+end
+
+When(/^I click the control alt "([^"]*)" key$/) do |arg1|
+  find("body").native.send_keys [:control, :alt, arg1]
 end
 
 When(/^I click the "([^"]*)" key in the "([^"]*)"$/) do |key, el|
@@ -306,6 +318,10 @@ When(/^I click on the "([^"]*)" button in the "([^"]*)"$/) do |button,div|
   elements[0].click
 end
 
+And(/^I click the "([^"]*)" preset$/) do |label|
+  find('button.preset-list-button', :text=>label).click
+end
+
 When(/^I click the "([^"]*)" at "([^"]*)","([^"]*)"$/) do |el, x, y|
   find('#' + el).click_at(x,y)
   sleep 3
@@ -322,7 +338,7 @@ When(/^I double-click the "([^"]*)"$/) do |el|
 end
 
 When(/^I fill "([^"]*)" with "([^"]*)"$/) do |el, value|
-  find('#' + el).set(value)
+  find(el).set(value)
   sleep 1
 end
 
@@ -434,6 +450,20 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)"$/) do |timeout, unit, text|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I wait ([0-9]*) "([^"]*)" to see css "([^"]*)"$/) do |timeout, unit, text|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  page.should have_css(text)
+  Capybara.default_max_wait_time = oldTimeout
+end
+
 When(/^I wait ([0-9]*) "([^"]*)" to not see "([^"]*)"$/) do |timeout, unit, text|
   if unit == "seconds"
     multiplier = 1
@@ -463,7 +493,8 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
 end
 
 When(/^I close the UI alert$/) do
-  find('#alerts').all('.x')[0].click
+  alerts = find('#alerts')
+  alerts.all('.x')[0].click unless alerts.nil?
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
@@ -521,6 +552,15 @@ end
 When(/^I select "([^"]*)" dataset/) do |file|
   include_hidden_fields do
     page.attach_file('ingestfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I select "([^"]*)" and "([^"]*)" from "([^"]*)" directory/) do |fileA, fileB, directory|
+  pathA = ENV['HOOT_HOME'] + directory + fileA
+  pathB = ENV['HOOT_HOME'] + directory + fileB
+
+  include_hidden_fields do
+    page.attach_file 'ingestdirectoryuploader', pathA #[@pathA, @pathB], options={multiple}
   end
 end
 
@@ -785,4 +825,87 @@ end
 Then(/^I turn on highlight edited features$/) do
   el = find('div.highlight-edited')
   el.click
+end
+
+
+When(/^I click paste tags, overwrite$/) do
+  page.all('button.col6')[0].click
+end
+
+When(/^I click paste tags, append$/) do
+  page.all('button.col6')[1].click
+end
+
+When(/^I click undo$/) do
+  page.all('button.col6')[2].click
+end
+
+When(/^I click redo$/) do
+  page.all('button.col6')[3].click
+end
+
+When(/^I expand the tag list toggle$/) do
+  ttg = page.all('a.hide-toggle')[1]
+  unless ttg.has_css?('hide-toggle expanded')
+    ttg.click
+  end
+end
+
+Then(/^I should see the last element "([^"]*)" with value "([^"]*)"$/) do |id, value|
+  lel = page.all(id).last
+  lel.value.should eq value
+end
+
+When(/^I expand the sidebar$/) do
+  resizer = page.find('#resizer')
+  resizer.drag_by(150, 0)
+end
+
+#for hidden features
+Then(/^I should see the previously hidden "([^"]*)" on the page$/) do |input|
+  el = page.find(input).should be_visible
+end
+
+Then(/^I should not see the "([^"]*)" on the page$/) do |input|
+  el = page.should have_no_css(input, :visible => true)
+end
+
+#for invalidName warning
+Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
+  el = find('input' + el)
+  el[:class].include?('invalidName').should eq true
+end
+
+# for invalid features
+Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq true
+end
+
+Then(/^I should_not see an invalid input warning for "([^"]*)"/) do |input|
+  el = find(input)
+  el[:class].include?('invalid-input').should eq false
+end
+
+
+# for placeholders
+Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
+  el = find(id)
+  el.value.should eq ""
+  el['placeholder'].should eq value
+end
+
+Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |negate, text, timeout, unit|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  expectation = negate ? 0 : 1
+  find('#datasettable').assert_selector('text',:text=>text, :match => :prefer_exact ,:maximum => expectation)
+  Capybara.default_max_wait_time = oldTimeout
 end

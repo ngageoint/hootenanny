@@ -1,0 +1,48 @@
+Writing input 1 data to osm api db...
+ setval 
+--------
+      1
+(1 row)
+
+ setval 
+--------
+      2
+(1 row)
+
+ setval 
+--------
+   4325
+(1 row)
+
+ setval 
+--------
+    375
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+Exporting input 1 data from osm api db to temp file...
+Writing input 2 data to hoot api db...
+Exporting input 2 data from hoot api db to temp file...
+Cropping osm api/hoot api db data to same AOI and conflating it...
+stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: test-output/cmd/glacial/ServiceOsmApiDbHootApiDbConflateCropTest/stats
+Reading conflated data back out of the hoot api db and checking extents...
+OSM API DB input 1 extent: 
+12:20:52.574 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcGisRoads.osm ...
+Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+OSM API DB input 1 exported extent: 
+12:20:52.805 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbConflateCropTest/osm-api-db-input.osm ...
+Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+Hoot API DB input 2 extent: 
+12:20:53.022 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcTigerRoads.osm ...
+Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+Hoot API DB input 2 exported extent: 
+12:20:53.226 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbConflateCropTest/hoot-api-db-input.osm ...
+Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+Crop bounds:  -77.042,38.891,-77.032,38.898
+Conflated data output extent: 
+12:20:53.811 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbConflateCropTest/conflated-export.osm ...
+Map extent (minx,miny,maxx,maxy): -77.042,38.891,-77.032,38.898

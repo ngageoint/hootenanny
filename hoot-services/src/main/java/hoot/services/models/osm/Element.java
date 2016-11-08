@@ -26,7 +26,10 @@
  */
 package hoot.services.models.osm;
 
+import static hoot.services.models.db.QChangesets.changesets;
+import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -55,13 +58,6 @@ import com.querydsl.sql.dml.SQLDeleteClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
-import hoot.services.models.db.QChangesets;
-import hoot.services.models.db.QCurrentNodes;
-import hoot.services.models.db.QCurrentRelationMembers;
-import hoot.services.models.db.QCurrentRelations;
-import hoot.services.models.db.QCurrentWayNodes;
-import hoot.services.models.db.QCurrentWays;
-import hoot.services.models.db.QUsers;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.PostgresUtils;
@@ -75,12 +71,6 @@ import hoot.services.utils.PostgresUtils;
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger logger = LoggerFactory.getLogger(Element.class);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
-
-    protected static final QCurrentWays currentWays = QCurrentWays.currentWays;
-    protected static final QCurrentNodes currentNodes = QCurrentNodes.currentNodes;
-    protected static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-    protected static final QCurrentRelations currentRelations = QCurrentRelations.currentRelations;
-    protected static final QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 
@@ -333,7 +323,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
             }
 
             element.setAttribute("id", id);
-
             element.setAttribute("visible", String.valueOf(MethodUtils.invokeMethod(record, "getVisible")));
             element.setAttribute("version", String.valueOf(MethodUtils.invokeMethod(record, "getVersion")));
             element.setAttribute("changeset", String.valueOf(MethodUtils.invokeMethod(record, "getChangesetId")));
@@ -480,12 +469,10 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         Element prototype = ElementFactory.create(mapId, elementType);
 
         if (!elementIds.isEmpty()) {
-            QChangesets changesets = QChangesets.changesets;
-            QUsers users = QUsers.users;
             return createQuery(String.valueOf(mapId))
                     .select(prototype.getElementTable(), users, changesets)
                     .from(prototype.getElementTable())
-                    .join(QChangesets.changesets).on(prototype.getChangesetIdField().eq(changesets.id))
+                    .join(changesets).on(prototype.getChangesetIdField().eq(changesets.id))
                     .join(users).on(changesets.userId.eq(users.id))
                     .where(prototype.getElementIdField().in(elementIds))
                     .orderBy(prototype.getElementIdField().asc())
@@ -515,8 +502,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      */
     public static void removeRelatedRecords(long mapId, RelationalPathBase<?> relatedRecordTable,
             NumberPath<Long> joinField, Set<Long> elementIds, boolean warnOnNothingRemoved) {
-        logger.debug("Removing related records...");
-
         long recordsProcessed = 0;
         if ((relatedRecordTable != null) && (joinField != null)) {
             SQLDeleteClause sqldelete = createQuery(mapId).delete(relatedRecordTable);
@@ -674,8 +659,6 @@ public abstract class Element implements XmlSerializable, DbSerializable {
      * Parses tags from the element XML and returns them in a map
      */
     static Map<String, String> parseTags(org.w3c.dom.Node elementXml) {
-        logger.debug("Parsing element tags...");
-
         Map<String, String> tags = new HashMap<>();
         try {
             // using xpath api here to get the tags is *very* slow, since it
@@ -703,14 +686,14 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     org.w3c.dom.Element addTagsXml(org.w3c.dom.Element elementXml) {
         try {
             Document doc = elementXml.getOwnerDocument();
+
             // We want tags map sorted
             Map<String, String> tags = new TreeMap<>(this.getTags());
 
             for (Map.Entry<String, String> tagEntry : tags.entrySet()) {
                 org.w3c.dom.Element tagElement = doc.createElement("tag");
                 tagElement.setAttribute("k", tagEntry.getKey());
-                tagElement.setAttribute("v",
-                        hoot.services.utils.StringUtils.encodeURIComponentForJavaScript(tagEntry.getValue()));
+                tagElement.setAttribute("v", encodeURIComponentForJavaScript(tagEntry.getValue()));
                 elementXml.appendChild(tagElement);
             }
 

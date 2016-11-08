@@ -151,9 +151,19 @@ if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
     mkdir -p $HOME/bin
     if [ ! -f chromedriver_linux64.zip ]; then
-      wget --quiet http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
+      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
     unzip -d $HOME/bin chromedriver_linux64.zip
+else
+  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+  if [[ "$(chromedriver --version)" != "ChromeDriver $(LATEST_RELEASE).*" ]]; then
+    echo "### Updating Chromedriver"
+    rm $HOME/bin/chromedriver
+    rm $HOME/chromedriver_linux64.zip
+    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+    unzip -o -d $HOME/bin chromedriver_linux64.zip
+  fi
 fi
 
 sudo apt-get autoremove -y
@@ -536,6 +546,15 @@ sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
 sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
+npm install --silent
+# Clean up after the npm install
+rm -rf $HOME/tmp
+
+echo "### Installing renderdb-export-server..."
+sudo cp $HOOT_HOME/renderdb-export-server/init.d/renderdb-export-server /etc/init.d
+sudo chmod a+x /etc/init.d/renderdb-export-server
+# Make sure all npm modules are installed
+cd $HOOT_HOME/renderdb-export-server
 npm install --silent
 # Clean up after the npm install
 rm -rf $HOME/tmp

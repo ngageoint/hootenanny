@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Contains multiple WaySublineMatches. The matches must not overlap.
  *
- * @todo this i a brittle way of handling the problem. Changing any way will break the matches.
+ * @todo this is a brittle way of handling the problem. Changing any way will break the matches.
  * In the future we should entertain switching to WayMatchStringMapping.
  */
 class WaySublineMatchString

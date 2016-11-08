@@ -241,25 +241,31 @@
       },
       {
         "id": "element_cache_size_node",
+        "minvalue": "0",
         "elem_type": "int",
         "description":"Size of the cache used when streaming I/O is used with nodes.",
         "name": "Element Cache Size Node",
+        "maxvalue": "",
         "defaultvalue": "2000000",
         "hoot_key": "element.cache.size.node"
       },
       {
         "id": "element_cache_size_relation",
+        "minvalue": "0",
         "elem_type": "int",
         "description":"Size of the cache used when streaming I/O is used with relations.",
         "name": "Element Cache Size Relation",
+        "maxvalue": "",        
         "defaultvalue": "200000",
         "hoot_key": "element.cache.size.relation"
       },
       {
         "id": "element_cache_size_way",
+        "minvalue": "0",
         "elem_type": "int",
         "description":"Size of the cache used when streaming I/O is used with ways.",
         "name": "Element Cache Size Way",
+        "maxvalue": "",        
         "defaultvalue": "200000",
         "hoot_key": "element.cache.size.way"
       }

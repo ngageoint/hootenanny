@@ -7,7 +7,7 @@ Feature: Import Geonames Dataset
         When I click on the "Datasets" option in the "settingsSidebar"
 
     Scenario: Import Dataset with geonames file extension
-        And I press "Add Dataset"
+        And I press "Import Single Dataset"
         # Here it doesn't matter which "File" option you pick
         And I select the "File (geonames,txt)" option in the "Select Import Type" combobox
         And I select "/test-files/cmd/glacial/ConvertGeoNames.geonames" dataset
@@ -24,7 +24,7 @@ Feature: Import Geonames Dataset
         Then I wait 30 "seconds" to not see "geonames_Cucumber"
 
     Scenario: Import Dataset with txt file extension
-        And I press "Add Dataset"
+        And I press "Import Single Dataset"
         And I select the "File (geonames,txt)" option in the "Select Import Type" combobox
         And I select "/test-files/cmd/glacial/ConvertGeoNames.txt" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "ConvertGeoNames"

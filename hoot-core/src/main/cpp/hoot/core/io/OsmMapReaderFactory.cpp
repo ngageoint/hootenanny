@@ -99,8 +99,9 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
-  //TODO: hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api databases,
-  //but by using the factory override during conflation it won't - see #781 for potential fix task
+  /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
+  /// databases, but by using the factory override during conflation it won't - see #781 for
+  /// potential fix task
   if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
   {
     readerOverride = "";

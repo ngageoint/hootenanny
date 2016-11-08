@@ -27,7 +27,13 @@
 package hoot.services.models.osm;
 
 import static hoot.services.HootProperties.MAXIMUM_WAY_NODES;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelationMembers.currentRelationMembers;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWayNodes.currentWayNodes;
+import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.utils.DbUtils.createQuery;
+import static org.apache.commons.lang3.StringUtils.join;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +45,6 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +53,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanPath;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.Coordinates;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
-import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 
@@ -69,7 +73,6 @@ import hoot.services.utils.DbUtils.EntityChangeType;
  */
 public class Way extends Element {
     private static final Logger logger = LoggerFactory.getLogger(Way.class);
-    private static final QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
 
     private final List<Long> wayNodeIdsCache = new ArrayList<>();
 
@@ -95,46 +98,12 @@ public class Way extends Element {
         wayRecord.setVisible(record.getVisible());
         wayRecord.setTags(record.getTags());
         super.record = wayRecord;
+
         setMapId(mapId);
     }
 
     List<Long> getWayNodeIdsCache() {
         return wayNodeIdsCache;
-    }
-
-    /**
-     * Returns all node records for the specified ways from the services
-     * database
-     *
-     * @param mapId
-     *            ID of the map owning the ways
-     * @param wayIds
-     *            a collection of way IDs for which to retrieve node records
-     * @return a list of node records
-     */
-    static List<CurrentNodes> getNodesForWays(long mapId, Set<Long> wayIds) {
-        if (!wayIds.isEmpty()) {
-            return createQuery(mapId)
-                    .select(currentNodes)
-                    .from(currentWayNodes, currentNodes)
-                    .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
-                    .where(currentWayNodes.wayId.in(wayIds))
-                    .fetch();
-        }
-        return new ArrayList<>();
-    }
-
-    /*
-     * Returns the nodes associated with this way
-     */
-    private List<CurrentNodes> getNodes() {
-        return createQuery(getMapId())
-                .select(currentNodes)
-                .from(currentWayNodes, currentNodes)
-                .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
-                .where(currentWayNodes.wayId.eq(getId()))
-                .orderBy(currentWayNodes.sequenceId.asc())
-                .fetch();
     }
 
     /*
@@ -232,10 +201,18 @@ public class Way extends Element {
             return getBoundsFromRequestDataAndRemainderFromDatabase();
         }
 
+        // Returns all nodes associated with this way
+        List<CurrentNodes> nodes = createQuery(getMapId())
+                .select(Projections.bean(CurrentNodes.class, currentNodes.latitude, currentNodes.longitude))
+                .from(currentWayNodes)
+                .join(currentNodes).on(currentWayNodes.nodeId.eq(currentNodes.id))
+                .where(currentWayNodes.wayId.eq(getId()))
+                .orderBy(currentWayNodes.sequenceId.asc())
+                .fetch();
+
         // If no temp related record data is present (hasn't been cleared out),
-        // the way nodes data for this way must be in the services database and up to date,
-        // so get it from there.
-        return new BoundingBox(new ArrayList<>(getNodes()));
+        // the way nodes data for this way must be in the services database and up to date, so get it from there.
+        return new BoundingBox(nodes);
     }
 
     /**
@@ -246,8 +223,6 @@ public class Way extends Element {
      */
     @Override
     public void fromXml(org.w3c.dom.Node xml) {
-        logger.debug("Parsing way...");
-
         NamedNodeMap xmlAttributes = xml.getAttributes();
 
         CurrentWays wayRecord = (CurrentWays) super.record;
@@ -279,7 +254,7 @@ public class Way extends Element {
         // From the Rails port of OSM API:
         // rels = Relation.joins(:relation_members).where(:visible => true,
         // :current_relation_members => { :member_type => "Way", :member_id => id }).
-        SQLQuery<Long> owningRelationsQuery = createQuery(getMapId())
+        List<Long> owningRelationsIds = createQuery(getMapId())
                 .select(currentRelationMembers.relationId)
                 .distinct()
                 .from(currentRelations, currentRelationMembers)
@@ -287,14 +262,13 @@ public class Way extends Element {
                 .where(currentRelations.visible.eq(true)
                         .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))
                         .and(currentRelationMembers.memberId.eq(super.getId())))
-                .orderBy(currentRelationMembers.relationId.asc());
-
-        List<Long> owningRelationsIds = owningRelationsQuery.fetch();
+                .orderBy(currentRelationMembers.relationId.asc())
+                .fetch();
 
         if (!owningRelationsIds.isEmpty()) {
             throw new OSMAPIPreconditionException(
                     "Node with ID = " + super.getId() + " is still used by other relation(s): "
-                            + StringUtils.join(owningRelationsIds) + " from map with ID = " + getMapId());
+                            + join(owningRelationsIds) + " from map with ID = " + getMapId());
         }
     }
 
@@ -442,7 +416,7 @@ public class Way extends Element {
      * info.
      */
     private void parseWayNodesXml(org.w3c.dom.Node xml) {
-        NodeList wayNodesXml = null;
+        NodeList wayNodesXml;
         try {
             wayNodesXml = XPathAPI.selectNodeList(xml, "nd");
         }

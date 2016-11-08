@@ -83,10 +83,6 @@ mgcp.rules = {
         ['F_CODE','AK120','landuse','recreation_ground'], // From OSM - PArk, not great
         ['F_CODE','AL015','building','yes'], // To fix amenity etc
         ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
-        // ['F_CODE','AL020','place','city'], // From OSM
-        ['F_CODE','AL020','landuse','residential'], // From OSM Data
-        ['F_CODE','AL020','landuse','commercial'], // From OSM Data
-        ['F_CODE','AL020','landuse','industrial'], // From OSM Data
         ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
         ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
         ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
@@ -131,7 +127,7 @@ mgcp.rules = {
         'UID':'uuid', // Universally Unique Identifier
         'UPD_DATE':'source:update:datetime', // Review Source Date and Time
         'UPD_INFO':'source:update:description', // Review Source Description
-        'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
+        'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
         }, // End txtBiased
 
     // One2one rules for Number attributes
@@ -923,7 +919,7 @@ mgcp.rules = {
         ['SCC','1','water:type','alkaline'],
         ['SCC','4','water:type','mineral'],
         ['SCC','9','water:type','potable'],
-        ['SCC','10','water:type','salty'],
+        ['SCC','10','water:type','salt'],
         ['SCC','11','water:type','fresh'], // Fresh 
         ['SCC','12','water:type','brackish'], // Brackish 
         // ['SCC','998',undefined,undefined],
@@ -944,8 +940,8 @@ mgcp.rules = {
         // SEP - Divided
         // ['SEP','0','divider','unknown'], 
         ['SEP','0',undefined,undefined], 
-        ['SEP','1000','divider','no'], 
-        ['SEP','1001','divider','yes'], 
+        ['SEP','1000','is_divided','no'],
+        ['SEP','1001','is_divided','yes'],
 
         // SFS - Aerodrome Pavement Functional 
         //['SFS','0','aeroway:pavement_status','unknown'], // Unknown 

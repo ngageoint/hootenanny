@@ -599,33 +599,27 @@ mgcp = {
         // if ('ACC' in attrs)
         if (translate.isOK(attrs.ACC))
         {
-            if (attrs.ACC == '2')
+            switch (attrs.ACC)
             {
-                accuracy = accuracy * 2;
-                // Add note: Accuracy: Approximate
-            }
-            else if (attrs.ACC == '3')
-            {
-                accuracy = accuracy * 4;
-                // Add note: Accuracy: Doubtful
-            }
-            else if (attrs.ACC == '5')
-            {
-                accuracy = -1;
-                // Add note: Accuracy: Disputed
-            }
-            else if (attrs.ACC == '6')
-            {
-                // Add note: Accuracy: Undisputed
-            }
-            else if (attrs.ACC == '7')
-            {
-                // Add note: Accuracy: Precise
-            }
-            else if (attrs.ACC == '8')
-            {
-                accuracy = -1;
-                // Add note: Accuracy: Abrogated
+                case '2':
+                    accuracy = accuracy * 2; // Add note: Accuracy: Approximate
+                    break;
+
+                case '3':
+                    accuracy = accuracy * 4; // Add note: Accuracy: Doubtful
+                    break;
+
+                case '5':
+                    accuracy = -1; // Add note: Accuracy: Disputed }
+                    break;
+
+                case '6': // Add note: Accuracy: Undisputed
+                case '7': // Add note: Accuracy: Precise
+                    break;
+
+                case '8':
+                    accuracy = -1; // Add note: Accuracy: Abrogated
+                    break;
             }
         }
 
@@ -635,12 +629,6 @@ mgcp = {
         }
 
         // #####
-        // #
-        // # Now the funky rules start. These account for common tables that are shared between various
-        // # features
-        // #
-        // #####
-
         if (attrs.HWT && attrs.HWT !== '0')
         {
             tags.amenity = 'place_of_worship';
@@ -730,11 +718,29 @@ mgcp = {
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
         translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
 
-        translate.fixConstruction(tags, 'highway');
-        translate.fixConstruction(tags, 'railway');
+        // Lifecycle tags
+        if (tags.condition)
+        {
+            if (tags.condition == 'construction')
+            {
+//                 if (tags.highway && attrs.F_CODE == 'AP030')
+                if (tags.highway)
+                {
+                    tags.construction = tags.highway;
+                    tags.highway = 'construction';
+                    delete tags.condition;
+                }
+                else if (tags.railway)
+                {
+                    tags.construction = tags.railway;
+                    tags.railway = 'construction';
+                    delete tags.condition;
+                }
+            } // End Construction
+
+        } // End Condition tags
 
         // Add 'building = yes' to amenities if we don't already have one
         if (tags.amenity && !tags.building)
@@ -756,6 +762,7 @@ mgcp = {
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
         // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
+        // Some FCODE specific rules
         switch (attrs.F_CODE)
         {
             case undefined: // Break early if no value
@@ -799,6 +806,28 @@ mgcp = {
                         tags.place = 'hamlet';
                         break;
                 } // End switch
+
+                switch (tags.use) // Fixup the landuse tags
+                {
+                    case undefined: // Break early if no value
+                        break;
+
+                    case 'industrial':
+                        tags.landuse = 'industrial';
+                        delete tags.use;
+                        break;
+
+                    case 'commercial':
+                        tags.landuse = 'commercial';
+                        delete tags.use;
+                        break;
+
+                    case 'residential':
+                        tags.landuse = 'residential';
+                        delete tags.use;
+                        break;
+                } // End switch
+
                 break;
 
             case 'BH070': // Ford
@@ -871,6 +900,12 @@ mgcp = {
             tags.facility = 'yes';
         }
 
+        // Sort out the WID, WD1 etc attributes.
+        // Roads etc have a WD1 attribute but this doesn't get translated to "width"
+        if (attrs.WD1)
+        {
+            if (! tags.width) tags.width = attrs.WD1;
+        }
 
     }, // End of applyToOsmPostProcessing
 
@@ -912,13 +947,6 @@ mgcp = {
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.landuse == 'allotments'","t.landuse = 'farmland'"],
-            ["t.landuse == 'construction'","t.landuse = 'built_up_area'; t.condition = 'construction'"],
-            ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
-            ["t.landuse == 'farm'","t.landuse = 'farmland'"],
-            ["t.landuse == 'farmyard'","t.facility = 'yes'; t.use = 'agriculture'; delete t.landuse"],
-            ["t.landuse == 'grass' || t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'grassland'; delete t.landuse"],
-            ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
@@ -943,13 +971,71 @@ mgcp = {
         // translate.applyComplexRules(tags,attrs,rulesList);
         translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
 
+        // Sort out landuse
+        switch (tags.landuse)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'brownfield':
+                tags.landuse = 'built_up_area';
+                tags.condition = 'destroyed';
+                break
+
+            case 'construction':
+                tags.condition = 'construction';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'commercial':
+            case 'retail':
+                tags.use = 'commercial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'farm':
+            case 'allotments':
+                tags.landuse = 'farmland';
+                break;
+
+            case 'farmyard': // NOTE: This is different to farm.
+                tags.facility = 'yes';
+                tags.use = 'agriculture';
+                delete tags.landuse;
+                break;
+
+            case 'grass':
+            case 'meadow':
+                tags.natural = 'grassland';
+                tags['grassland:type'] = 'grassland';
+                delete tags.landuse;
+                break;
+
+            case 'industrial':
+                tags.use = 'industrial';
+                tags.landuse = 'built_up_area';
+                break;
+
+            case 'military':
+                tags.military = 'installation';
+                delete tags.landuse;
+                break;
+
+            case 'residential':
+                tags.use = 'residential';
+                tags.landuse = 'built_up_area';
+                break;
+
+
+        } // End switch landuse
+
+
         // Fix up OSM 'walls' around facilities
         if (tags.barrier == 'wall' && geometryType == 'Area')
         {
             attrs.F_CODE = 'AL010'; // Facility
             delete tags.barrier; // Take away the walls...
         }
-
 
         // An "amenitiy" can be a building or a thing.
         // If appropriate, make the "amenity" into a building.
@@ -1162,9 +1248,6 @@ mgcp = {
         // Mapping Senior Citizens home to Accomodation. Not great
         if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
 
-        // Unknown House of Worship
-        if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
-
         // These FCODES have "No prescribed attributes" in TRDv40
         // Therefore:
         // - clean up the the attrs.
@@ -1215,6 +1298,18 @@ mgcp = {
                 }
                 break;
 
+            case 'AL015': // General Building
+                // Unknown House of Worship
+                if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
+
+                if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
+                {
+                    // Debug
+                    //print('AL015: Setting HWT 998');
+                    attrs.HWT = '998';
+                }
+                break;
+
             case 'AL020': // Built-up Area
                 // Allowed values for FUC
                 if (['0','1','2','4','19','999'].indexOf(attrs['FUC']) < 0) attrs.FUC = '999';
@@ -1239,11 +1334,24 @@ mgcp = {
                 }
                 break;
 
+            case 'AP010': // Cart Track
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
+                break;
+
             case 'AP030': // Road
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
                 if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
                 break;
 
             case 'AP050': // Trail
@@ -1305,6 +1413,10 @@ mgcp = {
             case 'EA010': // Crop Land
                 if (attrs.CSP == '15') attrs.F_CODE = 'EA040';
                 // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+                break;
+
+            case 'ED030': // Mangrove Swamp
+                if (! attrs.TID) attrs.TID = '1001'; // Tidal
                 break;
         } // End switch FCODE
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryConverter.h"
@@ -99,9 +99,18 @@ shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* 
   case GEOS_GEOMETRYCOLLECTION:
     return convertGeometryCollection(dynamic_cast<const GeometryCollection*>(g), s,
       circularError);
-  default:
-    LOG_WARN(g->toString());
-    throw HootException("Unsupported geometry type.");
+  default:\
+    _logCount++;
+    int logLimit = ConfigOptions().getOgrLogLimit();
+    if (_logCount <= logLimit)
+    {
+      LOG_WARN("Unsupported geometry type. Element will be removed from the map. " + g->toString());
+    }
+    else
+    {
+      LOG_WARN("GeometryConverter::convertGeometryToElement reached maximum number of log. No longer logging.");
+    }
+    return shared_ptr<Element>();
   }
 }
 

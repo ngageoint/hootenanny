@@ -179,7 +179,7 @@ private:
 
   void _moveNode(ElementId scrapNodeId, WayLocation wl1);
 
-  /// @todo merger these two together.
+  /// @todo merge these two together.
   void _rebuildWayString1();
   void _rebuildWayString2();
 

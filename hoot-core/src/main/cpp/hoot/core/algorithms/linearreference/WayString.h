@@ -74,6 +74,7 @@ public:
 
   Meters getMaxCircularError() const;
 
+  /** returns number of sublines in this string */
   int getSize() { return _sublines.size(); }
 
   QString toString() const { return hoot::toString(_sublines); }

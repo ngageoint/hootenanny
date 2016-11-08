@@ -156,6 +156,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   LOG_INFO("  Removing nodes...");
 
   // go through all the nodes
+  long nodesRemoved = 0;
   const NodeMap nodes = result->getNodeMap();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
@@ -198,11 +199,15 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
         if (n2w.find(it->first) == n2w.end())
         {
           // remove the node
+          LOG_TRACE(
+            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
           RemoveNodeOp::removeNodeNoCheck(result, it->second->getId());
+          nodesRemoved++;
         }
       }
     }
   }
+  LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
 
   RemoveEmptyRelationsVisitor v;
   map->visitRw(v);

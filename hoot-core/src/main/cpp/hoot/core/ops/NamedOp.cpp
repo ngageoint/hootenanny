@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -88,6 +89,8 @@ void NamedOp::apply(shared_ptr<OsmMap>& map)
       shared_ptr<OsmMapOperation> op(new VisitorOp(t));
       op->apply(map);
     }
+
+    LOG_VARD(map->getElementCount());
   }
 }
 

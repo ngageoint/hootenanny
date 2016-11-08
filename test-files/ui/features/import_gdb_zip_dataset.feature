@@ -7,7 +7,7 @@ Feature: Import Zipped GDB Dataset
         When I click on the "Datasets" option in the "settingsSidebar"
 
     Scenario: Import Dataset
-        And I press "Add Dataset"
+        And I press "Import Single Dataset"
         And I select the "File (shp,zip,gdb.zip)" option in the "Select Import Type" combobox
         And I select "/test-files/gdb/DcGisRoads.gdb.zip" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "DcGisRoads"

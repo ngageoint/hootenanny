@@ -15,6 +15,12 @@ var schemaMap = {
     MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js')
 };
 
+var translationsMap = {
+    TDSv40: '/translations/TDSv40.js',
+    TDSv61: '/translations/TDSv61.js',
+    MGCP: '/translations/MGCP_TRD4.js'
+};
+
 var osmToTdsMap = {
     TDSv40: '/translations/OSM_to_englishTDS.js',
     TDSv61: '/translations/OSM_to_englishTDS61.js',
@@ -27,7 +33,7 @@ var tdsToOsmMap = {
     MGCP: '/translations/englishMGCP_to_OSM.js'
 };
 
-var translationsMap = {
+var englishTranslationsMap = {
     TDSv40: '/plugins/etds40_osm.js',
     TDSv61: '/plugins/etds61_osm.js',
     MGCP: '/plugins/emgcp_osm.js'
@@ -161,8 +167,23 @@ function handleInputs(params) {
             params.transDir = 'toogr';
             result = osmtotds(params);
             break;
+        case '/translateToEnglish':
+            params.transMap = osmToTdsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
+        case '/translateTo':
+            params.transMap = translationsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
         case '/tdstoosm':
             params.transMap = tdsToOsmMap;
+            params.transDir = 'toosm';
+            result = tdstoosm(params);
+            break;
+        case '/translateFrom':
+            params.transMap = translationsMap;
             params.transDir = 'toosm';
             result = tdstoosm(params);
             break;
@@ -202,7 +223,7 @@ var translate = function(data) {
     }
     hoot = require(HOOT_HOME + '/lib/HootJs');
     createUuid = hoot.UuidHelper.createUuid;
-    var trans = require(HOOT_HOME + translationsMap[data.translation]);
+    var trans = require(HOOT_HOME + englishTranslationsMap[data.translation]);
     var result;
     if (data.to) {
         if (data.english) {
@@ -492,7 +513,7 @@ var searchSchema = function(options) {
         result = schema.filter(function(d) {
                 return d.geom.toLowerCase() === geomType.toLowerCase()
             })
-            .slice(limitResult)
+            .slice(0, limitResult)
             .map(function(d) {
                 return {
                     name: d.name,

@@ -198,7 +198,6 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   _addDefaults(t1);
   _addDefaults(t2);
 
-  /// @todo r7255 go through and use the cleaned tag vertices rather than tags directly.
   vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(t1);
   vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(t2);
 

@@ -172,8 +172,14 @@ public class ConflationResource extends JobControllerBase {
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
-                Map secondaryMap = new Map(secondaryMapId);
-                setAoi(secondaryMap, commandArgs);
+                BoundingBox bbox;
+                if (oParams.get("TASK_BBOX") != null) {
+                    bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
+                } else {
+                    Map secondaryMap = new Map(secondaryMapId);
+                    bbox = getMapBounds(secondaryMap);
+                }
+                setAoi(bbox, commandArgs);
 
                 // write a timestamp representing the time the osm api db data was queried out
                 // from the source; to be used conflict detection during export of conflated
@@ -232,7 +238,7 @@ public class ConflationResource extends JobControllerBase {
 
             logger.debug(jobArgs.toJSONString());
 
-            postChainJobRquest(jobId, jobArgs.toJSONString());
+            postChainJobRequest(jobId, jobArgs.toJSONString());
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -281,8 +287,7 @@ public class ConflationResource extends JobControllerBase {
         return Map.mapExists(id);
     }
 
-    private void setAoi(Map secondaryMap, JSONArray commandArgs) {
-        BoundingBox bounds = getMapBounds(secondaryMap);
+    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
         arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
                 bounds.getMaxLon() + "," + bounds.getMaxLat());

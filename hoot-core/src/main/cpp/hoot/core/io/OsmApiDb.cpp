@@ -359,8 +359,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
   // setup base sql query string
   QString sql =  "SELECT ";
 
-  //TODO: This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
-  //type but not others.
+  /// @todo This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
+  /// type but not others. - may be OBE after #772
   if (elementType == ElementType::Node)
   {
     sql += _elementTypeToElementTableName(elementType) +

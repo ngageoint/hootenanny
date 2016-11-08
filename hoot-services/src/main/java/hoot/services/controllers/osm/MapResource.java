@@ -129,14 +129,7 @@ public class MapResource extends JobControllerBase {
     public MapLayers getLayers() {
         MapLayers mapLayers = null;
         try {
-            logger.debug("Retrieving map layers list...");
-
-            List<Maps> mapLayerRecords = createQuery()
-                    .select(maps)
-                    .from(maps)
-                    .orderBy(maps.displayName.asc())
-                    .fetch();
-
+            List<Maps> mapLayerRecords = createQuery().select(maps).from(maps).orderBy(maps.displayName.asc()).fetch();
             mapLayers = Map.mapLayerRecordsToLayers(mapLayerRecords);
         }
         catch (Exception e) {
@@ -173,8 +166,6 @@ public class MapResource extends JobControllerBase {
     public FolderRecords getFolders() {
         FolderRecords folderRecords = null;
         try {
-            logger.debug("Retrieving folders list...");
-
             List<Folders> folderRecordSet = createQuery()
                     .select(folders)
                     .from(folders)
@@ -211,8 +202,6 @@ public class MapResource extends JobControllerBase {
         LinkRecords linkRecords = null;
 
         try {
-            logger.debug("Retrieving links list...");
-
             createQuery().delete(folderMapMappings)
                     .where(new SQLQuery<>()
                             .from(maps)
@@ -247,9 +236,6 @@ public class MapResource extends JobControllerBase {
         catch (Exception e) {
             handleError(e, null, null);
         }
-
-        String message = "Returning links response";
-        logger.debug(message);
 
         return linkRecords;
     }
@@ -721,7 +707,7 @@ public class MapResource extends JobControllerBase {
             JSONArray jobArgs = new JSONArray();
             jobArgs.add(command);
 
-            super.postChainJobRquest(uuid, jobArgs.toJSONString());
+            super.postChainJobRequest(uuid, jobArgs.toJSONString());
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -976,14 +962,8 @@ public class MapResource extends JobControllerBase {
             // THIS WILL NEED TO CHANGE when we implement handle map by Id
             // instead of name..
 
-            List<Long> mapIds = DbUtils.getMapIdsByName(mapName);
-            if (!mapIds.isEmpty()) {
-                // we are expecting the last one of duplicate name to be the one
-                // resulted from the conflation
-                // This can be wrong if there is race condition. REMOVE THIS
-                // once core
-                // implement map Id return
-                long mapId = mapIds.get(mapIds.size() - 1);
+            Long mapId = DbUtils.getMapIdByName(mapName);
+            if (mapId != null) {
                 jobStatusManager.addJob(jobId);
 
                 // Hack alert!

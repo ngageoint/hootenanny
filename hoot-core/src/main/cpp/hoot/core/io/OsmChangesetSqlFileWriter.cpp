@@ -82,8 +82,6 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    //TODO: This logic is ok for calculating the changeset bounds, except that for the fact the
-    //OsmApiDbReader has a bug: see #774.
     if (change.e->getElementType().getEnum() == ElementType::Node)
     {
       ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);

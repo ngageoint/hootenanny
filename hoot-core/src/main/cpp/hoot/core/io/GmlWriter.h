@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GMLWRITER_H
@@ -47,6 +47,7 @@ namespace hoot {
 
 /**
  * Writes a map or portion of a map to a GML file. Not completely implemented.
+ *
  * @todo write a generic OGR writer.
  */
 class GmlWriter

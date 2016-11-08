@@ -35,42 +35,27 @@
         <httpasyncclient.version>4.0</httpasyncclient.version>
         <smiley-http-proxy-servlet.version>1.6</smiley-http-proxy-servlet.version>
         <commons-lang3.version>3.1</commons-lang3.version>
-        <commons-io.version>2.4</commons-io.version>
-        <commons-compress.version>1.0</commons-compress.version>
-        <commons-codec.version>1.7</commons-codec.version>
-        <commons-httpclient.version>3.1</commons-httpclient.version>
+        <commons-io.version>2.5</commons-io.version>
         <commons-exec.version>1.3</commons-exec.version>
-        <joda-time.version>2.3</joda-time.version>
         <xalan.version>2.7.1</xalan.version>
         <xercesImpl.version>2.9.1</xercesImpl.version>
         <json-simple.version>1.1.1</json-simple.version>
         <jackson.version>1.9.2</jackson.version>
         <guava.version>18.0</guava.version>
         <rhino.version>1.7R4</rhino.version>
-        <osmosis-core.version>0.43-RELEASE</osmosis-core.version>
+        <!--<osmosis-core.version>0.43-RELEASE</osmosis-core.version>-->
         <antlr-runtime.version>3.4</antlr-runtime.version>
 
         <!-- Unit test tools section -->
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <mockito-all.version>1.9.5</mockito-all.version>
-        <easymock.version>3.2</easymock.version>
-        <cpsuite.version>1.2.5</cpsuite.version>
-        <powermock.version>1.5.6</powermock.version>
+        <powermock.version>1.6.5</powermock.version>
+        <cpsuite.version>1.2.6</cpsuite.version>
     </properties>
 
     <repositories>
         <!-- can comment out these repos if using artifactory -->
-        <repository>
-            <id>xwiki.org-cache</id>
-            <url>http://maven.xwiki.org/externals</url>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
+
         <repository>
             <id>deegree-repo</id>
             <url>http://repo.deegree.org/content/groups/public/</url>
@@ -81,6 +66,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
         <!-- uncomment below for artifactory support -->
         <!-- repository>
             <id>central</id>
@@ -133,12 +119,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <!-- Using the following commented out lines would result in better test
-                    parallelism, but haven't been able to get them to work...so forking instead. -->
-                    <!-- parallel>methods</parallel>
-                    <useUnlimitedThreads>true</useUnlimitedThreads -->
-                    <forkCount>4</forkCount>
-                    <reuseForks>true</reuseForks>
+                    <!-- As of 10/20/2016 executing of tests in parallel doesn't work -->
                     <printSummary>false</printSummary>
                     <groups>hoot.services.UnitTest</groups>
                     <skipTests>${skip.hoot.services.tests}</skipTests>
@@ -437,36 +418,14 @@
             <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>${commons-compress.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>${commons-httpclient.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-exec</artifactId>
             <version>${commons-exec.version}</version>
         </dependency>
-
-        <!-- date/time parsing -->
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- database driver -->
@@ -534,6 +493,7 @@
         </dependency>
 
         <!--  OSM Parsing Support -->
+<!--
         <dependency>
             <groupId>org.openstreetmap.osmosis</groupId>
             <artifactId>osmosis-core</artifactId>
@@ -549,6 +509,7 @@
             <artifactId>osmosis-xml</artifactId>
             <version>${osmosis-core.version}</version>
         </dependency>
+-->
 
         <!-- Spring framework provides dependency injection, transaction management, and a hook
         into db connection pooling via commons dbcp -->
@@ -710,13 +671,7 @@
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- Mockito allows for using mock object in unit testing -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito-all.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <!-- PowerMock builds on top of Mockito -->
         <dependency>
             <groupId>org.powermock</groupId>
@@ -727,12 +682,6 @@
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-easymock</artifactId>
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
@@ -754,36 +703,13 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- mocking api -->
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>${easymock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymockclassextension</artifactId>
-            <version>${easymock.version}</version>
-            <scope>test</scope>
-        </dependency>
         <!-- cpsuite allows for having separate unit and integration test suites -->
         <dependency>
-            <groupId>cpsuite</groupId>
+            <groupId>com.googlecode.cedar-common</groupId>
             <artifactId>cpsuite</artifactId>
             <version>${cpsuite.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- This sets up the test framework for Jersey web services -->
-<!--
-        <dependency>
-            <groupId>com.sun.jersey.jersey-test-framework</groupId>
-            <artifactId>jersey-test-framework-inmemory</artifactId>
-            <version>${jersey.version}</version>
-            <scope>test</scope>
-        </dependency>
--->
     </dependencies>
 
     <reporting>
@@ -815,13 +741,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.6</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>pmd-custom-rules.xml</ruleset>
+                    </rulesets>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.4</version>
                 <configuration>
-                    <!--excludeFilterFile>findbugs-exclude.xml</excludeFilterFile-->
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
         </plugins>
