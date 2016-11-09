@@ -86,77 +86,10 @@ Obviously, combining n records into a single record requires that some attribute
 The approach described above generally provides good results. There is no getting around it, the approach will drop information during conflation in some situations. As new business rules are defined we expect to revisit the above attribute merging approach to create something that addresses specific user concerns and needs. Please contact the developers if you have any specific needs or concerns.
 
 
-[[Building-to-POI-Conflation]]
-=== Building to POI Conflation
+[[POI-to-Polygon-Conflation]]
+=== POI to Polygon Conflation
  
-
-Building to POI conflation is in very early development and disabled by default. For information on configuring building to POI conflation please contact the developers.
-
-
-[[Matching]]
-==== Matching
-  
-
-Building to POI conflation in Hootenanny is a rule based conflation based on the following rules:
-
-* Find all candidate POI / building pairs. A candidate is any POI that is within
-  the combined circular error of a building plus the user definable
-  +poi.polygon.match.review.distance+ config option. (see below for the combined
-  circular error calculation)
-* Assign Match: If the POI is inside the building and the name is either
-  non-existant or a close match
-* Assign Review: If the POI is inside the building and the name is not a close match
-* Assign Review: If the POI is close to the building and the name is a close match
-* Assign Miss: Everything else
-
-Unlike many of the matching routines intra-data set matches are allowed. This
-resolves issues that commonly occur in data sets where buildings are duplicated
-in a POI layer.
-
-The circular error (CE) of the two input elements is assumed to be that we are
-95% CE for each feature. To combine the two values together into a single value
-that represents the 95% confidence that they're within that distance is:
-
-------
-sigma1 = CE1 / 2
-sigma2 = CE2 / 2
-combined CE = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2
-------
-
-
-[[Merging]]
-==== Merging
-  
-
-Once a relationship has been established between elements a graph is created to determine any interdependencies. If a single element is involved in multiple matches then all the elements involved in that set of matches are marked as needing review. This avoids complex situations where there are multiple conflicting POI attributes.
-
-However, if a review relationship is found and a match relationship is found the review relationship is not included in the interdependence calculation. So, you may have a POI merged with one building, but marked as needing review with another building. Modifying this business logic will require some user input on the desired functionality as well as some not so insignificant internal changes.
-
-If a merge is warranted, the geometry of the building is used and the tags are merged using the default tag merging mechanism ( +tag.merger.default+ configuration key).
-
-
-[[Enabled-POI-to-Building]]
-==== Enabled POI to Building
-  
-
-As mentioned above, please contact the developers for information on including this functionality in the application. Once included it can be enabled with:
-
-------
-hoot unify -D match.creators=hoot::PoiPolygonMatchCreator \
-  -D merger.creators=hoot::PoiPolygonMergerCreator in1.osm in2.osm out.osm
-------
-
-[[Configurable-Options]]
-==== Building to POI Configurable Options
-
-There are two configurable options to the Building to POI conflation:
-
-*  +poi.polygon.match.review.distance+ - How far away from a polygon should name
-   matches be considered reviews. This is a fixed value in meters that is added
-   to the combined CE.
-*  +poi.polygon.match.name.threshold+ - If the name similarity score is greater
-   than this then the names are considered a match. Scores are 0 to 1 for
-   similarity and -1 if there are no names present (null).
+Hootenanny conflates POIs with both building and area polygons.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details and configuration options.
 
 [[River-Conflation]]
 === River Conflation
@@ -172,7 +105,6 @@ more details on the algorithms and techniques used in river conflation.
 |======
 | *Location* | *Description*
 | `conf/WaterwaySchema.json` | attribute schema definitions for river data
-| `conf/LinearWaterway.conf` | custom configuration file for river conflation
 | `rules/LinearWaterway.js` | custom rule based model for river conflation
 |======
 
@@ -184,7 +116,7 @@ see the associated section in the Hootenanny User Interface guide.  To conflate 
 command similar to the following may be issued:
 
 ------
-hoot conflate -C conf/LinearWaterway.conf <river-dataset-1> <river-dataset-2> <output>
+hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
 +conf/LinearWaterway.conf+ is a default Hootenanny configuration file provided that has been 
