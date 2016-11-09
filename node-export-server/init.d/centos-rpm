@@ -3,8 +3,8 @@
 # Change the user and hoot_home as needed
 HOOT_HOME="/var/lib/hootenanny"
 USER="tomcat"
-APP_DIR="renderdb-export-server"
-LOG_DIR="/var/log/renderdb-export-server"
+APP_DIR="node-export-server"
+LOG_DIR="/var/log/node-export-server"
 LOG_FILE="$LOG_DIR/server.log"
 
 ###############

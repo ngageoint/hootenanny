@@ -74,7 +74,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     var output = 'export_' + id;
     var hootHome = process.env['HOOT_HOME'];
     var isFile = req.params.format === 'OSM XML';
-    var outDir = hootHome + '/renderdb-export-server/' + output;
+    var outDir = hootHome + '/node-export-server/' + output;
     var outFile = outDir + config.formats[req.params.format];
     if (req.params.format === 'File Geodatabase') outDir = outFile;
     var outzip = outDir + '.zip';
@@ -89,7 +89,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                 if (jobs[hash].timeout)
                     clearTimeout(jobs[hash].timeout);
 
-                // clean up export files after 1 hour
+                // clean up export files after configured delay
                 jobs[hash].timeout = setTimeout(function() {
                     if (jobs[hash]) {
                         delete jobs[hash];
@@ -118,6 +118,15 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                                 console.log('deleted ' + outzip);
                             }
                         });
+                        if (fs.existsSync(outDir + '.osm')) {
+                            fs.unlink(outDir + '.osm', function(err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('deleted ' + outDir + '.osm');
+                                }
+                            });
+                        }
                     }
                 }, config.settings.cleanupDelay);
             });
@@ -130,21 +139,34 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
             res.send(job.status);
         }
     } else { //if missing, run job
+        var command = '';
+        //if conn is url, write that response to a file
+        var input = config.datasources[req.params.datasource].conn;
+        //handle different flavors of bbox param
+        var bbox_param = 'convert.bounding.box';
+        var bbox = exports.validateBbox(req.query.bbox);
+        if (input.substring(0,2) === 'PG') bbox_param = 'ogr.reader.bounding.box.latlng';
+
+        if (input.substring(0,4) === 'http') {
+            temp_file = outDir + '.osm';
+            command += 'wget -q -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
+            input = temp_file;
+        }
+
         //create command and run
-        var command = 'hoot';
+        command += 'hoot';
         if (isFile) {
             command += ' convert';
-            command += ' -D ogr.reader.bounding.box.latlng=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ' + bbox_param + '=' + bbox
             if (config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
-            command += ' -D ogr.reader.bounding.box.latlng=' + exports.validateBbox(req.query.bbox)
+            command += ' -D ' + bbox_param + '=' + bbox
             command += ' ' + config.schemas[req.params.schema]
-
         }
-        command += ' "' + config.datasources[req.params.datasource].conn + '" '
+        command += ' "' + input + '" '
             + outFile
             ;
 
