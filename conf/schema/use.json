@@ -19,5 +19,13 @@
         "isA": "use",
         "name": "use=*",
         "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "use",
+        "name": "use=healthcare",
+        "objectType": "tag"
     }
 ]

@@ -44,6 +44,10 @@
         "similarTo": {
             "name": "tourism=artwork",
             "weight": 0.4
+        },
+        "similarTo": {
+            "name": "amenity=place_of_worship",
+            "weight": 0.3
         }
     },
     {
@@ -53,6 +57,15 @@
         "similarTo": {
             "name": "place=populated",
             "weight": 0.4
+        }
+    },
+    {
+        "isA": "historic",
+        "name": "historic=building",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "historic=monument",
+            "weight": 0.8
         }
     }
 ]

@@ -49,17 +49,28 @@ public:
 
   virtual QString getName() const { return "print-tags"; }
 
-  virtual int runSimple(QStringList /*args*/)
+  virtual int runSimple(QStringList args)
   {
+    QString printScript(ConfigOptions().getTagPrintingScript());
 
     auto_ptr<ScriptTranslator> translator;
 
+    if (args.size() == 1)
+    {
+      printScript = args[0];
+    }
+    else if (args.size() > 1)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
+    }
+
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(ConfigOptions().getTagPrintingScript()));
+    shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
 
     if (!uut)
     {
-      throw HootException("Unable to find a valid translation format for: " + ConfigOptions().getTagPrintingScript());
+      throw HootException("Unable to find a valid translation format for: " + printScript);
     }
 
     return 0;

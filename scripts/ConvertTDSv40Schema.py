@@ -241,6 +241,20 @@ def printFcodeList(schema):
 # End printFcodeList
 
 
+# Print FCode Attribute List
+def printFcodeAttrList(schema):
+    tList = {}
+    for i in schema:
+        if schema[i]['fcode'] not in tList:
+            tList[schema[i]['fcode']] = []
+            for j in schema[i]['columns']:
+                tList[schema[i]['fcode']].append(schema[i]['columns'][j]['name'])
+
+    for i in sorted(tList.keys()):
+        print '%s : %s' % (i,tList[i])
+# End printFcodeList
+
+
 # Print ToEnglish
 # Dump out the set of TDS English rules
 def printToEnglish(schema):
@@ -1703,7 +1717,8 @@ parser.add_argument('--rules', help='Dump out one2one rules',action='store_true'
 parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
 parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
 parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
-parser.add_argument('--fcodelist', help='Dump out a list of attributes',action='store_true')
+parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='store_true')
+parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
@@ -1728,6 +1743,8 @@ elif args.attrlist:
     printAttrList(schema)
 elif args.fcodelist:
     printFcodeList(schema)
+elif args.fcodeattrlist:
+    printFcodeAttrList(schema)
 elif args.toenglish:
     printToEnglish(schema)
 elif args.fromenglish:

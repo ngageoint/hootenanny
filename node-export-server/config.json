@@ -1,0 +1,28 @@
+{
+  "datasources": {
+    "RenderDb": {
+      "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
+    },
+    "API": {
+      "conn": "http://192.168.33.12:3000/api/0.6/map"
+    },
+    "APIDB": {
+      "conn": "osmapidb://vagrant:lqlrtktnabwx5gfI@192.168.33.12:5432/openstreetmap"
+    }
+  },
+  "formats": {
+    "OSM XML": ".osm",
+    "Shapefile": ".shp",
+    "File Geodatabase": ".gdb"
+  },
+  "schemas": {
+    "OSM": "translations/RenderDb.js",
+    "TDSv40": "translations/TDSv40.js",
+    "TDSv61": "translations/TDSv61.js",
+    "MGCP": "translations/MGCP_TRD4.js"
+  },
+  "settings": {
+    "cleanupDelay": 30000,
+    "port": 8101
+  }
+}

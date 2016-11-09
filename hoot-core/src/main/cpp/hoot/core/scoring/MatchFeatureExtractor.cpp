@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -212,6 +212,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
   shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   // go through all the manipulators
+  LOG_INFO("Processing " << matches.size() << " matches...");
   for (size_t i = 0; i < matches.size(); i++)
   {
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
@@ -236,7 +237,9 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
           set<ElementId> eids;
           eids.insert(pairs.begin()->first);
           eids.insert(pairs.begin()->second);
+          LOG_VART(eids);
           s["class"] = _getActualMatchType(eids, map).toEnum();
+          LOG_VART(s["class"]);
           _samples.push_back(s);
         }
       }
@@ -246,6 +249,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
       }
     }
   }
+  LOG_INFO("Collected " << _samples.size() << " samples.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

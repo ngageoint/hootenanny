@@ -185,13 +185,13 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   /// @todo this isnt right; Talk to mike
   double distanceScore = 1 - (Normal::phi(d, acc * 1.5) - 0.5) * 2.0;
-  LOG_VAR(nid1);
-  LOG_VAR(nid2);
-  LOG_VAR(distanceScore);
-  LOG_VAR(acc);
-  LOG_VAR(d);
-  LOG_VAR(Normal::phi(d, acc * 1.5));
-  LOG_VAR(Normal::phi(d, acc / 2.0));
+  LOG_VARD(nid1);
+  LOG_VARD(nid2);
+  LOG_VARD(distanceScore);
+  LOG_VARD(acc);
+  LOG_VARD(d);
+  LOG_VARD(Normal::phi(d, acc * 1.5));
+  LOG_VARD(Normal::phi(d, acc / 2.0));
 
   if (theta1.size() < theta2.size())
   {
@@ -228,7 +228,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   double result = (min(s1, s2) - diff) * thetaScore * distanceScore;
 
-  LOG_VAR(result);
+  LOG_VARD(result);
   return result;
 }
 

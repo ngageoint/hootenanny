@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -63,7 +63,7 @@ public:
 
     shared_ptr<OsmMap> pointsMap(new OsmMap());
     loadMap(pointsMap, pointsPath, false, Status::Unknown1);
-    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generate(pointsMap);
+    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
 
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);

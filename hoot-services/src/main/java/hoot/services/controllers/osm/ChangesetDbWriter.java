@@ -27,6 +27,10 @@
 package hoot.services.controllers.osm;
 
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWays.currentWays;
+import static hoot.services.utils.DbUtils.batchRecords;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.util.ArrayList;
@@ -35,6 +39,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,11 +55,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLExpressions;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
+import hoot.services.models.db.CurrentRelations;
+import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.osm.Changeset;
@@ -64,7 +73,6 @@ import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.OSMAPIAlreadyDeletedException;
 import hoot.services.models.osm.OSMAPIPreconditionException;
 import hoot.services.models.osm.XmlSerializable;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -522,15 +530,15 @@ public class ChangesetDbWriter {
                         // TODO: to be a certain size to avoid memory problems; see maxRecordBatchSize
                         // TODO: make this code element generic; reinstate the DbSerializable interface??
                         if (elementType == ElementType.Node) {
-                            DbUtils.batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
+                            batchRecordsDirectNodes(requestChangesetMapId, recordsToModify,
                                     recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
                         }
                         else if (elementType == ElementType.Way) {
-                            DbUtils.batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
+                            batchRecordsDirectWays(requestChangesetMapId, recordsToModify,
                                     recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
                         }
                         else if (elementType == ElementType.Relation) {
-                            DbUtils.batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
+                            batchRecordsDirectRelations(requestChangesetMapId, recordsToModify,
                                     recordBatchTypeForEntityChangeType(entityChangeType), maxRecordBatchSize);
                         }
 
@@ -545,16 +553,16 @@ public class ChangesetDbWriter {
                         // DbSerializable interface??
                         if ((relatedRecordsToStore != null) && (!relatedRecordsToStore.isEmpty())) {
                             if (elementType == ElementType.Node) {
-                                DbUtils.batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
+                                batchRecordsDirectNodes(requestChangesetMapId, relatedRecordsToStore,
                                         RecordBatchType.INSERT, maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Way) {
-                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                batchRecords(requestChangesetMapId, relatedRecordsToStore,
                                         QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
                                         maxRecordBatchSize);
                             }
                             else if (elementType == ElementType.Relation) {
-                                DbUtils.batchRecords(requestChangesetMapId, relatedRecordsToStore,
+                                batchRecords(requestChangesetMapId, relatedRecordsToStore,
                                         QCurrentRelationMembers.currentRelationMembers, null, RecordBatchType.INSERT,
                                         maxRecordBatchSize);
                             }
@@ -633,5 +641,83 @@ public class ChangesetDbWriter {
         }
 
         return recordBatchType;
+    }
+
+    private static long batchRecordsDirectRelations(long mapId, List<?> records, RecordBatchType recordBatchType,
+            int maxRecordBatchSize) {
+
+        if (recordBatchType == RecordBatchType.INSERT) {
+            return batchRecords(mapId, records, currentRelations, null, RecordBatchType.INSERT, maxRecordBatchSize);
+        }
+        else if (recordBatchType == RecordBatchType.UPDATE) {
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentRelations relation = (CurrentRelations) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(relation.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentRelations, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
+        }
+        else { //recordBatchType == RecordBatchType.DELETE
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentRelations relation = (CurrentRelations) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentRelations.id.eq(relation.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentRelations, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
+        }
+    }
+
+    private static long batchRecordsDirectWays(long mapId, List<?> records,
+            RecordBatchType recordBatchType, int maxRecordBatchSize) {
+
+        if (recordBatchType == RecordBatchType.INSERT) {
+            return batchRecords(mapId, records, currentWays, null, RecordBatchType.INSERT, maxRecordBatchSize);
+        }
+        else if (recordBatchType == RecordBatchType.UPDATE) {
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentWays way = (CurrentWays) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentWays.id.eq(way.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentWays, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
+        }
+        else { //recordBatchType == RecordBatchType.DELETE
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentWays way = (CurrentWays) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentWays.id.eq(way.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentWays, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
+        }
+    }
+
+    private static long batchRecordsDirectNodes(long mapId, List<?> records, RecordBatchType recordBatchType,
+            int maxRecordBatchSize) {
+
+        if (recordBatchType == RecordBatchType.INSERT) {
+            return batchRecords(mapId, records, currentNodes, null, RecordBatchType.INSERT, maxRecordBatchSize);
+        }
+        else if (recordBatchType == RecordBatchType.UPDATE) {
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentNodes node = (CurrentNodes) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentNodes.id.eq(node.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentNodes, predicateList, RecordBatchType.UPDATE, maxRecordBatchSize);
+        }
+        else { //recordBatchType == RecordBatchType.DELETE
+            List<List<BooleanExpression>> predicateList = new LinkedList<>();
+            for (Object o : records) {
+                CurrentNodes node = (CurrentNodes) o;
+                predicateList.add(Collections.singletonList(Expressions.asBoolean(currentNodes.id.eq(node.getId()))));
+            }
+
+            return batchRecords(mapId, records, currentNodes, predicateList, RecordBatchType.DELETE, maxRecordBatchSize);
+        }
     }
 }

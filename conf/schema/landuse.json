@@ -45,5 +45,26 @@
             "name": "place=village",
             "weight": 0.9
         }
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=reservoir",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "man_made=water_works",
+            "weight": 0.9
+        }
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "poi"
+        ],
+        "isA": "landuse",
+        "name": "landuse=farm",
+        "objectType": "tag"
     }
 ]

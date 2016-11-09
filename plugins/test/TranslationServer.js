@@ -299,6 +299,29 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle osmtotds POST of road line feature with width', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/osmtotds'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
+                assert.equal(result.osm.way[0].tag[1].$.k, "MGCP Feature universally unique identifier");
+                assert.equal(result.osm.way[0].tag[1].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[2].$.k, "Thoroughfare Class");
+                assert.equal(result.osm.way[0].tag[2].$.v, "Unknown");
+                assert.equal(result.osm.way[0].tag[3].$.k, "Route Minimum Travelled Way Width");
+                assert.equal(result.osm.way[0].tag[3].$.v, "20");
+                assert.equal(result.osm.way[0].tag[4].$.k, "Track or Lane Count");
+                assert.equal(result.osm.way[0].tag[4].$.v, "2");
+            });
+        });
+
         // it('should return error message for invalide F_CODE/geom combination in osmtotds POST', function() {
         //     var osm2trans = server.handleInputs({
         //         osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',
