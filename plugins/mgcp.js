@@ -900,6 +900,12 @@ mgcp = {
             tags.facility = 'yes';
         }
 
+        // Sort out the WID, WD1 etc attributes.
+        // Roads etc have a WD1 attribute but this doesn't get translated to "width"
+        if (attrs.WD1)
+        {
+            if (! tags.width) tags.width = attrs.WD1;
+        }
 
     }, // End of applyToOsmPostProcessing
 
@@ -1328,11 +1334,24 @@ mgcp = {
                 }
                 break;
 
+            case 'AP010': // Cart Track
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
+                break;
+
             case 'AP030': // Road
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
                 if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
                 break;
 
             case 'AP050': // Trail

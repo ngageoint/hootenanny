@@ -20,7 +20,7 @@ Feature: Manage Tab
     Scenario: Checking content of tabs
         When I click on the "Datasets" option in the "settingsSidebar"
         And I should see "Import Single Dataset"
-        And I should see "Import Multiple Datasets"
+        And I should see "Import Directory"
         And I should see "Add Folder"
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
         And I should see "Upload file(s)"
@@ -54,7 +54,7 @@ Feature: Manage Tab
         # Move datasets into folder
         And I hover over "#datasettable"
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
-        And I context click "AllDataTypesACucumber"
+        And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I select the "ManageTabTest" option in the "root" combobox
@@ -62,7 +62,7 @@ Feature: Manage Tab
         # Move datasets back out of folder
         Then I click the "ManageTabTest" Dataset
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
-        And I context click "AllDataTypesACucumber"
+        And I context click the "AllDataTypesACucumber" Dataset
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
