@@ -89,7 +89,12 @@ The approach described above generally provides good results. There is no gettin
 [[POI-to-Polygon-Conflation]]
 === POI to Polygon Conflation
  
-Hootenanny conflates POIs with both building and area polygons.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details and configuration options.
+Hootenanny conflates POIs with both building and area polygons.  It uses the distance between the two features, name similarity, type similarity, and address similarity as the criteria for matching the features.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
+
+[[POI-to-Polygon-Configurable-Options]]
+==== Configurable Options
+  
+See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
 
 [[River-Conflation]]
 === River Conflation
@@ -119,12 +124,9 @@ command similar to the following may be issued:
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-+conf/LinearWaterway.conf+ is a default Hootenanny configuration file provided that has been 
-set up to conflate rivers only.  All of the settings that can be modified for river conflation exist
-in +conf/ConfigOptions.asciidoc++ and are read in by +rules/LinearWaterway.js+  Tweaking the 
-settings can result in better conflation performance depending on the datasets being conflated.  
-See the configuration options for details on the settings that may be modified (search for 
-"waterway").
+All of the settings that can be modified for river conflation exist in +conf/ConfigOptions.asciidoc++ and are read in by 
++rules/LinearWaterway.js+  Tweaking the settings can result in better conflation performance depending on the datasets being conflated.  
+See the configuration options for details on the settings that may be modified (search for "waterway").
 
 [[Feature-Review]]
 === Feature Review

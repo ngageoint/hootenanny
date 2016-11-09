@@ -319,10 +319,11 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   }*/
 
   // calculate the 2 sigma for the distance between the two objects
-  const double sigma1 = poi->getCircularError() / 2.0;
-  const double sigma2 = poly->getCircularError() / 2.0;
-  const double ce = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2;
-  const double reviewDistancePlusCe = _reviewDistanceThreshold + ce;
+  const double poiSigma = poi->getCircularError() / 2.0;
+  const double polySigma = poly->getCircularError() / 2.0;
+  const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
+  const double combinedCircularError2Sigma = sigma * 2;
+  const double reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
   _closeMatch = _distance <= reviewDistancePlusCe;
   //close match is a requirement for any matching, regardless of the final total evidence count
   if (!_closeMatch)
@@ -335,7 +336,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(poi->getCircularError());
   LOG_VART(poly->getCircularError());
   LOG_VART(reviewDistancePlusCe);
-  LOG_VART(ce);
+  LOG_VART(combinedCircularError2Sigma);
   LOG_VART(_distance);
   LOG_VART(_closeMatch);
 
