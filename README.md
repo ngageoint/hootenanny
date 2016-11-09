@@ -1,5 +1,3 @@
-![](https://github.com/ngageoint/hootenanny-ui/blob/develop/dist/img/hoot_final4.png?raw=true)
-
 # Introduction
 
 Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation 
