@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONCUSTOMHRULES_H
+#ifndef POIPOLYGONCUSTOMRULES_H
 #define POIPOLYGONCUSTOMRULES_H
 
 // Hoot
