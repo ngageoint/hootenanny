@@ -2491,6 +2491,13 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
+=== writer.text.status
+
+* Data Type: bool
+* Default Value: `false`
+
+Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+
 === writer.include.debug
 
 * Data Type: bool

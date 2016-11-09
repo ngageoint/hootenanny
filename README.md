@@ -26,10 +26,13 @@ We actively maintain and update our [Frequently Asked Questions page](https://gi
 so please refer to that page for any questions about general Hootenanny capabilities.
 
 ## Conflation
-Hootenanny currently supports the conflation of POIs, Building polygons, Transportation polylines (highways, cart tracks, trails, bridges, 
-and tunnels), and Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).   When conflating these features, 
-it is important to note that conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation 
-polyline to Transportation polyline, etc.).
+Hootenanny currently supports the conflation of: 
+* POIs
+* Building polygons
+* Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
+* Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
+* POIs and polygons; where the polygons are buildings or areas
+When conflating these features, it is important to note that the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
 _Import:_ Hootenanny can ingest from:

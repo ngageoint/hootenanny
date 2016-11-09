@@ -294,7 +294,16 @@ Status OsmReader::_parseStatus(QString s)
 {
   Status result;
 
-  result = Status((Status::Type)_parseInt(s));
+  if (s.length() > 2)
+  {
+    // Try parsing the status as a string, not an int
+    result = Status::fromString(s);
+  }
+  else
+  {
+    result = Status((Status::Type)_parseInt(s));
+  }
+
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
   {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));

@@ -35,7 +35,7 @@ match criteria are met.
 
 Unlike many of the matching routines intra-data set matches are allowed. This resolves issues that commonly occur in data sets where polygons are duplicated in a POI layer.
 
-The circular error (CE) of the two input elements is assumed to be that we are 95% CE for each feature. To combine the two values together into a single value that represents the 95% confidence that they're within that distance is:
+The circular error (CE) of the two input elements is assumed to be that we are 95% CE for each feature (2 sigma). To combine the two values together into a single value that represents the 95% confidence that they're within that distance is:
 
 ------
 sigma1 = CE1 / 2
@@ -65,4 +65,9 @@ If a merge is warranted, the geometry of the building is used and the tags are m
 === Configurable Options
   
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
+
+[[POI-to-Polygon-Test-Results]]
+=== Test Results
+
+TODO
 
