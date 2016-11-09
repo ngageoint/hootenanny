@@ -1,0 +1,30 @@
+09:58:11.541 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ConflateExactTest/boston-road-building-out.osm ...
+09:58:12.164 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ConflateExactTest/output.osm ...
+09:58:12.852 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.852 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12679 Way:-319 P: match: 0 miss: 0 review: 1, distance: 2.62938, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12679 Way:-319 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12681 Relation:-1 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0.1, name score: 0.157103, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12681 Relation:-1 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12924 Way:-596 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12924 Way:-596 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12926 Relation:-1 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0.563694, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12926 Relation:-1 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12935 Way:-607 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12935 Way:-607 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12950 Way:-977 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12950 Way:-977 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-12952 Way:-109 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-12952 Way:-109 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-13585 Way:-792 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-13585 Way:-792 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:note = PoiPolygonMatch Node:-29084 Way:-1558 P: match: 0 miss: 0 review: 1, distance: 2.66302, close match: 1, type score: 0, name score: -1e+09, address score: 0
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:note = PoiPolygonMatch Node:-29084 Way:-1558 P: match: 0 miss: 0 review: 1
+09:58:12.853 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:

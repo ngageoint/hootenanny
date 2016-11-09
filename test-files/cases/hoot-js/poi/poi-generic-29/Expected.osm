@@ -16,6 +16,7 @@
         <member type="node" ref="-1" role="reviewee"/>
         <member type="node" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (96m) - similar names and generic type"/>
         <tag k="hoot:review:sort_order" v="0"/>

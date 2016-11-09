@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,10 +46,18 @@ public:
   /**
    * Generates an alpha shape based on the geometry of an input map
    *
-   * @param cutterShapeMap the geometry to use for generating the alpha shape
+   * @param inputMap the geometry to use for generating the alpha shape
    * @return a map containing the alpha shape's points
    */
-  OsmMapPtr generate(OsmMapPtr cutterShapeMap);
+  OsmMapPtr generateMap(OsmMapPtr inputMap);
+
+  /**
+   * @todo
+   *
+   * @param inputMap
+   * @return
+   */
+  shared_ptr<Geometry> generateGeometry(OsmMapPtr inputMap);
 
 private:
 

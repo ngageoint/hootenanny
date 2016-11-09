@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -325,14 +325,14 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
 
   for (size_t i = 0; i < randomized.size(); i++)
   {
-    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Trace)
     {
       cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
       cout << flush;
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     cout << endl;
   }

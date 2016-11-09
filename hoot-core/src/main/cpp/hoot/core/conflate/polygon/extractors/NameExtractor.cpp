@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,10 +61,19 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 
   for (int i = 0; i < targetNames.size(); i++)
   {
+    const QString targetName = targetNames[i];
     for (int j = 0; j < candidateNames.size(); j++)
     {
-      double thisScore = _d->compare(targetNames[i], candidateNames[j]);
+      const QString candidateName = candidateNames[j];
+      LOG_VART(targetName);
+      LOG_VART(candidateName);
+      const double thisScore = _d->compare(targetName, candidateName);
       score = max(thisScore, score);
+      LOG_VART(score);
+      if (score == 1.0)
+      {
+        return score;
+      }
     }
   }
 
