@@ -325,17 +325,14 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
 
   for (size_t i = 0; i < randomized.size(); i++)
   {
-    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Trace)
     {
-      //wanted to convert this logging to trace, but saw some strange screen output behavior when
-      //doing so...will look at later
       cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
       cout << flush;
-      //LOG_TRACE("Progress: " << i << " of " << (randomized.size() - 1));
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     cout << endl;
   }
