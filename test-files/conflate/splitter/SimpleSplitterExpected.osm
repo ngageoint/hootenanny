@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-7" lat="38.8850658127400024" lon="-77.0330654799400065">
+        <tag k="name" v="Bottom Other"/>
+    </node>
+    <node visible="true" id="-6" lat="38.8856797117799999" lon="-77.0341991849399932">
+        <tag k="name" v="Top Other"/>
+    </node>
+    <node visible="true" id="-5" lat="38.8847716508999994" lon="-77.0337268078500017">
+        <tag k="name" v="Bottom"/>
+    </node>
+    <node visible="true" id="-4" lat="38.8850817997600018" lon="-77.0336857315899977">
+        <tag k="name" v="Bottom Intersection"/>
+    </node>
+    <node visible="true" id="-3" lat="38.8853599733600035" lon="-77.0336857315899977">
+        <tag k="name" v="Middle"/>
+    </node>
+    <node visible="true" id="-2" lat="38.8856765143999965" lon="-77.0336898392099982">
+        <tag k="name" v="Top Intersection"/>
+    </node>
+    <node visible="true" id="-1" lat="38.8859770672199971" lon="-77.0336980544699941">
+        <tag k="name" v="Top"/>
+    </node>
+    <way visible="true" id="-10">
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <tag k="name" v="Vertical Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-9">
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <tag k="name" v="Vertical Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-8">
+        <nd ref="-4"/>
+        <nd ref="-7"/>
+        <tag k="name" v="Cross Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-7">
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <tag k="name" v="Cross Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5">
+        <nd ref="-6"/>
+        <nd ref="-2"/>
+        <tag k="name" v="Cross Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-3">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="name" v="Vertical Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+</osm>

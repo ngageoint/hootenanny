@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-614903' action='modify' visible='true' version='1' lat='37.75371473236959' lon='-122.43816176513847'>
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='test2' />
+  </node>
+</osm>

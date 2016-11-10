@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300021881800028" lon="31.2618604999999974">
-        <tag k="REF1" v="00216d"/>
-        <tag k="artwork" v="statue"/>
-        <tag k="name" v="ابراهيم باشا"/>
-        <tag k="tourism" v="artwork"/>
-        <tag k="name:en" v="Ibrahim Pasha"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300819999800019" lon="31.2618929995600006">
         <tag k="source" v="mgcp"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
@@ -30,10 +22,19 @@
         <tag k="historic" v="monument"/>
         <tag k="error:circular" v="28.65"/>
     </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300021881800028" lon="31.2618604999999974">
+        <tag k="REF1" v="00216d"/>
+        <tag k="artwork" v="statue"/>
+        <tag k="name" v="ابراهيم باشا"/>
+        <tag k="tourism" v="artwork"/>
+        <tag k="name:en" v="Ibrahim Pasha"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1" role="reviewee"/>
         <member type="node" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (9.4m) - very close together, similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>
