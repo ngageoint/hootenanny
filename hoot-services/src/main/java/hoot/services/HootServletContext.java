@@ -37,7 +37,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import hoot.services.controllers.auxiliaryservices.POI2POIMergeServiceResource;
-import hoot.services.controllers.auxiliaryservices.OSM2TDSTranslationServiceResource;
+import hoot.services.controllers.auxiliaryservices.TranslationServiceResource;
 
 
 public class HootServletContext implements ServletContextListener {
@@ -55,14 +55,14 @@ public class HootServletContext implements ServletContextListener {
 
         createUploadFolder();
 
-        OSM2TDSTranslationServiceResource.startTranslationService();
+        TranslationServiceResource.startTranslationService();
 
         POI2POIMergeServiceResource.startP2PService();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        OSM2TDSTranslationServiceResource.stopTranslationService();
+        TranslationServiceResource.stopTranslationService();
 
         POI2POIMergeServiceResource.stopP2PService();
 
