@@ -60,6 +60,7 @@ public:
   void runTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
+    LOG_VAR(uut.getAddressScoreThreshold());
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
