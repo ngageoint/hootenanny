@@ -595,7 +595,7 @@ public class Map extends Maps {
      * @return a collection of elements mapped to their IDs, grouped by element type
      */
     public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(BoundingBox bounds) {
-        validateQueryBounds(bounds);
+        //validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);

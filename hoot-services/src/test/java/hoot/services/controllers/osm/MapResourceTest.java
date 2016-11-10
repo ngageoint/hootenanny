@@ -41,7 +41,6 @@ import java.util.Set;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
@@ -1017,16 +1016,16 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
-    public void testGetMapBoundsOutsideWorld() throws Exception {
-        // Try to query nodes with invalid bounds.
-        Document doc = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", "-181,-90,180,90")
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-    }
+//    @Test(expected = WebApplicationException.class)
+//    @Category(UnitTest.class)
+//    public void testGetMapBoundsOutsideWorld() throws Exception {
+//        // Try to query nodes with invalid bounds.
+//        Document doc = target("api/0.6/map")
+//                    .queryParam("mapId", String.valueOf(mapId))
+//                    .queryParam("bbox", "-181,-90,180,90")
+//                    .request(MediaType.TEXT_XML)
+//                    .get(Document.class);
+//    }
 
     @Test
     @Category(UnitTest.class)
