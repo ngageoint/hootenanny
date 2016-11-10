@@ -32,7 +32,8 @@ Hootenanny currently supports the conflation of:
 * Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
 * Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
 * POIs and polygons; where the polygons are buildings or areas
-When conflating these features, it is important to note that the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
+
+When conflating these features, it is important to note that, with the exception of the POI to polygon conflation, the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
 _Import:_ Hootenanny can ingest from:
@@ -49,6 +50,7 @@ _Export:_ Hootenanny can export to:
 * ESRI File Geodatabase (.gdb)
 * Web Feature Service (WFS)
 * OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
+* OSM XML changeset
 
 Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
 associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into 
