@@ -71,6 +71,26 @@ public:
     }
   }
 
+  // This is not pretty and it is a copy of "toString".
+  // It is a lot easier to change this when the users want different text output
+  // instead of changing "toString" and all of code, unit tests etc that rely on it.
+  QString toTextStatus() const
+  {
+    switch (_type)
+    {
+    case Status::Invalid:
+      return "Invalid";
+    case Status::Unknown1:
+      return "Input1";
+    case Status::Unknown2:
+      return "Input2";
+    case Status::Conflated:
+      return "Conflated";
+    default:
+      return QString("Unknown (%1)").arg(_type);
+    }
+  }
+
   bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
 
   static Type fromString(QString typeString)
@@ -80,11 +100,11 @@ public:
     {
       return Invalid;
     }
-    else if (typeString == "unknown1")
+    else if (typeString == "unknown1" || typeString == "input1")
     {
       return Unknown1;
     }
-    else if (typeString == "unknown2")
+    else if (typeString == "unknown2" || typeString == "input2")
     {
       return Unknown2;
     }

@@ -28,6 +28,7 @@
         <member type="node" ref="-2" role="reviewee"/>
         <member type="node" ref="-1" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>

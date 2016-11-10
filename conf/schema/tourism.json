@@ -52,5 +52,38 @@
         "isA": "tourism",
         "name": "tourism=hotel",
         "objectType": "tag"
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=zoo",
+        "objectType": "tag"
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=attraction",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "tourism=zoo",
+                "weight": 0.8
+            },
+            {
+                "name": "tourism=theme_park",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=theme_park",
+        "objectType": "tag"
+    },
+    {
+         "categories": [
+            "building"
+        ],
+        "isA": "tourism",
+        "name": "tourism=museum",
+        "objectType": "tag"
     }
 ]

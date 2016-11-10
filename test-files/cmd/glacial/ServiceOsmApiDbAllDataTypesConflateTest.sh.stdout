@@ -52,3 +52,29 @@ Relation(s) Modified: 0
 Relation(s) Deleted: 0
 
 STEP 11: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+15:56:48.112 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/ServiceOsmApiDbAllDataTypesConflateTest/output.osm ...
+15:56:48.128 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbAllDataTypesConflateTest/11-output-PulledFromOsmApiDb.osm ...
+15:56:48.132 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 
+15:56:48.133 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 2

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -140,7 +140,7 @@ struct OsmSchemaCategory {
 
   /**
    * Returns true if any of the categories in c are the same as the categories in this. If one or
-   * both are emtpy then it returns false.
+   * both are empty then it returns false.
    */
   bool intersects(const OsmSchemaCategory& c) const
   {
@@ -287,6 +287,8 @@ public:
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
   vector<SchemaVertex> getAllTags();
+
+  QSet<QString> getAllTagKeys();
 
   vector<SchemaVertex> getChildTags(QString name);
 

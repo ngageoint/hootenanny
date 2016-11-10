@@ -1,0 +1,14 @@
+12:28:43.705 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/prepare_validation/poi1_validation.osm ...
+12:28:43.707 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/prepare_validation/poi1_validation.osm ...
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 1
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 1
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 1
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 136) < hoot:review:members = 1
+12:28:43.712 WARN  ...core/scoring/MapComparator.cpp( 137) > hoot:review:members = 

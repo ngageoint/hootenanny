@@ -85,7 +85,13 @@
     {
         "isA": "amenity",
         "name": "amenity=arts_centre",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=community_centre",
+                "weight": 0.7
+            }
+	]
     },
     {
         "isA": "amenity",
@@ -751,6 +757,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "building"
+        ],
         "isA": "amenity",
         "name": "amenity=fast_food",
         "objectType": "tag",
@@ -836,7 +845,11 @@
         ],
         "isA": "amenity",
         "name": "amenity=fountain",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=attraction",
+            "weight": 0.7
+        }
     },
     {
         "isA": "amenity",
@@ -1028,6 +1041,10 @@
         "objectType": "tag",
         "similarTo": {
             "name": "building=hospital",
+            "weight": 0.8
+        },
+        "similarTo": {
+            "name": "use=healthcare",
             "weight": 0.8
         }
     },
@@ -1448,6 +1465,9 @@
             "amenity=religion",
             "amenity=religious_activities"
         ],
+        "categories": [
+            "building"
+        ],
         "isA": "amenity",
         "name": "amenity=place_of_worship",
         "objectType": "tag"
@@ -1666,6 +1686,10 @@
         "similarTo": {
             "name": "amenity=pub",
             "weight": 0.8
+        },
+        "similarTo": {
+            "name": "amenity=biergarten",
+            "weight": 0.7
         }
     },
     {
@@ -1718,6 +1742,14 @@
         }
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "amenity",
         "name": "amenity=school",
         "objectType": "tag",
@@ -1728,6 +1760,14 @@
             },
             {
                 "name": "amenity=education",
+                "weight": 0.7
+            },
+            {
+                "name": "amenity=university",
+                "weight": 0.7
+            },
+            {
+                "name": "building=university",
                 "weight": 0.7
             }
         ]
@@ -1923,6 +1963,14 @@
         "objectType": "tag"
     },
     {
+         "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "amenity",
         "name": "amenity=theatre",
         "objectType": "tag",
@@ -2127,6 +2175,23 @@
         "objectType": "tag",
         "similarTo": {
             "name": "amenity=youth_centre",
+            "weight": 0.8
+        }
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "amenity",
+        "name": "amenity=golf_course",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "sport=golf",
             "weight": 0.8
         }
     }

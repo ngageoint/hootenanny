@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53,7 +53,9 @@ class RemoveRef2Visitor :
     public ConstOsmMapConsumer,
     public ElementCriterionConsumer
 {
+
 public:
+
   typedef QMap<QString, ElementId> Ref1ToEid;
 
   static std::string className() { return "hoot::RemoveRef2Visitor"; }
@@ -68,16 +70,20 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
+  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
+
 private:
-  OsmMap* _map;
+
   ElementCriterionPtr _criterion;
+  OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
   static QMutex _mutex;
-
-  void _checkAndDeleteRef2(ElementPtr e, QString ref);
+  bool _errorOnMissingRef1;
 
   bool _hasRef2Tag(ElementPtr e) const;
+  void _checkAndDeleteRef2(ElementPtr e, QString ref);
 
 };
 
