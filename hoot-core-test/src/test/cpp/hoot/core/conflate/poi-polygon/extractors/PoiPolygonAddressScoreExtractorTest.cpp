@@ -65,14 +65,18 @@ public:
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 main street");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "567 first street");
+    map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
@@ -84,8 +88,10 @@ public:
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "567 main street");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.667, uut.extract(*map, node1, way1), 0.01);
   }
 
@@ -97,17 +103,21 @@ public:
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     way1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
     way2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
+    map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
@@ -119,25 +129,31 @@ public:
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123-125");
     node1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "124");
     way1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123-125");
     node2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     way2->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
     NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
     node3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123-125");
     node3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node3);
     WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
     way3->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "567");
     way3->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "first street");
+    map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node3, way3), 0.01);
   }
 
@@ -149,15 +165,19 @@ public:
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(
       PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "main street 123");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(
       PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
+    map->addNode(node2);
     WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
     way2->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME_2, "first street 567");
+    map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.333, uut.extract(*map, node2, way2), 0.01);
   }
 
@@ -169,9 +189,11 @@ public:
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "Main Street");
+    map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
     way1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123a");
     way1->getTags().set(PoiPolygonAddressScoreExtractor::STREET_TAG_NAME, "main street");
+    map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
