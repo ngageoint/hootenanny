@@ -61,7 +61,7 @@ public:
   {
     PoiPolygonAddressScoreExtractor uut;
     LOG_VAR(uut.getAddressScoreThreshold());
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -80,7 +80,7 @@ public:
   {
     PoiPolygonAddressScoreExtractor uut;
     uut.setAddressScoreThreshold(0.6);
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -92,7 +92,7 @@ public:
   void runCombinedTagTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
@@ -114,7 +114,7 @@ public:
   void runRangeTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123-125");
@@ -144,7 +144,7 @@ public:
   void runAltFormatTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(
@@ -164,7 +164,7 @@ public:
   void runSubLetterTest()
   {
     PoiPolygonAddressScoreExtractor uut;
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(PoiPolygonAddressScoreExtractor::HOUSE_NUMBER_TAG_NAME, "123");
