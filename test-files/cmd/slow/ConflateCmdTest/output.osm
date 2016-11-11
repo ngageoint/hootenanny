@@ -553,6 +553,7 @@
         <member type="node" ref="-41" role="reviewee"/>
         <member type="node" ref="-120" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="5"/>
@@ -562,6 +563,7 @@
         <member type="node" ref="-41" role="reviewee"/>
         <member type="node" ref="-122" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="6"/>
@@ -571,6 +573,7 @@
         <member type="node" ref="-45" role="reviewee"/>
         <member type="node" ref="-120" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="4"/>
@@ -580,6 +583,7 @@
         <member type="node" ref="-43" role="reviewee"/>
         <member type="node" ref="-123" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="7"/>
@@ -589,6 +593,7 @@
         <member type="node" ref="-46" role="reviewee"/>
         <member type="node" ref="-123" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="3"/>
@@ -598,6 +603,7 @@
         <member type="node" ref="-46" role="reviewee"/>
         <member type="node" ref="-126" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="2"/>
@@ -607,6 +613,7 @@
         <member type="node" ref="-44" role="reviewee"/>
         <member type="node" ref="-119" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="0"/>
@@ -616,6 +623,7 @@
         <member type="node" ref="-47" role="reviewee"/>
         <member type="node" ref="-119" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="1"/>
