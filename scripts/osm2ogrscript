@@ -11,6 +11,11 @@ ifeq "$(append)" "true"
 HOOT_OPTS+= -D ogr.append.data=true
 endif
 
+# Add the option to export status as text
+ifeq "$(textstatus)" "true"
+HOOT_OPTS+= -D writer.text.status=true
+endif
+
 #DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 OP_PG_URL=PG:"$(PG_URL)"
 
