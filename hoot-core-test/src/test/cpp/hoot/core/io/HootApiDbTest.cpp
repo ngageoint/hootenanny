@@ -59,7 +59,7 @@ class HootApiDbTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runSelectNodeIdsForWayTest);
   CPPUNIT_TEST(runSelectMembersForRelationTest);
   CPPUNIT_TEST(runUpdateNodeTest);
-
+  CPPUNIT_TEST(runUnescapeTags);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -535,6 +535,13 @@ public:
           "ORDER BY longitude",
           "3.1415;2.71828;true;3222453693;1",
           (qlonglong)nodeId);
+  }
+
+  void runUnescapeTags()
+  {
+    HOOT_STR_EQUALS("key = value\n", HootApiDb::unescapeTags("\"key\"=>\"value\""));
+    HOOT_STR_EQUALS("key1 = value1\nkey2 = value2\n", HootApiDb::unescapeTags("\"key1\"=>\"value1\", \"key2\"=>\"value2\""));
+    HOOT_STR_EQUALS("fixme = check: building or just a \"paved\" place\n", HootApiDb::unescapeTags("\"fixme\"=>\"check: building or just a \"paved\" place\""));
   }
 
   void setUp()

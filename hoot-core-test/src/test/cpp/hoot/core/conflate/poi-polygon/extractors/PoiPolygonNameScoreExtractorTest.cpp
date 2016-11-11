@@ -55,7 +55,7 @@ public:
   void scoreTest()
   {
     PoiPolygonNameScoreExtractor uut;
-    OsmMapPtr map;
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "blah");

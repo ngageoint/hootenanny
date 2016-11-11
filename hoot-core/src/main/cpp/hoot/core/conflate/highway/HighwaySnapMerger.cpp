@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -179,7 +179,7 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 {
   if (!e1 && !e2)
   {
-    LOG_WARN("Error marking element as needing review. Neither element exists. " << note);
+    LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
   }
   else if (e1 && e2)
   {
