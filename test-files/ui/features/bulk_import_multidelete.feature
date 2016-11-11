@@ -86,4 +86,3 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I accept the alert
         Then I should not see "AllDataTypesA_directoryImport" dataset after 30 "seconds"
         # Then I should not see "AllDataTypesB_directoryImport" dataset after 30 "seconds"
-

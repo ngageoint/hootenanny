@@ -302,18 +302,27 @@ Tags ApiDb::unescapeTags(const QVariant &v)
 {
   assert(v.type() == QVariant::String);
   QString s = v.toString();
-  // convert backslash and double quotes to their octal form so we can safely split on double quotes
-  s.replace("\\\\", "\\134");
-  s.replace("\\\"", "\\042");
 
   Tags result;
-  QStringList l = s.split("\"");
-  for (int i = 1; i < l.size(); i+=4)
-  {
-    _unescapeString(l[i]);
-    _unescapeString(l[i + 2]);
 
-    result.insert(l[i], l[i + 2]);
+  QStringList list = s.split("=>");
+  while (list.size() > 1)
+  {
+    QString key = list.first();
+    list.pop_front();
+    QString value = list.first();
+    list.pop_front();
+    //  Split the value/key that wasn't split at the beginning
+    if (list.size() > 0)
+    {
+      QStringList vk = value.split("\", \"");
+      value = vk[0];
+      list.push_front(vk[1]);
+    }
+    //  Unescape the rest
+    _unescapeString(key);
+    _unescapeString(value);
+    result.insert(key, value);
   }
 
   return result;
