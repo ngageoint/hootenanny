@@ -138,6 +138,9 @@ public:
 
   QString getStatusString() const;
 
+  // This returns "Input1" instead of "Unknown1"
+  QString getTextStatus() const;
+
   bool isUnknown() const { return getStatus().isUnknown(); }
 
   virtual ElementType getElementType() const = 0;
