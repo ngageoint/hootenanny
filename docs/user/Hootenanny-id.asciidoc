@@ -952,7 +952,6 @@ The following advanced configuration parameters are provided to the user via the
 * *Enabled*: Enables POI conflation options.
 * *POI Options*: POI conflation engine to be used.
 
-** *Places*: Conflates POIs using the  PLACES algorithms which looks for name similarity and geographic proximity. Predates the Unify conflation engine which incorporates additional business logic and review similar to unify road conflation. See Hootenanny - Algorithms Guide for more detail.
 ** *Unify*: Conflates POIs with Unify algorithm routines into a single process flow and flag reviewable items to the user. See Hootenanny - Algorithms Guide for more detail.
 ** *Disabled*: Disables the POI conflation options.
 

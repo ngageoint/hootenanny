@@ -97,8 +97,6 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/algorithms/MaximalSublineTest.cpp \
     src/test/cpp/hoot/core/algorithms/ExpectationIntersectionTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolverTest.cpp \
     src/test/cpp/hoot/core/elements/NodeTest.cpp \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
@@ -161,8 +159,6 @@ SOURCES += \
     src/test/cpp/hoot/core/scoring/MapScoringStatusAndRefTagValidatorTest.cpp \
     src/test/cpp/hoot/core/ops/BuildingOutlineUpdateOpTest.cpp \
     src/test/cpp/hoot/core/conflate/highway/HighwayMatchCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/CustomPoiMatchCreatorTest.cpp \
     src/test/cpp/hoot/core/conflate/ConflateStatsHelperTest.cpp \
     src/test/cpp/hoot/core/visitors/MatchCandidateCountVisitorTest.cpp \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \

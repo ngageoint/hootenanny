@@ -1,14 +1,14 @@
-17:10:30.551 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceDbTest/output.osm ...
-Reprojecting 0 / 136         
-17:10:30.586 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:10:30.587 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+15:05:32.701 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceDbTest/output.osm ...
+Reprojecting 0 / 144         
+15:05:32.737 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
+15:05:32.737 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
 Stat Name	test-output/cmd/ServiceDbTest/output.osm
-Node Count	136
+Node Count	144
 Way Count	23
-Relation Count	1
+Relation Count	9
 Minimum Node ID	-273
 Maximum Node ID	-1
 Minimum Way ID	-170
 Maximum Way ID	-1
-Minimum Relation ID	-2
+Minimum Relation ID	-10
 Maximum Relation ID	-2
