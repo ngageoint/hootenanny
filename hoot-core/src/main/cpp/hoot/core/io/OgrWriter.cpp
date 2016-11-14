@@ -564,7 +564,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
     if (_textStatus)
     {
-      t["hoot:status"] = e->getTextStatus();
+      t["hoot:status"] = e->getStatus().toTextStatus();
     }
     else
     {

@@ -44,12 +44,6 @@ QString Element::getStatusString() const
   return _status.toString().toLower();
 }
 
-// This returns "Input1" etc instead of "Unknown1"
-QString Element::getTextStatus() const
-{
-  return _status.toTextStatus();
-}
-
 void Element::_postGeometryChange()
 {
   if (_listener != 0)
