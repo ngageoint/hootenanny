@@ -94,6 +94,9 @@ OgrWriter::OgrWriter():
   _failOnSkipRelation(false)
 {
   setConfiguration(conf());
+
+  _textStatus = ConfigOptions().getWriterTextStatus();
+
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
@@ -558,7 +561,16 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
     Tags t = e->getTags();
     t["error:circular"] = QString::number(e->getCircularError());
-    t["hoot:status"] = e->getStatusString();
+
+    if (_textStatus)
+    {
+      t["hoot:status"] = e->getStatus().toTextStatus();
+    }
+    else
+    {
+      t["hoot:status"] = e->getStatusString();
+    }
+
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
