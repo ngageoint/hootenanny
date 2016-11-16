@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,38 +26,20 @@
  */
 package hoot.services.nativeinterfaces;
 
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import java.io.IOException;
 
 
-/**
- * @author Jong Choi
- *
- *   The purpose of this class is to provide one additional indirection for managing Native Interface execution.
- **/
-@Transactional
-@Component("jobExecutionManagerNative")
-public class JobExecutionManager {
-    private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
+interface CommandRunner {
 
-    @Autowired
-    private NativeInterface nativeInterface;
+    /**
+     * Runs a process. The command to run is passed as a
+     * String[]. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.  This is a blocking call.
+     */
+    CommandResult exec(String[] command) throws IOException;
 
-    public JobExecutionManager() {}
+    String getStdout();
 
-    public String getProgress(String jobId) throws NativeInterfaceException {
-        return this.nativeInterface.getJobProgress(jobId);
-    }
-
-    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
-        return this.nativeInterface.exec(command);
-    }
-
-    public void terminate(String jobId) throws NativeInterfaceException {
-        this.nativeInterface.terminate(jobId);
-    }
+    void terminate();
 }

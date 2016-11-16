@@ -55,7 +55,7 @@ public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
 
     public enum JOB_STATUS {
-        RUNNING, COMPLETE, FAILED, UNKNOWN;
+        RUNNING, COMPLETE, FAILED, CANCELLED, UNKNOWN;
 
         public static JOB_STATUS fromInteger(int value) {
             if ((value >= 0) && (value < JOB_STATUS.values().length)) {
@@ -108,6 +108,21 @@ public class JobStatusManager {
         }
         catch (Exception e) {
             logger.error("Error setting job with ID = {} status to COMPLETE", jobId, e);
+            throw e;
+        }
+    }
+
+    /**
+     * Updates to Complete. (Convenience function)
+     *
+     * @param jobId
+     */
+    public void setCancelled(String jobId) {
+        try {
+            this.updateJob(jobId, CANCELLED, null);
+        }
+        catch (Exception e) {
+            logger.error("Error setting job with ID = {} status to CANCELLED", jobId, e);
             throw e;
         }
     }
