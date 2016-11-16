@@ -1672,7 +1672,7 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName);
+            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }

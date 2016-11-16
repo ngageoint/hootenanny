@@ -340,20 +340,21 @@ describe('TranslationServer', function () {
 
         it('should handle tdstoosm POST of facility area feature', function() {
             var trans2osm = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><nd ref="-13"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AL010"/><tag k="SDP" v="D"/></way></osm>',
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><nd ref="-13"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AL010"/><tag k="SDP" v="D"/><tag k="area" v="yes"/></way></osm>',
                 method: 'POST',
                 translation: 'MGCP',
                 path: '/translateFrom'
             });
             var output = xml2js.parseString(trans2osm, function(err, result) {
+                console.log(result.osm.way[0].tag[0].$.v);
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "source");
                 assert.equal(result.osm.way[0].tag[0].$.v, "D");
                 assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
                 assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[2].$.k, "facility");
+                assert.equal(result.osm.way[0].tag[2].$.k, "area");
                 assert.equal(result.osm.way[0].tag[2].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[3].$.k, "area");
+                assert.equal(result.osm.way[0].tag[3].$.k, "facility");
                 assert.equal(result.osm.way[0].tag[3].$.v, "yes");
             });
         });
