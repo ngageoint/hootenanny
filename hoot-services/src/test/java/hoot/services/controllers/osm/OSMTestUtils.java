@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -54,8 +54,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.w3c.dom.Document;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLExpressions;
+import com.querydsl.sql.dml.SQLDeleteClause;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Changesets;
@@ -1098,8 +1104,7 @@ public class OSMTestUtils {
         }
 
         int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
-        DbUtils.batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT,
-                maxRecordBatchSize);
+        batchRecords(mapId, wayNodeRecords, QCurrentWayNodes.currentWayNodes, null, RecordBatchType.INSERT, maxRecordBatchSize);
     }
 
     /*
@@ -1155,8 +1160,7 @@ public class OSMTestUtils {
         }
 
         int maxRecordBatchSize = Integer.parseInt(MAX_RECORD_BATCH_SIZE);
-        DbUtils.batchRecords(mapId, memberRecords, currentRelationMembers, null,
-                RecordBatchType.INSERT, maxRecordBatchSize);
+        batchRecords(mapId, memberRecords, currentRelationMembers, null, RecordBatchType.INSERT, maxRecordBatchSize);
     }
 
     /**
@@ -1322,5 +1326,96 @@ public class OSMTestUtils {
                 .values(nodeId, latitude, longitude, changesetId,
                         Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
                 .execute();
+    }
+
+    private static long batchRecords(long mapId, List<?> records, RelationalPathBase<?> t,
+            List<List<BooleanExpression>> predicateslist, RecordBatchType recordBatchType, int maxRecordBatchSize) {
+        if (recordBatchType == RecordBatchType.INSERT) {
+            SQLInsertClause insert = createQuery(mapId).insert(t);
+            long nBatch = 0;
+            for (int i = 0; i < records.size(); i++) {
+                Object oRec = records.get(i);
+                insert.populate(oRec).addBatch();
+                nBatch++;
+
+                if ((maxRecordBatchSize > -1) && (i > 0)) {
+                    if ((i % maxRecordBatchSize) == 0) {
+                        insert.execute();
+
+                        insert = createQuery(mapId).insert(t);
+                        nBatch = 0;
+                    }
+                }
+            }
+
+            if (nBatch > 0) {
+                return insert.execute();
+            }
+
+            return 0;
+        }
+        else if (recordBatchType == RecordBatchType.UPDATE) {
+            SQLUpdateClause update = createQuery(mapId).update(t);
+            long nBatchUpdate = 0;
+            for (int i = 0; i < records.size(); i++) {
+                Object oRec = records.get(i);
+
+                List<BooleanExpression> predicates = predicateslist.get(i);
+
+                BooleanExpression[] params = new BooleanExpression[predicates.size()];
+
+                for (int j = 0; j < predicates.size(); j++) {
+                    params[j] = predicates.get(j);
+                }
+
+                update.populate(oRec).where((Predicate[]) params).addBatch();
+                nBatchUpdate++;
+
+                if ((maxRecordBatchSize > -1) && (i > 0)) {
+                    if ((i % maxRecordBatchSize) == 0) {
+                        update.execute();
+
+                        update = createQuery(mapId).update(t);
+                        nBatchUpdate = 0;
+                    }
+                }
+            }
+
+            if (nBatchUpdate > 0) {
+                return update.execute();
+            }
+
+            return 0;
+        }
+        else { //(recordBatchType == RecordBatchType.DELETE)
+            SQLDeleteClause delete = createQuery(mapId).delete(t);
+            long nBatchDel = 0;
+            for (int i = 0; i < records.size(); i++) {
+                List<BooleanExpression> predicates = predicateslist.get(i);
+
+                BooleanExpression[] params = new BooleanExpression[predicates.size()];
+
+                for (int j = 0; j < predicates.size(); j++) {
+                    params[j] = predicates.get(j);
+                }
+
+                delete.where((Predicate[]) params).addBatch();
+                nBatchDel++;
+                if ((maxRecordBatchSize > -1) && (i > 0)) {
+                    if ((i % maxRecordBatchSize) == 0) {
+                        delete.execute();
+
+                        delete = createQuery(mapId).delete(t);
+                        nBatchDel = 0;
+                    }
+                }
+            }
+
+            if (nBatchDel > 0) {
+                return delete.execute();
+            }
+
+            return 0;
+        }
     }
 }

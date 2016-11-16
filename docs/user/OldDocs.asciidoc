@@ -13,38 +13,13 @@ Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 opera
 [[OldDocsConflation]]
 == Conflation
 
-[[POIConflation]]
+[[UnifyingPoi]]
 === POI Conflation
 
-Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using two general approaches: 
-
-* PLACES  
-* Unify 
-
-The _PLACES_ approach is appropriate when conflating
-link:$$http://www.geonames.org/about.html$$[GeoNames] source data where the goal
-is to conflate in an efficient and timely manner without depending heavily on
-discerning between different POI types (e.g. cities vs. hotels) and their the
-unique geographic characteristics.  The PLACES methods are generally fast and
-work for country-level POI datasets that contain similar types of POIs (e.g.
-localities) but are less useful for conflating datasets containing highly
-heterogeneous POIs that vary in their tag structure and subtype.  In this
-regard, the PLACES matching routines are not going to produce the best results
-for users who are trying to conflate POIs from OSM sources which tend to have
-dense POI information that is heavily reliant on the type tags to provide
-context to its users.
-
-When dealing with more complex (and generally more reflective of real world) POI
-conflation scenarios, Hootenanny provides a second conflation approach using
-Unify. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript
-interface described in <<HootJavaScriptOverview>> to find, label and merge match
-candidate features. Because this code deals with a broader range of POI
-conditions, conflating POI datasets using Unify will invariably produce reviews
-that the user must manually confirm using the workflow described in the
-<<hootUI>>, _Reviewing Conflicts_.  Unless there is a pressing need for faster
-execution or zero reviews the _Unify_ algorithm should be preferred over the
-_PLACES_ algorithm.  Further background on both PLACES and Unifying POI
-conflation can be found in <<hootalgo>>, _PLACES POI Conflation_ and _Unifying
+Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>> 
+to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI 
+datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
+<<hootUI>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootalgo>>, _Unifying
 POI Conflation_.
 
 There are a number of configurable distance thresholds that can be specified if

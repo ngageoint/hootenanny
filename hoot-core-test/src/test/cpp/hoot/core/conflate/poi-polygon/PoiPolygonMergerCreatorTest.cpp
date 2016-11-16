@@ -137,10 +137,8 @@ public:
   void setUp()
   {
     TestUtils::resetEnvironment();
-    conf().set(ConfigOptions().getMatchCreatorsKey(),
-      "hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::PoiPolygonMatchCreator");
-    conf().set(ConfigOptions().getMergerCreatorsKey(),
-      "hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::PoiPolygonMergerCreator");
+    conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
+    conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
   }
 
   void tearDown()

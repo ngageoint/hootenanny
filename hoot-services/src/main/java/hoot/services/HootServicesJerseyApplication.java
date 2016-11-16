@@ -40,13 +40,14 @@ public class HootServicesJerseyApplication extends ResourceConfig {
     private static final Logger logger = Logger.getLogger(HootServicesJerseyApplication.class.getName());
 
     public HootServicesJerseyApplication() {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+        super.packages(true, "hoot.services");
 
         super.register(MultiPartFeature.class);
         super.register(CorsResponseFilter.class);
         super.register(RequestContextFilter.class);
 
         /*
+        // Could not get LoggingFeature to work for some reason.  Falling back to the deprecated LoggingFilter!
         super.registerInstances(new LoggingFeature(logger,
                                                      Level.ALL,
                                                      LoggingFeature.Verbosity.PAYLOAD_TEXT,
