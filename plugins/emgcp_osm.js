@@ -179,6 +179,93 @@ emgcp_osm = {
             }
         }
 
+        // Fix up areas
+        // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
+        if (geometryType == 'Area' && ! tags.area)
+        {
+            if (emgcp_osm.areaList == undefined)
+            {
+                emgcp_osm.areaList = {
+                                       'amenity':undefined,
+                                       'area:highway':undefined,
+                                       'barrier':{'city_wall':1,'ditch':1,'hedge':1,'retaining_wall':1,'wall':1,'spikes':1},
+                                       'boundary':undefined,
+                                       'building':undefined,
+                                       'building:part':undefined,
+                                       'craft':undefined,
+                                       'golf':undefined,
+                                       'highway':{'services':1, 'rest_area':1, 'escape':1, 'elevator':1},
+                                       'historic':undefined,
+                                       'indoor':undefined,
+                                       'landuse':undefined,
+                                       'leisure':undefined,
+                                       'office':undefined,
+                                       'place':undefined,
+                                       'power':{'plant':1,'substation':1,'generator':1,'transformer':1},
+                                       'public_transport':undefined,
+                                       'railway':{'station':1,'turntable':1,'roundhouse':1,'platform':1},
+                                       'ruins':undefined,
+                                       'shop':undefined,
+                                       'tourism':undefined,
+                                       'waterway':{'riverbank':1,'dock':1,'boatyard':1,'dam':1}
+                                     }
+            } // End
+
+            if (tags.natural)
+            {
+                if (['no','coastline','cliff','ridge','arete','tree_row'].indexOf(tags.natural) == -1)
+                {
+                    // Debug
+                    print('Added area=yes');
+                    tags.area = 'yes';
+                }
+            }
+            else if (tags.man_made)
+            {
+                if (['no','cutline','embankment','pipeline'].indexOf(tags.man_made) == -1)
+                {
+                    // Debug
+                    print('Added area=yes');
+                    tags.area = 'yes';
+                }
+
+            }
+            else if (tags.aeroway && tags.aeroway !== 'taxiway')
+            {
+                // Debug
+                print('Added area=yes');
+                tags.area = 'yes';
+            }
+            else
+            {
+                // Now loop through the tags
+                for (var i in tags)
+                {
+                    if (i in emgcp_osm.areaList)
+                    {
+                        if (tags[i] == 'no') continue;
+
+                        if (emgcp_osm.areaList[i] == undefined)
+                        {
+                            // Debug
+                            print('Added area=yes');
+                            tags.area = 'yes';
+                            break
+                        }
+
+                        if (tags[i] in emgcp_osm.areaList[i])
+                        {
+                            // Debug
+                            print('Added area=yes');
+                            tags.area = 'yes';
+                            break
+                        }
+                    }
+                }
+            } // End else
+
+        } // End Area check
+
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
