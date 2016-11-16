@@ -35,9 +35,9 @@ import org.json.simple.JSONObject;
  *         Abstract class for Native Interface.
  */
 public interface NativeInterface {
-
     /**
-     * Performs execution. All required meta data should be in command parameter.
+     * Performs execution. All required meta data should be in command
+     * parameter.
      *
      * @param command
      * @throws NativeInterfaceException

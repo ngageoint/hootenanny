@@ -46,6 +46,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.command.CommandResult;
+import hoot.services.command.CommandRunner;
+import hoot.services.command.CommandRunnerImpl;
+
 
 /**
  * @author Jong Choi
@@ -63,18 +67,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @Profile("production")
-class ProcessStreamInterface implements NativeInterface {
+public class ProcessStreamInterface implements NativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
-    // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.
+    // This contains the command runner objects for the executing processes.
+    // Used for job cancellation and tracking
     private static final Map<String, CommandRunner> jobProcesses = new ConcurrentHashMap<>();
+    private static final Map<String, CommandRunner> progProcesses = new ConcurrentHashMap<>();
+
+    public ProcessStreamInterface() {}
 
     @Override
     public String getJobProgress(String jobId) {
         String stdStr = "";
-        CommandRunner commandRunner = jobProcesses.get(jobId);
-        if (commandRunner != null) {
-            stdStr = commandRunner.getStdout();
+        Object oCmdRunner = progProcesses.get(jobId);
+        if (oCmdRunner != null) {
+            CommandRunner cmdRunner = (CommandRunner) oCmdRunner;
+            stdStr = cmdRunner.getStdout();
         }
 
         return stdStr;
@@ -114,21 +123,13 @@ class ProcessStreamInterface implements NativeInterface {
         }
         else {
             logger.error("Failed to parse params: {}", command.toJSONString());
-            throw new NativeInterfaceException("Failed to parse params.", NativeInterfaceException.HttpCode.BAD_RQUEST);
+            throw new NativeInterfaceException("Failed to parse params.",
+                    NativeInterfaceException.HttpCode.BAD_RQUEST);
         }
 
         String commandStr = ArrayUtils.toString(commandArr);
         logger.debug("Native call: {}", commandStr);
         CommandRunner cmdRunner = new CommandRunnerImpl();
-
-        String jobId = null;
-        if (command.get("jobId") != null) {
-            jobId = command.get("jobId").toString();
-            if (jobId != null) {
-                jobProcesses.put(jobId, cmdRunner);
-            }
-        }
-
         logger.debug("Start: {}", new Date().getTime());
 
         try {
@@ -184,17 +185,13 @@ class ProcessStreamInterface implements NativeInterface {
             throw new NativeInterfaceException("Failed to execute.  Cause: " + e.getMessage(),
                     NativeInterfaceException.HttpCode.SERVER_ERROR, e);
         }
-        finally {
-            if ((jobId != null) && jobProcesses.containsKey(jobId)) {
-                jobProcesses.remove(jobId);
-            }
-        }
 
         return json;
     }
 
     /**
-     * Creates direct exec call like hoot --ogr2osm target input output if the "exectype" is "hoot"
+     * Creates direct exec call like hoot --ogr2osm target input output if the
+     * "exectype" is "hoot"
      */
     private static String[] createCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
@@ -205,11 +202,13 @@ class ProcessStreamInterface implements NativeInterface {
         for (Object o : params) {
             JSONObject param = (JSONObject) o;
 
+            String arg = "";
             for (Object entry : param.entrySet()) {
                 Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) entry;
-                String arg = (String) mEntry.getValue();
-                execCmd.add(arg);
+                arg = (String) mEntry.getValue();
             }
+
+            execCmd.add(arg);
         }
 
         Object[] objectArray = execCmd.toArray();
@@ -231,19 +230,20 @@ class ProcessStreamInterface implements NativeInterface {
         for (Object o : params) {
             JSONObject param = (JSONObject) o;
 
+            String arg = "";
+            String key = "";
+
             for (Object entry : param.entrySet()) {
                 Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) entry;
-                String key = (String) mEntry.getKey();
-                String arg = (String) mEntry.getValue();
-                execCmd.add(key + "=" + arg);
+                key = (String) mEntry.getKey();
+                arg = (String) mEntry.getValue();
             }
+
+            execCmd.add(key + "=" + arg);
         }
 
-        if (cmd.get("jobId") != null) {
-            String jobid = cmd.get("jobId").toString();
-            execCmd.add("jobid=" + jobid);
-        }
-
+        String jobid = cmd.get("jobId").toString();
+        execCmd.add("jobid=" + jobid);
         execCmd.add("DB_URL=" + DB_URL);
         execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
 
@@ -261,11 +261,13 @@ class ProcessStreamInterface implements NativeInterface {
         for (Object o : params) {
             JSONObject param = (JSONObject) o;
 
+            String arg = "";
             for (Object rename : param.entrySet()) {
                 Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) rename;
-                String arg = (String) mEntry.getValue();
-                execCmd.add(arg);
+                arg = (String) mEntry.getValue();
             }
+
+            execCmd.add(arg);
         }
 
         if (cmd.get("jobId") != null) {

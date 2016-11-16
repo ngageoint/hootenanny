@@ -260,4 +260,8 @@ public class JobResource {
     private String getProgressText(String jobId) throws NativeInterfaceException {
         return this.jobExecMan.getProgress(jobId);
     }
+
+    public void terminateJob(String childId) throws NativeInterfaceException {
+        this.jobExecMan.terminate(childId);
+    }
 }

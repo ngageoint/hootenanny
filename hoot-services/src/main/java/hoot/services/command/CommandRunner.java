@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,48 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.nativeinterfaces;
+package hoot.services.command;
+
+import java.io.IOException;
 
 
-class CommandResult {
+public interface CommandRunner {
 
-    private final String command;
-    private final int exitStatus;
-    private final String stdout;
-    private final String stderr;
+    /**
+     * Runs a process. The command to run is passed as a
+     * String[]. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.  This is a blocking call.
+     */
+    CommandResult exec(String[] command) throws IOException;
 
-    CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
-        this.command = cmdString;
-        this.exitStatus = result;
-        this.stdout = stdoutString;
-        this.stderr = stderrString;
-    }
+    String getStdout();
 
-    String getCommand() {
-        return command;
-    }
-
-    int getExitStatus() {
-        return exitStatus;
-    }
-
-    String getStderr() {
-        return stderr;
-    }
-
-    String getStdout() {
-        return stdout;
-    }
-
-    @Override
-    public String toString() {
-        return "CommandResult{" +
-                "command='" + command + '\'' +
-                ", exitStatus=" + exitStatus +
-                ", stdout='" + stdout + '\'' +
-                ", stderr='" + stderr + '\'' +
-                '}';
-    }
+    void terminate();
 }
