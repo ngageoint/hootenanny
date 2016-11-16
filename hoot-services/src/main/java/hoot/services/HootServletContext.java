@@ -36,8 +36,8 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.ogr.P2PResource;
-import hoot.services.controllers.ogr.TranslatorResource;
+import hoot.services.controllers.auxiliaryservices.POI2POIMergeServiceResource;
+import hoot.services.controllers.auxiliaryservices.TranslationServiceResource;
 
 
 public class HootServletContext implements ServletContextListener {
@@ -55,16 +55,16 @@ public class HootServletContext implements ServletContextListener {
 
         createUploadFolder();
 
-        TranslatorResource.startTranslationService();
+        TranslationServiceResource.startTranslationService();
 
-        P2PResource.startP2PService();
+        POI2POIMergeServiceResource.startP2PService();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        TranslatorResource.stopTranslationService();
+        TranslationServiceResource.stopTranslationService();
 
-        P2PResource.stopP2PService();
+        POI2POIMergeServiceResource.stopP2PService();
 
         FileUtils.deleteQuietly(new File(TEMP_OUTPUT_PATH));
     }
