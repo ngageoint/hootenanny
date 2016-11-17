@@ -28,8 +28,8 @@ build-info:
 config: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf
 
 run-liquibase:
-	rm -f ./liquibase/liquibase.properties
-	../scripts/ReplaceEnvironmentVariables.sh ./liquibase/liquibase.properties.in ./liquibase/liquibase.properties
+	rm -f ./src/main/resources/db/liquibase.properties
+	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
 	mvn $(MVN_QUIET) liquibase:update
 
 #add -X param temporarily to mvn-build command to debug mvn execution
@@ -37,7 +37,6 @@ build: build-info config run-liquibase
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
 	../scripts/mvn-build $(MVN_QUIET) build
-	
 	cp target/hoot-services-*.war ../bin
 
 docs: config
