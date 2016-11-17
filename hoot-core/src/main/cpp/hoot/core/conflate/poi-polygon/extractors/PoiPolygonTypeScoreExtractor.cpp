@@ -56,13 +56,8 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
 }
 
-double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
-                                             const ConstElementPtr& poi,
-                                             const ConstElementPtr& poly) const
+bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
-  const Tags& t1 = poi->getTags();
-  const Tags& t2 = poly->getTags();
-
   //be a little more restrictive with restaurants
   if (t1.get("amenity").toLower() == "restaurant" &&
       t2.get("amenity").toLower() == "restaurant" &&
@@ -78,8 +73,40 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
         t1Cuisine != "other" && t2Cuisine != "other")
     {
       LOG_TRACE("Failed type match on different cuisines.");
-      return 0.0;
+      return true;
     }
+  }
+  return false;
+}
+
+bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
+{
+  //be a little more restrictive with sport areas
+  if (t1.get("leisure").toLower() == "pitch" &&
+      t2.get("leisure").toLower() == "pitch" &&
+      t1.contains("sport") && t2.contains("sport"))
+  {
+    const QString t1Sport = t1.get("sport").toLower();
+    const QString t2Sport = t2.get("sport").toLower();
+    if (OsmSchema::getInstance().score("sport=" + t1Sport, "sport=" + t2Sport) != 1.0)
+    {
+      LOG_TRACE("Failed type match on different sports.");
+      return true;
+    }
+  }
+  return false;
+}
+
+double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
+                                             const ConstElementPtr& poi,
+                                             const ConstElementPtr& poly) const
+{
+  const Tags& t1 = poi->getTags();
+  const Tags& t2 = poly->getTags();
+
+  if (_failsCuisineMatch(t1, t2) || _failsSportMatch(t1, t2))
+  {
+    return 0.0;
   }
 
   const double typeScore = _getTagScore(poi, poly);
