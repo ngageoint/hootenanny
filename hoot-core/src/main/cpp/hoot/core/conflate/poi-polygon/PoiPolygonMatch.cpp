@@ -406,6 +406,13 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     return 0;
   }
 
+  //prevent athletic POIs within a park poly from being reviewed against that park poly
+  if (_distance == 0 && PoiPolygonTypeScoreExtractor::isPark(poly) &&
+      poi->getTags().get("leisure") == "pitch")
+  {
+    return 0;
+  }
+
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
   //We only want to run this if the previous match distance calculation was too large.
