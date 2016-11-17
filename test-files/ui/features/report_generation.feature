@@ -30,8 +30,8 @@ Feature: Generate Conflation Report
         And I click the "Complete Review" link
         Then I should see "Resolve all remaining reviews"
         And I press "Resolve all remaining reviews"
-        When I click on "input#export_data"
-        And I click on "input#exit_conflate"
+        When I press "Export Data"
+        And I press "Exit"
 
     Scenario: Check out the Report
         When I select the "sprocket" div
@@ -40,7 +40,7 @@ Feature: Generate Conflation Report
         When I click the "up" icon under the "Conflate_Report_Cucumber" link
         Then I press "round" span with text "Download"
         And I wait 30 seconds
-        Then the download file "Conflate_Report.pdf" should exist
+        Then the download file "Conflate_Report_Cucumber.pdf" should exist
 
     Scenario: Delete the Datasets
         When I click the "trash" icon under the "Conflate_Report_Cucumber" link
