@@ -102,7 +102,7 @@ public:
 
   virtual MatchType getType() const { return _threshold->getType(getClassification()); }
 
-  bool isSameAs(const NetworkMatch* other) const;
+  bool isVerySimlarTo(const NetworkMatch* other) const;
 
 protected:
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);

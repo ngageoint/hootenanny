@@ -242,7 +242,7 @@ void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
     {
       const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
 
-      if (nmi->isSameAs(nmj))
+      if (nmi->isVerySimlarTo(nmj))
       {
         MatchSet::iterator tmp = it;
         ++tmp;

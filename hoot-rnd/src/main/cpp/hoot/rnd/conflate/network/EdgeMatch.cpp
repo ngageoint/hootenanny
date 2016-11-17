@@ -131,6 +131,30 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
   return false;
 }
 
+bool EdgeMatch::isVerySimilarTo(const shared_ptr<const EdgeMatch>& other) const
+{
+  QString this1 = getString1()->toString();
+  QString other1 = other->getString1()->toString();
+  QString this2 = getString2()->toString();
+  QString other2 = other->getString2()->toString();
+
+  // Portions can be slightly different sometimes
+  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+
+  //LOG_INFO(this1);
+  //LOG_INFO(other1);
+  //LOG_INFO(this2);
+  //LOG_INFO(other2);
+
+  if (0 == this1.compare(other1) && 0 == this2.compare(other2))
+    return true;
+
+  return false;
+}
+
 QString EdgeMatch::toString() const
 {
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());

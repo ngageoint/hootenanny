@@ -147,28 +147,9 @@ QString NetworkMatch::toString() const
     arg(hoot::toString(_pairs)).arg(getScore());
 }
 
-bool NetworkMatch::isSameAs(const NetworkMatch* other) const
+bool NetworkMatch::isVerySimilarTo(const NetworkMatch* other) const
 {
-  QString this1 = getEdgeMatch()->getString1()->toString();
-  QString other1 = other->getEdgeMatch()->getString1()->toString();
-  QString this2 = getEdgeMatch()->getString2()->toString();
-  QString other2 = other->getEdgeMatch()->getString2()->toString();
-
-  // Portions can be slightly different sometimes
-  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
-
-  //LOG_INFO(this1);
-  //LOG_INFO(other1);
-  //LOG_INFO(this2);
-  //LOG_INFO(other2);
-
-  if (0 == this1.compare(other1) && 0 == this2.compare(other2))
-    return true;
-
-  return false;
+  return getEdgeMatch()->isVerySimilarTo(other->getEdgeMatch());
 }
 
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const

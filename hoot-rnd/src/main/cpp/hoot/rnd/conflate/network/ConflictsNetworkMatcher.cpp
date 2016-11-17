@@ -123,6 +123,40 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   }
 }
 
+void ConflictsNetworkMatcher::_removeDupes()
+{
+  QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
+  QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
+  ++it2;
+
+  while (it1 != _edgeMatches->getAllMatches().end())
+  {
+    while (it2 != _edgeMatches->getAllMatches().end())
+    {
+      if (it2.key()->isVerySimilarTo(it1.key()))
+      {
+        double score1 = it1.value();
+        double score2 = it2.value();
+        if (score1 > score2)
+        {
+          it2 = _edgeMatches->getAllMatches().erase(it2);
+        }
+        else
+        {
+          it1 = _edgeMatches->getAllMatches().erase(it1);
+          it2 = it1;
+          ++it2;
+        }
+      }
+      else
+      {
+        ++it2;
+      }
+    }
+    ++it1;
+  }
+}
+
 void ConflictsNetworkMatcher::_createMatchRelationships()
 {
   int count = 0;
@@ -512,6 +546,8 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   // create an initial estimation of edge match based on typical similarity scores
   _seedEdgeScores();
 
+  _removeDupes();
+
   _createMatchRelationships();
 }
 
@@ -540,6 +576,9 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
 
     IntersectionIterator iit = _createIterator(env, _edge2Index);
 
+    //Idea - lets look through our edgeMatches at this point. If we've already used this, lets not use it again.
+    //Possible problem: what if e1 matches more than one other thing? ... maybe we don't care
+
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
@@ -551,6 +590,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       if (score > 0)
       {
         // add all the EdgeMatches that are seeded with this edge pair.
+        /* MICAH - In Here Lies The Problem! */
         finder.addEdgeMatches(e1, e2);
       }
     }

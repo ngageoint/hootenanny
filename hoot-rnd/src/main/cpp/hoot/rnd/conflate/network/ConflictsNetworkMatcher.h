@@ -139,6 +139,12 @@ private:
 
   void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
 
+  /* Removes matches that are very similar to each other, where very similar is defined as being
+   * the same match, but with slight variations in portions. Pairs of matches are evaluated for
+   * similarity, and if similar, the higher-scoring match is kept
+   */
+  void _removeDupes();
+
   void _createMatchRelationships();
 
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
