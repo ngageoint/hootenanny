@@ -74,7 +74,7 @@ tds = {
         // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
         tds.nfddAttrLookup = translate.makeAttrLookup(tds.rawSchema);
 
-        // Debugging:
+        // Debug
         // print("tds.nfddAttrLookup");
         // translate.dumpLookup(tds.nfddAttrLookup);
 
@@ -1441,6 +1441,7 @@ tds = {
                     {
                         var row = tds.fcodeLookup[col][value];
                         attrs.F_CODE = row[1];
+                        // Debug
                         // print('FCODE: Got ' + attrs.F_CODE);
                     }
                 }
@@ -1672,7 +1673,7 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName);
+            print('In Layername: ' + layerName + '  geometryType: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
@@ -1740,16 +1741,18 @@ tds = {
         // post processing
         tds.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
+        // Debug: Add the FCODE to the tags
+        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         return tags;
     }, // End of toOsm
@@ -1938,11 +1941,11 @@ tds = {
                         returnData[i]['tableName'] = tds.layerNameLookup[gFcode.toUpperCase()];
                     }
                 }
-                else
-                {
-                    // Debug
-                    print('## Skipping: ' + gFcode);
-                }
+//                 else
+//                 {
+//                     // Debug
+//                     print('## Skipping: ' + gFcode);
+//                 }
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer

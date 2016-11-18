@@ -1893,13 +1893,11 @@ tds61 = {
         translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
 
         // Crack open the OTH field and populate the appropriate attributes
+        // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
         if (attrs.OTH) translate.processOTH(attrs, tags, tds61.lookup);
 
         // post processing
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
-
-        // Debug
-        for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -1907,6 +1905,8 @@ tds61 = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
@@ -2117,11 +2117,11 @@ tds61 = {
                         returnData[i]['tableName'] = tds61.layerNameLookup[gFcode.toUpperCase()];
                     }
                 }
-                else
-                {
-                    // Debug
-                    print('## Skipping: ' + gFcode);
-                }
+//                 else
+//                 {
+//                     // Debug
+//                     print('## Skipping: ' + gFcode);
+//                 }
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer

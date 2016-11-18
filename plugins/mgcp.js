@@ -1216,6 +1216,7 @@ mgcp = {
             {
                 if (i in tags)
                 {
+                    // Debug
                     // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
                     break;
@@ -1468,7 +1469,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName);
+            print('In Layername: ' + layerName + '  geometryType: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
@@ -1548,15 +1549,14 @@ mgcp = {
         // post processing
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
-        // Debug
-        // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
-
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
@@ -1742,11 +1742,11 @@ mgcp = {
 
                     returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
                 }
-                else
-                {
-                    // Debug
-                    print('## Skipping: ' + gFcode);
-                }
+//                 else
+//                 {
+//                     // Debug
+//                     print('## Skipping: ' + gFcode);
+//                 }
 
             } // End returnData loop
 
