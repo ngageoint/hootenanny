@@ -345,7 +345,7 @@ if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
 fi
 
 # Remove gdal libs installed by libgdal-dev that interfere with
-# renderdb-export-server using gdal libs compiled from source (fgdb support)
+# node-export-server using gdal libs compiled from source (fgdb support)
 if [ -f "/usr/lib/libgdal.*" ]; then
     echo "Removing GDAL libs installed by libgdal-dev..."
     sudo rm /usr/lib/libgdal.*
@@ -550,11 +550,11 @@ npm install --silent
 # Clean up after the npm install
 rm -rf $HOME/tmp
 
-echo "### Installing renderdb-export-server..."
-sudo cp $HOOT_HOME/renderdb-export-server/init.d/renderdb-export-server /etc/init.d
-sudo chmod a+x /etc/init.d/renderdb-export-server
+echo "### Installing node-export-server..."
+sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
+sudo chmod a+x /etc/init.d/node-export-server
 # Make sure all npm modules are installed
-cd $HOOT_HOME/renderdb-export-server
+cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
 rm -rf $HOME/tmp
