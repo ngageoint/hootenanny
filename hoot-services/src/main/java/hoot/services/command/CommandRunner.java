@@ -33,14 +33,6 @@ public interface CommandRunner {
 
     /**
      * Runs a process. The command to run is passed as a
-     * String. Collects all output on System.out and System.err, passing it to
-     * the CommandResult. Waits for all output and process completion then
-     * returns the process exit status.  This is a blocking call.
-     */
-    CommandResult exec(String command) throws IOException;
-
-    /**
-     * Runs a process. The command to run is passed as a
      * String[]. Collects all output on System.out and System.err, passing it to
      * the CommandResult. Waits for all output and process completion then
      * returns the process exit status.  This is a blocking call.

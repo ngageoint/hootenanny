@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.controllers.wfs.WfsManager;
+import hoot.services.wfs.WFSManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
@@ -137,7 +137,7 @@ public class ExportJobResource extends JobControllerBase {
                 wfsArgs.add(param);
 
                 JSONObject createWfsResCommand = createReflectionSycJobReq(wfsArgs,
-                        "hoot.services.controllers.wfs.WfsManager", "createWfsResource");
+                        "hoot.services.wfs.WfsManager", "createWfsResource");
 
                 JSONArray jobArgs = new JSONArray();
                 jobArgs.add(osm2orgCommand);
@@ -363,10 +363,10 @@ public class ExportJobResource extends JobControllerBase {
         JSONObject entity = new JSONObject();
 
         try {
-            WfsManager wfsMan = new WfsManager();
-            wfsMan.removeWfsResource(id);
+            WFSManager.removeWfsResource(id);
 
             List<String> tbls = DbUtils.getTablesList(id);
+
             DbUtils.deleteTables(tbls);
         }
         catch (WebApplicationException wae) {
@@ -395,7 +395,7 @@ public class ExportJobResource extends JobControllerBase {
     public Response getWfsResources() {
         JSONArray wfsResources = new JSONArray();
         try {
-            List<String> list = WfsManager.getAllWfsServices();
+            List<String> list = WFSManager.getAllWfsServices();
 
             if (list != null) {
                 for (String wfsResource : list) {

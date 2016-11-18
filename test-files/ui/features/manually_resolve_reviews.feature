@@ -22,8 +22,8 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 8 (Resolved: 0)"
     Then I should see "Hide Table"
     Then I should see "name"
-    Then I should see "Previous"
-    Then I should see "Next"
+    Then I should see a "a.previous" on the map
+    Then I should see a "a.next" on the map
     Then I should see "Resolved"
     #Add a new point and edit name tag
     When I click the "add-point" button
@@ -55,47 +55,47 @@ Feature: Manually resolve reviews feature
     And I hover over "#map"
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
-    And I press "Next"
+    And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
     #Click the review against item box
@@ -114,15 +114,15 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 1 (Resolved: 7)"
     And I press "Merge"
     Then I wait 30 "seconds" to not see "Please wait while merging review items."
-    And I press "Next"
+    And I click on "a.next"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
-    And I press "Previous"
+    And I click on "a.previous"
     Then I wait 5 "seconds" to see "Please resolve or undo the current feature changes before proceeding to the next review."
     And I press "Resolved"
     Then I wait 30 "seconds" to see "There are no more available features to review."
     Then I should not see "Reviews remaining:"
     Then I should not see "Hide Table"
     Then I should not see "name"
-    Then I should not see "Previous"
-    Then I should not see "Next"
+    Then I should not see "a.previous"
+    Then I should not see "a.next"
     Then I should not see "Resolved"

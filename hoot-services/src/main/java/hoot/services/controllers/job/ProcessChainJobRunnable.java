@@ -44,7 +44,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
-import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.JobStatus;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;

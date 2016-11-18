@@ -51,39 +51,6 @@ public class CommandRunnerImpl implements CommandRunner {
     public CommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String command) throws IOException {
-        logger.debug("Executing the following command: {}", command);
-
-        try (OutputStream stdout = new ByteArrayOutputStream();
-             OutputStream stderr = new ByteArrayOutputStream()) {
-
-            CommandLine cmdLine = CommandLine.parse(command);
-
-            ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
-            DefaultExecutor executor = new DefaultExecutor();
-            executor.setStreamHandler(executeStreamHandler);
-
-            int exitValue;
-            try {
-                exitValue = executor.execute(cmdLine);
-            }
-            catch (Exception e) {
-                exitValue = -1;
-                logger.warn("Error executing: {}", cmdLine, e);
-            }
-
-            CommandResult commandResult = new CommandResult(cmdLine.toString(), exitValue,
-                    stdout.toString(), stderr.toString());
-
-            this.stdout = stdout.toString();
-
-            logger.debug("Finished executing: {}", commandResult);
-
-            return commandResult;
-        }
-    }
-
-    @Override
     public CommandResult exec(String[] command) throws IOException {
         logger.debug("Executing the following command: {}", Arrays.toString(command));
 

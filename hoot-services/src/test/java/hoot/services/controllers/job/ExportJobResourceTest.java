@@ -94,7 +94,7 @@ public class ExportJobResourceTest {
                 + "{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
         jobArgs += tempOutputPath + ",";
         jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}," + "{\"PG_URL\":\"" + pgUrl
-                + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.controllers.wfs.WfsManager\","
+                + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.wfs.WfsManager\","
                 + "\"method\":\"createWfsResource\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"f9a8d471\","
                 + "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
 
@@ -141,7 +141,7 @@ public class ExportJobResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -180,7 +180,7 @@ public class ExportJobResourceTest {
                     .readFileToString(new File(
                             Thread.currentThread()
                                     .getContextClassLoader()
-                                    .getResource("hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
+                                    .getResource("hoot.services.controllers.job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
                                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -215,7 +215,7 @@ public class ExportJobResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -250,7 +250,7 @@ public class ExportJobResourceTest {
                     .currentThread()
                     .getContextClassLoader()
                     .getResource(
-                            "hoot/services/controllers/job/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
+                            "hoot.services.controllers.job/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -288,7 +288,7 @@ public class ExportJobResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -323,7 +323,7 @@ public class ExportJobResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());

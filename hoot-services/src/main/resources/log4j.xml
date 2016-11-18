@@ -2,6 +2,11 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
+    <!-- Controls logging done by the application including 3rd party tools.
+         All logging done by the application and its 3rd party tools is being funneled through
+         slf4j facade and log4j binding.
+     -->
+
     <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n" />
