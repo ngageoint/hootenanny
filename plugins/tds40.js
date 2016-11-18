@@ -36,8 +36,8 @@
 tds = {
     // getDbSchema - Load the standard schema or modify it into the TDS structure.
     getDbSchema: function() {
-        layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-        nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+        tds.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
+        tds.nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         tds.rawSchema = tds.schema.getDbSchema();
@@ -72,18 +72,18 @@ tds = {
      */
 
         // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
-        nfddAttrLookup = translate.makeAttrLookup(tds.rawSchema);
+        tds.nfddAttrLookup = translate.makeAttrLookup(tds.rawSchema);
 
         // Debugging:
-        // print("nfddAttrLookup");
-        // translate.dumpLookup(nfddAttrLookup);
+        // print("tds.nfddAttrLookup");
+        // translate.dumpLookup(tds.nfddAttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds.rawSchema
         if (config.getOgrTdsStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-            layerNameLookup = translate.makeLayerNameLookup(tds.rawSchema);
+            tds.layerNameLookup = translate.makeLayerNameLookup(tds.rawSchema);
 
             // Now add an o2s[A,L,P] feature to the tds.rawSchema
             // We can drop features but this is a nice way to see what we would drop
@@ -240,7 +240,7 @@ tds = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds.nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -419,7 +419,7 @@ tds = {
     validateTDSAttrs: function(gFcode, attrs) {
 
         var tdsAttrList = tdsAttrLookup[tds.rules.thematicGroupList[gFcode]];
-        var nfddAttrList = nfddAttrLookup[gFcode];
+        var nfddAttrList = tds.nfddAttrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
@@ -1846,7 +1846,7 @@ tds = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(nfddAttrLookup[gFcode]))
+        if (!(tds.nfddAttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (config.getOgrThrowError() == 'true')
@@ -1909,32 +1909,39 @@ tds = {
             // Debug: Add the first feature
             //returnData.push({attrs: attrs, tableName: ''});
 
-
             // Now go through the features and clean them up.
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-
-                // Validate attrs: remove all that are not supposed to be part of a feature
-                tds.validateAttrs(geometryType,returnData[i]['attrs']);
-
-                // Now set the FCSubtype.
-                // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true')
-                {
-                    returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-                }
-
+                // Make sure that we have a valid FCODE
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                if (config.getOgrTdsStructure() == 'true')
+                if (tds.nfddAttrLookup[gFcode.toUpperCase()])
                 {
-                    returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
-                    tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    tds.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    // Now set the FCSubtype.
+                    // NOTE: If we export to shapefile, GAIT _will_ complain about this
+                    if (config.getOgrTdsAddFcsubtype() == 'true')
+                    {
+                        returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                    }
+
+                    // If we are using the TDS structre, fill the rest of the unused attrs in the schema
+                    if (config.getOgrTdsStructure() == 'true')
+                    {
+                        returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
+                        tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    }
+                    else
+                    {
+                        returnData[i]['tableName'] = tds.layerNameLookup[gFcode.toUpperCase()];
+                    }
                 }
                 else
                 {
-                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                    // Debug
+                    print('## Skipping: ' + gFcode);
                 }
             } // End returnData loop
 
