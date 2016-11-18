@@ -196,7 +196,8 @@ public:
     {
       //Technically, the density based density matches depends on this data too, but since that
       //code has been disabled, this check is good enough.
-      if (ConfigOptions().getPoiPolygonEnableCustomRules())
+      if (ConfigOptions().getPoiPolygonEnableAdvancedMatching() ||
+          ConfigOptions().getPoiPolygonEnableReviewReduction())
       {
         collectSurroundingPolyIds(e);
         collectSurroundingPoiIds(e);

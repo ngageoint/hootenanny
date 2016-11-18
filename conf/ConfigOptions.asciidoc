@@ -1619,14 +1619,23 @@ If false, POI to polygon conflation will not take address tags into account duri
 Disable this setting to boost runtime performance if your data has little or no address information
 or you know the address information to be inaccurate.
 
-=== poi.polygon.enable.custom.rules
+=== poi.polygon.enable.advanced.matching
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to polygon conflation will execute custom matching rules in addition to the
-simpler, evidence based additive model for determining matches.  This setting allows for conflation
-customization but may result in a longer runtime.  See PoiPolygonMatchRules for more details.
+If true, POI to polygon conflation will perform additional checks against surrounding features
+for match evidence.  This setting allows for conflation customization but can be runtime expensive
+when enabled.
+
+=== poi.polygon.enable.review.reduction
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
+incorrect matches.  This setting is fairly experimental in that it has not been tested with many
+datasets, and it can be runtime expensive when enabled.
 
 === poi.polygon.match.threshold
 

@@ -38,7 +38,8 @@
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonCustomRules.h"
+#include "PoiPolygonReviewReducer.h"
+#include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
@@ -279,8 +280,21 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _class.setMiss();
 
   _categorizeElementsByGeometryType(eid1, eid2);
+  unsigned int evidence = _calculateEvidence(_poi, _poly);
 
-  const unsigned int evidence = _calculateEvidence(_poi, _poly);
+  //no point in trying to reduce reviews if we're still at a miss here
+  if (ConfigOptions().getPoiPolygonEnableReviewReduction() && evidence >= REVIEW_EVIDENCE_THRESHOLD)
+  {
+    PoiPolygonReviewReducer reviewReducer(
+      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
+      _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _reviewDistanceThreshold);
+    if (reviewReducer.triggersRule(_poi, _poly))
+    {
+      evidence = 0;
+    }
+  }
+
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
@@ -406,27 +420,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     return 0;
   }
 
-  //prevent athletic POIs within a park poly from being reviewed against that park poly
-  if (_distance == 0 && PoiPolygonTypeScoreExtractor::isPark(poly) &&
-      poi->getTags().get("leisure") == "pitch")
-  {
-    return 0;
-  }
-
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
-
-  //We only want to run this if the previous match distance calculation was too large.
-  //Tightening up the requirements for running the convex poly calculation here to improve
-  //runtime.  These requirements can possibly be removed at some point in the future, if proven
-  //necessary.  The school requirement definitely seems too type specific (this type of evidence
-  //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
-  //clean the school restriction up (see #1173).
-  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      OsmSchema::getInstance().isBuilding(poly))
-  {
-    evidence += _getConvexPolyDistanceEvidence(poi, poly);
-  }
 
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
@@ -450,22 +444,41 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     }
   }
 
-  if (evidence == 0)
+  //We only want to run this if the previous match distance calculation was too large.
+  //Tightening up the requirements for running the convex poly calculation here to improve
+  //runtime.  These requirements can possibly be removed at some point in the future, if proven
+  //necessary.  The school requirement definitely seems too type specific (this type of evidence
+  //has actually only been found with school pois in one test dataset so far), but when
+  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
+  //clean the school restriction up (see #1173).
+  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
+      OsmSchema::getInstance().isBuilding(poly))
+  {
+    evidence += _getConvexPolyDistanceEvidence(poi, poly);
+    if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+    {
+      return evidence;
+    }
+  }
+
+  /*if (evidence == 0)
   {
     //This is kind of a consolation prize...if there was no match, but name and type score have
     //moderately high values, then make it a match.
-    /*if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
+    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
     {
       evidence++;
     }
-    else*/ if (ConfigOptions().getPoiPolygonEnableCustomRules())
+  }*/
+
+  //no point in trying to increase evidence if we're already at a match
+  if (ConfigOptions().getPoiPolygonEnableAdvancedMatching() && evidence < MATCH_EVIDENCE_THRESHOLD)
+  {
+    PoiPolygonAdvancedMatcher advancedMatcher(
+      _map, _polyNeighborIds, _poiNeighborIds, _distance);
+    if (advancedMatcher.triggersRule(_poi, _poly))
     {
-      PoiPolygonCustomRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
-      matchRules.collectInfo(poi, poly);
-      if (matchRules.ruleTriggered())
-      {
-        evidence++;
-      }
+      evidence++;
     }
   }
 
