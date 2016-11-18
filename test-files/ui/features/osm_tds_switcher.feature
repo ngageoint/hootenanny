@@ -13,14 +13,14 @@ Feature: OSM/TDS Switcher
         When I select a way map feature with OSM id "w309"
         Then I wait 10 "seconds" to see "Edit feature:"
         Then I should see element "#preset-input-name" with value "23RD ST NW"
-        Then I select the "TDSv61" option labelled "Filter By Type"
+        Then I select the "TDSv61" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "label" element with text "Feature Code"
         Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030:Road"
-        Then I select the "TDSv40" option labelled "Filter By Type"
+        Then I select the "TDSv40" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
         Then I wait 5 seconds
         Then I should see element "#preset-input-TDSv40\/ZI005_FNA" with value "23RD ST NW"
-        Then I select the "MGCP" option labelled "Filter By Type"
+        Then I select the "MGCP" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "label" element with text "Thoroughfare Class"
         Then I should see element "#preset-input-MGCP\/HCT" with value "Unknown"
 
@@ -35,7 +35,7 @@ Feature: OSM/TDS Switcher
         And I hover over "#map"
         And I click the "map" at "350","300"
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "OSM" option labelled "Filter By Type"
+        Then I select the "OSM" option labelled "Tag Schema"
         And I click the "div.label" with text "Park"
         And I should see a "g.tag-leisure-park" on the map
         And I click the "map" at "400","400"
@@ -43,7 +43,7 @@ Feature: OSM/TDS Switcher
         # Translate this point to TDSv61 and get Feature out of spec error
         When I select a node map feature with class "tag-leisure-park"
         And I should see "Edit feature: "
-        And I select the "TDSv61" option labelled "Filter By Type"
+        And I select the "TDSv61" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "Feature out of spec"
 
         # Add a point with TDSv61 schema
@@ -51,7 +51,7 @@ Feature: OSM/TDS Switcher
         And I hover over "#map"
         And I click the "map" at "50","120"
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "TDSv61" option labelled "Filter By Type"
+        Then I select the "TDSv61" option labelled "Tag Schema"
 
         # Use the preset search feature
         And I append "preset-search-input" input with "b"
@@ -84,7 +84,7 @@ Feature: OSM/TDS Switcher
         # Translate this point to MGCP and get valid translation
         When I select a node map feature with class "tag-building"
         And I should see "Edit feature: "
-        And I select the "MGCP" option labelled "Filter By Type"
+        And I select the "MGCP" option labelled "Tag Schema"
         Then I wait 5 seconds
         Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015:General Building"
 
@@ -93,7 +93,7 @@ Feature: OSM/TDS Switcher
         And I hover over "#map"
         And I click the "map" at "200","200"
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "MGCP" option labelled "Filter By Type"
+        Then I select the "MGCP" option labelled "Tag Schema"
         And I click the "div.label" with text "Settlement (AL105)"
         And I should see a "g.tag-place-settlement" on the map
         And I click the "map" at "400","400"
@@ -106,7 +106,7 @@ Feature: OSM/TDS Switcher
         And I double-click the "map" at "200","400"
         Then I press the escape key
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "TDSv40" option labelled "Filter By Type"
+        Then I select the "TDSv40" option labelled "Tag Schema"
         And I click the "div.label" with text "Trail (AP050)"
         And I should see a "path.tag-highway-path" on the map
 
@@ -118,7 +118,7 @@ Feature: OSM/TDS Switcher
         And I double-click the "map" at "150","450"
         Then I press the escape key
         Then I wait 5 "seconds" to see "Select feature type"
-        Then I select the "MGCP" option labelled "Filter By Type"
+        Then I select the "MGCP" option labelled "Tag Schema"
         And I click the "div.label" with text "Built-up Area (AL020)"
         And I should see a "path.tag-landuse-built_up_area" on the map
 
