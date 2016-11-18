@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" shutdownHook="disable">
+<Configuration status="INFO" shutdownHook="disable" packages="hoot.services.utils.log4j2">
 
-    <!--
     <Filters>
-
+        <CustomLog4j2Filter/>
     </Filters>
-    -->
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
