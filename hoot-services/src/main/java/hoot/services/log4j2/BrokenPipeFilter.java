@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils.log4j2;
+package hoot.services.log4j2;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
@@ -38,12 +38,12 @@ import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 
 
-@Plugin(name = "CustomLog4j2Filter", category = "Core", elementType = "filter", printObject = true)
-public final class CustomLog4j2Filter extends AbstractFilter {
+@Plugin(name = "BrokenPipeFilter", category = "Core", elementType = "filter", printObject = true)
+public final class BrokenPipeFilter extends AbstractFilter {
 
     private final Level level;
 
-    private CustomLog4j2Filter(Level level, Result onMatch, Result onMismatch) {
+    private BrokenPipeFilter(Level level, Result onMatch, Result onMismatch) {
         super(onMatch, onMismatch);
         this.level = level;
     }
@@ -65,6 +65,12 @@ public final class CustomLog4j2Filter extends AbstractFilter {
 
     @Override
     public Result filter(LogEvent event) {
+        // If there is a throwable provided, inspect it.
+        Throwable t = event.getThrown();
+        if (t != null) {
+            return this.filter(t);
+        }
+
         return filter(event.getLevel());
     }
 
@@ -87,9 +93,9 @@ public final class CustomLog4j2Filter extends AbstractFilter {
     }
 
     @PluginFactory
-    public static CustomLog4j2Filter createFilter(@PluginAttribute(value = "level", defaultString = "ERROR") Level level,
+    public static BrokenPipeFilter createFilter(@PluginAttribute(value = "level", defaultString = "ERROR") Level level,
             @PluginAttribute(value = "onMatch", defaultString = "NEUTRAL") Result onMatch,
             @PluginAttribute(value = "onMismatch", defaultString = "DENY") Result onMismatch) {
-        return new CustomLog4j2Filter(level, onMatch, onMismatch);
+        return new BrokenPipeFilter(level, onMatch, onMismatch);
     }
 }

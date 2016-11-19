@@ -128,6 +128,9 @@
                         <exclude>**/*Suite.class</exclude>
                     </excludes>
                     <redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile>
+                    <systemPropertyVariables>
+                        <log4j.configurationFile>file:${project.build.testOutputDirectory}/log4j2-test.xml</log4j.configurationFile>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
                     <dependency>
