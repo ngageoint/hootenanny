@@ -15,7 +15,7 @@ Feature: OSM/TDS Switcher
         Then I should see element "#preset-input-name" with value "23RD ST NW"
         Then I select the "TDSv61" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "label" element with text "Feature Code"
-        Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030:Road"
+        Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030"
         Then I select the "TDSv40" option labelled "Tag Schema"
         Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
         Then I wait 5 seconds
@@ -86,7 +86,7 @@ Feature: OSM/TDS Switcher
         And I should see "Edit feature: "
         And I select the "MGCP" option labelled "Tag Schema"
         Then I wait 5 seconds
-        Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015:General Building"
+        Then I should see element "[id='preset-input-MGCP/FCODE']" with value "AL015"
 
         # Add a point with MGCP schema
         When I click the "add-point" button
