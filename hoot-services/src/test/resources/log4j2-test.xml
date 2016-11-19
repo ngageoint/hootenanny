@@ -39,13 +39,6 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <Logger name="hoot.services.controllers.info.Log4j2Test" level="INFO" additivity="false">
-            <Filters>
-                <BrokenPipeFilter/>
-            </Filters>
-            <AppenderRef ref="Console"/>
-        </Logger>
-
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
