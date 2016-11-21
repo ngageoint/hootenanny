@@ -85,17 +85,17 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
 
   bool poiContainedInAnotherParkPoly = false;
   bool polyContainedInAnotherParkPoly = false;
-  //const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
-  //const bool poiContainedInParkPoly =
-    //poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
-  //the name translations are very expensive here
+  //the name translations are very expensive here, so are disabled
 //  QString polyName = PoiPolygonNameScoreExtractor::getElementName(poly);
 //  if (!polyName.isEmpty())
 //  {
 //    polyName = Translator::getInstance().toEnglish(polyName);
 //  }
-  //const bool polyIsBuildingIsh = PoiPolygonTypeScoreExtractor::isBuildingIsh(poly, polyName);
-  //const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+  //  QString poiName = PoiPolygonNameScoreExtractor::getElementName(poi);
+  //  if (!poiName.isEmpty())
+  //  {
+  //    poiName = Translator::getInstance().toEnglish(poiName);
+  //  }
   const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   bool polyHasSpecificType = polyHasType;
@@ -104,14 +104,6 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   {
     polyHasSpecificType = false;
   }
-//  QString poiName = PoiPolygonNameScoreExtractor::getElementName(poi);
-//  if (!poiName.isEmpty())
-//  {
-//    poiName = Translator::getInstance().toEnglish(poiName);
-//  }
-  //const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
-  //const bool poiIsRecCenter = PoiPolygonTypeScoreExtractor::isRecCenter(poiName);
-  //const bool polyHasName = PoiPolygonNameScoreExtractor::elementHasName(poly);
 
   set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
   while (polyNeighborItr != _polyNeighborIds.end())
@@ -156,15 +148,6 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
             }
           }
         }
-
-        //If a POI is in a park, and is rec center, force at least a review against any other
-        //building-like poly in the park.
-//        if (poiContainedInParkPoly && !poiHasType && poiIsRecCenter && polyIsBuildingIsh &&
-//            (!polyHasSpecificType || !polyHasName) && polyContainedInAnotherParkPoly)
-//        {
-//          LOG_TRACE("Found evidence per rule #1...");
-//          return true;
-//        }
       }
       catch (const geos::util::TopologyException& e)
       {
