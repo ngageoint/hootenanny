@@ -2340,8 +2340,6 @@ mgcp.rules = {
     intList : ['LTN','NOS'],
     // ##### End of intList#####
 
-
-
 } // End of mgcp.rules
 
 

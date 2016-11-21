@@ -27,7 +27,7 @@
         <querydsl.version>4.1.0</querydsl.version>
         <postgresql.version>9.4.1208.jre7</postgresql.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <apache-log4j-extras.version>1.2.17</apache-log4j-extras.version>
+        <log4j2.version>2.7</log4j2.version>
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <httpclient.version>4.3.1</httpclient.version>
         <httpcore.version>4.3</httpcore.version>
@@ -128,6 +128,9 @@
                         <exclude>**/*Suite.class</exclude>
                     </excludes>
                     <redirectTestOutputToFile>${redirect-test-output-to-file}</redirectTestOutputToFile>
+                    <systemPropertyVariables>
+                        <log4j.configurationFile>file:${project.build.testOutputDirectory}/log4j2-test.xml</log4j.configurationFile>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -327,7 +330,6 @@
         </plugins>
     </build>
 
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -341,6 +343,13 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
                 <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j2.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -392,11 +401,6 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
@@ -406,9 +410,21 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>apache-log4j-extras</artifactId>
-            <version>${apache-log4j-extras.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Apache commons -->
@@ -621,6 +637,14 @@
                 <exclusion>
                     <artifactId>jersey-server</artifactId>
                     <groupId>com.sun.jersey</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
