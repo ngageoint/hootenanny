@@ -44,6 +44,8 @@ public:
 
   void matchTest()
   {
+    OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -77,6 +79,8 @@ public:
 
   void missTest()
   {
+    OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -98,17 +102,19 @@ public:
     }
 
     /// @todo fix; see #1177
-//    n1->getTags().set("name", "foo");
-//    n1->setX(-8);
-//    {
-//      PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
-//                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
-//      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
-//    }
+    n1->getTags().set("name", "foo");
+    n1->setX(-8);
+    {
+      PoiPolygonMatch uut(map, n1->getElementId(), w1->getElementId(), shared_ptr<MatchThreshold>(),
+                          shared_ptr<PoiPolygonRfClassifier>(), 0, 0, 0.8, 0.8, 1.0);
+      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
+    }
   }
 
   void reviewTest()
   {
+    OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
