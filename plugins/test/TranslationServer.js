@@ -155,11 +155,12 @@ describe('TranslationServer', function () {
     describe('searchSchema', function() {
 
         var defaults = {};
+        // Updated to reflect returning all geometries when none specified
         var defaultsResult = {
-                                "name": "AERIAL_FARM_P",
-                                "fcode": "AT012",
-                                "desc": "Aerial Farm",
-                                "geom": "Point"
+                                "name": "AERATION_BASIN_S",
+                                "fcode": "AB040",
+                                "desc": "Aeration Basin",
+                                "geom": "Area"
                             };
 
         var MgcpPointBui = {
