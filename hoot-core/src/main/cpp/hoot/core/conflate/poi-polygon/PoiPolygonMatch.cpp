@@ -381,11 +381,12 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   PoiPolygonTypeScoreExtractor typeScorer;
   typeScorer.setFeatureDistance(_distance);
   _typeScore = typeScorer.extract(*_map, poi, poly);
-//  if (poi->getTags().get("historic") == "monument")
-//  {
-//    //monuments can represent just about any poi type, so lowering this some to account for that
+  //if (poi->getTags().get("historic") == "monument")
+  //{
+    //monuments can represent just about any poi type, so lowering this some to account for that
 //    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
-//  }
+    //_typeScoreThreshold = 0.3; //this could be moved to a config
+  //}
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);

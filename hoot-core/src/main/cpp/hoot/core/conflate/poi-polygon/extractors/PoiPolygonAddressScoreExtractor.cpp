@@ -107,7 +107,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   StringDistancePtr addrComp;
   if (_addressScoreThreshold == 1.0)
   {
-    //Using this when score is equal to 1.0, since it seem some non-exact address were slipping
+    //Using this when score is equal to 1.0, since it seems some non-exact address were slipping
     //through when using the other comparator...probably need to look into it.
     addrComp.reset(new ExactStringDistance());
   }
