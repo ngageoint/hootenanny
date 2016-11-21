@@ -129,7 +129,6 @@ public:
   double getNameScore() const { return _nameScore; }
   double getNameScoreThreshold() const { return _nameScoreThreshold; }
   double getAddressScore() const { return _addressScore; }
-  double getAddressScoreThreshold() const { return _addressScoreThreshold; }
 
 private:
 

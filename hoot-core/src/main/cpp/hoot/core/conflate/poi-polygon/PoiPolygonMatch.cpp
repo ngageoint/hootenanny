@@ -68,7 +68,6 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
 _addressScore(-1.0),
-_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -93,7 +92,6 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
 _addressScore(-1.0),
-_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)

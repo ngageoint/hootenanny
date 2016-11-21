@@ -1602,14 +1602,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.address.score.threshold
-
-* Data Type: double
-* Default Value: `1.0`
-
-The minimum similarity the address scores a POI and polygon can have and be considered an address
-match, with 0.0 being the least similar and 1.0 being the most similar.
-
 === poi.polygon.enable.address.matching
 
 * Data Type: bool
