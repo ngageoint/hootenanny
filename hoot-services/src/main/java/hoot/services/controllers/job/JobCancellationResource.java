@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.util.UUID;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -36,31 +34,35 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
 @Controller
 @Path("/cancel")
-public class JobCancellationResource extends JobControllerBase {
+public class JobCancellationResource {
     private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
-    public JobCancellationResource() {
-        super(null);
-    }
+    @Autowired
+    private JobExecutionManager jobExecManager;
 
-    // TODO: Review this controller to make sure that cancellation logic works correctly
+    @Autowired
+    private JobStatusManager jobStatusManager;
+
+
+    public JobCancellationResource() {}
 
     /**
      * Cancel job.
      * 
      * @param args
-     *            - json containing following parameters jobid: Target job id
-     *            mpaid: Target map id.
+     *            - json containing following parameters jobid: Target job id; mapid: Target map id.
      * 
      *            Example: {"jobid":"123", "mapid":"45"}
      * 
@@ -70,44 +72,29 @@ public class JobCancellationResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response process(String args) {
-        String jobId = UUID.randomUUID().toString();
+        String jobIdToCancel = null;
+        String mapDisplayName = null;
 
         try {
             JSONParser parser = new JSONParser();
             JSONObject command = (JSONObject) parser.parse(args);
-            String cancelJobId = command.get("jobid").toString();
-            String cancelMapId = command.get("mapid").toString();
+            jobIdToCancel = command.get("jobid").toString();
+            mapDisplayName = command.get("mapid").toString();
 
-            JSONArray cancelArgs = new JSONArray();
+            this.jobExecManager.terminate(jobIdToCancel);
+            this.jobStatusManager.setCancelled(jobIdToCancel);
 
-            JSONObject param = new JSONObject();
-            param.put("value", cancelJobId);
-            param.put("paramtype", String.class.getName());
-            param.put("isprimitivetype", "false");
-            cancelArgs.add(param);
-
-            param = new JSONObject();
-            param.put("value", cancelMapId);
-            param.put("paramtype", String.class.getName());
-            param.put("isprimitivetype", "false");
-            cancelArgs.add(param);
-
-            JSONObject jobCancellationCommand = createReflectionJobReq(cancelArgs,
-                    JobResource.class.getName(), "terminateJob");
-
-            JSONArray jobArgs = new JSONArray();
-            jobArgs.add(jobCancellationCommand);
-
-            postChainJobRequest(jobId, jobArgs.toJSONString());
+            // TODO: should be trying to cleanup any files DB data already created by the cancelled job?
+            // TODO: Is this where mapId could come in handy?
         }
-        catch (Exception ex) {
-            String msg = "Error process data clean request: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        catch (Exception e) {
+            String msg = "Error cancellating job with ID = " + jobIdToCancel;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject res = new JSONObject();
-        res.put("jobid", jobId);
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobIdToCancel);
 
-        return Response.ok(res.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 }
