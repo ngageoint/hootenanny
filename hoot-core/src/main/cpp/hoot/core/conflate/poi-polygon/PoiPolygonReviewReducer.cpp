@@ -409,7 +409,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
 
         //If a poi is like and on top of a building, don't review it against a non-building poly.
-        if (/*poiIsBuildingIsh*/poiIsBuilding && poiOnBuilding && !polyIsBuilding)
+        if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
         {
           LOG_TRACE("Returning miss per review reduction rule #18...");
           return true;

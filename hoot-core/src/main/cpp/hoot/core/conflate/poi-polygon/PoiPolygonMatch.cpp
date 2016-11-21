@@ -434,13 +434,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     return evidence;
   }
 
-  if (ConfigOptions().getPoiPolygonEnableAddressMatching())
+  evidence += _getAddressEvidence(poi, poly);
+  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
-    evidence += _getAddressEvidence(poi, poly);
-    if (evidence >= MATCH_EVIDENCE_THRESHOLD)
-    {
-      return evidence;
-    }
+    return evidence;
   }
 
   //We only want to run this if the previous match distance calculation was too large.

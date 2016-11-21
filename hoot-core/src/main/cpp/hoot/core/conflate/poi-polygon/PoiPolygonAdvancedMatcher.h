@@ -36,6 +36,12 @@ namespace hoot
 /**
  * A custom set of rules that allow for additional match tweaking beyond the additive model used
  * in PoiPolygonMatch.
+ *
+ * The logic in this class has been stripped down over time for maintainability purposes.
+ * Currently, the logic accounts for adding one additional correct match in one test dataset.  Since
+ * that number is so small and the logic is runtime expensive, its disabled by default.  Future
+ * customization of this class may improve matching to the point that the logic should be
+ * re-enabled.
  */
 class PoiPolygonAdvancedMatcher
 {

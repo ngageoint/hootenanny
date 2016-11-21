@@ -175,10 +175,11 @@ void PoiPolygonAddressScoreExtractor::_parseAddressesInAltFormat(const Tags& tag
 
   //This may be able to be cleaned up with regex's.
 
-  QString addressTagValAltFormatRaw =
-    Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME_2)).trimmed().toLower();
+  QString addressTagValAltFormatRaw = tags.get(FULL_ADDRESS_TAG_NAME_2).trimmed();
   if (!addressTagValAltFormatRaw.isEmpty())
   {
+    addressTagValAltFormatRaw =
+      Translator::getInstance().toEnglish(addressTagValAltFormatRaw).toLower();
     addressTagValAltFormatRaw = addressTagValAltFormatRaw.replace(ESZETT, ESZETT_REPLACE);
     const QStringList addressParts = addressTagValAltFormatRaw.split(QRegExp("\\s"));
     if (addressParts.length() >= 2)
@@ -278,11 +279,11 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
 
   //address parts in separate tags (most common situation)
   QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
-  QString street =
-    Translator::getInstance().toEnglish(tags.get(STREET_TAG_NAME)).trimmed().toLower();
-  QString combinedAddress;
+  QString street = tags.get(STREET_TAG_NAME).trimmed();
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
+    street = Translator::getInstance().toEnglish(street).toLower();
+    QString combinedAddress;
     houseNum = houseNum.replace(QRegExp("[a-z]+"), "");
     //hack - I thought this would have been eliminated by using the translated name comparison
     //logic...seems like it wasn't. - see others
@@ -299,10 +300,10 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
   }
 
   //full address in one tag
-  QString addressTagVal =
-    Translator::getInstance().toEnglish(tags.get(FULL_ADDRESS_TAG_NAME)).trimmed().toLower();
+  QString addressTagVal = tags.get(FULL_ADDRESS_TAG_NAME).trimmed();
   if (!addressTagVal.isEmpty())
   {
+    addressTagVal = Translator::getInstance().toEnglish(addressTagVal).toLower();
     addressTagVal = addressTagVal.replace(ESZETT, ESZETT_REPLACE);
     addresses.insert(addressTagVal);
   }
