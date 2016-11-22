@@ -58,8 +58,8 @@ void PoiPolygonRfClassifier::_createExtractors()
   _extractors.push_back(addressExtractor1);
   shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(
     new PoiPolygonAddressScoreExtractor());
-  addressExtractor2->setAddressScoreThreshold(0.8);
-  _extractors.push_back(addressExtractor2);
+  //addressExtractor2->setAddressScoreThreshold(0.8);
+  //_extractors.push_back(addressExtractor2);
 
   /*vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
     FeatureExtractor::className());

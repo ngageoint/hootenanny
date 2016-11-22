@@ -36,11 +36,10 @@ namespace hoot
 {
 
 /**
- * Calculates the address similarity score of two features
- *
- * @todo This doesn't handle abbreviations.
+ * Calculates the address similarity score of two features.  Only exact string matches yield a
+ * positive score.  This translates addresses, but doesn't handle abbreviations.
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase//, public Configurable
 {
 public:
 
@@ -69,23 +68,24 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
-  virtual void setConfiguration(const Settings& conf);
+  //virtual void setConfiguration(const Settings& conf);
 
-  double getAddressScoreThreshold() { return _addressScoreThreshold; }
-  void setAddressScoreThreshold(double threshold) { _addressScoreThreshold = threshold; }
+  //double getAddressScoreThreshold() { return _addressScoreThreshold; }
+  //void setAddressScoreThreshold(double threshold) { _addressScoreThreshold = threshold; }
 
 private:
 
-  double _addressScoreThreshold;
+  //double _addressScoreThreshold;
 
-  void _collectAddressesFromElement(ConstElementPtr element,  QStringList& addresses) const;
-  void _collectAddressesFromWayNodes(ConstWayPtr way, QStringList& addresses,
+  void _collectAddressesFromElement(ConstElementPtr element, QSet<QString>& addresses) const;
+  void _collectAddressesFromWayNodes(ConstWayPtr way, QSet<QString>& addresses,
                                      const OsmMap& map) const;
-  void _collectAddressesFromRelationMembers(ConstRelationPtr relation, QStringList& addresses,
+  void _collectAddressesFromRelationMembers(ConstRelationPtr relation, QSet<QString>& addresses,
                                      const OsmMap& map) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
-                              QStringList& addresses) const;
-  void _parseAddressesInAltFormat(const Tags& tags, QStringList& addresses) const;
+                              QSet<QString>& addresses) const;
+  void _parseAddressesInAltFormat(const Tags& tags, QSet<QString>& addresses) const;
+  bool _addressesMatchesOnSubLetter(const QString polyAddress, const QString poiAddress) const;
 
 };
 

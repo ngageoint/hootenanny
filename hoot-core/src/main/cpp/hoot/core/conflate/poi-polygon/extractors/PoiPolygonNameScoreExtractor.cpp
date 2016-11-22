@@ -89,6 +89,7 @@ QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
     for (int i = 0; i < names.size(); i++)
     {
       name = names.at(i).toLower().trimmed();
+      //arbitrarily returning the first name here
       if (!name.isEmpty())
       {
         return name;

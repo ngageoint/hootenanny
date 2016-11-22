@@ -11,7 +11,4 @@ However,
 
   * tennis polygon does not match park polygon
 
-The Tennis POI to park polygon is clearly the more correct match, and originally due to
-the conflict we labelled the whole thing as needing review.  This lead to a large increase
-in unecessary reviews.  Adding a restriction on not matching sport fields to parks allows the
-sport POI to match the sport poly and solves this issue.
+The Tennis POI to tennis polygon is clearly the more correct match, so we match them.

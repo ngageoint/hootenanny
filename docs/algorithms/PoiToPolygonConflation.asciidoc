@@ -18,13 +18,13 @@ any other tag which causes it to be classified as a POI or a building by the Hoo
 POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
 
 * First, find all candidate POI / polygon pairs:
-** A candidate is any POI that meets the feature definition requirements and is within the combined circular error of a polygon plus a user definable review distance (+poi.polygon.review.distance+ config option; see below for the combined circular error calculation).
-** For certain feature types, Hootenanny defines a custom review distance based on the type.  See 
+** A candidate is any POI that meets the feature definition requirements and is within the combined circular error of a polygon plus a user definable review distance (see below for the combined circular error calculation).
+** For certain feature types, Hootenanny defines a hardcoded custom review distance based on the type.  See 
 PoiPolygonDistance::getReviewDistanceForType.
-* **Match the two features:**  If the POI is within a user definable match distance (+poi.polygon.match.distance+ config option) AND either: 
-** the names of the two features are similar (+poi.polygon.name.score.threshold+ config option)
-** the types of the two features are similar (+poi.polygon.type.score.threshold+ config option)
-** the address of the two features are similar (+poi.polygon.address.score.threshold+ config option; see PoiPolygonAddressScoreExtractor for the OSM standard names of the address tags expected)
+* **Match the two features:**  If the POI is within a user definable match distance AND either: 
+** the names of the two features are similar according to a configurable threshold OR
+** the types of the two features are similar according to a configurable threshold OR
+** the address of the two features are an exact match (standard OSM address tags are used; see PoiPolygonAddressScoreExtractor)
 ** If the Euclidean match distance requirement is not met, Hootenanny will also calculate the distance from the POI to a convex 
 polygon shape (alpha shape) derived from the polygon feature and use that value for the distance (certain restrictions 
 apply; see PoiPolygonMatch::_calculateEvidence).
