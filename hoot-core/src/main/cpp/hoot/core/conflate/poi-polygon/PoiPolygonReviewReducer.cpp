@@ -37,11 +37,13 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-#include <hoot/core/algorithms/Translator.h>
+//#include <hoot/core/algorithms/Translator.h>
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
+
+#include <float.h>
 
 namespace hoot
 {
@@ -52,11 +54,9 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  double distance, double nameScoreThreshold,
                                                  bool nameMatch,
                                                  bool exactNameMatch,
-                                                 double typeScoreThreshold,
                                                  double typeScore,
                                                  bool typeMatch,
-                                                 double matchDistanceThreshold,
-                                                 double reviewDistanceThreshold) :
+                                                 double matchDistanceThreshold) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -64,11 +64,9 @@ _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
 _nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
-_typeScoreThreshold(typeScoreThreshold),
 _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
-_reviewDistanceThreshold(reviewDistanceThreshold),
 _badGeomCount(0)
 {
   //TODO: can probably get rid of this list and make the logic work against all landuse

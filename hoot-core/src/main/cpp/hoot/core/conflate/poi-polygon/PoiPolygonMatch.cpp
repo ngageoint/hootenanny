@@ -285,8 +285,8 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   {
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
-      _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _reviewDistanceThreshold);
+      _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScore,
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;

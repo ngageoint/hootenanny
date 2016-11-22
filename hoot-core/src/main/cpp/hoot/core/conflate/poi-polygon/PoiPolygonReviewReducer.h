@@ -47,8 +47,7 @@ public:
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
                           const set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
-                          double typeScoreThreshold, double typeScore, bool typeMatch,
-                          double matchDistance, double reviewDistance);
+                          double typeScore, bool typeMatch, double matchDistanceThreshold);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -63,11 +62,9 @@ private:
   double _nameScoreThreshold;
   bool _nameMatch;
   bool _exactNameMatch;
-  double _typeScoreThreshold;
   double _typeScore;
   bool _typeMatch;
   double _matchDistanceThreshold;
-  double _reviewDistanceThreshold;
 
   QStringList _genericLandUseTagVals;
 
