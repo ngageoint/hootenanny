@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -303,12 +303,12 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map
     return getFrom();
   }
 
-  LOG_VAR(offset);
+  LOG_VART(offset);
   foreach (EdgeEntry ee, _edges)
   {
     Meters l = ee.getSubline()->calculateLength(map);
-    LOG_VAR(l);
-    LOG_VAR(ee.getSubline()->getStart());
+    LOG_VART(l);
+    LOG_VART(ee.getSubline()->getStart());
 
     if (d + l >= offset)
     {
@@ -324,7 +324,7 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map
 
     d += l;
   }
-  LOG_VAR(d);
+  LOG_VART(d);
 
   assert(offset > calculateLength(map));
 

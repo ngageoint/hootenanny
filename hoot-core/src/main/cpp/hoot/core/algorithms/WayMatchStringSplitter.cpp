@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -123,7 +123,7 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
       }
     }
 
-    LOG_VAR(wls);
+    LOG_VART(wls);
     vector<WayPtr> splits = WaySplitter(map, w1).createSplits(wls);
 
     assert((int)splits.size() == sm.size() * 2 + 1);
@@ -218,8 +218,8 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
 
     assert((int)splits.size() == sm.size() * 2 + 1);
 
-    LOG_VAR(wls);
-    LOG_VAR(splits);
+    LOG_VART(wls);
+    LOG_VART(splits);
 
     QList<ElementPtr> newWays;
 
@@ -245,8 +245,8 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
       newWays.append(w);
 
       w = splits[c++];
-      LOG_VAR(c);
-      LOG_VAR(w);
+      LOG_VART(c);
+      LOG_VART(w);
       // if this isn't empty
       if (w && ec.calculateLength(w) > 0.0)
       {

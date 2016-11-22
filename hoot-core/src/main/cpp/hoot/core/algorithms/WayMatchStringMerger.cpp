@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -178,8 +178,8 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
 
 void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
 {
-  LOG_VAR(scrapNode);
-  LOG_VAR(_map->getNode(scrapNode));
+  LOG_VART(scrapNode);
+  LOG_VART(_map->getNode(scrapNode));
   // find the first instance of scrapNode in way 2
   WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);
 
@@ -253,12 +253,12 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
     scrapNode->getX(), scrapNode->getY(), scrapNode->getCircularError()));
   _map->addNode(placeholder);
 
-  LOG_VAR(_sublineMappingOrder);
+  LOG_VART(_sublineMappingOrder);
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    LOG_VAR(sm->getNewWay2());
-    LOG_VAR(sm->getNewWay2()->getId());
-    LOG_VAR(_map->containsElement(sm->getNewWay2()->getElementId()));
+    LOG_VART(sm->getNewWay2());
+    LOG_VART(sm->getNewWay2()->getId());
+    LOG_VART(_map->containsElement(sm->getNewWay2()->getElementId()));
     WayPtr w = _map->getWay(sm->getNewWay2()->getId());
     w->replaceNode(scrapNodeId.getId(), placeholder->getId());
   }
@@ -350,7 +350,7 @@ void WayMatchStringMerger::replaceScraps()
     ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
     WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
 
-    LOG_VAR(sm->subline2);
+    LOG_VART(sm->subline2);
 
     // w1 should only occur once.
     assert(w2ToW1[w2].contains(w1) == false);
@@ -416,7 +416,7 @@ void WayMatchStringMerger::_splitPrimary()
   for (int i = 0; i < ws2->getSize(); ++i)
   {
     WaySubline& s2 = ws2->at(i);
-    LOG_VAR(s2);
+    LOG_VART(s2);
     WayLocation splitStart = _mapping->map2To1(s2.getStart());
     WayLocation splitEnd = _mapping->map2To1(s2.getEnd());
     _createWayMappings(splitStart, splitEnd, s2);

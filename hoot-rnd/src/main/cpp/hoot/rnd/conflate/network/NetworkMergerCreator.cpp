@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -67,7 +67,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
 
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
 
-  LOG_VAR(matches);
+  LOG_VART(matches);
 
   if (m)
   {
@@ -98,7 +98,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
       }
     }
 
-    LOG_VAR(matchOverlap);
+    LOG_VART(matchOverlap);
 
     // if there are only 2 matches and one completely contains the other, use the larger match.
     // This may need to be reverted as we play with more data, but at this point it seems like a

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -419,8 +419,8 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
   extendEdgeString(es1, e1);
   extendEdgeString(es2, e2);
 
-  LOG_VAR(es1);
-  LOG_VAR(es2);
+  LOG_VART(es1);
+  LOG_VART(es2);
 
   // calculate the subline match with the new em
   // - convert the edge strings into ways
@@ -432,14 +432,14 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 //  LOG_VAR(ElementConverter(map).convertToLineString(w2)->toString());
   // - calculate the matching subline of the two ways
   SublineCache sc = _calculateSublineScore(map, w1, w2);
-  LOG_VAR(sc.p);
+  LOG_VART(sc.p);
   // - use the length along the way to convert back to the edge string and crop as needed.
   if (sc.p == 0)
   {
     return result;
   }
 
-  LOG_VAR(sc.matches);
+  LOG_VART(sc.matches);
   WaySublineCollection ss1, ss2;
   const WaySublineMatchString::MatchCollection& mc = sc.matches->getMatches();
   foreach (const WaySublineMatch& wsm, mc)
@@ -763,8 +763,8 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
     const SublineCache& sc = _getSublineCache(w1, w2);
-    LOG_VAR(sc.p);
-    LOG_VAR(bestScore);
+    LOG_VART(sc.p);
+    LOG_VART(bestScore);
     result = sc.p * bestScore;
   }
 

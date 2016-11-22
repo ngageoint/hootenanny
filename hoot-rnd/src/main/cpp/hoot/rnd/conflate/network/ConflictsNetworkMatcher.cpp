@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -82,11 +82,11 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 {
   if (na == _n1)
   {
-    LOG_INFO("na is n1");
+    LOG_TRACE("na is n1");
   }
   else
   {
-    LOG_INFO("na is n2");
+    LOG_TRACE("na is n2");
   }
   const OsmNetwork::VertexMap& vm = na->getVertexMap();
 
@@ -117,7 +117,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
       // Create stub
       NetworkEdgePtr newStub(new NetworkEdge(va, va, false));
       newStub->addMember(va->getElement());
-      LOG_INFO("Adding new edge: " << newStub);
+      LOG_DEBUG("Adding new edge: " << newStub);
       na->addEdge(newStub);
     }
   }
@@ -311,11 +311,11 @@ QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTerminatio
 
   if (m.size() != result.size())
   {
-    LOG_VAR(v1);
-    LOG_VAR(v2);
+    LOG_VART(v1);
+    LOG_VART(v2);
     foreach (ConstEdgeMatchPtr e, result - m)
     {
-      LOG_VAR(e);
+      LOG_VART(e);
     }
   }
 
@@ -407,7 +407,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
 
     double numerator = _scores[em] * handicap;
     double denominator = numerator;
-    LOG_VAR(numerator);
+    LOG_VART(numerator);
 
     foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
@@ -460,7 +460,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       // based on testing through stubs connections shouldn't really count for or against matches.
       if (stubWeight != -1)
       {
-        LOG_VAR(stubWeight);
+        LOG_VART(stubWeight);
         //s *= stubWeight / 10.0;
         s *= pow(stubWeight, _stubThroughWeighting);
         //s = 0.0;
@@ -490,13 +490,13 @@ void ConflictsNetworkMatcher::_iterateSimple()
 
       if (r->isConflict() == false)
       {
-        LOG_INFO("support:  " << s << "\t" << r->getEdge()->toString().left(80));
+        LOG_TRACE("support:  " << s << "\t" << r->getEdge()->toString().left(80));
         //s = s / (double)supportCount;
         numerator += s;
       }
       else
       {
-        LOG_INFO("conflict: " << s << "\t" << r->getEdge()->toString().left(80));
+        LOG_TRACE("conflict: " << s << "\t" << r->getEdge()->toString().left(80));
         //s = s / (double)relationCount;
       }
 
@@ -507,7 +507,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     newWeights[em] = denominator;
     weightSum += denominator;
 
-    LOG_INFO("\ns1: " << em->getString1() << "\ns2: " << em->getString2() << "\n"
+    LOG_TRACE("\ns1: " << em->getString1() << "\ns2: " << em->getString2() << "\n"
              << numerator << "/" << denominator << " " << newScores[em]
              << " " << newWeights[em] << "\n\n");
 
@@ -572,7 +572,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     Envelope env = _details->getEnvelope(it.value());
 
     env.expandBy(_details->getSearchRadius(it.value()));
-    LOG_INFO("Search Radius: " << _details->getSearchRadius(it.value()));
+    LOG_TRACE("Search Radius: " << _details->getSearchRadius(it.value()));
 
     IntersectionIterator iit = _createIterator(env, _edge2Index);
 
@@ -582,11 +582,11 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
-      LOG_VAR(e1);
-      LOG_VAR(e2);
+      LOG_VART(e1);
+      LOG_VART(e2);
 
       double score = _details->getPartialEdgeMatchScore(e1, e2);
-      LOG_VAR(score);
+      LOG_VART(score);
       if (score > 0)
       {
         // add all the EdgeMatches that are seeded with this edge pair.

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -142,7 +142,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
 
 QString NetworkMatch::toString() const
 {
-  LOG_VAR(_threshold->toString());
+  LOG_VART(_threshold->toString());
   return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
     arg(hoot::toString(_pairs)).arg(getScore());
 }
