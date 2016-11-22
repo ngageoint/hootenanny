@@ -129,7 +129,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
     {
       double sum = 0.0;
       QStringList scores;
-      LOG_VAR(matches.size());
+      LOG_VART(matches.size());
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
@@ -190,7 +190,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     }
   }
 
-  LOG_VAR(largest);
+  LOG_VART(largest);
 
   foreach (const Match* m, matches)
   {
@@ -202,7 +202,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     }
   }
 
-  LOG_INFO("Found largest");
+  LOG_TRACE("Found largest");
 
   return largest;
 }

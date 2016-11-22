@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -118,13 +118,13 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
   if (other->getString1()->overlaps(getString1()))
   {
-    LOG_INFO("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps: " << toString() << " " << other);
     return true;
   }
 
   if (other->getString2()->overlaps(getString2()))
   {
-    LOG_INFO("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps: " << toString() << " " << other);
     return true;
   }
 
