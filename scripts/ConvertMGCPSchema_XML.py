@@ -188,6 +188,34 @@ def printFcodeList(schema):
 # End printFcodeList
 
 
+# Print FCODES in the internal OSM schema format
+def printFcodeSchema(schema):
+    tList = {}
+    gList = {'Line':'linestring', 'Area':'area', 'Point':'node' }
+
+    for i in schema:
+        # Skip geometry we don't care about
+        if schema[i]['geom'] not in gList:
+            continue
+
+        if schema[i]['fcode'] not in tList:
+            tList[schema[i]['fcode']] = {}
+            tList[schema[i]['fcode']]['description'] = schema[i]['desc']
+            tList[schema[i]['fcode']]['isA'] = 'FCODE'
+            tList[schema[i]['fcode']]['name'] = 'FCODE=' + schema[i]['fcode']
+            tList[schema[i]['fcode']]['objectType'] = 'tag'
+            tList[schema[i]['fcode']]['geometries'] = []
+
+        tList[schema[i]['fcode']]['geom'].append(gList[schema[i]['geom']])
+
+    #print '"FCODE","Name"'
+    for i in sorted(tList.keys()):
+        #print tList[i]
+        # Manual printing to get the order we want for sorting later
+        print '{"name": "%s", "geometries": %s, "description": "%s", "isA": "FCODE", "objectType": "tag"}' % (tList[i]['name'],tList[i]['geometries'],tList[i]['description'])
+# End printFcodeSchema
+
+
 # Print FCode Attribute List
 def printFcodeAttrList(schema):
     tList = {}
@@ -200,7 +228,7 @@ def printFcodeAttrList(schema):
     #print '"FCODE","Name"'
     for i in sorted(tList.keys()):
         print '%s : %s' % (i,tList[i])
-# End printFcodeList
+# End printFcodeAttrList
 
 
 # Print ToEnglish
@@ -730,6 +758,7 @@ if __name__ == "__main__":
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
     parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='store_true')
+    parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
     parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
     parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
     parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
@@ -758,22 +787,34 @@ if __name__ == "__main__":
     # Now dump the schema out
     if args.rules:
         printRules(schema)
+
     elif args.txtrules:
         printTxtRules(schema)
+
     elif args.numrules:
         printNumRules(schema)
+
     elif args.attrlist:
         printAttrList(schema)
+
     elif args.fcodelist:
         printFcodeList(schema)
+
+    elif args.fcodeschema:  # List the FCODES in the internal OSM schema format
+        printFcodeSchema(schema)
+
     elif args.fcodeattrlist:
         printFcodeAttrList(schema)
+
     elif args.toenglish:
         printToEnglish(schema)
+
     elif args.fromenglish:
         printFromEnglish(schema)
+
     elif args.attributecsv:
         printAttributeCsv(schema)
+
     else:
         printJSHeader(args.xmlFile)
         printFuncList(schema)

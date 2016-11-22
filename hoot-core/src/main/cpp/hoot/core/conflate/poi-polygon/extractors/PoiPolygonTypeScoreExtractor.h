@@ -74,21 +74,17 @@ public:
    */
   static bool isPark(ConstElementPtr element);
 
-  /**
-   * Determines if an element is a recreation center
-   *
-   * @param element the element to examine
-   * @return true if it is a recreation center; false otherwise
-   */
-  static bool isRecCenter(ConstElementPtr element);
+  //static bool isRecCenter(/*ConstElementPtr element*/const QString elementName);
 
-  /**
-   * Determines if an element is like a building in any way
-   *
-   * @param element the element to examine
-   * @return true if it like a building; false otherwise
-   */
-  static bool isBuildingIsh(ConstElementPtr element);
+  //static bool isBuildingIsh(ConstElementPtr element, const QString elementName);
+
+  static bool isParkish(ConstElementPtr element);
+  //static bool isPlayArea(/*ConstElementPtr element*/const QString elementName);
+  static bool isPlayground(ConstElementPtr element);
+  static bool isSport(ConstElementPtr element);
+  static bool isSchool(ConstElementPtr element);
+  static bool isRestroom(ConstElementPtr element);
+  static bool isParking(ConstElementPtr element);
 
   /**
    * Determines if an element has more than one type associated with it

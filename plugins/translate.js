@@ -28,8 +28,6 @@
 //
 // Set of core translation routines
 //
-
-
 translate = {
    
     // Build Lookup tables
@@ -58,6 +56,7 @@ translate = {
     
         return lookup;
     },
+
 
     /**
      * Given a list of strings create a dictionary of those strings that point to trues.
@@ -610,6 +609,88 @@ translate = {
     },
 
     
+    // Returns true the feature is an OSM area feature
+    // This is based on the OSM idea of what is considered na area as well as some Hoot specific OSM+ tags
+    // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
+    isOsmArea : function(tags)
+    {
+        var result = false;
+
+        if (translate.areaList == undefined)
+        {
+            translate.areaList = {
+                                    'amenity':undefined,
+                                    'area:highway':undefined,
+                                    'barrier':{'city_wall':1,'ditch':1,'hedge':1,'retaining_wall':1,'wall':1,'spikes':1},
+                                    'boundary':undefined,
+                                    'building':undefined,
+                                    'building:part':undefined,
+                                    'craft':undefined,
+                                    'facility':undefined,
+                                    'golf':undefined,
+                                    'highway':{'services':1, 'rest_area':1, 'escape':1, 'elevator':1},
+                                    'historic':undefined,
+                                    'indoor':undefined,
+                                    'landuse':undefined,
+                                    'leisure':undefined,
+                                    'office':undefined,
+                                    'place':undefined,
+                                    'power':{'plant':1,'substation':1,'generator':1,'transformer':1},
+                                    'public_transport':undefined,
+                                    'railway':{'station':1,'turntable':1,'roundhouse':1,'platform':1},
+                                    'ruins':undefined,
+                                    'shop':undefined,
+                                    'tourism':undefined,
+                                    'waterway':{'riverbank':1,'dock':1,'boatyard':1,'dam':1}
+                                    }
+        } // End
+
+        if (tags.natural)
+        {
+            if (['no','coastline','cliff','ridge','arete','tree_row'].indexOf(tags.natural) == -1)
+            {
+                result = true;
+            }
+        }
+        else if (tags.man_made)
+        {
+            if (['no','cutline','embankment','pipeline'].indexOf(tags.man_made) == -1)
+            {
+                result = true;
+            }
+        }
+        else if (tags.aeroway && tags.aeroway !== 'taxiway')
+        {
+            result = true;
+        }
+        else
+        {
+            // Now loop through the tags
+            for (var i in tags)
+            {
+                if (i in translate.areaList)
+                {
+                    if (tags[i] == 'no') continue;
+
+                    if (translate.areaList[i] == undefined)
+                    {
+                        result = true;
+                        break
+                    }
+
+                    if (tags[i] in translate.areaList[i])
+                    {
+                        result = true;
+                        break
+                    }
+                }
+            }
+        } // End else
+
+        return result;
+    },
+
+
     /**
      * Returns true if the col in attr is empty.
      */
@@ -622,6 +703,7 @@ translate = {
         }
         return result;
     },
+
 
     // isOK - A combination of isNumber and IsUnknown to make life easier for value checks
     isOK : function(v)
@@ -641,6 +723,7 @@ translate = {
         // print('### isOK: ' + v + ' : ' + result);
         return result;
     },
+
 
     // This is a bit backwards: If it is Unknown it is true...
     isUnknown : function(v)
@@ -701,7 +784,6 @@ translate = {
     },
 
 
-
     // applySimpleTxtBiased - Apply 0ne2one rules for Text Attributes
     // The "direction is either "forward" or "backward" - convert to or from
     applySimpleTxtBiased : function(attrs, tags, rules, direction)
@@ -736,6 +818,7 @@ translate = {
             }
         }
     }, // End applySimpleTxtBiased
+
 
     // applySimpleNumBiased - Apply 0ne2one rules for Number Attributes
     // The "direction is either "forward" or "backward" - convert to or from
@@ -819,6 +902,7 @@ translate = {
 
     }, // End buildComplexRules
 
+
     // applyComplexRules - Apply rules that are more complex than one to one.
     // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
     // Rules format:  ["test expression","output result"];
@@ -873,6 +957,7 @@ translate = {
         return lookup;
     },
 
+
     // makeAttrLookup - build a lookup table for FCODEs and Attrs
     makeAttrLookup : function(schema)
     {
@@ -893,6 +978,7 @@ translate = {
         return lookup;
     },
 
+
     // makeLayerNameLookup - build a lookup table for FCODE to LayerName 
     makeLayerNameLookup : function(schema)
     {
@@ -905,6 +991,7 @@ translate = {
 
         return lookup;
     },
+
 
     // addReviewFeature - Add Review features to a schema
     addReviewFeature: function(schema)
@@ -991,6 +1078,7 @@ translate = {
         return schema;
 
     }, // End addReviewFeature
+
 
     // addEmptyFeature - Add o2s features to a schema
     addEmptyFeature: function(schema)
@@ -1084,6 +1172,7 @@ translate = {
 
     }, // End addEmptyFeature
 
+
     // addExtraFeature - Add features to hold "extra" tag values to a schema
     addExtraFeature: function(schema)
     {
@@ -1135,7 +1224,8 @@ translate = {
         return schema;
 
     }, // End addExtraFeature
-    
+
+
     // addEtds - Add the eLTDS specific fields to each element in the schema
     addEtds: function(schema)
     { 
@@ -1207,6 +1297,7 @@ translate = {
         }
     }, // End dumpLookup
 
+
     // dumpOne2OneLookup - Dump a Lookup table so we can check it
     dumpOne2OneLookup : function(lookupTable)
     {
@@ -1216,6 +1307,7 @@ translate = {
                 print('I:' + i + '  J:' + j + '  ' + lookupTable[i][j][0] + ' = ' + lookupTable[i][j][1]);
             }
     }, // End dumpOne2OneLookup
+
 
     // dumpSchema - Dump a schema so we can check it
     dumpSchema : function(schema)

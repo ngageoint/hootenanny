@@ -197,14 +197,14 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   return tagsList;
 }
 
-bool PoiPolygonTypeScoreExtractor::isRecCenter(ConstElementPtr element)
-{
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return elementName.contains("recreation center") || elementName.contains("rec center") ||
-    elementName.contains("rec ctr") || elementName.contains("clubhouse") ||
-    elementName.contains("fieldhouse");
-}
+//bool PoiPolygonTypeScoreExtractor::isRecCenter(/*ConstElementPtr element*/const QString elementName)
+//{
+//  //const QString elementName =
+//    //Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+//  return elementName.contains("recreation center") || elementName.contains("rec center") ||
+//    elementName.contains("rec ctr") || elementName.contains("clubhouse") ||
+//    elementName.contains("fieldhouse");
+//}
 
 bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
@@ -212,12 +212,56 @@ bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
          (element->getTags().get("leisure") == "park");
 }
 
-bool PoiPolygonTypeScoreExtractor::isBuildingIsh(ConstElementPtr element)
+//bool PoiPolygonTypeScoreExtractor::isBuildingIsh(ConstElementPtr element, const QString elementName)
+//{
+//  //const QString elementName =
+//    //Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+//  return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
+//    elementName.contains("bldg");
+//}
+
+bool PoiPolygonTypeScoreExtractor::isParkish(ConstElementPtr element)
 {
-  const QString elementName =
-    Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
-  return OsmSchema::getInstance().isBuilding(element) || elementName.contains("building") ||
-    elementName.contains("bldg");
+  if (OsmSchema::getInstance().isBuilding(element))
+  {
+    return false;
+  }
+  const QString leisureVal = element->getTags().get("leisure").toLower();
+  return leisureVal == "garden" || leisureVal == "dog_park";
+}
+
+//bool PoiPolygonTypeScoreExtractor::isPlayArea(/*ConstElementPtr element*/const QString elementName)
+//{
+//  //const QString elementName =
+//    //Translator::getInstance().toEnglish(element->getTags().get("name").toLower());
+//  return elementName.contains("play area");
+//}
+
+bool PoiPolygonTypeScoreExtractor::isPlayground(ConstElementPtr element)
+{
+  const Tags& tags = element->getTags();
+  //const QString elementName = Translator::getInstance().toEnglish(tags.get("name").toLower());
+  return tags.get("leisure") == "playground" /*|| elementName.contains("playground")*/;
+}
+
+bool PoiPolygonTypeScoreExtractor::isSport(ConstElementPtr element)
+{
+  return element->getTags().contains("sport");
+}
+
+bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
+{
+  return element->getTags().get("amenity").toLower() == "school";
+}
+
+bool PoiPolygonTypeScoreExtractor::isRestroom(ConstElementPtr element)
+{
+  return element->getTags().get("amenity").toLower() == "toilets";
+}
+
+bool PoiPolygonTypeScoreExtractor::isParking(ConstElementPtr element)
+{
+  return element->getTags().get("amenity") == "parking";
 }
 
 bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)

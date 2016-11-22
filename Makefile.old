@@ -12,7 +12,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target
 # too.
-SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js
+SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js plugins/ggdm30_schema.js plugins/ggdm30_full_schema.js plugins/eggdm30_rules.js plugins/eggdm30_osm_rules.js
 
 -include Makefile.inc
 
@@ -172,11 +172,12 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 #
 # The Macro's are for Jason :-)
 
+##### MGCP
+# Build the MGCP schema
 plugins/mgcp_schema.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-##### MGCP
 # Build the MGCP  "To English" rules
 plugins/emgcp_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
@@ -228,6 +229,29 @@ plugins/etds61_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz 
 plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+#### GGDMv30
+# GGDMv30 is built from the GGDMv30 spec with additional layers and values files
+plugins/ggdm30_schema.js: scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# GGDMv30 full schema
+# This one has all of the Text Enumerations
+plugins/ggdm30_full_schema.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the GGDMv30 "To English" rules
+plugins/eggdm30_rules.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the GGDMv30 "From English" rules
+plugins/eggdm30_osm_rules.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+
 
 # Build osmapi db
 osmapidb:
@@ -361,7 +385,7 @@ archive: js-make services-build docs
 	mkdir -p $(HOOT_TARNAME)/plugins/
 	# TDSv40
 	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
-	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
+	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds40_full_schema.js
 	cp plugins/etds40_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
 	cp plugins/etds40_osm_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
 	# TDSv61
@@ -373,6 +397,11 @@ archive: js-make services-build docs
 	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
 	cp plugins/emgcp_rules.js $(HOOT_TARNAME)/plugins/emgcp_rules.js
 	cp plugins/emgcp_osm_rules.js $(HOOT_TARNAME)/plugins/emgcp_osm_rules.js
+	# GGDMv30
+	cp plugins/ggdm30_schema.js $(HOOT_TARNAME)/plugins/ggdm30_schema.js
+	cp plugins/ggdm30_full_schema.js $(HOOT_TARNAME)/plugins/ggdm30_full_schema.js
+	cp plugins/eggdm30_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
+	cp plugins/eggdm30_osm_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
 	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	# Don't include RF files at this time, to speed up archive

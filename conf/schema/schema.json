@@ -297,6 +297,9 @@
         "import": "is_divided.json"
     },
     {
+        "import": "FCODE.json"
+    },
+    {
         "import": "wikipedia.json"
     }
 ]
