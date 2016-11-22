@@ -64,6 +64,7 @@ double PoiPolygonDistance::getMatchDistanceForType(const Tags& /*tags*/) const
 
 double PoiPolygonDistance::getReviewDistanceForType(const Tags& tags) const
 {
+  //these distances could be moved to a config
   if (tags.get("leisure") == "park")
   {
     return 25.0;

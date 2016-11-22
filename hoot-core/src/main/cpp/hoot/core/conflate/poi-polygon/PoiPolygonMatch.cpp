@@ -38,7 +38,8 @@
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonCustomRules.h"
+#include "PoiPolygonReviewReducer.h"
+#include "PoiPolygonAdvancedMatcher.h"
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
@@ -67,7 +68,6 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
 _addressScore(-1.0),
-_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _rf(rf)
 {
   _calculateMatch(eid1, eid2);
@@ -92,7 +92,6 @@ _typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
 _nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
 _addressScore(-1.0),
-_addressScoreThreshold(ConfigOptions().getPoiPolygonAddressScoreThreshold()),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)
@@ -144,8 +143,12 @@ bool PoiPolygonMatch::isPoly(const Element& e)
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   //isArea includes building too
-  return OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
-         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  const bool isPoly =
+    OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
+      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(e);
+  LOG_VART(isPoly);
+  return isPoly;
 }
 
 bool PoiPolygonMatch::isPoi(const Element& e)
@@ -164,8 +167,12 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  return e.getElementType() == ElementType::Node &&
-         (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  const bool isPoi =
+    e.getElementType() == ElementType::Node &&
+      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(e);
+  LOG_VART(isPoi);
+  return isPoi;
 }
 
 bool PoiPolygonMatch::isArea(const Element& e)
@@ -271,8 +278,21 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   _class.setMiss();
 
   _categorizeElementsByGeometryType(eid1, eid2);
+  unsigned int evidence = _calculateEvidence(_poi, _poly);
 
-  const unsigned int evidence = _calculateEvidence(_poi, _poly);
+  //no point in trying to reduce reviews if we're still at a miss here
+  if (ConfigOptions().getPoiPolygonEnableReviewReduction() && evidence >= REVIEW_EVIDENCE_THRESHOLD)
+  {
+    PoiPolygonReviewReducer reviewReducer(
+      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
+      _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScore,
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold);
+    if (reviewReducer.triggersRule(_poi, _poly))
+    {
+      evidence = 0;
+    }
+  }
+
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     _class.setMatch();
@@ -359,11 +379,12 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   PoiPolygonTypeScoreExtractor typeScorer;
   typeScorer.setFeatureDistance(_distance);
   _typeScore = typeScorer.extract(*_map, poi, poly);
-//  if (poi->getTags().get("historic") == "monument")
-//  {
-//    //monuments can represent just about any poi type, so lowering this some to account for that
+  //if (poi->getTags().get("historic") == "monument")
+  //{
+    //monuments can represent just about any poi type, so lowering this some to account for that
 //    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
-//  }
+    //_typeScoreThreshold = 0.3; //this could be moved to a config
+  //}
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
@@ -400,19 +421,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //We only want to run this if the previous match distance calculation was too large.
-  //Tightening up the requirements for running the convex poly calculation here to improve
-  //runtime.  These requirements can possibly be removed at some point in the future, if proven
-  //necessary.  The school requirement definitely seems too type specific (this type of evidence
-  //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
-  //clean the school restriction up (see #1173).
-  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      OsmSchema::getInstance().isBuilding(poly))
-  {
-    evidence += _getConvexPolyDistanceEvidence(poi, poly);
-  }
-
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
@@ -426,31 +434,47 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
     return evidence;
   }
 
-  if (ConfigOptions().getPoiPolygonEnableAddressMatching())
+  evidence += _getAddressEvidence(poi, poly);
+  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
-    evidence += _getAddressEvidence(poi, poly);
+    return evidence;
+  }
+
+  //We only want to run this if the previous match distance calculation was too large.
+  //Tightening up the requirements for running the convex poly calculation here to improve
+  //runtime.  These requirements can possibly be removed at some point in the future, if proven
+  //necessary.  The school requirement definitely seems too type specific (this type of evidence
+  //has actually only been found with school pois in one test dataset so far), but when
+  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
+  //clean the school restriction up (see #1173).
+  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
+      OsmSchema::getInstance().isBuilding(poly))
+  {
+    evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= MATCH_EVIDENCE_THRESHOLD)
     {
       return evidence;
     }
   }
 
-  if (evidence == 0)
+  /*if (evidence == 0)
   {
     //This is kind of a consolation prize...if there was no match, but name and type score have
     //moderately high values, then make it a match.
-    /*if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
+    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
     {
       evidence++;
     }
-    else*/ if (ConfigOptions().getPoiPolygonEnableCustomRules())
+  }*/
+
+  //no point in trying to increase evidence if we're already at a match
+  if (ConfigOptions().getPoiPolygonEnableAdvancedMatching() && evidence < MATCH_EVIDENCE_THRESHOLD)
+  {
+    PoiPolygonAdvancedMatcher advancedMatcher(
+      _map, _polyNeighborIds, _poiNeighborIds, _distance);
+    if (advancedMatcher.triggersRule(_poi, _poly))
     {
-      PoiPolygonCustomRules matchRules(_map, _polyNeighborIds, _poiNeighborIds, _distance);
-      matchRules.collectInfo(poi, poly);
-      if (matchRules.ruleTriggered())
-      {
-        evidence++;
-      }
+      evidence++;
     }
   }
 

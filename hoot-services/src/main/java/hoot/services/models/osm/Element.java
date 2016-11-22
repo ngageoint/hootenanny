@@ -33,7 +33,6 @@ import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -383,7 +382,7 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     static Timestamp parseTimestamp(NamedNodeMap xmlAttributes) {
         Timestamp timestamp = null;
         org.w3c.dom.Node timestampXml = xmlAttributes.getNamedItem("timestamp");
-        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
 
         if (timestampXml != null) {
             try {

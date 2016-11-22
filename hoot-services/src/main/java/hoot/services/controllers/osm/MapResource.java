@@ -38,7 +38,6 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,9 +82,8 @@ import com.querydsl.sql.SQLQuery;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
+import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.geo.BoundingBox;
-import hoot.services.job.JobStatusManager;
-import hoot.services.job.MapResourcesCleaner;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
@@ -798,7 +796,7 @@ public class MapResource extends JobControllerBase {
                     .from()
                     .fetchOne();
 
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
 
             long userId = 1;
             createQuery().insert(folders)

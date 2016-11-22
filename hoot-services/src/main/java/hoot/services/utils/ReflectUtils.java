@@ -30,8 +30,7 @@ package hoot.services.utils;
  * Various utilities related to reflection
  */
 public final class ReflectUtils {
-    private ReflectUtils() {
-    }
+    private ReflectUtils() {}
 
     /**
      * Returns the name of the class that calls a method

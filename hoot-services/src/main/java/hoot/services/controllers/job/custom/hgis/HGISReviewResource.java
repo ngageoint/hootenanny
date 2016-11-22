@@ -50,7 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.job.JobStatusManager;
+import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
 

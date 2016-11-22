@@ -1,96 +1,98 @@
-09:30:26.841 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 122) bytesRead: 519635
-09:30:26.846 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 135) inputBytes: 36522
-09:30:26.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
-09:30:26.846 INFO  ...lygon/BuildingMatchCreator.cpp( 178) Loading model from: /home/jason.surratt/dg/src/hoot4/conf/BuildingModel.rf
-09:30:27.403 INFO  ...ighway/HighwayRfClassifier.cpp(  74) Loading highway model from: /home/jason.surratt/dg/src/hoot4/conf/HighwayModel.rf
-09:30:28.789 INFO  ...ighway/HighwayRfClassifier.cpp(  85) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:28.789 INFO  ...ighway/HighwayRfClassifier.cpp( 104) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:28.789 INFO  ...ighway/HighwayRfClassifier.cpp( 105) missingExtractors: [0]{}
-09:30:28.789 INFO  ...ighway/HighwayRfClassifier.cpp( 106) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:28.789 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
-09:30:28.789 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+15:03:14.124 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/conflate/unified/AllDataTypesA.osm with test-files/conflate/unified/AllDataTypesB.osm and writing the output to test-output/cmd/ConflateConsistencyTest/Output1.osm
+15:03:14.125 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 583569
+15:03:14.125 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+15:03:14.128 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
+15:03:14.130 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 110339
+15:03:14.130 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+15:03:14.130 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+15:03:14.130 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 233         
-09:30:28.811 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-09:30:28.811 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
-09:30:28.845 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-09:30:28.845 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-09:30:28.845 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-09:30:28.845 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+15:03:14.166 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+15:03:14.166 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
+15:03:14.220 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+15:03:14.220 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
+15:03:14.220 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+15:03:14.220 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
   Intersection splitter todo: 0         Intersection splitter todo: 0       
-09:30:28.845 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-09:30:28.845 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-09:30:28.845 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-09:30:28.845 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+15:03:14.221 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+15:03:14.221 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+15:03:14.221 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
+15:03:14.221 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
 
-09:30:28.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-09:30:28.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-09:30:28.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-09:30:28.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-09:30:28.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-09:30:28.848 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-09:30:28.848 INFO  ...lygon/BuildingMatchCreator.cpp( 212) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-09:30:28.894 INFO  ...ighway/HighwayMatchCreator.cpp(  87) neighbor counts, max: 6 mean: 3.875
-09:30:28.895 INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 58
-09:30:28.895 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
-09:30:28.905 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-09:30:28.905 INFO  ...conflate/UnifyingConflator.cpp( 183) CM took: 0.0105209s.
-09:30:28.905 INFO  ...conflate/UnifyingConflator.cpp( 184) CM Score: 1110.52
-09:30:28.905 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
-09:30:28.905 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-09:30:28.905 INFO  ...conflate/UnifyingConflator.cpp( 191) GM took: 0.000173807s.
-09:30:28.905 INFO  ...conflate/UnifyingConflator.cpp( 192) GM Score: 1110.52
-09:30:28.905 INFO  ...conflate/UnifyingConflator.cpp( 215) Post constraining match count: 35
-09:30:28.913 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
-09:30:28.913 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 145         
-09:30:28.913 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-09:30:28.913 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
-Reprojecting 0 / 136         
-09:30:29.051 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 122) bytesRead: 519637
-09:30:29.056 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 135) inputBytes: 36522
-09:30:29.056 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineRemoveOp
-09:30:29.056 INFO  ...lygon/BuildingMatchCreator.cpp( 178) Loading model from: /home/jason.surratt/dg/src/hoot4/conf/BuildingModel.rf
-09:30:29.612 INFO  ...ighway/HighwayRfClassifier.cpp(  74) Loading highway model from: /home/jason.surratt/dg/src/hoot4/conf/HighwayModel.rf
-09:30:30.977 INFO  ...ighway/HighwayRfClassifier.cpp(  85) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:30.977 INFO  ...ighway/HighwayRfClassifier.cpp( 104) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:30.977 INFO  ...ighway/HighwayRfClassifier.cpp( 105) missingExtractors: [0]{}
-09:30:30.977 INFO  ...ighway/HighwayRfClassifier.cpp( 106) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-09:30:30.977 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MapCleaner
-09:30:30.977 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+15:03:14.221 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+15:03:14.221 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+15:03:14.222 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:03:14.222 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:03:14.222 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:03:14.224 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+15:03:14.246 INFO  ...lygon/BuildingMatchCreator.cpp( 250) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
+15:03:14.246 INFO  ...lygon/BuildingMatchCreator.cpp( 269) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
+15:03:14.826 INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /home/bwitham/hoot/conf/HighwayModel.rf
+15:03:16.730 INFO  ...ighway/HighwayRfClassifier.cpp( 305) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:16.731 INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:16.731 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
+15:03:16.733 INFO  ...ighway/HighwayRfClassifier.cpp( 326) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:16.767 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: 2 mean: 1.125
+15:03:16.767 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
+15:03:16.776 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
+15:03:16.776 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
+15:03:16.776 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
+15:03:16.786 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+15:03:16.786 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+Reprojecting 0 / 153         
+15:03:16.786 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:03:16.787 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
+15:03:16.787 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyReviewRelationsVisitor
+15:03:16.787 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+15:03:16.787 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+15:03:16.787 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 144         
+15:03:16.964 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/conflate/unified/AllDataTypesA.osm with test-files/conflate/unified/AllDataTypesB.osm and writing the output to test-output/cmd/ConflateConsistencyTest/Output2.osm
+15:03:16.965 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 583569
+15:03:16.965 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+15:03:16.968 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
+15:03:16.970 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 110339
+15:03:16.971 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+15:03:16.971 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+15:03:16.971 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 233         
-09:30:31.000 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-09:30:31.000 INFO  ...nflate/DuplicateWayRemover.cpp(  61) Removing duplicate ways...
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-09:30:31.034 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-09:30:31.034 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
+15:03:17.008 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+15:03:17.008 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
+15:03:17.063 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+15:03:17.063 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
+15:03:17.063 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+15:03:17.063 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
   Intersection splitter todo: 0         Intersection splitter todo: 0       
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-09:30:31.034 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-09:30:31.034 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
+15:03:17.063 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+15:03:17.063 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+15:03:17.063 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
+15:03:17.063 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
 
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-09:30:31.034 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-09:30:31.035 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-09:30:31.035 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-09:30:31.035 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-09:30:31.037 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-09:30:31.037 INFO  ...lygon/BuildingMatchCreator.cpp( 212) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-09:30:31.083 INFO  ...ighway/HighwayMatchCreator.cpp(  87) neighbor counts, max: 6 mean: 3.875
-09:30:31.083 INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 58
-09:30:31.083 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
-09:30:31.094 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-09:30:31.094 INFO  ...conflate/UnifyingConflator.cpp( 183) CM took: 0.0104659s.
-09:30:31.094 INFO  ...conflate/UnifyingConflator.cpp( 184) CM Score: 1110.52
-09:30:31.094 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
-09:30:31.094 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-09:30:31.094 INFO  ...conflate/UnifyingConflator.cpp( 191) GM took: 0.000178814s.
-09:30:31.094 INFO  ...conflate/UnifyingConflator.cpp( 192) GM Score: 1110.52
-09:30:31.094 INFO  ...conflate/UnifyingConflator.cpp( 215) Post constraining match count: 35
-09:30:31.101 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousNodeRemover
-09:30:31.102 INFO  ...ops/SuperfluousNodeRemover.cpp(  53) Removing superfluous nodes...
-Reprojecting 0 / 145         
-09:30:31.102 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-09:30:31.102 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingOutlineUpdateOp
-Reprojecting 0 / 136         
+15:03:17.064 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+15:03:17.064 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+15:03:17.064 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:03:17.064 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:03:17.065 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:03:17.067 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+15:03:17.089 INFO  ...lygon/BuildingMatchCreator.cpp( 250) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
+15:03:17.089 INFO  ...lygon/BuildingMatchCreator.cpp( 269) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
+15:03:17.680 INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /home/bwitham/hoot/conf/HighwayModel.rf
+15:03:19.583 INFO  ...ighway/HighwayRfClassifier.cpp( 305) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:19.587 INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:19.587 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
+15:03:19.587 INFO  ...ighway/HighwayRfClassifier.cpp( 326) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
+15:03:19.620 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: 2 mean: 1.125
+15:03:19.620 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
+15:03:19.629 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
+15:03:19.629 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
+15:03:19.629 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
+15:03:19.639 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+15:03:19.639 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+Reprojecting 0 / 153         
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyReviewRelationsVisitor
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+15:03:19.640 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 144         

@@ -34,7 +34,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -199,63 +198,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
-    public void testGetNodeUniqueId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
-        Document responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-
-        assertNotNull(responseData);
-        verifyFirstNodeWasReturned(responseData, uniqueElementId, changesetId, originalBounds);
-        OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testGetWayUniqueId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
-        Document responseData = target("api/0.6/element/" + uniqueElementId)
-                .request(MediaType.TEXT_XML)
-                .get(Document.class);
-
-        assertNotNull(responseData);
-        verifyFirstWayWasReturned(responseData, uniqueElementId, changesetId, null);
-        OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testGetRelationUniqueId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
-
-        String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
-        Document responseData = target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-
-        assertNotNull(responseData);
-
-        verifyFirstRelationWasReturned(responseData, uniqueElementId, changesetId, null);
-        OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-    }
-
-    @Test
-    @Category(UnitTest.class)
     public void testGetWayFull() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
@@ -310,64 +252,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
     }
 
-    @Test
-    @Category(UnitTest.class)
-    public void testGetWayFullUniqueId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        Document responseData = null;
-        String uniqueElementId = mapId + "_w_" + wayIdsArr[0];
-        responseData = target()
-                .path("api/0.6/element/" + uniqueElementId + "/full")
-                .request(MediaType.TEXT_XML)
-                .get(Document.class);
-
-        assertNotNull(responseData);
-
-        Set<Long> wayNodes = new LinkedHashSet<>();
-        wayNodes.add(nodeIdsArr[0]);
-        wayNodes.add(nodeIdsArr[1]);
-        wayNodes.add(nodeIdsArr[4]);
-
-        verifyFirstWayWasReturned(responseData, uniqueElementId, changesetId, wayNodes);
-        OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testGetRelationFullUniqueId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
-
-        String uniqueElementId = mapId + "_r_" + relationIdsArr[0];
-        Document responseData = target("api/0.6/element/" + uniqueElementId + "/full")
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-
-        assertNotNull(responseData);
-
-        List<RelationMember> members = new ArrayList<>();
-        members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
-        members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
-        members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
-        members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
-
-        verifyFirstRelationWasReturned(responseData, uniqueElementId, changesetId, members);
-        OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-    }
-
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetNodeDoesntExist() throws Exception {
@@ -383,29 +267,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
-    public void testGetNodeUniqueIdDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_n_" + nodeIdsArr[nodeIdsArr.length - 1] + 1;
-        try {
-            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
@@ -443,29 +304,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
-    public void testGetWayUniqueIdDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
-        try {
-            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
     public void testGetWayFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
@@ -479,29 +317,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
-    public void testGetWayFullUniqueIdDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_w_" + wayIdsArr[wayIdsArr.length - 1] + 1;
-        try {
-            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
@@ -539,29 +354,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
-    public void testGetRelationUniqueIdDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
-
-        String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
-        try {
-            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
     public void testGetRelationFullDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
@@ -575,29 +367,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .queryParam("mapId", String.valueOf(mapId))
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
-    public void testGetRelationFullUniqueIdDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
-
-        String uniqueElementId = mapId + "_r_" + relationIdsArr[relationIdsArr.length - 1] + 1;
-        try {
-            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
@@ -637,30 +406,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
-    public void testGetUniqueIdMapDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_n_"
-                + nodeIdsArr[0];
-        try {
-            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("No map exists"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
     public void testGetFullElementMapDoesntExist() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
@@ -674,30 +419,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
                     .queryParam("mapId", String.valueOf((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)))
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("No map exists"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
-    public void testGetElementUniqueIdFullMapDoesntExist() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = ((int) RandomNumberGenerator.nextDouble(mapId + 10 ^ 4, Integer.MAX_VALUE)) + "_w_"
-                + wayIdsArr[0];
-        try {
-            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
@@ -752,54 +473,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = BadRequestException.class)
-    @Category(UnitTest.class)
-    public void testGetElementUniqueIdInvalidElementIdFormat() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        // invalid element ID format
-        String uniqueElementId = mapId + "__" + nodeIdsArr[0];
-        try {
-            target("api/0.6/element/" + uniqueElementId).request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (BadRequestException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    @Test(expected = BadRequestException.class)
-    @Category(UnitTest.class)
-    public void testGetElementUniqueIdFullInvalidElementIdFormat() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        // invalid element ID format
-        String uniqueElementId = mapId + "__" + nodeIdsArr[0];
-        try {
-            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (BadRequestException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("Invalid element ID"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
     /*
      * A call to get a full node is not allowed, since nodes have no children
      * (like ways and relations do) and, therefore, the call makes no sense.
@@ -823,33 +496,6 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(Response.Status.NOT_FOUND, Response.Status.fromStatusCode(r.getStatus()));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
-
-    /*
-     * see testGetNodeFull
-     */
-    @Test(expected = BadRequestException.class)
-    @Category(UnitTest.class)
-    public void testGetNodeUniqueIdFull() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        String uniqueElementId = mapId + "_n_" + nodeIdsArr[0];
-
-        try {
-            target("api/0.6/element/" + uniqueElementId + "/full").request(MediaType.TEXT_XML).get(Document.class);
-        }
-        catch (BadRequestException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("Get Full Element Request Invalid for type = Node"));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }

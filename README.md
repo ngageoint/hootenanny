@@ -31,7 +31,7 @@ Hootenanny currently supports the conflation of:
 * Building polygons
 * Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
 * Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
-* POIs and polygons; where the polygons are buildings or areas
+* POIs and building/area polygons
 
 When conflating these features, it is important to note that, with the exception of the POI to polygon conflation, the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
 

@@ -1,3 +1,30 @@
+#
+# This file is part of Hootenanny.
+#
+# Hootenanny is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# --------------------------------------------------------------------
+#
+# The following copyright notices are generated automatically. If you
+# have a new notice to add, please use the format:
+# " * @copyright Copyright ..."
+# This will properly maintain the copyright information. DigitalGlobe
+# copyrights will be updated automatically.
+#
+# @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+#
+
 ##
 # This file is the source control version of the liquibase.properties. The first time
 # you build this should be copied to liquibase.properties. You can then modify that
@@ -12,4 +39,4 @@ url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
 username: ${DB_USER}
 password: ${DB_PASSWORD}
 #Reference to the master changelog file
-changeLogFile: db/db.changelog-master.json
+changeLogFile: db.changelog-master.xml

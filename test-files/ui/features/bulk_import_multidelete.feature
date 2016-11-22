@@ -9,7 +9,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         When I click on the "Datasets" option in the "settingsSidebar"
         And I context click "Import Single Dataset"
         And I click the first "dataset-option" list item
-        And I should see "Bulk Import Datasets"
+        And I wait 5 "seconds" to see "Bulk Import Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
@@ -31,7 +31,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         When I click on the "Datasets" option in the "settingsSidebar"
         And I context click "Import Single Dataset"
         And I click the first "dataset-option" list item
-        And I should see "Bulk Import Datasets"
+        And I wait 5 "seconds" to see "Bulk Import Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
@@ -86,4 +86,3 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I accept the alert
         Then I should not see "AllDataTypesA_directoryImport" dataset after 30 "seconds"
         # Then I should not see "AllDataTypesB_directoryImport" dataset after 30 "seconds"
-

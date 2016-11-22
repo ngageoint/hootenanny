@@ -146,6 +146,7 @@ protected:
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
+  bool _textStatus;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
