@@ -127,8 +127,8 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     //select all elements in the bounding box
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
-      LOG_DEBUG("About to call bounded with element");
-      LOG_DEBUG(ctr);
+      LOG_TRACE("About to call bounded with element");
+      LOG_TRACE(ctr);
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
       _readBounded(map, elementType, env);
     }
@@ -157,17 +157,17 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
 
       // get the node tags
       shared_ptr<QSqlQuery> nodeTagIterator = _database.selectTagsForNode(id);
-      while( nodeTagIterator->next() )
+      while (nodeTagIterator->next())
       {
         // test for blank tag
         QString val1 = nodeTagIterator->value(1).toString();
         QString val2 = nodeTagIterator->value(2).toString();
         QString tag = "";
-        if(val1!="" || val2!="")
+        if (val1!="" || val2!="")
         {
           tag = "\""+val1+"\"=>\""+val2+"\"";
         }
-        if(tag != "")
+        if (tag != "")
         {
           tags << tag;
         }
@@ -175,6 +175,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
 
       if (tags.size() > 0)
       {
+        LOG_VART(tags);
         element->setTags(ApiDb::unescapeTags(tags.join(", ")));
         ApiDbReader::addTagsToElement(element);
       }
@@ -229,6 +230,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
         }
         if(tags.size()>0)
         {
+          LOG_VART(tags);
           element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
           ApiDbReader::addTagsToElement(element);
         }
@@ -330,6 +332,7 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         }
         if(tags.size()>0)
         {
+          LOG_VART(tags);
           element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
           ApiDbReader::addTagsToElement( element );
         }
@@ -416,6 +419,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
   {
     if(tags.size()>0)
     {
+      LOG_VART(tags);
       element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
       ApiDbReader::addTagsToElement( element );
     }
@@ -496,10 +500,14 @@ ElementId OsmApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 
 shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
-  long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  LOG_DEBUG("Reading node with ID: " << nodeId);
-  double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-  double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+  const long rawId = resultIterator.value(0).toLongLong();
+  LOG_TRACE("raw ID: " << rawId);
+  long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
+  LOG_VART(nodeId);
+  double lat =
+    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+  double lon =
+    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
   shared_ptr<Node> result(
     new Node(
@@ -511,15 +519,16 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
-  //LOG_VARD(result);
+  LOG_VART(result);
   return result;
 }
 
 shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
+  LOG_TRACE("raw ID: " << wayId);
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  LOG_DEBUG("Reading way with ID: " << wayId);
+  LOG_TRACE("Reading way with ID: " << wayId);
   if (newWayId != wayId)
   {
     LOG_VARD(newWayId);
@@ -544,7 +553,7 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   way->addNodes(nodeIds);
 
   _addNodesForWay(nodeIds, map);
-
+  LOG_VART(way);
   return way;
 }
 
@@ -585,10 +594,10 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  LOG_DEBUG("Reading relation with ID: " << relationId);
+  LOG_TRACE("Reading relation with ID: " << relationId);
   if (newRelationId != relationId)
   {
-    LOG_VARD(newRelationId);
+    LOG_VART(newRelationId);
   }
 
   shared_ptr<Relation> relation(
@@ -608,7 +617,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
-  //LOG_VARD(relation);
+  LOG_VART(relation);
   return relation;
 }
 
