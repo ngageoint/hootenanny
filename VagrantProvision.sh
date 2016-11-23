@@ -20,9 +20,7 @@ sudo ntpd -gq
 sudo service ntp start
 
 echo "### Installing Java 8..."
-if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ]; then
-    wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-fi
+sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
 sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
 sudo rm -rf /usr/lib/jvm/oracle_jdk8
 sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
