@@ -989,8 +989,6 @@ tds61 = {
             }
         }
 
-
-
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
         {
@@ -1117,6 +1115,14 @@ tds61 = {
             }
         } // End process tags.note
 
+        // Fix up areas
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
 
     }, // End of applyToOsmPostProcessing
 
