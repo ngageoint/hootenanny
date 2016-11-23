@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -131,7 +131,8 @@ bool OsmApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  //postgresql is deprecated but still supported
+  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql")
   {
     valid = false;
   }
@@ -267,7 +268,7 @@ QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType)
 {
   if (elementType == ElementType::Node)
   {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ") +
       QString("from current_nodes left outer join current_node_tags on current_nodes.id=current_node_tags.node_id");
   }
   else if (elementType == ElementType::Way)
@@ -346,7 +347,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   LOG_DEBUG("IN selectNodeById");
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
-  QString sql = "SELECT " + _elementTypeToElementTableName(ElementType::Node) + " WHERE (id=:elementId) ORDER BY id DESC";
+  QString sql =
+    "SELECT " + _elementTypeToElementTableName(ElementType::Node) +
+    " WHERE (id=:elementId) ORDER BY id DESC";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
 
@@ -365,7 +368,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox)
+shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
+                                                      const ElementType& elementType,
+                                                      const QString& bbox)
 {
   //prepare sql query
   _selectElementsForMap.reset(new QSqlQuery(_db));
@@ -414,7 +419,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
       }
       else if (elementType == ElementType::Relation)
       {
-        idsQuery += "relation_id FROM current_relation_members WHERE member_type='Node' AND (" + _getIdWhereCondition("member_id", nodeIds) + ")";
+        idsQuery +=
+          "relation_id FROM current_relation_members WHERE member_type='Node' AND (" +
+            _getIdWhereCondition("member_id", nodeIds) + ")";
       }
       QSqlQuery idsSqlQuery(_db);
       idsSqlQuery.setForwardOnly(true);
@@ -435,7 +442,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId, cons
       //format sql for ways or relations
       if (ids.size() > 0)
       {
-        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" + _getIdWhereCondition("id", ids) + ")";
+        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" +
+            _getIdWhereCondition("id", ids) + ")";
       }
       else
       {
@@ -516,11 +524,13 @@ QString OsmApiDb::_getTileWhereCondition(QString bbox)
   {
     if (i == ranges.size() - 1)
     {
-      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " + QString::number(ranges[i].getMax()) + ")";
+      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " +
+          QString::number(ranges[i].getMax()) + ")";
     }
     else
     {
-      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " + QString::number(ranges[i].getMax()) + ") or ";
+      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " +
+          QString::number(ranges[i].getMax()) + ") or ";
     }
   }
   return sql;
