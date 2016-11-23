@@ -62,8 +62,8 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   }
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
-  LOG_VAR(score);
-  LOG_VAR(p);
+  LOG_VART(score);
+  LOG_VART(p);
 
   // find all the match pairs
   _discoverWayPairs(details->getMap(), edgeMatch);
