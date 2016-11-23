@@ -10,11 +10,6 @@
         "name": "FCODE",
         "objectType": "tag"
     },
-    {
-        "isA": "FCODE",
-        "name": "FCODE=*",
-        "objectType": "tag"
-    },
     {"name": "FCODE=AA010", "geometries": ["area", "node"], "description": "Extraction Mine", "isA": "FCODE", "objectType": "tag"},
     {"name": "FCODE=AA011", "geometries": ["linestring"], "description": "Shear Wall", "isA": "FCODE", "objectType": "tag"},
     {"name": "FCODE=AA012", "geometries": ["node", "area"], "description": "Quarry", "isA": "FCODE", "objectType": "tag"},
