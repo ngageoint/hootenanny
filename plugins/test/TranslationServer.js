@@ -347,7 +347,6 @@ describe('TranslationServer', function () {
                 path: '/translateFrom'
             });
             var output = xml2js.parseString(trans2osm, function(err, result) {
-                console.log(result.osm.way[0].tag[0].$.v);
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "source");
                 assert.equal(result.osm.way[0].tag[0].$.v, "D");
