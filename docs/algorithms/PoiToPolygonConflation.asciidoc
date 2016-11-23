@@ -1,0 +1,73 @@
+
+[[POI-to-Polygon-Conflation]]
+== POI to Polygon Conflation
+
+[[POI-to-Polygon-Feature-Definitions]]
+=== Feature Definitions
+
+POI to polygon conflation defines the following feature types:
+
+* Hootenanny defines a POI (Point of Interest) as any point feature with either a populated name tag or any other tag which causes 
+it to be classifed as a POI or a building by the Hootenanny schema definitions.
+* Hootenanny defines a polygon as any polygon feature that is either an area or a building and has either a populated name tag or
+any other tag which causes it to be classified as a POI or a building by the Hootenanny schema definitions.
+
+[[POI-to-Polygon-Matching]]
+=== Matching
+  
+POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
+
+* First, find all candidate POI / polygon pairs:
+** A candidate is any POI that meets the feature definition requirements and is within the combined circular error of a polygon plus a user definable review distance (see below for the combined circular error calculation).
+** For certain feature types, Hootenanny defines a hardcoded custom review distance based on the type.  See 
+PoiPolygonDistance::getReviewDistanceForType.
+* **Match the two features:**  If the POI is within a user definable match distance AND either: 
+** the names of the two features are similar according to a configurable threshold OR
+** the types of the two features are similar according to a configurable threshold OR
+** the address of the two features are an exact match (standard OSM address tags are used; see PoiPolygonAddressScoreExtractor)
+** If the Euclidean match distance requirement is not met, Hootenanny will also calculate the distance from the POI to a convex 
+polygon shape (alpha shape) derived from the polygon feature and use that value for the distance (certain restrictions 
+apply; see PoiPolygonMatch::_calculateEvidence).
+* **Force the two features to be manually reviewed:**  If the POI is within the review distance (accounting for circular error) and any 
+one of the other previously listed criteria for a match is met.
+* **Do not match or review the two features:**  If the POI is not within the review distance of the polygon, regardless if any of the other
+match criteria are met.
+
+Unlike many of the matching routines intra-data set matches are allowed. This resolves issues that commonly occur in data sets where polygons are duplicated in a POI layer.
+
+The circular error (CE) of the two input elements is assumed to be that we are 95% CE for each feature (2 sigma). To combine the two values together into a single value that represents the 95% confidence that they're within that distance is:
+
+------
+sigma1 = CE1 / 2
+sigma2 = CE2 / 2
+combined CE = sqrt(sigma1 * sigma1 + sigma2 * sigma2) * 2
+------
+
+Hootenanny POI to Polygon conflation also allows user to define a custom set of match rules (disabled by default) for one-off type conflation
+tweaks.  See PoiPolygonCustomRules.cpp for an example.
+
+Techniques that were experimented with but proved to add no benefit to the model for the data tested:
+
+* varying the match distance based on the polygon density
+* varying the match distance based on the feature type
+* using Weka to fine tune the factors and score thresholds used
+
+[[POI-to-Polygon-Merging]]
+=== Merging
+  
+Once a relationship has been established between elements a graph is created to determine any interdependencies. If a single element is involved in multiple matches then all the elements involved in that set of matches are marked as needing review. This avoids complex situations where there are multiple conflicting POI attributes.
+
+However, if a review relationship is found and a match relationship is found, the review relationship is not included in the interdependence calculation. So, you may have a POI merged with one building, but marked as needing review with another building. Modifying this business logic will require some user input on the desired functionality as well as some not so insignificant internal changes.
+
+If a merge is warranted, the geometry of the building is used and the tags are merged using the default tag merging mechanism ( +tag.merger.default+ configuration key).
+
+[[POI-to-Polygon-Configurable-Options]]
+=== Configurable Options
+  
+See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
+
+[[POI-to-Polygon-Test-Results]]
+=== Test Results
+
+TODO
+

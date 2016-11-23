@@ -53,8 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.job.JobStatusManager;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
+import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 import hoot.services.nativeinterfaces.NativeInterfaceException;
@@ -73,7 +72,8 @@ public class JobResource {
     private static final Logger logger = LoggerFactory.getLogger(JobResource.class);
 
     // Thread pool for chain and job processing
-    private static final ExecutorService jobThreadExecutor;
+    private static final ExecutorService jobThreadExecutor =
+            Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
 
     @Autowired
     private JobExecutionManager jobExecMan;
@@ -81,18 +81,6 @@ public class JobResource {
     @Autowired
     private JobStatusManager jobStatusManager;
 
-
-    static {
-        int threadpoolSize = 5;
-        try {
-            threadpoolSize = Integer.parseInt(INTERNAL_JOB_THREAD_SIZE);
-        }
-        catch (NumberFormatException ignored) {
-            logger.error("Failed to get internalJobThreadSize.  Defaulting threadpool size to 5.");
-        }
-
-        jobThreadExecutor = Executors.newFixedThreadPool(threadpoolSize);
-    }
 
     public JobResource() {}
 
@@ -271,9 +259,5 @@ public class JobResource {
 
     private String getProgressText(String jobId) throws NativeInterfaceException {
         return this.jobExecMan.getProgress(jobId);
-    }
-
-    public void terminateJob(String childId) throws NativeInterfaceException {
-        this.jobExecMan.terminate(childId);
     }
 }

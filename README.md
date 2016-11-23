@@ -26,10 +26,14 @@ We actively maintain and update our [Frequently Asked Questions page](https://gi
 so please refer to that page for any questions about general Hootenanny capabilities.
 
 ## Conflation
-Hootenanny currently supports the conflation of POIs, Building polygons, Transportation polylines (highways, cart tracks, trails, bridges, 
-and tunnels), and Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).   When conflating these features, 
-it is important to note that conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation 
-polyline to Transportation polyline, etc.).
+Hootenanny currently supports the conflation of: 
+* POIs
+* Building polygons
+* Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
+* Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
+* POIs and building/area polygons
+
+When conflating these features, it is important to note that, with the exception of the POI to polygon conflation, the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).
 
 ## Supported Data Formats
 _Import:_ Hootenanny can ingest from:
@@ -38,19 +42,23 @@ _Import:_ Hootenanny can ingest from:
 * ESRI File Geodatabase (.gdb)
 * .zip files containing shapefiles and/or .gdb files
 * geonames.org (.geonames)
-* OSM API database sources (MapEdit, etc.; experimental feature; see documentation for workflow)
+* OSM API database
 
 _Export:_ Hootenanny can export to: 
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
 * Web Feature Service (WFS)
-* OSM API database (MapEdit, etc.; experimental feature; see documentation for workflow)
+* OSM API database via SQL changeset
+* OSM XML changeset
 
-Note that .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
-associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into 
-an OGC-enabled third party application, and OSM API database export is done with an OSM changeset
-representing the before/after difference of conflated data.
+Note:
+
+* .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
+associated files
+* WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+* OSM API database export is done with an OSM changeset representing the before/after difference of conflated data.
+* imports that may specify a geospatial bounds are supported with OSM API database format imports only, currently
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various 

@@ -1,0 +1,105 @@
+#!/bin/sh
+
+# Change the user and hoot_home as needed
+HOOT_HOME="/var/lib/hootenanny"
+USER="tomcat"
+APP_DIR="node-export-server"
+LOG_DIR="/var/log/node-export-server"
+LOG_FILE="$LOG_DIR/server.log"
+
+###############
+
+# REDHAT chkconfig header
+
+# chkconfig: - 58 74
+# description: node-app is the script for starting a node app on boot.
+### BEGIN INIT INFO
+# Provides: node
+# Required-Start:    $network $remote_fs $local_fs
+# Required-Stop:     $network $remote_fs $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop node
+# Description: Node process for app
+### END INIT INFO
+
+###############
+
+USAGE="Usage: $0 {start|stop|restart|status}"
+
+get_pid() {
+    echo `ps aux | grep node | grep 'server.js --config config.js' | awk '{print $2}' | tail -1`
+}
+
+start_it() {
+    mkdir -p "$LOG_DIR"
+    chown $USER:$USER "$LOG_DIR"
+
+    echo "Starting node app ..."
+    su -s /bin/bash -c "cd $HOOT_HOME/$APP_DIR && npm start 1>$LOG_FILE 2>&1 &" $USER
+    sleep 1
+    PID=$(get_pid)
+    if [ -z "$PID" ];
+    then
+        echo "Node app failed to start.  Check the log at $LOG_FILE"
+    else
+        echo "Node app started with pid $PID"
+    fi
+}
+
+start_app() {
+    PID=$(get_pid)
+    if [ -z "$PID" ];
+    then
+        start_it
+    else
+        echo "Node app already running with pid $PID"
+    fi
+}
+
+stop_app() {
+    if [ -z "$PID" ];
+    then
+        echo "Node app already stopped"
+    else
+        echo "Stopping node app ..."
+        echo "Killing process $PID"
+        kill $PID
+        echo "Node app stopped"
+    fi
+}
+
+status_app() {
+    if [ -z "$PID" ];
+    then
+        echo "Node app stopped"
+    else
+        echo "Node app running with pid $PID"
+    fi
+}
+
+PID=$(get_pid)
+
+case "$1" in
+    start)
+        start_app
+    ;;
+
+    stop)
+        stop_app
+    ;;
+
+    restart)
+        stop_app
+        start_app
+    ;;
+
+    status)
+        status_app
+    ;;
+
+    *)
+        echo $USAGE
+        exit 1
+    ;;
+esac

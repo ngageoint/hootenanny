@@ -26,16 +26,12 @@
  */
 package hoot.services.nativeinterfaces;
 
-import static hoot.services.HootProperties.*;
-
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -80,43 +76,6 @@ public class ProcessStreamInterfaceTest {
         String commandStr = ArrayUtils.toString(ret);
 
         String expected = "{hoot,--ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
-        Assert.assertEquals(expected, commandStr);
-    }
-
-    //either needs to be re-written to not use Processlet code or possibly be removed
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testcreateScriptCmd() throws Exception {
-        String sParam = null;//this.generateJobParam();
-        JSONParser parser = new JSONParser();
-        JSONObject command = (JSONObject) parser.parse(sParam);
-
-        ProcessStreamInterface ps = new ProcessStreamInterface();
-
-        Class<?>[] cArg = new Class[1];
-        cArg[0] = JSONObject.class;
-        Method method = ProcessStreamInterface.class.getDeclaredMethod("createScriptCmdArray", cArg);
-        method.setAccessible(true);
-        command.put("jobId", "123-456-789");
-        String[] ret = (String[]) method.invoke(ps, command);
-        String commandStr = ArrayUtils.toString(ret);
-
-        String makePath = CORE_SCRIPT_PATH + "/" + ETL_MAKEFILE;
-
-        // [make, -f, /project/hoot/scripts/makeetl,
-        // translation=/test/file/test.js, INPUT_TYPE=OSM,
-        // INPUT=/test/file/INPUT.osm, jobid=123-456-789]
-        String expected = "{make,-f," + makePath
-                + ",translation=/test/file/test.js,INPUT_TYPE=OSM,INPUT=/test/file/INPUT.osm";
-        expected += ",jobid=123-456-789";
-
-        String dbUrl = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
-        expected += ",DB_URL=" + dbUrl;
-        
-        String osmApiDbUrl = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
-        expected += ",OSM_API_DB_URL=" + osmApiDbUrl + "}";
-
         Assert.assertEquals(expected, commandStr);
     }
 }

@@ -137,8 +137,6 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::BuildingMatchCreator");
     matchCreators.append("hoot::HighwayMatchCreator");
-    matchCreators.append("hoot::PlacesPoiMatchCreator");
-    matchCreators.append("hoot::CustomPoiMatchCreator");
     matchCreators.append("hoot::ScriptMatchCreator,LineStringGeneric.js");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
@@ -146,15 +144,13 @@ public:
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
 
-    CPPUNIT_ASSERT_EQUAL((int)76, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL((int)34, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut.getData());
-    CPPUNIT_ASSERT_EQUAL(5, matchCandidateCountsByMatchCreator.size());
+    CPPUNIT_ASSERT_EQUAL(3, matchCandidateCountsByMatchCreator.size());
     //These don't add up to the total...is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::CustomPoiMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL(
       (long)0,
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
@@ -236,20 +232,17 @@ public:
 
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
-    matchCreators.append("hoot::PlacesPoiMatchCreator");
     MatchFactory::getInstance().reset();
     MatchFactory::_setMatchCreators(matchCreators);
 
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)42, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut.getData());
-    CPPUNIT_ASSERT_EQUAL(2, matchCandidateCountsByMatchCreator.size());
+    CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
-    CPPUNIT_ASSERT_EQUAL(
-      (long)21, matchCandidateCountsByMatchCreator["hoot::PlacesPoiMatchCreator"]);
   }
 };
 

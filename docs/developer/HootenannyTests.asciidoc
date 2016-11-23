@@ -1,6 +1,6 @@
 == Hootenanny Tests
 
-Hootenanny contains three distinct codebases: the core, the web services, and the user interface.  
+Hootenanny contains three distinct codebases: the core, the web services, and the user interface.
 Each employs a different testing technology, which is described here.
 
 Before building Hootenanny and running its tests, the application must be configured.  See the
@@ -10,13 +10,13 @@ Building Hootenanny section in this document for details.
 
 Tests are divided into the following groups: current, quick, slow, and glacial.
 
-* **current** - Used when you want to isolate a single test and work on it. No tests should be committed 
+* **current** - Used when you want to isolate a single test and work on it. No tests should be committed
 in this directory.
 * **quick** - Individual tests that each run in less than 1 sec.
 * **slow** - Individual tests that each run in less than 30 sec.
 * **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
- 
-If you want to run the tests for all codebases at the same time, first configure as described in a 
+
+If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
 
 -------------------
@@ -27,21 +27,21 @@ make -sj($nproc) test-all   # glacial tests
 
 "quick" is a subset of the "slow" suite, and "quick" and "slow" are subsets of the "glacial" suite.
 
-As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.  
-If you are doing user interface or web service work, you may also want to test your changes against 
+As a developer, you are expected to, at a minimum, run the slow tests before pushing commits.
+If you are doing user interface or web service work, you may also want to test your changes against
 the User Interface Tests, which run as part of the glacial tests.
 
 To see other, more granular testing options, run 'make help'.
 
 === Core Tests
 
-The Core Tests test everything that is accessible via the Hootenanny command line interface.  
-The core code is written in C++ and employs several different types of tests, which are described 
-in the following sections.  The tests are also subdivided into different test suites with differing 
+The Core Tests test everything that is accessible via the Hootenanny command line interface.
+The core code is written in C++ and employs several different types of tests, which are described
+in the following sections.  The tests are also subdivided into different test suites with differing
 runtimes.
 
-In a later section the Hootenanny Web Services Java test code is described.  It is important to note 
-that there is also C++ code labeled "services".  That is code which writes to the Hoot API and OSM 
+In a later section the Hootenanny Web Services Java test code is described.  It is important to note
+that there is also C++ code labeled "services".  That is code which writes to the Hoot API and OSM
 API services database and is not affiliated with the Hootenanny Web Services Java code.
 
 To run all the Core Tests in a suite, choose one of the following after running configure:
@@ -68,26 +68,26 @@ HootTest --single hoot::AlphaShapeTest
 
 ==== Core Unit Tests
 
-The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.  
-See hoot-core-test/src/test/cpp project for examples.  One CPPUnit test class may contain multiple 
+The core unit tests use CPPUnit.  The goal is to have one test class for each functional class.
+See hoot-core-test/src/test/cpp project for examples.  One CPPUnit test class may contain multiple
 CPPUnit tests.
 
-To place a test into one of the four test suites listed in the previous section, a line similar to 
+To place a test into one of the four test suites listed in the previous section, a line similar to
 the following is placed at the end of the test class:
 
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
------------------- 
+------------------
 
 ==== Core Command Line Tests
 
-The C++ portion of Hootenanny exposes functionality via a command line interface. This command line 
-interface is tested via simple shell scripts. The shell scripts output is compared against a known 
-good output and these scripts are run via one or more test suites within CPPUnit. The unit tests 
-and integration tests should provide good coverage of all the code from the command line interface 
+The C++ portion of Hootenanny exposes functionality via a command line interface. This command line
+interface is tested via simple shell scripts. The shell scripts output is compared against a known
+good output and these scripts are run via one or more test suites within CPPUnit. The unit tests
+and integration tests should provide good coverage of all the code from the command line interface
 down.
 
-This is most useful when testing operations that involve multiple parts of the system, or exercise 
+This is most useful when testing operations that involve multiple parts of the system, or exercise
 the command line aspects of the system. Examples include:
 
 * Complex command line options
@@ -95,14 +95,14 @@ the command line aspects of the system. Examples include:
 * Hadoop operations that require moving multiple files to create the test scenario
 * Translation scripts
 
-Note that is is generally desirable to make the test do as little as possible to fully exercise 
-the system. When you write a test it will likely be run thousands of times by a number of people 
-over its lifetime. No need to make them all wait 20sec for a test that could run in .1sec. It is 
+Note that is is generally desirable to make the test do as little as possible to fully exercise
+the system. When you write a test it will likely be run thousands of times by a number of people
+over its lifetime. No need to make them all wait 20sec for a test that could run in .1sec. It is
 likely worth taking an extra 20min to write an efficient test.
 
 **What Do Command Line Tests Do?**
 
-The basic principal of the command line tests is that they verify that the stdout and stderr are 
+The basic principal of the command line tests is that they verify that the stdout and stderr are
 consistent with a given baseline. To do this the following must occur:
 
 * Create an executable script to test some aspect of the system.
@@ -112,18 +112,18 @@ consistent with a given baseline. To do this the following must occur:
 
 When your test runs it will do the following:
 
-* Find all the scripts to execute (the scripts to run are determined by looking for all executable 
+* Find all the scripts to execute (the scripts to run are determined by looking for all executable
 files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in @.off@ it will be ignored.)
 * Run a script and capture the stdout and stderr
-* Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and 
+* Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and
 the elapsed time print outs.
-* Compare the meaningful bits from the test run to the baseline. If there are any difference, report 
+* Compare the meaningful bits from the test run to the baseline. If there are any difference, report
 an error.
 
 **An Example**
 
-To create a test make a shell script that is executable and place it in the 
-@test-files/cmd/current/@ directory. The shell script should exercise some aspect of the system 
+To create a test make a shell script that is executable and place it in the
+@test-files/cmd/current/@ directory. The shell script should exercise some aspect of the system
 and the success/failure should be determined by the output. For instance:
 
 ------------
@@ -138,7 +138,7 @@ mkdir -p test-output/cmd/example
 # perform the operation we're testing.
 hoot --convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
 
-# Write the output to stdout. When this run in the future it'll compare the old output 
+# Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent
 cat jakarta.osm
 ------------------
@@ -150,9 +150,9 @@ Running HootTest will give an error similar to the one below:
 .18:27:35.009 WARN  src/main/cpp/hoot/test/ScriptTest.cpp(130) - STDOUT or STDERR don't exist for \
 /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh
 *************************
-  This can be resolved by reviewing the output for correctness and then 
+  This can be resolved by reviewing the output for correctness and then
   creating a new baseline. E.g.
-  verify: 
+  verify:
     less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
     less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
   Make a new baseline:
@@ -191,7 +191,7 @@ Fix the script by changing the last line to:
 cat test-output/cmd/example/jakarta.osm
 --------------
 
-When you rerun @HootTest --current@ you'll see the .osm file in the .stdout.first file. If 
+When you rerun @HootTest --current@ you'll see the .osm file in the .stdout.first file. If
 everything looks good create the new baseline.
 
 ------------
@@ -213,7 +213,7 @@ Elapsed: 0.146274
 
 This shows that the test run matches the baseline.
 
-We don't want the test to live in @current@ so we'll move it over to the appropriate test set. In 
+We don't want the test to live in @current@ so we'll move it over to the appropriate test set. In
 this case @quick@.
 
 ------------
@@ -222,29 +222,29 @@ mv test-files/cmd/current/Example* test-files/cmd/quick/
 
 **Inconsistent Output**
 
-Sometimes scripts have output values that change from run to run such as data/time stamps. Many of 
-these values get stripped out automatically, but if there is something relevant to just your test 
-you can remove it via grep/sed. If that isn't an option you may need to modify ScriptTest.cpp to 
-be knowledgeable of your situation. Be careful, because it will modify the way that all tests are 
+Sometimes scripts have output values that change from run to run such as data/time stamps. Many of
+these values get stripped out automatically, but if there is something relevant to just your test
+you can remove it via grep/sed. If that isn't an option you may need to modify ScriptTest.cpp to
+be knowledgeable of your situation. Be careful, because it will modify the way that all tests are
 verified.
 
 ==== Core Micro Conflate Tests
 
-Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get 
-merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed 
-to help with this. These are not, "Did it conflate all of DC exactly the same?" tests or "Did 
-these 15 roads get conflated properly?" tests. They're intended to test one situation for 
-correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to 
+Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get
+merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed
+to help with this. These are not, "Did it conflate all of DC exactly the same?" tests or "Did
+these 15 roads get conflated properly?" tests. They're intended to test one situation for
+correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to
 determine what happened.
 
-These tests are discovered/created from directories. For now, only one directory is searched 
+These tests are discovered/created from directories. For now, only one directory is searched
 for tests @test-files/cases/unifying/@. The test creation process goes as follows:
 
-* Search @test-files/cases/unifying@ for a config file (@Config.conf@), if there is one, push it 
+* Search @test-files/cases/unifying@ for a config file (@Config.conf@), if there is one, push it
 onto the config file stack.
-* If there are directories, recursively search them for tests, but ignore any directories that end 
+* If there are directories, recursively search them for tests, but ignore any directories that end
 with @.off@
-* If there are no directories, search for @Input1.osm@, @Input2.osm@ and @Expected.osm@, if they're 
+* If there are no directories, search for @Input1.osm@, @Input2.osm@ and @Expected.osm@, if they're
 found then create a new test case for this directory.
 
 When a test runs it runs as follows:
@@ -254,7 +254,7 @@ When a test runs it runs as follows:
 * Run the equivalent of a "--unify" command on the two input files and put the result in @Output.osm@.
 * Verify that @Expected.osm@ matches @Output.osm@.
 
-This approach makes it very fast/easy to create new micro tests and run them with the rest of the 
+This approach makes it very fast/easy to create new micro tests and run them with the rest of the
 test routines. At this time the micro tests run as part of _quick_ and up.
 
 ==== Core Plugins Tests
@@ -263,7 +263,7 @@ The Plugins Test test various translation related operations.  They may be invok
 
 --------------
 # configure step required once per configuration only
-aclocal && autoconf && autoheader && automake && ./configure 
+aclocal && autoconf && autoheader && automake && ./configure
 make -sj($nproc) plugins-test
 --------------
 
@@ -283,20 +283,20 @@ They run by default in the quick test suite.
 
 === Web Services Tests
 
-The Web Services tests test the Hootenanny web services interface.  There are two types of 
-Hootenanny web services tests.  One type is written in Java and use JUnit, Jersey, and a 
-combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test class may contain 
-multiple JUnit tests.  The other type is written in Javascript and uses a combination of mocha and 
+The Web Services tests test the Hootenanny web services interface.  There are two types of
+Hootenanny web services tests.  One type is written in Java and use JUnit, Jersey, and a
+combination of Mockito, PowerMock, EasyMock for mock objects.  One JUnit test class may contain
+multiple JUnit tests.  The other type is written in Javascript and uses a combination of mocha and
 chai for testing.
 
-It is important to note that there is also C++ code labeled "services".  That is code which writes 
-to the Hoot API and OSM API services database and is not affiliated with the Hootenanny Web 
+It is important to note that there is also C++ code labeled "services".  That is code which writes
+to the Hoot API and OSM API services database and is not affiliated with the Hootenanny Web
 Services Java code.
 
 ==== Test Suites
 
-Java web services test methods may be placed into either the UnitTest or IntegrationTest categories.  
-The UnitTest suite corresponds to the slow test suite in the Core Tests, and the IntegrationTest 
+Java web services test methods may be placed into either the UnitTest or IntegrationTest categories.
+The UnitTest suite corresponds to the slow test suite in the Core Tests, and the IntegrationTest
 suite corresponds to the glacial test suite.
 
 To run web services unit tests:
@@ -315,18 +315,18 @@ aclocal && autoconf && autoheader && automake && ./configure  --with-services
 make -sj($nproc) test-all
 -----------
 
-The above commands will run the corresponding Core Tests immediately after the web services test 
+The above commands will run the corresponding Core Tests immediately after the web services test
 complete.  There currently is no means to separate the two.
 
-The mocha based web services tests (see renderdb-export-server/test as an example) are not 
+The mocha based web services tests (see node-export-server/test as an example) are not
 currently aligned with the test suites.
 
 ===== Java Web Services Unit Tests
 
-The Web Services Unit Tests are meant to test the Java web service code at the class level.  
+The Web Services Unit Tests are meant to test the Java web service code at the class level.
 See hoot-services/src/test/java for test examples.
 
-To mark a web service test method as a Unit Test, place the following annotation in front of the 
+To mark a web service test method as a Unit Test, place the following annotation in front of the
 method declaration:
 
 -------------
@@ -334,18 +334,18 @@ method declaration:
 @Category(UnitTest.class)
 -----------
 
-Unfortunately, we do have quite a few Web Services Tests labeled as Unit Tests which are 
-technically Integration Tests, since they involve Jersey and Postgres (e.g. MapResourceTest).  
-The decision was made to leave these are Unit Tests, since they are critical and should be run 
-with each commit push as part of the slow tests, but those tests should eventually be moved to 
+Unfortunately, we do have quite a few Web Services Tests labeled as Unit Tests which are
+technically Integration Tests, since they involve Jersey and Postgres (e.g. MapResourceTest).
+The decision was made to leave these are Unit Tests, since they are critical and should be run
+with each commit push as part of the slow tests, but those tests should eventually be moved to
 the Integration Tests suite and corresponding class level Unit Tests written for them.
 
 ===== Java Web Services Integration Tests
 
-The Web Services Integration Tests are meant to test the Java web service code across logical 
+The Web Services Integration Tests are meant to test the Java web service code across logical
 boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
 
-To mark a web service test method as a Integration Test, place the following annotation in front 
+To mark a web service test method as a Integration Test, place the following annotation in front
 of the method declaration:
 
 -------------
@@ -362,7 +362,7 @@ npm install
 npm test
 ---------------
 
-See renderdb-export-server/test as an example.
+See node-export-server/test as an example.
 
 ==== nodejs System Tests (legacy)
 
@@ -370,35 +370,35 @@ Of note, are a set of nodejs system tests which still run as part of the nightly
 
 === User Interface Tests
 
-The User Interface tests come in two types.  The first type uses Cucumber to test the functionality 
-of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.  
-The second type uses mocha to test at a more granular level.  Of the two, to date more attention 
-has been paid to the Cucumber tests while the mocha user interface tests do not receive much 
+The User Interface tests come in two types.  The first type uses Cucumber to test the functionality
+of the Hootenanny iD browser based application and its interactions with the Hootenanny Web Services.
+The second type uses mocha to test at a more granular level.  Of the two, to date more attention
+has been paid to the Cucumber tests while the mocha user interface tests do not receive much
 attention and may be candidates for removal.
 
 ==== Cucumber User Interface Tests
 
-The purpose of these tests is to catch relatively simple errors that get introduced into UI workflows inadvertently, and not to be a bulletproof set of tests for the user interface.  Achieving such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny codebases, they can quickly reveal inconsistencies between both what the web services expect the command line API to be and what it actually is and what the user interface expects the web service API to be and what it actually is.  With this set of tests in place to catch basic errors, we can allow testers to spend more time testing complicated conflation scenarios instead of, for example, waiting for a typo on a single line of code to be fixed before they can complete regression testing.  
+The purpose of these tests is to catch relatively simple errors that get introduced into UI workflows inadvertently, and not to be a bulletproof set of tests for the user interface.  Achieving such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny codebases, they can quickly reveal inconsistencies between both what the web services expect the command line API to be and what it actually is and what the user interface expects the web service API to be and what it actually is.  With this set of tests in place to catch basic errors, we can allow testers to spend more time testing complicated conflation scenarios instead of, for example, waiting for a typo on a single line of code to be fixed before they can complete regression testing.
 
-https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.  
-https://cukes.info[Cucumber] is the top level interpreter of the 
-"gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test. 
-There are many 
-https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the 
-web to get you started, 
+https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.
+https://cukes.info[Cucumber] is the top level interpreter of the
+"gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test.
+There are many
+https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the
+web to get you started,
 
-* Hootenanny Cucumber User Interface Tests can be found in test-files/ui. 
-* Cucumber settings may be changed in @features/support/env.rb@. 
-* Place common test methods in 
-@features/conflate.feature@ and @features/step_definitions/custom_steps.rb@.  
-* Each piece of functionality being tested should be placed into its own *.feature file.  
-* When running silent mode ('make -s'), Cucumber output will be written to 
+* Hootenanny Cucumber User Interface Tests can be found in test-files/ui.
+* Cucumber settings may be changed in @features/support/env.rb@.
+* Place common test methods in
+@features/conflate.feature@ and @features/step_definitions/custom_steps.rb@.
+* Each piece of functionality being tested should be placed into its own *.feature file.
+* When running silent mode ('make -s'), Cucumber output will be written to
 @test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
 to the screen.
 
-The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.  
+The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.
 
-To run the User Interface tests with all other glacial tests:  
+To run the User Interface tests with all other glacial tests:
 
 -----------------------
 cd $HOOT_HOME
@@ -430,7 +430,7 @@ If you work consistently in the hootenanny-id submodule, then you need to pay cl
 
 ==== Mocha User Interface Tests
 
-These tests reside in hoot-ui/test/spec/hoot and are not known to be currently supported.  They 
+These tests reside in hoot-ui/test/spec/hoot and are not known to be currently supported.  They
 may be run with:
 
 ---------------
@@ -441,47 +441,47 @@ npm test
 
 === iD Editor Tests
 
-Although outside of the scope of Hootenanny code, of note for diagnostic purposes are the iD Editor 
+Although outside of the scope of Hootenanny code, of note for diagnostic purposes are the iD Editor
 unit tests.  These can be found in hoot-ui/test/spec.
 
 === Smoke Tests
 
-The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify 
-the results of a Hootenanny installation.  The Smoke Test steps are located here (TODO: fill in 
+The Smoke Tests are manual tests run against the Hootenanny iD browser based application to verify
+the results of a Hootenanny installation.  The Smoke Test steps are located here (TODO: fill in
 location).
 
 === Regression Tests
 
-The Regression Tests run Hootenanny command line operations against specific datasets to measure 
-Hootenanny performance against particular scenarios.  The tests are run against non-public data and, 
-therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For 
+The Regression Tests run Hootenanny command line operations against specific datasets to measure
+Hootenanny performance against particular scenarios.  The tests are run against non-public data and,
+therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For
 more information about the tests, contact hootenanny.help@digitalglobe.com
 
 If you have access to the regression test repository and wish to run them locally, contact
 hootenanny.help@digitalglobe.com for further instructions.
 
-Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test 
-as passing or failing based on an allowable score range.  See 
+Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
+as passing or failing based on an allowable score range.  See
 hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
 === Load Tests
 
-The Load Tests test the scalability of the Hootenanny web services code and are run as part of the 
-nightly tests in a private DigitalGlobe repository.  These tests currently are not meant to be run 
+The Load Tests test the scalability of the Hootenanny web services code and are run as part of the
+nightly tests in a private DigitalGlobe repository.  These tests currently are not meant to be run
 in a local development environment.
 
-When run, the tests output an image with graph metrics on Hootenanny scalability for increasing 
+When run, the tests output an image with graph metrics on Hootenanny scalability for increasing
 levels of simulated users.  Here is an example set of test metrics:
 
 image::developer/images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
-Reports can be generated which detail how well test coverage is for Hootenanny code.  The report 
-will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java 
-JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.  
-Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate 
-coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura] 
+Reports can be generated which detail how well test coverage is for Hootenanny code.  The report
+will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java
+JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
+Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate
+coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura]
 via Maven.  Report coverage generation for Javascript code is currently in the works.
 
 *Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
@@ -500,14 +500,14 @@ To generate a report for all Hootenanny Core code and the Hootenanny Java Web Se
 ./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 -----------
 
-The test coverage reports will be output to _$HOOT_HOME/coverage_. 
+The test coverage reports will be output to _$HOOT_HOME/coverage_.
 
-*NOTES:* 
+*NOTES:*
 
 * See ngageoint/hootenanny#604 for why the extra 'make' is required before running 'make coverage' when generating a report for the Hootenanny core code.
 * To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
-for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run 
-beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, 
+for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run
+beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option,
 you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
 * For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
 * See ngageoint/hootenanny#610 for why the Java web services tests will run twice when generating the Hootenanny Core and Web Services coverage reports in the same command.
@@ -515,32 +515,32 @@ you should always run 'make test' beforehand in order to not receive inaccurate 
 === General Test Writing Guidelines
 
 * Unit tests should strive to test at the single class level only, when possible.
-* Unit tests should have nearly a one to one mapping to each class in code.  Use the code coverage 
+* Unit tests should have nearly a one to one mapping to each class in code.  Use the code coverage
 report to see where your tests are deficient.
-* Unit tests should avoid interfacing with external entities, when possible. e.g. databases, 
-web servers (Note: Many of the Java services tests violate this and should be updated).  Such 
+* Unit tests should avoid interfacing with external entities, when possible. e.g. databases,
+web servers (Note: Many of the Java services tests violate this and should be updated).  Such
 tests that interface with external entities should then become integration tests instead.
 * Unit tests should cover as many exceptional error handling cases as is reasonable.
 * Use clear test method names to state what you are testing.
 * Make gratuitous use of asserts during testing.
 * Use comments in test methods where its not obvious in the code how/why you're testing something.
-* Care should be taken to categorize tests based on the amount of time they complete. e.g. don't 
-put a longer running test in the C++ quick tests.  For the Java tests, longer running tests should 
+* Care should be taken to categorize tests based on the amount of time they complete. e.g. don't
+put a longer running test in the C++ quick tests.  For the Java tests, longer running tests should
 most likely be put into the integration tests.
-* Small amounts of test data should be used for testing if possible.  Do not check large test data 
+* Small amounts of test data should be used for testing if possible.  Do not check large test data
 files into the repository.
-* During testing you can verify test output via asserts against the state of the output data or via 
-file comparison of the output with known good output.  An advantage to using file comparison for 
-testing output is that the test code is less verbose and tedious to maintain as the class evolves.  
-A disadvantage of using file comparison is that it is not always clear what the intentions of your 
-test are and individuals can inadvertently overwrite your intended test output if they do not 
-understand why they broke the test.  Weigh these pros and cons when selecting which one of these 
+* During testing you can verify test output via asserts against the state of the output data or via
+file comparison of the output with known good output.  An advantage to using file comparison for
+testing output is that the test code is less verbose and tedious to maintain as the class evolves.
+A disadvantage of using file comparison is that it is not always clear what the intentions of your
+test are and individuals can inadvertently overwrite your intended test output if they do not
+understand why they broke the test.  Weigh these pros and cons when selecting which one of these
 test output verification methods you will use.
-* Do not overwrite generated test output used to verify a test unless you are sure that in doing 
+* Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friend when writing tests.
-* Design a class so that testing of all of its members is possible.  In some cases, you may need 
-to expose members only to the tests.  e.g. Use C++ friend keyword, etc.; or in Java, Mockito may 
+* Design a class so that testing of all of its members is possible.  In some cases, you may need
+to expose members only to the tests.  e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
 
 

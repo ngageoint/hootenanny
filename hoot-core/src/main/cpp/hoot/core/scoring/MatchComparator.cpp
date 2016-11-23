@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,6 +40,12 @@
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 
 // Qt
 #include <QSet>
@@ -128,6 +134,15 @@ public:
     if (!uuid.isEmpty())
     {
       _uuidToEid.insert(uuid, e->getElementId());
+
+      //If an item was merged during conflation, its uuid is its original uuid prepended or appended
+      //with the uuid's of the merged items.  So, add map entries for all the uuid parts, if it
+      //contains multiple features.
+      const QStringList uuidParts = uuid.split(";");
+      for (int i = 0; i < uuidParts.size(); i++)
+      {
+        _uuidToEid.insert(uuidParts.at(i), e->getElementId());
+      }
     }
   }
 
@@ -183,6 +198,7 @@ void MatchComparator::_clearCache()
   _actualReviewGroups.clear();
   _expectedMatchGroups.clear();
   _expectedReviewGroups.clear();
+  _elementWrongCounts.clear();
 }
 
 bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
@@ -238,8 +254,6 @@ double MatchComparator::getPertyScore() const
   LOG_VARD(_expected);
   assert(_expected.size() > 0);
   set<UuidPair> intersection;
-  //tried to use QSet here, since its more intuitive to do set operations with, but it required that
-  //UuidPair implement a hash function...tried to implement but was unsuccessful
   set_intersection(_actual.begin(), _actual.end(), _expected.begin(), _expected.end(),
     insert_iterator<std::set<UuidPair> >(intersection, intersection.begin()));
   LOG_VARD(intersection.size());
@@ -288,7 +302,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       expectedIndex = MatchType::Miss;
     }
 
-    // if this is an expected match
+    // if this is an actual match
     if (_actualMatchGroups.findT(m.first) == _actualMatchGroups.findT(m.second))
     {
       actualIndex = MatchType::Match;
@@ -349,10 +363,24 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 
       _tagError(conflated, it->first, "1");
       _tagError(conflated, it->second, "2");
+
+      //This info from these tags can be misleading if you are conflating the same data type twice
+      //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
+      //those cases multiple actual/expected states can exist and this logic only records one
+      //of them.
+      //@todo The expected miss/actual review tags are sometimes inaccurate.
+      const MatchType expectedMatchType(expectedIndex);
+      const MatchType actualMatchType(actualIndex);
+      _tagTestOutcome(
+        conflated, it->first, expectedMatchType.toString(), actualMatchType.toString());
+      _tagTestOutcome(
+        conflated, it->second, expectedMatchType.toString(), actualMatchType.toString());
     }
 
     _confusion[actualIndex][expectedIndex]++;
   }
+
+  _setElementWrongCounts(conflated);
 
   _tp = _confusion[MatchType::Match][MatchType::Match];
   _fn = _confusion[MatchType::Miss][MatchType::Match] +
@@ -591,6 +619,34 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
   return result;
 }
 
+void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
+                                      const QString expected, const QString actual)
+{
+  SetTagVisitor stv1("hoot:expected", expected);
+  MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv1.visit(eid);
+    }
+    it++;
+  }
+
+  SetTagVisitor stv2("hoot:actual", actual);
+  it = _actualUuidToEid.begin();
+  while (it != _actualUuidToEid.end())
+  {
+    if (it.key().contains(uuid))
+    {
+      shared_ptr<Element> eid = map->getElement(it.value());
+      stv2.visit(eid);
+    }
+    it++;
+  }
+}
+
 void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
 {
   // if the uuid contains the first uuid, set mismatch
@@ -621,6 +677,28 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
     }
     it++;
   }
+}
+
+void MatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
+{
+  _setElementWrongCount(map, ElementType::Node);
+  _setElementWrongCount(map, ElementType::Way);
+  _setElementWrongCount(map, ElementType::Relation);
+}
+
+void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
+                                            const ElementType::Type& elementType)
+{
+  FilteredVisitor elementWrongVisitor(
+    new ChainCriterion(
+      new ElementTypeCriterion(elementType),
+      new HasTagCriterion("hoot:wrong")),
+    new CountVisitor());
+  FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
+  SingleStatistic* singleStat =
+    dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());
+  map->visitRo(filteredVisitor);
+  _elementWrongCounts[elementType] = singleStat->getStat();
 }
 
 QString MatchComparator::toString() const
@@ -662,6 +740,27 @@ QString MatchComparator::toString() const
   result += QString("correct: %1\n").arg(getPercentCorrect());
   result += QString("wrong: %1\n").arg(getPercentWrong());
   result += QString("unnecessary reviews: %1\n").arg(getPercentUnnecessaryReview());
+
+  result += "\n";
+  result += QString("elements involved in a wrong match:\n");
+  result += QString("  nodes: %1\n").arg(_elementWrongCounts[ElementType::Node]);
+  result += QString("  ways: %1\n").arg(_elementWrongCounts[ElementType::Way]);
+  result += QString("  relations: %1\n").arg(_elementWrongCounts[ElementType::Relation]);
+  const int totalCorrect =
+    _confusion[MatchType::Match][MatchType::Match] +
+    _confusion[MatchType::Review][MatchType::Review];
+  result += QString("correct match count: %1\n").arg(totalCorrect);
+  result += QString("wrong match count: %1\n")
+              .arg(_confusion[MatchType::Miss][MatchType::Match] +
+                   _confusion[MatchType::Miss][MatchType::Review] +
+                   _confusion[MatchType::Match][MatchType::Miss] +
+                   _confusion[MatchType::Match][MatchType::Review]);
+  const int totalUnnecessaryReviews =
+    _confusion[MatchType::Review][MatchType::Miss] +
+    _confusion[MatchType::Review][MatchType::Match];
+  result += QString("unnecessary review count: %1\n").arg(totalUnnecessaryReviews);
+  result += QString("ratio of unnecessary reviews to correct matches: %1\n")
+    .arg((double)totalUnnecessaryReviews / (double)totalCorrect);
 
   return result;
 }

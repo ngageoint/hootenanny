@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616647473931919" lon="42.5514026487499279">
+        <tag k="man_made" v="tower"/>
+        <tag k="uuid" v="B"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616687794012057" lon="42.5514807085668139"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616624004603039" lon="42.5513599010436891"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616716205538067" lon="42.5515246892602761"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614935889301875" lon="42.5515344122679835"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614845364747481" lon="42.5513694564133402"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="building" v="mosque"/>
+        <tag k="uuid" v="A;C"/>
+        <tag k="amenity" v="place_of_worship"/>
+    </way>
+    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-9" role="reviewee"/>
+        <member type="way" ref="-1" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-9 Way:-1 P: match: 0 miss: 0 review: 1, distance: 0.00997662, close match: 1, type score: 0, name score: -1e+09, address score: 0"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

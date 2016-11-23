@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -68,7 +68,8 @@ private:
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
-RemoveRef2Visitor::RemoveRef2Visitor()
+RemoveRef2Visitor::RemoveRef2Visitor() :
+_errorOnMissingRef1(false)
 {
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
@@ -112,19 +113,34 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      LOG_WARN(key << " contains " << r);
-      throw IllegalArgumentException("Found a REF2 that references a non-existing REF1.");
+      const QString errMsg = "Found a REF2 that references a non-existing REF1: " + r;
+      //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
+      //if (_errorOnMissingRef1)
+      //{
+        //throw IllegalArgumentException(errMsg);
+      //}
+      //else
+      //{
+        LOG_WARN(errMsg);
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == "REF2")
+        {
+          refs.append("none");
+        }
+      //}
     }
-
-    ElementPtr e = _map->getElement(eid);
-    // if the REF1 element meets the criterion.
-    if (_criterion->isSatisfied(e))
+    else
     {
-      // remove the specified REF2 from the appropriate REF2 field.
-      refs.removeAll(r);
-      if (refs.size() == 0 && key == "REF2")
+      ElementPtr e = _map->getElement(eid);
+      // if the REF1 element meets the criterion.
+      if (ref1CriterionSatisfied(e))
       {
-        refs.append("none");
+        // remove the specified REF2 from the appropriate REF2 field.
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == "REF2")
+        {
+          refs.append("none");
+        }
       }
     }
   }
@@ -178,7 +194,7 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
   ElementPtr ee = _map->getElement(ElementId(type, id));
 
   // if e has a REF2 and meets the criterion
-  if (_hasRef2Tag(ee) && _criterion->isSatisfied(ee))
+  if (_hasRef2Tag(ee) && ref2CriterionSatisfied(ee))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
@@ -186,6 +202,16 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
       _checkAndDeleteRef2(ee, _ref2Keys[i]);
     }
   }
+}
+
+bool RemoveRef2Visitor::ref1CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return _criterion->isSatisfied(e);
+}
+
+bool RemoveRef2Visitor::ref2CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return ref1CriterionSatisfied(e);
 }
 
 }

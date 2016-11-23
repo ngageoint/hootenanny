@@ -20,8 +20,8 @@ Feature: Resolve all reviews feature
     Then I should see "Complete Review"
     Then I wait 30 "seconds" to see "Reviews remaining:"
     Then I should see "Hide Table"
-    Then I should see "Previous"
-    Then I should see "Next"
+    Then I should see a "a.previous" on the map
+    Then I should see a "a.next" on the map
     Then I should see "Resolved"
     Then I should see "Complete Review"
     And I click the "Complete Review" link
@@ -29,8 +29,8 @@ Feature: Resolve all reviews feature
     And I press "Resolve all remaining reviews"
     Then I wait 30 "seconds" to not see "Reviews remaining:"
     Then I should not see "Hide Table"
-    Then I should not see "Previous"
-    Then I should not see "Next"
+    Then I should not see "a.previous"
+    Then I should not see "a.next"
     Then I should see "All Reviews Resolved!"
 
   Scenario: I can conflate with another dataset
@@ -48,8 +48,8 @@ Feature: Resolve all reviews feature
     Then I should see "Complete Review"
     Then I wait 30 "seconds" to see "Reviews remaining:"
     Then I should see "Hide Table"
-    Then I should see "Previous"
-    Then I should see "Next"
+    Then I should see a "a.previous" on the map
+    Then I should see a "a.next" on the map
     Then I should see "Resolved"
     Then I should see "Complete Review"
     And I click the "Complete Review" link
@@ -57,13 +57,14 @@ Feature: Resolve all reviews feature
     And I press "Resolve all remaining reviews"
     Then I wait 30 "seconds" to not see "Reviews remaining:"
     Then I should not see "Hide Table"
-    Then I should not see "Previous"
-    Then I should not see "Next"
+    Then I should not see the "a.previous" on the page
+    Then I should not see the "a.next" on the page
     Then I should see "All Reviews Resolved!"
 
-  Scenario: I can export the merged dataset
-    When I click on "input.fill-darken0[type='submit']"
-    Then I type "export_conflated" in input "fileExportOutputName"
-    Then I click on "input.fill-dark[type='submit']"
-    And I wait 5 "minutes" to not see "Output Name"
-    Then the download file "export_conflated.zip" should exist
+  # Disable until resolved in https://github.com/ngageoint/hootenanny/issues/1147
+  # Scenario: I can export the merged dataset
+  #   When I click on "input.fill-darken0[type='submit']"
+  #   Then I type "export_conflated" in input "fileExportOutputName"
+  #   Then I click on "input.fill-dark[type='submit']"
+  #   And I wait 5 "minutes" to not see "Output Name"
+  #   Then the download file "export_conflated.zip" should exist

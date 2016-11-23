@@ -37,7 +37,6 @@ build: build-info config run-liquibase
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
 	../scripts/mvn-build $(MVN_QUIET) build
-	
 	cp target/hoot-services-*.war ../bin
 
 docs: config
@@ -45,10 +44,12 @@ docs: config
 
 clean: config clean-coverage
 	../scripts/mvn-build $(MVN_QUIET) clean
-	rm -f db.properties
+	rm -rf ./db.properties
 	rm -rf ./src/main/java/hoot/services/db2
-	rm -f src/main/resources/db/db.properties
-	rm -rf target/site/apidocs
+	rm -rf ./src/main/resources/db/liquibase.properties
+	rm -rf ./src/main/resources/conf/hoot-services.conf
+	rm -rf ./src/main/resources/db/db.properties
+	rm -rf ./target/site/apidocs
 
 # Both commands now do the same thing.
 clean-db: clean-db-force

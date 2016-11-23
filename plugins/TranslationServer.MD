@@ -57,7 +57,7 @@ ___
 {
   "name": "PAL015",
   "fcode": "AL015",
-  "desc": "General Building Point Feature",
+  "desc": "General Building",
   "definition": "A relatively permanent structure, roofed and usually walled and designed for some particular use.",
   "geom": "Point",
   "columns": [
@@ -185,7 +185,7 @@ ___
         <tag k="Horizontal Accuracy Category" v="Accurate"/>
         <tag k="Built-up Area Density Category" ve="Unknown"/>
         <tag k="Commercial Copyright Notice" v="UNK"/>
-        <tag k="Feature Code" v="AL020:Built-Up Area Area Feature"/>
+        <tag k="Feature Code" v="AL020:Built-Up Area"/>
         <tag k="Functional Use" v="Other"/>
         <tag k="Condition of Facility" v="Unknown"/>
         <tag k="Name" v="Manitou Springs"/>
@@ -251,14 +251,14 @@ ___
   {
     "name": "PAL015",
     "fcode": "AL015",
-    "desc": "General Building Point Feature",
+    "desc": "General Building",
     "geom": "Point",
     "idx": -1
   },
   {
     "name": "PAL020",
     "fcode": "AL020",
-    "desc": "Built-Up Area Point Feature",
+    "desc": "Built-Up Area",
     "geom": "Point",
     "idx": -1
   },
@@ -268,14 +268,14 @@ ___
   {
     "name": "PBH070",
     "fcode": "BH070",
-    "desc": "Ford Point Feature",
+    "desc": "Ford",
     "geom": "Point",
     "idx": 4
   },
   {
     "name": "PBH120",
     "fcode": "BH120",
-    "desc": "Rapids Point Feature",
+    "desc": "Rapids",
     "geom": "Point",
     "idx": 4
   }

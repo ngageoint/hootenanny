@@ -32,7 +32,6 @@ import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import hoot.services.controllers.filters.CorsResponseFilter;
 
@@ -40,21 +39,15 @@ import hoot.services.controllers.filters.CorsResponseFilter;
 public class HootServicesJerseyApplication extends ResourceConfig {
     private static final Logger logger = Logger.getLogger(HootServicesJerseyApplication.class.getName());
 
-    private static Class<?> springConfigurationClass;
-
-
-    public static void setSpringConfigationClass(Class<?> springConfigurationClass) {
-        HootServicesJerseyApplication.springConfigurationClass = springConfigurationClass;
-    }
-
     public HootServicesJerseyApplication() {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+        super.packages(true, "hoot.services");
 
         super.register(MultiPartFeature.class);
         super.register(CorsResponseFilter.class);
         super.register(RequestContextFilter.class);
 
         /*
+        // Could not get LoggingFeature to work for some reason.  Falling back to the deprecated LoggingFilter!
         super.registerInstances(new LoggingFeature(logger,
                                                      Level.ALL,
                                                      LoggingFeature.Verbosity.PAYLOAD_TEXT,
@@ -62,10 +55,5 @@ public class HootServicesJerseyApplication extends ResourceConfig {
         */
 
         super.registerInstances(new LoggingFilter(logger, true));
-
-        if (springConfigurationClass != null) {
-            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(springConfigurationClass);
-            super.property("contextConfig", ctx);
-        }
     }
 }

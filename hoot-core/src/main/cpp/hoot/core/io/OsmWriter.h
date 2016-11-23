@@ -108,6 +108,7 @@ protected:
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  bool _textStatus;
   QString _osmSchema;
   QString _timestamp;
   int _precision;

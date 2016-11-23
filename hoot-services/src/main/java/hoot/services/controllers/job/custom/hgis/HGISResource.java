@@ -27,6 +27,7 @@
 package hoot.services.controllers.job.custom.hgis;
 
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QMaps.maps;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.controllers.job.JobControllerBase;
-import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.ModelDaoUtils;
 
 
@@ -109,10 +109,6 @@ public class HGISResource extends JobControllerBase {
      * @return the map's numeric ID
      */
     private static long verifyMapExists(String mapIdStr) {
-        logger.debug("Checking maps table for map with ID: {} ...", mapIdStr);
-
-        QMaps maps = QMaps.maps;
-
         // this will throw if it doesn't find the map
         return ModelDaoUtils.getRecordIdForInputString(mapIdStr, maps, maps.id, maps.displayName);
     }

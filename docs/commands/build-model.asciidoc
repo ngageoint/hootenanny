@@ -5,6 +5,7 @@
 The +build-model+ command reads the inputs, generates a model and writes the
 result to a .arff and .rf files.
 
+* +--export-arff-only+ - Exports only the .arff file and skips the building and exporting of the .rf file.
 * +ref1+ - Input with REF1 tags (e.g. .osm file).
 * +ref2+ - Input with REF2 tags (e.g. .osm file).
 * +output+ - Output model base name.
@@ -12,6 +13,6 @@ result to a .arff and .rf files.
 === Usage
 
 --------------------------------------
-build-model (ref1 ref2) [ref1 ref2 ...] (output)
+build-model [--export-arff-only] (ref1 ref2) [ref1 ref2 ...] (output)
 --------------------------------------
 

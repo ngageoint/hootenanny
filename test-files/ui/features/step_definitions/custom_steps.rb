@@ -211,7 +211,7 @@ When(/^I context click the "([^"]*)" Dataset$/) do |dataset|
 end
 
 When(/^I context click "([^"]*)"$/) do |txt|
-  page.find('a',:text=>txt, :match => :prefer_exact).context_click
+  page.find('span',:text=>txt, :match => :prefer_exact).context_click
 end
 
 
@@ -493,7 +493,8 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
 end
 
 When(/^I close the UI alert$/) do
-  find('#alerts').all('.x')[0].click
+  alerts = find('#alerts')
+  alerts.all('.x')[0].click unless alerts.nil?
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
@@ -551,6 +552,15 @@ end
 When(/^I select "([^"]*)" dataset/) do |file|
   include_hidden_fields do
     page.attach_file('ingestfileuploader', ENV['HOOT_HOME'] + file)
+  end
+end
+
+When(/^I select "([^"]*)" and "([^"]*)" from "([^"]*)" directory/) do |fileA, fileB, directory|
+  pathA = ENV['HOOT_HOME'] + directory + fileA
+  pathB = ENV['HOOT_HOME'] + directory + fileB
+
+  include_hidden_fields do
+    page.attach_file 'ingestdirectoryuploader', pathA #[@pathA, @pathB], options={multiple}
   end
 end
 
@@ -860,6 +870,12 @@ Then(/^I should not see the "([^"]*)" on the page$/) do |input|
   el = page.should have_no_css(input, :visible => true)
 end
 
+#for invalidName warning
+Then(/^I should see an invalid name warning for "([^"]*)" input/) do |el|
+  el = find('input' + el)
+  el[:class].include?('invalidName').should eq true
+end
+
 # for invalid features
 Then(/^I should see an invalid input warning for "([^"]*)"/) do |input|
   el = find(input)
@@ -879,3 +895,17 @@ Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do 
   el['placeholder'].should eq value
 end
 
+Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |negate, text, timeout, unit|
+  if unit == "seconds"
+    multiplier = 1
+  elsif unit == "minutes"
+    multiplier = 60
+  else
+    throw :badunits
+  end
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = Float(timeout) * multiplier
+  expectation = negate ? 0 : 1
+  find('#datasettable').assert_selector('text',:text=>text, :match => :prefer_exact ,:maximum => expectation)
+  Capybara.default_max_wait_time = oldTimeout
+end

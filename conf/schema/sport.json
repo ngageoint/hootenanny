@@ -1,5 +1,8 @@
 [
     {
+        "categories": [
+            "use"
+        ],
         "dataType": "enumeration",
         "geometries": [
             "node",
@@ -106,6 +109,14 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "sport",
         "name": "sport=basketball",
         "objectType": "tag"
@@ -166,9 +177,18 @@
         "objectType": "tag"
     },
     {
+        "aliases": [
+            "sport=bocci_ball"
+        ],
         "isA": "sport=boules",
         "name": "sport=bocce",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "sport=pelota",
+                "weight": 0.8
+            }
+        ]
     },
     {
         "isA": "sport",
@@ -491,6 +511,14 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "sport",
         "name": "sport=golf",
         "objectType": "tag"
@@ -1110,6 +1138,14 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "sport",
         "name": "sport=swimming",
         "objectType": "tag"
@@ -1150,6 +1186,14 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "sport",
         "name": "sport=tennis",
         "objectType": "tag"

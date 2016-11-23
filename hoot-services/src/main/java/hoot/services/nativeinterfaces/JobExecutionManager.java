@@ -50,41 +50,14 @@ public class JobExecutionManager {
     public JobExecutionManager() {}
 
     public String getProgress(String jobId) throws NativeInterfaceException {
-        try {
-            return this.nativeInterface.getJobProgress(jobId);
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
-        }
+        return this.nativeInterface.getJobProgress(jobId);
     }
 
-    /**
-     * Execute job using associated Native Interface class.
-     *
-     * @param command
-     * @throws NativeInterfaceException
-     */
     public JSONObject exec(JSONObject command) throws NativeInterfaceException {
-        try {
-            return this.nativeInterface.exec(command);
-        }
-        catch (NativeInterfaceException ne) {
-            throw ne;
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
-        }
+        return this.nativeInterface.exec(command);
     }
 
     public void terminate(String jobId) throws NativeInterfaceException {
-        try {
-            this.nativeInterface.terminate(jobId);
-        }
-        catch (NativeInterfaceException ne) {
-            throw ne;
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException(e.getMessage(), NativeInterfaceException.HttpCode.SERVER_ERROR, e);
-        }
+        this.nativeInterface.terminate(jobId);
     }
 }

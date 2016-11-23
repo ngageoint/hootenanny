@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.geo.BoundingBox;
-import hoot.services.job.JobStatusManager;
+import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
@@ -156,60 +156,6 @@ public class RasterToTilesService extends JobControllerBase {
         catch (Exception e) {
             String msg = "Failure resource ingestion: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        return jobId;
-    }
-
-    // This method may appear unused in your IDE since it's currently invoked reflectively.
-    public String ingestOSMResource(String name) {
-        // _zoomLevels
-        String jobId = UUID.randomUUID().toString();
-
-        try {
-            QMaps maps = QMaps.maps;
-            long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
-
-            BoundingBox queryBounds;
-            try {
-                queryBounds = new BoundingBox("-180,-90,180,90");
-                logger.debug("Query bounds area: {}", queryBounds.getArea());
-            }
-            catch (Exception e) {
-                throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                        + e.getMessage() + ")", e);
-            }
-
-            Map currMap = new Map(mapIdNum);
-            JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-            double dMinLon = (Double) extents.get("minlon");
-            double dMaxLon = (Double) extents.get("maxlon");
-            double dMinLat = (Double) extents.get("minlat");
-            double dMaxLat = (Double) extents.get("maxlat");
-
-            double deltaLon = dMaxLon - dMinLon;
-            double deltaLat = dMaxLat - dMinLat;
-
-            double maxDelta = deltaLon;
-            if (deltaLat > maxDelta) {
-                maxDelta = deltaLat;
-            }
-
-            JSONObject zoomInfo = getZoomInfo(maxDelta);
-
-            String zoomList = zoomInfo.get("zoomlist").toString();
-            int rasterSize = (Integer) zoomInfo.get("rastersize");
-
-            String argStr = createCommand(name, zoomList, rasterSize, mapIdNum);
-            postJobRquest(jobId, argStr);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Failure ingesting resource " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return jobId;

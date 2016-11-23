@@ -7,6 +7,10 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!--
+        Jersey Framework looks specifically for applicationContext.xml on the classpath
+        when Jersey-Spring integration is enabled.
+    -->
 
     <context:annotation-config/>
     <bean id="config" class="hoot.services.HootServicesSpringConfig"/>

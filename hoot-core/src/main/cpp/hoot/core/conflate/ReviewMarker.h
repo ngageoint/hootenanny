@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,6 +51,11 @@ public:
   /// Should only be used by AddHilbertReviewSortOrder. Please use the ReviewMarker helper methods
   /// for other operations.
   static QString reviewSortOrderKey;
+
+  /// This is in place so that we know the original number of members in the review relations in case
+  /// one of them is deleted during the process as a result of a merge.  This information can then
+  /// be used during cleanup of review relations for validity purposes.
+  static QString reviewMemberCountKey;
 
   ReviewMarker();
 
@@ -140,7 +145,7 @@ private:
   void _updateScore(Tags& t, double score);
 
   // for white box testing.
-  friend class RemoveEmptyReviewRelationsVisitorTest;
+  friend class RemoveInvalidReviewRelationsVisitorTest;
 };
 
 }
