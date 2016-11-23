@@ -107,7 +107,8 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 
     _read(map, _osmElemType);
   }
-  else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" || _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0") // process SELECT ALL
+  else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" ||
+          _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0") // process SELECT ALL
   {
     LOG_INFO("Executing OSM API read query against all element types...");
 
@@ -138,7 +139,8 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
 }
 
-void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env)
+void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& elementType,
+                                  const Envelope& env)
 {
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator =
@@ -157,17 +159,17 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
 
       // get the node tags
       shared_ptr<QSqlQuery> nodeTagIterator = _database.selectTagsForNode(id);
-      while( nodeTagIterator->next() )
+      while (nodeTagIterator->next())
       {
         // test for blank tag
         QString val1 = nodeTagIterator->value(1).toString();
         QString val2 = nodeTagIterator->value(2).toString();
         QString tag = "";
-        if(val1!="" || val2!="")
+        if (val1!="" || val2!="")
         {
           tag = "\""+val1+"\"=>\""+val2+"\"";
         }
-        if(tag != "")
+        if (tag != "")
         {
           tags << tag;
         }
@@ -189,16 +191,18 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   }
   else if (elementType == ElementType::Way)
   {
-    while( elementResultsIterator->next() )
+    while (elementResultsIterator->next())
     {
       long long wayId = elementResultsIterator->value(0).toLongLong();
       shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay( wayId );
       bool foundOne = false;
-      while( nodeInfoIterator->next() && !foundOne)
+      while (nodeInfoIterator->next() && !foundOne)
       {
         // do the bounds check
-        double lat = nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-        double lon = nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+        double lat =
+          nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+        double lon =
+          nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
         Coordinate c(lon, lat);
         if (env.contains(c))
         {
@@ -213,22 +217,22 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
 
         // get the way tags
         shared_ptr<QSqlQuery> wayTagIterator = _database.selectTagsForWay( wayId );
-        while( wayTagIterator->next() )
+        while (wayTagIterator->next())
         {
           // test for blank tag
           QString val1 = wayTagIterator->value(1).toString();
           QString val2 = wayTagIterator->value(2).toString();
           QString tag = "";
-          if(val1!="" || val2!="")
+          if (val1!="" || val2!="")
           {
             tag = "\""+val1+"\"=>\""+val2+"\"";
           }
-          if(tag != "")
+          if (tag != "")
           {
             tags << tag;
           }
         }
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
           element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
@@ -246,7 +250,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   }
   else if (elementType == ElementType::Relation)
   {
-    while( elementResultsIterator->next() )
+    while (elementResultsIterator->next())
     {
       _processRelation(*elementResultsIterator, *map, env);
     }
@@ -257,7 +261,8 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& ele
   }
 }
 
-void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env)
+void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& map,
+                                      const Envelope& env)
 {
   QStringList tags;
   long long relId = resultIterator.value(0).toLongLong();
@@ -269,26 +274,27 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
     QString type = eid.getType().toString();
     long idFromRelation = eid.getId();
 
-    if(type=="Node")
+    if (type == "Node")
     {
-      shared_ptr<QSqlQuery> nodeIterator = _database.selectBoundedElements(idFromRelation, ElementType::Node, _bbox);
-      if( nodeIterator->next() ) // we found a relation in the bounds
+      shared_ptr<QSqlQuery> nodeIterator =
+        _database.selectBoundedElements(idFromRelation, ElementType::Node, _bbox);
+      if (nodeIterator->next()) // we found a relation in the bounds
       {
         // process the relation into a data structure
         shared_ptr<Element> element = _resultToRelation(resultIterator, map);
 
         // get the way tags
         shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation( relId );
-        while( relationTagIterator->next() )
+        while (relationTagIterator->next())
         {
           // test for blank tag
           QString val1 = relationTagIterator->value(1).toString();
           QString val2 = relationTagIterator->value(2).toString();
           QString tag = "";
-          if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
-          if(tag != "") tags << tag;
+          if (val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
+          if (tag != "") tags << tag;
         }
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
@@ -300,11 +306,11 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         tags.clear();
       }
     }
-    else if(type == "Way")
+    else if (type == "Way")
     {
-      shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay( idFromRelation );
+      shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay(idFromRelation);
       bool foundOne = false;
-      while( nodeInfoIterator->next() && !foundOne)
+      while (nodeInfoIterator->next() && !foundOne)
       {
         // do the bounds check
         double lat =
@@ -317,14 +323,14 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
           foundOne = true;
         }
       }
-      if( foundOne ) // we found a relation in the bounds
+      if (foundOne) // we found a relation in the bounds
       {
         // process the relation into a data structure
         shared_ptr<Element> element = _resultToRelation(resultIterator, map);
 
         // get the way tags
         shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation( relId );
-        while( relationTagIterator->next() )
+        while (relationTagIterator->next())
         {
           // test for blank tag
           QString val1 = relationTagIterator->value(1).toString();
@@ -333,10 +339,10 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
           if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
           if(tag != "") tags << tag;
         }
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
-          element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
+          element->setTags(ApiDb::unescapeTags(tags.join(", ")));
           ApiDbReader::addTagsToElement( element );
         }
 
@@ -345,10 +351,11 @@ void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& m
         tags.clear();
       }
     }
-    else if(type == "Relation")
+    else if (type == "Relation")
     {
-      shared_ptr<QSqlQuery> relIterator = _database.selectBoundedElements(idFromRelation, ElementType::Relation, _bbox);
-      while(relIterator->next())
+      shared_ptr<QSqlQuery> relIterator =
+        _database.selectBoundedElements(idFromRelation, ElementType::Relation, _bbox);
+      while (relIterator->next())
       {
         _processRelation(*relIterator, map, env);
       }
@@ -369,15 +376,15 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
 
   assert(elementResultsIterator->isActive());
 
-  while( elementResultsIterator->next() )
+  while (elementResultsIterator->next())
   {
     long long id = elementResultsIterator->value(0).toLongLong();
-    if( lastId != id )
+    if (lastId != id)
     {
       // process the complete element only after the first element created
-      if(!firstElement)
+      if (!firstElement)
       {
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
@@ -415,16 +422,16 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     // need to get into form "key1"=>"val1", "key2"=>"val2", ...
 
     QString result = _database.extractTagFromRow(elementResultsIterator, elementType.getEnum());
-    if(result != "") tags << result;
+    if (result != "") tags << result;
   }
 
   // process the last complete element only if an element has been created
-  if(!firstElement)
+  if (!firstElement)
   {
-    if(tags.size()>0)
+    if (tags.size() > 0)
     {
       LOG_VART(tags);
-      element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
+      element->setTags(ApiDb::unescapeTags(tags.join(", ")));
       ApiDbReader::addTagsToElement( element );
     }
     if (_status != Status::Invalid) { element->setStatus(_status); }
