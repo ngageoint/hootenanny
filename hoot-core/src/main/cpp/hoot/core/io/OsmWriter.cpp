@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -209,6 +209,7 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 
 void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
+  LOG_VART(e->toString());
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
@@ -248,7 +249,8 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
 {
   QList<long> nids;
   NodeMap::const_iterator it = map->getNodeMap().begin();
-  while (it != map->getNodeMap().end()) {
+  while (it != map->getNodeMap().end())
+  {
     nids.append(it->first);
     ++it;
   }
@@ -282,7 +284,8 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
           }
           else
           {
-            writer.writeAttribute("v", removeInvalidCharacters(QString::number(n->getStatus().getEnum())));
+            writer.writeAttribute(
+              "v", removeInvalidCharacters(QString::number(n->getStatus().getEnum())));
           }
         }
         else
@@ -334,7 +337,8 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
 {
   QList<long> wids;
   WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end()) {
+  while (it != map->getWays().end())
+  {
     wids.append(it->first);
     ++it;
   }
@@ -434,7 +438,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
 {
   QList<long> rids;
   RelationMap::const_iterator it = map->getRelationMap().begin();
-  while (it != map->getRelationMap().end()) {
+  while (it != map->getRelationMap().end())
+  {
     rids.append(it->first);
     ++it;
   }
@@ -478,7 +483,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
           }
           else
           {
-            writer.writeAttribute("v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
+            writer.writeAttribute(
+              "v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
           }
         }
         else
@@ -527,8 +533,8 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
         {
           writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
         }
+        writer.writeEndElement();
       }
-      writer.writeEndElement();
     }
 
     writer.writeEndElement();
