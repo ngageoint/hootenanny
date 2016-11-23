@@ -610,7 +610,7 @@ translate = {
 
     
     // Returns true the feature is an OSM area feature
-    // This is based on the OSM idea of what is considered na area as well as some Hoot specific OSM+ tags
+    // This is based on the OSM idea of what is considered an area
     // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
     isOsmArea : function(tags)
     {
@@ -626,7 +626,6 @@ translate = {
                                     'building':undefined,
                                     'building:part':undefined,
                                     'craft':undefined,
-                                    'facility':undefined,
                                     'golf':undefined,
                                     'highway':{'services':1, 'rest_area':1, 'escape':1, 'elevator':1},
                                     'historic':undefined,

@@ -1116,7 +1116,8 @@ tds61 = {
         } // End process tags.note
 
         // Fix up areas
-        if (geometryType == 'Area' && translate.isOsmArea(tags))
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
         {
             // Debug
             // print('Adding area=yes');

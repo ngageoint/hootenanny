@@ -902,8 +902,9 @@ mgcp = {
             if (! tags.width) tags.width = attrs.WD1;
         }
 
-        // Fix up areas
-        if (geometryType == 'Area' && translate.isOsmArea(tags))
+        // Fix up areas.
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
         {
             // Debug
             // print('Adding area=yes');
