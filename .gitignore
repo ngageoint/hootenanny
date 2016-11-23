@@ -158,6 +158,8 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+plugins/eggdm30_osm_rules.js
+plugins/eggdm30_rules.js
 
 ###### hoot-services ignores
 hoot-services/db.properties
