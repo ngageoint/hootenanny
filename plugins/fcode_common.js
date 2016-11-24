@@ -116,7 +116,7 @@ fcodeCommon = {
       ['F_CODE','AK170','leisure','swimming_pool'], // Swimming Pool 
       ['F_CODE','AK180','tourism','zoo'], // Zoo/Safari Park
       ['F_CODE','AL010','facility','yes'], // Facility 
-      ['F_CODE','AL011','landuse','installation'], // Installation # Not sure the difference to AL010 Facility
+      ['F_CODE','AL011','landuse','installation'], // Installation. This is a group of AL010 Facilities.
       ['F_CODE','AL012','historic','archaeological_site'], // Archeological Site
       ['F_CODE','AL013','building','yes'], // Building - See custom rules
       ['F_CODE','AL014','man_made','structure'], // Non-building Structure

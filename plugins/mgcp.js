@@ -902,6 +902,15 @@ mgcp = {
             if (! tags.width) tags.width = attrs.WD1;
         }
 
+        // Fix up areas.
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
+
     }, // End of applyToOsmPostProcessing
 
     // ##### Start of the xxToMgcpxx Block #####
@@ -1469,7 +1478,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName + '  geometryType: ' + geometryType);
+            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
