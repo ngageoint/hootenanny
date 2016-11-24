@@ -22,7 +22,15 @@ sudo service ntp start
 echo "### Installing Java 8..."
 sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
 sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
-sudo rm -rf /usr/lib/jvm/oracle_jdk8
+
+if [[ ! -e /usr/lib/jvm ]]; then
+    sudo mkdir /usr/lib/jvm
+else
+    if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
+        sudo rm -rf /usr/lib/jvm/oracle_jdk8
+    fi
+fi
+
 sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 2000
 sudo rm -f /tmp/jdk-8u112-linux-x64.tar.gz
@@ -345,6 +353,11 @@ fi
 if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
     echo "### Changing Tomcat java opts..."
     sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m@" /etc/default/tomcat6
+fi
+
+if grep -i --quiet '^#JAVA_HOME=' /etc/default/tomcat6; then
+    echo "### Changing Tomcat JAVA_HOME..."
+    sudo sed -i.bak '/.*#JAVA_HOME=.*/c\JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' /etc/default/tomcat6
 fi
 
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
