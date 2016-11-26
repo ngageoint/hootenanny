@@ -32,7 +32,8 @@ else
 fi
 
 sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
-sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 2000
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
+sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
 sudo rm -f /tmp/jdk-8u112-linux-x64.tar.gz
 echo "### Done with Java 8 install..."
 
@@ -548,11 +549,6 @@ EOT
   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
   cd ~
 
-  echo '1' | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/bin/java 1
-  echo '1' | sudo update-alternatives --config java
-  echo '1' | sudo update-alternatives --install "/usr/bin/javac" "javac" "$JAVA_HOME/bin/javac" 1
-  echo '1' | sudo update-alternatives --config javac
-
   # test hadoop out
   #stop-all.sh
   #start-all.sh
@@ -593,3 +589,7 @@ mkdir -p $HOOT_HOME/upload
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 # Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
+
+# switch to auto mode and use the highest priority installed alternatives for Java.
+sudo update-alternatives --auto java
+sudo update-alternatives --auto javac
