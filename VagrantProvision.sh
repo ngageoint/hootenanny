@@ -23,6 +23,7 @@ echo "### Installing Java 8..."
 sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
 sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
 
+
 if [[ ! -e /usr/lib/jvm ]]; then
     sudo mkdir /usr/lib/jvm
 else
@@ -76,6 +77,8 @@ if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     echo "Adding Java home to profile..."
     echo "export JAVA_HOME=/usr/lib/jvm/oracle_jdk8" >> ~/.profile
     source ~/.profile
+else
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' ~/.profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
