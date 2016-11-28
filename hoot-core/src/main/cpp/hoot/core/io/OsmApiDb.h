@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -87,7 +87,7 @@ public:
   /**
    * Returns a results iterator to all OSM elements for a given bbox.
    */
-  shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
+  //shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
 
   /**
    * Returns a results iterator to a node for a given node id.
@@ -152,6 +152,15 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
+  shared_ptr<QSqlQuery> selectNodesByBounds(const QString bbox);
+  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QStringList& nodeIds);
+  shared_ptr<QSqlQuery> selectWaysByWayIds(const QStringList& wayIds);
+  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QStringList& wayIds);
+  shared_ptr<QSqlQuery> selectNodesByNodeIds(const QStringList& nodeIds);
+  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QStringList& memberIds,
+                                                     const ElementType& elementType);
+  shared_ptr<QSqlQuery> selectRelationsByRelationIds(const QStringList& relationIds);
+
 private:
 
   bool _inTransaction;
@@ -164,6 +173,15 @@ private:
   shared_ptr<QSqlQuery> _selectNodeById;
   shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
+  //bounds query related queries
+  shared_ptr<QSqlQuery> _selectNodesByBounds;
+  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  shared_ptr<QSqlQuery> _selectWaysByWayIds;
+  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  shared_ptr<QSqlQuery> _selectNodesByNodeIds;
+  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+  shared_ptr<QSqlQuery> _selectRelationsByRelationIds;
+
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   void _resetQueries();
@@ -172,8 +190,9 @@ private:
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
   QString _getTableName(const ElementType& elementType);
-  QString _getTileWhereCondition(QString bbox);
+  QString _getTileWhereCondition(const vector<Range>& tileIdRanges);
   QString _getIdWhereCondition(QString idCol, QStringList ids);
+  vector<Range> _getTileRanges(const Envelope& env);
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }

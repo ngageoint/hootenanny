@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -109,8 +109,9 @@ private:
   Tgs::BigMap<long, long> _wayIdMap;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env);
-  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env);
+  //void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env);
+  void _readBounded2(shared_ptr<OsmMap> map);
+  //void _processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
@@ -119,6 +120,7 @@ private:
   shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+  void _parseAndSetTagsOnElement(ElementPtr element);
 };
 
 }

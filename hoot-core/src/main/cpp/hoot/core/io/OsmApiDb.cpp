@@ -38,7 +38,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
-
+#include <hoot/core/util/GeometryUtils.h>
 
 // qt
 #include <QStringList>
@@ -189,6 +189,13 @@ void OsmApiDb::_resetQueries()
     itr.value().reset();
   }
   _selectChangesetsCreatedAfterTime.reset();
+  _selectNodesByBounds.reset();
+  _selectWayIdsByWayNodeIds.reset();
+  _selectWaysByWayIds.reset();
+  _selectWayNodeIdsByWayIds.reset();
+  _selectNodesByNodeIds.reset();
+  _selectRelationIdsByMemberIds.reset();
+  _selectRelationsByRelationIds.reset();
 }
 
 void OsmApiDb::rollback()
@@ -368,111 +375,111 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
-                                                      const ElementType& elementType,
-                                                      const QString& bbox)
-{
-  //prepare sql query
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
+//shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
+//                                                      const ElementType& elementType,
+//                                                      const QString& bbox)
+//{
+//  //prepare sql query
+//  _selectElementsForMap.reset(new QSqlQuery(_db));
+//  _selectElementsForMap->setForwardOnly(true);
 
-  QString sql =  "SELECT * FROM ";
-  //if element id is giving, use it directly
-  if (elementId > -1)
-  {
-    sql += _getTableName(elementType) + " WHERE visible = true ";
-    if (elementType == ElementType::Node)
-    {
-      sql += "AND (" + _getTileWhereCondition(bbox) + ")";
-    }
-    sql += " AND (id = :elementId)";
-  }
-  else
-  {
-    sql += " current_nodes WHERE visible = true AND (" + _getTileWhereCondition(bbox) + ")";
+//  QString sql =  "SELECT * FROM ";
+//  //if element id is giving, use it directly
+//  if (elementId > -1)
+//  {
+//    sql += _getTableName(elementType) + " WHERE visible = true ";
+//    if (elementType == ElementType::Node)
+//    {
+//      sql += "AND (" + _getTileWhereCondition(bbox) + ")";
+//    }
+//    sql += " AND (id = :elementId)";
+//  }
+//  else
+//  {
+//    sql += " current_nodes WHERE visible = true AND (" + _getTileWhereCondition(bbox) + ")";
 
-    //get node ids so we can select ways or relations related to those node ids
-    if (elementType != ElementType::Node)
-    {
-      QStringList nodeIds;
-      QSqlQuery nodeIdsQuery(_db);
-      nodeIdsQuery.setForwardOnly(true);
-      nodeIdsQuery.prepare(sql);
-      if (nodeIdsQuery.exec() == false)
-      {
-        QString err = nodeIdsQuery.lastError().text();
-        LOG_WARN(sql);
-        throw HootException("Error selecting elements of type: " + elementType.toString() +
-          " Error: " + err);
-      }
-      while(nodeIdsQuery.next())
-      {
-        nodeIds << nodeIdsQuery.value(0).toString();;
-      }
+//    //get node ids so we can select ways or relations related to those node ids
+//    if (elementType != ElementType::Node)
+//    {
+//      QStringList nodeIds;
+//      QSqlQuery nodeIdsQuery(_db);
+//      nodeIdsQuery.setForwardOnly(true);
+//      nodeIdsQuery.prepare(sql);
+//      if (nodeIdsQuery.exec() == false)
+//      {
+//        QString err = nodeIdsQuery.lastError().text();
+//        LOG_WARN(sql);
+//        throw HootException("Error selecting elements of type: " + elementType.toString() +
+//          " Error: " + err);
+//      }
+//      while(nodeIdsQuery.next())
+//      {
+//        nodeIds << nodeIdsQuery.value(0).toString();;
+//      }
 
-      //select way ids or relation ids depends on node ids
-      QString idsQuery = "SELECT ";
-      QStringList ids;
-      if (elementType == ElementType::Way)
-      {
-        idsQuery += "way_id FROM current_way_nodes WHERE " + _getIdWhereCondition("node_id", nodeIds);
-      }
-      else if (elementType == ElementType::Relation)
-      {
-        idsQuery +=
-          "relation_id FROM current_relation_members WHERE member_type='Node' AND (" +
-            _getIdWhereCondition("member_id", nodeIds) + ")";
-      }
-      QSqlQuery idsSqlQuery(_db);
-      idsSqlQuery.setForwardOnly(true);
-      idsSqlQuery.prepare(idsQuery);
-      if (idsSqlQuery.exec() == false)
-      {
-        QString err = idsSqlQuery.lastError().text();
-        LOG_WARN(idsQuery);
-        throw HootException("Error selecting elements of type: " + elementType.toString() +
-          " Error: " + err);
-      }
-      while(idsSqlQuery.next())
-      {
-        ids << idsSqlQuery.value(0).toString();
-      }
-      ids.removeDuplicates();
+//      //select way ids or relation ids depends on node ids
+//      QString idsQuery = "SELECT ";
+//      QStringList ids;
+//      if (elementType == ElementType::Way)
+//      {
+//        idsQuery += "way_id FROM current_way_nodes WHERE " + _getIdWhereCondition("node_id", nodeIds);
+//      }
+//      else if (elementType == ElementType::Relation)
+//      {
+//        idsQuery +=
+//          "relation_id FROM current_relation_members WHERE member_type='Node' AND (" +
+//            _getIdWhereCondition("member_id", nodeIds) + ")";
+//      }
+//      QSqlQuery idsSqlQuery(_db);
+//      idsSqlQuery.setForwardOnly(true);
+//      idsSqlQuery.prepare(idsQuery);
+//      if (idsSqlQuery.exec() == false)
+//      {
+//        QString err = idsSqlQuery.lastError().text();
+//        LOG_WARN(idsQuery);
+//        throw HootException("Error selecting elements of type: " + elementType.toString() +
+//          " Error: " + err);
+//      }
+//      while(idsSqlQuery.next())
+//      {
+//        ids << idsSqlQuery.value(0).toString();
+//      }
+//      ids.removeDuplicates();
 
-      //format sql for ways or relations
-      if (ids.size() > 0)
-      {
-        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" +
-            _getIdWhereCondition("id", ids) + ")";
-      }
-      else
-      {
-        //will return 0 records
-        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (id=-1)";
-      }
+//      //format sql for ways or relations
+//      if (ids.size() > 0)
+//      {
+//        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" +
+//            _getIdWhereCondition("id", ids) + ")";
+//      }
+//      else
+//      {
+//        //will return 0 records
+//        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (id=-1)";
+//      }
 
-    }
-  }
-  sql += " ORDER BY id DESC";
+//    }
+//  }
+//  sql += " ORDER BY id DESC";
 
-  _selectElementsForMap->prepare(sql);
+//  _selectElementsForMap->prepare(sql);
 
-  if (elementId > -1)
-  {
-    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-  }
+//  if (elementId > -1)
+//  {
+//    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
+//  }
 
-  // execute the query on the DB and get the results back
-  if (_selectElementsForMap->exec() == false)
-  {
-    QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " Error: " + err);
-  }
+//  // execute the query on the DB and get the results back
+//  if (_selectElementsForMap->exec() == false)
+//  {
+//    QString err = _selectElementsForMap->lastError().text();
+//    LOG_WARN(sql);
+//    throw HootException("Error selecting elements of type: " + elementType.toString() +
+//      " Error: " + err);
+//  }
 
-  return _selectElementsForMap;
-}
+//  return _selectElementsForMap;
+//}
 
 QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
 {
@@ -491,14 +498,12 @@ QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
   return sql;
 }
 
-QString OsmApiDb::_getTileWhereCondition(QString bbox)
+vector<Range> OsmApiDb::_getTileRanges(const Envelope& env)
 {
-  //get tile id ranges
-  QStringList bboxParts = bbox.split(",");
-  double minLat = bboxParts[1].toDouble();
-  double minLon = bboxParts[0].toDouble();
-  double maxLat = bboxParts[3].toDouble();
-  double maxLon = bboxParts[2].toDouble();
+  double minLat = env.getMinY();
+  double minLon = env.getMinX();
+  double maxLat = env.getMaxY();
+  double maxLon = env.getMaxX();
 
   vector<double> minV;
   minV.push_back(-90.0);
@@ -517,20 +522,23 @@ QString OsmApiDb::_getTileWhereCondition(QString bbox)
   maxB.push_back(maxLon);
 
   BBox b(minB, maxB);
-  vector<Range> ranges = ranger.decomposeRange(b, 1);
+  return ranger.decomposeRange(b, 1);
+}
 
+QString OsmApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges)
+{
   QString sql = "";
-  for (uint i = 0; i < ranges.size(); i++)
+  for (uint i = 0; i < tileIdRanges.size(); i++)
   {
-    if (i == ranges.size() - 1)
+    if (i == tileIdRanges.size() - 1)
     {
-      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " +
-          QString::number(ranges[i].getMax()) + ")";
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ")";
     }
     else
     {
-      sql += "(tile between " + QString::number(ranges[i].getMin()) + " and " +
-          QString::number(ranges[i].getMax()) + ") or ";
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ") or ";
     }
   }
   return sql;
@@ -738,6 +746,149 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
 double OsmApiDb::fromOsmApiDbCoord(const long x)
 {
   return (double)x / COORDINATE_SCALE;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
+{
+  const Envelope env = GeometryUtils::envelopeFromConfigString(bbox);
+  const vector<Range> tileRanges = _getTileRanges(env);
+  if (!_selectNodesByBounds)
+  {
+    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds->setForwardOnly(true);
+    QString sql = "select * from current_nodes where";
+    sql += " visible = true";
+    sql += " and " + _getTileWhereCondition(tileRanges);
+    sql += " and longitude between :minLon and :maxLon and latitude between :minLat and :maxLat";
+    _selectNodesByBounds->prepare(sql);
+  }
+  _selectNodesByBounds->bindValue(":minLon", env.getMinX());
+  _selectNodesByBounds->bindValue(":maxLon", env.getMaxX());
+  _selectNodesByBounds->bindValue(":minLat", env.getMinY());
+  _selectNodesByBounds->bindValue(":maxLat", env.getMaxY());
+  if (_selectNodesByBounds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting nodes by bounds: " + bbox + " Error: " +
+      _selectNodesByBounds->lastError().text());
+  }
+  return _selectNodesByBounds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& nodeIds)
+{
+  if (!_selectWayIdsByWayNodeIds)
+  {
+    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds->setForwardOnly(true);
+    const QString sql = "select way_id from current_way_nodes where node_id in :nodeIds";
+    _selectWayIdsByWayNodeIds->prepare(sql);
+  }
+  _selectWayIdsByWayNodeIds->bindValue(":nodeIds", "(" + nodeIds.join(", ") + ")");
+  if (_selectWayIdsByWayNodeIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way IDs by way node IDs.  Error: " +
+      _selectWayIdsByWayNodeIds->lastError().text());
+  }
+  return _selectWayIdsByWayNodeIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectWaysByWayIds(const QStringList& wayIds)
+{
+  if (!_selectWaysByWayIds)
+  {
+    _selectWaysByWayIds.reset(new QSqlQuery(_db));
+    _selectWaysByWayIds->setForwardOnly(true);
+    const QString sql = "select * from current_ways where visible = true and id in :wayIds";
+    _selectWaysByWayIds->prepare(sql);
+  }
+  _selectWaysByWayIds->bindValue(":wayIds", "(" + wayIds.join(", ") + ")");
+  if (_selectWaysByWayIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting ways by way IDs:  Error: " + _selectWaysByWayIds->lastError().text());
+  }
+  return _selectWaysByWayIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayIds)
+{
+  if (!_selectWayNodeIdsByWayIds)
+  {
+    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds->setForwardOnly(true);
+    const QString sql = "select node_id from current_way_nodes where way_id in :wayIds";
+    _selectWayNodeIdsByWayIds->prepare(sql);
+  }
+  _selectWayNodeIdsByWayIds->bindValue(":wayIds", "(" + wayIds.join(", ") + ")");
+  if (_selectWayNodeIdsByWayIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way node IDs by way IDs.  Error: " +
+      _selectWayNodeIdsByWayIds->lastError().text());
+  }
+  return _selectWayNodeIdsByWayIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectNodesByNodeIds(const QStringList& nodeIds)
+{
+  if (!_selectNodesByNodeIds)
+  {
+    _selectNodesByNodeIds.reset(new QSqlQuery(_db));
+    _selectNodesByNodeIds->setForwardOnly(true);
+    const QString sql = "select * from current_nodes where visible = true and id in :nodeIds";
+    _selectNodesByNodeIds->prepare(sql);
+  }
+  _selectNodesByNodeIds->bindValue(":nodeIds", "(" + nodeIds.join(", ") + ")");
+  if (_selectNodesByNodeIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting nodes by node IDs:  Error: " + _selectNodesByNodeIds->lastError().text());
+  }
+  return _selectNodesByNodeIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& memberIds,
+                                                             const ElementType& elementType)
+{
+  if (!_selectRelationIdsByMemberIds)
+  {
+    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds->setForwardOnly(true);
+    QString sql = "select relation_id from current_relation_members";
+    sql += " where member_type = ':elementType' and member_id in :memberIds";
+    _selectRelationIdsByMemberIds->prepare(sql);
+  }
+  _selectRelationIdsByMemberIds->bindValue(":elementType", elementType.toString());
+  _selectRelationIdsByMemberIds->bindValue(":memberIds", "(" + memberIds.join(", ") + ")");
+  if (_selectRelationIdsByMemberIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting relation IDs by member IDs.  Error: " +
+      _selectRelationIdsByMemberIds->lastError().text());
+  }
+  return _selectRelationIdsByMemberIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectRelationsByRelationIds(const QStringList& relationIds)
+{
+  if (!_selectRelationsByRelationIds)
+  {
+    _selectRelationsByRelationIds.reset(new QSqlQuery(_db));
+    _selectRelationsByRelationIds->setForwardOnly(true);
+    const QString sql =
+      "select * from current_relations where visible = true and id in :relationIds";
+    _selectRelationsByRelationIds->prepare(sql);
+  }
+  _selectRelationsByRelationIds->bindValue(":relationIds", "(" + relationIds.join(", ") + ")");
+  if (_selectRelationsByRelationIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting relations by relation IDs:  Error: " +
+      _selectRelationsByRelationIds->lastError().text());
+  }
+  return _selectRelationsByRelationIds;
 }
 
 }
