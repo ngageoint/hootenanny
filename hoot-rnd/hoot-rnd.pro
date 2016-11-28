@@ -64,7 +64,7 @@ SOURCES += \
 
 
 HEADERS += \
-
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h 
 }
 
 SOURCES += \
@@ -128,7 +128,6 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/SearchRadiusProvider.h \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h \
     src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
