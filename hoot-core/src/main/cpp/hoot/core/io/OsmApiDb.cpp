@@ -372,112 +372,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-//shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
-//                                                      const ElementType& elementType,
-//                                                      const QString& bbox)
-//{
-//  //prepare sql query
-//  _selectElementsForMap.reset(new QSqlQuery(_db));
-//  _selectElementsForMap->setForwardOnly(true);
-
-//  QString sql =  "SELECT * FROM ";
-//  //if element id is giving, use it directly
-//  if (elementId > -1)
-//  {
-//    sql += _getTableName(elementType) + " WHERE visible = true ";
-//    if (elementType == ElementType::Node)
-//    {
-//      sql += "AND (" + _getTileWhereCondition(bbox) + ")";
-//    }
-//    sql += " AND (id = :elementId)";
-//  }
-//  else
-//  {
-//    sql += " current_nodes WHERE visible = true AND (" + _getTileWhereCondition(bbox) + ")";
-
-//    //get node ids so we can select ways or relations related to those node ids
-//    if (elementType != ElementType::Node)
-//    {
-//      QStringList nodeIds;
-//      QSqlQuery nodeIdsQuery(_db);
-//      nodeIdsQuery.setForwardOnly(true);
-//      nodeIdsQuery.prepare(sql);
-//      if (nodeIdsQuery.exec() == false)
-//      {
-//        QString err = nodeIdsQuery.lastError().text();
-//        LOG_WARN(sql);
-//        throw HootException("Error selecting elements of type: " + elementType.toString() +
-//          " Error: " + err);
-//      }
-//      while(nodeIdsQuery.next())
-//      {
-//        nodeIds << nodeIdsQuery.value(0).toString();;
-//      }
-
-//      //select way ids or relation ids depends on node ids
-//      QString idsQuery = "SELECT ";
-//      QStringList ids;
-//      if (elementType == ElementType::Way)
-//      {
-//        idsQuery += "way_id FROM current_way_nodes WHERE " + _getIdWhereCondition("node_id", nodeIds);
-//      }
-//      else if (elementType == ElementType::Relation)
-//      {
-//        idsQuery +=
-//          "relation_id FROM current_relation_members WHERE member_type='Node' AND (" +
-//            _getIdWhereCondition("member_id", nodeIds) + ")";
-//      }
-//      QSqlQuery idsSqlQuery(_db);
-//      idsSqlQuery.setForwardOnly(true);
-//      idsSqlQuery.prepare(idsQuery);
-//      if (idsSqlQuery.exec() == false)
-//      {
-//        QString err = idsSqlQuery.lastError().text();
-//        LOG_WARN(idsQuery);
-//        throw HootException("Error selecting elements of type: " + elementType.toString() +
-//          " Error: " + err);
-//      }
-//      while(idsSqlQuery.next())
-//      {
-//        ids << idsSqlQuery.value(0).toString();
-//      }
-//      ids.removeDuplicates();
-
-//      //format sql for ways or relations
-//      if (ids.size() > 0)
-//      {
-//        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (" +
-//            _getIdWhereCondition("id", ids) + ")";
-//      }
-//      else
-//      {
-//        //will return 0 records
-//        sql = "SELECT * FROM " + _getTableName(elementType) + " WHERE visible = true AND (id=-1)";
-//      }
-
-//    }
-//  }
-//  sql += " ORDER BY id DESC";
-
-//  _selectElementsForMap->prepare(sql);
-
-//  if (elementId > -1)
-//  {
-//    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-//  }
-
-//  // execute the query on the DB and get the results back
-//  if (_selectElementsForMap->exec() == false)
-//  {
-//    QString err = _selectElementsForMap->lastError().text();
-//    LOG_WARN(sql);
-//    throw HootException("Error selecting elements of type: " + elementType.toString() +
-//      " Error: " + err);
-//  }
-
-//  return _selectElementsForMap;
-//}
-
 QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
 {
   QString sql = "";
@@ -497,10 +391,10 @@ QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
 
 vector<Range> OsmApiDb::_getTileRanges(const Envelope& env)
 {
-  double minLat = env.getMinY();
-  double minLon = env.getMinX();
-  double maxLat = env.getMaxY();
-  double maxLon = env.getMaxX();
+  const double minLat = env.getMinY();
+  const double minLon = env.getMinX();
+  const double maxLat = env.getMaxY();
+  const double maxLon = env.getMaxX();
 
   vector<double> minV;
   minV.push_back(-90.0);

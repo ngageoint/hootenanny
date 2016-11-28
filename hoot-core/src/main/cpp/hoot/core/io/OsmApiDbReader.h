@@ -109,9 +109,7 @@ private:
   Tgs::BigMap<long, long> _wayIdMap;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  //void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env);
-  void _readBounded2(shared_ptr<OsmMap> map);
-  //void _processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env);
+  void _readBounded(shared_ptr<OsmMap> map);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
