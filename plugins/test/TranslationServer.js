@@ -323,6 +323,42 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle osmtotds POST of facility area feature', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="facility" v="yes"/><tag k="uuid" v="{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}"/><tag k="area" v="yes"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[0].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
+                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[1].$.v, "AL010");
+            });
+        });
+
+        it('should handle tdstoosm POST of facility area feature', function() {
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><nd ref="-13"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AL010"/><tag k="SDP" v="D"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateFrom'
+            });
+            var output = xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "source");
+                assert.equal(result.osm.way[0].tag[0].$.v, "D");
+                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[2].$.k, "facility");
+                assert.equal(result.osm.way[0].tag[2].$.v, "yes");
+                assert.equal(result.osm.way[0].tag[3].$.k, "area");
+                assert.equal(result.osm.way[0].tag[3].$.v, "yes");
+            });
+        });
+
         // it('should return error message for invalide F_CODE/geom combination in osmtotds POST', function() {
         //     var osm2trans = server.handleInputs({
         //         osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',

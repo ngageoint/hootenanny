@@ -14,5 +14,31 @@
             "name": "landuse=military",
             "weight": 0.1
         }
+    },
+    {
+        "description": "FCODE: SU001 - An installation designed for military use. For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages.",
+        "isA": "military",
+        "name": "military=installation",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "landuse=installation",
+            "weight": 0.9
+        }
+    },
+    {
+        "description": "FCODE: SU004 - An area containing military quarters. Typically consisting of the residential sections of a military installation, where tactical training may be limited due to other activities that would endanger and disrupt personnel and their dependents.",
+        "isA": "military",
+        "name": "military=cantonment",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "landuse=installation",
+                "weight": 0.9
+            },
+            {
+                "name": "landuse=residential",
+                "weight": 0.9
+            }
+        ]
     }
 ]
