@@ -154,12 +154,11 @@ public:
 
   shared_ptr<QSqlQuery> selectNodesByBounds(const QString bbox);
   shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QStringList& nodeIds);
-  shared_ptr<QSqlQuery> selectWaysByWayIds(const QStringList& wayIds);
+  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QStringList& elementIds,
+                                                      const ElementType& elementType);
   shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QStringList& wayIds);
-  shared_ptr<QSqlQuery> selectNodesByNodeIds(const QStringList& nodeIds);
   shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QStringList& memberIds,
                                                      const ElementType& elementType);
-  shared_ptr<QSqlQuery> selectRelationsByRelationIds(const QStringList& relationIds);
 
 private:
 
@@ -176,11 +175,9 @@ private:
   //bounds query related queries
   shared_ptr<QSqlQuery> _selectNodesByBounds;
   shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
-  shared_ptr<QSqlQuery> _selectWaysByWayIds;
+  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
   shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
-  shared_ptr<QSqlQuery> _selectNodesByNodeIds;
   shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
-  shared_ptr<QSqlQuery> _selectRelationsByRelationIds;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

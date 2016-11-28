@@ -191,11 +191,8 @@ void OsmApiDb::_resetQueries()
   _selectChangesetsCreatedAfterTime.reset();
   _selectNodesByBounds.reset();
   _selectWayIdsByWayNodeIds.reset();
-  _selectWaysByWayIds.reset();
   _selectWayNodeIdsByWayIds.reset();
-  _selectNodesByNodeIds.reset();
   _selectRelationIdsByMemberIds.reset();
-  _selectRelationsByRelationIds.reset();
 }
 
 void OsmApiDb::rollback()
@@ -794,22 +791,25 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& node
   return _selectWayIdsByWayNodeIds;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectWaysByWayIds(const QStringList& wayIds)
+shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList& elementIds,
+                                                              const ElementType& elementType)
 {
-  if (!_selectWaysByWayIds)
+  if (!_selectElementsByElementIdList)
   {
-    _selectWaysByWayIds.reset(new QSqlQuery(_db));
-    _selectWaysByWayIds->setForwardOnly(true);
-    const QString sql = "select * from current_ways where visible = true and id in :wayIds";
-    _selectWaysByWayIds->prepare(sql);
+    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList->setForwardOnly(true);
+    const QString sql = "select * from :table where visible = true and id in :elementIds";
+    _selectElementsByElementIdList->prepare(sql);
   }
-  _selectWaysByWayIds->bindValue(":wayIds", "(" + wayIds.join(", ") + ")");
-  if (_selectWaysByWayIds->exec() == false)
+  _selectElementsByElementIdList->bindValue(":table", _getTableName(elementType));
+  _selectElementsByElementIdList->bindValue(":elementIds", "(" + elementIds.join(", ") + ")");
+  if (_selectElementsByElementIdList->exec() == false)
   {
     throw HootException(
-      "Error selecting ways by way IDs:  Error: " + _selectWaysByWayIds->lastError().text());
+      "Error selecting elements by element ID list:  Error: " +
+      _selectElementsByElementIdList->lastError().text());
   }
-  return _selectWaysByWayIds;
+  return _selectElementsByElementIdList;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayIds)
@@ -829,24 +829,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayI
       _selectWayNodeIdsByWayIds->lastError().text());
   }
   return _selectWayNodeIdsByWayIds;
-}
-
-shared_ptr<QSqlQuery> OsmApiDb::selectNodesByNodeIds(const QStringList& nodeIds)
-{
-  if (!_selectNodesByNodeIds)
-  {
-    _selectNodesByNodeIds.reset(new QSqlQuery(_db));
-    _selectNodesByNodeIds->setForwardOnly(true);
-    const QString sql = "select * from current_nodes where visible = true and id in :nodeIds";
-    _selectNodesByNodeIds->prepare(sql);
-  }
-  _selectNodesByNodeIds->bindValue(":nodeIds", "(" + nodeIds.join(", ") + ")");
-  if (_selectNodesByNodeIds->exec() == false)
-  {
-    throw HootException(
-      "Error selecting nodes by node IDs:  Error: " + _selectNodesByNodeIds->lastError().text());
-  }
-  return _selectNodesByNodeIds;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& memberIds,
@@ -869,26 +851,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& 
       _selectRelationIdsByMemberIds->lastError().text());
   }
   return _selectRelationIdsByMemberIds;
-}
-
-shared_ptr<QSqlQuery> OsmApiDb::selectRelationsByRelationIds(const QStringList& relationIds)
-{
-  if (!_selectRelationsByRelationIds)
-  {
-    _selectRelationsByRelationIds.reset(new QSqlQuery(_db));
-    _selectRelationsByRelationIds->setForwardOnly(true);
-    const QString sql =
-      "select * from current_relations where visible = true and id in :relationIds";
-    _selectRelationsByRelationIds->prepare(sql);
-  }
-  _selectRelationsByRelationIds->bindValue(":relationIds", "(" + relationIds.join(", ") + ")");
-  if (_selectRelationsByRelationIds->exec() == false)
-  {
-    throw HootException(
-      "Error selecting relations by relation IDs:  Error: " +
-      _selectRelationsByRelationIds->lastError().text());
-  }
-  return _selectRelationsByRelationIds;
 }
 
 }
