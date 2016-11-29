@@ -100,8 +100,6 @@ void OsmApiDbReader::open(QString urlStr)
 
 void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  LOG_DEBUG("IN OsmApiDbReader::read()...");
-
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
     LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
@@ -139,6 +137,9 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
       break;
     case ElementType::Way:
       tagItr = _database.selectTagsForWay(element->getId());
+      break;
+    case ElementType::Relation:
+      tagItr = _database.selectTagsForRelation(element->getId());
       break;
     default:
       throw HootException("Invalid element type.");
@@ -181,9 +182,11 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
     {
       element->setStatus(_status);
     }
+    LOG_VART(element->toString());
     map->addElement(element);
     nodeIds.append(QString::number(element->getId()));
   }
+  LOG_VARD(nodeIds.size());
 
   if (nodeIds.size() > 0)
   {
@@ -192,8 +195,11 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
     shared_ptr<QSqlQuery> wayIdItr = _database.selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
     {
-      wayIds.append(QString::number((*wayIdItr).value(0).toLongLong()));
+      const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
+      LOG_VART(wayId);
+      wayIds.append(wayId);
     }
+    LOG_VARD(wayIds.size());
 
     if (wayIds.size() > 0)
     {
@@ -208,6 +214,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
         {
           element->setStatus(_status);
         }
+        LOG_VART(element->toString());
         //TODO: I believe this will fail for any contained way nodes not yet added (added by next
         //query), so may need to refactor.
         map->addElement(element);
@@ -218,14 +225,18 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
       shared_ptr<QSqlQuery> additionalWayNodeIdItr = _database.selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
       {
-        additionalWayNodeIds.append(
-          QString::number((*additionalWayNodeIdItr).value(0).toLongLong()));
+        const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
+        LOG_VART(nodeId);
+        additionalWayNodeIds.append(nodeId);
       }
 
       //subtract nodeIds from additionalWayNodeIds so no dupes get added
       const QSet<QString> nodeIdsAsSet = nodeIds.toSet();
+      LOG_VARD(nodeIdsAsSet.size());
       QSet<QString> additionalWayNodeIdsAsSet = additionalWayNodeIds.toSet();
+      LOG_VARD(additionalWayNodeIdsAsSet.size());
       additionalWayNodeIdsAsSet = additionalWayNodeIdsAsSet.subtract(nodeIdsAsSet);
+      LOG_VARD(additionalWayNodeIdsAsSet.size());
       additionalWayNodeIds = additionalWayNodeIdsAsSet.toList();
 
       if (additionalWayNodeIds.size() > 0)
@@ -243,6 +254,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
           {
             element->setStatus(_status);
           }
+          LOG_VART(element->toString());
           map->addElement(element);
         }
       }
@@ -254,13 +266,18 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
       _database.selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
     {
-      relationIds.append(QString::number((*relationIdItr).value(0).toLongLong()));
+      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
+      LOG_VART(relationId);
+      relationIds.append(relationId);
     }
     relationIdItr = _database.selectRelationIdsByMemberIds(wayIds, ElementType::Way);
     while (relationIdItr->next())
     {
-      relationIds.append(QString::number((*relationIdItr).value(0).toLongLong()));
+      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
+      LOG_VART(relationId);
+      relationIds.append(relationId);
     }
+    LOG_VARD(relationIds.size());
 
     if (relationIds.size() > 0)
     {
@@ -275,6 +292,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
         {
           element->setStatus(_status);
         }
+        LOG_VART(element->toString());
         map->addElement(element);
       }
     }

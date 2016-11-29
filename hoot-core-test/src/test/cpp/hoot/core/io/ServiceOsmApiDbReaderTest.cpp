@@ -51,8 +51,8 @@ namespace hoot
 class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
-  CPPUNIT_TEST(runReadOsmApiTest);
-  //CPPUNIT_TEST(runReadBoundingBoxTest);
+  //CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadBoundingBoxTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -170,7 +170,9 @@ public:
 
   void verifyReadBoundingBoxOutput(shared_ptr<OsmMap> map)
   {
-
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
   }
 
   void runReadOsmApiTest()
@@ -201,10 +203,9 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
-    Settings s = conf();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    QString bbox = "-106.51848,38.0445,-105.378,38.56";
-    reader.setBoundingBox(bbox);
+    reader.setBoundingBox(
+      "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
     reader.read(map);
 
     verifyReadBoundingBoxOutput(map);
