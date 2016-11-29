@@ -240,7 +240,7 @@ void OsmApiDb::commit()
   _inTransaction = false;
 }
 
-QString OsmApiDb::_getTableName(const ElementType& elementType)
+QString OsmApiDb::_getTableName(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
   {
@@ -373,24 +373,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-QString OsmApiDb::_getIdWhereCondition(QString idCol, QStringList ids)
-{
-  QString sql = "";
-  for (int i = 0; i < ids.size(); i++)
-  {
-    if (i == ids.size() - 1)
-    {
-      sql += idCol + "=" + ids.at(i);
-    }
-    else
-    {
-      sql += idCol + "=" + ids.at(i) + " or ";
-    }
-  }
-  return sql;
-}
-
-vector<Range> OsmApiDb::_getTileRanges(const Envelope& env)
+vector<Range> OsmApiDb::_getTileRanges(const Envelope& env) const
 {
   const double minLat = env.getMinY();
   const double minLon = env.getMinX();
@@ -417,7 +400,7 @@ vector<Range> OsmApiDb::_getTileRanges(const Envelope& env)
   return ranger.decomposeRange(b, 1);
 }
 
-QString OsmApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges)
+QString OsmApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
 {
   QString sql = "";
   for (uint i = 0; i < tileIdRanges.size(); i++)
@@ -611,11 +594,14 @@ long OsmApiDb::getNextId(const QString tableName)
 shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
   LOG_VARD(timeStr);
-  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
-  _selectChangesetsCreatedAfterTime->prepare(
-    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
-    QString("WHERE created_at > :createdAt"));
-  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  if (!_selectChangesetsCreatedAfterTime)
+  {
+    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime->prepare(
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+      QString("WHERE created_at > :createdAt"));
+    _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  }
 
   if (_selectChangesetsCreatedAfterTime->exec() == false)
   {
@@ -646,24 +632,29 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
   LOG_VARD(env);
   const vector<Range> tileRanges = _getTileRanges(env);
   LOG_VARD(tileRanges.size());
-  //if (!_selectNodesByBounds)
-  //{
+
+  //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
+  //modify this to add placeholders for the tile ID ranges and make it so the query only gets
+  //prepared once.
+  if (!_selectNodesByBounds)
+  {
     _selectNodesByBounds.reset(new QSqlQuery(_db));
     _selectNodesByBounds->setForwardOnly(true);
-    QString sql = "select * from current_nodes where";
-    sql += " visible = true";
-    sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
-    sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
-    sql += " and latitude <= :maxLat";
-    sql += " order by id desc";
-    _selectNodesByBounds->prepare(sql);
-  //}
+  }
+  QString sql = "select * from current_nodes where";
+  sql += " visible = true";
+  sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
+  sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
+  sql += " and latitude <= :maxLat";
+  sql += " order by id desc";
+  _selectNodesByBounds->prepare(sql);
   _selectNodesByBounds->bindValue(":minLon", (qlonglong)(env.getMinX() * COORDINATE_SCALE));
   _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(env.getMaxX() * COORDINATE_SCALE));
   _selectNodesByBounds->bindValue(":minLat", (qlonglong)(env.getMinY() * COORDINATE_SCALE));
   _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(env.getMaxY() * COORDINATE_SCALE));
   LOG_VARD(_selectNodesByBounds->lastQuery());
   LOG_VARD(_selectNodesByBounds->boundValues());
+
   if (_selectNodesByBounds->exec() == false)
   {
     throw HootException(
@@ -676,19 +667,18 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
 
 shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& nodeIds)
 {
-  //if (!_selectWayIdsByWayNodeIds)
-  //{
+  if (!_selectWayIdsByWayNodeIds)
+  {
     _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
-    //const QString sql = "select way_id from current_way_nodes where node_id in :nodeIds";
-    QString sql =
-      "select way_id from current_way_nodes where node_id in (" + nodeIds.join(",") + ")";
-    //sql += " order by way_id desc";
-    _selectWayIdsByWayNodeIds->prepare(sql);
-  //}
-  //_selectWayIdsByWayNodeIds->bindValue(":nodeIds", "(" + nodeIds.join(",") + ")");
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select way_id from current_way_nodes where node_id in (" + nodeIds.join(",") + ")";
+  //sql += " order by way_id desc";
+  _selectWayIdsByWayNodeIds->prepare(sql);
   LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
-  //LOG_VARD(_selectWayIdsByWayNodeIds->boundValues());
+
   if (_selectWayIdsByWayNodeIds->exec() == false)
   {
     throw HootException(
@@ -702,20 +692,19 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& node
 shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList& elementIds,
                                                               const ElementType& elementType)
 {
-  //if (!_selectElementsByElementIdList)
-  //{
+  if (!_selectElementsByElementIdList)
+  {
     _selectElementsByElementIdList.reset(new QSqlQuery(_db));
     _selectElementsByElementIdList->setForwardOnly(true);
-    QString sql =
-      "select * from " + _getTableName(elementType) + " where visible = true and id in (" +
-      elementIds.join(",") + ")";
-    sql += " order by id desc";
-    _selectElementsByElementIdList->prepare(sql);
-  //}
-  //_selectElementsByElementIdList->bindValue(":table", _getTableName(elementType));
-  //_selectElementsByElementIdList->bindValue(":elementIds", "(" + elementIds.join(", ") + ")");
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select * from " + _getTableName(elementType) + " where visible = true and id in (" +
+    elementIds.join(",") + ")";
+  sql += " order by id desc";
+  _selectElementsByElementIdList->prepare(sql);
   LOG_VARD(_selectElementsByElementIdList->lastQuery());
-  //LOG_VARD(_selectElementsByElementIdList->boundValues());
+
   if (_selectElementsByElementIdList->exec() == false)
   {
     throw HootException(
@@ -728,18 +717,18 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList&
 
 shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayIds)
 {
-  //if (!_selectWayNodeIdsByWayIds)
-  //{
+  if (!_selectWayNodeIdsByWayIds)
+  {
     _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
-    QString sql =
-      "select node_id from current_way_nodes where way_id in (" + wayIds.join(",") + ")";
-    //sql += " order by sequence_id";
-    _selectWayNodeIdsByWayIds->prepare(sql);
-  //}
-  //_selectWayNodeIdsByWayIds->bindValue(":wayIds", "(" + wayIds.join(", ") + ")");
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select node_id from current_way_nodes where way_id in (" + wayIds.join(",") + ")";
+  //sql += " order by sequence_id";
+  _selectWayNodeIdsByWayIds->prepare(sql);
   LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
-  //LOG_VARD(_selectWayNodeIdsByWayIds->boundValues());
+
   if (_selectWayNodeIdsByWayIds->exec() == false)
   {
     throw HootException(
@@ -753,19 +742,20 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayI
 shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& memberIds,
                                                              const ElementType& elementType)
 {
-  //if (!_selectRelationIdsByMemberIds)
-  //{
+  if (!_selectRelationIdsByMemberIds)
+  {
     _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
     _selectRelationIdsByMemberIds->setForwardOnly(true);
-    QString sql = "select relation_id from current_relation_members";
-    sql += " where member_type = :elementType and member_id in (" + memberIds.join(",") + ")";
-    //sql += " order by relation_id desc";
-    _selectRelationIdsByMemberIds->prepare(sql);
-  //}
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "select relation_id from current_relation_members";
+  sql += " where member_type = :elementType and member_id in (" + memberIds.join(",") + ")";
+  //sql += " order by relation_id desc";
+  _selectRelationIdsByMemberIds->prepare(sql);
   _selectRelationIdsByMemberIds->bindValue(":elementType", elementType.toString());
-  //_selectRelationIdsByMemberIds->bindValue(":memberIds", "(" + memberIds.join(", ") + ")");
   LOG_VARD(_selectRelationIdsByMemberIds->lastQuery());
   LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
+
   if (_selectRelationIdsByMemberIds->exec() == false)
   {
     throw HootException(

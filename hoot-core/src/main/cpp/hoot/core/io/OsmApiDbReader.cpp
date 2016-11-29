@@ -211,8 +211,9 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
           element->setStatus(_status);
         }
         LOG_VART(element->toString());
-        //TODO: I believe this will fail for any contained way nodes not yet added (added by next
-        //query), so may need to refactor.
+        //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
+        //to the map here whose nodes haven't yet been written to it.  Haven't encountered the
+        //problem yet with test data yet, so will keep an eye on it.
         map->addElement(element);
       }
 

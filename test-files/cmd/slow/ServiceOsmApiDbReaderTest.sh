@@ -40,18 +40,20 @@ echo "Doing comparison"
 # TEST 2: BOUNDING BOX SELECTION FROM OSM API DB
 ######################################################
 
-source scripts/CleanOsmApiDB.sh
+source conf/DatabaseConfig.sh
+export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
+export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PGPASSWORD=$DB_PASSWORD_OSMAPI
+OUTPUT_DIR=test-output/cmd/slow/ServiceOsmApiDbReaderTest
+mkdir -p $OUTPUT_DIR
 
-createdb $AUTH $DB_NAME_OSMAPI
+source scripts/SetupOsmApiDB.sh force
+psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
-psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/bbox_test.sql
+hoot convert --error test-files/DcGisRoads.osm $OUTPUT_DIR/DcGisRoads.sql
+psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_DIR/DcGisRoads.sql
 
-hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 $DB_URL test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm
-
-# perform a crude but effective comparison
-cat test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm | grep 'tag k'
-cat test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm | grep 'noderole'
-cat test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm | grep 'wayrole'
-cat test-output/cmd/ServiceOsmApiDbTest/bboxOutput.osm | grep 'relation'
+hoot convert --error $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output.osm
+hoot is-match test-files/cmd/slow/ServiceOsmApiDbReaderTest/output.osm $OUTPUT_DIR/output.osm
 
 
