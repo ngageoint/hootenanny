@@ -2107,13 +2107,13 @@ tds61 = {
 
                     // Now set the FCSubtype.
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (config.getOgrTdsAddFcsubtype() == 'true')
+                    if (config.getOgrEsriFcsubtype() == 'true')
                     {
                         returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (config.getOgrTdsStructure() == 'true')
+                    if (config.getOgrThematicStructure() == 'true')
                     {
                         returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
                         tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);

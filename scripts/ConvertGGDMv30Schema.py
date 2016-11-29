@@ -277,7 +277,7 @@ def printFcodeSchema(schema):
             tList[schema[i]['fcode']]['objectType'] = 'tag'
             tList[schema[i]['fcode']]['geometries'] = []
 
-        tList[schema[i]['fcode']]['geom'].append(gList[schema[i]['geom']])
+        tList[schema[i]['fcode']]['geometries'].append(gList[schema[i]['geom']])
 
     #print '"FCODE","Name"'
     for i in sorted(tList.keys()):
