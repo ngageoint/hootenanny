@@ -109,7 +109,7 @@ private:
   Tgs::BigMap<long, long> _wayIdMap;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _readBounded(shared_ptr<OsmMap> map);
+  void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 

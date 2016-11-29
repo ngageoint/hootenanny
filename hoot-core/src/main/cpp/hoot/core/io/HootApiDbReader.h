@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -103,6 +103,8 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+
 protected:
 
   Tgs::BigMap<long, long> _nodeIdMap;
@@ -121,12 +123,14 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
+  QString _bbox;
 
   shared_ptr<Element> _nextElement;
 
   const ElementType _getCurrentSelectElementType() const;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
   //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();

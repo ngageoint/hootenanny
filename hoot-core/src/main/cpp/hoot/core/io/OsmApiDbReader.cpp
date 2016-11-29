@@ -106,19 +106,18 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     _read(map, _osmElemType);
   }
   else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" ||
-          _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0") // process SELECT ALL
+          _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0")
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
-      ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
-      _read(map, elementType);
+      _read(map, static_cast<ElementType::Type>(ctr));
     }
   }
   else
   {
     LOG_INFO("Executing OSM API bounded read query with bounds " << _bbox << "...");
-    _readBounded(map);
+    _read(map, GeometryUtils::envelopeFromConfigString(_bbox));
   }
 }
 
@@ -165,10 +164,10 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 
 //This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
 //implemented yet.
-void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
+void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
 {
   LOG_DEBUG("Retrieving node records within the query bounds...");
-  shared_ptr<QSqlQuery> nodeItr = _database.selectNodesByBounds(_bbox);
+  shared_ptr<QSqlQuery> nodeItr = _database.selectNodesByBounds(bounds);
   QStringList nodeIds;
   while (nodeItr->next())
   {

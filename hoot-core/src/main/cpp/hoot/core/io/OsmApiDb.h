@@ -150,10 +150,10 @@ public:
   /**
    * Returns all nodes that fall within a geospatial bounds
    *
-   * @param bbox a comma delimited string of the form: minX,minY,maxX,maxY
+   * @param bounds the query bounds
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectNodesByBounds(const QString bbox);
+  shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
 
   /**
    * Returns the IDs of all ways that own the input node IDs

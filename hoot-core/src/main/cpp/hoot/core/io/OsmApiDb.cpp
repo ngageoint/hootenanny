@@ -626,11 +626,10 @@ double OsmApiDb::fromOsmApiDbCoord(const long x)
   return (double)x / COORDINATE_SCALE;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
+shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const Envelope& bounds)
 {
-  const Envelope env = GeometryUtils::envelopeFromConfigString(bbox);
-  LOG_VARD(env);
-  const vector<Range> tileRanges = _getTileRanges(env);
+  LOG_VARD(bounds);
+  const vector<Range> tileRanges = _getTileRanges(bounds);
   LOG_VARD(tileRanges.size());
 
   //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
@@ -648,17 +647,17 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
   sql += " and latitude <= :maxLat";
   sql += " order by id desc";
   _selectNodesByBounds->prepare(sql);
-  _selectNodesByBounds->bindValue(":minLon", (qlonglong)(env.getMinX() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(env.getMaxX() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":minLat", (qlonglong)(env.getMinY() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(env.getMaxY() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":minLon", (qlonglong)(bounds.getMinX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(bounds.getMaxX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":minLat", (qlonglong)(bounds.getMinY() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(bounds.getMaxY() * COORDINATE_SCALE));
   LOG_VARD(_selectNodesByBounds->lastQuery());
   LOG_VARD(_selectNodesByBounds->boundValues());
 
   if (_selectNodesByBounds->exec() == false)
   {
     throw HootException(
-      "Error selecting nodes by bounds: " + bbox + " Error: " +
+      "Error selecting nodes by bounds: " + QString::fromStdString(bounds.toString()) + " Error: " +
       _selectNodesByBounds->lastError().text());
   }
   LOG_VARD(_selectNodesByBounds->numRowsAffected());

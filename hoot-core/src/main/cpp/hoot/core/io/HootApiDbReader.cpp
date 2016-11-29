@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,6 +32,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -143,13 +144,24 @@ void  HootApiDbReader::initializePartial()
 
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  LOG_DEBUG("IN HootApiDbReader::read()...");
-
-  for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
+  if (_bbox.trimmed().isEmpty())
   {
-    ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
-    _read(map, elementType);
+    LOG_INFO("Executing OSM API read query...");
+    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
+    {
+      _read(map, static_cast<ElementType::Type>(ctr));
+    }
   }
+  else
+  {
+    LOG_INFO("Executing Hoot API bounded read query with bounds " << _bbox << "...");
+    _read(map, GeometryUtils::envelopeFromConfigString(_bbox));
+  }
+}
+
+void HootApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
+{
+
 }
 
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
