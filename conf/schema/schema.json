@@ -96,6 +96,9 @@
         "import": "error.json"
     },
     {
+        "import": "facility.json"
+    },
+    {
         "import": "fire_hydrant.json"
     },
     {
@@ -292,6 +295,9 @@
     },
     {
         "import": "is_divided.json"
+    },
+    {
+        "import": "FCODE.json"
     },
     {
         "import": "wikipedia.json"
