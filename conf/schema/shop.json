@@ -1155,6 +1155,10 @@
             {
                 "name": "shop=department_store",
                 "weight": 0.7
+            },
+            {
+                "name": "shop=mall",
+                "weight": 0.7
             }
         ]
     },

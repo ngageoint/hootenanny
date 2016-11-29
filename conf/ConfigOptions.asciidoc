@@ -236,7 +236,7 @@ conflation.
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveEmptyReviewRelationsVisitor` - Remove empty review relations
+** `hoot::RemoveInvalidReviewRelationsVisitor` - Remove review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
@@ -423,21 +423,21 @@ The spacing used by the EdgeDistanceExtractor.  Units in meters.
 
 === element.cache.size.node
 
-* Data Type: int
+* Data Type: long
 * Default Value: `2000000`
 
 Size of the cache used when streaming I/O is used with nodes.
 
 === element.cache.size.relation
 
-* Data Type: int
+* Data Type: long
 * Default Value: `200000`
 
 Size of the cache used when streaming I/O is used with relations.
 
 === element.cache.size.way
 
-* Data Type: int
+* Data Type: long
 * Default Value: `200000`
 
 Size of the cache used when streaming I/O is used with ways.
@@ -781,20 +781,21 @@ A list of map operations to be applied to a map for cleaning purposes in order
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::PlacesPoiMatchCreator;hoot::HighwayMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator`
 
-List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+List of MatchCreators to use during conflation. This can modify what features will be conflated
+(e.g. buildings, roads, etc.).
 
 Some of the possible options include:
 
 * `hoot::BuildingMatchCreator` - Matches building polygons.
 * `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
-* `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify
-  algorithm.
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify
-  algorithm.
-* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The
-  script should be in `$HOOT_HOME/rules/<yourscript.js>`.
+* `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify algorithm.
+* `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
+* `hoot::ScriptMatchCreator,LinearWaterway.js` - Matches linear rivers and streams.
+* `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
+  in `$HOOT_HOME/rules/<yourscript.js>`.
 
 === match.parallel.exponent
 
@@ -842,7 +843,7 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::PlacesPoiMergerCreator;hoot::HighwaySnapMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
 
 List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
 
@@ -850,9 +851,9 @@ Possible values include:
 
 * `hoot::BuildingMergerCreator` - Required if `hoot::BuildingMatchCreator` is
   specified in `match.creators`.
-* `hoot::PlacesPoiMergerCreator` - Required if `hoot::PlacesPoiMatchCreator` is
-  specified in `match.creators`.
 * `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
+  is specified in `match.creators`.
+* `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
   is specified in `match.creators`.
 * `hoot::ScriptMergerCreator` - Required if one or more instances of
   `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
@@ -1561,67 +1562,6 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 A list of scripts to include before loading the user's plugin script. The path will be search as:
 current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
-=== places.distance.weight
-
-* Data Type: double
-* Default Value: `0.1`
-
-The PLACES `wd` value for calculating goodness.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.goodness.threshold
-
-* Data Type: double
-* Default Value: `0.3`
-
-The PLACES goodness threshold.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.minimum.edit.similarity
-
-* Data Type: double
-* Default Value: `0.8`
-
-If the similarity score is less than this value then the POIs are not considered for match.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.poi.epsilon.distance
-
-* Data Type: double
-* Default Value: `0.001`
-
-Distance that is considered an exact match. Defaults to 1mm.
-
-=== places.string.weight
-
-* Data Type: double
-* Default Value: `0.9`
-
-The PLACES `ws` value for calculating goodness.
-
-See also:
-
- * _PLACES POI Conflation_, <<hootalgo>>
-
-=== places.tag.merger
-
-* Data Type: string
-* Default Value: `hoot::OverwriteTag2Merger`
-
-Possible options include:
-
-* `hoot::GeneralizeTagMerger`
-* `hoot::OverwriteTag2Merger`
-
 === poi.match.threshold
 
 * Data Type: double
@@ -1655,6 +1595,24 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.enable.advanced.matching
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will perform additional checks against surrounding features
+for match evidence.  This setting allows for detailed conflation customization but can be runtime
+expensive when enabled.
+
+=== poi.polygon.enable.review.reduction
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
+incorrect matches.  This setting is still fairly experimental and can be runtime expensive when
+enabled.
+
 === poi.polygon.match.threshold
 
 * Data Type: double
@@ -1665,6 +1623,40 @@ The threshold at which a match is called a match for PoiPolygon.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
+
+=== poi.polygon.name.score.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+The minimum similarity the name scores of two features can have and be considered a name
+match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
+present (null).
+
+=== poi.polygon.review.distance.threshold
+
+* Data Type: double
+* Default Value: `125.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+for review based on distance criteria only (value is added to the circular error of the features
+calculation).
+
+=== poi.polygon.type.score.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+The minimum similarity the type scores a POI and polygon can have and be considered a type
+match, with 0.0 being the least similar and 1.0 being the most similar.
 
 === poi.polygon.miss.threshold
 
@@ -1677,6 +1669,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.print.match.distance.truth
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, debug match distance output will be obtained from manually matched source data and printed
+if running 'hoot score-matches' with POI to polygon conflation.
+
 === poi.polygon.review.threshold
 
 * Data Type: double
@@ -1688,22 +1688,6 @@ The threshold at which a review is called a review for PoiPolygon. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.match.name.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-If the name similarity score is greater than this then the names are considered a match. Scores
-are 0 to 1 for similarity and -1 if there are no names present (null).
-
-=== poi.polygon.match.review.distance
-
-* Data Type: double
-* Default Value: `0`
-
-How far away from a polygon should name matches be considered reviews. This is a fixed value in
-meters that is added to the CE calculation.
 
 === postgresql.dumpfile.writer.auto.calc.ids
 
@@ -2491,6 +2475,13 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
+
+=== writer.text.status
+
+* Data Type: bool
+* Default Value: `false`
+
+Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
 
 === writer.include.debug
 

@@ -15,6 +15,12 @@ var schemaMap = {
     MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js')
 };
 
+var translationsMap = {
+    TDSv40: '/translations/TDSv40.js',
+    TDSv61: '/translations/TDSv61.js',
+    MGCP: '/translations/MGCP_TRD4.js'
+};
+
 var osmToTdsMap = {
     TDSv40: '/translations/OSM_to_englishTDS.js',
     TDSv61: '/translations/OSM_to_englishTDS61.js',
@@ -27,7 +33,7 @@ var tdsToOsmMap = {
     MGCP: '/translations/englishMGCP_to_OSM.js'
 };
 
-var translationsMap = {
+var englishTranslationsMap = {
     TDSv40: '/plugins/etds40_osm.js',
     TDSv61: '/plugins/etds61_osm.js',
     MGCP: '/plugins/emgcp_osm.js'
@@ -161,8 +167,23 @@ function handleInputs(params) {
             params.transDir = 'toogr';
             result = osmtotds(params);
             break;
+        case '/translateToEnglish':
+            params.transMap = osmToTdsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
+        case '/translateTo':
+            params.transMap = translationsMap;
+            params.transDir = 'toogr';
+            result = osmtotds(params);
+            break;
         case '/tdstoosm':
             params.transMap = tdsToOsmMap;
+            params.transDir = 'toosm';
+            result = tdstoosm(params);
+            break;
+        case '/translateFrom':
+            params.transMap = translationsMap;
             params.transDir = 'toosm';
             result = tdstoosm(params);
             break;
@@ -202,7 +223,7 @@ var translate = function(data) {
     }
     hoot = require(HOOT_HOME + '/lib/HootJs');
     createUuid = hoot.UuidHelper.createUuid;
-    var trans = require(HOOT_HOME + translationsMap[data.translation]);
+    var trans = require(HOOT_HOME + englishTranslationsMap[data.translation]);
     var result;
     if (data.to) {
         if (data.english) {
@@ -421,9 +442,9 @@ var getFilteredSchema = function(params) {
 
 var searchSchema = function(options) {
     var translation = options.translation || 'TDSv61';
-    var geomType = options.geomType || 'point';
+    var geomType = options.geomType || '';
     var searchStr = options.searchStr || '';
-    var limitResult = options.limitResult || 12;
+    var limitResult = options.limitResult || 1000;
     var maxLevDistance = options.maxLevDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
 
@@ -433,7 +454,7 @@ var searchSchema = function(options) {
         //Check for search string in the description or fcode
         var exactMatches = schema
             .filter(function(d) {
-                return d.geom.toLowerCase() === geomType.toLowerCase() &&
+                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
                 ( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
                     d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 )
                 ;
@@ -463,7 +484,7 @@ var searchSchema = function(options) {
                     return (! exactMatches.some(function(e) { //filter out exact matches
                         return e.desc === d.desc;
                     }) ) &&
-                    d.geom.toLowerCase() === geomType.toLowerCase() &&
+                    d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
                     ( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()) <= maxLevDistance ||
                         getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) <= maxLevDistance )
                     ;
@@ -490,7 +511,7 @@ var searchSchema = function(options) {
     } else {
         // Return the first N elements of the schema
         result = schema.filter(function(d) {
-                return d.geom.toLowerCase() === geomType.toLowerCase()
+                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
             })
             .slice(0, limitResult)
             .map(function(d) {

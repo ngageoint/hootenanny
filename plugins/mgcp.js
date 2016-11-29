@@ -46,7 +46,7 @@ mgcp = {
     mgcpAttrLookup = translate.makeAttrLookup(mgcp.rawSchema);
 
     // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-    layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+    mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
 
     // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
     // We can drop features but this is a nice way to see what we would drop
@@ -309,19 +309,14 @@ mgcp = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-//             translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-//             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], mgcp.rules.txtBiased, 'backward');
             translate.applySimpleNumBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
             translate.applySimpleTxtBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-//             translate.applyOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
             translate.applyOne2One(notUsedTags, newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
 
             // post processing
             mgcp.applyToMgcpPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType,notUsedTags);
-
-            returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
         }
 
         return returnData;
@@ -900,6 +895,21 @@ mgcp = {
             tags.facility = 'yes';
         }
 
+        // Sort out the WID, WD1 etc attributes.
+        // Roads etc have a WD1 attribute but this doesn't get translated to "width"
+        if (attrs.WD1)
+        {
+            if (! tags.width) tags.width = attrs.WD1;
+        }
+
+        // Fix up areas.
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
 
     }, // End of applyToOsmPostProcessing
 
@@ -1215,6 +1225,7 @@ mgcp = {
             {
                 if (i in tags)
                 {
+                    // Debug
                     // print('Added FCODE from Map: ' + fcodeMap[i]);
                     attrs.F_CODE = fcodeMap[i];
                     break;
@@ -1328,11 +1339,24 @@ mgcp = {
                 }
                 break;
 
+            case 'AP010': // Cart Track
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
+                break;
+
             case 'AP030': // Road
                 if (tags.bridge) attrs.LOC = '45'; // Above Surface
                 if (tags.tunnel) attrs.LOC = '40'; // Below Surface
                 if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
                 if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
+                if (attrs.WID && ! attrs.WD1)
+                {
+                    attrs.WD1 = attrs.WID;
+                    delete attrs.WID;
+                }
                 break;
 
             case 'AP050': // Trail
@@ -1454,7 +1478,7 @@ mgcp = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            print('In Layername: ' + layerName);
+            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
@@ -1534,15 +1558,14 @@ mgcp = {
         // post processing
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
-        // Debug
-        // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
-
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
@@ -1643,7 +1666,7 @@ mgcp = {
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to the o2s layer
-        if (!layerNameLookup[tableName])
+        if (!mgcp.layerNameLookup[tableName])
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (config.getOgrThrowError() == 'true')
@@ -1706,9 +1729,8 @@ mgcp = {
         }
         else // We have a feature
         {
-            // Check if we need to make a second feature
+            // Check if we need to return more than one feature
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-            // attrs2 = mgcp.twoFeatures(geometryType,tags,attrs);
             returnData = mgcp.manyFeatures(geometryType,tags,attrs);
 
             // Now go through the features and clean them up.
@@ -1719,11 +1741,21 @@ mgcp = {
                 returnData[i]['attrs']['FCODE'] = returnData[i]['attrs']['F_CODE'];
                 delete returnData[i]['attrs']['F_CODE'];
 
-                 // Validate attrs: remove all that are not supposed to be part of a feature
-                mgcp.validateAttrs(geometryType,returnData[i]['attrs']);
-
+                // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
+                // features to return.
                 var gFcode = gType + returnData[i]['attrs']['FCODE'];
-                returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                if (mgcp.layerNameLookup[gFcode.toUpperCase()])
+                {
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    mgcp.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
+                }
+//                 else
+//                 {
+//                     // Debug
+//                     print('## Skipping: ' + gFcode);
+//                 }
 
             } // End returnData loop
 

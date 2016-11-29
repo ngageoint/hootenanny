@@ -152,7 +152,6 @@ data/
 inputFeatures.png
 docs/developer/restDocs/
 docs/developer/wpsDocs/
-log4j.xml
 Vagrant.marker
 test-files/services-system/node_modules
 vagrant*.lock
@@ -160,6 +159,8 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+plugins/eggdm30_osm_rules.js
+plugins/eggdm30_rules.js
 
 ###### hoot-services ignores
 hoot-services/db.properties

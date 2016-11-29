@@ -34,7 +34,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -96,10 +95,9 @@ public class Map extends Maps {
      * Retrieves all ranges of quad tiles that fall within the bounds
      */
     private static List<Range> getTileRanges(BoundingBox bounds) {
-        logger.debug("Retrieving tile ranges...");
         int queryDimensions = Integer.parseInt(MAP_QUERY_DIMENSIONS);
         ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
-        // use y, x ordering here
+                // use y, x ordering here
                 new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT }, new double[] {
                         BoundingBox.LAT_LIMIT, BoundingBox.LON_LIMIT }));
         return ranger.decomposeRange(bounds.toZIndexBox(), 1);
@@ -132,7 +130,6 @@ public class Map extends Maps {
     }
 
     private static void validateQueryBounds(BoundingBox bounds) {
-        logger.debug("Checking request bounds size...");
         double maxQueryAreaDegrees = Double.parseDouble(MAP_QUERY_AREA_DEGREES);
         double requestedArea = bounds.getArea();
         if (requestedArea > maxQueryAreaDegrees) {
@@ -148,8 +145,6 @@ public class Map extends Maps {
      * check, then getNodeCount should be used.
      */
     private void validateNodeCount(BooleanExpression combinedGeospatialCondition) {
-        logger.debug("Retrieving node count...");
-
         long nodeCount = createQuery(getId())
                 .from(currentNodes)
                 .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
@@ -600,7 +595,7 @@ public class Map extends Maps {
      * @return a collection of elements mapped to their IDs, grouped by element type
      */
     public java.util.Map<ElementType, java.util.Map<Long, Tuple>> query(BoundingBox bounds) {
-        // validateQueryBounds(bounds);
+        //validateQueryBounds(bounds);
 
         // get the intersecting tile ranges for the nodes
         List<Range> tileIdRanges = getTileRanges(bounds);
@@ -613,109 +608,6 @@ public class Map extends Maps {
         }
 
         return elementIdsToRecordsByType;
-    }
-
-    private java.util.Map<ElementType, Set<Long>> retrieveElementIds(BooleanExpression combinedGeospatialCondition) {
-        // if the limit hasn't been exceeded, query out all nodes which fall
-        // within the geospatial bounds, are visible, and belong to this map
-        logger.debug("Retrieving IDs of nodes within the query bounds...");
-
-        Set<Long> nodeIds = new HashSet<>(createQuery(getId())
-                .select(currentNodes.id)
-                .from(currentNodes)
-                .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
-                .fetch());
-
-        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<>();
-        elementIdsByType.put(ElementType.Node, nodeIds);
-
-        if (!nodeIds.isEmpty()) {
-            // get all ways which have way nodes that belong to the previously
-            // queried node results, are visible, and belong to this map; join in user info
-            logger.debug("Retrieving IDs of ways within the query bounds...");
-            QCurrentWayNodes currentWayNodes = QCurrentWayNodes.currentWayNodes;
-
-            Set<Long> wayIds = new HashSet<>(createQuery(getId())
-                    .select(currentWayNodes.wayId)
-                    .from(currentWayNodes)
-                    .where(currentWayNodes.nodeId.in(nodeIds))
-                    .fetch());
-
-            elementIdsByType.put(ElementType.Way, wayIds);
-
-            /*
-             * retrieve all relations that reference the nodes or ways
-             * previously retrieved
-             */
-            logger.debug("Retrieving relations IDs within the query bounds...");
-
-            Set<Long> nodesIds = elementIdsByType.get(ElementType.Node);
-            Set<Long> waysIds = elementIdsByType.get(ElementType.Way);
-
-            // if the Set is empty the in statement blows up..
-            if (nodesIds.isEmpty()) {
-                // nodesset returned by elementIdsToRecordsByType.get(ElementType.Node).keySet() might be immutable
-                nodesIds = new HashSet<>();
-                nodesIds.add(-1L);
-            }
-
-            if (waysIds.isEmpty()) {
-                waysIds = new HashSet<>();
-                waysIds.add(-1L);
-            }
-
-            QCurrentRelationMembers currentRelationMembers = QCurrentRelationMembers.currentRelationMembers;
-            Set<Long> relationIds = new HashSet<>(createQuery(getId())
-                    .select(currentRelationMembers.relationId)
-                    .from(currentRelationMembers)
-                    .where(currentRelationMembers.memberId.in(nodesIds)
-                            .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node))
-                            .or(currentRelationMembers.memberId.in(waysIds).and(
-                                    currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way))))
-                    .fetch());
-
-            elementIdsByType.put(ElementType.Relation, relationIds);
-        }
-
-        return elementIdsByType;
-    }
-
-    /**
-     * Executes a geospatial query for element IDs against the services database
-     * 
-     * Bounds calculation: see query
-     * 
-     * - All nodes that are inside a given bounding box and any relations that
-     * reference them. - All ways that reference at least one node that is
-     * inside a given bounding box, any relations that reference them [the
-     * ways], and any nodes outside the bounding box that the ways may
-     * reference. - All relations that reference one of the nodes, ways, or
-     * relations included due to the above rules. (Does not apply recursively;
-     * e.g. don't return every node and way the relations themselves
-     * reference...only the ones in the query bounds).
-     * 
-     * @param bounds
-     *            geospatial bounds the returned nodes should fall within
-     * @return a collection of element IDs, grouped by element type
-     */
-    public java.util.Map<ElementType, Set<Long>> queryForElementIds(BoundingBox bounds) {
-        // TODO: add transaction; verify that no other writes are seen during
-        // this transaction
-
-        validateQueryBounds(bounds);
-
-        // get the intersecting tile ranges for the nodes
-        List<Range> tileIdRanges = getTileRanges(bounds);
-        java.util.Map<ElementType, Set<Long>> elementIdsByType = new HashMap<>();
-
-        if (!tileIdRanges.isEmpty()) {
-            BooleanExpression combinedGeospatialCondition = getTileWhereCondition(tileIdRanges).and(
-                    getGeospatialWhereCondition(bounds));
-            validateNodeCount(combinedGeospatialCondition);
-            elementIdsByType = retrieveElementIds(combinedGeospatialCondition);
-        }
-
-        return elementIdsByType;
     }
 
     /**
@@ -737,7 +629,7 @@ public class Map extends Maps {
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
             mapLayer.setName("OSM_API_DB_" + OSM_API_DB_NAME);
-            mapLayer.setDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            mapLayer.setDate(new Timestamp(System.currentTimeMillis()));
             mapLayerList.add(mapLayer);
         }
 

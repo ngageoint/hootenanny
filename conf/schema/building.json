@@ -194,7 +194,11 @@
         ],
         "isA": "building",
         "name": "building=hospital",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=hospital",
+            "weight": 0.8
+        }
     },
     {
         "categories": [
@@ -219,6 +223,9 @@
         "categories": [
             "poi",
             "hgispoi"
+        ],
+        "aliases": [
+            "amenity=mosque"
         ],
         "isA": "abstract_building_place_of_worship",
         "name": "building=mosque",
@@ -258,6 +265,14 @@
         ],
         "isA": "building",
         "name": "building=school",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=university",
         "objectType": "tag"
     },
     {

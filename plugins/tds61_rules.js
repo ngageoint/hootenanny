@@ -141,7 +141,7 @@ tds61.rules = {
      'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
      'URI':'source_ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
-     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
+     'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
      //'ZI001_SDP':'source:description', // Source Information : Source Description
@@ -773,7 +773,7 @@ tds61.rules = {
      ['BSC','30','bridge:structure','submersible'], // Submersible
      ['BSC','31','bridge:structure','arch'], // Arch
      ['BSC','32','bridge:structure','trestle'], // Trestle
-     ['BSC','999','bridge:structure','other'], // Trestle
+     ['BSC','999','bridge:structure','other'], // Other
 
      // BSM - Mobile Bridge Span
      // ['BSM','-999999',undefined,undefined], // No Information
@@ -1062,7 +1062,7 @@ tds61.rules = {
      // ['CTC','-999999',undefined,undefined], // No Information
      ['CTC','1','culvert:type','regular_with_soil'], // Regular with Soil
      ['CTC','2','culvert:type','box_with_soil'], // Box with Soil
-     ['CTC','3','culvert:type','box_with_load'], // Box with Load
+     ['CTC','3','culvert:type','load_bearing_box'], // Box with Load
      ['CTC','999','culvert:type','other'], // Other
 
      // CVT - Conveyor Type
@@ -2109,7 +2109,7 @@ tds61.rules = {
      ['MAN','1000','navigation:maritime_landmark','no'],
      ['MAN','1001','navigation:maritime_landmark','yes'],
 
-// MCC - Structural Material Type
+     // MCC - Structural Material Type
      // ['MCC','-999999',undefined,undefined], // No Information
      ['MCC','2','material','aluminum'], // Aluminum
      ['MCC','5','material','asphalt'], // Asphalt
@@ -3086,18 +3086,18 @@ tds61.rules = {
 
      // TXP - Taxiway Type
      // ['TXP','-999999',undefined,undefined], // No Information
-     ['TXP','1','taxiway:type','parallel_taxiway'], // Parallel Taxiway
-     ['TXP','2','taxiway:type','stub_taxiway'], // Stub Taxiway
-     ['TXP','3','taxiway:type','rapid_exit_and/or_turnoff_taxiway'], // Rapid Exit and/or Turnoff Taxiway
-     ['TXP','4','taxiway:type','turnaround_taxiway'], // Turnaround Taxiway
+     ['TXP','1','taxiway:type','parallel'], // Parallel Taxiway
+     ['TXP','2','taxiway:type','stub'], // Stub Taxiway
+     ['TXP','3','taxiway:type','rapid_exit_and/or_turnoff'], // Rapid Exit and/or Turnoff Taxiway
+     ['TXP','4','taxiway:type','turnaround'], // Turnaround Taxiway
      ['TXP','5','taxiway:type','dispersal'], // Dispersal
      ['TXP','6','taxiway:type','loop'], // Loop
      ['TXP','7','taxiway:type','perimeter'], // Perimeter
-     ['TXP','8','taxiway:type','apron_taxiway'], // Apron Taxiway
+     ['TXP','8','taxiway:type','apron'], // Apron Taxiway
      ['TXP','9','taxiway:type','aircraft_stand_taxilane'], // Aircraft Stand Taxilane
      ['TXP','10','taxiway:type','lead-in_taxilane'], // Lead-in Taxilane
      ['TXP','11','taxiway:type','lead-out_taxilane'], // Lead-out Taxilane
-     ['TXP','12','taxiway:type','air_taxiway'], // Air Taxiway
+     ['TXP','12','taxiway:type','air'], // Air Taxiway
      ['TXP','13','taxiway:type','helicopter_ground_taxiway'], // Helicopter Ground Taxiway
      ['TXP','999','taxiway:type','other'], // Other
 
@@ -3114,7 +3114,6 @@ tds61.rules = {
      ['UMA','1','mine:access','drift'], // Drift
      ['UMA','2','mine:access','slope'], // Slope
      ['UMA','3','mine:access','shaft'], // Shaft
-     // ['UMA','998','mine:access','not_applicable'], // Not Applicable
      ['UMA','998',undefined,undefined], // Not Applicable
 
      // UTY - Accessible Utility Type
@@ -3284,12 +3283,12 @@ tds61.rules = {
 
      // WFT - Well Type
      // ['WFT','-999999',undefined,undefined], // No Information
-     ['WFT','2','well:type','walled-in'], // Walled-in
-     ['WFT','3','well:type','artesian'], // Artesian
-     ['WFT','5','well:type','dug_or_drilled'], // Dug or Drilled
-     ['WFT','6','well:type','dug'], // Dug
-     ['WFT','7','well:type','drilled'], // Drilled
-     ['WFT','999','well:type','other'], // Other
+     ['WFT','2','water_well:type','walled-in'], // Walled-in
+     ['WFT','3','water_well:type','artesian'], // Artesian
+     ['WFT','5','water_well:type','dug_or_drilled'], // Dug or Drilled
+     ['WFT','6','water_well:type','dug'], // Dug
+     ['WFT','7','water_well:type','drilled'], // Drilled
+     ['WFT','999','water_well:type','other'], // Other
 
      // WLE - Hydrographic Vertical Positioning Information : Water Level Effect
      // ['WLE','-999999',undefined,undefined], // No Information
@@ -4170,7 +4169,7 @@ tds61.rules = {
      // ['ZI024_SCC','-999999',undefined,undefined], // No Information
      ['ZI024_SCC','1','water:type','alkaline'], // Alkaline
      ['ZI024_SCC','4','water:type','mineral'], // Mineral
-     ['ZI024_SCC','10','water:type','saline'], // Saline
+     ['ZI024_SCC','10','water:type','salt'], // Saline
      ['ZI024_SCC','11','water:type','fresh'], // Fresh
      ['ZI024_SCC','12','water:type','brackish'], // Brackish
      ['ZI024_SCC','13','water:type','seawater'], // Seawater

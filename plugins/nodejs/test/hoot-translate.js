@@ -38,14 +38,14 @@ describe('hoot mgcp translations', function () {
             'hoot': 'DcGisRoadsCucumber'
         }, '', 'Line');
         assert.equal(data.attrs['Name'], '23RD ST NW');
-        assert.equal(data.attrs['Feature Code'], 'AP030:Road Line Feature');
+        assert.equal(data.attrs['Feature Code'], 'AP030:Road');
         assert.equal(data.attrs['Thoroughfare Class'], 'Unknown');
     });
 
     it('should translate MGCP english to OSM', function() {
         var data = translator.mgcp.EnglishtoOSM({
             //'error:circular': '5',
-            'Feature Code': 'AP030:Road Line Feature',
+            'Feature Code': 'AP030:Road',
             //'hoot:status': '1',
             'Name': '23RD ST NW',
             'Thoroughfare Class': 'Unknown'
@@ -66,7 +66,7 @@ describe('hoot mgcp translations', function () {
             'source:accuracy:horizontal:category': 'accurate'
         }, '', 'Point');
         assert.equal(data.attrs['Name'], 'Manitou Springs');
-        assert.equal(data.attrs['Feature Code'], 'AL020:Built-Up Area Area Feature');
+        assert.equal(data.attrs['Feature Code'], 'AL020:Built-Up Area');
         assert.equal(data.attrs['Associated Text'], '<OSM>{"poi":"yes"}</OSM>');
         assert.equal(data.attrs['Functional Use'], 'Other');
         assert.equal(data.attrs['Horizontal Accuracy Category'], 'Accurate');

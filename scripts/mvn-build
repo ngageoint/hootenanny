@@ -214,6 +214,7 @@ mvn $ARGS 2>&1 \
     | grep -v -e 'Loading source files for package .*' \
     | grep -v -e 'Building [^ ]* for all .*' \
     | grep -v -e 'SLF4J:.*' \
+    | grep -v -F 'Filters contains an invalid element or attribute "BrokenPipeFilter"' \
     || true
 # Use the return value of mvn, not the last grep
 [ ${PIPESTATUS[0]} == "0" ] && true || false

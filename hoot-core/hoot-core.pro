@@ -273,20 +273,12 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/ExpectationIntersection.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySublineMatch.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySubline.cpp \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMatchCreator.cpp \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMatch.cpp \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMerger.cpp \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMergerCreator.cpp \
     src/main/cpp/hoot/core/filters/IntersectionFilter.cpp \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.cpp \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.cpp \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.cpp \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.cpp \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.cpp \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMerger.cpp \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMergerCreator.cpp \
     src/main/cpp/hoot/core/perty/PertyRemoveRandomElementVisitor.cpp \
     src/main/cpp/hoot/core/perty/PertyNameVisitor.cpp \
     src/main/cpp/hoot/core/io/ScriptTranslator.cpp \
@@ -508,7 +500,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp \
@@ -525,7 +517,28 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/RemoveElementOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.cpp \
-    src/main/cpp/hoot/core/ops/RemoveWayOp.cpp
+    src/main/cpp/hoot/core/ops/RemoveWayOp.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.cpp \
+    src/main/cpp/hoot/core/filters/AreaCriterion.cpp \
+    src/main/cpp/hoot/core/filters/WayCriterion.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.cpp \
+    src/main/cpp/hoot/core/filters/ChainCriterion.cpp \
+    src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.cpp \
+    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -770,20 +783,12 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/ExpectationIntersection.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySublineMatch.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySubline.h \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMatchCreator.h \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMatch.h \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMergerCreator.h \
-    src/main/cpp/hoot/core/conflate/point/PlacesPoiMerger.h \
     src/main/cpp/hoot/core/filters/IntersectionFilter.h \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
     src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.h \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.h \
     src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.h \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMatch.h \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMatchCreator.h \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMerger.h \
-    src/main/cpp/hoot/core/conflate/point/CustomPoiMergerCreator.h \
     src/main/cpp/hoot/core/util/Configurable.h \
     src/main/cpp/hoot/core/perty/PertyRemoveRandomElementVisitor.h \
     src/main/cpp/hoot/core/perty/RngConsumer.h \
@@ -1034,7 +1039,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmJsonReader.h \
-    src/main/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitor.h \
+    src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
@@ -1056,5 +1061,25 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
-    src/main/cpp/hoot/core/ops/RemoveWayOp.h
+    src/main/cpp/hoot/core/ops/RemoveWayOp.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h \
+    src/main/cpp/hoot/core/filters/AreaCriterion.h \
+    src/main/cpp/hoot/core/filters/WayCriterion.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h \
+    src/main/cpp/hoot/core/filters/NonBuildingAreaCriterion.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistance.h \
+    src/main/cpp/hoot/core/visitors/CountManualMatchesVisitor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h
 

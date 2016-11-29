@@ -444,7 +444,7 @@
    			"override":{"defaultvalue":"hoot::BuildingMergerCreator"},
         "hoot_key": "merger.creators",
 				"required":"true"
-      },
+      }
     ]
   },
   {
@@ -497,37 +497,6 @@
 											},
 								"hoot_key": "merger.creators"
 							}
-						]
-					},
-					{
-						"id": "hoot_poi_opt_places",
-						"description": "Places options",
-						"name": "Places",
-						"members":[
-							  {
-									"id": "poi_match_creator_places",
-									"elem_type": "string",
-									"description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-									"name": "POI Places Match Creator",
-									"required": "true",
-									"defaultvalue": "hoot::PlacesPoiMatchCreator",
-									"override":{
-													"defaultvalue": "hoot::PlacesPoiMatchCreator"
-												},
-									"hoot_key": "match.creators"
-							  },
-							  {
-									"id": "poi_merger_creator_places",
-									"elem_type": "string",
-									"description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-									"name": "POI Places Merger Creator",
-									"required": "true",
-									"defaultvalue": "hoot::PlacesPoiMergerCreator",
-									"override":{
-													"defaultvalue": "hoot::PlacesPoiMergerCreator"
-												},
-									"hoot_key": "merger.creators"
-							  }
 						]
 					}			 
 				]
