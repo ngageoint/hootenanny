@@ -177,7 +177,6 @@ public:
 
   void runReadOsmApiTest()
   {
-    //test reader
     OsmApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
 
@@ -186,7 +185,6 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
-    Settings s = conf();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 

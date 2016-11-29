@@ -129,7 +129,7 @@ COPY current_relation_members (relation_id, member_type, member_id, member_role,
 2	Relation	1	role1	2
 3	Way	2	empty	1
 4	Node	3	role1	1
-5	Node	2	role1	1
+5	Node	7	role1	1
 5	Way	4	role1	2
 6	Node	7	role1	1
 6	Way	1	role1	2
@@ -164,7 +164,7 @@ COPY relation_members (relation_id, member_type, member_id, member_role, version
 2	Relation	1	role1	1	2
 3	Way	2	empty	1	1
 4	Node	3	role1	1	1
-5	Node	2	role1	1	1
+5	Node	7	role1	1	1
 5	Way	4	role1	1	2
 6	Node	7	role1	1	1
 6	Way	1	role1	1	2
