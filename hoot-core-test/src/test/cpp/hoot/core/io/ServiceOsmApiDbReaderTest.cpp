@@ -63,14 +63,15 @@ public:
 
   static QString userEmail() { return "ServiceOsmApiDbReaderTest@hoottestcpp.org"; }
 
-  void tearDown()
+  void setUp()
   {
-    // Osm Api DB
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    database.deleteData();
-    database.close();
+    _deleteData();
   }
+
+//  void tearDown()
+//  {
+//    _deleteData();
+//  }
 
   void insertData()
   {
@@ -191,20 +192,30 @@ public:
 
   void runReadBoundingBoxTest()
   {
-    OsmApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
     insertDataForBoundTest();
 
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmApiDbReader reader;
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    shared_ptr<OsmMap> map(new OsmMap());
+
     reader.setBoundingBox(
       "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
     reader.read(map);
 
+    //quick check to see if the element counts are off...consult the test output for more detail
+
+    //All of the six nodes should be returned.  Two of them are outside of the bounds, but one is
+    //referenced by a way within bounds and the other by a relation within bounds.
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    //All but one of the five ways should be returned.  The way not returned contains all nodes
+    //that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    //All but one of the six relations should be returned.  The relation not returned contains all
+    //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+
     QDir().mkdir("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
@@ -213,7 +224,27 @@ public:
       TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"),
       TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"));
 
+    //just want to make sure I can read against the same data twice in a row w/o crashing and also
+    //make sure I don't get the same result again for a different bounds
+    reader.setBoundingBox("-1,-1,1,1");
+    map.reset(new OsmMap());
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+
     reader.close();
+  }
+
+private:
+
+  void _deleteData()
+  {
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    database.deleteData();
+    database.close();
   }
 };
 
