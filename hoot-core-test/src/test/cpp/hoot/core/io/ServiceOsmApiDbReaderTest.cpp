@@ -38,8 +38,12 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
-
+#include <hoot/core/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
+
+// Qt
+#include <QDir>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
@@ -51,7 +55,7 @@ namespace hoot
 class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
-  //CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadBoundingBoxTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -168,13 +172,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
   }
 
-  void verifyReadBoundingBoxOutput(shared_ptr<OsmMap> map)
-  {
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
-  }
-
   void runReadOsmApiTest()
   {
     OsmApiDbReader reader;
@@ -200,13 +197,21 @@ public:
 
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.setBoundingBox(
       "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
     reader.read(map);
 
-    verifyReadBoundingBoxOutput(map);
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+    QDir().mkdir("test-output/io/ServiceOsmApiDbReaderTest");
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm");
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"),
+      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"));
 
     reader.close();
   }

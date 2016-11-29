@@ -655,6 +655,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
     sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
     sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
     sql += " and latitude <= :maxLat";
+    sql += " order by id desc";
     _selectNodesByBounds->prepare(sql);
   //}
   _selectNodesByBounds->bindValue(":minLon", (qlonglong)(env.getMinX() * COORDINATE_SCALE));
@@ -680,8 +681,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& node
     _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
     //const QString sql = "select way_id from current_way_nodes where node_id in :nodeIds";
-    const QString sql =
+    QString sql =
       "select way_id from current_way_nodes where node_id in (" + nodeIds.join(",") + ")";
+    //sql += " order by way_id desc";
     _selectWayIdsByWayNodeIds->prepare(sql);
   //}
   //_selectWayIdsByWayNodeIds->bindValue(":nodeIds", "(" + nodeIds.join(",") + ")");
@@ -704,9 +706,10 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList&
   //{
     _selectElementsByElementIdList.reset(new QSqlQuery(_db));
     _selectElementsByElementIdList->setForwardOnly(true);
-    const QString sql =
+    QString sql =
       "select * from " + _getTableName(elementType) + " where visible = true and id in (" +
       elementIds.join(",") + ")";
+    sql += " order by id desc";
     _selectElementsByElementIdList->prepare(sql);
   //}
   //_selectElementsByElementIdList->bindValue(":table", _getTableName(elementType));
@@ -729,8 +732,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayI
   //{
     _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
-    const QString sql =
+    QString sql =
       "select node_id from current_way_nodes where way_id in (" + wayIds.join(",") + ")";
+    //sql += " order by sequence_id";
     _selectWayNodeIdsByWayIds->prepare(sql);
   //}
   //_selectWayNodeIdsByWayIds->bindValue(":wayIds", "(" + wayIds.join(", ") + ")");
@@ -755,6 +759,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& 
     _selectRelationIdsByMemberIds->setForwardOnly(true);
     QString sql = "select relation_id from current_relation_members";
     sql += " where member_type = :elementType and member_id in (" + memberIds.join(",") + ")";
+    //sql += " order by relation_id desc";
     _selectRelationIdsByMemberIds->prepare(sql);
   //}
   _selectRelationIdsByMemberIds->bindValue(":elementType", elementType.toString());

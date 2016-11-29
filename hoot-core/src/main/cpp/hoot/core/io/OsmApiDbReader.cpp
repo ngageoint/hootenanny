@@ -103,25 +103,21 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
     LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
-
     _read(map, _osmElemType);
   }
   else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" ||
           _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0") // process SELECT ALL
   {
-    LOG_INFO("Executing OSM API read query against all element types...");
-
+    LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
       _read(map, elementType);
     }
   }
-  else // process BOUNDED REGION
+  else
   {
-    LOG_INFO(
-      "Executing OSM API bounded read query against all element types with bounds " << _bbox << "...");
-
+    LOG_INFO("Executing OSM API bounded read query with bounds " << _bbox << "...");
     _readBounded(map);
   }
 }
@@ -190,7 +186,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
 
   if (nodeIds.size() > 0)
   {
-    LOG_DEBUG("Retrieving way IDs within the query bounds...");
+    LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
     QStringList wayIds;
     shared_ptr<QSqlQuery> wayIdItr = _database.selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
@@ -203,7 +199,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
 
     if (wayIds.size() > 0)
     {
-      LOG_DEBUG("Retrieving ways within the query bounds...");
+      LOG_DEBUG("Retrieving ways by way ID...");
       shared_ptr<QSqlQuery> wayItr =
         _database.selectElementsByElementIdList(wayIds, ElementType::Way);
       while (wayItr->next())
@@ -220,7 +216,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
         map->addElement(element);
       }
 
-      LOG_DEBUG("Retrieving additional way node IDs within the query bounds...");
+      LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
       QStringList additionalWayNodeIds;
       shared_ptr<QSqlQuery> additionalWayNodeIdItr = _database.selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
@@ -243,7 +239,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
       {
         nodeIds.append(additionalWayNodeIds);
         LOG_DEBUG(
-          "Retrieving nodes falling outside of the query bounds but belonging to a retrieved way...");
+          "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
         shared_ptr<QSqlQuery> additionalWayNodeItr =
           _database.selectElementsByElementIdList(additionalWayNodeIds, ElementType::Node);
         while (additionalWayNodeItr->next())
@@ -260,7 +256,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
       }
     }
 
-    LOG_DEBUG("Retrieving relation IDs within the query bounds...");
+    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
     QStringList relationIds;
     shared_ptr<QSqlQuery> relationIdItr =
       _database.selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
@@ -281,7 +277,7 @@ void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
 
     if (relationIds.size() > 0)
     {
-      LOG_DEBUG("Retrieving relations within the query bounds...");
+      LOG_DEBUG("Retrieving relations by relation ID...");
       shared_ptr<QSqlQuery> relationItr =
         _database.selectElementsByElementIdList(relationIds, ElementType::Relation);
       while (relationItr->next())

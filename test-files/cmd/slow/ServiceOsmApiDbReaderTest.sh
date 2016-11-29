@@ -33,6 +33,7 @@ hoot convert "$DB_URL" test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm
 
 # compare input to dumped
 echo "Doing comparison"
+# TODO: why is this commented out?
 #scripts/compareOsmXmlToOsmApiDbDumpWriter test-output/cmd/ServiceOsmApiDbTest/ToyTestA-out.osm test-output/cmd/ServiceOsmApiDbTest/idmaps2.xml test-files/ToyTestA.sql
 
 ######################################################
