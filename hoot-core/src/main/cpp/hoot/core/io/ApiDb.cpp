@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -144,7 +144,7 @@ void ApiDb::open(const QUrl& url)
   LOG_DEBUG("Successfully opened _db: " << url.toString());
 }
 
-long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
+long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
   //LOG_DEBUG("debug email = " + email);
   //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
@@ -184,7 +184,7 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
   return result;
 }
 
-long ApiDb::insertUser(const QString& email, const QString& displayName)
+long ApiDb::insertUser(const QString email, const QString displayName)
 {
   long id = -1;
 
@@ -244,8 +244,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 }
 
 
-vector<long> ApiDb::selectNodeIdsForWay(long wayId,
-                                        const QString& sql)
+vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
 {
   vector<long> result;
 
@@ -279,7 +278,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId,
   return result;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
+shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -345,7 +344,7 @@ void ApiDb::_unescapeString(QString& s)
   s.replace("\\134", "\\");
 }
 
-QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3) const
+QSqlQuery ApiDb::_exec(const QString sql, QVariant v1, QVariant v2, QVariant v3) const
 {
   QSqlQuery q(_db);
 
@@ -394,7 +393,7 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   return tile;
 }
 
-QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
+QSqlQuery ApiDb::_execNoPrepare(const QString sql) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
