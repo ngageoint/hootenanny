@@ -63,7 +63,6 @@ void HootApiDbReader::setBoundingBox(const QString bbox)
   }
 }
 
-
 Envelope HootApiDbReader::calculateEnvelope() const
 {
   assert(_open);
