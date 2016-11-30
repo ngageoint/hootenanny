@@ -707,8 +707,8 @@ mgcp = {
             ["t.public_transport == 'station'","t.bus = 'yes'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-            ["t.water && !(t.natural)","t.natural = 'water'"]
-            ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
+            ["t.water && !(t.natural)","t.natural = 'water'"],
+            ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"]
             ];
 
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
