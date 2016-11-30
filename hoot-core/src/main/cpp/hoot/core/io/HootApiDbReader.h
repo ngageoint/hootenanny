@@ -38,9 +38,6 @@
 
 #include <ogr_spatialref.h>
 
-// tgs
-#include <tgs/BigContainers/BigMap.h>
-
 #include "EnvelopeProvider.h"
 
 namespace hoot
@@ -108,23 +105,14 @@ public:
 
 protected:
 
-  Tgs::BigMap<long, long> _nodeIdMap;
-  Tgs::BigMap<long, long> _relationIdMap;
-  Tgs::BigMap<long, long> _wayIdMap;
-
-  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
-
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+                                                 const OsmMap& map);
 
 private:
 
-  Status _status;
-  bool _useDataSourceIds;
-
   HootApiDb _database;
-  bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;

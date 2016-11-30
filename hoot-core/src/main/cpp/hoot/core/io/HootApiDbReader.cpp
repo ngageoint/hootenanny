@@ -44,10 +44,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 
-HootApiDbReader::HootApiDbReader() :
-_status(Status::Invalid),
-_useDataSourceIds(true),
-_open(false)
+HootApiDbReader::HootApiDbReader()
 {
   LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
@@ -260,65 +257,6 @@ void HootApiDbReader::finalizePartial()
 void HootApiDbReader::close()
 {
   finalizePartial();
-}
-
-ElementId HootApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
-{
-  ElementId result;
-  LOG_VART(oldId);
-  if (_useDataSourceIds)
-  {
-    result = oldId;
-  }
-  else
-  {
-    long id = oldId.getId();
-    switch (oldId.getType().getEnum())
-    {
-    case ElementType::Node:
-      if (_nodeIdMap.count(id) > 0)
-      {
-        result = ElementId::node(_nodeIdMap.at(id));
-      }
-      else
-      {
-        long newId = map.createNextNodeId();
-        _nodeIdMap[id] = newId;
-        result = ElementId::node(newId);
-      }
-      break;
-    case ElementType::Way:
-      if (_wayIdMap.count(id) > 0)
-      {
-        result = ElementId::way(_wayIdMap.at(id));
-      }
-      else
-      {
-        long newId = map.createNextWayId();
-        _wayIdMap[id] = newId;
-        result = ElementId::way(newId);
-      }
-      break;
-    case ElementType::Relation:
-      if (_relationIdMap.count(id) > 0)
-      {
-        result = ElementId::relation(_relationIdMap.at(id));
-      }
-      else
-      {
-        long newId = map.createNextRelationId();
-        _relationIdMap[id] = newId;
-        result = ElementId::relation(newId);
-      }
-      break;
-    default:
-      throw IllegalArgumentException("Expected a valid element type, but got: " +
-        QString::number(oldId.getType().getEnum()));
-    }
-  }
-  LOG_VART(result);
-
-  return result;
 }
 
 shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,

@@ -35,6 +35,9 @@
 // Qt
 #include <QtSql/QSqlQuery>
 
+// tgs
+#include <tgs/BigContainers/BigMap.h>
+
 namespace hoot
 {
 
@@ -45,9 +48,18 @@ class ApiDbReader
 {
 public:
 
+  ApiDbReader();
   virtual ~ApiDbReader() {}
 
 protected:
+
+  bool _useDataSourceIds;
+  Status _status;
+  bool _open;
+
+  Tgs::BigMap<long, long> _nodeIdMap;
+  Tgs::BigMap<long, long> _relationIdMap;
+  Tgs::BigMap<long, long> _wayIdMap;
 
   void _addTagsToElement(shared_ptr<Element> element);
 
@@ -56,7 +68,7 @@ protected:
   virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map) = 0;
 
-  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId) = 0;
+  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 };
 
 }

@@ -38,9 +38,6 @@
 
 #include <ogr_spatialref.h>
 
-// tgs
-#include <tgs/BigContainers/BigMap.h>
-
 namespace hoot
 {
 
@@ -92,17 +89,12 @@ protected:
 
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
-
-  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+                                                 const OsmMap& map);
 
 private:
 
-  Status _status;
-  bool _useDataSourceIds;
-
   OsmApiDb _database;
-  bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   Envelope _bounds;
@@ -110,10 +102,6 @@ private:
   long _osmElemId;
   ElementType _osmElemType;
   ElementType _selectElementType;
-
-  Tgs::BigMap<long, long> _nodeIdMap;
-  Tgs::BigMap<long, long> _relationIdMap;
-  Tgs::BigMap<long, long> _wayIdMap;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
   /*
