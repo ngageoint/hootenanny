@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/io/ApiDb.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -37,6 +38,8 @@
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
+
+#include <ogr_spatialref.h>
 
 namespace hoot
 {
@@ -69,6 +72,14 @@ protected:
                                                  const OsmMap& map) = 0;
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+
+  virtual shared_ptr<ApiDb> _getDatabase() const = 0;
+
+  /*
+   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
+   * implemented yet.
+   */
+  virtual void _readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds);
 };
 
 }

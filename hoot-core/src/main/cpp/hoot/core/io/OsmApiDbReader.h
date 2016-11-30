@@ -34,10 +34,6 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
-
 namespace hoot
 {
 
@@ -92,9 +88,11 @@ protected:
   virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map);
 
+  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+
 private:
 
-  OsmApiDb _database;
+  shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   Envelope _bounds;
@@ -104,11 +102,6 @@ private:
   ElementType _selectElementType;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  /*
-   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
-   * implemented yet.
-   */
-  void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
   void _parseAndSetTagsOnElement(ElementPtr element);

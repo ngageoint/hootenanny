@@ -34,10 +34,6 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
-
 #include "EnvelopeProvider.h"
 
 namespace hoot
@@ -110,9 +106,11 @@ protected:
   virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map);
 
+  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+
 private:
 
-  HootApiDb _database;
+  shared_ptr<HootApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
@@ -123,7 +121,6 @@ private:
   const ElementType _getCurrentSelectElementType() const;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
   //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();
@@ -131,8 +128,8 @@ private:
   /**
    * Converts a query result to an OSM element
    */
-  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map);
+  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType,
+                                       OsmMap& map);
 };
 
 }

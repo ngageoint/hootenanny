@@ -35,7 +35,6 @@
 #include <hoot/core/util/GeometryUtils.h>
 
 // Qt
-#include <QtSql/QSqlDatabase>
 #include <QUrl>
 #include <QDateTime>
 
@@ -44,7 +43,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 
-HootApiDbReader::HootApiDbReader()
+HootApiDbReader::HootApiDbReader() :
+_database(new HootApiDb())
 {
   LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
@@ -67,14 +67,14 @@ void HootApiDbReader::setBoundingBox(const QString bbox)
 Envelope HootApiDbReader::calculateEnvelope() const
 {
   assert(_open);
-  Envelope result = _database.calculateEnvelope();
+  Envelope result = _database->calculateEnvelope();
   return result;
 }
 
 bool HootApiDbReader::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _database.isSupported(url);
+  return _database->isSupported(url);
 }
 
 void HootApiDbReader::open(QString urlStr)
@@ -89,7 +89,7 @@ void HootApiDbReader::open(QString urlStr)
   QStringList pList = url.path().split("/");
   LOG_DEBUG("url path = "+url.path());
   bool ok;
-  _database.open(url);
+  _database->open(url);
 
   long requestedMapId = pList[pList.size() - 1].toLong(&ok);
 
@@ -102,8 +102,8 @@ void HootApiDbReader::open(QString urlStr)
     }
 
     QString mapName = pList[pList.size() - 1];
-    _database.setUserId(_database.getUserId(_email, false));
-    set<long> mapIds = _database.selectMapIds(mapName);
+    _database->setUserId(_database->getUserId(_email, false));
+    set<long> mapIds = _database->selectMapIds(mapName);
     if (mapIds.size() != 1)
     {
       QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
@@ -113,17 +113,17 @@ void HootApiDbReader::open(QString urlStr)
     requestedMapId = *mapIds.begin();
   }
 
-  if (!_database.mapExists(requestedMapId))
+  if (!_database->mapExists(requestedMapId))
   {
-    _database.close();
+    _database->close();
     throw HootException("No map exists with ID: " + QString::number(requestedMapId));
   }
-  _database.setMapId(requestedMapId);
+  _database->setMapId(requestedMapId);
 
   //using a transaction seems to make sense here, b/c we don't want to read a map being modified
   //in the middle of its modification caused by a changeset upload, which could cause the map to
   //be invalid as a whole
-  _database.transaction();
+  _database->transaction();
   _open = true;
 }
 
@@ -162,19 +162,14 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   else
   {
     LOG_INFO("Executing Hoot API bounded read query with bounds " << _bounds.toString() << "...");
-    _read(map, _bounds);
+    _readByBounds(map, _bounds);
   }
-}
-
-void HootApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
-{
-  //TODO:
 }
 
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database.selectElements(elementType);
+  shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end, unfortunately (see comments in
@@ -203,7 +198,7 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    _elementResultIterator = _database.selectElements(_selectElementType);
+    _elementResultIterator = _database->selectElements(_selectElementType);
   }
 
   //results still available, so keep parsing through them
@@ -248,8 +243,8 @@ void HootApiDbReader::finalizePartial()
   _partialMap.reset();
   if (_open)
   {
-    _database.commit();
-    _database.close();
+    _database->commit();
+    _database->close();
     _open = false;
   }
 }
@@ -349,7 +344,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   _addTagsToElement(way);
 
   // These could be read out in batch at the same time the element results are read...
-  vector<long> nodeIds = _database.selectNodeIdsForWay(wayId);
+  vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
@@ -380,7 +375,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   _addTagsToElement(relation);
 
   // These could be read out in batch at the same time the element results are read...
-  vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
+  vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
