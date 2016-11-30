@@ -432,11 +432,11 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
 {
   const long rawId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << rawId);
-  long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
+  const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
   LOG_VART(nodeId);
-  double lat =
+  const double lat =
     resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-  double lon =
+  const double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
   shared_ptr<Node> node(
@@ -451,10 +451,6 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
 
   _parseAndSetTagsOnElement(node);
-//  if (_status != Status::Invalid)
-//  {
-//    node->setStatus(_status);
-//  }
 
   LOG_VART(node);
   return node;
@@ -509,12 +505,12 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
       {
         shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
         QString result = _database.extractTagFromRow(queryIterator, ElementType::Node);
-        if(result != "")
+        if (result != "")
         {
           tags << result;
         }
 
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
