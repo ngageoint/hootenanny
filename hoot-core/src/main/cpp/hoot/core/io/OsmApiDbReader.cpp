@@ -211,8 +211,8 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
         }
         LOG_VART(element->toString());
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
-        //to the map here whose nodes haven't yet been written to it.  Haven't encountered the
-        //problem yet with test data yet, so will keep an eye on it.
+        //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
+        //he problem yet with test data, but will continue to keep an eye on it.
         map->addElement(element);
       }
 
