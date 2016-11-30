@@ -93,6 +93,7 @@ void ApiDb::_resetQueries()
   _selectElementsByElementIdList.reset();
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -610,6 +611,31 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
     }
   }
   return sql;
+}
+
+shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+{
+  LOG_VARD(timeStr);
+  if (!_selectChangesetsCreatedAfterTime)
+  {
+    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime->prepare(
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+      QString("WHERE created_at > :createdAt"));
+    _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  }
+
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
+  {
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
+  }
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
+
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

@@ -250,6 +250,23 @@ public:
 
   virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const = 0;
 
+  /**
+   * Returns all changesets created after the specified time.
+   *
+   * @param timeStr time string for which to search for changesets created after; should be of the
+   * format specified by the TIME_FORMAT constant
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+
+  /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param elementType element type
+   * @return an element ID
+   */
+  virtual long getNextId(const ElementType& elementType) = 0;
+
 protected:
 
   virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
@@ -282,6 +299,8 @@ private:
   shared_ptr<QSqlQuery> _selectElementsByElementIdList;
   shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
   shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+
+  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 };
 
 }

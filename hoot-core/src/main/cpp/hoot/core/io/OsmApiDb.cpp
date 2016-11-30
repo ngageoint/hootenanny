@@ -188,7 +188,6 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -479,7 +478,7 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   return tag;
 }
 
-long OsmApiDb::getNextId(const ElementType type)
+long OsmApiDb::getNextId(const ElementType& type)
 {
   switch (type.getEnum())
   {
@@ -529,31 +528,6 @@ long OsmApiDb::getNextId(const QString tableName)
   query->finish();
 
   return result;
-}
-
-shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
-{
-  LOG_VARD(timeStr);
-  if (!_selectChangesetsCreatedAfterTime)
-  {
-    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
-    _selectChangesetsCreatedAfterTime->prepare(
-      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
-      QString("WHERE created_at > :createdAt"));
-    _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
-  }
-
-  if (_selectChangesetsCreatedAfterTime->exec() == false)
-  {
-    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
-    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
-    throw HootException(
-      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
-  }
-  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
-  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
-
-  return _selectChangesetsCreatedAfterTime;
 }
 
 long OsmApiDb::toOsmApiDbCoord(const double x)

@@ -114,13 +114,7 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
-  /**
-   * Gets the next sequence ID for the given element type
-   *
-   * @param type element type
-   * @return an element ID
-   */
-  long getNextId(const ElementType type);
+  virtual long getNextId(const ElementType& elementType);
 
   /**
    * Gets the next sequence ID for the given database table
@@ -129,15 +123,6 @@ public:
    * @return an element ID
    */
   long getNextId(const QString tableName);
-
-  /**
-   * Returns all changesets created after the specified time.
-   *
-   * @param timeStr time string for which to search for changesets created after; should be of the
-   * format specified by the TIME_FORMAT constant
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
@@ -175,7 +160,6 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
-  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 

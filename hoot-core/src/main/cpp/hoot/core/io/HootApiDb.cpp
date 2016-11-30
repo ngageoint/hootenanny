@@ -500,6 +500,24 @@ long HootApiDb::_getNextWayId()
   return _wayIdReserver->getNextId();
 }
 
+long HootApiDb::getNextId(const ElementType& elementType)
+{
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+      return _getNextNodeId();
+
+    case ElementType::Way:
+      return _getNextWayId();
+
+    case ElementType::Relation:
+      return _getNextRelationId();
+
+    default:
+      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+  }
+}
+
 void HootApiDb::_init()
 {
   _inTransaction = false;
