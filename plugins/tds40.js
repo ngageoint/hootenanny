@@ -49,7 +49,7 @@ tds = {
         if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrTdsExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
+        if (config.getOgrTdsExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds.rawSchema);
 
      /*
         // This has been removed since we no longer have text enumerations in the schema
@@ -536,6 +536,24 @@ tds = {
     }, // End manyFeatures
 
 
+    // Doesn't do much but saves typing the same code out a few times in the to NFDD Pre Processing
+    fixTransType : function(tags)
+    {
+        if (tags.railway)
+        {
+            tags['transport:type'] = 'railway';
+        }
+        else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
+        {
+            tags['transport:type'] = 'pedestrian';
+        }
+        else if (tags.highway)
+        {
+            tags['transport:type'] = 'road';
+        }
+    },
+
+
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
@@ -844,6 +862,7 @@ tds = {
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
+            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
@@ -985,6 +1004,25 @@ tds = {
                     break;
             } // End switch
         }
+
+        // Fix oil/gas/petroleum fields
+        if (attrs.FCODE == 'AA052')
+        {
+            switch (tags.product)
+            {
+                case undefined:
+                    break;
+
+                case 'gas':
+                    tags.industrial = 'gas';
+                    break;
+
+                case 'petroleum':
+                    tags.industrial = 'oil';
+                    break;
+            }
+        } // End Hydrocarbons
+
 
         // Lifecycle tags
         // NOTE: This needs to be expanded.
@@ -1336,9 +1374,26 @@ tds = {
                 delete tags.landuse;
                 break;
 
-            case 'industrial':
-                tags.use = 'industrial';
-                tags.landuse = 'built_up_area';
+            case 'industrial': // Deconflict with AA052 Hydrocarbons Field
+                switch (tags.industrial)
+                {
+                    case undefined: // Built up Area
+                        tags.use = 'industrial';
+                        tags.landuse = 'built_up_area';
+                        break;
+
+                    case 'oil':
+                        tags.product = 'petroleum';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+
+                    case 'gas':
+                        tags.product = 'gas';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+                }
                 break;
 
             case 'military':
@@ -1502,6 +1557,45 @@ tds = {
            if (tags.protect_class) delete tags.protect_class;
        }
 
+
+       // Now set the relative levels and transportation types for various features
+       if (tags.highway || tags.railway)
+       {
+           if (tags.bridge && tags.bridge !== 'no')
+           {
+               tds.fixTransType(tags);
+               tags.location = 'surface';
+               tags.layer = '1';
+               tags.on_bridge = 'yes';
+           }
+
+           if (tags.tunnel && tags.tunnel !== 'no')
+           {
+               tds.fixTransType(tags);
+               // tags.layer = '-1';
+               tags.in_tunnel = 'yes';
+           }
+
+           if (tags.embankment && tags.embankment !== 'no')
+           {
+               tds.fixTransType(tags);
+               tags.layer = '1';
+           }
+
+           if (tags.cutting && tags.cutting !== 'no')
+           {
+               tds.fixTransType(tags);
+               tags.layer = '-1';
+           }
+
+           if (tags.ford && tags.ford !== 'no')
+           {
+               tds.fixTransType(tags);
+               tags.location = 'on_waterbody_bottom';
+           }
+
+       } // End if highway || railway
+
     }, // End applyToNfddPreProcessing
 
     applyToNfddPostProcessing : function (tags, attrs, geometryType, notUsedTags)
@@ -1517,41 +1611,45 @@ tds = {
         // with similar names and roughly the same attributes. Bleah!
         // Format is: <FCODE>:[<from>:<to>]
         var swapList = {
-            'AA010':['ZI014_PPO','PPO'], 'AA010':['ZI014_PPO2','PPO2'], 'AA010':['ZI014_PPO3','PPO3'],
-            'AA020':['ZI014_PPO','PPO'], 'AA020':['ZI014_PPO2','PPO2'], 'AA020':['ZI014_PPO3','PPO3'],
-            'AA040':['ZI014_PPO','PPO'], 'AA040':['ZI014_PPO2','PPO2'], 'AA040':['ZI014_PPO3','PPO3'],
-            'AA052':['ZI014_PPO','PPO'], 'AA052':['ZI014_PPO2','PPO2'], 'AA052':['ZI014_PPO3','PPO3'],
-            'AA054':['ZI014_PPO','PPO'], 'AA054':['ZI014_PPO2','PPO2'], 'AA054':['ZI014_PPO3','PPO3'],
-            'AB000':['ZI014_PBY','PBY'], 'AB000':['ZI014_PBY2','PBY2'], 'AB000':['ZI014_PBY3','PBY3'],
-            'AC060':['ZI014_PPO','PPO'], 'AC060':['ZI014_PPO2','PPO2'], 'AC060':['ZI014_PPO3','PPO3'],
-            'AD020':['ZI014_PPO','PPO'], 'AD020':['ZI014_PPO2','PPO2'], 'AD020':['ZI014_PPO3','PPO3'],
-            'AD025':['ZI014_PPO','PPO'], 'AD025':['ZI014_PPO2','PPO2'], 'AD025':['ZI014_PPO3','PPO3'],
-            'AJ050':['ZI014_PPO','PPO'],'AJ050':['ZI014_PPO2','PPO2'],'AJ050':['ZI014_PPO3','PPO3'],
-            'AL020':['ZI005_NFN','ZI005_NFN1'],
-            'AM010':['ZI014_PPO','PPO'], 'AM010':['ZI014_PPO2','PPO2'], 'AM010':['ZI014_PPO3','PPO3'],
-            'AM040':['ZI014_PRW','PRW'], 'AM040':['ZI014_PRW2','PRW2'], 'AM040':['ZI014_PRW3','PRW3'],
-            'AM060':['ZI014_PPO','PPO'], 'AM060':['ZI014_PPO2','PPO2'], 'AM060':['ZI014_PPO3','PPO3'],
-            'AM070':['ZI014_PPO','PPO'], 'AM070':['ZI014_PPO2','PPO2'], 'AM070':['ZI014_PPO3','PPO3'],
-            'AM071':['ZI014_PPO','PPO'], 'AM071':['ZI014_PPO2','PPO2'], 'AM071':['ZI014_PPO3','PPO3'],
-            'AM080':['ZI014_YWQ','YWQ'], 'AQ059':['ZI016_WD1','WD1'],
-            'AQ113':['ZI014_PPO','PPO'], 'AQ113':['ZI014_PPO2','PPO2'], 'AQ113':['ZI014_PPO3','PPO3'],
-            'AQ116':['ZI014_PPO','PPO'], 'AQ116':['ZI014_PPO2','PPO2'], 'AQ116':['ZI014_PPO3','PPO3'],
-            'AT005':['WLE','ZI025_WLE'],
-            'AT042':['GUG','ZI032_GUG'], 'AT042':['PYC','ZI032_PYC'], 'AT042':['PYM','ZI032_PYM'],
-            'AT042':['TOS','ZI032_TOS'], 'AT042':['CAB','AT005_CAB'],
-            'BD100':['WLE','ZI025_WLE'],
-            'BH051':['ZI014_PPO','PPO'], 'BH051':['ZI014_PPO2','PPO2'], 'BH051':['ZI014_PPO3','PPO3'],
-            'DB029':['FFN','ZI071_FFN'], 'DB029':['FFN2','ZI071_FFN2'], 'DB029':['FFN3','ZI071_FFN3'],
-            'ED010':['ZI024_HYP','HYP'],
-            'GB045':['ZI019_ASU','ASU'], 'GB045':['ZI019_ASU2','ASU2'], 'GB045':['ZI019_ASU3','ASU3'],
-            'ZI031':['ZI006_MEM','MEM'], 'ZI031':['ZI004_RCG','RCG']
+            'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+            'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+            'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+            'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM080':{'ZI014_YWQ':'YWQ', 'ZI016_WD1':'WD1'},
+            'AQ113':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AQ116':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AT005':{'WLE':'ZI025_WLE'},
+            'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB', 'CAB2':'AT005_CAB2', 'CAB3':'AT005_CAB3'},
+            'BD100':{'WLE':'ZI025_WLE'},
+            'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+            'ED010':{'ZI024_HYP':'HYP'},
+            'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+            'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
                 };
 
-        // Shorter but more ugly version of a set of if..else if statements
-        if (swapList[attrs.F_CODE] && attrs[swapList[attrs.F_CODE][0]])
+        if (swapList[attrs.F_CODE])
         {
-            attrs[swapList[attrs.F_CODE][1]] = attrs[swapList[attrs.F_CODE][0]];
-            delete attrs[swapList[attrs.F_CODE][0]];
+            for (var i in swapList[attrs.F_CODE])
+            {
+                if (i in attrs)
+                {
+                    attrs[swapList[attrs.F_CODE][i]] = attrs[i];
+                    delete attrs[i]
+                }
+            }
         }
 
         // Sort out the UUID

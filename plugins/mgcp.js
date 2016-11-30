@@ -696,18 +696,19 @@ mgcp = {
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
-            ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
-            ["t['generator:source'] == 'wind'","t.power = 'generator'"],
-            ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
-            ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
-            ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
-            ["t.public_transport == 'station'","t.bus = 'yes'"],
-            ["t.leisure == 'stadium'","t.building = 'yes'"],
-            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-            ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
+            ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
             ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
+            ["t['generator:source'] == 'wind'","t.power = 'generator'"],
+            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
+            ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
+            ["t.leisure == 'stadium'","t.building = 'yes'"],
+            ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.public_transport == 'station'","t.bus = 'yes'"],
+            ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
+            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
             ["t.water && !(t.natural)","t.natural = 'water'"]
+            ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
             ];
 
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -1015,9 +1016,26 @@ mgcp = {
                 delete tags.landuse;
                 break;
 
-            case 'industrial':
-                tags.use = 'industrial';
-                tags.landuse = 'built_up_area';
+            case 'industrial': // Deconflict with AA052 Hydrocarbons Field
+                switch (tags.industrial)
+                {
+                    case undefined: // Built up Area
+                        tags.use = 'industrial';
+                        tags.landuse = 'built_up_area';
+                        break;
+
+                    case 'oil':
+                        tags.product = 'petroleum';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+
+                    case 'gas':
+                        tags.product = 'gas';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+                }
                 break;
 
             case 'military':
