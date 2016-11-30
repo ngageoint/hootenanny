@@ -260,15 +260,6 @@ QString OsmApiDb::_getTableName(const ElementType& elementType) const
   }
 }
 
-/**************************************************************
- * Purpose: support method for OsmApi selects returns a query
- *   string
- * Note: The sql queries in here are getting large to the point where
- *   they might not be as efficient as initially planned and it may be
- *   more efficient to read the element table and by id call the tags
- *   tables to extract the table.  Hard to compare without testing.
- *   Save that for a future exercise.
- **************************************************************/
 QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
@@ -513,15 +504,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-/************************************************************************
- * Purpose: to extract tags from the extra lines returned in the
- *   selectAll for OsmApi data
- * Input: apidb row in form with row[8]=k, row[9]=v
- * Output: "k"=>"v"
- * Note: this gets the tags in a form that is the same as how selectAll
- *       returns them for Services DB
- * **********************************************************************
- */
 QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
   QString tag = "";

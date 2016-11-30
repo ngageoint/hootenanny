@@ -171,8 +171,6 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   }
 }
 
-//This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
-//implemented yet.
 void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
 {
   LOG_DEBUG("Retrieving node records within the query bounds...");

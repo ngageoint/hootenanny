@@ -94,6 +94,18 @@ public:
     */
   void deleteData();
 
+  /**
+   * Purpose: to extract tags from the extra lines returned in the
+   *   selectAll for OsmApi data
+   * Input: apidb row in form with row[8]=k, row[9]=v
+   * Output: "k"=>"v"
+   * Note: this gets the tags in a form that is the same as how selectAll
+   *       returns them for Services DB
+   *
+   * @param row
+   * @param Type
+   * @return
+   */
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
   shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);

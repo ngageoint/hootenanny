@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -982,9 +982,6 @@ void HootApiDb::transaction()
   }
   _inTransaction = true;
 }
-
-//using some kind of SQL generator (if one exists for C++ would prevent us from having to do
-//hardcoded table and column references and keep this code less brittle...
 
 QString HootApiDb::_elementTypeToElementTableName(long mapId, const ElementType& elementType) const
 {

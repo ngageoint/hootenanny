@@ -77,8 +77,6 @@ public:
    */
   virtual void read(shared_ptr<OsmMap> map);
 
-  //virtual void finalizePartial();
-
   void close();
 
   virtual void setConfiguration(const Settings &conf);
@@ -109,6 +107,10 @@ private:
   Tgs::BigMap<long, long> _wayIdMap;
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  /*
+   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
+   * implemented yet.
+   */
   void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
   ElementId _mapElementId(const OsmMap& map, ElementId oldId);
