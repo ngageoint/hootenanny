@@ -179,11 +179,6 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
   while (nodeItr->next())
   {
     NodePtr element = _resultToNode(*nodeItr, *map);
-    _parseAndSetTagsOnElement(element);
-    if (_status != Status::Invalid)
-    {
-      element->setStatus(_status);
-    }
     LOG_VART(element->toString());
     map->addElement(element);
     nodeIds.append(QString::number(element->getId()));
@@ -211,11 +206,6 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
       while (wayItr->next())
       {
         WayPtr element = _resultToWay(*wayItr, *map);
-        _parseAndSetTagsOnElement(element);
-        if (_status != Status::Invalid)
-        {
-          element->setStatus(_status);
-        }
         LOG_VART(element->toString());
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
@@ -252,11 +242,6 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
         while (additionalWayNodeItr->next())
         {
           NodePtr element = _resultToNode(*additionalWayNodeItr, *map);
-          _parseAndSetTagsOnElement(element);
-          if (_status != Status::Invalid)
-          {
-            element->setStatus(_status);
-          }
           LOG_VART(element->toString());
           map->addElement(element);
         }
@@ -290,11 +275,6 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
       while (relationItr->next())
       {
         RelationPtr element = _resultToRelation(*relationItr, *map);
-        _parseAndSetTagsOnElement(element);
-        if (_status != Status::Invalid)
-        {
-          element->setStatus(_status);
-        }
         LOG_VART(element->toString());
         map->addElement(element);
       }
@@ -459,7 +439,7 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
-  shared_ptr<Node> result(
+  shared_ptr<Node> node(
     new Node(
       _status,
       nodeId,
@@ -469,8 +449,15 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
-  LOG_VART(result);
-  return result;
+
+  _parseAndSetTagsOnElement(node);
+//  if (_status != Status::Invalid)
+//  {
+//    node->setStatus(_status);
+//  }
+
+  LOG_VART(node);
+  return node;
 }
 
 shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
@@ -502,7 +489,10 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   }
   way->addNodes(nodeIds);
 
+  _parseAndSetTagsOnElement(way);
+
   _addNodesForWay(nodeIds, map);
+
   LOG_VART(way);
   return way;
 }
@@ -562,6 +552,8 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toUInt()));
 
+  _parseAndSetTagsOnElement(relation);
+
   // These could be read these out in batch at the same time the element results are read.
   vector<RelationData::Entry> members = _database.selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
@@ -569,6 +561,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
+
   LOG_VART(relation);
   return relation;
 }
