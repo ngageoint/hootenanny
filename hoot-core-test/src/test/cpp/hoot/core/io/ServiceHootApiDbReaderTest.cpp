@@ -46,9 +46,9 @@
 namespace hoot
 {
 
-class HootApiDbReaderTest : public CppUnit::TestFixture
+class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(HootApiDbReaderTest);
+  CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
 
   CPPUNIT_TEST(runCalculateBoundsTest);
   CPPUNIT_TEST(runElementIdTest);
@@ -63,7 +63,7 @@ class HootApiDbReaderTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "HootApiDbReaderTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceHootApiDbReaderTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -74,7 +74,7 @@ public:
     HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "HootApiDbReaderTest");
+    database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
     database.close();
 
     //inserting a map before all of these tests isn't actually necessary (url tests) and
@@ -641,6 +641,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");
 
 }
