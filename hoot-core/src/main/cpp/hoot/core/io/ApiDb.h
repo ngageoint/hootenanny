@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -150,14 +150,14 @@ public:
    */
   virtual vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
+  vector<long> selectNodeIdsForWay(long wayId, const QString sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
   virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
+  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -168,12 +168,12 @@ public:
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
    * if the user doesn't exist.
    */
-  virtual long getUserId(const QString& email, bool throwWhenMissing);
+  virtual long getUserId(const QString email, bool throwWhenMissing);
 
   /**
    * Inserts a user.
    */
-  virtual long insertUser(const QString& email, const QString& displayName);
+  virtual long insertUser(const QString email, const QString displayName);
 
   /**
    * Deletes a user.
@@ -203,7 +203,7 @@ public:
 
 protected:
 
-  virtual QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+  virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;
 
   /**
@@ -211,7 +211,7 @@ protected:
    * constraints, tables, etc.
    * @param sql SQL to execute.
    */
-  virtual QSqlQuery _execNoPrepare(const QString& sql) const;
+  virtual QSqlQuery _execNoPrepare(const QString sql) const;
 
   static void _unescapeString(QString& s);
 
