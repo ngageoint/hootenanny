@@ -203,7 +203,9 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                     if (isFile) {
                         zip.file(outFile, { name: output + config.formats[req.params.format]});
                     } else {
-                        zip.directory(outDir, output + config.formats[req.params.format]);
+                        //Don't include file extension for shapefile
+                        var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
+                        zip.directory(outDir, output + ext);
                     }
                     zip.finalize();
 
