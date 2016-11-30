@@ -206,8 +206,10 @@ public:
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    //All of the six nodes should be returned.  Two of them are outside of the bounds, but one is
-    //referenced by a way within bounds and the other by a relation within bounds.
+    //All but one of the seven nodes should be returned.  There are two nodes outside of the
+    //requested bounds, but one of them is referenced by a way within the bounds and the other by a
+    //relation within the bounds.  The node not returned is outside of the requested bounds and not
+    //reference by any other element.
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
     //All but one of the five ways should be returned.  The way not returned contains all nodes
     //that are out of bounds.
@@ -216,7 +218,7 @@ public:
     //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
 
-    QDir().mkdir("test-output/io/ServiceOsmApiDbReaderTest");
+    QDir().mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm");
