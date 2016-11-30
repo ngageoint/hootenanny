@@ -56,7 +56,7 @@ class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
   CPPUNIT_TEST(runReadOsmApiTest);
-  CPPUNIT_TEST(runReadBoundingBoxTest);
+  CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -190,7 +190,7 @@ public:
     reader.close();
   }
 
-  void runReadBoundingBoxTest()
+  void runReadByBoundsTest()
   {
     insertDataForBoundTest();
 
@@ -219,10 +219,10 @@ public:
     QDir().mkdir("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm");
+      "test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm");
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"),
-      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadBoundingBoxTest.osm"));
+      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"),
+      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"));
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
