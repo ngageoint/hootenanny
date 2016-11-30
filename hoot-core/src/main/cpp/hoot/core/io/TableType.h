@@ -60,67 +60,20 @@ public:
 
   Type getEnum() const { return _type; }
 
-//  QString toString() const
-//  {
-//    switch (_type)
-//    {
-//    case ElementType::Node:
-//      return "Node";
-//    case ElementType::Way:
-//      return "Way";
-//    case ElementType::Relation:
-//      return "Relation";
-//    default:
-//      return QString("Unknown (%1)").arg(_type);
-//    }
-//  }
-
-//  static bool isValidTypeString(QString typeString)
-//  {
-//    typeString = typeString.toLower();
-//    return typeString == "node" || typeString == "way" || typeString == "relation" ||
-//      typeString == "unknown";
-//  }
-
-//  static Type fromString(QString typeString)
-//  {
-//    typeString = typeString.toLower();
-//    if (typeString == "node")
-//    {
-//      return Node;
-//    }
-//    else if (typeString == "way")
-//    {
-//      return Way;
-//    }
-//    else if (typeString == "relation")
-//    {
-//      return Relation;
-//    }
-//    else if (typeString == "unknown")
-//    {
-//      return Unknown;
-//    }
-//    else
-//    {
-//      throw HootException("Invalid element type string: " + typeString);
-//    }
-//  }
-
-    static Type fromElementType(const ElementType& elementType)
+  static Type fromElementType(const ElementType& elementType)
+  {
+    switch (elementType.getEnum())
     {
-      switch (elementType.getEnum())
-      {
-        case ElementType::Node:
-          return Node;
-        case ElementType::Way:
-          return Way;
-        case ElementType::Relation:
-          return Relation;
-        default:
-          throw HootException("Invalid element type.");
-      }
+      case ElementType::Node:
+        return Node;
+      case ElementType::Way:
+        return Way;
+      case ElementType::Relation:
+        return Relation;
+      default:
+        throw HootException("Invalid element type.");
     }
+  }
 
 private:
 
