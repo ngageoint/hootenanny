@@ -207,7 +207,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
     {
       LOG_DEBUG("Retrieving ways by way ID...");
       shared_ptr<QSqlQuery> wayItr =
-        _database.selectElementsByElementIdList(wayIds, ElementType::Way);
+        _database.selectElementsByElementIdList(wayIds, TableType::Way);
       while (wayItr->next())
       {
         WayPtr element = _resultToWay(*wayItr, *map);
@@ -248,7 +248,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
         LOG_DEBUG(
           "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
         shared_ptr<QSqlQuery> additionalWayNodeItr =
-          _database.selectElementsByElementIdList(additionalWayNodeIds, ElementType::Node);
+          _database.selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
           NodePtr element = _resultToNode(*additionalWayNodeItr, *map);
@@ -286,7 +286,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
     {
       LOG_DEBUG("Retrieving relations by relation ID...");
       shared_ptr<QSqlQuery> relationItr =
-        _database.selectElementsByElementIdList(relationIds, ElementType::Relation);
+        _database.selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {
         RelationPtr element = _resultToRelation(*relationItr, *map);

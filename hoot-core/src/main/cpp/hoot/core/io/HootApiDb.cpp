@@ -893,6 +893,8 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
+  ApiDb::_resetQueries();
+
   _closeChangeSet.reset();
   _insertChangeSet.reset();
   _insertChangeSetTag.reset();
@@ -983,23 +985,36 @@ void HootApiDb::transaction()
   _inTransaction = true;
 }
 
-QString HootApiDb::_elementTypeToElementTableName(long mapId, const ElementType& elementType) const
+QString HootApiDb::tableTypeToTableName(const TableType& tableType, const long mapId) const
 {
-  if (elementType == ElementType::Node)
+  if (mapId == -1)
+  {
+    throw HootException("Invalid map ID: " + mapId);
+  }
+
+  if (tableType == TableType::Node)
   {
     return getNodesTableName(mapId);
   }
-  else if (elementType == ElementType::Way)
+  else if (tableType == TableType::Way)
   {
     return getWaysTableName(mapId);
   }
-  else if (elementType == ElementType::Relation)
+  else if (tableType == TableType::Relation)
   {
     return getRelationsTableName(mapId);
   }
+  else if (tableType == TableType::WayNode)
+  {
+    return getWayNodesTableName(mapId);
+  }
+  else if (tableType == TableType::RelationMember)
+  {
+    return getRelationMembersTableName(mapId);
+  }
   else
   {
-    throw HootException("Unsupported element type.");
+    throw HootException("Unsupported table type.");
   }
 }
 
@@ -1045,7 +1060,7 @@ long HootApiDb::numElements(const ElementType& elementType)
 
   _numTypeElementsForMap.reset(new QSqlQuery(_db));
   _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + _elementTypeToElementTableName(mapId, elementType));
+    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType), mapId));
   if (_numTypeElementsForMap->exec() == false)
   {
     LOG_ERROR(_numTypeElementsForMap->executedQuery());
@@ -1073,7 +1088,8 @@ shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
-  QString sql =  "SELECT * FROM " + _elementTypeToElementTableName(mapId, elementType);
+  QString sql =
+    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType), mapId);
   LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);

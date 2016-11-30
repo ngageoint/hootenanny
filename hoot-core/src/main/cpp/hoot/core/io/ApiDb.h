@@ -35,6 +35,8 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/io/TableType.h>
 
 // Qt
 #include <QUrl>
@@ -74,6 +76,7 @@ class Relation;
  */
 class ApiDb
 {
+
 public:
 
   static const int COORDINATE_SCALE = 1e7;
@@ -201,10 +204,56 @@ public:
    */
   static unsigned int tileForPoint(double lat, double lon);
 
+  /**
+   * Returns all nodes that fall within a geospatial bounds
+   *
+   * @param bounds the query bounds
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
+
+  /**
+   * Returns the IDs of all ways that own the input node IDs
+   *
+   * @param nodeIds a list of node IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QStringList& nodeIds);
+
+  /**
+   * Returns all elements by type with IDs in the input ID list
+   *
+   * @param elementIds a list of element IDs
+   * @param tableType the type of database table to query
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QStringList& elementIds,
+                                                      const TableType& tableType);
+
+  /**
+   * Returns all the IDs of all nodes owned by the input way IDs
+   *
+   * @param wayIds a list of way IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QStringList& wayIds);
+
+  /**
+   * Returns the IDs of all relations which own the typed input member IDs
+   *
+   * @param memberIds a list of member IDs of the same element type
+   * @param memberElementType the element type of the associated relation member
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QStringList& memberIds,
+                                                     const ElementType& memberElementType);
+
+  virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const = 0;
+
 protected:
 
   virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const;
+                          QVariant v3 = QVariant()) const;
 
   /**
    * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
@@ -215,10 +264,24 @@ protected:
 
   static void _unescapeString(QString& s);
 
+  virtual void _resetQueries();
+
   QSqlDatabase _db;
   shared_ptr<QSqlQuery> _selectUserByEmail;
   shared_ptr<QSqlQuery> _insertUser;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+
+private:
+
+  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
+  vector<Range> _getTileRanges(const Envelope& env) const;
+
+  //element bounds related queries
+  shared_ptr<QSqlQuery> _selectNodesByBounds;
+  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
+  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
 };
 
 }

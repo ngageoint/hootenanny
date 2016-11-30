@@ -36,6 +36,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
+#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
 
 // qt
 #include <QStringList>
@@ -64,6 +66,16 @@ ApiDb::ApiDb()
 
 ApiDb::~ApiDb()
 {
+  _resetQueries();
+
+  if (_db.isOpen())
+  {
+    _db.close();
+  }
+}
+
+void ApiDb::_resetQueries()
+{
   if (_selectUserByEmail != 0)
   {
     _selectUserByEmail.reset();
@@ -76,10 +88,11 @@ ApiDb::~ApiDb()
   {
     _selectNodeIdsForWay.reset();
   }
-  if (_db.isOpen())
-  {
-    _db.close();
-  }
+  _selectNodesByBounds.reset();
+  _selectWayIdsByWayNodeIds.reset();
+  _selectElementsByElementIdList.reset();
+  _selectWayNodeIdsByWayIds.reset();
+  _selectRelationIdsByMemberIds.reset();
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -412,6 +425,191 @@ QSqlQuery ApiDb::_execNoPrepare(const QString sql) const
 long ApiDb::round(double x)
 {
   return (long)(x + 0.5);
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
+{
+  LOG_VARD(bounds);
+  const vector<Range> tileRanges = _getTileRanges(bounds);
+  LOG_VARD(tileRanges.size());
+
+  //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
+  //modify this to add placeholders for the tile ID ranges and make it so the query only gets
+  //prepared once.
+  if (!_selectNodesByBounds)
+  {
+    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds->setForwardOnly(true);
+  }
+  QString sql = "select * from current_nodes where";
+  sql += " visible = true";
+  sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
+  sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
+  sql += " and latitude <= :maxLat";
+  sql += " order by id desc";
+  _selectNodesByBounds->prepare(sql);
+  _selectNodesByBounds->bindValue(":minLon", (qlonglong)(bounds.getMinX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(bounds.getMaxX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":minLat", (qlonglong)(bounds.getMinY() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(bounds.getMaxY() * COORDINATE_SCALE));
+  LOG_VARD(_selectNodesByBounds->lastQuery());
+  LOG_VARD(_selectNodesByBounds->boundValues());
+
+  if (_selectNodesByBounds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting nodes by bounds: " + QString::fromStdString(bounds.toString()) + " Error: " +
+      _selectNodesByBounds->lastError().text());
+  }
+  LOG_VARD(_selectNodesByBounds->numRowsAffected());
+  return _selectNodesByBounds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QStringList& nodeIds)
+{
+  if (!_selectWayIdsByWayNodeIds)
+  {
+    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select way_id from current_way_nodes where node_id in (" + nodeIds.join(",") + ")";
+  //sql += " order by way_id desc";
+  _selectWayIdsByWayNodeIds->prepare(sql);
+  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
+
+  if (_selectWayIdsByWayNodeIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way IDs by way node IDs.  Error: " +
+      _selectWayIdsByWayNodeIds->lastError().text());
+  }
+  LOG_VARD(_selectWayIdsByWayNodeIds->numRowsAffected());
+  return _selectWayIdsByWayNodeIds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QStringList& elementIds,
+                                                           const TableType& tableType)
+{
+  if (!_selectElementsByElementIdList)
+  {
+    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select * from " + tableTypeToTableName(tableType) +
+    " where visible = true and id in (" + elementIds.join(",") + ")";
+  sql += " order by id desc";
+  _selectElementsByElementIdList->prepare(sql);
+  LOG_VARD(_selectElementsByElementIdList->lastQuery());
+
+  if (_selectElementsByElementIdList->exec() == false)
+  {
+    throw HootException(
+      "Error selecting elements by element ID list:  Error: " +
+      _selectElementsByElementIdList->lastError().text());
+  }
+  LOG_VARD(_selectElementsByElementIdList->numRowsAffected());
+  return _selectElementsByElementIdList;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QStringList& wayIds)
+{
+  if (!_selectWayNodeIdsByWayIds)
+  {
+    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select node_id from current_way_nodes where way_id in (" + wayIds.join(",") + ")";
+  //sql += " order by sequence_id";
+  _selectWayNodeIdsByWayIds->prepare(sql);
+  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
+
+  if (_selectWayNodeIdsByWayIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way node IDs by way IDs.  Error: " +
+      _selectWayNodeIdsByWayIds->lastError().text());
+  }
+  LOG_VARD(_selectWayNodeIdsByWayIds->numRowsAffected());
+  return _selectWayNodeIdsByWayIds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QStringList& memberIds,
+                                                          const ElementType& memberElementType)
+{
+  if (!_selectRelationIdsByMemberIds)
+  {
+    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "select relation_id from current_relation_members";
+  sql += " where member_type = :elementType and member_id in (" + memberIds.join(",") + ")";
+  //sql += " order by relation_id desc";
+  _selectRelationIdsByMemberIds->prepare(sql);
+  _selectRelationIdsByMemberIds->bindValue(":elementType", memberElementType.toString());
+  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery());
+  LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
+
+  if (_selectRelationIdsByMemberIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting relation IDs by member IDs.  Error: " +
+      _selectRelationIdsByMemberIds->lastError().text());
+  }
+  LOG_VARD(_selectRelationIdsByMemberIds->numRowsAffected());
+  return _selectRelationIdsByMemberIds;
+}
+
+vector<Range> ApiDb::_getTileRanges(const Envelope& env) const
+{
+  const double minLat = env.getMinY();
+  const double minLon = env.getMinX();
+  const double maxLat = env.getMaxY();
+  const double maxLon = env.getMaxX();
+
+  vector<double> minV;
+  minV.push_back(-90.0);
+  minV.push_back(-180.0);
+  vector<double> maxV;
+  maxV.push_back(90.0);
+  maxV.push_back(180.0);
+  ZValue zv(2, 16, minV, maxV);
+  ZCurveRanger ranger(zv);
+
+  vector<double> minB;
+  minB.push_back(minLat);
+  minB.push_back(minLon);
+  vector<double> maxB;
+  maxB.push_back(maxLat);
+  maxB.push_back(maxLon);
+
+  BBox b(minB, maxB);
+  return ranger.decomposeRange(b, 1);
+}
+
+QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
+{
+  QString sql = "";
+  for (uint i = 0; i < tileIdRanges.size(); i++)
+  {
+    if (i == tileIdRanges.size() - 1)
+    {
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ")";
+    }
+    else
+    {
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ") or ";
+    }
+  }
+  return sql;
 }
 
 }

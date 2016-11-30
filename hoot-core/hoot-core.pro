@@ -1081,5 +1081,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h \
+    src/main/cpp/hoot/core/io/TableType.h
 

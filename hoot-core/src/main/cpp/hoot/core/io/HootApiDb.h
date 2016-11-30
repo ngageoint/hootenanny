@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -278,6 +278,12 @@ public:
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                         QVariant v3 = QVariant());
 
+  virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const;
+
+protected:
+
+  virtual void _resetQueries();
+
 private:
 
   bool _inTransaction;
@@ -360,8 +366,6 @@ private:
    */
   void _copyTableStructure(QString from, QString to);
 
-  QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
-
   QString _escapeTags(const Tags& tags) const;
 
   void _flushBulkInserts();
@@ -370,7 +374,6 @@ private:
   long _getNextWayId();
   void _init();
   void _lazyFlushBulkInsert();
-  void _resetQueries();
 
   /**
    * Executes the insert, performs error checking and returns the new ID.
