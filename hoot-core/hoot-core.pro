@@ -538,7 +538,8 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp \
+    src/main/cpp/hoot/core/io/ApiDbReader.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \

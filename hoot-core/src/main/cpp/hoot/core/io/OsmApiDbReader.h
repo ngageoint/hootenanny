@@ -45,6 +45,7 @@ namespace hoot
 {
 
 class OsmApiDbReader :
+    public ApiDbReader,
     public OsmMapReader,
     public Configurable
 {
@@ -87,6 +88,14 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+protected:
+
+  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+
+  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+
 private:
 
   Status _status;
@@ -113,12 +122,6 @@ private:
    */
   void _read(shared_ptr<OsmMap> map, const Envelope& bounds);
 
-  ElementId _mapElementId(const OsmMap& map, ElementId oldId);
-
-  // Osm Api data assignment methods
-  shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

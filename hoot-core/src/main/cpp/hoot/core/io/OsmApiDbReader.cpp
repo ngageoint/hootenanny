@@ -167,7 +167,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   {
     LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-    ApiDbReader::addTagsToElement(element);
+    _addTagsToElement(element);
   }
 }
 
@@ -209,7 +209,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
         LOG_VART(element->toString());
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
-        //he problem yet with test data, but will continue to keep an eye on it.
+        //the problem yet with test data, but will continue to keep an eye on it.
         map->addElement(element);
       }
 
@@ -307,7 +307,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
         {
           LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          ApiDbReader::addTagsToElement( element );
+          _addTagsToElement( element );
         }
 
         if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -351,7 +351,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     {
       LOG_VART(tags);
       element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-      ApiDbReader::addTagsToElement( element );
+      _addTagsToElement( element );
     }
     if (_status != Status::Invalid) { element->setStatus(_status); }
     map->addElement(element);
@@ -514,7 +514,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
         {
           LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
-          ApiDbReader::addTagsToElement(node);
+          _addTagsToElement(node);
         }
         if (_status != Status::Invalid)
         {

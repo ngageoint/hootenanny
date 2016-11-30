@@ -47,6 +47,7 @@ namespace hoot
 {
 
 class HootApiDbReader :
+    public ApiDbReader,
     public PartialOsmMapReader,
     public Configurable,
     public EnvelopeProvider
@@ -113,6 +114,10 @@ protected:
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
+  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+
 private:
 
   Status _status;
@@ -140,11 +145,6 @@ private:
    */
   shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
     const ElementType& elementType, OsmMap& map);
-
-  // Services data assignment methods
-  shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 };
 
 }
