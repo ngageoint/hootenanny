@@ -373,7 +373,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
 
-  // These could be read out in batch at the same time the element results are read...
+  // Could these be read out in batch at the same time the element results are read?...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
@@ -389,6 +389,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getHootapiDbReaderEmail());
+  setBoundingBox(configOptions.getConvertBoundingBox());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
