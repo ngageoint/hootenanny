@@ -83,9 +83,9 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  void setUserEmail(const QString& email) { _email = email; }
+  void setUserEmail(const QString email) { _email = email; }
 
-  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+  void setBoundingBox(const QString bbox);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
@@ -98,7 +98,7 @@ private:
   bool _open;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  QString _bbox;
+  Envelope _bounds;
 
   long _osmElemId;
   ElementType _osmElemType;

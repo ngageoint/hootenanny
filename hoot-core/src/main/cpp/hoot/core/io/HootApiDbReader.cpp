@@ -58,6 +58,15 @@ HootApiDbReader::~HootApiDbReader()
   close();
 }
 
+void HootApiDbReader::setBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+
 Envelope HootApiDbReader::calculateEnvelope() const
 {
   assert(_open);
@@ -128,7 +137,6 @@ bool HootApiDbReader::hasMoreElements()
     //populate next element.
     _nextElement = _getElementUsingIterator();
   }
-
   return _nextElement != NULL;
 }
 
@@ -144,7 +152,9 @@ void  HootApiDbReader::initializePartial()
 
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  if (_bbox.trimmed().isEmpty())
+  //TODO: this check is strange
+  if (_bounds.isNull() || _bounds.toString() == "-180,-90,180,90" ||
+      _bounds.toString() == "-180.0,-90.0,180.0,90.0")
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -154,20 +164,18 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_INFO("Executing Hoot API bounded read query with bounds " << _bbox << "...");
-    _read(map, GeometryUtils::envelopeFromConfigString(_bbox));
+    LOG_INFO("Executing Hoot API bounded read query with bounds " << _bounds.toString() << "...");
+    _read(map, _bounds);
   }
 }
 
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const Envelope& bounds)
 {
-
+  //TODO:
 }
 
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
-  LOG_DEBUG("IN HootApiDbReader::read(,)...");
-
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database.selectElements(elementType);
 

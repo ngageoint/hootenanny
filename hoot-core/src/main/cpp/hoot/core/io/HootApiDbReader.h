@@ -103,7 +103,7 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+  void setBoundingBox(const QString bbox);
 
 protected:
 
@@ -123,7 +123,7 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
-  QString _bbox;
+  Envelope _bounds;
 
   shared_ptr<Element> _nextElement;
 

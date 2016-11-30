@@ -62,6 +62,14 @@ OsmApiDbReader::~OsmApiDbReader()
   close();
 }
 
+void OsmApiDbReader::setBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
 bool OsmApiDbReader::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
@@ -105,8 +113,9 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
-  else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" ||
-          _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0")
+  //TODO: this check is strange
+  else if(_bounds.isNull() || _bounds.toString() == "-180,-90,180,90" ||
+          _bounds.toString() == "-180.0,-90.0,180.0,90.0")
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -116,8 +125,8 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_INFO("Executing OSM API bounded read query with bounds " << _bbox << "...");
-    _read(map, GeometryUtils::envelopeFromConfigString(_bbox));
+    LOG_INFO("Executing OSM API bounded read query with bounds " << _bounds.toString() << "...");
+    _read(map, _bounds);
   }
 }
 
