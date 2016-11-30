@@ -83,18 +83,20 @@ public:
 
     //inserting a map before all of these tests isn't actually necessary (url tests) and
     //is probably slowing the test run down a little more than necessary
-    mapId = populateMap();
+    //mapId = populateMap();
   }
 
   void tearDown()
   {
-    // HootApi DB
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.deleteMap(mapId);
-    database.close();
+    if (mapId != -1)
+    {
+      HootApiDb database;
+      database.open(ServicesDbTestUtils::getDbModifyUrl());
+      database.deleteMap(mapId);
+      database.close();
+    }
   }
 
   long populateMap()
@@ -149,49 +151,16 @@ public:
 
   long insertDataForBoundTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
-
-    shared_ptr<Node> n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
-    map->addNode(n1);
-    shared_ptr<Node> n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
-    n2->setTag("noteb", "n2b");
-    map->addNode(n2);
-    shared_ptr<Node> n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
-    n3->setTag("note", "n3");
-    map->addNode(n3);
-    shared_ptr<Node> n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
-    n4->setTag("note", "n4");
-    map->addNode(n4);
-    shared_ptr<Node> n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
-    map->addNode(n5);
-
-    shared_ptr<Way> w1(new Way(Status::Unknown1, 1, 15.0));
-    w1->addNode(1);
-    w1->addNode(2);
-    w1->setTag("noteb", "w1b");
-    map->addWay(w1);
-    shared_ptr<Way> w2(new Way(Status::Unknown2, 2, 16.0));
-    w2->addNode(2);
-    w2->addNode(3);
-    w2->setTag("note", "w2");
-    map->addWay(w2);
-    shared_ptr<Way> w3(new Way(Status::Unknown2, 3, 17.0));
-    w3->addNode(2);
-    map->addWay(w3);
-
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 18.1, "collection"));
-    r1->addElement("n1", n1->getElementId());
-    r1->addElement("w1", w1->getElementId());
-    r1->setTag("note", "r1");
-    map->addRelation(r1);
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, -1.0));
-    r2->addElement("n2", n2->getElementId());
-    map->addRelation(r2);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestInput.osm", false,
+      Status::Unknown1);
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
-    writer.setRemap(false);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.setRemap(true);
+    //writer.setOverwriteMap(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString()/* + mapId*/);
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -210,6 +179,8 @@ public:
 
   void runCalculateBoundsTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
     reader.open(url);
@@ -218,6 +189,8 @@ public:
 
   void runElementIdTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     // make sure all the element ids start with -1
     OsmMap::resetCounters();
@@ -468,6 +441,8 @@ public:
 
   void runReadTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
@@ -478,6 +453,8 @@ public:
 
   void runReadWithElemTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
@@ -488,6 +465,8 @@ public:
 
   void runFactoryReadTest()
   {
+    mapId = populateMap();
+
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     verifyFullReadOutput(map);
@@ -495,6 +474,8 @@ public:
 
   void runPartialReadTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
@@ -695,7 +676,7 @@ public:
 
   void runReadByBoundsTest()
   {
-    insertDataForBoundTest();
+    mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
@@ -707,23 +688,19 @@ public:
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    //All of the six nodes should be returned.  Two of them are outside of the bounds, but one is
-    //referenced by a way within bounds and the other by a relation within bounds.
+    //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
+    //(exact same input data)
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
-    //All but one of the five ways should be returned.  The way not returned contains all nodes
-    //that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    //All but one of the six relations should be returned.  The relation not returned contains all
-    //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
 
-    QDir().mkdir("test-output/io/ServiceHootApiDbReaderTest");
+    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTest.osm");
+      "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"),
-      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"));
+      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTestOutput.osm"),
+      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTestOutput.osm"));
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
