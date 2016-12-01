@@ -55,7 +55,7 @@ namespace hoot
 class ServiceOsmApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbReaderTest);
-  //CPPUNIT_TEST(runReadOsmApiTest);
+  CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
