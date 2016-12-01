@@ -27,6 +27,12 @@ Feature: Highlight features on click
         And I hover over "#map"
         And I click the "map" at "350","300"
 
+    Scenario: Attempt to Remove Dataset and Recieve Warning
+        And I click the "map" at "450","300"
+        And I click the "trash.map-button" button
+        And I should see an alert containing "There is unsaved changes"
+        And I reject the alert
+
     Scenario: I select a feature and see an orange highlight
         When I select a node map feature with OSM id "n-1"
         Then I should see a node element "n-1" with a selected highlight
