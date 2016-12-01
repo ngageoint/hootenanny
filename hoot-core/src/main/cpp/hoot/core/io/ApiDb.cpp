@@ -476,7 +476,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeI
   }
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql =
-    "select way_id from current_way_nodes where";
+    "select distinct way_id from current_way_nodes where";
   sql += " node_id in (" + QStringList(nodeIds.toList()).join(",") + ")";
   //sql += " order by way_id desc";
   _selectWayIdsByWayNodeIds->prepare(sql);
@@ -528,7 +528,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayId
   }
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql =
-    "select node_id from current_way_nodes where";
+    "select distinct node_id from current_way_nodes where";
   sql += " way_id in (" + QStringList(wayIds.toList()).join(",") + ")";
   //sql += " order by sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
@@ -553,7 +553,7 @@ shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& m
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select relation_id from current_relation_members where";
+  QString sql = "select distinct relation_id from current_relation_members where";
   sql += " member_type = :elementType";
   sql += " and member_id in (" + QStringList(memberIds.toList()).join(",") + ")";
   //sql += " order by relation_id desc";
