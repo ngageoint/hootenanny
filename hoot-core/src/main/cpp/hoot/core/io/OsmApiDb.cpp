@@ -47,6 +47,7 @@
 #include <QtSql/QSqlRecord>
 #include <QFile>
 #include <QTextStream>
+#include <QSet>
 
 // Standard
 #include <math.h>
@@ -665,7 +666,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
   return _selectNodesByBounds;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& nodeIds)
+shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
   if (!_selectWayIdsByWayNodeIds)
   {
@@ -674,7 +675,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& node
   }
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql =
-    "select way_id from current_way_nodes where node_id in (" + nodeIds.join(",") + ")";
+    "select distinct way_id from current_way_nodes where node_id in (" +
+    QStringList(nodeIds.toList()).join(",") + ")";
   //sql += " order by way_id desc";
   _selectWayIdsByWayNodeIds->prepare(sql);
   LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
@@ -689,7 +691,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QStringList& node
   return _selectWayIdsByWayNodeIds;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList& elementIds,
+shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                               const ElementType& elementType)
 {
   if (!_selectElementsByElementIdList)
@@ -700,7 +702,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList&
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql =
     "select * from " + _getTableName(elementType) + " where visible = true and id in (" +
-    elementIds.join(",") + ")";
+    QStringList(elementIds.toList()).join(",") + ")";
   sql += " order by id desc";
   _selectElementsByElementIdList->prepare(sql);
   LOG_VARD(_selectElementsByElementIdList->lastQuery());
@@ -715,7 +717,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QStringList&
   return _selectElementsByElementIdList;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayIds)
+shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
   if (!_selectWayNodeIdsByWayIds)
   {
@@ -724,7 +726,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayI
   }
   //this has to be prepared every time due to the varying number of IDs passed in
   QString sql =
-    "select node_id from current_way_nodes where way_id in (" + wayIds.join(",") + ")";
+    "select distinct node_id from current_way_nodes where way_id in (" +
+    QStringList(wayIds.toList()).join(",") + ")";
   //sql += " order by sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
   LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
@@ -739,7 +742,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QStringList& wayI
   return _selectWayNodeIdsByWayIds;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& memberIds,
+shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                              const ElementType& elementType)
 {
   if (!_selectRelationIdsByMemberIds)
@@ -748,8 +751,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QStringList& 
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select relation_id from current_relation_members";
-  sql += " where member_type = :elementType and member_id in (" + memberIds.join(",") + ")";
+  QString sql = "select distinct relation_id from current_relation_members";
+  sql += " where member_type = :elementType and member_id in (" +
+    QStringList(memberIds.toList()).join(",") + ")";
   //sql += " order by relation_id desc";
   _selectRelationIdsByMemberIds->prepare(sql);
   _selectRelationIdsByMemberIds->bindValue(":elementType", elementType.toString());

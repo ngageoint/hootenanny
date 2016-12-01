@@ -158,19 +158,19 @@ public:
   /**
    * Returns the IDs of all ways that own the input node IDs
    *
-   * @param nodeIds a list of node IDs
+   * @param nodeIds a collection of node IDs
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QStringList& nodeIds);
+  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
 
   /**
    * Returns all elements by type with IDs in the input ID list
    *
-   * @param elementIds a list of element IDs
+   * @param elementIds a collection of element IDs
    * @param elementType the type of element to return
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QStringList& elementIds,
+  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                       const ElementType& elementType);
 
   /**
@@ -179,7 +179,7 @@ public:
    * @param wayIds a list of way IDs
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QStringList& wayIds);
+  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
 
   /**
    * Returns the IDs of all relations which own the typed input member IDs
@@ -188,7 +188,7 @@ public:
    * @param elementType the type of member element
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QStringList& memberIds,
+  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                      const ElementType& elementType);
 
 private:
