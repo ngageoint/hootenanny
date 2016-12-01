@@ -144,7 +144,7 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
-  virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const;
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
 
 protected:
 

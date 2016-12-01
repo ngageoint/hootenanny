@@ -277,7 +277,7 @@ public:
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                        QVariant v3 = QVariant());
 
-  virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const;
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
 
   virtual long getNextId(const ElementType& elementType);
 

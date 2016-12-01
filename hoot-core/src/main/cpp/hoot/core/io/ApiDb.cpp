@@ -443,17 +443,27 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
     _selectNodesByBounds.reset(new QSqlQuery(_db));
     _selectNodesByBounds->setForwardOnly(true);
   }
-  QString sql = "select * from current_nodes where";
+  QString sql = "select * from " + tableTypeToTableName(TableType::Node) + " where";
   sql += " visible = true";
   sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
   sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
   sql += " and latitude <= :maxLat";
   sql += " order by id desc";
   _selectNodesByBounds->prepare(sql);
-  _selectNodesByBounds->bindValue(":minLon", (qlonglong)(bounds.getMinX() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(bounds.getMaxX() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":minLat", (qlonglong)(bounds.getMinY() * COORDINATE_SCALE));
-  _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(bounds.getMaxY() * COORDINATE_SCALE));
+  if (!_floatingPointCoords)
+  {
+    _selectNodesByBounds->bindValue(":minLon", (qlonglong)(bounds.getMinX() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(bounds.getMaxX() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":minLat", (qlonglong)(bounds.getMinY() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(bounds.getMaxY() * COORDINATE_SCALE));
+  }
+  else
+  {
+    _selectNodesByBounds->bindValue(":minLon", bounds.getMinX());
+    _selectNodesByBounds->bindValue(":maxLon", bounds.getMaxX());
+    _selectNodesByBounds->bindValue(":minLat", bounds.getMinY());
+    _selectNodesByBounds->bindValue(":maxLat", bounds.getMaxY());
+  }
   LOG_VARD(_selectNodesByBounds->lastQuery());
   LOG_VARD(_selectNodesByBounds->boundValues());
 
@@ -475,8 +485,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeI
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql =
-    "select distinct way_id from current_way_nodes where";
+  QString sql = "select distinct way_id from " + tableTypeToTableName(TableType::WayNode) + " where";
   sql += " node_id in (" + QStringList(nodeIds.toList()).join(",") + ")";
   //sql += " order by way_id desc";
   _selectWayIdsByWayNodeIds->prepare(sql);
@@ -527,8 +536,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayId
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql =
-    "select distinct node_id from current_way_nodes where";
+  QString sql = "select distinct node_id from " + tableTypeToTableName(TableType::WayNode) + " where";
   sql += " way_id in (" + QStringList(wayIds.toList()).join(",") + ")";
   //sql += " order by sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
@@ -553,7 +561,8 @@ shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& m
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select distinct relation_id from current_relation_members where";
+  QString sql = "select distinct relation_id from " +
+    tableTypeToTableName(TableType::RelationMember) + " where";
   sql += " member_type = :elementType";
   sql += " and member_id in (" + QStringList(memberIds.toList()).join(",") + ")";
   //sql += " order by relation_id desc";

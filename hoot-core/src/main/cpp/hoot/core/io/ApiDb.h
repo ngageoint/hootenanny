@@ -248,7 +248,7 @@ public:
   shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                      const ElementType& memberElementType);
 
-  virtual QString tableTypeToTableName(const TableType& tableType, const long mapId = -1) const = 0;
+  virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
 
   /**
    * Returns all changesets created after the specified time.
@@ -269,6 +269,15 @@ public:
 
 protected:
 
+  //This is arguably a little bit of a hack...overloading selectNodesByBounds may be a better route,
+  //but we'll go with this for now.
+  bool _floatingPointCoords;
+
+  QSqlDatabase _db;
+  shared_ptr<QSqlQuery> _selectUserByEmail;
+  shared_ptr<QSqlQuery> _insertUser;
+  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+
   virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                           QVariant v3 = QVariant()) const;
 
@@ -283,15 +292,7 @@ protected:
 
   virtual void _resetQueries();
 
-  QSqlDatabase _db;
-  shared_ptr<QSqlQuery> _selectUserByEmail;
-  shared_ptr<QSqlQuery> _insertUser;
-  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
-
 private:
-
-  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
-  vector<Range> _getTileRanges(const Envelope& env) const;
 
   //element bounds related queries
   shared_ptr<QSqlQuery> _selectNodesByBounds;
@@ -301,6 +302,9 @@ private:
   shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
 
   shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+
+  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
+  vector<Range> _getTileRanges(const Envelope& env) const;
 };
 
 }
