@@ -28,10 +28,8 @@
 #define REMOVEATTRIBUTEVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "ElementOsmMapVisitor.h"
 
@@ -41,21 +39,22 @@ namespace hoot
 /**
  * Sets one or more element properties stored in XML attributes to an empty value, which will cause
  * them to be dropped when written to file output.
- *
- * This hasn't been set up yet to be configurable from the command line, which is why it hasn't
- * been registered yet as an ElementVisitor.
  */
-class RemoveAttributeVisitor : public ElementOsmMapVisitor
+class RemoveAttributeVisitor : public ElementOsmMapVisitor, public Configurable
 {
 
 public:
 
   static std::string className() { return "hoot::RemoveAttributeVisitor"; }
 
-  //RemoveAttributeVisitor();
+  RemoveAttributeVisitor();
   RemoveAttributeVisitor(const QList<ElementAttributeType>& types);
 
   virtual void visit(const shared_ptr<Element>& e);
+
+  virtual void setConfiguration(const Settings &conf);
+
+  void setTypes(const QStringList& types);
 
 private:
 

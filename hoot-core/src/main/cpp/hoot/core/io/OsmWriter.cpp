@@ -223,6 +223,8 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
   else
   {
+    //TODO: This comparison seems to be still unequal when I set an element's timestamp to
+    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributeVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));

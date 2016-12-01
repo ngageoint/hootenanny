@@ -64,6 +64,54 @@ public:
 
   Type getEnum() const { return _type; }
 
+  QString toString() const
+  {
+    switch (_type)
+    {
+    case ElementAttributeType::Changeset:
+      return "changeset";
+    case ElementAttributeType::Timestamp:
+      return "timestamp";
+    case ElementAttributeType::User:
+      return "user";
+    case ElementAttributeType::Uid:
+      return "uid";
+    case ElementAttributeType::Version:
+      return "version";
+    default:
+      return QString("Unknown (%1)").arg(_type);
+    }
+  }
+
+  static Type fromString(QString typeString)
+  {
+    typeString = typeString.toLower();
+    if (typeString == "changeset")
+    {
+      return Changeset;
+    }
+    else if (typeString == "timestamp")
+    {
+      return Timestamp;
+    }
+    else if (typeString == "user")
+    {
+      return User;
+    }
+    else if (typeString == "uid")
+    {
+      return Uid;
+    }
+    else if (typeString == "version")
+    {
+      return Version;
+    }
+    else
+    {
+      throw HootException("Invalid element attribute type string: " + typeString);
+    }
+  }
+
 private:
 
   ElementAttributeType::Type _type;

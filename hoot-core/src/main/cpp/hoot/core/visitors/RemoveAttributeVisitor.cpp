@@ -27,20 +27,38 @@
 #include "RemoveAttributeVisitor.h"
 
 // hoot
-//#include <hoot/core/Factory.h>
+#include <hoot/core/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
 
-//HOOT_FACTORY_REGISTER(ElementVisitor, RemoveAttributeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveAttributeVisitor)
 
-//RemoveAttributeVisitor::RemoveAttributeVisitor()
-//{
-//}
+RemoveAttributeVisitor::RemoveAttributeVisitor()
+{
+  setConfiguration(conf());
+}
 
 RemoveAttributeVisitor::RemoveAttributeVisitor(const QList<ElementAttributeType>& types) :
 _types(types)
 {
+}
+
+void RemoveAttributeVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  setTypes(configOptions.getRemoveAttributeVisitorTypes());
+}
+
+void RemoveAttributeVisitor::setTypes(const QStringList& types)
+{
+  LOG_VART(types);
+  for (int i = 0; i < types.size(); i++)
+  {
+    _types.append(ElementAttributeType::fromString(types.at(i)));
+  }
 }
 
 void RemoveAttributeVisitor::visit(const shared_ptr<Element>& e)
@@ -48,6 +66,7 @@ void RemoveAttributeVisitor::visit(const shared_ptr<Element>& e)
   //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _types.length(); i++)
   {
+    LOG_VART(_types.at(i).toString());
     switch (_types.at(i).getEnum())
     {
       case ElementAttributeType::Changeset:
