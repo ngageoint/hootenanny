@@ -189,7 +189,7 @@ plugins/emgcp_osm_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_Feat
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv40
-plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/LTDSv40.csv.gz
+plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
