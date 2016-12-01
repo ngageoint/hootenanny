@@ -700,7 +700,6 @@ mgcp = {
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
             ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
-            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
@@ -762,6 +761,10 @@ mgcp = {
         switch (attrs.F_CODE)
         {
             case undefined: // Break early if no value
+                break;
+
+            case 'AA052': // Hydrocarbons Field
+                tags.landuse = 'industrial';
                 break;
 
             case 'AF030': // Cooling Tower
@@ -1033,6 +1036,10 @@ mgcp = {
                     case 'gas':
                         tags.product = 'gas';
                         tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+
+                    case 'hydrocarbons_field':
                         delete tags.landuse;
                         break;
                 }

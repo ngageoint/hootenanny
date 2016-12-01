@@ -862,7 +862,6 @@ tds = {
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t['generator:source'] == 'wind'","t.power = 'generator'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
-            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
