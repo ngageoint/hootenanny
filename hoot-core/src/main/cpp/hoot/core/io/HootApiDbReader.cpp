@@ -242,6 +242,9 @@ void HootApiDbReader::finalizePartial()
   _partialMap.reset();
   if (_open)
   {
+    //The exception thrown by this commit will mask exception text coming from failed queries.  Not
+    //sure yet how to prevent that from happening, so you may have to temporarily comment out the
+    //commit statement to see query error detail when debugging.
     _database->commit();
     _database->close();
     _open = false;

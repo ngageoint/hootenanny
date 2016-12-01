@@ -264,6 +264,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
 
     LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
     QSet<QString> relationIds;
+    assert(nodeIds.size() > 0);
     shared_ptr<QSqlQuery> relationIdItr =
       _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
@@ -272,12 +273,15 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
       LOG_VART(relationId);
       relationIds.insert(relationId);
     }
-    relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
-    while (relationIdItr->next())
+    if (wayIds.size() > 0)
     {
-      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-      LOG_VART(relationId);
-      relationIds.insert(relationId);
+      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+      while (relationIdItr->next())
+      {
+        const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
+        LOG_VART(relationId);
+        relationIds.insert(relationId);
+      }
     }
     LOG_VARD(relationIds.size());
 

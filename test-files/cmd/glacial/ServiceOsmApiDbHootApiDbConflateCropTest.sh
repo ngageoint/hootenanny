@@ -39,6 +39,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/DcTigerRoads" $HOOT_API_DB_INPUT_EXPORT_TE
 # situations.  Including stats here, since a bug related to running map cropping with it was discovered while writing this test.
 echo "Cropping osm api/hoot api db data to same AOI and conflating it..."
 hoot conflate $HOOT_OPTS -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL -D convert.bounding.box=$CROP_BOUNDS -D conflate.load.post.ops="hoot::MapCropper" -D crop.bounds=$CROP_BOUNDS $OSM_API_DB_URL "$HOOT_DB_URL/DcTigerRoads" "$HOOT_DB_URL/DcConflated" --stats $OUTPUT_DIR/stats
+#hoot conflate $HOOT_OPTS -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL -D convert.bounding.box=$CROP_BOUNDS -D crop.bounds=$CROP_BOUNDS $OSM_API_DB_URL "$HOOT_DB_URL/DcTigerRoads" "$HOOT_DB_URL/DcConflated" --stats $OUTPUT_DIR/stats
 
 # We're just verifying the extents with the command output and not running hoot is-match on the output files.  
 # OSM API DB/Hoot API DB conflation output is verified in other tests.

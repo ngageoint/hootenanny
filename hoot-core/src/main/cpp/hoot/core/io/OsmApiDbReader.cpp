@@ -249,6 +249,7 @@ void OsmApiDbReader::close()
 {
   if (_open)
   {
+    //See comment in HootApiDbReader::finalizePartial.
     _database->commit();
     _database->close();
     _open = false;

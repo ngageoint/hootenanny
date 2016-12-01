@@ -37,9 +37,11 @@
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
+#include <hoot/core/visitors/RemoveAttributeVisitor.h>
 
 // Qt
 #include <QDir>
@@ -62,7 +64,7 @@ class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
   CPPUNIT_TEST(runReadWithElemTest);
-  //CPPUNIT_TEST(runReadByBoundsTest);
+  CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -689,13 +691,25 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
 
-    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
+    //We need to drop to set all the element changeset tags here to empty, which will cause them
+    //to be dropped from the file output.  If they aren't dropped, they will increment with each
+    //test and cause the output comparison to fail.
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Changeset));
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributeVisitor attrVis(types);
+    map->visitRw(attrVis);
+
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
-      "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");
+
+    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
+    OsmWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(
+      map, "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTestOutput.osm"),
-      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTestOutput.osm"));
+      TestUtils::readFile("test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"),
+      TestUtils::readFile("test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"));
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds

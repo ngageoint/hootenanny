@@ -72,6 +72,14 @@ OsmApiDb::~OsmApiDb()
   close();
 }
 
+void OsmApiDb::_init()
+{
+  _floatingPointCoords = false;
+  _capitalizeRelationMemberType = true;
+  _inTransaction = false;
+  _resetQueries();
+}
+
 void OsmApiDb::close()
 {
   _resetQueries();
@@ -164,12 +172,6 @@ void OsmApiDb::deleteUser(long userId)
   _exec("DELETE FROM users WHERE id=:id", (qlonglong)userId);
 }
 
-void OsmApiDb::_init()
-{
-  _inTransaction = false;
-  _resetQueries();
-}
-
 void OsmApiDb::_resetQueries()
 {
   ApiDb::_resetQueries();
@@ -234,7 +236,7 @@ void OsmApiDb::commit()
   _inTransaction = false;
 }
 
-QString OsmApiDb::tableTypeToTableName(const TableType& tableType, const long /*mapId*/) const
+QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
 {
   if (tableType == TableType::Node)
   {

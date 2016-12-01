@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TABLETYPE_H
-#define TABLETYPE_H
+#ifndef ELEMENTATTRIBUTETYPE_H
+#define ELEMENTATTRIBUTETYPE_H
 
 // Hoot
 #include <hoot/core/util/HootException.h>
@@ -36,51 +36,40 @@
 
 namespace hoot {
 
-class TableType
+/**
+ * Represents common element properties that get serialized as XML attributes when writing to file.
+ *
+ * would like to find a way to make this a little more extensible and less dependent on what's in
+ * ElementData...maybe eventually replace this with an enum in ElementData?
+ */
+class ElementAttributeType
 {
 
 public:
 
-  //we could add the changesets table to this
   typedef enum Type
   {
-    Node = 0,
-    Way = 1,
-    Relation = 2,
-    WayNode = 3,
-    RelationMember = 4,
-    Unknown
+    Changeset = 0,
+    Timestamp = 1,
+    User = 2,
+    Uid = 3,
+    Version = 4
   } Type;
 
-  TableType() { _type = Unknown; }
-  TableType(Type type) { _type = type; }
+  ElementAttributeType() { _type = Changeset; }
+  ElementAttributeType(Type type) { _type = type; }
 
-  bool operator==(TableType t) const { return t._type == _type; }
-  bool operator!=(TableType t) const { return t._type != _type; }
+  bool operator==(ElementAttributeType t) const { return t._type == _type; }
+  bool operator!=(ElementAttributeType t) const { return t._type != _type; }
 
   Type getEnum() const { return _type; }
 
-  static Type fromElementType(const ElementType& elementType)
-  {
-    switch (elementType.getEnum())
-    {
-      case ElementType::Node:
-        return Node;
-      case ElementType::Way:
-        return Way;
-      case ElementType::Relation:
-        return Relation;
-      default:
-        throw HootException("Invalid element type.");
-    }
-  }
-
 private:
 
-  TableType::Type _type;
+  ElementAttributeType::Type _type;
 
 };
 
 }
 
-#endif // TABLETYPE_H
+#endif // ELEMENTATTRIBUTETYPE_H
