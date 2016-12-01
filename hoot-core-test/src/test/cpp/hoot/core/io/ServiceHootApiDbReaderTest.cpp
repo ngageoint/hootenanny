@@ -80,10 +80,6 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
     database.close();
-
-    //inserting a map before all of these tests isn't actually necessary (url tests) and
-    //is probably slowing the test run down a little more than necessary
-    //mapId = populateMap();
   }
 
   void tearDown()
@@ -159,8 +155,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(true);
-    //writer.setOverwriteMap(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString()/* + mapId*/);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
