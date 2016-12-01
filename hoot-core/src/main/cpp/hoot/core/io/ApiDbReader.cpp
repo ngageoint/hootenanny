@@ -191,26 +191,26 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
 {
   LOG_DEBUG("Retrieving node records within the query bounds...");
   shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
-  QStringList nodeIds;
+  QSet<QString> nodeIds;
   while (nodeItr->next())
   {
     NodePtr element = _resultToNode(*nodeItr, *map);
     LOG_VART(element->toString());
     map->addElement(element);
-    nodeIds.append(QString::number(element->getId()));
+    nodeIds.insert(QString::number(element->getId()));
   }
   LOG_VARD(nodeIds.size());
 
   if (nodeIds.size() > 0)
   {
     LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-    QStringList wayIds;
+    QSet<QString> wayIds;
     shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
     {
       const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
       LOG_VART(wayId);
-      wayIds.append(wayId);
+      wayIds.insert(wayId);
     }
     LOG_VARD(wayIds.size());
 
@@ -230,28 +230,25 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
       }
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-      QStringList additionalWayNodeIds;
+      QSet<QString> additionalWayNodeIds;
       shared_ptr<QSqlQuery> additionalWayNodeIdItr =
         _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
       {
         const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
         LOG_VART(nodeId);
-        additionalWayNodeIds.append(nodeId);
+        additionalWayNodeIds.insert(nodeId);
       }
 
       //subtract nodeIds from additionalWayNodeIds so no dupes get added
-      const QSet<QString> nodeIdsAsSet = nodeIds.toSet();
-      LOG_VARD(nodeIdsAsSet.size());
-      QSet<QString> additionalWayNodeIdsAsSet = additionalWayNodeIds.toSet();
-      LOG_VARD(additionalWayNodeIdsAsSet.size());
-      additionalWayNodeIdsAsSet = additionalWayNodeIdsAsSet.subtract(nodeIdsAsSet);
-      LOG_VARD(additionalWayNodeIdsAsSet.size());
-      additionalWayNodeIds = additionalWayNodeIdsAsSet.toList();
+      LOG_VARD(nodeIds.size());
+      LOG_VARD(additionalWayNodeIds.size());
+      additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
+      LOG_VARD(additionalWayNodeIds.size());
 
       if (additionalWayNodeIds.size() > 0)
       {
-        nodeIds.append(additionalWayNodeIds);
+        nodeIds.unite(additionalWayNodeIds);
         LOG_DEBUG(
           "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
         shared_ptr<QSqlQuery> additionalWayNodeItr =
@@ -266,21 +263,21 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
     }
 
     LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-    QStringList relationIds;
+    QSet<QString> relationIds;
     shared_ptr<QSqlQuery> relationIdItr =
       _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
     {
       const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
       LOG_VART(relationId);
-      relationIds.append(relationId);
+      relationIds.insert(relationId);
     }
     relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
     while (relationIdItr->next())
     {
       const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
       LOG_VART(relationId);
-      relationIds.append(relationId);
+      relationIds.insert(relationId);
     }
     LOG_VARD(relationIds.size());
 
