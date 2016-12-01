@@ -166,7 +166,6 @@ void OsmApiDb::deleteUser(long userId)
 
 void OsmApiDb::_init()
 {
-  _floatingPointCoords = false;
   _inTransaction = false;
   _resetQueries();
 }
@@ -235,7 +234,7 @@ void OsmApiDb::commit()
   _inTransaction = false;
 }
 
-QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
+QString OsmApiDb::tableTypeToTableName(const TableType& tableType, const long /*mapId*/) const
 {
   if (tableType == TableType::Node)
   {

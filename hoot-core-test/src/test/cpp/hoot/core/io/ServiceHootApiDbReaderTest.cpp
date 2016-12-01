@@ -54,15 +54,15 @@ namespace hoot
 class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
-//  CPPUNIT_TEST(runCalculateBoundsTest);
-//  CPPUNIT_TEST(runElementIdTest);
-//  CPPUNIT_TEST(runUrlMissingMapIdTest);
-//  CPPUNIT_TEST(runUrlInvalidMapIdTest);
-//  CPPUNIT_TEST(runReadTest);
-//  CPPUNIT_TEST(runPartialReadTest);
-//  CPPUNIT_TEST(runFactoryReadTest);
-//  CPPUNIT_TEST(runReadWithElemTest);
-  CPPUNIT_TEST(runReadByBoundsTest);
+  CPPUNIT_TEST(runCalculateBoundsTest);
+  CPPUNIT_TEST(runElementIdTest);
+  CPPUNIT_TEST(runUrlMissingMapIdTest);
+  CPPUNIT_TEST(runUrlInvalidMapIdTest);
+  CPPUNIT_TEST(runReadTest);
+  CPPUNIT_TEST(runPartialReadTest);
+  CPPUNIT_TEST(runFactoryReadTest);
+  CPPUNIT_TEST(runReadWithElemTest);
+  //CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
