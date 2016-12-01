@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/algorithms/zindex/Range.h>
 
 // Qt
 #include <QFile>
@@ -84,11 +85,6 @@ public:
   virtual vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
-   * Returns a results iterator to all OSM elements for a given bbox.
-   */
-  shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
-
-  /**
    * Returns a results iterator to a node for a given node id.
    */
   shared_ptr<QSqlQuery> selectNodeById(const long elementId);
@@ -99,6 +95,8 @@ public:
   void deleteData();
 
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+
+  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
   shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
@@ -149,24 +147,78 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
+  /**
+   * Returns all nodes that fall within a geospatial bounds
+   *
+   * @param bbox a comma delimited string of the form: minX,minY,maxX,maxY
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectNodesByBounds(const QString bbox);
+
+  /**
+   * Returns the IDs of all ways that own the input node IDs
+   *
+   * @param nodeIds a collection of node IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
+
+  /**
+   * Returns all elements by type with IDs in the input ID list
+   *
+   * @param elementIds a collection of element IDs
+   * @param elementType the type of element to return
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
+                                                      const ElementType& elementType);
+
+  /**
+   * Returns all the IDs of all nodes owned by the input way IDs
+   *
+   * @param wayIds a list of way IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
+
+  /**
+   * Returns the IDs of all relations which own the typed input member IDs
+   *
+   * @param memberIds a list of member IDs of the same element type
+   * @param elementType the type of member element
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+                                                     const ElementType& elementType);
+
 private:
 
   bool _inTransaction;
 
   shared_ptr<QSqlQuery> _selectElementsForMap;
+  shared_ptr<QSqlQuery> _selectTagsForNode;
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
   shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
+  //element bounds related queries
+  shared_ptr<QSqlQuery> _selectNodesByBounds;
+  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
+  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   void _resetQueries();
-
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
+  QString _getTableName(const ElementType& elementType) const;
+  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
+  vector<Range> _getTileRanges(const Envelope& env) const;
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }

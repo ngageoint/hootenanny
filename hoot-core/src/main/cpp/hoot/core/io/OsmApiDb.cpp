@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,6 +36,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
+#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // qt
 #include <QStringList>
@@ -44,6 +47,7 @@
 #include <QtSql/QSqlRecord>
 #include <QFile>
 #include <QTextStream>
+#include <QSet>
 
 // Standard
 #include <math.h>
@@ -128,7 +132,8 @@ bool OsmApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  //postgresql is deprecated but still supported
+  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql")
   {
     valid = false;
   }
@@ -171,6 +176,7 @@ void OsmApiDb::_init()
 void OsmApiDb::_resetQueries()
 {
   _selectElementsForMap.reset();
+  _selectTagsForNode.reset();
   _selectTagsForWay.reset();
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
@@ -184,6 +190,11 @@ void OsmApiDb::_resetQueries()
     itr.value().reset();
   }
   _selectChangesetsCreatedAfterTime.reset();
+  _selectNodesByBounds.reset();
+  _selectWayIdsByWayNodeIds.reset();
+  _selectElementsByElementIdList.reset();
+  _selectWayNodeIdsByWayIds.reset();
+  _selectRelationIdsByMemberIds.reset();
 }
 
 void OsmApiDb::rollback()
@@ -230,6 +241,26 @@ void OsmApiDb::commit()
   _inTransaction = false;
 }
 
+QString OsmApiDb::_getTableName(const ElementType& elementType) const
+{
+  if (elementType == ElementType::Node)
+  {
+    return "current_nodes";
+  }
+  else if (elementType == ElementType::Way)
+  {
+    return "current_ways";
+  }
+  else if (elementType == ElementType::Relation)
+  {
+    return "current_relations";
+  }
+  else
+  {
+    throw HootException("Unsupported element type.");
+  }
+}
+
 /**************************************************************
  * Purpose: support method for OsmApi selects returns a query
  *   string
@@ -243,7 +274,7 @@ QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType)
 {
   if (elementType == ElementType::Node)
   {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ") +
       QString("from current_nodes left outer join current_node_tags on current_nodes.id=current_node_tags.node_id");
   }
   else if (elementType == ElementType::Way)
@@ -322,7 +353,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   LOG_DEBUG("IN selectNodeById");
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
-  QString sql = "SELECT " + _elementTypeToElementTableName(ElementType::Node) + " WHERE (id=:elementId) ORDER BY id DESC";
+  QString sql =
+    "SELECT " + _elementTypeToElementTableName(ElementType::Node) +
+    " WHERE (id=:elementId) ORDER BY id DESC";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
 
@@ -341,97 +374,50 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
-                                                      const ElementType& elementType,
-                                                      const QString& bbox)
+vector<Range> OsmApiDb::_getTileRanges(const Envelope& env) const
 {
-  LOG_DEBUG("IN selectBoundedElement");
+  const double minLat = env.getMinY();
+  const double minLon = env.getMinX();
+  const double maxLat = env.getMaxY();
+  const double maxLon = env.getMaxX();
 
-  QStringList bboxParts = bbox.split(",");
-  double minLat = bboxParts[1].toDouble()*(double)COORDINATE_SCALE;
-  double minLon = bboxParts[0].toDouble()*(double)COORDINATE_SCALE;
-  double maxLat = bboxParts[3].toDouble()*(double)COORDINATE_SCALE;
-  double maxLon = bboxParts[2].toDouble()*(double)COORDINATE_SCALE;
+  vector<double> minV;
+  minV.push_back(-90.0);
+  minV.push_back(-180.0);
+  vector<double> maxV;
+  maxV.push_back(90.0);
+  maxV.push_back(180.0);
+  ZValue zv(2, 16, minV, maxV);
+  ZCurveRanger ranger(zv);
 
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
+  vector<double> minB;
+  minB.push_back(minLat);
+  minB.push_back(minLon);
+  vector<double> maxB;
+  maxB.push_back(maxLat);
+  maxB.push_back(maxLon);
 
-  // setup base sql query string
-  QString sql =  "SELECT ";
+  BBox b(minB, maxB);
+  return ranger.decomposeRange(b, 1);
+}
 
-  /// @todo This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
-  /// type but not others. - may be OBE after #772
-  if (elementType == ElementType::Node)
+QString OsmApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
+{
+  QString sql = "";
+  for (uint i = 0; i < tileIdRanges.size(); i++)
   {
-    sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
-      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
+    if (i == tileIdRanges.size() - 1)
     {
-      sql += " AND (id = :elementId) ";
-    }
-    sql += " AND visible = true ";
-  }
-  else if (elementType == ElementType::Way)
-  {
-    sql += "* FROM current_ways ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ")";
     }
     else
     {
-      sql += " WHERE visible = true ";
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ") or ";
     }
   }
-  else if (elementType == ElementType::Relation)
-  {
-    sql += "* FROM current_relations ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
-    }
-    else
-    {
-      sql += " WHERE visible = true ";
-    }
-  }
-  else
-  {
-    throw HootException("selectBoundedElements cannot operate on an unknown data type.");
-  }
-
-  // sort them in descending order, set limit and offset
-  sql += " ORDER BY id DESC";
-
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
-
-  _selectElementsForMap->prepare(sql);
-
-  // add the element id value if needed by inserting where the marker was placed
-  if (elementId > -1)
-  {
-    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-  }
-
-  // execute the query on the DB and get the results back
-  if (_selectElementsForMap->exec() == false)
-  {
-    QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " Error: " + err);
-  }
-
-  LOG_DEBUG("LEAVING OsmApiDb::selectBoundedElements...");
-  return _selectElementsForMap;
+  return sql;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
@@ -505,6 +491,27 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   }
 
   return _selectTagsForWay;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
+{
+  if (!_selectTagsForNode)
+  {
+    _selectTagsForNode.reset(new QSqlQuery(_db));
+    _selectTagsForNode->setForwardOnly(true);
+    QString sql =  "SELECT ";
+    sql += "node_id, k, v FROM current_node_tags where node_id = :nodeId";
+    _selectTagsForNode->prepare( sql );
+  }
+
+  _selectTagsForNode->bindValue(":nodeId", (qlonglong)nodeId);
+  if (_selectTagsForNode->exec() == false)
+  {
+    throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
+      " Error: " + _selectTagsForNode->lastError().text());
+  }
+
+  return _selectTagsForNode;
 }
 
 /************************************************************************
@@ -588,11 +595,14 @@ long OsmApiDb::getNextId(const QString tableName)
 shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
   LOG_VARD(timeStr);
-  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
-  _selectChangesetsCreatedAfterTime->prepare(
-    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
-    QString("WHERE created_at > :createdAt"));
-  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  if (!_selectChangesetsCreatedAfterTime)
+  {
+    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime->prepare(
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+      QString("WHERE created_at > :createdAt"));
+    _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  }
 
   if (_selectChangesetsCreatedAfterTime->exec() == false)
   {
@@ -615,6 +625,149 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
 double OsmApiDb::fromOsmApiDbCoord(const long x)
 {
   return (double)x / COORDINATE_SCALE;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectNodesByBounds(const QString bbox)
+{
+  const Envelope env = GeometryUtils::envelopeFromConfigString(bbox);
+  LOG_VARD(env);
+  const vector<Range> tileRanges = _getTileRanges(env);
+  LOG_VARD(tileRanges.size());
+
+  //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
+  //modify this to add placeholders for the tile ID ranges and make it so the query only gets
+  //prepared once.
+  if (!_selectNodesByBounds)
+  {
+    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds->setForwardOnly(true);
+  }
+  QString sql = "select * from current_nodes where";
+  sql += " visible = true";
+  sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
+  sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
+  sql += " and latitude <= :maxLat";
+  sql += " order by id desc";
+  _selectNodesByBounds->prepare(sql);
+  _selectNodesByBounds->bindValue(":minLon", (qlonglong)(env.getMinX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(env.getMaxX() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":minLat", (qlonglong)(env.getMinY() * COORDINATE_SCALE));
+  _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(env.getMaxY() * COORDINATE_SCALE));
+  LOG_VARD(_selectNodesByBounds->lastQuery());
+  LOG_VARD(_selectNodesByBounds->boundValues());
+
+  if (_selectNodesByBounds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting nodes by bounds: " + bbox + " Error: " +
+      _selectNodesByBounds->lastError().text());
+  }
+  LOG_VARD(_selectNodesByBounds->numRowsAffected());
+  return _selectNodesByBounds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
+{
+  if (!_selectWayIdsByWayNodeIds)
+  {
+    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select distinct way_id from current_way_nodes where node_id in (" +
+    QStringList(nodeIds.toList()).join(",") + ")";
+  //sql += " order by way_id desc";
+  _selectWayIdsByWayNodeIds->prepare(sql);
+  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
+
+  if (_selectWayIdsByWayNodeIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way IDs by way node IDs.  Error: " +
+      _selectWayIdsByWayNodeIds->lastError().text());
+  }
+  LOG_VARD(_selectWayIdsByWayNodeIds->numRowsAffected());
+  return _selectWayIdsByWayNodeIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
+                                                              const ElementType& elementType)
+{
+  if (!_selectElementsByElementIdList)
+  {
+    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select * from " + _getTableName(elementType) + " where visible = true and id in (" +
+    QStringList(elementIds.toList()).join(",") + ")";
+  sql += " order by id desc";
+  _selectElementsByElementIdList->prepare(sql);
+  LOG_VARD(_selectElementsByElementIdList->lastQuery());
+
+  if (_selectElementsByElementIdList->exec() == false)
+  {
+    throw HootException(
+      "Error selecting elements by element ID list:  Error: " +
+      _selectElementsByElementIdList->lastError().text());
+  }
+  LOG_VARD(_selectElementsByElementIdList->numRowsAffected());
+  return _selectElementsByElementIdList;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
+{
+  if (!_selectWayNodeIdsByWayIds)
+  {
+    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql =
+    "select distinct node_id from current_way_nodes where way_id in (" +
+    QStringList(wayIds.toList()).join(",") + ")";
+  //sql += " order by sequence_id";
+  _selectWayNodeIdsByWayIds->prepare(sql);
+  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
+
+  if (_selectWayNodeIdsByWayIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way node IDs by way IDs.  Error: " +
+      _selectWayNodeIdsByWayIds->lastError().text());
+  }
+  LOG_VARD(_selectWayNodeIdsByWayIds->numRowsAffected());
+  return _selectWayNodeIdsByWayIds;
+}
+
+shared_ptr<QSqlQuery> OsmApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+                                                             const ElementType& elementType)
+{
+  if (!_selectRelationIdsByMemberIds)
+  {
+    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "select distinct relation_id from current_relation_members";
+  sql += " where member_type = :elementType and member_id in (" +
+    QStringList(memberIds.toList()).join(",") + ")";
+  //sql += " order by relation_id desc";
+  _selectRelationIdsByMemberIds->prepare(sql);
+  _selectRelationIdsByMemberIds->bindValue(":elementType", elementType.toString());
+  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery());
+  LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
+
+  if (_selectRelationIdsByMemberIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting relation IDs by member IDs.  Error: " +
+      _selectRelationIdsByMemberIds->lastError().text());
+  }
+  LOG_VARD(_selectRelationIdsByMemberIds->numRowsAffected());
+  return _selectRelationIdsByMemberIds;
 }
 
 }

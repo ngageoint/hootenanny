@@ -57,7 +57,7 @@ public:
     Range r2(3, 8);
 
     CPPUNIT_ASSERT_EQUAL((long int)9, r.calculateSize());
-    CPPUNIT_ASSERT_EQUAL(true, r=r1);
+    CPPUNIT_ASSERT_EQUAL(true, r==r1);
     CPPUNIT_ASSERT_EQUAL(false, r1>r2);
     CPPUNIT_ASSERT_EQUAL(true, r1<r2);
     CPPUNIT_ASSERT_EQUAL(true, r.in(5));
