@@ -257,7 +257,7 @@ void HootApiDbReader::close()
 }
 
 shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
-  const ElementType& elementType, OsmMap& map)
+                                                      const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
@@ -345,7 +345,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _addTagsToElement(way);
 
-  // These could be read out in batch at the same time the element results are read...
+  // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -376,7 +376,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _addTagsToElement(relation);
 
-  // Could these be read out in batch at the same time the element results are read?...
+  // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {

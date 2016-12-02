@@ -24,7 +24,7 @@ echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "TEST_NAME: " $TEST_NAME
 
-RUN_DEBUG_STEPS=true
+RUN_DEBUG_STEPS=false
 
 source conf/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
@@ -33,7 +33,7 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # Will probably eventually remove postgresql.dumpfile.writer.add.circular.error.tag, but its needed for the time being for tests
 # using this script only.
-export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org -D reader.add.source.datetime=false -D postgresql.dumpfile.writer.add.circular.error.tag=true"
+export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org -D reader.add.source.datetime=false -D postgresql.dumpfile.writer.add.circular.error.tag=true"
 
 rm -rf test-output/cmd/glacial/$TEST_NAME
 mkdir -p test-output/cmd/glacial/$TEST_NAME
@@ -93,6 +93,7 @@ echo ""
 # we want to give the user a chance to review them.  That can only happen when the output is stored in a hoot api db.
 hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
 #hoot conflate $HOOT_OPTS -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
+#hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME"
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
