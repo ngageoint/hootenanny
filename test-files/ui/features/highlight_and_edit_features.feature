@@ -31,7 +31,7 @@ Feature: Highlight features on click
         And I click the "map" at "450","300"
         And I click the "trash.map-button" button
         And I wait
-        And I should see an alert containing "There is unsaved changes"
+        And I should see an alert containing "There are unsaved changes"
         And I reject the alert
 
     Scenario: I select a feature and see an orange highlight
