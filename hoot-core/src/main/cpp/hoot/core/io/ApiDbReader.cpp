@@ -298,6 +298,11 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
       }
     }
   }
+
+  LOG_INFO("Bounded query read " << map->getElementCount() << " elements.");
+  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelationMap().size());
 }
 
 }

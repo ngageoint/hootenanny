@@ -86,8 +86,8 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
     }
     else
     {
-      LOG_VARD(w->getNodeId(0));
-      LOG_VARD(w->getLastNodeId());
+      LOG_VART(w->getNodeId(0));
+      LOG_VART(w->getLastNodeId());
       // count this as a bad spot. If we find some valid spots and some bad spots then that is an
       // error condition
       badSpots++;
@@ -185,13 +185,13 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   /// @todo this isnt right; Talk to mike
   double distanceScore = 1 - (Normal::phi(d, acc * 1.5) - 0.5) * 2.0;
-  LOG_VARD(nid1);
-  LOG_VARD(nid2);
-  LOG_VARD(distanceScore);
-  LOG_VARD(acc);
-  LOG_VARD(d);
-  LOG_VARD(Normal::phi(d, acc * 1.5));
-  LOG_VARD(Normal::phi(d, acc / 2.0));
+  LOG_VART(nid1);
+  LOG_VART(nid2);
+  LOG_VART(distanceScore);
+  LOG_VART(acc);
+  LOG_VART(d);
+  LOG_VART(Normal::phi(d, acc * 1.5));
+  LOG_VART(Normal::phi(d, acc / 2.0));
 
   if (theta1.size() < theta2.size())
   {
@@ -203,10 +203,10 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   if (theta1.size() > 6 && theta2.size() > 6)
   {
     LOG_WARN("7 intersections at one spot? Odd. Giving it a high angleScore.");
-    LOG_VAR(nid1);
-    LOG_VAR(nid2);
-    LOG_VAR(wids1);
-    LOG_VAR(wids2);
+    LOG_VART(nid1);
+    LOG_VART(nid2);
+    LOG_VART(wids1);
+    LOG_VART(wids2);
     thetaScore = 1.0;
   }
   else

@@ -345,7 +345,6 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 
 shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 {
-  LOG_DEBUG("IN selectNodeById");
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
   QString sql =
@@ -365,14 +364,11 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
       " Error: " + err);
   }
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectNodeById...");
   return _selectNodeById;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 {
-  LOG_DEBUG("IN selectElement");
-
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
@@ -396,7 +392,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
       " Error: " + err);
   }
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectElements...");
   return _selectElementsForMap;
 }
 

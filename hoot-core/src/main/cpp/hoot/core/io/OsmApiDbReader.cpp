@@ -168,7 +168,6 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 
 void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
-  LOG_DEBUG("IN OsmApiDbReader::read(,)...");
   long long lastId = LLONG_MIN;
   shared_ptr<Element> element;
   QStringList tags;
