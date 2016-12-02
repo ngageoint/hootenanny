@@ -321,12 +321,13 @@ applicable to the convert command.
 
 If specified the convert reader will limit data read from the data source to only features that
 intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.
+of the input data source.  This setting can be used with both the convert and conflate commands, but
+is not supported by all data readers.  See the documentation for details.
 
 Example Usage:
 
 ----
-hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input.osm output.osm
+hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
 ----
 
 === cookie.cutter.alpha
@@ -1477,6 +1478,7 @@ Dynamic variable value initially assigned to a PERTY test dynamic variable when 
 
 * Data Type: list
 * Default Value:
+** ``
 
 A list of one or more numeric PERTY variables to be assigned a start value (specified in
 perty.test.dynamic.variable.start.value) and then incremented once per test run by
@@ -1828,6 +1830,7 @@ Should it remove the elements recursively?
 
 * Data Type: list
 * Default Value:
+** ``
 
 A list of tag keys for which the RemoveTagVisitor to identify for removal on elements.
 
@@ -1995,6 +1998,7 @@ relations that were written to the database.
 
 * Data Type: list
 * Default Value:
+** ``
 
 List of element attributes to remove with the RemoveAttributeVisitor.
 
