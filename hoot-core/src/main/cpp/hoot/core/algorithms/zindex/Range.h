@@ -27,6 +27,8 @@
 #ifndef RANGE_H
 #define RANGE_H
 
+#include <vector>
+
 //Qt includes
 #include <QString>
 
@@ -53,11 +55,13 @@ public:
 
   bool hashCode();
 
-  bool operator>(Range r) { return (_min - r.getMin()) > 0; }
+  bool operator>(Range r) const { return _min > r.getMin(); }
 
-  bool operator<(Range r) { return (_min - r.getMin()) < 0; }
+  bool operator<(Range r) const { return _min < r.getMin(); }
 
-  bool operator=(Range r) { return _min == r.getMin(); }
+  bool operator<=(Range r) const { return operator <(r) || operator==(r); }
+
+  bool operator==(Range r) const { return _min == r.getMin() && _max == r.getMax(); }
 
   bool in(long int l);
 
@@ -69,9 +73,9 @@ public:
 
   long calculateSize() { return (_max - _min) + 1; }
 
-  long int getMin() { return _min; }
+  long int getMin() const { return _min; }
 
-  long int getMax() { return _max; }
+  long int getMax() const { return _max; }
 
   void set(long int min, long int max);
 

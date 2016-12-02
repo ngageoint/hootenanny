@@ -40,6 +40,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QUrl>
 #include <QDateTime>
+#include <QSet>
 
 namespace hoot
 {
@@ -73,7 +74,7 @@ void OsmApiDbReader::open(QString urlStr)
   {
     throw HootException("An unsupported URL was passed into OsmApiDbReader: " + urlStr);
   }
-  _elementResultIterator.reset();
+  _elementResultIterator.reset(); //??
   _selectElementType = ElementType::Node;
 
   QUrl url(urlStr);
@@ -99,282 +100,194 @@ void OsmApiDbReader::open(QString urlStr)
 
 void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  LOG_DEBUG("IN OsmApiDbReader::read()...");
-
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
     LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
-
     _read(map, _osmElemType);
   }
-  else if(_bbox == "") // process SELECT ALL
+  else if(_bbox == "" || _bbox.replace(" ", "") == "-180,-90,180,90" ||
+          _bbox.replace(" ", "") == "-180.0,-90.0,180.0,90.0") // process SELECT ALL
   {
-    LOG_INFO("Executing OSM API read query against all element types...");
-
+    LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
       ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
       _read(map, elementType);
     }
   }
-  else // process BOUNDED REGION
+  else
   {
-    LOG_INFO(
-      "Executing OSM API bounded read query against all element types with bounds " << _bbox << "...");
-
-    Envelope env = GeometryUtils::envelopeFromConfigString(_bbox);
-
-    //select all elements in the bounding box
-    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
-    {
-      LOG_TRACE("About to call bounded with element");
-      LOG_TRACE(ctr);
-      ElementType::Type elementType = static_cast<ElementType::Type>(ctr);
-      _readBounded(map, elementType, env);
-    }
-
-    //crop the map
-    MapCropper::crop(map, env);
+    LOG_INFO("Executing OSM API bounded read query with bounds " << _bbox << "...");
+    _readBounded(map);
   }
 }
 
-void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env)
+void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 {
-  LOG_DEBUG("IN OsmApiDbReader::readBounded(,)...");
-  long long lastId = LLONG_MIN;
-  shared_ptr<Element> element;
   QStringList tags;
-  bool firstElement = true;
-
-  // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator =
-    _database.selectBoundedElements(_osmElemId, elementType, _bbox);
-
-  // check if db active or not
-  assert(elementResultsIterator->isActive());
-
-  switch (elementType.getEnum())
+  shared_ptr<QSqlQuery> tagItr;
+  switch (element->getElementType().getEnum())
   {
-    ///////////////////////////////////////////////////////////////////
-    // NODES
-    ///////////////////////////////////////////////////////////////////
     case ElementType::Node:
-      while (elementResultsIterator->next())
-      {
-        long long id = elementResultsIterator->value(0).toLongLong();
-        if (lastId != id)
-        {
-          // process the complete element only after the first element created
-          if (!firstElement)
-          {
-            if (tags.size()>0)
-            {
-              LOG_VART(tags);
-              element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-              ApiDbReader::addTagsToElement(element);
-            }
-
-            if (_status != Status::Invalid)
-            {
-              element->setStatus(_status);
-            }
-            map->addElement(element);
-            tags.clear();
-          }
-
-          // extract the node contents except for the tags
-          element = _resultToNode(*elementResultsIterator, *map);
-
-          lastId = id;
-          firstElement = false;
-        }
-
-        // read the tag for as many rows as there are tags
-        // need to get into form "key1"=>"val1", "key2"=>"val2", ...
-        QString result = _database.extractTagFromRow(elementResultsIterator, elementType.getEnum());
-        if (result != "")
-        {
-          tags << result;
-        }
-      }
-      // process the last complete element only if an element has been created
-      if (!firstElement)
-      {
-        if (tags.size() > 0)
-        {
-          LOG_VART(tags);
-          element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-          ApiDbReader::addTagsToElement(element);
-        }
-        if (_status != Status::Invalid) { element->setStatus(_status); }
-        map->addElement(element);
-        tags.clear();
-      }
+      tagItr = _database.selectTagsForNode(element->getId());
       break;
-
-    ///////////////////////////////////////////////////////////////////
-    // WAYS
-    ///////////////////////////////////////////////////////////////////
     case ElementType::Way:
-      while( elementResultsIterator->next() )
+      tagItr = _database.selectTagsForWay(element->getId());
+      break;
+    case ElementType::Relation:
+      tagItr = _database.selectTagsForRelation(element->getId());
+      break;
+    default:
+      throw HootException("Invalid element type.");
+  }
+  while (tagItr->next())
+  {
+    // test for blank tag
+    QString val1 = tagItr->value(1).toString();
+    QString val2 = tagItr->value(2).toString();
+    QString tag = "";
+    if (val1!="" || val2!="")
+    {
+      tag = "\""+val1+"\"=>\""+val2+"\"";
+    }
+    if (tag != "")
+    {
+      tags << tag;
+    }
+  }
+  if (tags.size() > 0)
+  {
+    LOG_VART(tags);
+    element->setTags(ApiDb::unescapeTags(tags.join(", ")));
+    ApiDbReader::addTagsToElement(element);
+  }
+}
+
+//This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
+//implemented yet.
+void OsmApiDbReader::_readBounded(shared_ptr<OsmMap> map)
+{
+  LOG_DEBUG("Retrieving node records within the query bounds...");
+  shared_ptr<QSqlQuery> nodeItr = _database.selectNodesByBounds(_bbox);
+  QSet<QString> nodeIds;
+  while (nodeItr->next())
+  {
+    NodePtr element = _resultToNode(*nodeItr, *map);
+    _parseAndSetTagsOnElement(element);
+    if (_status != Status::Invalid)
+    {
+      element->setStatus(_status);
+    }
+    LOG_VART(element->toString());
+    map->addElement(element);
+    nodeIds.insert(QString::number(element->getId()));
+  }
+  LOG_VARD(nodeIds.size());
+
+  if (nodeIds.size() > 0)
+  {
+    LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
+    QSet<QString> wayIds;
+    shared_ptr<QSqlQuery> wayIdItr = _database.selectWayIdsByWayNodeIds(nodeIds);
+    while (wayIdItr->next())
+    {
+      const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
+      LOG_VART(wayId);
+      wayIds.insert(wayId);
+    }
+    LOG_VARD(wayIds.size());
+
+    if (wayIds.size() > 0)
+    {
+      LOG_DEBUG("Retrieving ways by way ID...");
+      shared_ptr<QSqlQuery> wayItr =
+        _database.selectElementsByElementIdList(wayIds, ElementType::Way);
+      while (wayItr->next())
       {
-        long long wayId = elementResultsIterator->value(0).toLongLong();
-        shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay( wayId );
-        bool foundOne = false;
-        while( nodeInfoIterator->next() && !foundOne)
+        WayPtr element = _resultToWay(*wayItr, *map);
+        _parseAndSetTagsOnElement(element);
+        if (_status != Status::Invalid)
         {
-          // do the bounds check
-          double lat = nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-          double lon = nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-          Coordinate c(lon, lat);
-          if (env.contains(c))
-          {
-            foundOne = true;
-          }
+          element->setStatus(_status);
         }
-        if( foundOne )
+        LOG_VART(element->toString());
+        //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
+        //to the map here whose nodes haven't yet been written to it.  Haven't encountered the
+        //problem yet with test data yet, so will keep an eye on it.
+        map->addElement(element);
+      }
+
+      LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+      QSet<QString> additionalWayNodeIds;
+      shared_ptr<QSqlQuery> additionalWayNodeIdItr = _database.selectWayNodeIdsByWayIds(wayIds);
+      while (additionalWayNodeIdItr->next())
+      {
+        const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
+        LOG_VART(nodeId);
+        additionalWayNodeIds.insert(nodeId);
+      }
+
+      //subtract nodeIds from additionalWayNodeIds so no dupes get added
+      LOG_VARD(nodeIds.size());
+      LOG_VARD(additionalWayNodeIds.size());
+      additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
+      LOG_VARD(additionalWayNodeIds.size());
+
+      if (additionalWayNodeIds.size() > 0)
+      {
+        nodeIds.unite(additionalWayNodeIds);
+        LOG_DEBUG(
+          "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
+        shared_ptr<QSqlQuery> additionalWayNodeItr =
+          _database.selectElementsByElementIdList(additionalWayNodeIds, ElementType::Node);
+        while (additionalWayNodeItr->next())
         {
-          // we have a polygon, so now you have to do some work; else go on to the next way_id
-          // process the way into a data structure
-          shared_ptr<Element> element = _resultToWay(*elementResultsIterator, *map);
-
-          // get the way tags
-          shared_ptr<QSqlQuery> wayTagIterator = _database.selectTagsForWay( wayId );
-          while( wayTagIterator->next() )
-          {
-            // test for blank tag
-            QString val1 = wayTagIterator->value(1).toString();
-            QString val2 = wayTagIterator->value(2).toString();
-            QString tag = "";
-            if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
-            if(tag != "") tags << tag;
-          }
-          if(tags.size()>0)
-          {
-            LOG_VART(tags);
-            element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-            ApiDbReader::addTagsToElement(element);
-          }
-
+          NodePtr element = _resultToNode(*additionalWayNodeItr, *map);
+          _parseAndSetTagsOnElement(element);
           if (_status != Status::Invalid)
           {
             element->setStatus(_status);
           }
+          LOG_VART(element->toString());
           map->addElement(element);
-          tags.clear();
         }
-      }
-      break;
-
-    ///////////////////////////////////////////////////////////////////
-    // RELATIONS
-    ///////////////////////////////////////////////////////////////////
-    case ElementType::Relation:
-      while( elementResultsIterator->next() )
-      {
-        _processRelation(*elementResultsIterator, *map, env);
-      }
-      break;
-
-    default:
-      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
-  }
-
-  LOG_DEBUG("LEAVING OsmApiDbReader::_read...");
-}
-
-void OsmApiDbReader::_processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env)
-{
-  QStringList tags;
-  long long relId = resultIterator.value(0).toLongLong();
-
-  vector<RelationData::Entry> members = _database.selectMembersForRelation( relId );
-  for(vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
-  {
-    ElementId eid = (*it).getElementId();
-    QString type = eid.getType().toString();
-    long idFromRelation = eid.getId();
-
-    if(type=="Node")
-    {
-      shared_ptr<QSqlQuery> nodeIterator = _database.selectBoundedElements(idFromRelation, ElementType::Node, _bbox);
-      if( nodeIterator->next() ) // we found a relation in the bounds
-      {
-        // process the relation into a data structure
-        shared_ptr<Element> element = _resultToRelation(resultIterator, map);
-
-        // get the way tags
-        shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation( relId );
-        while( relationTagIterator->next() )
-        {
-          // test for blank tag
-          QString val1 = relationTagIterator->value(1).toString();
-          QString val2 = relationTagIterator->value(2).toString();
-          QString tag = "";
-          if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
-          if(tag != "") tags << tag;
-        }
-        if(tags.size()>0)
-        {
-          LOG_VART(tags);
-          element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          ApiDbReader::addTagsToElement( element );
-        }
-
-        if (_status != Status::Invalid) {element->setStatus(_status); }
-        map.addElement(element);
-        tags.clear();
       }
     }
-    else if(type == "Way")
+
+    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+    QSet<QString> relationIds;
+    shared_ptr<QSqlQuery> relationIdItr =
+      _database.selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
+    while (relationIdItr->next())
     {
-      shared_ptr<QSqlQuery> nodeInfoIterator = _database.selectNodesForWay( idFromRelation );
-      bool foundOne = false;
-      while( nodeInfoIterator->next() && !foundOne)
-      {
-        // do the bounds check
-        double lat = nodeInfoIterator->value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-        double lon = nodeInfoIterator->value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-        Coordinate c(lon, lat);
-        if (env.contains(c))
-        {
-          foundOne = true;
-        }
-      }
-      if( foundOne ) // we found a relation in the bounds
-      {
-        // process the relation into a data structure
-        shared_ptr<Element> element = _resultToRelation(resultIterator, map);
-
-        // get the way tags
-        shared_ptr<QSqlQuery> relationTagIterator = _database.selectTagsForRelation( relId );
-        while( relationTagIterator->next() )
-        {
-          // test for blank tag
-          QString val1 = relationTagIterator->value(1).toString();
-          QString val2 = relationTagIterator->value(2).toString();
-          QString tag = "";
-          if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
-          if(tag != "") tags << tag;
-        }
-        if(tags.size()>0)
-        {
-          LOG_VART(tags);
-          element->setTags( ApiDb::unescapeTags(tags.join(", ")) );
-          ApiDbReader::addTagsToElement( element );
-        }
-
-        if (_status != Status::Invalid) { element->setStatus(_status); }
-        map.addElement(element);
-        tags.clear();
-      }
+      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
+      LOG_VART(relationId);
+      relationIds.insert(relationId);
     }
-    else if(type == "Relation")
+    relationIdItr = _database.selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+    while (relationIdItr->next())
     {
-      shared_ptr<QSqlQuery> relIterator = _database.selectBoundedElements(idFromRelation, ElementType::Relation, _bbox);
-      while(relIterator->next())
+      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
+      LOG_VART(relationId);
+      relationIds.insert(relationId);
+    }
+    LOG_VARD(relationIds.size());
+
+    if (relationIds.size() > 0)
+    {
+      LOG_DEBUG("Retrieving relations by relation ID...");
+      shared_ptr<QSqlQuery> relationItr =
+        _database.selectElementsByElementIdList(relationIds, ElementType::Relation);
+      while (relationItr->next())
       {
-        _processRelation(*relIterator, map, env);
+        RelationPtr element = _resultToRelation(*relationItr, *map);
+        _parseAndSetTagsOnElement(element);
+        if (_status != Status::Invalid)
+        {
+          element->setStatus(_status);
+        }
+        LOG_VART(element->toString());
+        map->addElement(element);
       }
     }
   }
@@ -393,15 +306,15 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
 
   assert(elementResultsIterator->isActive());
 
-  while( elementResultsIterator->next() )
+  while (elementResultsIterator->next())
   {
     long long id = elementResultsIterator->value(0).toLongLong();
-    if( lastId != id )
+    if (lastId != id)
     {
       // process the complete element only after the first element created
-      if(!firstElement)
+      if (!firstElement)
       {
-        if(tags.size()>0)
+        if (tags.size() > 0)
         {
           LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
@@ -439,16 +352,16 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     // need to get into form "key1"=>"val1", "key2"=>"val2", ...
 
     QString result = _database.extractTagFromRow(elementResultsIterator, elementType.getEnum());
-    if(result != "") tags << result;
+    if (result != "") tags << result;
   }
 
   // process the last complete element only if an element has been created
-  if(!firstElement)
+  if (!firstElement)
   {
-    if(tags.size()>0)
+    if (tags.size() > 0)
     {
       LOG_VART(tags);
-      element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
+      element->setTags(ApiDb::unescapeTags(tags.join(", ")));
       ApiDbReader::addTagsToElement( element );
     }
     if (_status != Status::Invalid) { element->setStatus(_status); }
@@ -532,8 +445,10 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   LOG_TRACE("raw ID: " << rawId);
   long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
   LOG_VART(nodeId);
-  double lat = resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
-  double lon = resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+  double lat =
+    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+  double lon =
+    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
   shared_ptr<Node> result(
     new Node(
@@ -578,8 +493,6 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   }
   way->addNodes(nodeIds);
 
-  //add nodes to the map if the map does not contain the node for way. Since query nodes in bounding box
-  //may not contain all nodes for the way which will cause problem when cropping map later
   _addNodesForWay(nodeIds, map);
   LOG_VART(way);
   return way;
@@ -627,7 +540,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
   LOG_TRACE("Reading relation with ID: " << relationId);
   if (newRelationId != relationId)
   {
-    LOG_VARD(newRelationId);
+    LOG_VART(newRelationId);
   }
 
   shared_ptr<Relation> relation(
