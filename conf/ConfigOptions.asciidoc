@@ -1991,6 +1991,13 @@ If this value is set to a non-empty string, the system will attempt to open a fi
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
 
+=== remove.attribute.visitor.types
+
+* Data Type: list
+* Default Value:
+
+List of element attributes to remove with the RemoveAttributeVisitor.
+
 === set.tag.visitor.key
 
 * Data Type: string

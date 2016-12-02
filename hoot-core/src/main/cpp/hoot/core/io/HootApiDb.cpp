@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -67,6 +67,39 @@ HootApiDb::~HootApiDb()
   LOG_VARD(_wayNodesInsertElapsed);
   LOG_VARD(_wayInsertElapsed);
   close();
+}
+
+void HootApiDb::_init()
+{
+  _floatingPointCoords = true;
+  _capitalizeRelationMemberType = false;
+  _inTransaction = false;
+
+  int recordsPerBulkInsert = 500;
+
+  // set it to something obsurd.
+  _lastMapId = -numeric_limits<long>::max();
+
+  _nodesInsertElapsed = 0;
+  // 500 found experimentally on my desktop -JRS
+  _nodesPerBulkInsert = recordsPerBulkInsert;
+
+  _wayNodesInsertElapsed = 0;
+  // arbitrary, needs benchmarking
+  _wayNodesPerBulkInsert = recordsPerBulkInsert;
+
+  _wayInsertElapsed = 0;
+  // arbitrary, needs benchmarking
+  _waysPerBulkInsert = recordsPerBulkInsert;
+
+  // arbitrary, needs benchmarking
+  _relationsPerBulkInsert = recordsPerBulkInsert;
+
+  _currUserId = -1;
+  _currMapId = -1;
+  _currChangesetId = -1;
+  _changesetEnvelope.init();
+  _changesetChangeCount = 0;
 }
 
 Envelope HootApiDb::calculateEnvelope() const
@@ -500,35 +533,22 @@ long HootApiDb::_getNextWayId()
   return _wayIdReserver->getNextId();
 }
 
-void HootApiDb::_init()
+long HootApiDb::getNextId(const ElementType& elementType)
 {
-  _inTransaction = false;
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+      return _getNextNodeId();
 
-  int recordsPerBulkInsert = 500;
+    case ElementType::Way:
+      return _getNextWayId();
 
-  // set it to something obsurd.
-  _lastMapId = -numeric_limits<long>::max();
+    case ElementType::Relation:
+      return _getNextRelationId();
 
-  _nodesInsertElapsed = 0;
-  // 500 found experimentally on my desktop -JRS
-  _nodesPerBulkInsert = recordsPerBulkInsert;
-
-  _wayNodesInsertElapsed = 0;
-  // arbitrary, needs benchmarking
-  _wayNodesPerBulkInsert = recordsPerBulkInsert;
-
-  _wayInsertElapsed = 0;
-  // arbitrary, needs benchmarking
-  _waysPerBulkInsert = recordsPerBulkInsert;
-
-  // arbitrary, needs benchmarking
-  _relationsPerBulkInsert = recordsPerBulkInsert;
-
-  _currUserId = -1;
-  _currMapId = -1;
-  _currChangesetId = -1;
-  _changesetEnvelope.init();
-  _changesetChangeCount = 0;
+    default:
+      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+  }
 }
 
 void HootApiDb::beginChangeset()
@@ -669,7 +689,9 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  //LOG_DEBUG("Inserted node with ID: " << QString::number(id));
+  LOG_TRACE("Inserted node with ID: " << QString::number(id));
+  LOG_VART(QString::number(lat, 'g', 15));
+  LOG_VART(QString::number(lon, 'g', 15));
 
   return true;
 }
@@ -708,7 +730,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_DEBUG("Inserted relation with ID: " << QString::number(relationId));
+  LOG_TRACE("Inserted relation with ID: " << QString::number(relationId));
 
   return true;
 }
@@ -893,6 +915,8 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
+  ApiDb::_resetQueries();
+
   _closeChangeSet.reset();
   _insertChangeSet.reset();
   _insertChangeSetTag.reset();
@@ -983,26 +1007,31 @@ void HootApiDb::transaction()
   _inTransaction = true;
 }
 
-//using some kind of SQL generator (if one exists for C++ would prevent us from having to do
-//hardcoded table and column references and keep this code less brittle...
-
-QString HootApiDb::_elementTypeToElementTableName(long mapId, const ElementType& elementType) const
+QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 {
-  if (elementType == ElementType::Node)
+  if (tableType == TableType::Node)
   {
-    return getNodesTableName(mapId);
+    return getNodesTableName(_currMapId);
   }
-  else if (elementType == ElementType::Way)
+  else if (tableType == TableType::Way)
   {
-    return getWaysTableName(mapId);
+    return getWaysTableName(_currMapId);
   }
-  else if (elementType == ElementType::Relation)
+  else if (tableType == TableType::Relation)
   {
-    return getRelationsTableName(mapId);
+    return getRelationsTableName(_currMapId);
+  }
+  else if (tableType == TableType::WayNode)
+  {
+    return getWayNodesTableName(_currMapId);
+  }
+  else if (tableType == TableType::RelationMember)
+  {
+    return getRelationMembersTableName(_currMapId);
   }
   else
   {
-    throw HootException("Unsupported element type.");
+    throw HootException("Unsupported table type.");
   }
 }
 
@@ -1044,11 +1073,9 @@ bool HootApiDb::changesetExists(const long id)
 
 long HootApiDb::numElements(const ElementType& elementType)
 {
-  const long mapId = _currMapId;
-
   _numTypeElementsForMap.reset(new QSqlQuery(_db));
   _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + _elementTypeToElementTableName(mapId, elementType));
+    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
   if (_numTypeElementsForMap->exec() == false)
   {
     LOG_ERROR(_numTypeElementsForMap->executedQuery());
@@ -1076,7 +1103,7 @@ shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
-  QString sql =  "SELECT * FROM " + _elementTypeToElementTableName(mapId, elementType);
+  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
   LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);
@@ -1297,7 +1324,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_DEBUG("Inserted way with ID: " << QString::number(wayId));
+  LOG_TRACE("Inserted way with ID: " << QString::number(wayId));
 
   return true;
 }

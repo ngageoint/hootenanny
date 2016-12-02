@@ -41,9 +41,9 @@
 namespace hoot
 {
 
-class HootApiDbTest : public CppUnit::TestFixture
+class ServiceHootApiDbTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(HootApiDbTest);
+  CPPUNIT_TEST_SUITE(ServiceHootApiDbTest);
 
   // standard hoot services tests
   CPPUNIT_TEST(runDbVersionTest);
@@ -64,7 +64,7 @@ class HootApiDbTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "HootApiDbTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceHootApiDbTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -571,6 +571,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbTest, "slow");
 
 }

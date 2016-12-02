@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,19 +34,13 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
-
-// tgs
-#include <tgs/BigContainers/BigMap.h>
-
 #include "EnvelopeProvider.h"
 
 namespace hoot
 {
 
 class HootApiDbReader :
+    public ApiDbReader,
     public PartialOsmMapReader,
     public Configurable,
     public EnvelopeProvider
@@ -103,24 +97,24 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+  void setBoundingBox(const QString bbox);
+
 protected:
 
-  Tgs::BigMap<long, long> _nodeIdMap;
-  Tgs::BigMap<long, long> _relationIdMap;
-  Tgs::BigMap<long, long> _wayIdMap;
+  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+                                                 const OsmMap& map);
 
-  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
+  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
 
-  Status _status;
-  bool _useDataSourceIds;
-
-  HootApiDb _database;
-  bool _open;
+  shared_ptr<HootApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
+  Envelope _bounds;
 
   shared_ptr<Element> _nextElement;
 
@@ -134,13 +128,8 @@ private:
   /**
    * Converts a query result to an OSM element
    */
-  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-    const ElementType& elementType, OsmMap& map);
-
-  // Services data assignment methods
-  shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
+  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType,
+                                       OsmMap& map);
 };
 
 }
