@@ -62,6 +62,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         And I press "Add Reference Dataset"
         And I click the "3MergeHwy_Cuc" Dataset
         And I press "Add Layer"
+        And I wait
         And I accept the alert
         Then I wait 15 "seconds" to see "span.strong" element with text "3MergeHwy_Cuc"
         Then I should see "Complete Review"
