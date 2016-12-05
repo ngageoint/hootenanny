@@ -94,6 +94,18 @@ public:
     */
   void deleteData();
 
+  /**
+   * Purpose: to extract tags from the extra lines returned in the
+   *   selectAll for OsmApi data
+   * Input: apidb row in form with row[8]=k, row[9]=v
+   * Output: "k"=>"v"
+   * Note: this gets the tags in a form that is the same as how selectAll
+   *       returns them for Services DB
+   *
+   * @param row
+   * @param Type
+   * @return
+   */
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
   shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
@@ -102,13 +114,7 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
-  /**
-   * Gets the next sequence ID for the given element type
-   *
-   * @param type element type
-   * @return an element ID
-   */
-  long getNextId(const ElementType type);
+  virtual long getNextId(const ElementType& elementType);
 
   /**
    * Gets the next sequence ID for the given database table
@@ -117,15 +123,6 @@ public:
    * @return an element ID
    */
   long getNextId(const QString tableName);
-
-  /**
-   * Returns all changesets created after the specified time.
-   *
-   * @param timeStr time string for which to search for changesets created after; should be of the
-   * format specified by the TIME_FORMAT constant
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
@@ -147,49 +144,11 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
-  /**
-   * Returns all nodes that fall within a geospatial bounds
-   *
-   * @param bbox a comma delimited string of the form: minX,minY,maxX,maxY
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> selectNodesByBounds(const QString bbox);
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
 
-  /**
-   * Returns the IDs of all ways that own the input node IDs
-   *
-   * @param nodeIds a collection of node IDs
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
+protected:
 
-  /**
-   * Returns all elements by type with IDs in the input ID list
-   *
-   * @param elementIds a collection of element IDs
-   * @param elementType the type of element to return
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                      const ElementType& elementType);
-
-  /**
-   * Returns all the IDs of all nodes owned by the input way IDs
-   *
-   * @param wayIds a list of way IDs
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
-
-  /**
-   * Returns the IDs of all relations which own the typed input member IDs
-   *
-   * @param memberIds a list of member IDs of the same element type
-   * @param elementType the type of member element
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
-                                                     const ElementType& elementType);
+  void _resetQueries();
 
 private:
 
@@ -201,28 +160,16 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
-  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
-
-  //element bounds related queries
-  shared_ptr<QSqlQuery> _selectNodesByBounds;
-  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
-  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
-  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
-  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
-  void _resetQueries();
   void _init();
-
-  QString _elementTypeToElementTableName(const ElementType& elementType) const;
-  QString _getTableName(const ElementType& elementType) const;
-  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
-  vector<Range> _getTileRanges(const Envelope& env) const;
 
   // Osm Api DB table strings
   static QString _getWayNodesTableName() { return "current_way_nodes"; }
   static QString _getRelationMembersTableName() { return "current_relation_members"; }
+
+  QString _elementTypeToElementTableName(const ElementType& elementType) const;
 
 };
 

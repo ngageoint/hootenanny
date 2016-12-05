@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,12 +35,15 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/io/TableType.h>
 
 // Qt
 #include <QUrl>
 #include <QVariant>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
 
 // Standard
 #include <vector>
@@ -74,6 +77,7 @@ class Relation;
  */
 class ApiDb
 {
+
 public:
 
   static const int COORDINATE_SCALE = 1e7;
@@ -150,14 +154,14 @@ public:
    */
   virtual vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
+  vector<long> selectNodeIdsForWay(long wayId, const QString sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
   virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
+  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -168,12 +172,12 @@ public:
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
    * if the user doesn't exist.
    */
-  virtual long getUserId(const QString& email, bool throwWhenMissing);
+  virtual long getUserId(const QString email, bool throwWhenMissing);
 
   /**
    * Inserts a user.
    */
-  virtual long insertUser(const QString& email, const QString& displayName);
+  virtual long insertUser(const QString email, const QString displayName);
 
   /**
    * Deletes a user.
@@ -201,24 +205,112 @@ public:
    */
   static unsigned int tileForPoint(double lat, double lon);
 
+  /**
+   * Returns all nodes that fall within a geospatial bounds
+   *
+   * @param bounds the query bounds
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
+
+  /**
+   * Returns the IDs of all ways that own the input node IDs
+   *
+   * @param nodeIds a collection of node IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
+
+  /**
+   * Returns all elements by type with IDs in the input ID list
+   *
+   * @param elementIds a collection of element IDs
+   * @param tableType the type of database table to query
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
+                                                      const TableType& tableType);
+
+  /**
+   * Returns all the IDs of all nodes owned by the input way IDs
+   *
+   * @param wayIds a collection of way IDs
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
+
+  /**
+   * Returns the IDs of all relations which own the typed input member IDs
+   *
+   * @param memberIds a collection of member IDs of the same element type
+   * @param memberElementType the element type of the associated relation member
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+                                                     const ElementType& memberElementType);
+
+  virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
+
+  /**
+   * Returns all changesets created after the specified time.
+   *
+   * @param timeStr time string for which to search for changesets created after; should be of the
+   * format specified by the TIME_FORMAT constant
+   * @return a SQL results iterator
+   */
+  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+
+  /**
+   * Gets the next sequence ID for the given element type
+   *
+   * @param elementType element type
+   * @return an element ID
+   */
+  virtual long getNextId(const ElementType& elementType) = 0;
+
+  QSqlError getLastError() const { return _db.lastError(); }
+
 protected:
 
-  virtual QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const;
+  //osm api db stores coords as integers and hoot api db as floating point
+  bool _floatingPointCoords;
+  //osm api db expects the relation member type to have the first capitalized, while the hoot
+  //api db expects the value to be all lower case; by default the value is always passed around with
+  //the first letter capitalized, since its taken from ElementType::toString()
+  bool _capitalizeRelationMemberType;
+
+  QSqlDatabase _db;
+  shared_ptr<QSqlQuery> _selectUserByEmail;
+  shared_ptr<QSqlQuery> _insertUser;
+  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+
+  virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                          QVariant v3 = QVariant()) const;
 
   /**
    * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
    * constraints, tables, etc.
    * @param sql SQL to execute.
    */
-  virtual QSqlQuery _execNoPrepare(const QString& sql) const;
+  virtual QSqlQuery _execNoPrepare(const QString sql) const;
 
   static void _unescapeString(QString& s);
 
-  QSqlDatabase _db;
-  shared_ptr<QSqlQuery> _selectUserByEmail;
-  shared_ptr<QSqlQuery> _insertUser;
-  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  virtual void _resetQueries();
+
+private:
+
+  //element bounds related queries
+  shared_ptr<QSqlQuery> _selectNodesByBounds;
+  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
+  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+
+  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+
+  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
+  vector<Range> _getTileRanges(const Envelope& env) const;
 };
 
 }

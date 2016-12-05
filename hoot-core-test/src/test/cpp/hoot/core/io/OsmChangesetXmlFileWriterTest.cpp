@@ -113,7 +113,7 @@ public:
   void runTest()
   {
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
-    QDir().mkdir("test-output/io/OsmChangesetXmlFileWriterTest");
+    QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
     OsmChangesetXmlFileWriter().write(
       "test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc", changesetProvider);
 

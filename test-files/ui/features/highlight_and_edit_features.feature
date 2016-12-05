@@ -30,6 +30,7 @@ Feature: Highlight features on click
     Scenario: Attempt to Remove Dataset and Recieve Warning
         And I click the "map" at "450","300"
         And I click the "trash.map-button" button
+        And I wait
         And I should see an alert containing "There is unsaved changes"
         And I reject the alert
 

@@ -22,10 +22,13 @@ COPY current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp",
 
 
 COPY current_node_tags (node_id, k, v) FROM stdin;
-1	key1	val1
-1	key2	val2
-4	key3	val3
-5	key4	val5
+1	node1	node1
+2	node2	node2
+3	node3	node3
+4	node4	node4
+5	node5	node5
+6	node6	node6
+7	node7	node7
 \.
 
 
@@ -41,10 +44,13 @@ COPY nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", ti
 
 
 COPY node_tags (node_id, version, k, v) FROM stdin;
-1	1	key1	val1
-1	1	key2	val2
-4	1	key3	val3
-5	1	key4	val5
+1	1	node1	node1
+2	1	node2	node2
+3	1	node3	node3
+4	1	node4	node4
+5	1	node5	node5
+6	1	node6	node6
+7	1	node7	node7
 \.
 
 
@@ -73,9 +79,11 @@ COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;
 
 
 COPY current_way_tags (way_id, k, v) FROM stdin;
-1	key1	val1
-1	key2	val2
-3	key3	val3
+1	way1	way1
+2	way2	way2
+3	way3	way3
+4	way4	way4
+5	way5	way5
 \.
 
 
@@ -104,9 +112,11 @@ COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;
 
 
 COPY way_tags (way_id, version, k, v) FROM stdin;
-1	1	key1	val1
-1	1	key2	val2
-3	1	key3	val3
+1	1	way1	way1
+2	1	way2	way2
+3	1	way3	way3
+4	1	way4	way4
+5	1	way5	way5
 \.
 
 
@@ -138,10 +148,12 @@ COPY current_relation_members (relation_id, member_type, member_id, member_role,
 
 
 COPY current_relation_tags (relation_id, k, v) FROM stdin;
-1	key1	val1
-2	key2	val2
-2	key3	val3
-3	key4	val4
+1	relation1	relation1
+2	relation2	relation2
+3	relation3	relation3
+4	relation4	relation4
+5	relation5	relation5
+6	relation6	relation6
 \.
 
 
@@ -159,10 +171,10 @@ COPY relation_members (relation_id, member_type, member_id, member_role, version
 1	Node	1	role1	1	1
 1	Way	2	role3	1	2
 1	Way	1	role2	1	3
-1	Node	3	empty	1	4
+1	Node	3	role1	1	4
 2	Node	5	role1	1	1
 2	Relation	1	role1	1	2
-3	Way	2	empty	1	1
+3	Way	2	role2	1	1
 4	Node	3	role1	1	1
 5	Node	7	role1	1	1
 5	Way	4	role1	1	2
@@ -173,10 +185,12 @@ COPY relation_members (relation_id, member_type, member_id, member_role, version
 
 
 COPY relation_tags (relation_id, version, k, v) FROM stdin;
-1	1	key1	val1
-2	1	key2	val2
-2	1	key3	val3
-3	1	key4	val4
+1	1	relation1	relation1
+2	1	relation2	relation2
+3	1	relation3	relation3
+4	1	relation4	relation4
+5	1	relation5	relation5
+6	1	relation6	relation6
 \.
 
 

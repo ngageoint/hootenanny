@@ -51,17 +51,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
 
-OsmWriter::OsmWriter()
+OsmWriter::OsmWriter() :
+_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_includeIds(false),
+_includeDebug(ConfigOptions().getWriterIncludeDebug()),
+_includePointInWays(false),
+_includeCompatibilityTags(true),
+_textStatus(ConfigOptions().getWriterTextStatus()),
+_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+_precision(round(ConfigOptions().getWriterPrecision())),
+_encodingErrorCount(0)
 {
-  _formatXml = ConfigOptions().getOsmMapWriterFormatXml();
-  _includeIds = false;
-  _includeDebug = ConfigOptions().getWriterIncludeDebug();
-  _textStatus = ConfigOptions().getWriterTextStatus();
-  _includePointInWays = false;
-  _includeCompatibilityTags = true;
-  _osmSchema = ConfigOptions().getOsmMapWriterSchema();
-  _precision = round(ConfigOptions().getWriterPrecision());
-  _encodingErrorCount = 0;
+
 }
 
 QString OsmWriter::removeInvalidCharacters(const QString& s)
@@ -222,6 +223,8 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
   else
   {
+    //TODO: This comparison seems to be still unequal when I set an element's timestamp to
+    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributeVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
