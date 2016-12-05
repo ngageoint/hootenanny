@@ -353,7 +353,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
 
-  LOG_DEBUG(QString("The sql query= "+ sql));
+  LOG_TRACE(QString("The sql query= "+ sql));
 
   // execute the query on the DB and get the results back
   if (_selectNodeById->exec() == false)

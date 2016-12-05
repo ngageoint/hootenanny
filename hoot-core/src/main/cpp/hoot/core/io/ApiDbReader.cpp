@@ -40,28 +40,32 @@ _open(false)
 
 }
 
-void ApiDbReader::_addTagsToElement(shared_ptr<Element> element)
+void ApiDbReader::_updateMetadataOnElement(shared_ptr<Element> element)
 {
   bool ok;
   Tags& tags = element->getTags();
 
-  if (tags.contains("hoot:status"))
-  {
-    QString statusStr = tags.get("hoot:status");
-    bool ok;
-    const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
-    if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
-    {
-      element->setStatus(status);
-    }
-    else
-    {
-      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-               QString::number(element->getId()));
-    }
-    tags.remove("hoot:status");
-  }
+  //This is being done in the result to element methods now and no longer needed here.
+//  if (tags.contains("hoot:status"))
+//  {
+//    QString statusStr = tags.get("hoot:status");
+//    bool ok;
+//    const int statusInt = statusStr.toInt(&ok);
+//    Status status = static_cast<Status::Type>(statusInt);
+//    if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
+//    {
+//      element->setStatus(status);
+//      LOG_VART(element->getStatus().toString());
+//    }
+//    else
+//    {
+//      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+//               QString::number(element->getId()));
+//    }
+//    tags.remove("hoot:status");
+//  }
+
+  //Removing tags here doesn't seem right, so disabling it for now.
 
   if (tags.contains("type"))
   {
@@ -69,7 +73,7 @@ void ApiDbReader::_addTagsToElement(shared_ptr<Element> element)
     if (r)
     {
       r->setType(tags["type"]);
-      tags.remove("type");
+      //tags.remove("type");
     }
   }
 
@@ -97,7 +101,7 @@ void ApiDbReader::_addTagsToElement(shared_ptr<Element> element)
         LOG_WARN("Error parsing error:circular.");
       }
     }
-    tags.remove("error:circular");
+    //tags.remove("error:circular");
   }
   else if (tags.contains("accuracy"))
   {
@@ -124,7 +128,7 @@ void ApiDbReader::_addTagsToElement(shared_ptr<Element> element)
         LOG_WARN("Error parsing accuracy.");
       }
     }
-    tags.remove("accuracy");
+    //tags.remove("accuracy");
   }
 }
 
@@ -194,10 +198,9 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
-    NodePtr element = _resultToNode(*nodeItr, *map);
-    LOG_VART(element->toString());
-    map->addElement(element);
-    nodeIds.insert(QString::number(element->getId()));
+    NodePtr node = _resultToNode(*nodeItr, *map);
+    map->addElement(node);
+    nodeIds.insert(QString::number(node->getId()));
   }
   LOG_VARD(nodeIds.size());
 
@@ -221,12 +224,10 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
       while (wayItr->next())
       {
-        WayPtr element = _resultToWay(*wayItr, *map);
-        LOG_VART(element->toString());
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
         //the problem yet with test data, but will continue to keep an eye on it.
-        map->addElement(element);
+        map->addElement(_resultToWay(*wayItr, *map));
       }
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
@@ -255,9 +256,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
           _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
-          NodePtr element = _resultToNode(*additionalWayNodeItr, *map);
-          LOG_VART(element->toString());
-          map->addElement(element);
+          map->addElement(_resultToNode(*additionalWayNodeItr, *map));
         }
       }
     }
@@ -292,9 +291,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {
-        RelationPtr element = _resultToRelation(*relationItr, *map);
-        LOG_VART(element->toString());
-        map->addElement(element);
+        map->addElement(_resultToRelation(*relationItr, *map));
       }
     }
   }

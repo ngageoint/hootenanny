@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,8 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/stats/IoSingleStat.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmWriter.h>
 
 // Standard
 #include <fstream>
@@ -134,11 +136,30 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
 
+    if (Log::getInstance().isDebugEnabled())
+    {
+      LOG_DEBUG("Writing debug map...");
+      OsmMapPtr debug(new OsmMap(map));
+      MapProjector::projectToWgs84(debug);
+      OsmWriter().write(
+        debug, ConfigOptions().getDebugMapFilename().replace(".osm", "-input-1.osm"));
+    }
+
     // read input 2
     if (!input2.isEmpty())
     {
       loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
     }
+
+    if (Log::getInstance().isDebugEnabled())
+    {
+      LOG_DEBUG("Writing debug map...");
+      OsmMapPtr debug(new OsmMap(map));
+      MapProjector::projectToWgs84(debug);
+      OsmWriter().write(
+        debug, ConfigOptions().getDebugMapFilename().replace(".osm", "-input-combined.osm"));
+    }
+
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VAR(inputBytes);
     double elapsed = t.getElapsedAndRestart();

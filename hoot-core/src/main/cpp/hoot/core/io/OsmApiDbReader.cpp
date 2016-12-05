@@ -162,7 +162,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   {
     LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-    _addTagsToElement(element);
+    _updateMetadataOnElement(element);
   }
 }
 
@@ -189,11 +189,11 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
         if (tags.size() > 0)
         {
           LOG_VART(tags);
-          element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          element->setTags(ApiDb::unescapeTags(tags.join(", ")));
+          _updateMetadataOnElement(element);
         }
 
-        if (_status != Status::Invalid) { element->setStatus(_status); }
+        //if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
         tags.clear();
       }
@@ -234,9 +234,9 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     {
       LOG_VART(tags);
       element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-      _addTagsToElement( element );
+      _updateMetadataOnElement(element);
     }
-    if (_status != Status::Invalid) { element->setStatus(_status); }
+    //if (_status != Status::Invalid) { element->setStatus(_status); }
     map->addElement(element);
     tags.clear();
   }
@@ -276,6 +276,7 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
+  //if (_status != Status::Invalid) { node->setStatus(_status); }
 
   _parseAndSetTagsOnElement(node);
 
@@ -302,6 +303,7 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       resultIterator.value(ApiDb::WAYS_TIMESTAMP).toUInt()));
+  //if (_status != Status::Invalid) { way->setStatus(_status); }
 
   // if performance becomes an issue, try reading these out in batch at the same time
   // the element results are read
@@ -341,12 +343,12 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
         {
           LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
-          _addTagsToElement(node);
+          _updateMetadataOnElement(node);
         }
-        if (_status != Status::Invalid)
-        {
-          node->setStatus(_status);
-        }
+//        if (_status != Status::Invalid)
+//        {
+//          node->setStatus(_status);
+//        }
         map.addElement(node);
       }
     }
@@ -374,6 +376,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toUInt()));
+  //if (_status != Status::Invalid) { relation->setStatus(_status); }
 
   _parseAndSetTagsOnElement(relation);
 

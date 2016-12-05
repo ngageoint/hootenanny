@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -319,7 +319,7 @@ QString Way::toString() const
   stringstream ss(stringstream::out);
   ss << "way(" << getId() << ")" << endl;
   ss << "nodes: ";
-  Tgs::operator <<(ss, getNodeIds());
+  Tgs::operator << (ss, getNodeIds());
   ss << endl;
   ss << "tags: " << getTags().toString().toStdString();
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
