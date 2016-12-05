@@ -64,8 +64,6 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  void _updateMetadataOnElement(shared_ptr<Element> element);
-
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
@@ -80,6 +78,8 @@ protected:
    * implemented yet.
    */
   virtual void _readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds);
+
+  void _updateMetadataOnElement(shared_ptr<Element> element);
 };
 
 }

@@ -104,6 +104,7 @@ private:
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
 
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+
   void _parseAndSetTagsOnElement(ElementPtr element);
 };
 
