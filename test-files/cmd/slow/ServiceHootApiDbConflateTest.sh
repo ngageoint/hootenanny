@@ -9,6 +9,7 @@ export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 rm -rf test-output/cmd/ServiceHootApiDbConflateTest
 mkdir -p test-output/cmd/ServiceHootApiDbConflateTest
+
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
 wait
@@ -21,9 +22,10 @@ wait
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA" &
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB" &
 wait
-hoot conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-output/cmd/ServiceHootApiDbConflateTest/output.osm
+
+hoot conflate $HOOT_OPTS "$DB_URL/AllDataTypesA" "$DB_URL/AllDataTypesB" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 # Do a very coarse comparison check.
-hoot stats --quick test-output/cmd/ServiceHootApiDbConflateTest/output.osm
+hoot stats --quick test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
@@ -32,3 +34,24 @@ wait
 export PGPASSWORD=$DB_PASSWORD
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA && echo "Error: delete-map did not remove AllDataTypesA dataset"
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB && echo "Error: delete-map did not remove AllDataTypesB dataset"
+
+#hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
+#hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
+#wait
+
+#hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads" &
+#hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads" &
+#wait
+
+#hoot conflate $HOOT_OPTS "$DB_URL/DcGisRoads" "$DB_URL/DcTigerRoads" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+#hoot stats --quick test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+
+#hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
+#hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
+#wait
+
+#export PGPASSWORD=$DB_PASSWORD
+#psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads && echo "Error: delete-map did not remove DcGisRoads dataset"
+#psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads && echo "Error: delete-map did not remove DcTigerRoads dataset"
+
+

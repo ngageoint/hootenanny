@@ -99,7 +99,6 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-//Removing tags here doesn't seem right to me, so disabled.
 void ApiDbReader::_updateMetadataOnElement(shared_ptr<Element> element)
 {
   bool ok;

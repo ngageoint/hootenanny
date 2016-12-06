@@ -164,6 +164,8 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   }
 }
 
+//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
+//the this read performs better
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   // contact the DB and select all
@@ -191,7 +193,7 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
     return shared_ptr<Element>();
   }
 
-  //see of another result is available
+  //see if another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
@@ -254,13 +256,14 @@ void HootApiDbReader::close()
   finalizePartial();
 }
 
+//TODO: this method could probably be moved up to the parent class
 shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
                                                       const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
   //method.  However, I was getting some initialization errors with QSqlQuery when the
-  //HootApiDbReader called it in that way during a partial map read.  So, calling it inside here
+  //reader called it in that way during a partial map read.  So, calling it inside here
   //instead.  A side effect is that this method will return a NULL element during the last
   //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
   //calling resultIterator->next() and also should check for the null element.
@@ -291,6 +294,15 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
         throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
     }
 
+    _updateMetadataOnElement(element);
+    //we want the reader's status to always override any existing status
+    if (_status != Status::Invalid) { element->setStatus(_status); }
+  //  if (_status != Status::Invalid)
+  //  {
+  //    node->setStatus(_status);
+  //    node->getTags().set("hoot:status", QString::number(node->getStatus().getEnum()));
+  //  }
+
     return element;
   }
   else
@@ -319,16 +331,6 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
 
-  _updateMetadataOnElement(node);
-
-  //Not sure if this and the same code in the other element conversion methods is necessary but
-  //leaving it in for now.
-//  if (_status != Status::Invalid)
-//  {
-//    node->setStatus(_status);
-//    node->getTags().set("hoot:status", QString::number(node->getStatus().getEnum()));
-//  }
-
   LOG_VART(node);
   return node;
 }
@@ -352,8 +354,6 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
 
-  _updateMetadataOnElement(way);
-
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
@@ -361,12 +361,6 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
   }
   way->addNodes(nodeIds);
-
-//  if (_status != Status::Invalid)
-//  {
-//    way->setStatus(_status);
-//    way->getTags().set("hoot:status", QString::number(way->getStatus().getEnum()));
-//  }
 
   LOG_VART(way);
   return way;
@@ -392,8 +386,6 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
 
-  _updateMetadataOnElement(relation);
-
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
@@ -401,12 +393,6 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
-
-//  if (_status != Status::Invalid)
-//  {
-//    relation->setStatus(_status);
-//    relation->getTags().set("hoot:status", QString::number(relation->getStatus().getEnum()));
-//  }
 
   LOG_VART(relation);
   return relation;

@@ -162,10 +162,11 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   {
     LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-    _updateMetadataOnElement(element);
   }
 }
 
+//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
+//the this read performs better
 void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   long long lastId = LLONG_MIN;
@@ -192,7 +193,6 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
           element->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(element);
         }
-
         if (_status != Status::Invalid) { element->setStatus(_status); }
         map->addElement(element);
         tags.clear();
@@ -278,13 +278,9 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
 
   _parseAndSetTagsOnElement(node);
-
-  //see comment in similar section in HootApiDbReader::_resultToNode
-//  if (_status != Status::Invalid)
-//  {
-//    node->setStatus(_status);
-//    node->getTags().set("hoot:status", QString::number(node->getStatus().getEnum()));
-//  }
+  _updateMetadataOnElement(node);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { node->setStatus(_status); }
 
   LOG_VART(node);
   return node;
@@ -320,14 +316,9 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   way->addNodes(nodeIds);
 
   _parseAndSetTagsOnElement(way);
-
-  _addNodesForWay(nodeIds, map);
-
-//  if (_status != Status::Invalid)
-//  {
-//    way->setStatus(_status);
-//    way->getTags().set("hoot:status", QString::number(way->getStatus().getEnum()));
-//  }
+  _updateMetadataOnElement(way);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { way->setStatus(_status); }
 
   LOG_VART(way);
   return way;
@@ -356,11 +347,8 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(node);
         }
-//        if (_status != Status::Invalid)
-//        {
-//          node->setStatus(_status);
-//          node->getTags().set("hoot:status", QString::number(node->getStatus().getEnum()));
-//        }
+        //we want the reader's status to always override any existing status
+        if (_status != Status::Invalid) { node->setStatus(_status); }
         map.addElement(node);
       }
     }
@@ -399,11 +387,10 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
   }
   relation->setMembers(members);
 
-//  if (_status != Status::Invalid)
-//  {
-//    relation->setStatus(_status);
-//    relation->getTags().set("hoot:status", QString::number(relation->getStatus().getEnum()));
-//  }
+  _parseAndSetTagsOnElement(relation);
+  _updateMetadataOnElement(relation);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { relation->setStatus(_status); }
 
   LOG_VART(relation);
   return relation;
