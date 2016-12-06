@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,10 +52,10 @@ void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCr
     {
       matchCreatorName = matchCreatorDescription;
     }
-     LOG_DEBUG("Appending: " + matchCreatorName);
+     LOG_TRACE("Appending: " + matchCreatorName);
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
   }
-  LOG_VARD(_matchCreatorsByName.size());
+  LOG_VART(_matchCreatorsByName.size());
 }
 
 void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
@@ -64,11 +64,11 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
        iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
-    //LOG_VARD(matchCreatorName);
+    LOG_VART(matchCreatorName);
     shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
-      //LOG_DEBUG("is match candidate");
+      LOG_TRACE("is match candidate");
       if (_matchCandidateCountsByMatchCreator.contains(matchCreatorName))
       {
         _matchCandidateCountsByMatchCreator[matchCreatorName] =
@@ -78,11 +78,11 @@ void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
       {
         _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
       }
-      //LOG_VARD(_matchCandidateCountsByMatchCreator[matchCreatorName]);
+      LOG_VART(_matchCandidateCountsByMatchCreator[matchCreatorName]);
       _candidateCount++;
     }
   }
-  //LOG_VARD(_matchCandidateCountsByMatchCreator.size());
+  LOG_VART(_matchCandidateCountsByMatchCreator.size());
 }
 
 }
