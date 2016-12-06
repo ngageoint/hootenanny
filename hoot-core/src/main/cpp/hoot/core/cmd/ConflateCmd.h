@@ -135,31 +135,11 @@ public:
     // read input 1
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
-
-//    if (Log::getInstance().isDebugEnabled())
-//    {
-//      LOG_DEBUG("Writing debug map...");
-//      OsmMapPtr debug(new OsmMap(map));
-//      MapProjector::projectToWgs84(debug);
-//      OsmWriter().write(
-//        debug, ConfigOptions().getDebugMapFilename().replace(".osm", "-input-1.osm"));
-//    }
-
     // read input 2
     if (!input2.isEmpty())
     {
       loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
     }
-
-//    if (Log::getInstance().isDebugEnabled())
-//    {
-//      LOG_DEBUG("Writing debug map...");
-//      OsmMapPtr debug(new OsmMap(map));
-//      MapProjector::projectToWgs84(debug);
-//      OsmWriter().write(
-//        debug, ConfigOptions().getDebugMapFilename().replace(".osm", "-input-combined.osm"));
-//    }
-
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VAR(inputBytes);
     double elapsed = t.getElapsedAndRestart();
