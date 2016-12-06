@@ -1,28 +1,6 @@
-11:13:45.439 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceHootApiDbConflateTest/output1.osm ...
-Reprojecting 0 / 144         
-11:13:45.474 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
-11:13:45.474 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
-Stat Name	test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
-Node Count	144
-Way Count	23
-Relation Count	9
-Minimum Node ID	-273
-Maximum Node ID	-1
-Minimum Way ID	-170
-Maximum Way ID	-1
-Minimum Relation ID	-10
-Maximum Relation ID	-2
-11:13:52.671 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm ...
-11:13:52.689 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceHootApiDbConflateTest/output2.osm ...
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 136) < source:datetime = 2016-12-06T10:03:13Z
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 137) > source:datetime = 
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 136) < source:datetime = 2016-12-06T10:03:13Z
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 137) > source:datetime = 
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 136) < source:datetime = 2016-12-06T10:03:13Z
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 137) > source:datetime = 
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 123) Tags do not match:
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 136) < source:datetime = 2016-12-06T10:03:13Z
-11:13:52.707 WARN  ...core/scoring/MapComparator.cpp( 137) > source:datetime = 
+Running select all conflate...
+13:27:41.667 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm ...
+13:27:41.673 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceHootApiDbConflateTest/output1.osm ...
+Running select by bounds conflate...
+13:27:48.403 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm ...
+13:27:48.417 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceHootApiDbConflateTest/output2.osm ...

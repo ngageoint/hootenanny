@@ -247,7 +247,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     tags.clear();
   }
 
-  LOG_INFO("Select all query read " << elementCount << " elements.");
+  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());

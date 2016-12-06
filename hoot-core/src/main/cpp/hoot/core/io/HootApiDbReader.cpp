@@ -189,7 +189,7 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     }
   }
 
-  LOG_INFO("Select all query read " << elementCount << " elements.");
+  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
@@ -304,15 +304,6 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
         throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
     }
 
-    _updateMetadataOnElement(element);
-    //we want the reader's status to always override any existing status
-    if (_status != Status::Invalid) { element->setStatus(_status); }
-  //  if (_status != Status::Invalid)
-  //  {
-  //    node->setStatus(_status);
-  //    node->getTags().set("hoot:status", QString::number(node->getStatus().getEnum()));
-  //  }
-
     return element;
   }
   else
@@ -340,6 +331,9 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
         resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
+  _updateMetadataOnElement(node);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { node->setStatus(_status); }
 
   //LOG_VART(node);
   return node;
@@ -363,6 +357,9 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
       ));
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
+  _updateMetadataOnElement(way);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { way->setStatus(_status); }
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
@@ -395,6 +392,9 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
         resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
+  _updateMetadataOnElement(relation);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { relation->setStatus(_status); }
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);

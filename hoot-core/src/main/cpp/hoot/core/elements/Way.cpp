@@ -325,7 +325,8 @@ QString Way::toString() const
   ss << "cached envelope: " << GeometryUtils::toString(_cachedEnvelope).toStdString() << endl;
   ss << "status: " << getStatusString().toStdString() << endl;
   ss << "version: " << getVersion() << endl;
-  ss << "visible: " << getVisible();
+  ss << "visible: " << getVisible() << endl;
+  ss << "circular error: " << getCircularError();
   return QString::fromStdString(ss.str());
 }
 
