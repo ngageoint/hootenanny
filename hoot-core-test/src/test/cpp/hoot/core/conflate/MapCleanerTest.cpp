@@ -89,6 +89,7 @@ public:
 
 };
 
+//putting this in the quick test suite causes MatchComparatorTest to fail
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "current");
 
