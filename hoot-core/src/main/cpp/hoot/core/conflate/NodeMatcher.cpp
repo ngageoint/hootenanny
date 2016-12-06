@@ -228,7 +228,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
 
   double result = (min(s1, s2) - diff) * thetaScore * distanceScore;
 
-  LOG_VARD(result);
+  LOG_VART(result);
   return result;
 }
 

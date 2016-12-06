@@ -99,7 +99,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-void ApiDbReader::_updateMetadataOnElement(shared_ptr<Element> element)
+void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 {
   bool ok;
   Tags& tags = element->getTags();
@@ -188,8 +188,12 @@ void ApiDbReader::_updateMetadataOnElement(shared_ptr<Element> element)
   }
 }
 
-void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
+void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
+  long boundedNodeCount = 0;
+  long boundedWayCount = 0;
+  long boundedRelationCount = 0;
+
   LOG_DEBUG("Retrieving node records within the query bounds...");
   shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
@@ -198,6 +202,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
     const QSqlQuery resultIterator = *nodeItr;
     NodePtr node = _resultToNode(resultIterator, *map);
     map->addElement(node);
+    boundedNodeCount++;
     //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
     //with any queries.  Mapped ids may not exist yet.
     const QString nodeId = QString::number(resultIterator.value(0).toLongLong());
@@ -230,6 +235,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
         //the problem yet with test data, but will continue to keep an eye on it.
         map->addElement(_resultToWay(*wayItr, *map));
+        boundedWayCount++;
       }
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
@@ -259,6 +265,7 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         while (additionalWayNodeItr->next())
         {
           map->addElement(_resultToNode(*additionalWayNodeItr, *map));
+          boundedNodeCount++;
         }
       }
     }
@@ -294,11 +301,18 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
       while (relationItr->next())
       {
         map->addElement(_resultToRelation(*relationItr, *map));
+        boundedRelationCount++;
       }
     }
   }
 
-  LOG_INFO("Bounded query read " << map->getElementCount() << " elements.");
+  LOG_INFO(
+    "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
+    " elements.");
+  LOG_VARD(boundedNodeCount);
+  LOG_VARD(boundedWayCount);
+  LOG_VARD(boundedRelationCount);
+  LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
   LOG_VARD(map->getRelationMap().size());

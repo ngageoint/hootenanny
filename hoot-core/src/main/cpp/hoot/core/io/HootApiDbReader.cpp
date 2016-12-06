@@ -165,9 +165,11 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
 }
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
-//the this read performs better
+//this read performs better for some reason
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
+  long elementCount = 0; //TODO: break this out by element type
+
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
@@ -182,8 +184,15 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     if (element.get())
     {
       map->addElement(element);
+      elementCount++;
     }
   }
+
+  LOG_INFO("Select all query read " << elementCount << " elements.");
+  LOG_DEBUG("Current map:");
+  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelationMap().size());
 }
 
 shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()

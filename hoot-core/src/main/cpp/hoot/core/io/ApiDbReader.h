@@ -77,9 +77,9 @@ protected:
    * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
    * implemented yet.
    */
-  virtual void _readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds);
+  virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
 
-  void _updateMetadataOnElement(shared_ptr<Element> element);
+  void _updateMetadataOnElement(ElementPtr element);
 };
 
 }

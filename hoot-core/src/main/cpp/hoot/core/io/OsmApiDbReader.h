@@ -101,7 +101,7 @@ private:
   ElementType _osmElemType;
   ElementType _selectElementType;
 
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _read(OsmMapPtr map, const ElementType& elementType);
 
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
 

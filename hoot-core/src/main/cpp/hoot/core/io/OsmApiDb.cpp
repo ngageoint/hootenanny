@@ -378,9 +378,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true ORDER BY id DESC";
 
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
-
   _selectElementsForMap->prepare(sql);
 
   // execute the query on the DB and get the results back
@@ -391,6 +388,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " Error: " + err);
   }
+  LOG_VARD(_selectElementsForMap->executedQuery());
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
 
   return _selectElementsForMap;
 }
