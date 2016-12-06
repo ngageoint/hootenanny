@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -150,7 +150,6 @@ public:
    */
   void beginChangeset();
 
-
   /**
    * Starts a new changeset
    * @param tags Tags for the new changeset
@@ -232,7 +231,7 @@ public:
   void dropDatabase(const QString& databaseName);
 
   /**
-   * Drops the specified table and cascades (removes depedants). No warning or error will be given
+   * Drops the specified table and cascades (removes dependants). No warning or error will be given
    * if the table does not exist.
    *
    * No validation is done on the table names. In other words, don't pass in user provided strings.
@@ -276,7 +275,15 @@ public:
    * Very handy for testing.
    */
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                        QVariant v3 = QVariant());
+                       QVariant v3 = QVariant());
+
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
+
+  virtual long getNextId(const ElementType& elementType);
+
+protected:
+
+  virtual void _resetQueries();
 
 private:
 
@@ -360,8 +367,6 @@ private:
    */
   void _copyTableStructure(QString from, QString to);
 
-  QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
-
   QString _escapeTags(const Tags& tags) const;
 
   void _flushBulkInserts();
@@ -370,7 +375,6 @@ private:
   long _getNextWayId();
   void _init();
   void _lazyFlushBulkInsert();
-  void _resetQueries();
 
   /**
    * Executes the insert, performs error checking and returns the new ID.

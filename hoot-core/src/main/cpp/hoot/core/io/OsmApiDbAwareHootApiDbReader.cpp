@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -68,7 +68,7 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
   ElementId result;
 
   long id = oldId.getId();
-  //LOG_VARD(oldId);
+  LOG_VART(oldId);
   switch (oldId.getType().getEnum())
   {
     case ElementType::Node:
@@ -111,7 +111,7 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
       throw IllegalArgumentException("Expected a valid element type, but got: " +
                                      QString::number(oldId.getType().getEnum()));
   }
-  //LOG_VARD(result);
+  LOG_VART(result);
 
   return result;
 }

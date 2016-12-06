@@ -119,7 +119,6 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
   //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
-  assert(mapId > 0);
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
     QString::number(mapId);
@@ -134,7 +133,6 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
   QString dbModifyUrl = getDbModifyUrl().toString();
   QStringList modifyUrlParts = dbModifyUrl.split("/");
   //read url example: hootapidb://hoot:hoottest@localhost:5432/hoot/1
-  assert(mapId > 0);
   QString dbReadUrl =
     dbModifyUrl.remove("/" + modifyUrlParts[modifyUrlParts.size() - 1]) + "/" +
       QString::number(mapId) + "?osm-element-id=" + QString::number((elemId)) +

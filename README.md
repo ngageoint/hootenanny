@@ -47,8 +47,7 @@ Note:
 * .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
 associated files
 * WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
-* OSM API database export is done with an OSM changeset representing the before/after difference of conflated data.
-* imports that may specify a geospatial bounds are supported with OSM API database format imports only, currently
+* Importing by a geospatial bounding box is supported by the OSM API database and Hoot API database formats only (see convert command documentation).
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 

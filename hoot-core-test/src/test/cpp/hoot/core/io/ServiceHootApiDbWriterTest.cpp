@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,9 +50,9 @@
 namespace hoot
 {
 
-class HootApiDbWriterTest : public CppUnit::TestFixture
+class ServiceHootApiDbWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(HootApiDbWriterTest);
+  CPPUNIT_TEST_SUITE(ServiceHootApiDbWriterTest);
   CPPUNIT_TEST(runEscapeTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runRemapInsertTest);
@@ -60,7 +60,7 @@ class HootApiDbWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "HootApiDbWriterTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceHootApiDbWriterTest@hoottestcpp.org"; }
 
   void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
@@ -167,7 +167,7 @@ public:
 
     compareRecords("SELECT email, display_name FROM users "
                    "WHERE email LIKE :email",
-                   "HootApiDbWriterTest@hoottestcpp.org;HootApiDbWriterTest",
+                   "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
@@ -275,7 +275,7 @@ public:
 
     compareRecords("SELECT email, display_name FROM users "
                    "WHERE email LIKE :email",
-                   "HootApiDbWriterTest@hoottestcpp.org;HootApiDbWriterTest",
+                   "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
@@ -334,7 +334,7 @@ public:
     ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl());
-    db.getOrCreateUser(userEmail(), "HootApiDbWriterTest");
+    db.getOrCreateUser(userEmail(), "ServiceHootApiDbWriterTest");
   }
 
   void tearDown()
@@ -344,6 +344,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");
 
 }
