@@ -353,8 +353,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
 
-  LOG_TRACE(QString("The sql query= "+ sql));
-
   // execute the query on the DB and get the results back
   if (_selectNodeById->exec() == false)
   {
@@ -363,6 +361,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
     throw HootException("Error selecting node by id: " + QString::number(elementId) +
       " Error: " + err);
   }
+  LOG_VARD(_selectNodeById->executedQuery());
+  LOG_VARD(_selectNodeById->numRowsAffected());
 
   return _selectNodeById;
 }
@@ -411,6 +411,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
     throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
       " Error: " + _selectTagsForRelation->lastError().text());
   }
+  LOG_VART(_selectTagsForRelation->executedQuery());
+  LOG_VART(_selectTagsForRelation->numRowsAffected());
 
   return _selectTagsForRelation;
 }
@@ -432,6 +434,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
     throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
       " Error: " + _selectTagsForWay->lastError().text());
   }
+  LOG_VART(_selectTagsForWay->executedQuery());
+  LOG_VART(_selectTagsForWay->numRowsAffected());
 
   return _selectTagsForWay;
 }
@@ -453,6 +457,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
     throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
       " Error: " + _selectTagsForNode->lastError().text());
   }
+  LOG_VART(_selectTagsForNode->executedQuery());
+  LOG_VART(_selectTagsForNode->numRowsAffected());
 
   return _selectTagsForNode;
 }

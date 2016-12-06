@@ -1116,6 +1116,8 @@ shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " for map ID: " + QString::number(mapId) + " Error: " + err);
   }
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VARD(_selectElementsForMap->executedQuery());
   return _selectElementsForMap;
 }
 
@@ -1160,6 +1162,8 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     throw HootException("Error selecting members for relation with ID: " +
       QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
   }
+  LOG_VART(_selectMembersForRelation->numRowsAffected());
+  LOG_VART(_selectMembersForRelation->executedQuery());
 
   while (_selectMembersForRelation->next())
   {
@@ -1199,9 +1203,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
-  //_updateNode->bindValue(":latitude", (qlonglong)_round(lat * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":latitude", lat);
-  //_updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)_currChangesetId);
   _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
@@ -1232,7 +1234,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
     _updateRelation.reset(new QSqlQuery(_db));
     _updateRelation->prepare(
       "UPDATE " + getRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateRelation->bindValue(":id", (qlonglong)id);
@@ -1264,7 +1267,8 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
     _updateWay.reset(new QSqlQuery(_db));
     _updateWay->prepare(
       "UPDATE " + getWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
@@ -1381,7 +1385,9 @@ void HootApiDb::_updateChangesetEnvelope(const ConstNodePtr node)
   const double nodeY = node->getY();
 
   _changesetEnvelope.expandToInclude(nodeX, nodeY);
-  //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
+  LOG_TRACE(
+    "Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" +
+    QString::number(nodeY));
 }
 
 long HootApiDb::reserveElementId(const ElementType::Type type)

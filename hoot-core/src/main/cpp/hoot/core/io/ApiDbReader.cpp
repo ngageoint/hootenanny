@@ -113,7 +113,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
     {
       element->setStatus(status);
-      LOG_VART(element->getStatus().toString());
     }
     else
     {
@@ -143,9 +142,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         double tv = tags.getLength("error:circular").value();
         element->setCircularError(tv);
         ok = true;
-        LOG_TRACE(
-          "Set circular error from error:circular tag to " << tv << " for element with ID: " <<
-          element->getId());
       }
       catch (const HootException& e)
       {
@@ -170,9 +166,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         double tv = tags.getLength("accuracy").value();
         element->setCircularError(tv);
         ok = true;
-        LOG_TRACE(
-          "Set circular error from accuracy tag to " << tv << " for element with ID: " <<
-          element->getId());
       }
       catch (const HootException& e)
       {
@@ -201,6 +194,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   {
     const QSqlQuery resultIterator = *nodeItr;
     NodePtr node = _resultToNode(resultIterator, *map);
+    LOG_VART(node);
     map->addElement(node);
     boundedNodeCount++;
     //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
@@ -234,7 +228,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
         //the problem yet with test data, but will continue to keep an eye on it.
-        map->addElement(_resultToWay(*wayItr, *map));
+        WayPtr way = _resultToWay(*wayItr, *map);
+        map->addElement(way);
+        LOG_VART(way);
         boundedWayCount++;
       }
 
@@ -264,7 +260,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
-          map->addElement(_resultToNode(*additionalWayNodeItr, *map));
+          NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
+          map->addElement(node);
+          LOG_VART(node);
           boundedNodeCount++;
         }
       }
@@ -300,7 +298,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {
-        map->addElement(_resultToRelation(*relationItr, *map));
+        RelationPtr relation = _resultToRelation(*relationItr, *map);
+        map->addElement(relation);
+        LOG_VART(relation);
         boundedRelationCount++;
       }
     }

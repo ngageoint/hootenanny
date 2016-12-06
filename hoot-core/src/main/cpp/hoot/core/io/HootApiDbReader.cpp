@@ -184,6 +184,7 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     if (element.get())
     {
       map->addElement(element);
+      LOG_VART(element);
       elementCount++;
     }
   }
@@ -340,7 +341,7 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
 
-  LOG_VART(node);
+  //LOG_VART(node);
   return node;
 }
 
@@ -371,7 +372,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   }
   way->addNodes(nodeIds);
 
-  LOG_VART(way);
+  //LOG_VART(way);
   return way;
 }
 
@@ -403,7 +404,7 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   }
   relation->setMembers(members);
 
-  LOG_VART(relation);
+  //LOG_VART(relation);
   return relation;
 }
 

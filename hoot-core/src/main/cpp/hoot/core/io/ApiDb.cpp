@@ -308,6 +308,8 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
     throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
       " Error: " + _selectNodeIdsForWay->lastError().text());
   }
+  LOG_VART(_selectNodeIdsForWay->numRowsAffected());
+  LOG_VART(_selectNodeIdsForWay->executedQuery());
 
   return _selectNodeIdsForWay;
 }
