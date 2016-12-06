@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,10 +27,10 @@
 
 #include "PostgresqlDumpfileWriter.h"
 
-#include <cstdlib>  // for std::system
-#include <cstdio>   // for std::remove
-#include <math.h>   // for ::round (cmath header is C++11 only)
-#include <utility>  // For std::pair
+#include <cstdlib>
+#include <cstdio>
+#include <math.h>
+#include <utility>
 #include <vector>
 
 #include <boost/shared_ptr.hpp>
@@ -131,7 +131,8 @@ void PostgresqlDumpfileWriter::close()
 
   finalizePartial();
 
-  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
+  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
+       (_writeStats.relationsWritten > 0) )
   {
     LOG_INFO("Write stats:");
     LOG_INFO("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
@@ -240,21 +241,21 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
-  Tags t = n->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (n->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(n->getCircularError());
-    }
-  }
+//  Tags t = n->getTags();
+//  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+//  {
+//    if (n->getCircularError() >= 0.0)
+//    {
+//      t["error:circular"] = QString::number(n->getCircularError());
+//    }
+//  }
 
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
-  //LOG_VARD(n->getX());
-  //LOG_VARD(n->getY());
+  LOG_VART(n->getX());
+  LOG_VART(n->getY());
   _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
-  //LOG_VARD(_changesetData.changesetBounds.toString());
+  LOG_VART(_changesetData.changesetBounds.toString());
 
   if ( _writeStats.nodesWritten == 0 )
   {
@@ -276,7 +277,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables(t, nodeDbId,
+  _writeTagsToTables(n->getTags(), nodeDbId,
     _outputSections["current_node_tags"].second, "%1\t%2\t%3\n",
     _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
 
@@ -294,14 +295,14 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
-  Tags t = w->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (w->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(w->getCircularError());
-    }
-  }
+//  Tags t = w->getTags();
+//  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+//  {
+//    if (w->getCircularError() >= 0.0)
+//    {
+//      t["error:circular"] = QString::number(w->getCircularError());
+//    }
+//  }
 
   if ( _writeStats.waysWritten == 0 )
   {
@@ -326,7 +327,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables(t, wayDbId,
+  _writeTagsToTables(w->getTags(), wayDbId,
     _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
     _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
 
@@ -344,14 +345,14 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
-  Tags t = r->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (r->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(r->getCircularError());
-    }
-  }
+//  Tags t = r->getTags();
+//  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
+//  {
+//    if (r->getCircularError() >= 0.0)
+//    {
+//      t["error:circular"] = QString::number(r->getCircularError());
+//    }
+//  }
 
   if ( _writeStats.relationsWritten == 0 )
   {
@@ -517,7 +518,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   const ConstNodePtr& node,
   const ElementIdDatatype nodeDbId)
 {
-  //LOG_DEBUG("Writing node with ID: " << nodeDbId);
+  LOG_TRACE("Writing node with ID: " << nodeDbId);
 
   const double nodeY = node->getY();
   const double nodeX = node->getX();
@@ -572,9 +573,9 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
     const QString key = _escapeCopyToData( it.key() );
-    //LOG_VARD(key);
+    LOG_VART(key);
     const QString value = _escapeCopyToData( it.value() );
-    //LOG_VARD(value);
+    LOG_VART(value);
 
     *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
     *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
@@ -594,7 +595,7 @@ void PostgresqlDumpfileWriter::_createWayTables()
 
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
-  //LOG_DEBUG("Writing way with ID: " << wayDbId);
+  LOG_TRACE("Writing way with ID: " << wayDbId);
 
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
@@ -658,7 +659,7 @@ void PostgresqlDumpfileWriter::_createRelationTables()
 
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
-  //LOG_DEBUG("Writing relation with ID: " << relationDbId);
+  LOG_TRACE("Writing relation with ID: " << relationDbId);
 
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");

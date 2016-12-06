@@ -1,0 +1,155 @@
+reference dataset:  test-files/conflate/unified/AllDataTypesA.osm
+secondary dataset:  test-files/conflate/unified/AllDataTypesB.osm
+AOI:  -104.8192,38.8162,-104.6926,38.9181
+TEST_NAME:  ServiceOsmApiDbHootApiDbAllDataTypesConflateTest
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+15:45:32.384 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/2-ref-raw-complete.osm to test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql...
+15:45:32.385 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/2-ref-raw-complete.osm ...
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 137) Write stats:
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 138) 	Nodes written: 117
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 139) 	Ways written: 14
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 140) 	Relations written: 0
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 141) 	Relation members written:0
+15:45:32.392 INFO  ...b/PostgresqlDumpfileWriter.cpp( 142) 	Unresolved relation members:0
+15:45:32.392 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 108) Convert operation complete.
+ setval 
+--------
+      2
+(1 row)
+
+ setval 
+--------
+    118
+(1 row)
+
+ setval 
+--------
+     15
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+15:45:32.716 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/5-secondary-raw-complete.osm to hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest...
+15:45:32.717 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/5-secondary-raw-complete.osm ...
+15:45:32.910 INFO  ...ot/core/io/HootApiDbWriter.cpp( 186) Removing map with ID: 1945
+15:45:32.923 INFO  ...ot/core/io/HootApiDbWriter.cpp( 188) Finished removing map with ID: 1945
+15:45:33.722 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 108) Convert operation complete.
+
+STEP 8: Conflating the two datasets over the specified AOI...
+
+15:45:33.861 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 129) Conflating osmapidb://hoot:hoottest@localhost:5432/osmapi_test with hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest and writing the output to hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest
+15:45:33.861 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 132) bytesRead: 583569
+15:45:33.862 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from osmapidb://hoot:hoottest@localhost:5432/osmapi_test ...
+15:45:33.883 INFO  ...oot/core/io/OsmApiDbReader.cpp( 123) Executing OSM API bounded read query with bounds Env[-104.819:-104.693,38.8162:38.9181]...
+15:45:33.890 INFO  ...p/hoot/core/io/ApiDbReader.cpp( 317) Bounded query read 6 total elements.
+15:45:33.892 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest ...
+15:45:34.093 INFO  ...ot/core/io/HootApiDbReader.cpp( 162) Executing Hoot API bounded read query with bounds Env[-104.819:-104.693,38.8162:38.9181]...
+15:45:34.105 INFO  ...p/hoot/core/io/ApiDbReader.cpp( 317) Bounded query read 6 total elements.
+15:45:34.107 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 164) inputBytes: 100571
+15:45:34.107 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+15:45:34.107 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+15:45:34.107 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 12         
+15:45:34.199 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+15:45:34.199 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
+15:45:34.200 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+15:45:34.264 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+15:45:34.264 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
+
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+15:45:34.264 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
+15:45:34.264 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
+
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:45:34.264 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+15:45:34.299 INFO  ...conflate/UnifyingConflator.cpp( 139) Creating matches...
+15:45:34.299 INFO  ...lygon/BuildingMatchCreator.cpp( 250) className(): hoot::BuildingMatchCreator
+15:45:34.299 INFO  ...lygon/BuildingMatchCreator.cpp( 270) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
+15:45:34.774 INFO  ...late/js/ScriptMatchCreator.cpp( 429) className(): hoot::ScriptMatchCreator
+15:45:34.820 INFO  ...ighway/HighwayMatchCreator.cpp( 267) className(): hoot::HighwayMatchCreator
+15:45:34.820 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: -1 mean: -nan
+15:45:34.820 INFO  ...late/js/ScriptMatchCreator.cpp( 429) className(): hoot::ScriptMatchCreator
+15:45:34.821 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+15:45:34.822 INFO  .../core/conflate/RubberSheet.cpp( 326) Found 0 potential ties.
+15:45:34.822 INFO  .../core/conflate/RubberSheet.cpp( 364) Found 0 confident ties.
+15:45:34.822 INFO  ...ate/SearchRadiusCalculator.cpp( 153) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+15:45:34.822 INFO  ...gon/PoiPolygonMatchCreator.cpp( 338) className(): hoot::PoiPolygonMatchCreator
+15:45:34.824 INFO  ...conflate/UnifyingConflator.cpp( 165) Pre-constraining match count: 8
+15:45:34.824 INFO  ...conflate/UnifyingConflator.cpp( 223) Post constraining match count: 0
+15:45:34.824 INFO  ...conflate/UnifyingConflator.cpp( 256) Applying mergers...
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+15:45:34.825 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+Reprojecting 0 / 10         
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+15:45:34.825 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 10         
+15:45:35.010 INFO  ...ot/core/io/HootApiDbWriter.cpp( 186) Removing map with ID: 1946
+15:45:35.021 INFO  ...ot/core/io/HootApiDbWriter.cpp( 188) Finished removing map with ID: 1946
+
+STEP 10: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+15:45:35.919 INFO  ...ore/cmd/DeriveChangesetCmd.cpp(  60) Deriving changeset for inputs osmapidb://hoot:hoottest@localhost:5432/osmapi_test, hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest...
+15:45:35.920 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from osmapidb://hoot:hoottest@localhost:5432/osmapi_test ...
+15:45:35.939 INFO  ...oot/core/io/OsmApiDbReader.cpp( 123) Executing OSM API bounded read query with bounds Env[-104.819:-104.693,38.8162:38.9181]...
+15:45:35.944 INFO  ...p/hoot/core/io/ApiDbReader.cpp( 317) Bounded query read 6 total elements.
+15:45:35.945 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbAllDataTypesConflateTest ...
+15:45:36.131 INFO  ...ot/core/io/HootApiDbReader.cpp( 162) Executing Hoot API bounded read query with bounds Env[-104.819:-104.693,38.8162:38.9181]...
+15:45:36.137 INFO  ...p/hoot/core/io/ApiDbReader.cpp( 317) Bounded query read 16 total elements.
+15:45:36.137 INFO  ...hoot/core/io/ElementSorter.cpp(  40) Sorting element by element type...
+15:45:36.137 INFO  ...hoot/core/io/ElementSorter.cpp(  40) Sorting element by element type...
+
+STEP 11: Executing the changeset SQL on the osm api db...
+
+15:45:36.296 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  60) Applying changeset test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+15:45:36.316 INFO  ...OsmApiDbSqlChangesetWriter.cpp(  64) Executing changeset SQL queries against OSM API database...
+15:45:36.351 INFO  ...OsmApiDbSqlChangesetWriter.cpp( 172) Changeset SQL queries execute finished against OSM API database.
+Changeset(s) Created: 1
+Changeset Details: min_lat=38.858051, max_lat=38.910969, min_lon=-104.786929, max_lon=-104.714569, num_changes=22
+Node(s) Created: 10
+Node(s) Modified: 0
+Node(s) Deleted: 6
+Way(s) Created: 0
+Way(s) Modified: 0
+Way(s) Deleted: 0
+Relation(s) Created: 6
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 13: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+
+15:45:36.485 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/13-complete-output-PulledFromOsmApiDb.osm...
+15:45:36.487 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from osmapidb://hoot:hoottest@localhost:5432/osmapi_test ...
+15:45:36.507 INFO  ...oot/core/io/OsmApiDbReader.cpp( 115) Executing OSM API read query...
+15:45:36.543 INFO  ...oot/core/io/OsmApiDbReader.cpp( 250) Select all query read 121 Node elements.
+15:45:36.553 INFO  ...oot/core/io/OsmApiDbReader.cpp( 250) Select all query read 14 Way elements.
+15:45:36.560 INFO  ...oot/core/io/OsmApiDbReader.cpp( 250) Select all query read 6 Relation elements.
+15:45:36.564 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 108) Convert operation complete.
+15:45:36.699 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/output.osm ...
+15:45:36.702 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/glacial/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/13-complete-output-PulledFromOsmApiDb.osm ...

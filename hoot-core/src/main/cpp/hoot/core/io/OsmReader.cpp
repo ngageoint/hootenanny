@@ -371,7 +371,6 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     }
 
     LOG_DEBUG("Uncompress succeeded!");
-
   }
 
   // do xml parsing
@@ -427,7 +426,7 @@ void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
-      throw Exception(_errorString);
+    throw Exception(_errorString);
   }
 
   ReportMissingElementsVisitor visitor;
@@ -473,7 +472,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
               }
           }
       }
-
 
       if (qName == "node")
       {
@@ -606,6 +604,10 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         {
           shared_ptr<Relation> r = dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
+          if (ConfigOptions().getReaderPreserveAllTags())
+          {
+            _element->setTag(key, value);
+          }
         }
         else if (key == "accuracy" || key == "error:circular")
         {
@@ -615,9 +617,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
-            LOG_TRACE(
-              "Set circular error from accuracy or error:circular tag to " << circularError <<
-              " for element with ID: " << _element->getId());
           }
           else
           {
@@ -650,6 +649,10 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
                 LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
               }
             }
+          }
+          if (ConfigOptions().getReaderPreserveAllTags())
+          {
+            _element->setTag(key, value);
           }
         }
         else
