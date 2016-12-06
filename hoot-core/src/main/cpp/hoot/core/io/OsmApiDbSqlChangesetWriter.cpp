@@ -117,7 +117,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
         changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
         //LOG_VARD(changesetStatType);
       }
-      else if (sqlStatement.contains("UPDATE changesets"))
+      else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
       {
         //some tight coupling here to OsmChangesetSqlFileWriter
         changesetStatType = "";
@@ -209,8 +209,8 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
 
 bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
 {
-  LOG_INFO("Checking for OSM API DB conflicts for changesets within " << boundsStr << " and " <<
-           "created after " << timeStr << "...");
+  LOG_INFO("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() << " within " <<
+           boundsStr << " and created after " << timeStr << "...");
 
   const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
   LOG_VARD(bounds.toString());

@@ -167,7 +167,7 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
-    _selectUserByEmail->prepare("SELECT email, id, display_name FROM users WHERE email LIKE :email");
+    _selectUserByEmail->prepare("SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() + " WHERE email LIKE :email");
   }
   _selectUserByEmail->bindValue(":email", email);
   if (_selectUserByEmail->exec() == false)
@@ -207,7 +207,7 @@ long ApiDb::insertUser(const QString email, const QString displayName)
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
-    _insertUser->prepare("INSERT INTO users (email, display_name) "
+    _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "
                          "VALUES (:email, :display_name) "
                          "RETURNING id");
   }
@@ -443,12 +443,12 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
     _selectNodesByBounds.reset(new QSqlQuery(_db));
     _selectNodesByBounds->setForwardOnly(true);
   }
-  QString sql = "select * from " + tableTypeToTableName(TableType::Node) + " where";
+  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::Node) + " WHERE";
   sql += " visible = true";
-  sql += " and (" + _getTileWhereCondition(tileRanges) + ")";
-  sql += " and longitude >= :minLon and longitude <= :maxLon and latitude >= :minLat ";
-  sql += " and latitude <= :maxLat";
-  sql += " order by id desc";
+  sql += " AND (" + _getTileWhereCondition(tileRanges) + ")";
+  sql += " AND longitude >= :minLon AND longitude <= :maxLon AND latitude >= :minLat ";
+  sql += " AND latitude <= :maxLat";
+  sql += " ORDER BY id DESC";
   _selectNodesByBounds->prepare(sql);
   if (!_floatingPointCoords)
   {
@@ -490,9 +490,9 @@ shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeI
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select distinct way_id from " + tableTypeToTableName(TableType::WayNode) + " where";
-  sql += " node_id in (" + QStringList(nodeIds.toList()).join(",") + ")";
-  //sql += " order by way_id desc";
+  QString sql = "SELECT DISTINCT way_id FROM " + tableTypeToTableName(TableType::WayNode) + " WHERE";
+  sql += " node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
+  //sql += " ORDER BY way_id desc";
   _selectWayIdsByWayNodeIds->prepare(sql);
   LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
 
@@ -520,10 +520,10 @@ shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& 
     _selectElementsByElementIdList->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select * from " + tableTypeToTableName(tableType) + " where";
+  QString sql = "SELECT * FROM " + tableTypeToTableName(tableType) + " WHERE";
   sql += " visible = true";
-  sql += " and id in (" + QStringList(elementIds.toList()).join(",") + ")";
-  sql += " order by id desc";
+  sql += " AND id IN (" + QStringList(elementIds.toList()).join(",") + ")";
+  sql += " ORDER BY id DESC";
   _selectElementsByElementIdList->prepare(sql);
   LOG_VARD(_selectElementsByElementIdList->lastQuery());
 
@@ -550,9 +550,9 @@ shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayId
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select distinct node_id from " + tableTypeToTableName(TableType::WayNode) + " where";
-  sql += " way_id in (" + QStringList(wayIds.toList()).join(",") + ")";
-  //sql += " order by sequence_id";
+  QString sql = "SELECT DISTINCT node_id FROM " + tableTypeToTableName(TableType::WayNode) + " WHERE";
+  sql += " way_id IN (" + QStringList(wayIds.toList()).join(",") + ")";
+  //sql += " ORDER BY sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
   LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
 
@@ -580,11 +580,11 @@ shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& m
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "select distinct relation_id from " +
-    tableTypeToTableName(TableType::RelationMember) + " where";
+  QString sql = "SELECT DISTINCT relation_id FROM " +
+    tableTypeToTableName(TableType::RelationMember) + " WHERE";
   sql += " member_type = :elementType";
-  sql += " and member_id in (" + QStringList(memberIds.toList()).join(",") + ")";
-  //sql += " order by relation_id desc";
+  sql += " AND member_id IN (" + QStringList(memberIds.toList()).join(",") + ")";
+  //sql += " ORDER BY relation_id DESC";
   _selectRelationIdsByMemberIds->prepare(sql);
   if (!_capitalizeRelationMemberType)
   {
@@ -660,7 +660,7 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
   {
     _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
     _selectChangesetsCreatedAfterTime->prepare(
-      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ").arg(ApiDb::getChangesetsTableName()) +
       QString("WHERE created_at > :createdAt"));
     _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
   }

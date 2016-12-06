@@ -165,10 +165,6 @@ private:
 
   void _init();
 
-  // Osm Api DB table strings
-  static QString _getWayNodesTableName() { return "current_way_nodes"; }
-  static QString _getRelationMembersTableName() { return "current_relation_members"; }
-
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
 
 };
