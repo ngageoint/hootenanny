@@ -10,6 +10,8 @@ export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 rm -rf test-output/cmd/ServiceHootApiDbConflateTest
 mkdir -p test-output/cmd/ServiceHootApiDbConflateTest
 
+# select all
+
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA" &
 hoot delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB" &
 wait
@@ -35,23 +37,26 @@ export PGPASSWORD=$DB_PASSWORD
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA && echo "Error: delete-map did not remove AllDataTypesA dataset"
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB && echo "Error: delete-map did not remove AllDataTypesB dataset"
 
-#hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
-#hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
-#wait
+# select by bounds
 
-#hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads" &
-#hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads" &
-#wait
+hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
+hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
+wait
 
-#hoot conflate $HOOT_OPTS "$DB_URL/DcGisRoads" "$DB_URL/DcTigerRoads" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
-#hoot stats --quick test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads" &
+hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads" &
+wait
 
-#hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
-#hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
-#wait
+hoot conflate $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagVisitor;hoot::RemoveAttributeVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attribute.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads" "$DB_URL/DcTigerRoads" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+hoot is-match test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
 
-#export PGPASSWORD=$DB_PASSWORD
-#psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads && echo "Error: delete-map did not remove DcGisRoads dataset"
-#psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads && echo "Error: delete-map did not remove DcTigerRoads dataset"
+hoot delete-map $HOOT_OPTS "$DB_URL/DcGisRoads" &
+hoot delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads" &
+wait
+
+export PGPASSWORD=$DB_PASSWORD
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads && echo "Error: delete-map did not remove DcGisRoads dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads && echo "Error: delete-map did not remove DcTigerRoads dataset"
+
 
 
