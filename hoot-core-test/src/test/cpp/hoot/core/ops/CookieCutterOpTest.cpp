@@ -95,7 +95,7 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "current");
 
 
