@@ -5,6 +5,7 @@ mkdir -p test-output/cmd/ConflateCmdStatsTest
 STATS_OUT=test-output/cmd/ConflateCmdStatsTest/all-data-types-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+# TODO: remove the passed in match/merger creators here
 hoot conflate -D writer.include.debug=true -D "match.creators=hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator" -D "merger.creators=hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator" test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm $STATS_OUT.osm --stats > $STATS_OUT
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output

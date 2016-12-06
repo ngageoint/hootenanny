@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -455,7 +455,7 @@ void JsonOsmSchemaLoader::_processObject(const QVariantMap& v, OsmSchema& s)
 {
   if (v.contains("import"))
   {
-    LOG_DEBUG("Loading: " + v["import"].toString());
+    LOG_TRACE("Loading: " + v["import"].toString());
     load(_baseDir.back() + v["import"].toString(), s);
   }
   else if (v.contains("objectType"))

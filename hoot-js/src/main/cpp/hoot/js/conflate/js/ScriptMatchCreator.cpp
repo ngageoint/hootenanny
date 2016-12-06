@@ -449,16 +449,17 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
       if (!d.description.isEmpty())
       {
         result.push_back(d);
+        LOG_TRACE(d.description);
       }
       else
       {
-        LOG_DEBUG(QString("Skipping reporting script %1 because it has no "
+        LOG_TRACE(QString("Skipping reporting script %1 because it has no "
           "description.").arg(scripts[i]));
       }
     }
     catch (HootException& e)
     {
-      LOG_INFO("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
+      LOG_WARN("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
     }
   }
 
