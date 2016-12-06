@@ -119,6 +119,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
       LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
                QString::number(element->getId()));
     }
+    //We don't need to carry this tag around once the value is set on the element...it will
+    //be reinstated by some writers, though.
     tags.remove("hoot:status");
   }
 
@@ -128,7 +130,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     if (r)
     {
       r->setType(tags["type"]);
-      tags.remove("type");
+      //I don't think OSM non-hoot metadata tags should be removed here...
+      //tags.remove("type");
     }
   }
 
@@ -143,7 +146,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException& /*e*/)
       {
         ok = false;
       }
@@ -153,6 +156,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         LOG_WARN("Error parsing error:circular.");
       }
     }
+    //We don't need to carry this tag around once the value is set on the element...it will
+    //be reinstated by some writers, though.
     tags.remove("error:circular");
   }
   else if (tags.contains("accuracy"))
@@ -167,7 +172,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException& /*e*/)
       {
         ok = false;
       }
@@ -177,7 +182,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         LOG_WARN("Error parsing accuracy.");
       }
     }
-    tags.remove("accuracy");
+    //I don't think OSM non-hoot metadata tags should be removed here...
+    //tags.remove("accuracy");
   }
 }
 
@@ -308,7 +314,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   LOG_INFO(
     "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
-    " elements.");
+    " total elements.");
   LOG_VARD(boundedNodeCount);
   LOG_VARD(boundedWayCount);
   LOG_VARD(boundedRelationCount);
