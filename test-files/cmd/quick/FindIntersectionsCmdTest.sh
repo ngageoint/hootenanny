@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/FindIntersectionsCmdTest
+mkdir -p $HOOT_HOME/test-output/cmd/quick/FindIntersectionsCmdTest
 
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
-comparefile=$HOOT_HOME/test-files/cmd/slow/FindIntersectionsCmdTest/out.osm
-outputfile=$HOOT_HOME/test-output/cmd/slow/FindIntersectionsCmdTest/out.osm
+comparefile=$HOOT_HOME/test-files/cmd/quick/FindIntersectionsCmdTest/out.osm
+outputfile=$HOOT_HOME/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm
 
 # Run the command.
 hoot find-intersections $inputfile $outputfile
