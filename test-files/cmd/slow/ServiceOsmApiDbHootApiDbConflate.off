@@ -139,8 +139,6 @@ echo "STEP 11: Executing the changeset SQL on the osm api db..."
 echo ""
 hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
-exit
-
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 12: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
