@@ -102,7 +102,7 @@ exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
     var radius = e.getCircularError();
-    //hoot.debug("radius start: " + radius);
+    hoot.trace("radius start: " + radius);
 
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
@@ -113,7 +113,7 @@ exports.getSearchRadius = function(e) {
         }
     }
 
-    //hoot.debug("radius final: " + radius);
+    hoot.trace("radius final: " + radius);
 
     return radius;
 }
@@ -190,13 +190,13 @@ function additiveScore(map, e1, e2) {
     var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
     if (oneGeneric)
     {
-      hoot.debug("One element in the pair is generic.");
+      hoot.trace("One element in the pair is generic.");
     }
 
     var e1SearchRadius = exports.getSearchRadius(e1);
-    hoot.debug("e1SearchRadius: " + e1SearchRadius);
+    hoot.trace("e1SearchRadius: " + e1SearchRadius);
     var e2SearchRadius = exports.getSearchRadius(e2);
-    hoot.debug("e2SearchRadius: " + e2SearchRadius);
+    hoot.trace("e2SearchRadius: " + e2SearchRadius);
     var searchRadius;
     if (oneGeneric)
     {
@@ -211,9 +211,9 @@ function additiveScore(map, e1, e2) {
 
     if (d > searchRadius)
     {
-        hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-        hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
-        hoot.debug(
+        hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+        hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+        hoot.trace(
           "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
           result.score);
         return result;
@@ -330,18 +330,18 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    hoot.debug("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
     if (e1.getTags().get("note"))
     {
-      hoot.debug("e1 note: " + e1.getTags().get("note"));
+      hoot.trace("e1 note: " + e1.getTags().get("note"));
     }
-    hoot.debug("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
     if (e2.getTags().get("note"))
     {
-      hoot.debug("e2 note: " + e2.getTags().get("note"));
+      hoot.trace("e2 note: " + e2.getTags().get("note"));
     }
-    hoot.debug("reason: " + reason);
-    hoot.debug("score: " + score);
+    hoot.trace("reason: " + reason);
+    hoot.trace("score: " + score);
 
     return result;
 }

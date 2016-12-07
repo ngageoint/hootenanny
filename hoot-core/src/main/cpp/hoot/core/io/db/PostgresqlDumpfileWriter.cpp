@@ -178,9 +178,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Create our user data if the email value is set
   if ( _configData.addUserEmail.isEmpty() == false )
   {
-    _createTable( "users", "COPY users (email, id, pass_crypt, creation_time) FROM stdin;\n");
+    _createTable( ApiDb::getUsersTableName(), "COPY " + ApiDb::getUsersTableName() + " (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
-    *(_outputSections["users"].second) <<
+    *(_outputSections[ApiDb::getUsersTableName()].second) <<
       QString("%1\t%2\t\tNOW()\n").arg(
         _configData.addUserEmail,
         QString::number(_configData.addUserId) );
@@ -277,8 +277,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   _writeNodeToTables(n, nodeDbId);
 
   _writeTagsToTables(t, nodeDbId,
-    _outputSections["current_node_tags"].second, "%1\t%2\t%3\n",
-    _outputSections["node_tags"].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentNodeTagsTableName()].second, "%1\t%2\t%3\n",
+    _outputSections[ApiDb::getNodeTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.nodesWritten++;
   _incrementChangesInChangeset();
@@ -327,8 +327,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
   _writeTagsToTables(t, wayDbId,
-    _outputSections["current_way_tags"].second, "%1\t%2\t%3\n",
-    _outputSections["way_tags"].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentWayTagsTableName()].second, "%1\t%2\t%3\n",
+    _outputSections[ApiDb::getWayTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.waysWritten++;
   _incrementChangesInChangeset();
@@ -377,8 +377,8 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
   _writeRelationMembersToTables( r );
 
   _writeTagsToTables( r->getTags(), relationDbId,
-    _outputSections["current_relation_tags"].second, "%1\t%2\t%3\n",
-    _outputSections["relation_tags"].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentRelationTagsTableName()].second, "%1\t%2\t%3\n",
+    _outputSections[ApiDb::getRelationTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.relationsWritten++;
   _incrementChangesInChangeset();
@@ -409,7 +409,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   else
   {
     _db.open(ConfigOptions().getPostgresqlDumpfileWriterIdAwareUrl());
-    _configData.startingChangesetId = _db.getNextId("changesets");
+    _configData.startingChangesetId = _db.getNextId(ApiDb::getChangesetsTableName());
     _configData.startingNodeId      = _db.getNextId(ElementType::Node);
     _configData.startingWayId       = _db.getNextId(ElementType::Way);
     _configData.startingRelationId  = _db.getNextId(ElementType::Relation);
@@ -428,39 +428,39 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
 
   sections.push_back(QString("byte_order_mark"));
   sections.push_back(QString("sequence_updates"));
-  sections.push_back(QString("users"));
-  sections.push_back(QString("changesets"));
-  sections.push_back(QString("current_nodes"));
-  sections.push_back(QString("current_node_tags"));
-  sections.push_back(QString("nodes"));
-  sections.push_back(QString("node_tags"));
-  sections.push_back(QString("current_ways"));
-  sections.push_back(QString("current_way_nodes"));
-  sections.push_back(QString("current_way_tags"));
-  sections.push_back(QString("ways"));
-  sections.push_back(QString("way_nodes"));
-  sections.push_back(QString("way_tags"));
-  sections.push_back(QString("current_relations"));
-  sections.push_back(QString("current_relation_members"));
-  sections.push_back(QString("current_relation_tags"));
-  sections.push_back(QString("relations"));
-  sections.push_back(QString("relation_members"));
-  sections.push_back(QString("relation_tags"));
+  sections.push_back(ApiDb::getUsersTableName());
+  sections.push_back(ApiDb::getChangesetsTableName());
+  sections.push_back(ApiDb::getCurrentNodesTableName());
+  sections.push_back(ApiDb::getCurrentNodeTagsTableName());
+  sections.push_back(ApiDb::getNodesTableName());
+  sections.push_back(ApiDb::getNodeTagsTableName());
+  sections.push_back(ApiDb::getCurrentWaysTableName());
+  sections.push_back(ApiDb::getCurrentWayNodesTableName());
+  sections.push_back(ApiDb::getCurrentWayTagsTableName());
+  sections.push_back(ApiDb::getWaysTableName());
+  sections.push_back(ApiDb::getWayNodesTableName());
+  sections.push_back(ApiDb::getWayTagsTableName());
+  sections.push_back(ApiDb::getCurrentRelationsTableName());
+  sections.push_back(ApiDb::getCurrentRelationMembersTableName());
+  sections.push_back(ApiDb::getCurrentRelationTagsTableName());
+  sections.push_back(ApiDb::getRelationsTableName());
+  sections.push_back(ApiDb::getRelationMembersTableName());
+  sections.push_back(ApiDb::getRelationTagsTableName());
 
   return sections;
 }
 
 void PostgresqlDumpfileWriter::_createNodeTables()
 {
-  _createTable( "current_nodes",
-                "COPY current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
-  _createTable( "current_node_tags",
-                "COPY current_node_tags (node_id, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentNodesTableName(),
+                "COPY " + ApiDb::getCurrentNodesTableName() + " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentNodeTagsTableName(),
+                "COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n" );
 
-  _createTable( "nodes",
-                "COPY nodes (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
-  _createTable( "node_tags",
-                "COPY node_tags (node_id, version, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getNodesTableName(),
+                "COPY " + ApiDb::getNodesTableName() + " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
+  _createTable( ApiDb::getNodeTagsTableName(),
+                "COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_zeroWriteStats()
@@ -546,7 +546,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  *(_outputSections["current_nodes"].second) << outputLine;
+  *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
     QString::number(nodeDbId),
@@ -556,7 +556,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
     datestring,
     tileNumberString );
 
-  *(_outputSections["nodes"].second) << outputLine;
+  *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeTagsToTables(
@@ -583,13 +583,13 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
 
 void PostgresqlDumpfileWriter::_createWayTables()
 {
-  _createTable( "current_ways",       "COPY current_ways (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
-  _createTable( "current_way_tags",   "COPY current_way_tags (way_id, k, v) FROM stdin;\n" );
-  _createTable( "current_way_nodes",  "COPY current_way_nodes (way_id, node_id, sequence_id) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentWaysTableName(),     "COPY " + ApiDb::getCurrentWaysTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentWayTagsTableName(),  "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentWayNodesTableName(), "COPY " + ApiDb::getCurrentWayNodesTableName() + " (way_id, node_id, sequence_id) FROM stdin;\n" );
 
-  _createTable( "ways",               "COPY ways (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( "way_tags",           "COPY way_tags (way_id, version, k, v) FROM stdin;\n" );
-  _createTable( "way_nodes",          "COPY way_nodes (way_id, node_id, version, sequence_id) FROM stdin;\n" );
+  _createTable( ApiDb::getWaysTableName(),            "COPY " + ApiDb::getWaysTableName() + " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable( ApiDb::getWayTagsTableName(),         "COPY " + ApiDb::getWayTagsTableName() + " (way_id, version, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getWayNodesTableName(),        "COPY " + ApiDb::getWayNodesTableName() + " (way_id, node_id, version, sequence_id) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
@@ -604,14 +604,14 @@ void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_ways"].second) << outputLine;
+  *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["ways"].second) << outputLine;
+  *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
@@ -619,8 +619,8 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 {
   unsigned int nodeIndex = 1;
 
-  boost::shared_ptr<QTextStream> currentWayNodesStream  = _outputSections["current_way_nodes"].second;
-  boost::shared_ptr<QTextStream> wayNodesStream         = _outputSections["way_nodes"].second;
+  boost::shared_ptr<QTextStream> currentWayNodesStream  = _outputSections[ApiDb::getCurrentWayNodesTableName()].second;
+  boost::shared_ptr<QTextStream> wayNodesStream         = _outputSections[ApiDb::getWayNodesTableName()].second;
   const QString currentWaynodesFormat("%1\t%2\t%3\n");
   const QString waynodesFormat("%1\t%2\t1\t%3\n");
   const QString dbWayIdString( QString::number(dbWayId));
@@ -647,13 +647,13 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 
 void PostgresqlDumpfileWriter::_createRelationTables()
 {
-  _createTable( "current_relations",        "COPY current_relations (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
-  _createTable( "current_relation_tags",    "COPY current_relation_tags (relation_id, k, v) FROM stdin;\n" );
-  _createTable( "current_relation_members", "COPY current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentRelationsTableName(),        "COPY " + ApiDb::getCurrentRelationsTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentRelationTagsTableName(),     "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getCurrentRelationMembersTableName(),  "COPY " + ApiDb::getCurrentRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
 
-  _createTable( "relations",                "COPY relations (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( "relation_tags",            "COPY relation_tags (relation_id, version, k, v) FROM stdin;\n" );
-  _createTable( "relation_members",         "COPY relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
+  _createTable( ApiDb::getRelationsTableName(),               "COPY " + ApiDb::getRelationsTableName() + " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable( ApiDb::getRelationTagsTableName(),            "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, version, k, v) FROM stdin;\n" );
+  _createTable( ApiDb::getRelationMembersTableName(),         "COPY " + ApiDb::getRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
@@ -668,14 +668,14 @@ void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype re
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["current_relations"].second) << outputLine;
+  *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << outputLine;
 
   outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
 
-  *(_outputSections["relations"].second) << outputLine;
+  *(_outputSections[ApiDb::getRelationsTableName()].second) << outputLine;
 }
 
 void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelationPtr& relation )
@@ -758,8 +758,8 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   const QString memberRefIdString( QString::number(memberDbId) );
   const QString memberSequenceString( QString::number(memberSequenceIndex) );
   const QString memberRole = _escapeCopyToData( memberEntry.getRole() );
-  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections["current_relation_members"].second;
-  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections["relation_members"].second;
+  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
+  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections[ApiDb::getRelationMembersTableName()].second;
   const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
   const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
@@ -878,10 +878,10 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
   if ( _changesetData.changesetId == _configData.startingChangesetId )
   {
     _createTable(
-      "changesets", "COPY changesets (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
+      ApiDb::getChangesetsTableName(), "COPY " + ApiDb::getChangesetsTableName() + " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
   }
 
-  boost::shared_ptr<QTextStream> changesetsStream  = _outputSections["changesets"].second;
+  boost::shared_ptr<QTextStream> changesetsStream  = _outputSections[ApiDb::getChangesetsTableName()].second;
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 
@@ -907,24 +907,24 @@ void PostgresqlDumpfileWriter::_writeSequenceUpdates()
   // Users
   if ( _configData.addUserEmail.isEmpty() == false )
   {
-    *sequenceUpdatesStream << sequenceUpdateFormat.arg("users_id_seq",
+    *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getUsersSequenceName(),
       QString::number(_configData.addUserId + 1) );
   }
 
   // Changesets
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg("changesets_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(),
     QString::number(_changesetData.changesetId + 1) );
 
   // Nodes
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_nodes_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(),
     QString::number(_idMappings.nextNodeId) );
 
   // Ways
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_ways_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(),
     QString::number(_idMappings.nextWayId) );
 
   // Relations
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg("current_relations_id_seq",
+  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentRelationsSequenceName(),
     QString::number(_idMappings.nextRelationId) ) << "\n\n";
 }
 
