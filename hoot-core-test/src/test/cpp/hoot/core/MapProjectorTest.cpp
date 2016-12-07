@@ -426,7 +426,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapProjectorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapProjectorTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapProjectorTest, "current");
 
 }
