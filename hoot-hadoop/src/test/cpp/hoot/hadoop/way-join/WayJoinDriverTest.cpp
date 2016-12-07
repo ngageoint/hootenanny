@@ -95,6 +95,6 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoinDriverTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoinDriverTest, "glacial");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoinDriverTest, "current");
 

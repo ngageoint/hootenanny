@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -138,7 +138,7 @@ public:
     reader.setUseDataSourceIds(true);
     reader.read(
       "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-combined-out-1.osm", combinedMap);
-      
+
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
@@ -158,6 +158,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyMatchScorerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyMatchScorerTest, "slow");
 
 }
