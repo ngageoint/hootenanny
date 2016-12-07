@@ -26,7 +26,7 @@ Feature: Import Geonames Dataset
     Scenario: Import Dataset with txt file extension
         And I press "Import Single Dataset"
         And I select the "File (geonames,txt)" option in the "Select Import Type" combobox
-        And I select "/test-files/cmd/glacial/ConvertGeoNames.txt" dataset
+        And I select "/test-files/cmd/quick/ConvertGeoNames.txt" dataset
         Then I should see element "[id='importDatasetLayerName']" with value "ConvertGeoNames"
         Then I type "geonames_txt_Cucumber" in input "importDatasetLayerName"
         When I press "big.loud" span with text "Import"
