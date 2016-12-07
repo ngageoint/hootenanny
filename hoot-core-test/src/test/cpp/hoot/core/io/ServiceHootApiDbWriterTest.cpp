@@ -116,7 +116,7 @@ public:
 
     long mapId = writer.getMapId();
 
-    compareRecords("SELECT tags FROM " + HootApiDb::getNodesTableName(mapId) +
+    compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "\"note\"=>\"n1',\n\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "\"note\"=>\"n2\\\\\\\"\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -165,13 +165,13 @@ public:
 
     long mapId = writer.getMapId();
 
-    compareRecords("SELECT email, display_name FROM users "
-                   "WHERE email LIKE :email",
+    compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
+                   " WHERE email LIKE :email",
                    "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getNodesTableName(mapId) +
+                   HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -179,14 +179,14 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getWaysTableName(mapId) +
+                   HootApiDb::getCurrentWaysTableName(mapId) +
                    " ORDER BY id",
                    "1;true;1;\"note\"=>\"w1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"13\"\n"
                    "2;true;1;\"note\"=>\"w2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"14\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT way_id, node_id, sequence_id FROM " +
-                   HootApiDb::getWayNodesTableName(mapId) +
+                   HootApiDb::getCurrentWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1;1;0\n"
                    "1;2;1\n"
@@ -195,13 +195,13 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getRelationsTableName(mapId),
+                   HootApiDb::getCurrentRelationsTableName(mapId),
                    "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT relation_id, member_type, member_id, member_role, sequence_id "
                    "FROM " +
-                   HootApiDb::getRelationMembersTableName(mapId) +
+                   HootApiDb::getCurrentRelationMembersTableName(mapId) +
                    " ORDER BY relation_id, member_type",
                    "1;node;1;n1;0\n"
                    "1;way;1;w1;1",
@@ -211,9 +211,9 @@ public:
     db.open(ServicesDbTestUtils::getDbModifyUrl());
 
     QStringList tableNames;
-    tableNames.append(HootApiDb::getNodesTableName(mapId));
-    tableNames.append(HootApiDb::getWaysTableName(mapId));
-    tableNames.append(HootApiDb::getRelationsTableName(mapId));
+    tableNames.append(HootApiDb::getCurrentNodesTableName(mapId));
+    tableNames.append(HootApiDb::getCurrentWaysTableName(mapId));
+    tableNames.append(HootApiDb::getCurrentRelationsTableName(mapId));
 
     for (int i = 0; i < tableNames.length(); i++)
     {
@@ -273,13 +273,13 @@ public:
     writer.write(map);
     long mapId = writer.getMapId();
 
-    compareRecords("SELECT email, display_name FROM users "
-                   "WHERE email LIKE :email",
+    compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
+                   " WHERE email LIKE :email",
                    "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getNodesTableName(mapId) +
+                   HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
                    "0;0;true;3221225472;1;\"note\"=>\"n1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"10\"\n"
                    "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"11\"\n"
@@ -287,14 +287,14 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getWaysTableName(mapId) +
+                   HootApiDb::getCurrentWaysTableName(mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"w2\", \"hoot:status\"=>\"2\", \"error:circular\"=>\"14\"\n"
                    "true;1;\"note\"=>\"w1\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"13\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT sequence_id FROM " +
-                   HootApiDb::getWayNodesTableName(mapId) +
+                   HootApiDb::getCurrentWayNodesTableName(mapId) +
                    " ORDER BY way_id, node_id, sequence_id",
                    "1\n"
                    "0\n"
@@ -303,7 +303,7 @@ public:
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getRelationsTableName(mapId) +
+                   HootApiDb::getCurrentRelationsTableName(mapId) +
                    " ORDER BY id",
                    "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"\n"
                    "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\"",
@@ -311,7 +311,7 @@ public:
 
     compareRecords("SELECT member_type, member_role, sequence_id "
                    "FROM " +
-                   HootApiDb::getRelationMembersTableName(mapId) +
+                   HootApiDb::getCurrentRelationMembersTableName(mapId) +
                    " ORDER BY relation_id, member_type",
                    "relation;r1;0\n"
                    "node;n1;0\n"
