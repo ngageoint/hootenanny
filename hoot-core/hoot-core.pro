@@ -518,6 +518,8 @@ SOURCES += \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.cpp \
     src/main/cpp/hoot/core/ops/RemoveWayOp.cpp \
+    src/main/cpp/hoot/core/algorithms/FrechetDistance.cpp \
+    src/main/cpp/hoot/core/algorithms/FrechetSublineMatcher.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.cpp \
@@ -1064,6 +1066,8 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
     src/main/cpp/hoot/core/ops/RemoveWayOp.h \
+    src/main/cpp/hoot/core/algorithms/FrechetDistance.h \
+    src/main/cpp/hoot/core/algorithms/FrechetSublineMatcher.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatch.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMerger.h \
