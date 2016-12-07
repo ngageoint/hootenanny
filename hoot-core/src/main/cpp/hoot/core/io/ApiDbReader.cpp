@@ -312,7 +312,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     }
   }
 
-  LOG_INFO(
+  LOG_DEBUG(
     "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
     " total elements.");
   LOG_VARD(boundedNodeCount);

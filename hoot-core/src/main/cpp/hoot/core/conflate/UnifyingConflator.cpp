@@ -220,7 +220,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
-  LOG_INFO("Post constraining match count: " << _matches.size());
+  LOG_DEBUG("Post constraining match count: " << _matches.size());
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the

@@ -189,7 +189,7 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     }
   }
 
-  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
