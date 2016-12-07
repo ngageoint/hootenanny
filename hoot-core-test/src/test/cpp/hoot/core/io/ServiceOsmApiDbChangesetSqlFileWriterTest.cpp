@@ -122,7 +122,7 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkdir("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
+    QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
     shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
 
     //clear out the db so we get consistent next id results

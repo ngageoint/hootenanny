@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/algorithms/zindex/Range.h>
 
 // Qt
 #include <QFile>
@@ -84,11 +85,6 @@ public:
   virtual vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
-   * Returns a results iterator to all OSM elements for a given bbox.
-   */
-  shared_ptr<QSqlQuery> selectBoundedElements(const long elementId, const ElementType& elementType, const QString& bbox);
-
-  /**
    * Returns a results iterator to a node for a given node id.
    */
   shared_ptr<QSqlQuery> selectNodeById(const long elementId);
@@ -98,19 +94,27 @@ public:
     */
   void deleteData();
 
+  /**
+   * Purpose: to extract tags from the extra lines returned in the
+   *   selectAll for OsmApi data
+   * Input: apidb row in form with row[8]=k, row[9]=v
+   * Output: "k"=>"v"
+   * Note: this gets the tags in a form that is the same as how selectAll
+   *       returns them for Services DB
+   *
+   * @param row
+   * @param Type
+   * @return
+   */
   QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+
+  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
   shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
-  /**
-   * Gets the next sequence ID for the given element type
-   *
-   * @param type element type
-   * @return an element ID
-   */
-  long getNextId(const ElementType type);
+  virtual long getNextId(const ElementType& elementType);
 
   /**
    * Gets the next sequence ID for the given database table
@@ -119,15 +123,6 @@ public:
    * @return an element ID
    */
   long getNextId(const QString tableName);
-
-  /**
-   * Returns all changesets created after the specified time.
-   *
-   * @param timeStr time string for which to search for changesets created after; should be of the
-   * format specified by the TIME_FORMAT constant
-   * @return a SQL results iterator
-   */
-  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
@@ -149,28 +144,28 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
+
+protected:
+
+  void _resetQueries();
+
 private:
 
   bool _inTransaction;
 
   shared_ptr<QSqlQuery> _selectElementsForMap;
+  shared_ptr<QSqlQuery> _selectTagsForNode;
   shared_ptr<QSqlQuery> _selectTagsForWay;
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
-  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
-
-  void _resetQueries();
 
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
-
-  // Osm Api DB table strings
-  static QString _getWayNodesTableName() { return "current_way_nodes"; }
-  static QString _getRelationMembersTableName() { return "current_relation_members"; }
 
 };
 

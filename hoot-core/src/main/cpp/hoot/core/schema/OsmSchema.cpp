@@ -1806,6 +1806,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
+  LOG_INFO("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

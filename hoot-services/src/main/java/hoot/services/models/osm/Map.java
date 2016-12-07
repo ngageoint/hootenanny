@@ -291,7 +291,7 @@ public class Map extends Maps {
                 }
 
                 List<Long> pageWayIds = createQuery(getId())
-                        .select(currentWayNodes.wayId)
+                        .selectDistinct(currentWayNodes.wayId)
                         .from(currentWayNodes)
                         .where(currentWayNodes.nodeId.in(pageList))
                         .fetch();
@@ -366,7 +366,7 @@ public class Map extends Maps {
                         }
 
                         wayNodeIds.addAll(createQuery(getId())
-                                .select(currentWayNodes.nodeId)
+                                .selectDistinct(currentWayNodes.nodeId)
                                 .distinct()
                                 .from(currentWayNodes)
                                 .where(currentWayNodes.wayId.in(pageList))
@@ -491,7 +491,7 @@ public class Map extends Maps {
                     }
 
                     nodeSetRelationIds.addAll(new HashSet<>(createQuery(getId())
-                            .select(currentRelationMembers.relationId)
+                            .selectDistinct(currentRelationMembers.relationId)
                             .from(currentRelationMembers)
                             .where(currentRelationMembers.memberId.in(pageList)
                                     .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.node)))
@@ -517,7 +517,7 @@ public class Map extends Maps {
 
                     waySetRelationIds.addAll(new HashSet<>(
                             createQuery(getId())
-                                    .select(currentRelationMembers.relationId)
+                                    .selectDistinct(currentRelationMembers.relationId)
                                     .from(currentRelationMembers)
                                     .where(currentRelationMembers.memberId.in(pageList)
                                             .and(currentRelationMembers.memberType.eq(DbUtils.nwr_enum.way)))

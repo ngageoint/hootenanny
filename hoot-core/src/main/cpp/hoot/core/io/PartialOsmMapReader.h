@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,11 +49,6 @@ public:
 
   long getMaxElementsPerMap() { return _maxElementsPerMap; }
 
-  /**
-   *  @todo is this needed?
-   */
-  //virtual void initializePartial() = 0;
-
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 
   /**
@@ -83,7 +78,6 @@ protected:
   long _maxElementsPerMap;
   long _elementsRead;
   shared_ptr<OsmMap> _partialMap;
-  QString _bbox;
 
 };
 

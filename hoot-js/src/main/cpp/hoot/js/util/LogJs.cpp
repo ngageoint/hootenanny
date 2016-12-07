@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,7 +56,9 @@ void LogJs::Init(Handle<Object> exports)
   log->Set(String::NewSymbol("init"), FunctionTemplate::New(init)->GetFunction());
 
   exports->Set(String::NewSymbol("log"), FunctionTemplate::New(logInfo)->GetFunction());
+  exports->Set(String::NewSymbol("trace"), FunctionTemplate::New(logTrace)->GetFunction());
   exports->Set(String::NewSymbol("debug"), FunctionTemplate::New(logDebug)->GetFunction());
+  exports->Set(String::NewSymbol("logTraceg"), FunctionTemplate::New(logDebug)->GetFunction());
   exports->Set(String::NewSymbol("logDebug"), FunctionTemplate::New(logDebug)->GetFunction());
   exports->Set(String::NewSymbol("logVerbose"), FunctionTemplate::New(logVerbose)->GetFunction());
   exports->Set(String::NewSymbol("logInfo"), FunctionTemplate::New(logInfo)->GetFunction());
@@ -129,6 +131,14 @@ Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
     }
   }
 
+  return scope.Close(Undefined());
+}
+
+Handle<Value> LogJs::logTrace(const Arguments& args)
+{
+  HandleScope scope;
+//  Context::Scope context_scope(Context::GetCurrent());
+  log(args, Log::Trace);
   return scope.Close(Undefined());
 }
 

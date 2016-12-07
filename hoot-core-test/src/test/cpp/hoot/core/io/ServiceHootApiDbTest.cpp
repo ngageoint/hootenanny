@@ -41,9 +41,9 @@
 namespace hoot
 {
 
-class HootApiDbTest : public CppUnit::TestFixture
+class ServiceHootApiDbTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(HootApiDbTest);
+  CPPUNIT_TEST_SUITE(ServiceHootApiDbTest);
 
   // standard hoot services tests
   CPPUNIT_TEST(runDbVersionTest);
@@ -64,7 +64,7 @@ class HootApiDbTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "HootApiDbTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceHootApiDbTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -125,25 +125,19 @@ public:
 
     CPPUNIT_ASSERT(database.mapExists(mapId));
 
-    HOOT_STR_EQUALS(true, database.hasTable("current_nodes" + database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(true, database.hasTable("current_relation_members" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(true, database.hasTable("current_relations" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(true, database.hasTable("current_way_nodes" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(true, database.hasTable("current_ways" + database.getMapIdString(mapId)));
+    HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentNodesTableName(mapId)));
+    HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentRelationMembersTableName(mapId)));
+    HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentRelationsTableName(mapId)));
+    HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentWayNodesTableName(mapId)));
+    HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentWaysTableName(mapId)));
 
     database.deleteMap(mapId);
 
-    HOOT_STR_EQUALS(false, database.hasTable("current_nodes" + database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(false, database.hasTable("current_relation_members" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(false, database.hasTable("current_relations" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(false, database.hasTable("current_way_nodes" +
-      database.getMapIdString(mapId)));
-    HOOT_STR_EQUALS(false, database.hasTable("current_ways" + database.getMapIdString(mapId)));
+    HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentNodesTableName(mapId)));
+    HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentRelationMembersTableName(mapId)));
+    HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentRelationsTableName(mapId)));
+    HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentWayNodesTableName(mapId)));
+    HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentWaysTableName(mapId)));
   }
 
   const shared_ptr<QList<long> > insertTestMap1(HootApiDb& database)
@@ -517,7 +511,7 @@ public:
 
     ServicesDbTestUtils::compareRecords(
           "SELECT latitude, longitude, visible, tile, version FROM " +
-          HootApiDb::getNodesTableName(mapId) +
+          HootApiDb::getCurrentNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
           "38;-104;true;1329332431;1",
@@ -530,7 +524,7 @@ public:
 
     ServicesDbTestUtils::compareRecords(
           "SELECT latitude, longitude, visible, tile, version FROM " +
-          HootApiDb::getNodesTableName(mapId) +
+          HootApiDb::getCurrentNodesTableName(mapId) +
           " WHERE id=:id "
           "ORDER BY longitude",
           "3.1415;2.71828;true;3222453693;1",
@@ -571,6 +565,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbTest, "slow");
 
 }

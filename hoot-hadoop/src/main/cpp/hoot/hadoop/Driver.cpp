@@ -51,6 +51,7 @@ void Driver::_addDefaultJobSettings(pp::Job& job)
   shared_ptr<OsmSchemaLoader> l =
     OsmSchemaLoaderFactory::getInstance().createLoader(schemaPath);
   OsmSchema tmp;
+  LOG_INFO("Loading translation files...");
   l->load(schemaPath, tmp);
   set<QString> deps = l->getDependencies();
 

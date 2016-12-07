@@ -36,8 +36,15 @@
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/MapProjector.h>
+#include <hoot/core/visitors/RemoveAttributeVisitor.h>
+
+// Qt
+#include <QDir>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
@@ -46,10 +53,9 @@
 namespace hoot
 {
 
-class HootApiDbReaderTest : public CppUnit::TestFixture
+class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(HootApiDbReaderTest);
-
+  CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
   CPPUNIT_TEST(runCalculateBoundsTest);
   CPPUNIT_TEST(runElementIdTest);
   CPPUNIT_TEST(runUrlMissingMapIdTest);
@@ -58,12 +64,12 @@ class HootApiDbReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPartialReadTest);
   CPPUNIT_TEST(runFactoryReadTest);
   CPPUNIT_TEST(runReadWithElemTest);
-
+  CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static QString userEmail() { return "HootApiDbReaderTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceHootApiDbReaderTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -74,23 +80,21 @@ public:
     HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "HootApiDbReaderTest");
+    database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
     database.close();
-
-    //inserting a map before all of these tests isn't actually necessary (url tests) and
-    //is probably slowing the test run down a little more than necessary
-    mapId = populateMap();
   }
 
   void tearDown()
   {
-    // HootApi DB
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.deleteMap(mapId);
-    database.close();
+    if (mapId != -1)
+    {
+      HootApiDb database;
+      database.open(ServicesDbTestUtils::getDbModifyUrl());
+      database.deleteMap(mapId);
+      database.close();
+    }
   }
 
   long populateMap()
@@ -143,6 +147,22 @@ public:
     return writer.getMapId();
   }
 
+  long insertDataForBoundTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestInput.osm", false,
+      Status::Unknown1);
+
+    HootApiDbWriter writer;
+    writer.setUserEmail(userEmail());
+    writer.setRemap(true);
+    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.write(map);
+    writer.close();
+    return writer.getMapId();
+  }
+
   template<typename T>
   vector<long> getKeys(T begin, T end)
   {
@@ -156,6 +176,8 @@ public:
 
   void runCalculateBoundsTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     QString url = ServicesDbTestUtils::getDbReadUrl(mapId).toString();
     reader.open(url);
@@ -164,6 +186,8 @@ public:
 
   void runElementIdTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     // make sure all the element ids start with -1
     OsmMap::resetCounters();
@@ -414,6 +438,8 @@ public:
 
   void runReadTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
@@ -424,6 +450,8 @@ public:
 
   void runReadWithElemTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
@@ -434,6 +462,8 @@ public:
 
   void runFactoryReadTest()
   {
+    mapId = populateMap();
+
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     verifyFullReadOutput(map);
@@ -441,6 +471,8 @@ public:
 
   void runPartialReadTest()
   {
+    mapId = populateMap();
+
     HootApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
@@ -639,8 +671,61 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, ctr);
   }
 
+  void runReadByBoundsTest()
+  {
+    mapId = insertDataForBoundTest();
+
+    HootApiDbReader reader;
+    shared_ptr<OsmMap> map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
+
+    reader.setBoundingBox(
+      "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
+    reader.read(map);
+
+    //quick check to see if the element counts are off...consult the test output for more detail
+
+    //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
+    //(exact same input data)
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+
+    //We need to drop to set all the element changeset tags here to empty, which will cause them
+    //to be dropped from the file output.  If they aren't dropped, they will increment with each
+    //test and cause the output comparison to fail.
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Changeset));
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributeVisitor attrVis(types);
+    map->visitRw(attrVis);
+
+    MapProjector::projectToWgs84(map);
+
+    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
+    OsmWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(
+      map, "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"),
+      TestUtils::readFile("test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"));
+
+    //just want to make sure I can read against the same data twice in a row w/o crashing and also
+    //make sure I don't get the same result again for a different bounds
+    reader.setBoundingBox("-1,-1,1,1");
+    map.reset(new OsmMap());
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+
+    reader.close();
+  }
+
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootApiDbReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");
 
 }
