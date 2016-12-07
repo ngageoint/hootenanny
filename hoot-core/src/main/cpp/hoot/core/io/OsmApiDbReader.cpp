@@ -77,7 +77,7 @@ void OsmApiDbReader::open(QString urlStr)
   {
     throw HootException("An unsupported URL was passed into OsmApiDbReader: " + urlStr);
   }
-  _elementResultIterator.reset(); //??
+  _elementResultIterator.reset();
   _selectElementType = ElementType::Node;
 
   QUrl url(urlStr);
@@ -88,7 +88,7 @@ void OsmApiDbReader::open(QString urlStr)
 
   _database->open(url);
 
-  if(osmElemId.length() > 0 && osmElemType.length() > 0)
+  if (osmElemId.length() > 0 && osmElemType.length() > 0)
   {
     _osmElemId = osmElemId.toLong(&ok);
     _osmElemType = ElementType::fromString(osmElemType);
@@ -108,9 +108,9 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
-  //TODO: this check is strange
-  else if(_bounds.isNull() || _bounds.toString() == "-180,-90,180,90" ||
-          _bounds.toString() == "-180.0,-90.0,180.0,90.0")
+  else if (_bounds.isNull() ||
+            (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
+              && _bounds.getMaxY() == 90.0))
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -160,15 +160,16 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   }
   if (tags.size() > 0)
   {
-    LOG_VART(tags);
+    //LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-    _addTagsToElement(element);
   }
 }
 
+//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
+//this read performs better for some reason
 void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
-  LOG_DEBUG("IN OsmApiDbReader::read(,)...");
+  long elementCount = 0; //TODO: break this out by element type
   long long lastId = LLONG_MIN;
   shared_ptr<Element> element;
   QStringList tags;
@@ -189,13 +190,14 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
       {
         if (tags.size() > 0)
         {
-          LOG_VART(tags);
-          element->setTags(ApiDb::unescapeTags(tags.join(", ")) );
-          _addTagsToElement( element );
+          //LOG_VART(tags);
+          element->setTags(ApiDb::unescapeTags(tags.join(", ")));
+          _updateMetadataOnElement(element);
         }
-
         if (_status != Status::Invalid) { element->setStatus(_status); }
+        LOG_VART(element);
         map->addElement(element);
+        elementCount++;
         tags.clear();
       }
 
@@ -224,7 +226,8 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     // read the tag for as many rows as there are tags
     // need to get into form "key1"=>"val1", "key2"=>"val2", ...
 
-    QString result = _database->extractTagFromRow(elementResultsIterator, elementType.getEnum());
+    const QString result =
+      _database->extractTagFromRow(elementResultsIterator, elementType.getEnum());
     if (result != "") tags << result;
   }
 
@@ -233,16 +236,22 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
   {
     if (tags.size() > 0)
     {
-      LOG_VART(tags);
+      //LOG_VART(tags);
       element->setTags(ApiDb::unescapeTags(tags.join(", ")));
-      _addTagsToElement( element );
+      _updateMetadataOnElement(element);
     }
     if (_status != Status::Invalid) { element->setStatus(_status); }
+    LOG_VART(element);
     map->addElement(element);
+    elementCount++;
     tags.clear();
   }
 
-  LOG_DEBUG("LEAVING OsmApiDbReader::_read...");
+  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Current map:");
+  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelationMap().size());
 }
 
 void OsmApiDbReader::close()
@@ -279,8 +288,11 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
 
   _parseAndSetTagsOnElement(node);
+  _updateMetadataOnElement(node);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { node->setStatus(_status); }
 
-  LOG_VART(node);
+  //LOG_VART(node);
   return node;
 }
 
@@ -314,10 +326,11 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   way->addNodes(nodeIds);
 
   _parseAndSetTagsOnElement(way);
+  _updateMetadataOnElement(way);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { way->setStatus(_status); }
 
-  _addNodesForWay(nodeIds, map);
-
-  LOG_VART(way);
+  //LOG_VART(way);
   return way;
 }
 
@@ -340,14 +353,12 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 
         if (tags.size() > 0)
         {
-          LOG_VART(tags);
+          //LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
-          _addTagsToElement(node);
+          _updateMetadataOnElement(node);
         }
-        if (_status != Status::Invalid)
-        {
-          node->setStatus(_status);
-        }
+        //we want the reader's status to always override any existing status
+        if (_status != Status::Invalid) { node->setStatus(_status); }
         map.addElement(node);
       }
     }
@@ -386,7 +397,12 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
   }
   relation->setMembers(members);
 
-  LOG_VART(relation);
+  _parseAndSetTagsOnElement(relation);
+  _updateMetadataOnElement(relation);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { relation->setStatus(_status); }
+
+  //LOG_VART(relation);
   return relation;
 }
 

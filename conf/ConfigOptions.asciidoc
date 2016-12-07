@@ -1780,15 +1780,13 @@ database will be assigned the user id set by this field.
 Count at which the load status of each element type should be logged.  e.g. With a value of 100000,
 you will see a element load status update message for every 100000 elements parsed.
 
-=== postgresql.dumpfile.writer.add.circular.error.tag
+=== reader.preserve.all.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, then any element being written to an OSM API database via 'hoot convert' will have the
-"error:circular" tag written to the element, if that element has a positive circular error value.
-This operation can be slow for large amounts of data.  This is a temporary setting for holy grail
-that eventually needs to be removed.
+If true, all tags from the input data will be preserved.  Not honored by all readers.  e.g.
+an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will be kept.
 
 === reader.add.source.datetime
 
@@ -2494,19 +2492,19 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
-=== writer.text.status
+=== writer.include.circular.error
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+When true, writers will include circular error information. Not honored by all writers.
 
 === writer.include.debug
 
 * Data Type: bool
 * Default Value: `false`
 
-By default should a writer include debug information (e.g. status). Not honored by all writers.
+When true, writers will include debug information (e.g. status). Not honored by all writers.
 
 === writer.precision
 
@@ -2514,3 +2512,10 @@ By default should a writer include debug information (e.g. status). Not honored 
 * Default Value: `16`
 
 Set the output precision when writing. Not honored by all writers.
+
+=== writer.text.status
+
+* Data Type: bool
+* Default Value: `false`
+
+Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)

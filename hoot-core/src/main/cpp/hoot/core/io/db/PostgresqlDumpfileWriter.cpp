@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,10 +27,10 @@
 
 #include "PostgresqlDumpfileWriter.h"
 
-#include <cstdlib>  // for std::system
-#include <cstdio>   // for std::remove
-#include <math.h>   // for ::round (cmath header is C++11 only)
-#include <utility>  // For std::pair
+#include <cstdlib>
+#include <cstdio>
+#include <math.h>
+#include <utility>
 #include <vector>
 
 #include <boost/shared_ptr.hpp>
@@ -131,7 +131,8 @@ void PostgresqlDumpfileWriter::close()
 
   finalizePartial();
 
-  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) || (_writeStats.relationsWritten > 0) )
+  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
+       (_writeStats.relationsWritten > 0) )
   {
     LOG_INFO("Write stats:");
     LOG_INFO("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
@@ -178,7 +179,9 @@ void PostgresqlDumpfileWriter::finalizePartial()
   // Create our user data if the email value is set
   if ( _configData.addUserEmail.isEmpty() == false )
   {
-    _createTable( ApiDb::getUsersTableName(), "COPY " + ApiDb::getUsersTableName() + " (email, id, pass_crypt, creation_time) FROM stdin;\n");
+    _createTable(
+      ApiDb::getUsersTableName(),
+      "COPY " + ApiDb::getUsersTableName() + " (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
     *(_outputSections[ApiDb::getUsersTableName()].second) <<
       QString("%1\t%2\t\tNOW()\n").arg(
@@ -240,21 +243,12 @@ void PostgresqlDumpfileWriter::finalizePartial()
 
 void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 {
-  Tags t = n->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (n->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(n->getCircularError());
-    }
-  }
-
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
-  //LOG_VARD(n->getX());
-  //LOG_VARD(n->getY());
+  LOG_VART(n->getX());
+  LOG_VART(n->getY());
   _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
-  //LOG_VARD(_changesetData.changesetBounds.toString());
+  LOG_VART(_changesetData.changesetBounds.toString());
 
   if ( _writeStats.nodesWritten == 0 )
   {
@@ -276,7 +270,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToTables(n, nodeDbId);
 
-  _writeTagsToTables(t, nodeDbId,
+  _writeTagsToTables(n->getTags(), nodeDbId,
     _outputSections[ApiDb::getCurrentNodeTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getNodeTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
@@ -294,15 +288,6 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
-  Tags t = w->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (w->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(w->getCircularError());
-    }
-  }
-
   if ( _writeStats.waysWritten == 0 )
   {
     _createWayTables();
@@ -326,7 +311,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
   _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
 
-  _writeTagsToTables(t, wayDbId,
+  _writeTagsToTables(w->getTags(), wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getWayTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
@@ -344,15 +329,6 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 
 void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
-  Tags t = r->getTags();
-  if (ConfigOptions().getPostgresqlDumpfileWriterAddCircularErrorTag())
-  {
-    if (r->getCircularError() >= 0.0)
-    {
-      t["error:circular"] = QString::number(r->getCircularError());
-    }
-  }
-
   if ( _writeStats.relationsWritten == 0 )
   {
     _createRelationTables();
@@ -452,15 +428,19 @@ std::list<QString> PostgresqlDumpfileWriter::_createSectionNameList()
 
 void PostgresqlDumpfileWriter::_createNodeTables()
 {
-  _createTable( ApiDb::getCurrentNodesTableName(),
-                "COPY " + ApiDb::getCurrentNodesTableName() + " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
-  _createTable( ApiDb::getCurrentNodeTagsTableName(),
-                "COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n" );
+  _createTable(ApiDb::getCurrentNodesTableName(),
+                "COPY " + ApiDb::getCurrentNodesTableName() +
+               " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+  _createTable(ApiDb::getCurrentNodeTagsTableName(),
+                "COPY " + ApiDb::getCurrentNodeTagsTableName() +
+               " (node_id, k, v) FROM stdin;\n" );
 
-  _createTable( ApiDb::getNodesTableName(),
-                "COPY " + ApiDb::getNodesTableName() + " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
-  _createTable( ApiDb::getNodeTagsTableName(),
-                "COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n" );
+  _createTable(ApiDb::getNodesTableName(),
+                "COPY " + ApiDb::getNodesTableName() +
+               " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
+  _createTable(ApiDb::getNodeTagsTableName(),
+                "COPY " + ApiDb::getNodeTagsTableName() +
+               " (node_id, version, k, v) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_zeroWriteStats()
@@ -517,7 +497,7 @@ void PostgresqlDumpfileWriter::_writeNodeToTables(
   const ConstNodePtr& node,
   const ElementIdDatatype nodeDbId)
 {
-  //LOG_DEBUG("Writing node with ID: " << nodeDbId);
+  LOG_TRACE("Writing node with ID: " << nodeDbId);
 
   const double nodeY = node->getY();
   const double nodeX = node->getX();
@@ -572,9 +552,9 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
   for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
   {
     const QString key = _escapeCopyToData( it.key() );
-    //LOG_VARD(key);
+    LOG_VART(key);
     const QString value = _escapeCopyToData( it.value() );
-    //LOG_VARD(value);
+    LOG_VART(value);
 
     *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
     *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
@@ -583,18 +563,30 @@ void PostgresqlDumpfileWriter::_writeTagsToTables(
 
 void PostgresqlDumpfileWriter::_createWayTables()
 {
-  _createTable( ApiDb::getCurrentWaysTableName(),     "COPY " + ApiDb::getCurrentWaysTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
-  _createTable( ApiDb::getCurrentWayTagsTableName(),  "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n" );
-  _createTable( ApiDb::getCurrentWayNodesTableName(), "COPY " + ApiDb::getCurrentWayNodesTableName() + " (way_id, node_id, sequence_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentWaysTableName(),
+    "COPY " + ApiDb::getCurrentWaysTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentWayTagsTableName(),
+    "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentWayNodesTableName(),
+    "COPY " + ApiDb::getCurrentWayNodesTableName() + " (way_id, node_id, sequence_id) FROM stdin;\n" );
 
-  _createTable( ApiDb::getWaysTableName(),            "COPY " + ApiDb::getWaysTableName() + " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( ApiDb::getWayTagsTableName(),         "COPY " + ApiDb::getWayTagsTableName() + " (way_id, version, k, v) FROM stdin;\n" );
-  _createTable( ApiDb::getWayNodesTableName(),        "COPY " + ApiDb::getWayNodesTableName() + " (way_id, node_id, version, sequence_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getWaysTableName(),
+    "COPY " + ApiDb::getWaysTableName() + " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getWayTagsTableName(),
+    "COPY " + ApiDb::getWayTagsTableName() + " (way_id, version, k, v) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getWayNodesTableName(),
+    "COPY " + ApiDb::getWayNodesTableName() + " (way_id, node_id, version, sequence_id) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
 {
-  //LOG_DEBUG("Writing way with ID: " << wayDbId);
+  LOG_TRACE("Writing way with ID: " << wayDbId);
 
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
@@ -619,8 +611,10 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 {
   unsigned int nodeIndex = 1;
 
-  boost::shared_ptr<QTextStream> currentWayNodesStream  = _outputSections[ApiDb::getCurrentWayNodesTableName()].second;
-  boost::shared_ptr<QTextStream> wayNodesStream         = _outputSections[ApiDb::getWayNodesTableName()].second;
+  boost::shared_ptr<QTextStream> currentWayNodesStream  =
+    _outputSections[ApiDb::getCurrentWayNodesTableName()].second;
+  boost::shared_ptr<QTextStream> wayNodesStream =
+    _outputSections[ApiDb::getWayNodesTableName()].second;
   const QString currentWaynodesFormat("%1\t%2\t%3\n");
   const QString waynodesFormat("%1\t%2\t1\t%3\n");
   const QString dbWayIdString( QString::number(dbWayId));
@@ -647,18 +641,30 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
 
 void PostgresqlDumpfileWriter::_createRelationTables()
 {
-  _createTable( ApiDb::getCurrentRelationsTableName(),        "COPY " + ApiDb::getCurrentRelationsTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
-  _createTable( ApiDb::getCurrentRelationTagsTableName(),     "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n" );
-  _createTable( ApiDb::getCurrentRelationMembersTableName(),  "COPY " + ApiDb::getCurrentRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentRelationsTableName(),
+    "COPY " + ApiDb::getCurrentRelationsTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentRelationTagsTableName(),
+    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getCurrentRelationMembersTableName(),
+    "COPY " + ApiDb::getCurrentRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
 
-  _createTable( ApiDb::getRelationsTableName(),               "COPY " + ApiDb::getRelationsTableName() + " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
-  _createTable( ApiDb::getRelationTagsTableName(),            "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, version, k, v) FROM stdin;\n" );
-  _createTable( ApiDb::getRelationMembersTableName(),         "COPY " + ApiDb::getRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getRelationsTableName(),
+    "COPY " + ApiDb::getRelationsTableName() + " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getRelationTagsTableName(),
+    "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, version, k, v) FROM stdin;\n" );
+  _createTable(
+    ApiDb::getRelationMembersTableName(),
+    "COPY " + ApiDb::getRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
 }
 
 void PostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
 {
-  //LOG_DEBUG("Writing relation with ID: " << relationDbId);
+  LOG_TRACE("Writing relation with ID: " << relationDbId);
 
   const int changesetId = _getChangesetId();
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
@@ -732,8 +738,10 @@ void PostgresqlDumpfileWriter::_writeRelationMembersToTables( const ConstRelatio
   }
 }
 
-void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sourceRelationDbId,
-  const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId, const unsigned int memberSequenceIndex )
+void PostgresqlDumpfileWriter::_writeRelationMember(const ElementIdDatatype sourceRelationDbId,
+                                                    const RelationData::Entry& memberEntry,
+                                                    const ElementIdDatatype memberDbId,
+                                                    const unsigned int memberSequenceIndex )
 {
   QString memberType;
   const ElementId memberElementId = memberEntry.getElementId();
@@ -758,8 +766,10 @@ void PostgresqlDumpfileWriter::_writeRelationMember( const ElementIdDatatype sou
   const QString memberRefIdString( QString::number(memberDbId) );
   const QString memberSequenceString( QString::number(memberSequenceIndex) );
   const QString memberRole = _escapeCopyToData( memberEntry.getRole() );
-  boost::shared_ptr<QTextStream> currentRelationMembersStream  = _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
-  boost::shared_ptr<QTextStream> relationMembersStream         = _outputSections[ApiDb::getRelationMembersTableName()].second;
+  boost::shared_ptr<QTextStream> currentRelationMembersStream =
+    _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
+  boost::shared_ptr<QTextStream> relationMembersStream =
+   _outputSections[ApiDb::getRelationMembersTableName()].second;
   const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
   const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
@@ -833,8 +843,9 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
         QString(" (DB ID=") + QString::number(relationRef->second.sourceDbRelationId) +
         QString(") has ref to ") + relationRef->second.relationMemberData.toString() );
 
-      _writeRelationMember(relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
-        elementDbId, relationRef->second.relationMemberSequenceId );
+      _writeRelationMember(
+        relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
+        elementDbId, relationRef->second.relationMemberSequenceId);
 
       // Remove entry from unresolved list
       _unresolvedRefs.unresolvedRelationRefs->erase(relationRef);
@@ -842,13 +853,13 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
   }
 
   // If newly-written element is a node, check noderefs as well
-  if ( element->getElementType().getEnum() == ElementType::Node )
+  if (element->getElementType().getEnum() == ElementType::Node)
   {
-    if ( (_unresolvedRefs.unresolvedWaynodeRefs !=
+    if ((_unresolvedRefs.unresolvedWaynodeRefs !=
         boost::shared_ptr<
         Tgs::BigMap<ElementIdDatatype, std::vector<
         std::pair<ElementIdDatatype, unsigned long> > > >()) &&
-        ( _unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true) )
+        ( _unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
     {
       LOG_DEBUG("Found unresolved waynode ref!");
       throw NotImplementedException("Need to insert waynode ref that is now resolved");
@@ -878,10 +889,12 @@ void PostgresqlDumpfileWriter::_writeChangesetToTable()
   if ( _changesetData.changesetId == _configData.startingChangesetId )
   {
     _createTable(
-      ApiDb::getChangesetsTableName(), "COPY " + ApiDb::getChangesetsTableName() + " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
+      ApiDb::getChangesetsTableName(),
+      "COPY " + ApiDb::getChangesetsTableName() + " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
   }
 
-  boost::shared_ptr<QTextStream> changesetsStream  = _outputSections[ApiDb::getChangesetsTableName()].second;
+  boost::shared_ptr<QTextStream> changesetsStream  =
+    _outputSections[ApiDb::getChangesetsTableName()].second;
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 

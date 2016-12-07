@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -247,7 +247,8 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(*threshold);
+  LOG_VAR(className());
+  LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
 }

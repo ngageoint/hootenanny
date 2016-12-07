@@ -59,7 +59,7 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) { _status = status; }
+  virtual void setDefaultStatus(Status status) { _status = status; LOG_VARD(_status); }
 
   /**
    * Determines whether the reader should use the element id's from the file being read

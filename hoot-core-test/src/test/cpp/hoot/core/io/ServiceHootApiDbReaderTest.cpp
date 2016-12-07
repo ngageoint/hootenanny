@@ -391,7 +391,7 @@ public:
     member = relationMembers.at(1);
     CPPUNIT_ASSERT_EQUAL(QString("w1").toStdString(), member.role.toStdString());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     tagValue = relation->getTags().get("note");
     CPPUNIT_ASSERT(!tagValue.isEmpty());
     CPPUNIT_ASSERT_EQUAL(QString("r1").toStdString(), tagValue.toStdString());
@@ -629,7 +629,7 @@ public:
     member = relation->getMembers().at(1);
     CPPUNIT_ASSERT_EQUAL(QString("w1").toStdString(), member.role.toStdString());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     tagValue = relation->getTags().get("note");
     CPPUNIT_ASSERT(!tagValue.isEmpty());
     CPPUNIT_ASSERT_EQUAL(QString("r1").toStdString(), tagValue.toStdString());

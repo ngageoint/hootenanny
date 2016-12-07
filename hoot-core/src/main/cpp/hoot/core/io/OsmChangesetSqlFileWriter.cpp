@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -194,9 +194,9 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -285,9 +285,9 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -344,9 +344,9 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -367,9 +367,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
     case ElementType::Node:
 
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " WHERE node_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() +
+         " WHERE node_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " WHERE member_type = 'Node' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Node' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -378,9 +380,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
 
       //all of its entries in current way nodes are removed
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " WHERE way_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() +
+         " WHERE way_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " WHERE member_type = 'Way' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Way' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -388,9 +392,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
     case ElementType::Relation:
 
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " WHERE relation_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE relation_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " WHERE member_type = 'Relation' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Relation' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -500,13 +506,13 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
 
 void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 {
-  //LOG_DEBUG("way nodes create");
-  //LOG_VARD(way->getId());
+  LOG_TRACE("way nodes create");
+  LOG_VART(way->getId());
   const std::vector<long> nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     const long nodeId = nodeIds.at(i);
-    //LOG_VARD(nodeId);
+    LOG_VART(nodeId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
@@ -526,13 +532,13 @@ void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 
 void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
 {
-  //LOG_DEBUG("relation members create");
-  //LOG_VARD(relation->getId());
+  LOG_TRACE("relation members create");
+  LOG_VART(relation->getId());
   const vector<RelationData::Entry> members = relation->getMembers();
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry member = members[i];
-    //LOG_VARD(member.toString());
+    LOG_VART(member.toString());
 
     QString values =
       QString(
@@ -552,7 +558,8 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO " + ApiDb::getCurrentRelationMembersTableName() + " " + values).toUtf8());
+    _outputSql.write(
+      ("INSERT INTO " + ApiDb::getCurrentRelationMembersTableName() + " " + values).toUtf8());
   }
 }
 
@@ -571,7 +578,7 @@ void OsmChangesetSqlFileWriter::_deleteCurrentTags(const ElementId& eid)
 void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
                                            const long id)
 {
-  //LOG_DEBUG("delete all" << tableName);
+  LOG_TRACE("delete all" << tableName);
   _outputSql.write(
     (QString("DELETE FROM %1 WHERE %2 = %3;\n")
       .arg(tableName)
