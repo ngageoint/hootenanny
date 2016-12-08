@@ -153,10 +153,11 @@ Radians FrechetDistance::getHeadingWay2(int index)
 
 Radians FrechetDistance::getHeading(WayPtr way, int index)
 {
-  //  TEST
   return getHeadingAvg(way, index);
-  //  END TEST
+}
 
+Radians FrechetDistance::getHeadingSimple(WayPtr way, int index)
+{
   //  Setup the indices to check between
   int index1 = index;
   int index2 = index + 1;

@@ -132,9 +132,10 @@ protected:
   Radians getHeadingWay1(int index);
   Radians getHeadingWay2(int index);
 
-  Radians getHeadingAvg(WayPtr way, int index);
 
 protected:
+  Radians getHeadingAvg(WayPtr way, int index);
+  Radians getHeadingSimple(WayPtr way, int index);
   //  Allow test class to access protected members for white box testing
   friend class FrechetDistanceTest;
   //  Copies of the map and both ways
