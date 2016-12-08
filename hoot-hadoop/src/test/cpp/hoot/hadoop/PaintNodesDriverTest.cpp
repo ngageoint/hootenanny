@@ -117,5 +117,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::PaintNodesDriverTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::PaintNodesDriverTest, "glacial");
 

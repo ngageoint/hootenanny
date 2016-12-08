@@ -40,94 +40,6 @@ _open(false)
 
 }
 
-void ApiDbReader::_addTagsToElement(shared_ptr<Element> element)
-{
-  bool ok;
-  Tags& tags = element->getTags();
-
-  if (tags.contains("hoot:status"))
-  {
-    QString statusStr = tags.get("hoot:status");
-    bool ok;
-    const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
-    if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
-    {
-      element->setStatus(status);
-    }
-    else
-    {
-      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-               QString::number(element->getId()));
-    }
-    tags.remove("hoot:status");
-  }
-
-  if (tags.contains("type"))
-  {
-    Relation* r = dynamic_cast<Relation*>(element.get());
-    if (r)
-    {
-      r->setType(tags["type"]);
-      tags.remove("type");
-    }
-  }
-
-  if (tags.contains("error:circular"))
-  {
-    element->setCircularError(tags.get("error:circular").toDouble(&ok));
-    if (!ok)
-    {
-      try
-      {
-        double tv = tags.getLength("error:circular").value();
-        element->setCircularError(tv);
-        ok = true;
-        LOG_TRACE(
-          "Set circular error from error:circular tag to " << tv << " for element with ID: " <<
-          element->getId());
-      }
-      catch (const HootException& e)
-      {
-        ok = false;
-      }
-
-      if (!ok)
-      {
-        LOG_WARN("Error parsing error:circular.");
-      }
-    }
-    tags.remove("error:circular");
-  }
-  else if (tags.contains("accuracy"))
-  {
-    element->setCircularError(tags.get("accuracy").toDouble(&ok));
-
-    if (!ok)
-    {
-      try
-      {
-        double tv = tags.getLength("accuracy").value();
-        element->setCircularError(tv);
-        ok = true;
-        LOG_TRACE(
-          "Set circular error from accuracy tag to " << tv << " for element with ID: " <<
-          element->getId());
-      }
-      catch (const HootException& e)
-      {
-        ok = false;
-      }
-
-      if (!ok)
-      {
-        LOG_WARN("Error parsing accuracy.");
-      }
-    }
-    tags.remove("accuracy");
-  }
-}
-
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
@@ -187,17 +99,115 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
+void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 {
+  bool ok;
+  Tags& tags = element->getTags();
+
+  if (tags.contains("hoot:status"))
+  {
+    QString statusStr = tags.get("hoot:status");
+    bool ok;
+    const int statusInt = statusStr.toInt(&ok);
+    Status status = static_cast<Status::Type>(statusInt);
+    if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
+    {
+      element->setStatus(status);
+    }
+    else
+    {
+      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+               QString::number(element->getId()));
+    }
+    //We don't need to carry this tag around once the value is set on the element...it will
+    //be reinstated by some writers, though.
+    tags.remove("hoot:status");
+  }
+
+  if (tags.contains("type"))
+  {
+    Relation* r = dynamic_cast<Relation*>(element.get());
+    if (r)
+    {
+      r->setType(tags["type"]);
+      //I don't think OSM non-hoot metadata tags should be removed here...
+      //tags.remove("type");
+    }
+  }
+
+  if (tags.contains("error:circular"))
+  {
+    element->setCircularError(tags.get("error:circular").toDouble(&ok));
+    if (!ok)
+    {
+      try
+      {
+        double tv = tags.getLength("error:circular").value();
+        element->setCircularError(tv);
+        ok = true;
+      }
+      catch (const HootException& /*e*/)
+      {
+        ok = false;
+      }
+
+      if (!ok)
+      {
+        LOG_WARN("Error parsing error:circular.");
+      }
+    }
+    //We don't need to carry this tag around once the value is set on the element...it will
+    //be reinstated by some writers, though.
+    tags.remove("error:circular");
+  }
+  else if (tags.contains("accuracy"))
+  {
+    element->setCircularError(tags.get("accuracy").toDouble(&ok));
+
+    if (!ok)
+    {
+      try
+      {
+        double tv = tags.getLength("accuracy").value();
+        element->setCircularError(tv);
+        ok = true;
+      }
+      catch (const HootException& /*e*/)
+      {
+        ok = false;
+      }
+
+      if (!ok)
+      {
+        LOG_WARN("Error parsing accuracy.");
+      }
+    }
+    //I don't think OSM non-hoot metadata tags should be removed here...
+    //tags.remove("accuracy");
+  }
+}
+
+void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
+{
+  long boundedNodeCount = 0;
+  long boundedWayCount = 0;
+  long boundedRelationCount = 0;
+
   LOG_DEBUG("Retrieving node records within the query bounds...");
   shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
-    NodePtr element = _resultToNode(*nodeItr, *map);
-    LOG_VART(element->toString());
-    map->addElement(element);
-    nodeIds.insert(QString::number(element->getId()));
+    const QSqlQuery resultIterator = *nodeItr;
+    NodePtr node = _resultToNode(resultIterator, *map);
+    LOG_VART(node);
+    map->addElement(node);
+    boundedNodeCount++;
+    //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
+    //with any queries.  Mapped ids may not exist yet.
+    const QString nodeId = QString::number(resultIterator.value(0).toLongLong());
+    LOG_VART(nodeId);
+    nodeIds.insert(nodeId);
   }
   LOG_VARD(nodeIds.size());
 
@@ -221,12 +231,13 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
       while (wayItr->next())
       {
-        WayPtr element = _resultToWay(*wayItr, *map);
-        LOG_VART(element->toString());
         //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
         //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
         //the problem yet with test data, but will continue to keep an eye on it.
-        map->addElement(element);
+        WayPtr way = _resultToWay(*wayItr, *map);
+        map->addElement(way);
+        LOG_VART(way);
+        boundedWayCount++;
       }
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
@@ -255,9 +266,10 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
           _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
-          NodePtr element = _resultToNode(*additionalWayNodeItr, *map);
-          LOG_VART(element->toString());
-          map->addElement(element);
+          NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
+          map->addElement(node);
+          LOG_VART(node);
+          boundedNodeCount++;
         }
       }
     }
@@ -292,12 +304,24 @@ void ApiDbReader::_readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds)
         _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {
-        RelationPtr element = _resultToRelation(*relationItr, *map);
-        LOG_VART(element->toString());
-        map->addElement(element);
+        RelationPtr relation = _resultToRelation(*relationItr, *map);
+        map->addElement(relation);
+        LOG_VART(relation);
+        boundedRelationCount++;
       }
     }
   }
+
+  LOG_DEBUG(
+    "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
+    " total elements.");
+  LOG_VARD(boundedNodeCount);
+  LOG_VARD(boundedWayCount);
+  LOG_VARD(boundedRelationCount);
+  LOG_DEBUG("Current map:");
+  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelationMap().size());
 }
 
 }

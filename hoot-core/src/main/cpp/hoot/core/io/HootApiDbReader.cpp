@@ -130,7 +130,6 @@ bool HootApiDbReader::hasMoreElements()
 {
   if (_nextElement == 0)
   {
-    //populate next element.
     _nextElement = _getElementUsingIterator();
   }
   return _nextElement != NULL;
@@ -148,9 +147,9 @@ void  HootApiDbReader::initializePartial()
 
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  //TODO: this check is strange
-  if (_bounds.isNull() || _bounds.toString() == "-180,-90,180,90" ||
-      _bounds.toString() == "-180.0,-90.0,180.0,90.0")
+  if (_bounds.isNull() ||
+      (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
+       && _bounds.getMaxY() == 90.0))
   {
     LOG_INFO("Executing Hoot API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -165,8 +164,12 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   }
 }
 
+//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
+//this read performs better for some reason
 void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
 {
+  long elementCount = 0; //TODO: break this out by element type
+
   // contact the DB and select all
   shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
@@ -180,10 +183,17 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     //this check is necessary due to an inefficiency in HootApiDb::resultToElement
     if (element.get())
     {
-      if (_status != Status::Invalid) { element->setStatus(_status); }
       map->addElement(element);
+      LOG_VART(element);
+      elementCount++;
     }
   }
+
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Current map:");
+  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelationMap().size());
 }
 
 shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
@@ -193,7 +203,7 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
     return shared_ptr<Element>();
   }
 
-  //see of another result is available
+  //see if another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
@@ -201,8 +211,8 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   }
 
   //results still available, so keep parsing through them
-  shared_ptr<Element> element = _resultToElement(*_elementResultIterator, _selectElementType,
-    *_partialMap);
+  shared_ptr<Element> element =
+    _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
   //QSqlQuery::next() in HootApiDbReader::_resultToElement will return null
   //when end of records loop. The iterator will be reset and go to next element type
@@ -232,7 +242,7 @@ shared_ptr<Element> HootApiDbReader::readNextElement()
   }
   else
   {
-    throw HootException("readNextElement should not called if hasMoreElements return false.");
+    throw HootException("readNextElement should not called if hasMoreElements returns false.");
   }
 }
 
@@ -256,13 +266,14 @@ void HootApiDbReader::close()
   finalizePartial();
 }
 
+//TODO: this method could probably be moved up to the parent class
 shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
-  const ElementType& elementType, OsmMap& map)
+                                                      const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
   //method.  However, I was getting some initialization errors with QSqlQuery when the
-  //HootApiDbReader called it in that way during a partial map read.  So, calling it inside here
+  //reader called it in that way during a partial map read.  So, calling it inside here
   //instead.  A side effect is that this method will return a NULL element during the last
   //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
   //calling resultIterator->next() and also should check for the null element.
@@ -293,8 +304,6 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
         throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
     }
 
-    _addTagsToElement(element);
-
     return element;
   }
   else
@@ -308,7 +317,8 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
-  shared_ptr<Node> result(
+
+  shared_ptr<Node> node(
     new Node(
       _status,
       nodeId,
@@ -320,10 +330,13 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
       OsmUtils::fromTimeString(
         resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
-  result->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
-  _addTagsToElement(result);
-  LOG_VART(result);
-  return result;
+  node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
+  _updateMetadataOnElement(node);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { node->setStatus(_status); }
+
+  //LOG_VART(node);
+  return node;
 }
 
 shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
@@ -331,6 +344,7 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
   LOG_TRACE("Reading way with ID: " << wayId);
+
   shared_ptr<Way> way(
     new Way(
       _status,
@@ -343,25 +357,29 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
       ));
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
-  _addTagsToElement(way);
+  _updateMetadataOnElement(way);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { way->setStatus(_status); }
 
-  // These could be read out in batch at the same time the element results are read...
+  // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     nodeIds[i] = _mapElementId(map, ElementId::node(nodeIds[i])).getId();
   }
   way->addNodes(nodeIds);
-  LOG_VART(way);
+
+  //LOG_VART(way);
   return way;
 }
 
 shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-  const OsmMap& map)
+                                                        const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_TRACE("Reading relation with ID: " << relationId);
+
   shared_ptr<Relation> relation(
     new Relation(
       _status,
@@ -374,16 +392,19 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
         resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
-  _addTagsToElement(relation);
+  _updateMetadataOnElement(relation);
+  //we want the reader's status to always override any existing status
+  if (_status != Status::Invalid) { relation->setStatus(_status); }
 
-  // Could these be read out in batch at the same time the element results are read?...
+  // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
     members[i].setElementId(_mapElementId(map, members[i].getElementId()));
   }
   relation->setMembers(members);
-  LOG_VART(relation);
+
+  //LOG_VART(relation);
   return relation;
 }
 

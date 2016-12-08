@@ -151,21 +151,24 @@ public:
                     "tags: cached envelope: 0,-1,0,-1\n"
                     "status: conflated\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 15",
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
                     "status: unknown1\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 15",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
                     "tags: cached envelope: 0,-1,0,-1\n"
                     "status: unknown2\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 15",
                     map->getWay(-7)->toString());
   }
 
@@ -208,7 +211,9 @@ public:
                     "tags: cached envelope: 0,-1,0,-1\n"
                     "status: conflated\n"
                     "version: 0\n"
-                    "visible: 1", map->getWay(-4)->toString());
+                    "visible: 1\n"
+                    "circular error: 15",
+                    map->getWay(-4)->toString());
   }
 
   /**

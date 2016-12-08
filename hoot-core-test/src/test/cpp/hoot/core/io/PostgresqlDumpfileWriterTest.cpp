@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/db/PostgresqlDumpfileWriter.h>
+#include <hoot/core/io/PostgresqlDumpfileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
 

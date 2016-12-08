@@ -426,6 +426,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
+  LOG_VAR(className());
   ScriptMatchVisitor v(map, matches, threshold, _script);
   v.customScriptInit();
   map->visitRo(v);

@@ -8,6 +8,6 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 
 mkdir -p test-output/cmd/ServiceOsmApiDbDeriveChangesetCmdTest
 
-hoot derive-changeset test-files/cmd/slow/DeriveChangesetCmdTest/map1.osm test-files/cmd/slow/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceOsmApiDbDeriveChangesetCmdTest/changeset.osc.sql "$DB_URL"
+hoot derive-changeset test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceOsmApiDbDeriveChangesetCmdTest/changeset.osc.sql "$DB_URL"
 diff test-output/cmd/ServiceOsmApiDbDeriveChangesetCmdTest/changeset.osc.sql test-files/cmd/slow/ServiceOsmApiDbDeriveChangesetCmdTest/changeset.osc.sql
 

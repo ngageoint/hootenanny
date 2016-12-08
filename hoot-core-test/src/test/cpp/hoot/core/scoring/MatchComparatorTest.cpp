@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,6 +54,9 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
+namespace hoot
+{
+
 class MatchComparatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(MatchComparatorTest);
@@ -96,13 +99,13 @@ public:
 
     MatchComparator comparator;
     double tpr = comparator.evaluateMatches(map, copy);
-    LOG_INFO(comparator.toString());
+    LOG_TRACE(comparator.toString());
 
     // for debugging
-    MapProjector::projectToWgs84(copy);
-    QDir(".").mkpath("test-output/scoring");
-    OsmWriter writer;
-    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
+//    MapProjector::projectToWgs84(copy);
+//    QDir(".").mkpath("test-output/scoring");
+//    OsmWriter writer;
+//    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, tpr, 0.001);
     CPPUNIT_ASSERT_EQUAL(6, comparator.getTp());
@@ -112,6 +115,8 @@ public:
   }
 
 };
+
+}
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchComparatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchComparatorTest, "quick");

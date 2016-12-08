@@ -300,8 +300,8 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     }
 
     // turn this on when we start using node circularError.
-    if (n->hasCircularError() &&
-        n->getTags().getNonDebugCount() > 0)
+    if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0 &&
+        ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -399,7 +399,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       }
     }
 
-    if (w->hasCircularError())
+    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -506,7 +506,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       writer.writeEndElement();
     }
 
-    if (r->hasCircularError())
+    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
