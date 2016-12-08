@@ -105,7 +105,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
-    LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
+    LOG_DEBUG("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
   else if (_bounds.isNull() ||
@@ -120,7 +120,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_INFO("Executing OSM API bounded read query with bounds " << _bounds.toString() << "...");
+    LOG_DEBUG("Executing OSM API bounded read query with bounds " << _bounds.toString() << "...");
     _readByBounds(map, _bounds);
   }
 }
@@ -247,7 +247,7 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     tags.clear();
   }
 
-  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());

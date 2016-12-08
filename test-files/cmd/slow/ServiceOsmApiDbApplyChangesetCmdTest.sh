@@ -13,7 +13,7 @@ rm -rf test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest
 mkdir -p test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest
 
 # write the contents
-hoot apply-changeset test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/changeset.osc.sql $DB_URL
+hoot apply-changeset --debug test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/changeset.osc.sql $DB_URL
 
 # read the contents back out
 hoot convert $DB_URL test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest/output.osm

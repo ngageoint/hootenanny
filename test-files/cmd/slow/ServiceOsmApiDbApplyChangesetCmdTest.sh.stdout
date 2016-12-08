@@ -3,10 +3,22 @@
       1
 (1 row)
 
-16:33:38.696 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  60) Applying changeset test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/changeset.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
-16:33:38.725 INFO  ...OsmApiDbSqlChangesetWriter.cpp(  64) Executing changeset SQL queries against OSM API database...
-16:33:38.742 INFO  ...OsmApiDbSqlChangesetWriter.cpp( 172) Changeset SQL queries execute finished against OSM API database.
-Changeset(s) Created: 1
+16:20:46.817 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  60) Applying changeset test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/changeset.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+16:20:46.837 DEBUG ...ain/cpp/hoot/core/io/ApiDb.cpp( 159) Successfully opened _db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+16:20:46.837 DEBUG ...OsmApiDbSqlChangesetWriter.cpp(  64) Executing changeset SQL queries against OSM API database...
+16:20:46.838 DEBUG ...OsmApiDbSqlChangesetWriter.cpp( 257) sql: INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, now(), now());
+16:20:46.840 DEBUG ...OsmApiDbSqlChangesetWriter.cpp( 263) q.numRowsAffected(): 1
+16:20:46.840 DEBUG ...OsmApiDbSqlChangesetWriter.cpp( 257) sql: 
+/* create node 1 */
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388925209, -770386440, 1, true, now(), 3221225472, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388925209, -770386440, 1, true, now(), 3221225472, 1);
+UPDATE changesets SET min_lat=388925209, max_lat=388925209, min_lon=-770386440, max_lon=-770386440 WHERE id=1;
+
+
+;
+16:20:46.842 DEBUG ...OsmApiDbSqlChangesetWriter.cpp( 263) q.numRowsAffected(): 1
+16:20:46.848 DEBUG ...OsmApiDbSqlChangesetWriter.cpp( 172) Changeset SQL queries execute finished against OSM API database.
+16:20:46.848 DEBUG ...core/cmd/ApplyChangesetCmd.cpp(  87) Changeset(s) Created: 1
 Changeset Details: min_lat=38.892521, max_lat=38.892521, min_lon=-77.038644, max_lon=-77.038644
 Node(s) Created: 1
 Node(s) Modified: 0
@@ -17,5 +29,9 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-16:33:38.851 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  78) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest/output.osm...
-16:33:38.872 INFO  ...oot/core/io/OsmApiDbReader.cpp( 112) Executing OSM API read query against all element types...
+
+16:20:46.983 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest/output.osm...
+16:20:46.985 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from osmapidb://hoot:hoottest@localhost:5432/osmapi_test ...
+16:20:47.006 INFO  ...oot/core/io/OsmApiDbReader.cpp( 115) Executing OSM API read query...
+16:20:47.149 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceOsmApiDbApplyChangesetCmdTest/output.osm ...
+16:20:47.150 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ServiceOsmApiDbApplyChangesetCmdTest/output.osm ...

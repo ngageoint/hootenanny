@@ -167,8 +167,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 {
   if (note.isEmpty())
   {
-    //LOG_VARD(e1->toString());
-    //LOG_VARD(e2->toString());
+    LOG_VART(e1->toString());
+    LOG_VART(e2->toString());
     throw IllegalArgumentException("You must specify a review note.");
   }
 
@@ -182,10 +182,9 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
   r->setCircularError(-1);
 
-
-  //LOG_VARD(r->getId());
-  //LOG_VARD(e1->getElementId());
-  //LOG_VARD(e2->getElementId());
+  LOG_VART(r->getId());
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
@@ -218,8 +217,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
   r->setCircularError(-1);
 
-  //LOG_VARD(r->getId());
-  //LOG_VARD(ids);
+  LOG_VART(r->getId());
+  LOG_VART(ids);
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
@@ -227,7 +226,6 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   }
 
   map->addElement(r);
-
 }
 
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
@@ -235,7 +233,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 {
   if (note.isEmpty())
   {
-    //LOG_VARD(e->toString())
+    LOG_VART(e->toString())
     throw IllegalArgumentException("You must specify a review note.");
   }
 
@@ -248,8 +246,8 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
   r->setCircularError(-1);
 
-  //LOG_VARD(r->getId());
-  //LOG_VARD(e->getElementId());
+  LOG_VART(r->getId());
+  LOG_VART(e->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
