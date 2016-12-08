@@ -295,6 +295,14 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
+# Shut down tomcat6 service if it exists
+if service --status-all | grep -Fq 'tomcat6'; then
+    service tomcat6 stop
+    # Prevent tomcat6 from being started during boot time
+    update-rc.d -f tomcat6 remove
+fi
+
+# Install Tomcat 8
 sudo $HOOT_HOME/tomcat8/ubuntu/tomcat8_install.sh
 
 # Remove gdal libs installed by libgdal-dev that interfere with

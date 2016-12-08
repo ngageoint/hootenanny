@@ -7,7 +7,7 @@ TOMCAT8_USER=tomcat8
 TOMCAT8_GROUP=tomcat8
 
 # The home directory of the Java development kit (JDK). You need at least JDK version 7.
-JAVA_HOME=/usr/lib/jvm/java-8-oracle
+JAVA_HOME=/usr/lib/jvm/oracle_jdk8
 
 # You may pass JVM startup parameters to Java here. If unset, the default
 # options will be: -Djava.awt.headless=true -Xmx128m -XX:+UseConcMarkSweepGC
@@ -20,11 +20,11 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:+UseConcMarkSweepGC"
 
 # To enable remote debugging uncomment the following line.
 # You will then be able to use a java debugger on port 8000.
-#JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
+JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,address=8585,server=y,suspend=n"
 
 # Java compiler to use for translating JavaServer Pages (JSPs). You can use all
 # compilers that are accepted by Ant's build.compiler property.
-#JSP_COMPILER=javac
+JSP_COMPILER=javac
 
 # Use the Java security manager? (yes/no, default: no)
 #TOMCAT8_SECURITY=no
@@ -50,9 +50,15 @@ unset LC_ALL
 umask 002
 
 HOOT_HOME=/home/vagrant/hoot
+
 HADOOP_HOME=/home/vagrant/hadoop
+
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
+
 GDAL_DATA=/usr/local/share/gdal
+
 GDAL_LIB_DIR=/usr/local/lib
+
 HOOT_WORKING_NAME=hoot
+
 PATH=$HOOT_HOME/bin:$PATH
