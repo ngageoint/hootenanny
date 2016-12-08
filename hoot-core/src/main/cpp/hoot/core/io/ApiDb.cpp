@@ -30,7 +30,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/db/SqlBulkInsert.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -54,7 +54,7 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "db/InternalIdReserver.h"
+#include "InternalIdReserver.h"
 
 namespace hoot
 {
@@ -167,7 +167,8 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
-    _selectUserByEmail->prepare("SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() + " WHERE email LIKE :email");
+    _selectUserByEmail->prepare(
+      "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() + " WHERE email LIKE :email");
   }
   _selectUserByEmail->bindValue(":email", email);
   if (_selectUserByEmail->exec() == false)
@@ -308,6 +309,8 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
     throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
       " Error: " + _selectNodeIdsForWay->lastError().text());
   }
+  LOG_VART(_selectNodeIdsForWay->numRowsAffected());
+  LOG_VART(_selectNodeIdsForWay->executedQuery());
 
   return _selectNodeIdsForWay;
 }
@@ -660,7 +663,8 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
   {
     _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
     _selectChangesetsCreatedAfterTime->prepare(
-      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ").arg(ApiDb::getChangesetsTableName()) +
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ")
+        .arg(ApiDb::getChangesetsTableName()) +
       QString("WHERE created_at > :createdAt"));
     _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
   }

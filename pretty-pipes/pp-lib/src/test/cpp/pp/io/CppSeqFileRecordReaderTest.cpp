@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -133,7 +133,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(80280020l, status.getLen());
     conf.set("mapred.input.dir", "tmp/dum.csq");
     fif.setConfiguration(conf);
-    CPPUNIT_ASSERT_EQUAL((int)ceil((double)status.getLen() / (double)status.getBlockSize()), 
+    CPPUNIT_ASSERT_EQUAL((int)ceil((double)status.getLen() / (double)status.getBlockSize()),
       fif.getSplitCount());
 
     int e = 0;
@@ -162,6 +162,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CppSeqFileRecordReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CppSeqFileRecordReaderTest, "glacial");
 
 

@@ -100,7 +100,7 @@ public:
   void setId(long id) { _getElementData().setId(id); }
 
   long getChangeset() const { return _getElementData().getChangeset(); }
-  void setChangeset(bool changeset) { _getElementData().setChangeset(changeset); }
+  void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
 
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
 
