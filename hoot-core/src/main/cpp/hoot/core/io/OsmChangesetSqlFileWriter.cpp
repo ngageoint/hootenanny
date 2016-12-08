@@ -126,6 +126,7 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
 {
   LOG_DEBUG("Creating changeset...");
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
+  LOG_VART(_changesetId);
   _outputSql.write(
     QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES "
             "(%2, %3, %4, %4);\n")
@@ -188,6 +189,7 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   changeElement->setVersion(1);
   changeElement->setVisible(true);
   changeElement->setChangeset(_changesetId);
+  LOG_VART(changeElement->getChangeset());
 
   QString note = "";
   /*if (changeElement->getTags().contains("note"))
@@ -432,6 +434,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
 
 QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
 {
+  LOG_VART(node->getChangeset());
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, %8, %6, %7);\n")
