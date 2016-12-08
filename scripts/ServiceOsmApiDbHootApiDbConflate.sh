@@ -43,7 +43,6 @@ rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 if [ "$LOAD_REF_DATA" == "true" ]; then
-
   echo ""
   echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
   echo ""
@@ -53,19 +52,17 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   echo ""
   echo "STEP 2: Writing the complete reference dataset to the osm api db..."
   echo ""
-  # a bit hacky
   if [[ $REF_DATASET == *"pbf"* ]]; then
-    REF_EXTENSION=osm.pbf
+    #we want this in .osm format to be able to examine it for debugging purposes anyway
+    hoot convert $HOOT_OPTS $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   else
-    REF_EXTENSION=osm
+    cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   fi
-  cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.$REF_EXTENSION
   # By default, all of these element ID's will be written starting at 1 by the postgres dump file writer.  
   # By using reader.preserve.all.tags=true, we're forcing the hoot xml file reader to preserve all tags here, such as 'accuracy', 
   # 'type', etc., to simulate the data that would likely be coming from an osm api db.
-  hoot convert $HOOT_OPTS $OUTPUT_DIR/2-ref-raw-complete.$REF_EXTENSION $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
+  hoot convert $HOOT_OPTS $OUTPUT_DIR/2-ref-raw-complete.osm $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
   psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
-
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -83,18 +80,16 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
 fi
 
 if [ "$LOAD_SEC_DATA" == "true" ]; then
-
   echo ""
   echo "STEP 5: Writing the complete secondary dataset to the hoot api db..."
   echo ""
   if [[ $SEC_DATASET == *"pbf"* ]]; then
-    SEC_EXTENSION=osm.pbf
+    #we want this in .osm format to be able to examine it for debugging purposes anyway
+    hoot convert $HOOT_OPTS $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   else
-    SEC_EXTENSION=osm
+    cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   fi
-  cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.$SEC_EXTENSION
-  hoot convert $HOOT_OPTS $OUTPUT_DIR/5-secondary-raw-complete.$SEC_EXTENSION "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
-
+  hoot convert $HOOT_OPTS $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -112,14 +107,12 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
-
   echo ""
   echo "STEP 8: Conflating the two datasets over the specified AOI..."
   echo ""
   # We're writing the output to the hoot api db first here, rather than directly to the osm api db, b/c if there are reviews 
   # we want to give the user a chance to review them.  That can only happen when the output is stored in a hoot api db.
   hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
-
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
