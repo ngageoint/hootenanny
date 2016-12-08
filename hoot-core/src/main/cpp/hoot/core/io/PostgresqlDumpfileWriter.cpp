@@ -631,7 +631,7 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
     }
     else
     {
-      LOG_WARN( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
+      LOG_ERROR( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
       throw NotImplementedException("Unresolved waynodes are not supported");
     }
 
