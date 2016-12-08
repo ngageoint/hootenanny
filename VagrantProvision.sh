@@ -23,7 +23,6 @@ echo "### Installing Java 8..."
 sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
 sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
 
-
 if [[ ! -e /usr/lib/jvm ]]; then
     sudo mkdir /usr/lib/jvm
 else
@@ -47,7 +46,7 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -296,100 +295,13 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-# Configure Tomcat
-if ! grep --quiet TOMCAT6_HOME ~/.profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
-    source ~/.profile
-fi
-
-# Add tomcat6 and vagrant to each others groups so we can get the group write working with nfs
-if ! groups vagrant | grep --quiet '\btomcat6\b'; then
-    echo "Adding vagrant user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 vagrant
-fi
-if ! groups tomcat6 | grep --quiet "\bvagrant\b"; then
-    echo "Adding tomcat6 user to vagrant user group..."
-    sudo usermod -a -G vagrant tomcat6
-fi
-
-if ! grep -i --quiet HOOT /etc/default/tomcat6; then
-echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but
-# fails on permissions during write...so hardcoding the home path here instead for now.  This
-# hardcode needs to be removed in order for hoot dev env install script to work correctly.
-#
-#sudo echo "#--------------
-# Hoot Settings
-#--------------
-#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
-
-sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-
-#--------------
-# Hoot Settings
-#--------------
-HOOT_HOME=/home/vagrant/hoot
-HADOOP_HOME=/home/vagrant/hadoop
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
-GDAL_DATA=/usr/local/share/gdal
-GDAL_LIB_DIR=/usr/local/lib
-HOOT_WORKING_NAME=hoot
-PATH=$HOOT_HOME/bin:$PATH
-EOT
-fi
-
-# Trying this to try to get rid of errors
-sudo mkdir -p /usr/share/tomcat6/server/classes
-sudo mkdir -p /usr/share/tomcat6/shared/classes
-sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/server
-sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/shared
-
-# Can change it to 000 to get rid of errors
-if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
-echo "### Changing Tomcat umask to group write..."
-sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-# Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
-umask 002
-EOT
-fi
-
-if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
-    echo "### Changing Tomcat java opts..."
-    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m@" /etc/default/tomcat6
-fi
-
-if grep -i --quiet '^#JAVA_HOME=' /etc/default/tomcat6; then
-    echo "### Changing Tomcat JAVA_HOME..."
-    sudo sed -i.bak '/.*#JAVA_HOME=.*/c\JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' /etc/default/tomcat6
-fi
-
-if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
-    echo "### Fixing Tomcat GDAL_DATA env var path..."
-    sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
-fi
+sudo $HOOT_HOME/tomcat8/ubuntu/tomcat8_install.sh
 
 # Remove gdal libs installed by libgdal-dev that interfere with
 # node-export-server using gdal libs compiled from source (fgdb support)
 if [ -f "/usr/lib/libgdal.*" ]; then
     echo "Removing GDAL libs installed by libgdal-dev..."
     sudo rm /usr/lib/libgdal.*
-fi
-
-if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
-    echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' /etc/tomcat6/server.xml
-fi
-
-if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
-    echo "Set allowLinking to true in Tomcat context..."
-    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
-fi
-
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
-    echo "Creating deegree directory for webapp..."
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
@@ -401,10 +313,6 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo "Removing services local.conf..."
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
-
-# Clean out tomcat logfile. We restart tomcat after provisioning
-sudo service tomcat6 stop
-sudo rm /var/log/tomcat6/catalina.out
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
