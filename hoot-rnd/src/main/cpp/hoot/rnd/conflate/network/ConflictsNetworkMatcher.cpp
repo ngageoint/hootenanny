@@ -503,7 +503,12 @@ void ConflictsNetworkMatcher::_iterateSimple()
       denominator += s;
     }
 
-    newScores[em] = pow(numerator / denominator, aggression);
+    // If the denominator trends to 0, we pollute the system with NaNs
+    if (denominator > 0.0)
+      newScores[em] = pow(numerator / denominator, aggression);
+    else
+      newScores[em] = 0.0;
+
     newWeights[em] = denominator;
     weightSum += denominator;
 
@@ -576,9 +581,6 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
 
     IntersectionIterator iit = _createIterator(env, _edge2Index);
 
-    //Idea - lets look through our edgeMatches at this point. If we've already used this, lets not use it again.
-    //Possible problem: what if e1 matches more than one other thing? ... maybe we don't care
-
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
@@ -589,8 +591,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       LOG_VART(score);
       if (score > 0)
       {
-        // add all the EdgeMatches that are seeded with this edge pair.
-        /* MICAH - In Here Lies The Problem! */
+        // Add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);
       }
     }
