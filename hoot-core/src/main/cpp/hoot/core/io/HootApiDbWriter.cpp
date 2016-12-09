@@ -187,14 +187,15 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
         _hootdb.deleteMap(*it);
         LOG_INFO("Finished removing map with ID: " << *it);
       }
-
-      _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
     else
     {
       LOG_INFO("There are one or more maps with this name. Consider using "
-               "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+               "'hootapi.db.writer.overwrite.map=true' if you want to "
+               "overwrite them. Map IDs: " << mapIds);
     }
+
+    _hootdb.setMapId(_hootdb.insertMap(mapName, true));
   }
   else if ( mapIds.size() == 0 )
   {
