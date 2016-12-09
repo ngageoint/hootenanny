@@ -302,8 +302,17 @@ if service --status-all | grep -Fq 'tomcat6'; then
     update-rc.d -f tomcat6 remove
 fi
 
+TOMCAT_HOME=/usr/share/tomcat8
+
 # Install Tomcat 8
 sudo $HOOT_HOME/tomcat8/ubuntu/tomcat8_install.sh
+
+# Configure Tomcat
+if ! grep --quiet TOMCAT8_HOME ~/.profile; then
+    echo "### Adding Tomcat to profile..."
+    echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.profile
+    source ~/.profile
+fi
 
 # Remove gdal libs installed by libgdal-dev that interfere with
 # node-export-server using gdal libs compiled from source (fgdb support)

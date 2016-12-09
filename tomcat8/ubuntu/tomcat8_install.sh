@@ -8,10 +8,15 @@ TOMCAT_HOME=/usr/share/tomcat8
 TOMCAT_USER_HOME=/var/lib/tomcat8
 TOMCAT_CACHE_HOME=/var/cache/tomcat8
 TOMCAT_LOGS_HOME=/var/log/tomcat8
-SYSCONFDIR=/etc
+TOMCAT_CONFIG_HOME=/etc/tomcat8
+SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+#Check boottime startup!
 
 echo "### Installing Tomcat 8.5.8"
+
+# Stop tomcat8 service if it exists
+service tomcat8 stop
 
 # Create tomcat8 group if not already created
 getent group ${TOMCAT_GROUP} >/dev/null || groupadd -r ${TOMCAT_GROUP}
@@ -52,6 +57,7 @@ cd ${TOMCAT_HOME}
 
 ln -sf ${TOMCAT_USER_HOME}/webapps webapps
 chmod 775 ${TOMCAT_USER_HOME}
+chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_USER_HOME}/webapps
 
 cd -
 
@@ -63,7 +69,7 @@ echo "### Setting up Tomcat logs"
 rm -rf ${TOMCAT_HOME}/logs
 mkdir -p ${TOMCAT_LOGS_HOME}
 chmod -R 755 ${TOMCAT_LOGS_HOME}
-chown ${TOMCAT_GROUP:adm ${TOMCAT_LOGS_HOME}
+chown ${TOMCAT_GROUP}:adm ${TOMCAT_LOGS_HOME}
 cd ${TOMCAT_HOME}
 
 ln -sf ${TOMCAT_LOGS_HOME} logs
@@ -71,11 +77,17 @@ ln -sf ${TOMCAT_LOGS_HOME} logs
 cd -
 echo "### Done setting up Tomcat logs"
 
-if [ ! -d "$SYSCONFDIR/$TOMCAT_NAME" ]; then
+if [ ! -d "$TOMCAT_CONFIG_HOME" ]; then
     # Put conf in /etc/ and link back.
-    mv ${TOMCAT_HOME}/conf ${SYSCONFDIR}/${TOMCAT_NAME}
+    echo "### Setting up config"
+    mkdir -p ${TOMCAT_HOME}/conf/policy.d
+    cp ${SCRIPT_HOME}/policy.d/* ${TOMCAT_HOME}/conf/policy.d
+    mv ${TOMCAT_HOME}/conf ${TOMCAT_CONFIG_HOME}
     cd ${TOMCAT_HOME}
-    ln -sf ${SYSCONFDIR}/${TOMCAT_NAME} conf
+    ln -sf ${TOMCAT_CONFIG_HOME} conf
+    mkdir -p ${TOMCAT_CONFIG_HOME}/Catalina
+    chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CONFIG_HOME}/*
+    chmod -R g+w ${TOMCAT_CONFIG_HOME}/*
     cd -
 fi
 
@@ -98,6 +110,8 @@ ln -sf ${TOMCAT_CACHE_HOME}/temp temp
 ln -sf ${TOMCAT_CACHE_HOME}/work work
 chmod 775 ${TOMCAT_CACHE_HOME}/temp
 chmod 775 ${TOMCAT_CACHE_HOME}/work
+chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/temp
+chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 
 cd -
 
@@ -107,29 +121,21 @@ mkdir -p ${TOMCAT_HOME}/shared/classes
 chown -R ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/server
 chown -R ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/shared
 
-cp ./etc/init.d/tomcat8 /etc/init.d
-cp ./etc/default/tomcat8 /etc/default
+cp ${SCRIPT_HOME}/etc/init.d/${TOMCAT_NAME} /etc/init.d
+cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
 
-mkdir -p ${TOMCAT_HOME}/conf/policy.d
-cp ./etc/policy.d/* ${TOMCAT_HOME}/conf/policy.d
-
-# Configure Tomcat
-if ! grep --quiet TOMCAT8_HOME ~/.profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.profile
-    source ~/.profile
-fi
-
-if ! grep -i --quiet 'ingest/processed' ${SYSCONFDIR}/${TOMCAT_NAME}/server.xml; then
+if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG_HOME}/server.xml; then
     echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${SYSCONFDIR}/${TOMCAT_NAME}/server.xml
+    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG_HOME}/server.xml
 fi
 
-if ! grep -i --quiet 'allowLinking="true"' ${SYSCONFDIR}/${TOMCAT_NAME}/context.xml; then
+if ! grep -i --quiet 'allowLinking="true"' ${TOMCAT_CONFIG_HOME}/context.xml; then
     echo "Set allowLinking to true in Tomcat context..."
-    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" ${SYSCONFDIR}/${TOMCAT_NAME}/context.xml
+    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" ${TOMCAT_CONFIG_HOME}/context.xml
 fi
 
-# Clean out tomcat logfile. We restart tomcat after provisioning
+# Clean out tomcat logfile. We restart tomcat after provisioning.
 service ${TOMCAT_NAME} stop
 rm -f ${TOMCAT_LOGS_HOME}/catalina.out
+
+sudo update-rc.d ${TOMCAT_NAME} defaults
