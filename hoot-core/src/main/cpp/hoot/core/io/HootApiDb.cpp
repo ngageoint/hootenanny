@@ -63,9 +63,6 @@ HootApiDb::HootApiDb()
 
 HootApiDb::~HootApiDb()
 {
-  LOG_VARD(_nodesInsertElapsed);
-  LOG_VARD(_wayNodesInsertElapsed);
-  LOG_VARD(_wayInsertElapsed);
   close();
 }
 
@@ -1132,7 +1129,6 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   _checkLastMapId(mapId);
   QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
@@ -1142,7 +1138,6 @@ shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
   _checkLastMapId(mapId);
   QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodesForWay(wayId, sql);
 }
 
@@ -1174,17 +1169,20 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
   while (_selectMembersForRelation->next())
   {
     const QString memberType = _selectMembersForRelation->value(0).toString();
+    LOG_VART(memberType);
     if (ElementType::isValidTypeString(memberType))
     {
-      result.push_back(
+      RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong())));
+          _selectMembersForRelation->value(1).toLongLong()));
+      LOG_VART(member);
+      result.push_back(member);
     }
     else
     {
-        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
     }
   }
 

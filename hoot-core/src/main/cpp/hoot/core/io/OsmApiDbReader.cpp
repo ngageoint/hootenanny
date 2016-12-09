@@ -160,7 +160,6 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   }
   if (tags.size() > 0)
   {
-    //LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
   }
 }
@@ -265,7 +264,7 @@ void OsmApiDbReader::close()
   }
 }
 
-shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
+NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long rawId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << rawId);
@@ -292,11 +291,10 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { node->setStatus(_status); }
 
-  //LOG_VART(node);
   return node;
 }
 
-shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
+WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << wayId);
@@ -330,7 +328,6 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { way->setStatus(_status); }
 
-  //LOG_VART(way);
   return way;
 }
 
@@ -338,6 +335,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 {
   for (unsigned int i = 0; i < nodeIds.size(); i++)
   {
+    LOG_VART(nodeIds[i]);
     QStringList tags;
     if (map.containsNode(nodeIds[i]) == false)
     {
@@ -353,20 +351,19 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 
         if (tags.size() > 0)
         {
-          //LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(node);
         }
         //we want the reader's status to always override any existing status
         if (_status != Status::Invalid) { node->setStatus(_status); }
+        LOG_VART(node);
         map.addElement(node);
       }
     }
   }
 }
 
-shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-  const OsmMap& map)
+RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << relationId);
@@ -402,7 +399,6 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { relation->setStatus(_status); }
 
-  //LOG_VART(relation);
   return relation;
 }
 

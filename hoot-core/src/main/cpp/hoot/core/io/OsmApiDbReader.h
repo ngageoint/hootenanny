@@ -83,9 +83,9 @@ public:
 
 protected:
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map);
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }

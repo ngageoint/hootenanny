@@ -119,32 +119,42 @@ fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
-  echo "STEP 9: Reading the conflated dataset specified AOI out of the hoot api db and writing it into a file (debug)..."
+  echo "STEP 9: Reading the complete conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-complete-PulledFromHootApiDb.osm
 fi
-
-echo ""
-echo "STEP 10: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
-echo ""
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
-
-echo ""
-echo "STEP 11: Executing the changeset SQL on the osm api db..."
-echo ""
-hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
-  echo "STEP 12: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
+  echo "STEP 10: Reading the subset AOI conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/12-subset-output-PulledFromOsmApiDb.osm
+  hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
 fi
 
 echo ""
-echo "STEP 13: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
+echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot convert $HOOT_OPTS -D writer.include.circular.error=false $OSM_API_DB_URL $OUTPUT_DIR/13-complete-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/13-complete-output-PulledFromOsmApiDb.osm
+# can't be run with debug or trace or the extent string won't be returned correctly
+#CONFLATED_MAP_EXTENT=`hoot map-extent --error -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org "$HOOT_DB_URL/8-conflated-$TEST_NAME" | grep Map | awk '{print $4}'`
+hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$CONFLATED_MAP_EXTENT $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+
+echo ""
+echo "STEP 12: Executing the changeset SQL on the osm api db..."
+echo ""
+hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+
+if [ "$RUN_DEBUG_STEPS" == "true" ]; then
+  echo ""
+  echo "STEP 13: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
+  echo ""
+  hoot convert $HOOT_OPTS -D writer.include.circular.error=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/13-subset-output-PulledFromOsmApiDb.osm
+fi
+
+echo ""
+echo "STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
+echo ""
+hoot convert $HOOT_OPTS -D writer.include.circular.error=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 

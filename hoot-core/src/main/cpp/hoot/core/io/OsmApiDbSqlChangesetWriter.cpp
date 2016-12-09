@@ -79,7 +79,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
   for (int i = 0; i < sqlParts.size(); i++)
   {
     const QString sqlStatement = sqlParts[i];
-    //LOG_VARD(sqlStatement);
+    LOG_VART(sqlStatement);
     QString changesetStatType;
     if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
     {
@@ -206,7 +206,7 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
     "Relation(s) Deleted: " + QString::number(_changesetStats["relation-delete"]) + "\n";
 }
 
-//TODO: This needs to be updated to use tile ids...but it possibly goes away completely after #716.
+//This method may go away after #716.
 bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
                                                         const QString timeStr)
 {

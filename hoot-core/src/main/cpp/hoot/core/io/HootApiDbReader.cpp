@@ -313,7 +313,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
   }
 }
 
-shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
+NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
@@ -335,11 +335,10 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { node->setStatus(_status); }
 
-  //LOG_VART(node);
   return node;
 }
 
-shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
+WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
@@ -369,12 +368,10 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   }
   way->addNodes(nodeIds);
 
-  //LOG_VART(way);
   return way;
 }
 
-shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-                                                        const OsmMap& map)
+RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
@@ -404,7 +401,6 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   }
   relation->setMembers(members);
 
-  //LOG_VART(relation);
   return relation;
 }
 
