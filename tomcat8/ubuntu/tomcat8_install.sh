@@ -138,4 +138,4 @@ fi
 service ${TOMCAT_NAME} stop
 rm -f ${TOMCAT_LOGS_HOME}/catalina.out
 
-sudo update-rc.d ${TOMCAT_NAME} defaults
+update-rc.d ${TOMCAT_NAME} defaults
