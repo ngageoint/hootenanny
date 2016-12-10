@@ -77,11 +77,11 @@ delete from databasechangeloglock *;
 
 * *Need to monitor the Tomcat log for errors?* -->
 --------------------------------------
-tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
+tail -f /var/log/tomcat8/catalina.out | grep -i -e ERROR -e SEVERE
 --------------------------------------
 In some cases, you may need to execute the following instead:
 --------------------------------------
-tail -f /usr/share/tomcat6/logs/catalina.out | grep -i -e ERROR -e SEVERE
+tail -f /usr/share/tomcat8/logs/catalina.out | grep -i -e ERROR -e SEVERE
 --------------------------------------
 
 * *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:

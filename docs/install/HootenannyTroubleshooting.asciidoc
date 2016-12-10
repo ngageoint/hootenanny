@@ -115,35 +115,35 @@ COMMIT
 * *WAR files will not deploy?* --> If your Tomcat instance is not set up to automatically deploy WAR files for some reason, then you will need to restart Tomcat to extract the WAR contents to a folder before setting permissions on them.
 * *Need to monitor the Tomcat log for errors?* -->
 --------------------------------------
-tail -f /var/log/tomcat6/catalina.out | grep -i -e ERROR -e SEVERE
+tail -f /var/log/tomcat8/catalina.out | grep -i -e ERROR -e SEVERE
 --------------------------------------
 
 * *Not sure the correct version of Hootenanny services are deployed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
 	** +http://localhost/hoot-services/info/about/servicesVersionInfo+
 	** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
-* *Can't hit the service URL's above?* --> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat6/webapps/hoot-services .  Although UpdateHoot-CentOS6.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
+* *Can't hit the service URL's above?* --> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat8/webapps/hoot-services .  Although UpdateHoot-CentOS6.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
 installations:
-	** sudo rm -f /var/lib/tomcat6/webapps/hoot*-services*.war
-	** sudo rm -rf /var/lib/tomcat6/webapps/hoot*-services*
+	** sudo rm -f /var/lib/tomcat8/webapps/hoot*-services*.war
+	** sudo rm -rf /var/lib/tomcat8/webapps/hoot*-services*
 
-* *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
+* *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
 	**  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
 	**  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
-	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+ 
-	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
-	**  +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
-	** Also, verify +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+ 
+	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+
+	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
+	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
+	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+
 		. maxActive=90
 		. maxIdle=30
-	** Also, verify +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
+	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
 
 * *Having problems with the WFS?* -->
 	** Verify wfsstoredb has been properly set up (see database troubleshooting section).
-	** Check +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
-	** Verify +/var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace+ has had its permissions set correctly.
+	** Check +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
+	** Verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has had its permissions set correctly.
 
 * *Seeing this WFS error?* -->
 
@@ -155,7 +155,7 @@ installations:
 You're seeing expired WFS links. To remove them:
 
 --------------------------------------
-cd /var/lib/tomcat6/webapps/hoot-services/WEB-INF/workspace
+cd /var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace
 sudo rm -f datasources/feature/ex_*.xml 
 sudo rm -f datasources/feature/*.properties
 sudo rm -f services/ex_*.xml
@@ -169,6 +169,6 @@ sudo rm -f services/ex_*.xml
 * *Not sure the correct version of the user interface is installed?* --> You can check the version of the user interface by clicking on the "Hootenanny | Innovision| logo from within the UI.
 
 * *Trouble seeing your base map?* -->
-	** In +/var/lib/tomcat6/webapps/hootenanny-id/data/imagery.json+ , verify that the base map URLs for all your layers are correct.
-	** You may also need to tweak the "source.url" variable in +/var/lib/tomcat6/webapps/hootenanny-id/js/id/renderer/background_source.js+ depending on how the base maps are to be parsed. Make sure the url produced by iD.BackgroundSource. <your layer> function is correct by cut and pasting the url on browser and see if that returns image.
+	** In +/var/lib/tomcat8/webapps/hootenanny-id/data/imagery.json+ , verify that the base map URLs for all your layers are correct.
+	** You may also need to tweak the "source.url" variable in +/var/lib/tomcat8/webapps/hootenanny-id/js/id/renderer/background_source.js+ depending on how the base maps are to be parsed. Make sure the url produced by iD.BackgroundSource. <your layer> function is correct by cut and pasting the url on browser and see if that returns image.
 	** If changes are made to the imagery.json file, always then clear the browser history, close the browser, and open a new browser pointed to the Hootenanny UI application.
