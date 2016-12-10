@@ -11,7 +11,6 @@ TOMCAT_LOGS_HOME=/var/log/tomcat8
 TOMCAT_CONFIG_HOME=/etc/tomcat8
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-#Check boottime startup!
 
 echo "### Installing Tomcat 8.5.8"
 
@@ -61,7 +60,7 @@ chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_USER_HOME}/webapps
 
 cd -
 
-#We don't need .bat file lying around
+#We don't need .bat files lying around
 rm -f ${TOMCAT_HOME}/bin/*.bat
 
 echo "### Setting up Tomcat logs"
