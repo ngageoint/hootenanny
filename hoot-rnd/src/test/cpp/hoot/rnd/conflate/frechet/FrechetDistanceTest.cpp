@@ -45,8 +45,6 @@
 
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
-using namespace hoot;
-
 namespace hoot
 {
 
@@ -153,7 +151,7 @@ public:
      */
     const int rows = 7;
     const int cols = 8;
-    Meters values[rows][cols] = {
+    const Meters values[rows][cols] = {
       {  0.86,  2.33,  5.55,  9.97, 10.67, 10.64,  9.52,  6.01 },
       {  2.52,  0.92,  4.18,  8.85,  9.62,  9.70,  8.78,  5.39 },
       {  3.45,  0.91,  3.10,  7.80,  8.60,  8.74,  7.93,  4.70 },
@@ -196,7 +194,7 @@ public:
      */
     const int rows = 9;
     const int cols = 17;
-    Meters values[rows][cols] = {
+    const Meters values[rows][cols] = {
       {  1.60,  0.67,  1.78,  1.17,  0.72,  2.03,  3.62,  4.55,  6.14,  7.74,  8.55,  9.77, 11.40, 13.10, 12.80, 13.20, 12.70 },
       {  3.64,  2.62,  3.82,  2.97,  1.75,  0.11,  1.55,  2.58,  4.17,  5.77,  6.65,  7.89,  9.58, 11.20, 10.90, 11.30, 10.90 },
       {  5.73,  4.71,  5.91,  5.01,  3.80,  2.18,  0.73,  1.22,  2.44,  3.94,  4.91,  6.16,  7.78,  9.37,  9.16,  9.65,  9.35 },
