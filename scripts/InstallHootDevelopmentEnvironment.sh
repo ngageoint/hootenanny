@@ -1,26 +1,18 @@
 #!/usr/bin/env bash
 
-# This script:  
-#
-#   - is meant for installing hoot in a development enviroment to bare metal for performance reasons (instead of using the 
-#     actively maintained Vagrant VM; faster compiles, etc.)
-#   - is one possible way to set up a Hootenanny developer environment on bare metal;  Feel free to tweak your own version of it.
-#   - is not actively maintained and may need to be updated to work with the latest version of VagrantProvision.sh
-#   - calls into the vagrant ubuntu script for the first part of the installation
-#   - adds developer tools; Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
-#   - takes up roughly 10GB space
-#   - does not handle the hoot-tests repo, the translations repo, or the data used by hoot-tests (see Redmine docs for these steps)
-#   - still needs to auto-handle some command prompts
+# This script is meant for installing an Ubuntu Hootenanny development enviroment to bare metal 
+# for performance reasons (faster compiles, etc.).
 #
 # Pre-req:
 #
 # 1. Set up an Ubuntu 14.04 environment: http://mirror.pnl.gov/releases/14.04/
-# 2. Export your ssh key to Github: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-# 3. Install git.
-# 4. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
-# 5. If you are going to use the hoot-tests repo, have a DG admin create you an account on
+# 2. Create an ssh key and set up passwordless ssh locally.
+# 3. Export your ssh key to Github: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+# 4. Install git.
+# 5. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
+# 6. If you are going to use the hoot-tests repo, have a DG admin create you an account on
 # that server and add your ssh key to that repo.
-# 6. Clone the hoot-tests repo. 
+# 7. Clone the hoot-tests repo. 
 #
 # Before running this script:
 #
@@ -33,6 +25,17 @@
 #  cd hoot
 #  git submodule init && git submodule update
 #  scripts/InstallHootDevelopmentEnvironment.sh
+#
+# More details; this script:
+#
+#   - is one possible way to set up a Hootenanny developer environment on bare metal;  Feel free to tweak your own version of it.
+#   - is not actively maintained and may need to be updated to work with the latest version of VagrantProvision.sh
+#   - calls into the vagrant ubuntu script for the first part of the installation
+#   - adds developer tools; Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
+#   - takes up roughly 13GB space (12/12/16; includes test output)
+#   - sets up an environment which can work with as little as 4GB of ram, but 8-16GB is recommended for working with larger, real world datasets
+#   - does not handle the hoot-tests repo, the translations repo, or the data used by hoot-tests (see Redmine docs for these steps)
+#   - still needs to auto-handle some command prompts
 
 cd ~
 
