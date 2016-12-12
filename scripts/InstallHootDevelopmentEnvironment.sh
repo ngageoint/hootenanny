@@ -11,9 +11,10 @@
 #
 # Pre-req:
 #
-# 1. Set up an Ubuntu 14.04 environment.
-# 2. Export your ssh key to Github.
-# 3. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
+# 1. Set up an Ubuntu 14.04 environment: http://mirror.pnl.gov/releases/14.04/
+# 2. Export your ssh key to Github: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+# 3. Install git.
+# 4. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
 #
 # Before running this script:
 #
@@ -60,7 +61,7 @@ sudo apt-get update
 sudo apt-get install -y qtcreator eclipse eclipse-jdt eclipse-pde eclipse-platform*
 
 # misc goodies - distcc requires further configuration
-sudo apt-get install -y meld distcc htop synergy gparted qgis kompare
+sudo apt-get install -y meld distcc htop synergy gparted qgis kompare xclip
 
 # JOSM
 mkdir -p ~/local/jars/
