@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -96,13 +96,16 @@ shared_ptr<geos::geom::Point> Node::toPoint() const
 QString Node::toString() const
 {
   return
-    QString("Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6")
+    QString(
+      "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
       .arg(getId())
       .arg(getX())
       .arg(getY())
       .arg(getTags().toString())
       .arg(getVersion())
-      .arg(getVisible());
+      .arg(getVisible())
+      .arg(getStatus().toString())
+      .arg(QString::number(getCircularError()));
 }
 
 void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const

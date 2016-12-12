@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -100,7 +100,7 @@ public:
   void setId(long id) { _getElementData().setId(id); }
 
   long getChangeset() const { return _getElementData().getChangeset(); }
-  void setChangeset(bool changeset) { _getElementData().setChangeset(changeset); }
+  void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
 
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
 

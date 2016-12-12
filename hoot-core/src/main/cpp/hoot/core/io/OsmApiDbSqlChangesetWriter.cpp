@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -91,8 +91,8 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
           throw HootException("No element SQL statements changeset.");
         }
 
-        //had problems here when trying to prepare these queries (should they be?); the changeset writing
-        //needs to be done before the element writing, hence the separate queries
+        //had problems here when trying to prepare these queries (should they be?); the changeset
+        //writing needs to be done before the element writing, hence the separate queries
         _execNoPrepare(changesetInsertStatement);
         _execNoPrepare(elementSqlStatements);
 
@@ -207,10 +207,12 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
     "Relation(s) Deleted: " + QString::number(_changesetStats["relation-delete"]) + "\n";
 }
 
-bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr, const QString timeStr)
+//TODO: This needs to be updated to use tile ids...but it possibly goes away completely after #716.
+bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
+                                                        const QString timeStr)
 {
-  LOG_INFO("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() << " within " <<
-           boundsStr << " and created after " << timeStr << "...");
+  LOG_INFO("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
+           " within " << boundsStr << " and created after " << timeStr << "...");
 
   const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
   LOG_VARD(bounds.toString());

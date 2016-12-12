@@ -336,7 +336,7 @@ private:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "current");
 
 

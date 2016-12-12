@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -64,8 +64,6 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  void _addTagsToElement(shared_ptr<Element> element);
-
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
@@ -79,7 +77,9 @@ protected:
    * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
    * implemented yet.
    */
-  virtual void _readByBounds(shared_ptr<OsmMap> map, const Envelope& bounds);
+  virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
+
+  void _updateMetadataOnElement(ElementPtr element);
 };
 
 }

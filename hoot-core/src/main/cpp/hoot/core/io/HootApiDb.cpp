@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/db/SqlBulkInsert.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -51,7 +51,7 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "db/InternalIdReserver.h"
+#include "InternalIdReserver.h"
 
 namespace hoot
 {
@@ -206,8 +206,8 @@ void HootApiDb::endChangeset()
 
   LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
 
-  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to database yet!
-  //    they will be refreshed upon opening a new database, so leave them alone!
+  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
+  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
   _changesetChangeCount = 0;
 }
 
@@ -379,7 +379,8 @@ void HootApiDb::dropTable(const QString& tableName)
 
 void HootApiDb::deleteUser(long userId)
 {
-  QSqlQuery maps = _exec("SELECT id FROM " + ApiDb::getMapsTableName() + " WHERE user_id=:user_id", (qlonglong)userId);
+  QSqlQuery maps = _exec("SELECT id FROM " + ApiDb::getMapsTableName() +
+                         " WHERE user_id=:user_id", (qlonglong)userId);
 
   // delete all the maps owned by this user
   while (maps.next())
@@ -570,7 +571,8 @@ void HootApiDb::beginChangeset(const Tags& tags)
     _insertChangeSet->prepare(
       QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
         "closed_at, tags) "
-        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " + _escapeTags(tags) + ") "
+        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " +
+        _escapeTags(tags) + ") "
         "RETURNING id")
         .arg(getChangesetsTableName(mapId)));
   }
@@ -593,7 +595,8 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   if (_insertMap == 0)
   {
     _insertMap.reset(new QSqlQuery(_db));
-    _insertMap->prepare("INSERT INTO " + ApiDb::getMapsTableName() + " (display_name, user_id, public, created_at) "
+    _insertMap->prepare("INSERT INTO " + ApiDb::getMapsTableName() +
+                        " (display_name, user_id, public, created_at) "
                         "VALUES (:display_name, :user_id, :public, NOW()) "
                         "RETURNING id");
   }
@@ -605,7 +608,8 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
 
   _copyTableStructure(ApiDb::getChangesetsTableName(), getChangesetsTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentNodesTableName(), getCurrentNodesTableName(mapId));
-  _copyTableStructure(ApiDb::getCurrentRelationMembersTableName(), getCurrentRelationMembersTableName(mapId));
+  _copyTableStructure(
+    ApiDb::getCurrentRelationMembersTableName(), getCurrentRelationMembersTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentRelationsTableName(), getCurrentRelationsTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
@@ -824,7 +828,8 @@ bool HootApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  if (url.scheme() != "hootapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  //postgresql is deprecated but still support
+  if (url.scheme() != "hootapidb" && url.scheme() != "postgresql")
   {
     valid = false;
   }
@@ -968,7 +973,8 @@ set<long> HootApiDb::selectMapIds(QString name)
   {
       LOG_DEBUG("inside first test inside selectMapIds");
     _selectMapIds.reset(new QSqlQuery(_db));
-    _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() + " WHERE display_name LIKE :name AND user_id=:userId");
+    _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                           " WHERE display_name LIKE :name AND user_id=:userId");
   }
 
   _selectMapIds->bindValue(":name", name);
@@ -1038,7 +1044,8 @@ bool HootApiDb::mapExists(const long id)
   if (_mapExists == 0)
   {
     _mapExists.reset(new QSqlQuery(_db));
-    _mapExists->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() + " WHERE id = :mapId");
+    _mapExists->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
+                        " WHERE id = :mapId");
   }
   _mapExists->bindValue(":mapId", (qlonglong)id);
   if (_mapExists->exec() == false)
@@ -1114,6 +1121,8 @@ shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " for map ID: " + QString::number(mapId) + " Error: " + err);
   }
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VARD(_selectElementsForMap->executedQuery());
   return _selectElementsForMap;
 }
 
@@ -1147,7 +1156,8 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     _selectMembersForRelation.reset(new QSqlQuery(_db));
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
-      "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName(mapId) +
+      "SELECT member_type, member_id, member_role FROM " +
+      getCurrentRelationMembersTableName(mapId) +
       " WHERE relation_id = :relationId ORDER BY sequence_id");
     _selectMembersForRelation->bindValue(":mapId", (qlonglong)mapId);
   }
@@ -1158,6 +1168,8 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     throw HootException("Error selecting members for relation with ID: " +
       QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
   }
+  LOG_VART(_selectMembersForRelation->numRowsAffected());
+  LOG_VART(_selectMembersForRelation->executedQuery());
 
   while (_selectMembersForRelation->next())
   {
@@ -1193,13 +1205,12 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
     _updateNode->prepare(
       "UPDATE " + getCurrentNodesTableName(mapId) +
       " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
-      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
+      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) +
+      " WHERE id=:id");
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
-  //_updateNode->bindValue(":latitude", (qlonglong)_round(lat * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":latitude", lat);
-  //_updateNode->bindValue(":longitude", (qlonglong)_round(lon * COORDINATE_SCALE, 7));
   _updateNode->bindValue(":longitude", lon);
   _updateNode->bindValue(":changeset_id", (qlonglong)_currChangesetId);
   _updateNode->bindValue(":timestamp", OsmUtils::currentTimeAsString());
@@ -1230,7 +1241,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
     _updateRelation.reset(new QSqlQuery(_db));
     _updateRelation->prepare(
       "UPDATE " + getCurrentRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateRelation->bindValue(":id", (qlonglong)id);
@@ -1262,7 +1274,8 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
     _updateWay.reset(new QSqlQuery(_db));
     _updateWay->prepare(
       "UPDATE " + getCurrentWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" + _escapeTags(tags) + " WHERE id=:id");
+      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
@@ -1379,7 +1392,9 @@ void HootApiDb::_updateChangesetEnvelope(const ConstNodePtr node)
   const double nodeY = node->getY();
 
   _changesetEnvelope.expandToInclude(nodeX, nodeY);
-  //LOG_DEBUG("Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" + QString::number(nodeY));
+  LOG_TRACE(
+    "Changeset bounding box updated to include X=" + QString::number(nodeX) + ", Y=" +
+    QString::number(nodeY));
 }
 
 long HootApiDb::reserveElementId(const ElementType::Type type)

@@ -96,6 +96,6 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin1Test, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin1Test, "glacial");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin1Test, "current");
 
