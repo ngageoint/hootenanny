@@ -1,30 +1,36 @@
 #!/usr/bin/env bash
 
 # This script:  
-#   - is meant for installing hoot in a development enviroment to bare metal for performance reasons (faster compiles, etc.)
+#
+#   - is meant for installing hoot in a development enviroment to bare metal for performance reasons (instead of using the 
+#     actively maintained Vagrant VM; faster compiles, etc.)
+#   - is one possible way to set up a Hootenanny developer environment on bare metal;  Feel free to tweak your own version of it.
+#   - is not actively maintained and may need to be updated to work with the latest version of VagrantProvision.sh
 #   - calls into the vagrant ubuntu script for the first part of the installation
-#   - has added developer tools and other goodies.
+#   - adds developer tools; Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
 #
-# Use this as one possible way to set up a Hootenanny developer environment.  Feel free to tweak your own version of it.
+# Pre-req:
 #
-# To run this script:
+# 1. Set up an Ubuntu 14.04 environment.
+# 2. Export your ssh key to Github.
+# 3. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
 #
-#  cd ~
-#  git clone git@github.com:ngageoint/hootenanny.git hoot
+# Before running this script:
+#
+# 1. Temporarily change all references to '/home/vagrant' in VagrantProvision.sh to your home directory.
+#
+# Run the script:
+#
 #  cd hoot
 #  git submodule init && git submodule update
 #  hoot/scripts/InstallHootDevelopmentEnvironment.sh
-#
-# Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
-#
-# TODO: Fix hardcoded HOOT_HOME in VagrantProvision.sh to make this script work.
 
 cd ~
 
-echo "Installing base dependencies..."
+echo "Installing base dependencies from Vagrant script..."
 hoot/scripts/VagrantProvision.sh
 
-# Use tomcat 7 here instead of tomcat 6, since eclipse installed from repos needs tomcat 7.  I don't like changing the Tomcat version for the development environment, but the impact is minimal, and the eclipse installation can't be automated very easily if this isn't done.
+# Use tomcat 7 here instead of tomcat 6, since eclipse installed from repos needs tomcat 7.
 
 echo "Backing up Tomcat 6 settings..."
 mkdir -p ~/tmp
@@ -43,7 +49,7 @@ echo "Restoring settings to Tomcat 7..."
 sudo cp ~/tmp/tomcat6 /etc/default
 sudo cp ~/tmp/server.xml /etc/tomcat7
 sudo cp ~/tmp/context.xml /etc/tomcat7
-# Do tomcat7 group permissions need to be set on these files in a developer environment?; Do sym links have to be made for the log dirs, etc?
+# TODO: Do tomcat7 group permissions need to be set on these files in a developer environment?; Do sym links have to be made for the log dirs, etc?
 
 echo "Installing development environment dependencies..."
 
@@ -54,10 +60,16 @@ sudo apt-get update
 sudo apt-get install -y qtcreator eclipse eclipse-jdt eclipse-pde eclipse-platform*
 
 # misc goodies - distcc requires further configuration
-sudo apt-get install -y meld distcc htop synergy gparted qgis
+sudo apt-get install -y meld distcc htop synergy gparted qgis kompare
+
+# JOSM
+mkdir -p ~/local/jars/
+wget -P ~/local/jars/ -N http://josm.openstreetmap.de/josm-tested.jar
+# launch with:
+#java -XX:MaxPermSize=1024m -Xmx8192m -jar ~/local/jars/josm-tested.jar
 
 # needed for webex
-sudo apt-get install -y libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin
+#sudo apt-get install -y libpangoxft-1.0-0:i386 libxv1:i386 libpangox-1.0-0:i386 libgtk2.0-0 libxtst6 libxi-dev libasound2 libgtk2.0-0:i386 libxtst6:i386 libasound2:i386 libgcj14-awt:i386 icedtea-plugin
 
 # If you're fed up with the unity desktop, then uncomment this for xfce; use 'xfce4-display-settings -m' after installing for display config
 # sudo apt-get install xfce4
