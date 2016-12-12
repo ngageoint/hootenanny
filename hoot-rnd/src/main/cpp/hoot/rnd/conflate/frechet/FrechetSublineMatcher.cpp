@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/Units.h>
-#include <hoot/core/algorithms/FrechetDistance.h>
+#include <hoot/rnd/conflate/frechet/FrechetDistance.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 

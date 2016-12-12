@@ -34,13 +34,13 @@
 // GEOS
 #include <geos/geom/LineString.h>
 // Hoot
-#include <hoot/core/algorithms/FrechetSublineMatcher.h>
+#include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/MapProjector.h>
 
-#include "../TestUtils.h"
+#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
 using namespace hoot;
 
