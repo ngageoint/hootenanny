@@ -16,7 +16,7 @@ SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOMCAT_HOME_PERMISSIONS=755
 TOMCAT_USER_HOME_PERMISSIONS=755
 TOMCAT_LOGS_HOME_PERMISSIONS=755
-TOMCAT_CACHE_HOME_PERMISSIONS=755
+TOMCAT_CACHE_HOME_PERMISSIONS=775
 
 TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-8.5.8.tar.gz
 
@@ -25,7 +25,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "### Begin $TOMCAT_NAME installation."
+echo "######## Begin $TOMCAT_NAME installation ########"
+echo "SCRIPT_HOME=$SCRIPT_HOME"
 
 # Stop tomcat service if it already exists
 service ${TOMCAT_NAME} stop
@@ -55,13 +56,9 @@ chmod -R ${TOMCAT_HOME_PERMISSIONS} ${TOMCAT_HOME}
 rm -rf ${TOMCAT_HOME}/webapps
 mkdir -p ${TOMCAT_USER_HOME}/webapps
 
-cd ${TOMCAT_HOME}
-
-ln -sf ${TOMCAT_USER_HOME}/webapps webapps
+ln -sf ${TOMCAT_USER_HOME}/webapps ${TOMCAT_HOME}/webapps
 chmod ${TOMCAT_USER_HOME_PERMISSIONS} ${TOMCAT_USER_HOME}
 chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_USER_HOME}/webapps
-
-cd -
 
 #We don't need .bat files lying around
 rm -f ${TOMCAT_HOME}/bin/*.bat
@@ -72,55 +69,51 @@ rm -rf ${TOMCAT_HOME}/logs
 mkdir -p ${TOMCAT_LOGS_HOME}
 chmod -R ${TOMCAT_LOGS_HOME_PERMISSIONS} ${TOMCAT_LOGS_HOME}
 chown ${TOMCAT_GROUP}:adm ${TOMCAT_LOGS_HOME}
-cd ${TOMCAT_HOME}
+ln -sf ${TOMCAT_LOGS_HOME} ${TOMCAT_HOME}/logs
 
-ln -sf ${TOMCAT_LOGS_HOME} logs
-
-cd -
 echo "### Done setting up Tomcat logs"
 
-if [ ! -d "$TOMCAT_CONFIG_HOME" ]; then
-    # Put conf in /etc/ and link back.
-    echo "### Setting up config"
-    mkdir -p ${TOMCAT_HOME}/conf/policy.d
-    cp ${SCRIPT_HOME}/../policy.d/* ${TOMCAT_HOME}/conf/policy.d
-    mv ${TOMCAT_HOME}/conf ${TOMCAT_CONFIG_HOME}
-    cd ${TOMCAT_HOME}
-    ln -sf ${TOMCAT_CONFIG_HOME} conf
-    mkdir -p ${TOMCAT_CONFIG_HOME}/Catalina
-    chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CONFIG_HOME}/*
-    chmod -R g+w ${TOMCAT_CONFIG_HOME}/*
-    cd -
+if [ -d "$TOMCAT_CONFIG_HOME" ]; then
+    rm -rf ${TOMCAT_CONFIG_HOME}
 fi
 
-# Put temp and work to /var/cache and link back.
-mkdir -p ${TOMCAT_CACHE_HOME}
+mkdir -p ${TOMCAT_CONFIG_HOME}
+
+# Put conf in /etc/ and link back.
+echo "### Setting up config"
+mkdir -p ${TOMCAT_HOME}/conf/policy.d
+cp ${SCRIPT_HOME}/../policy.d/* ${TOMCAT_HOME}/conf/policy.d
+mv ${TOMCAT_HOME}/conf/* ${TOMCAT_CONFIG_HOME}
+rm -rf ${TOMCAT_HOME}/conf
+ln -sf ${TOMCAT_CONFIG_HOME} ${TOMCAT_HOME}/conf
+mkdir -p ${TOMCAT_CONFIG_HOME}/Catalina
+chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CONFIG_HOME}/*
+chmod -R g+w ${TOMCAT_CONFIG_HOME}/*
+echo "### Finished setting up config"
+
 mkdir -p ${TOMCAT_HOME}/.deegree
 chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/.deegree
 
-if [ ! -d "$TOMCAT_CACHE_HOME/temp" ]; then
-    mv ${TOMCAT_HOME}/temp ${TOMCAT_CACHE_HOME}
+# Put temp and work to /var/cache and link back.
+mkdir -p ${TOMCAT_CACHE_HOME}
+
+if [ -d "$TOMCAT_CACHE_HOME/temp" ]; then
+    rm -rf ${TOMCAT_CACHE_HOME}/temp
 fi
 
-if [ ! -d "$TOMCAT_CACHE_HOME/work" ]; then
-    mv ${TOMCAT_HOME}/work ${TOMCAT_CACHE_HOME}
-fi
-
-cd ${TOMCAT_HOME}
-
-ln -sf ${TOMCAT_CACHE_HOME}/temp temp
-ln -sf ${TOMCAT_CACHE_HOME}/work work
+mv ${TOMCAT_HOME}/temp ${TOMCAT_CACHE_HOME}
+ln -sf ${TOMCAT_CACHE_HOME}/temp ${TOMCAT_HOME}/temp
 chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/temp
-chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/work
 chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/temp
+
+if [ -d "$TOMCAT_CACHE_HOME/work" ]; then
+    rm -rf ${TOMCAT_CACHE_HOME}/work
+fi
+
+mv ${TOMCAT_HOME}/work ${TOMCAT_CACHE_HOME}
+ln -sf ${TOMCAT_CACHE_HOME}/work ${TOMCAT_HOME}/work
+chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/work
 chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
-
-cd -
-
-#mkdir -p ${TOMCAT_HOME}/server/classes
-#mkdir -p ${TOMCAT_HOME}/shared/classes
-#chown -R ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/server
-#chown -R ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/shared
 
 cp ${SCRIPT_HOME}/etc/init.d/${TOMCAT_NAME} /etc/init.d
 cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
@@ -141,4 +134,4 @@ rm -f ${TOMCAT_LOGS_HOME}/catalina.out
 
 update-rc.d ${TOMCAT_NAME} defaults
 
-echo "### End $TOMCAT_NAME installation."
+echo "######## End $TOMCAT_NAME installation ########"
