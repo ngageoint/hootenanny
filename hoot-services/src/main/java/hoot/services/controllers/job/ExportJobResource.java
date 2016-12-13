@@ -235,6 +235,10 @@ public class ExportJobResource extends JobControllerBase {
             bbox = getMapBounds(conflatedMap);
         }
         setAoi(bbox, commandArgs);
+        //put the osm userid in the command args
+        if (oParams.get("USER_ID") != null) {
+            commandArgs.add(new JSONObject("userid", oParams.get("USER_ID")));
+        }
 
         return commandArgs;
     }
