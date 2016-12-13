@@ -237,7 +237,9 @@ public class ExportJobResource extends JobControllerBase {
         setAoi(bbox, commandArgs);
         //put the osm userid in the command args
         if (oParams.get("USER_ID") != null) {
-            commandArgs.add(new JSONObject("userid", oParams.get("USER_ID")));
+            JSONObject uid = new JSONObject();
+            uid.put("userid", oParams.get("USER_ID"));
+            commandArgs.add(uid);
         }
 
         return commandArgs;
