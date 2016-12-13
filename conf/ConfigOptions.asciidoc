@@ -324,6 +324,24 @@ intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified 
 of the input data source.  This setting can be used with both the convert and conflate commands, but
 is not supported by all data readers.  See the documentation for details.
 
+=== osm.api.convert.bounding.box
+
+* Data Type: string
+* Default Value: ``
+
+Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
+data sources.  This setting takes precendence over convert.bounding.box for OSM API database data
+sources.
+
+=== hoot.api.convert.bounding.box
+
+* Data Type: string
+* Default Value: ``
+
+Same as convert.bounding.box but the resultant bounds filtering is only applied to Hootenanny API
+database data sources.  This setting takes precendence over convert.bounding.box for Hootenanny API
+database data sources.
+
 Example Usage:
 
 ----

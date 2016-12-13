@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,16 +97,17 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  void setBoundingBox(const QString bbox);
+  void setHootApiBoundingBox(const QString bbox);
 
 protected:
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+
+  virtual bool _hasBounds();
 
 private:
 
@@ -114,7 +115,7 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
-  Envelope _bounds;
+  Envelope _hootApiBounds;
 
   shared_ptr<Element> _nextElement;
 
@@ -122,7 +123,6 @@ private:
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
 
-  //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();
 
   /**

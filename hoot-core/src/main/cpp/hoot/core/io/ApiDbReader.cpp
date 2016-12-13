@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,6 +26,9 @@
  */
 #include "ApiDbReader.h"
 
+// Hoot
+#include <hoot/core/util/GeometryUtils.h>
+
 // Qt
 #include <QSet>
 
@@ -38,6 +41,14 @@ _status(Status::Invalid),
 _open(false)
 {
 
+}
+
+void ApiDbReader::setBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
@@ -185,6 +196,17 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     //I don't think OSM non-hoot metadata tags should be removed here...
     //tags.remove("accuracy");
   }
+}
+
+bool ApiDbReader::_isValidBounds(const Envelope& bounds)
+{
+  if (bounds.isNull() ||
+      (bounds.getMinX() == -180.0 && bounds.getMinY() == -90.0 && bounds.getMaxX() == 180.0 &&
+       bounds.getMaxY() == 90.0))
+  {
+    return false;
+  }
+  return true;
 }
 
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)

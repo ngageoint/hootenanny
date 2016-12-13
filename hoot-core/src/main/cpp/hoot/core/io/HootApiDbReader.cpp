@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,11 +55,11 @@ HootApiDbReader::~HootApiDbReader()
   close();
 }
 
-void HootApiDbReader::setBoundingBox(const QString bbox)
+void HootApiDbReader::setHootApiBoundingBox(const QString bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+    _hootApiBounds = GeometryUtils::envelopeFromConfigString(bbox);
   }
 }
 
@@ -145,11 +145,14 @@ void  HootApiDbReader::initializePartial()
   _elementsRead = 0;
 }
 
+bool HootApiDbReader::_hasBounds()
+{
+  return _isValidBounds(_bounds) || _isValidBounds(_hootApiBounds);
+}
+
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
-  if (_bounds.isNull() ||
-      (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
-       && _bounds.getMaxY() == 90.0))
+  if (!_hasBounds())
   {
     LOG_DEBUG("Executing Hoot API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -159,8 +162,17 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_DEBUG("Executing Hoot API bounded read query with bounds " << _bounds.toString() << "...");
-    _readByBounds(map, _bounds);
+    Envelope bounds;
+    if (!_hootApiBounds.isNull())
+    {
+      bounds = _hootApiBounds;
+    }
+    else
+    {
+      bounds = _bounds;
+    }
+    LOG_DEBUG("Executing Hoot API bounded read query with bounds " << bounds.toString() << "...");
+    _readByBounds(map, bounds);
   }
 }
 
@@ -410,6 +422,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getHootapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
+  setHootApiBoundingBox(configOptions.getHootApiConvertBoundingBox());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const

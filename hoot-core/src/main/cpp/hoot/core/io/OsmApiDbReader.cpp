@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,11 +57,11 @@ OsmApiDbReader::~OsmApiDbReader()
   close();
 }
 
-void OsmApiDbReader::setBoundingBox(const QString bbox)
+void OsmApiDbReader::setOsmApiBoundingBox(const QString bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+    _osmApiBounds = GeometryUtils::envelopeFromConfigString(bbox);
   }
 }
 
@@ -101,6 +101,11 @@ void OsmApiDbReader::open(QString urlStr)
   _open = true;
 }
 
+bool OsmApiDbReader::_hasBounds()
+{
+  return _isValidBounds(_bounds) || _isValidBounds(_osmApiBounds);
+}
+
 void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
@@ -108,9 +113,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
     LOG_DEBUG("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
-  else if (_bounds.isNull() ||
-            (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
-              && _bounds.getMaxY() == 90.0))
+  else if (!_hasBounds())
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -120,8 +123,17 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_DEBUG("Executing OSM API bounded read query with bounds " << _bounds.toString() << "...");
-    _readByBounds(map, _bounds);
+    Envelope bounds;
+    if (!_osmApiBounds.isNull())
+    {
+      bounds = _osmApiBounds;
+    }
+    else
+    {
+      bounds = _bounds;
+    }
+    LOG_DEBUG("Executing OSM API bounded read query with bounds " << bounds.toString() << "...");
+    _readByBounds(map, bounds);
   }
 }
 
@@ -407,6 +419,7 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setUserEmail(configOptions.getOsmapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
+  setOsmApiBoundingBox(configOptions.getOsmApiConvertBoundingBox());
 }
 
 boost::shared_ptr<OGRSpatialReference> OsmApiDbReader::getProjection() const

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -77,7 +77,7 @@ public:
 
   void setUserEmail(const QString email) { _email = email; }
 
-  void setBoundingBox(const QString bbox);
+  void setOsmApiBoundingBox(const QString bbox);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
@@ -90,12 +90,14 @@ protected:
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
+  virtual bool _hasBounds();
+
 private:
 
   shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  Envelope _bounds;
+  Envelope _osmApiBounds;
 
   long _osmElemId;
   ElementType _osmElemType;
