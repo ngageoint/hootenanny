@@ -6,20 +6,17 @@ of critical Foundation GEOINT features in the topographic domain, namely:
 * Building polygons
 * Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
 * Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
-* POIs and building/area polygons
+* POIs and building/area polygons 
 
-When conflating these features, it is important to note that, with the exception of the POI to polygon conflation, the conflation occurs between similar feature types (e.g. POI to POI, Building to Building, Transportation polyline to Transportation polyline, etc.).  Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.  
+Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
 
 Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
 
 Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience without the extra overhead of thick desktop GIS clients.  The application is primarily supported in either the Chrome or Chromium browser with more limited supported in Firefox.   
 
-This offers several key benefits which include its open license allowing users to easily customize and add functionality, a robust editing capability originally targeted for interactive editing of OSM features, and a web service based architecture for integrating into SOA environments.  
+A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open interoperability. 
 
-A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through node.js service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open 
-interoperability. 
-
-If you have any support questions please create an Issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
+If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 
 # Specifications
 
@@ -27,27 +24,26 @@ We actively maintain and update our [Frequently Asked Questions page](https://gi
 so please refer to that page for any questions about general Hootenanny capabilities.
 
 ## Supported Data Formats
-_Import:_ Hootenanny can ingest from:
+Hootenanny can import from:
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
 * .zip files containing shapefiles and/or .gdb files
 * geonames.org (.geonames)
-* OSM API database
+* OSM API database via bounding box query
 
-_Export:_ Hootenanny can export to: 
+Hootenanny can export to: 
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
 * Web Feature Service (WFS)
-* OSM API database via SQL changeset
-* OSM XML changeset
+* OSM XML changeset file
+* Directly to an OSM API database via SQL changeset
 
 Note:
 * .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
 associated files
 * WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
-* Importing by a geospatial bounding box is supported by the OSM API database and Hoot API database formats only (see convert command documentation).
 
 ## Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
@@ -60,14 +56,13 @@ Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database 
 For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More detailed background on the translation capabilities of Hootenanny can be found in Hootenanny User Guide as well as specific examples from the UI in the Hootenanny User Interface Guide. These documents can accessed in your local Hootenanny instance in hoot/docs or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
 
 # Installation
-Instructions to launch a Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
+Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+
+An RPM based installation is also available for CentOS 6.7.
 
 Optional file download:
 * https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
-
-If you're compiling manually on CentOS, you'll also need:
-** https://github.com/ngageoint/hootenanny/releases/download/v0.2.16/geos-3.3.8-patched.tgz
 
 Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
 Developer's Guide.
