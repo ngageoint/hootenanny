@@ -51,7 +51,10 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/cmd/slow/PoiPolygonConflateTest/PoiPolygon2.osm", false, Status::Unknown2);
+      map,
+      "test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      false,
+      Status::Unknown2);
 
     CountManualMatchesVisitor uut;
     map->visitRo(uut);
