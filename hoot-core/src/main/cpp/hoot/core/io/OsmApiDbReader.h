@@ -37,10 +37,7 @@
 namespace hoot
 {
 
-class OsmApiDbReader :
-    public ApiDbReader,
-    public OsmMapReader,
-    public Configurable
+class OsmApiDbReader : public ApiDbReader, public OsmMapReader, public Configurable
 {
 public:
 
@@ -77,10 +74,6 @@ public:
 
   void setUserEmail(const QString email) { _email = email; }
 
-  void setOsmApiBoundingBox(const QString bbox);
-
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
 protected:
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
@@ -90,14 +83,11 @@ protected:
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
-  virtual bool _hasBounds();
-
 private:
 
   shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  Envelope _osmApiBounds;
 
   long _osmElemId;
   ElementType _osmElemType;

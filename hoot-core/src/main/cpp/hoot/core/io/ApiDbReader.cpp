@@ -51,6 +51,19 @@ void ApiDbReader::setBoundingBox(const QString bbox)
   }
 }
 
+void ApiDbReader::setOverrideBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+bool ApiDbReader::_hasBounds()
+{
+  return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);
+}
+
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;

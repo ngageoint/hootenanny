@@ -57,14 +57,6 @@ OsmApiDbReader::~OsmApiDbReader()
   close();
 }
 
-void OsmApiDbReader::setOsmApiBoundingBox(const QString bbox)
-{
-  if (!bbox.trimmed().isEmpty())
-  {
-    _osmApiBounds = GeometryUtils::envelopeFromConfigString(bbox);
-  }
-}
-
 bool OsmApiDbReader::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
@@ -101,11 +93,6 @@ void OsmApiDbReader::open(QString urlStr)
   _open = true;
 }
 
-bool OsmApiDbReader::_hasBounds()
-{
-  return _isValidBounds(_bounds) || _isValidBounds(_osmApiBounds);
-}
-
 void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
@@ -124,9 +111,9 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   else
   {
     Envelope bounds;
-    if (!_osmApiBounds.isNull())
+    if (!_overrideBounds.isNull())
     {
-      bounds = _osmApiBounds;
+      bounds = _overrideBounds;
     }
     else
     {
@@ -419,18 +406,7 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setUserEmail(configOptions.getOsmapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
-  setOsmApiBoundingBox(configOptions.getOsmApiConvertBoundingBox());
-}
-
-boost::shared_ptr<OGRSpatialReference> OsmApiDbReader::getProjection() const
-{
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-
-  return wgs84;
+  setOverrideBoundingBox(configOptions.getConvertBoundingBoxOsmApiDatabase());
 }
 
 }

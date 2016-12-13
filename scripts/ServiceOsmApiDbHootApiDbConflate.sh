@@ -134,9 +134,8 @@ fi
 echo ""
 echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-# can't be run with debug or trace or the extent string won't be returned correctly
-#CONFLATED_MAP_EXTENT=`hoot map-extent --error -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org "$HOOT_DB_URL/8-conflated-$TEST_NAME" | grep Map | awk '{print $4}'`
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D osm.api.convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+# We apply the bounding box to the osm api db target here only.
+hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box.osm.api.database=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 12: Executing the changeset SQL on the osm api db..."

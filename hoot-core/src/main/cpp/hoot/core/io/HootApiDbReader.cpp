@@ -55,14 +55,6 @@ HootApiDbReader::~HootApiDbReader()
   close();
 }
 
-void HootApiDbReader::setHootApiBoundingBox(const QString bbox)
-{
-  if (!bbox.trimmed().isEmpty())
-  {
-    _hootApiBounds = GeometryUtils::envelopeFromConfigString(bbox);
-  }
-}
-
 Envelope HootApiDbReader::calculateEnvelope() const
 {
   assert(_open);
@@ -145,11 +137,6 @@ void  HootApiDbReader::initializePartial()
   _elementsRead = 0;
 }
 
-bool HootApiDbReader::_hasBounds()
-{
-  return _isValidBounds(_bounds) || _isValidBounds(_hootApiBounds);
-}
-
 void HootApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (!_hasBounds())
@@ -163,9 +150,9 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   else
   {
     Envelope bounds;
-    if (!_hootApiBounds.isNull())
+    if (!_overrideBounds.isNull())
     {
-      bounds = _hootApiBounds;
+      bounds = _overrideBounds;
     }
     else
     {
@@ -422,7 +409,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getHootapiDbReaderEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
-  setHootApiBoundingBox(configOptions.getHootApiConvertBoundingBox());
+  setOverrideBoundingBox(configOptions.getConvertBoundingBoxHootApiDatabase());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
@@ -435,6 +422,5 @@ boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
 
   return wgs84;
 }
-
 
 }

@@ -319,34 +319,35 @@ applicable to the convert command.
 * Data Type: string
 * Default Value: ``
 
-If specified the convert reader will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.  This setting can be used with both the convert and conflate commands, but
-is not supported by all data readers.  See the documentation for details.
-
-=== osm.api.convert.bounding.box
-
-* Data Type: string
-* Default Value: ``
-
-Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
-data sources.  This setting takes precendence over convert.bounding.box for OSM API database data
-sources.
-
-=== hoot.api.convert.bounding.box
-
-* Data Type: string
-* Default Value: ``
-
-Same as convert.bounding.box but the resultant bounds filtering is only applied to Hootenanny API
-database data sources.  This setting takes precendence over convert.bounding.box for Hootenanny API
-database data sources.
+If specified, the convert reader will limit data read from the data source to only features that
+intersect the given bounding box.  The format is "minx,miny,maxx,maxy" specified in the projection
+of the input data source.  This setting can be used with both the convert and conflate commands, and
+the same setting value will be used with all data source readers that support it.  See the
+documentation for details.
 
 Example Usage:
 
 ----
 hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
 ----
+
+=== convert.bounding.box.hoot.api.database
+
+* Data Type: string
+* Default Value: ``
+
+Same as convert.bounding.box but the resultant bounds filtering is only applied to Hootenanny API
+database data sources when used with the convert and conflate commands.  This setting takes
+precendence over the convert.bounding.box setting for Hootenanny API database data sources only.
+
+=== convert.bounding.box.osm.api.database
+
+* Data Type: string
+* Default Value: ``
+
+Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
+data sources when used with the convert and conflate commands.  This setting takes precendence over
+the convert.bounding.box setting for OSM API database data sources only.
 
 === cookie.cutter.alpha
 

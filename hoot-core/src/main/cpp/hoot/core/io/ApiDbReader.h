@@ -55,6 +55,7 @@ public:
   virtual ~ApiDbReader() {}
 
   void setBoundingBox(const QString bbox);
+  void setOverrideBoundingBox(const QString bbox);
 
 protected:
 
@@ -67,6 +68,7 @@ protected:
   Tgs::BigMap<long, long> _wayIdMap;
 
   Envelope _bounds;
+  Envelope _overrideBounds; //this will override _bounds
 
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -84,9 +86,8 @@ protected:
 
   void _updateMetadataOnElement(ElementPtr element);
 
-  virtual bool _hasBounds() = 0;
-
   static bool _isValidBounds(const Envelope& bounds);
+  bool _hasBounds();
 };
 
 }
