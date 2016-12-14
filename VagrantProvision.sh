@@ -299,15 +299,18 @@ if dpkg -l | grep --quiet tomcat6; then
     echo "Disabling Tomcat 6 service"
 
     # Shut down tomcat6 service
-    service tomcat6 stop
+    sudo service tomcat6 stop
 
     # Deregister tomcat6 service from autostart
-    update-rc.d -f tomcat6 remove
+    sudo update-rc.d -f tomcat6 remove
 
-    # Don't uninstall for now.
-    #apt-get -y purge tomcat6
-    #apt-get -y autoremove
-    #rm -f /etc/default/tomcat6*
+    #uninstall Tomcat
+    sudo apt-get -y purge tomcat6
+    sudo apt-get -y autoremove
+    sudo rm -f /etc/default/tomcat6*
+    sudo rm -f /etc/tomcat6
+    sudo rm -f /usr/share/tomcat6
+    sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
 fi
 
 TOMCAT_HOME=/usr/share/tomcat8
