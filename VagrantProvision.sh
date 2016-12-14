@@ -295,11 +295,19 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-# Shut down tomcat6 service if it exists
-if service --status-all | grep -Fq 'tomcat6'; then
+if dpkg -l | grep --quiet tomcat6; then
+    echo "Disabling Tomcat 6 service"
+
+    # Shut down tomcat6 service
     service tomcat6 stop
-    # Prevent tomcat6 from being started during boot time
+
+    # Deregister tomcat6 service from autostart
     update-rc.d -f tomcat6 remove
+
+    # Don't uninstall for now.
+    #apt-get -y purge tomcat6
+    #apt-get -y autoremove
+    #rm -f /etc/default/tomcat6*
 fi
 
 TOMCAT_HOME=/usr/share/tomcat8
