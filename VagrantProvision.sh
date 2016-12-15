@@ -308,8 +308,8 @@ if dpkg -l | grep --quiet tomcat6; then
     sudo apt-get -y purge tomcat6
     sudo apt-get -y autoremove
     sudo rm -f /etc/default/tomcat6*
-    sudo rm -f /etc/tomcat6
-    sudo rm -f /usr/share/tomcat6
+    sudo rm -rf /etc/tomcat6
+    sudo rm -rf /usr/share/tomcat6
     sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
 fi
 
