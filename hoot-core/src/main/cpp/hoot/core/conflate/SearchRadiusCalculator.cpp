@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,6 +34,8 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/MapProjector.h>
 
 namespace hoot
 {
@@ -84,14 +86,14 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
   {
-    LOG_INFO(
+    LOG_WARN(
       "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
       " conflated or invalid features out of " << map->getElementCount() << " total features.");
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
     _result = _circularError;
-    LOG_INFO(
+    LOG_WARN(
       "Unable to automatically calculate search radius.  All features have already been " <<
       "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
     return;
@@ -123,7 +125,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     catch (const HootException& e)
     {
       _result = _circularError;
-      LOG_INFO(
+      LOG_DEBUG(
         QString("Unable to automatically calculate search radius: ") + e.getWhat() + QString("\n") +
         QString("Using default search radius value = ") + QString::number(_result));
       return;
@@ -148,14 +150,14 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   if (tiePointDistances.size() < 2)
   {
     _result = _circularError;
-    LOG_INFO(
+    LOG_DEBUG(
       QString("Unable to automatically calculate search radius.  Not enough tie points.  ") +
       QString("Using default search radius value = ") + QString::number(_result));
   }
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_DEBUG("Calculated search radius = " + QString::number(_result, 'g', 16));
   }
 }
 

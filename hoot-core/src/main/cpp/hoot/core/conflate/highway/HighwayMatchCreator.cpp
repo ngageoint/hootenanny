@@ -92,7 +92,7 @@ public:
 
   ~HighwayMatchVisitor()
   {
-    LOG_INFO("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
