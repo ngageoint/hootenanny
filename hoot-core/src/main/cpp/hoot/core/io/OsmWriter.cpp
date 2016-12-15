@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -157,8 +157,6 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 {
-  LOG_DEBUG("OsmWriter::write");
-
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
