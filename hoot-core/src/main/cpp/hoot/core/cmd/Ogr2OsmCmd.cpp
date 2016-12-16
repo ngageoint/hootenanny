@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -80,11 +80,9 @@ public:
     reader.setLimit(limit);
     reader.setTranslationFile(translation);
 
-    ConfigOptions configOptions;
-
     // define progress object
-    Progress progress( getName() );
-    progress.setReportType( configOptions.getReporting() );
+    Progress progress(getName());
+    progress.setReportType("json");
     progress.setState("Running");
 
     for (int i = a; i < args.size(); i++)
@@ -119,38 +117,38 @@ public:
       long featureCountTotal = 0;
       int undefinedCounts = 0;
       vector<float> progressWeights;
-      for(int i=0; i<layers.size(); i++)
+      for (int i=0; i<layers.size(); i++)
       {
         // simply open the file, get the meta feature count value, and close
         int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
         progressWeights.push_back((float)featuresPerLayer);
         // cover the case where no feature count available efficiently
-        if(featuresPerLayer == -1) undefinedCounts++;
+        if (featuresPerLayer == -1) undefinedCounts++;
         else featureCountTotal += featuresPerLayer;
       }
 
       int definedCounts = layers.size() - undefinedCounts;
 
       // determine weights for 3 possible cases
-      if(undefinedCounts == layers.size())
+      if (undefinedCounts == layers.size())
       {
-        for(int i=0;i<layers.size();i++) progressWeights[i]=1./(float)layers.size();
+        for (int i=0;i<layers.size();i++) progressWeights[i]=1./(float)layers.size();
       }
-      else if(definedCounts == layers.size())
+      else if (definedCounts == layers.size())
       {
-        for(int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+        for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
       }
       else
       {
-        for(int i=0;i<layers.size();i++)
-          if(progressWeights[i] == -1)
+        for (int i=0;i<layers.size();i++)
+          if (progressWeights[i] == -1)
           {
             progressWeights[i] = (1./(float)definedCounts) * featureCountTotal;
           }
         // reset featurecount total and recalculate
         featureCountTotal = 0;
-        for(int i=0;i<layers.size();i++) featureCountTotal += progressWeights[i];
-        for(int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+        for (int i=0;i<layers.size();i++) featureCountTotal += progressWeights[i];
+        for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
       }
 
       // read each layer's data
