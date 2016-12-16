@@ -38,8 +38,6 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
-// Again, please keep the configuration options in alphabetical order.
-//
 === add.ref.visitor.information.only
 
 * Data Type: bool
@@ -55,9 +53,8 @@ however setting this to false will apply REF1/2 values to all elements.
 
 Prefix to apply to REF1 values.
 
-The REF1 values are typically used when training a model. See the
-https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Manual_Conflation[developer
-documentation] for details.
+The REF1 values are typically used when training a model. See the Developer Documentation for
+details.
 
 === attribute.count.values
 
@@ -78,8 +75,8 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 * Data Type: double
 * Default Value: `-1`
 
-The maximum distance that the BigPertyOp should move a node. This must be larger than sigma to
-avoid endless or near endless loops.
+The maximum distance that the BigPertyOp should move a node. This must be larger than
+big.perty.op.sigma to avoid endless or near endless loops.
 
 === big.perty.op.sigma
 
@@ -111,18 +108,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== building.model.path
-
-* Data Type: string
-* Default Value: `BuildingModel.rf`
-
-Path to the RF building model. A new model can be created with `build-model`. Searches local path
-and then `$HOOT_HOME/conf/`.
-
-Training a model is typically done during research. While all the tools are available to do
-limited training, the documentation is not. Please contact the developers if you would like to
-dig deeper.
-
 === building.review.threshold
 
 * Data Type: double
@@ -140,14 +125,15 @@ See also:
 * Data Type: long
 * Default Value: `50000`
 
-The maximum allowed size of an OSM changeset written to the OSM API database.
+The maximum allowed size of an OSM changeset written to an OSM API database.
 
 === changeset.user.id
 
 * Data Type: double
 * Default Value: `1`
 
-The DB user ID for a OSM API DB. Used by changeset writing.
+The user ID used when writing to an OSM API database used by changeset writers and the
+PostgresqlDumpFileWriter.
 
 === circular.error.default.value
 
@@ -177,6 +163,14 @@ By default the `conflate` command will first conflate roads using the circa 2012
 algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying
 algorithm has road conflation enable then the results could get interesting.
 
+=== conflate.match.building.model
+
+* Data Type: string
+* Default Value: `BuildingModel.rf`
+
+Path to the RF building model. A new model can be created with `build-model`. Searches local path
+and then `$HOOT_HOME/conf/`.
+
 === conflate.match.highway.classifier
 
 * Data Type: string
@@ -189,17 +183,17 @@ The highway match classifier to use. This should only be used for testing and de
 * Data Type: string
 * Default Value: `HighwayModel.rf`
 
-The highway match classifier model file to use. This is only relevant if the
-`conflate.match.highway.classifier` is set to `hoot::HighwayRfClassifier`. The configuration
-path will be searched for this file (`$HOOT_HOME/conf/`).
+Path to the RF highway model. A new model can be created with `build-model`. Searches local path
+and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
+set to `hoot::HighwayRfClassifier`.
 
 === conflate.match.poi.model
 
 * Data Type: string
 * Default Value: `PoiModel.rf`
 
-The POI match classifier model file to use. The configuration path will be searched for this
-file (`$HOOT_HOME/conf/`).
+Path to the POI match classifier model. A new model can be created with `build-model`. Searches
+local path and then `$HOOT_HOME/conf/`.
 
 === conflate.match.threshold.default
 
@@ -233,7 +227,8 @@ See also:
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
 
-List of operations to run in the conflate command after data is conflated, but before exporting.
+List of operations to run in the conflate command after data is conflated, after the ops in
+unify.post.ops (if using Unifying Conflation), but before exporting.
 
 === conflate.pre.ops
 
@@ -242,8 +237,8 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::MapCleaner`
 
-Runs in the conflate command after data is loaded, but before the conflation. The default,
-`hoot::MapCleaner` runs a number of common map cleaning operations.
+Runs in the conflate command after data is loaded, but before the conflation and before the ops in
+unify.pre.ops (if using Unifying Conflation).
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -305,7 +300,7 @@ less confident matches.
 If specified, readers will limit data read from the data source to only features that
 intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
 of the input data source.  This setting can be used with both the convert and conflate commands, but
-is not supported by all data readers.  See the documentation for details.
+is not supported by all data readers.  See the documentation for more details.
 
 Example Usage:
 
@@ -345,7 +340,7 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 * Default Value: `false`
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
-operation (CookieCutterOp).
+operation (see CookieCutterOp).
 
 === create.bogus.review.tags
 
@@ -373,7 +368,7 @@ Debugging: The filename to use when saving the debug map during conflation.
 * Data Type: string
 * Default Value: `right`
 
-When splitting divided highways do we assume the drivers are on the right or left.
+When splitting divided highways, do we assume the drivers are on the right or left?
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
@@ -419,21 +414,21 @@ The spacing used by the EdgeDistanceExtractor.  Units in meters.
 * Data Type: long
 * Default Value: `2000000`
 
-Size of the cache used when streaming I/O is used with nodes.
+Size of the in memory node cache used when streaming I/O is used with nodes.
 
 === element.cache.size.relation
 
 * Data Type: long
 * Default Value: `200000`
 
-Size of the cache used when streaming I/O is used with relations.
+Size of the in memory relation cache used when streaming I/O is used with relations.
 
 === element.cache.size.way
 
 * Data Type: long
 * Default Value: `200000`
 
-Size of the cache used when streaming I/O is used with ways.
+Size of the in memory way cache used when streaming I/O is used with ways.
 
 === english.words.files
 
@@ -449,9 +444,6 @@ Size of the cache used when streaming I/O is used with ways.
 Absolute file path to dictionaries of English words. The first file found will be loaded into the
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
-
-For CentOS 6.X use `sudo yum install words` to install the dictionary. For Ubuntu 14.04 use
-`sudo apt-get install wamerican-insane`.
 
 === generic.line.match.threshold
 
@@ -499,7 +491,7 @@ See also:
 * Data Type: string
 * Default Value: `hoot::MaximalSublineMatcher`
 
-The way subline matcher to use when determining matching sublines.
+The way subline matcher to use when determining matching sublines with generic line conflation.
 
 === generic.polygon.match.threshold
 
@@ -599,7 +591,7 @@ See also:
 * Data Type: string
 * Default Value: `${way.subline.matcher}`
 
-The highway subline matcher to use when determining matching sublines.
+The highway subline matcher to use when determining matching highway sublines.
 
 === highway.subline.string.matcher
 
@@ -614,7 +606,7 @@ The way subline string matcher to use when determining matching sublines for hig
 * Default Value:
 ** `${HOOT_HOME}/conf/BuildingModel.rf`
 
-Used by the building matching code.
+Used by the building matching hadoop code.
 
 === hoot.hadoop.libpath
 
@@ -625,7 +617,7 @@ Used by the building matching code.
 ** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
 ** `${HOOT_HOME}/pretty-pipes/lib/`
 
-List of library paths to check for hadoop
+List of library paths to check for hadoop.
 
 === hoot.hadoop.maxNodeCount
 
@@ -699,6 +691,7 @@ A list of paths to include in the javascript translator search path.
 
 * Data Type: list
 * Default Value:
+** ``
 
 A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
 other tags from elements.
@@ -708,12 +701,12 @@ other tags from elements.
 * Data Type: double
 * Default Value: `1.15`
 
-Raise the levenshtein score to this power before returning this result. If alpha is greater than
+Raise the Levenshtein score to this power before returning this result. If alpha is greater than
 1 then this makes low scores even lower. Valid values are > 0.
 
 The default alpha value of 1.15 was determined through experimentation with a Jakarta data set
-using MeanWordSetDistance as the container classes. See ticket #2349 for some experiment details.
-The "best" value varies depending on the input data as well as how the data is being used.
+using MeanWordSetDistance as the container classes. See Redmine ticket #2349 for some experiment
+details.  The "best" value varies depending on the input data as well as how the data is being used.
 
 === log.format
 
@@ -755,7 +748,7 @@ Foo: Pre-constraining match count: 11
 * Data Type: double
 * Default Value: `3`
 
-The number of identical log messages that will be emitted before they're silenced.  Not necessarily
+The number of identical log messages that will be emitted before they are silenced.  Not necessarily
 utilized by all parts of the application.
 
 [[MapCleanerTransforms]]
@@ -776,7 +769,7 @@ utilized by all parts of the application.
 ** `hoot::RemoveDuplicateAreaVisitor` - Remove any area elements that are essentially the same.
 ** `hoot::NoInformationElementRemover` - Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).
 
-A list of map operations to be applied to a map for cleaning purposes in order
+A list of map operations to be applied to a map for cleaning purposes, in order.
 
 [[match.creators]]
 === match.creators
@@ -784,13 +777,12 @@ A list of map operations to be applied to a map for cleaning purposes in order
 * Data Type: string
 * Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator`
 
-List of MatchCreators to use during conflation. This can modify what features will be conflated
+List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).
 
 Some of the possible options include:
 
 * `hoot::BuildingMatchCreator` - Matches building polygons.
-* `hoot::PlacesPoiMatchCreator` - Matches POIs using the PLACES algorithm.
 * `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify algorithm.
 * `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
@@ -803,23 +795,26 @@ Some of the possible options include:
 * Data Type: double
 * Default Value: `1`
 
-Used in the calculation of the parallel score, cos (delta) ^ match.parallel.exponent
+Used in the calculation of the match parallel score, cos (delta) ^ match.parallel.exponent
 
 === max.elements.per.partial.map
 
 * Data Type: double
 * Default Value: `100000`
 
-Maximum number of elements that will be read into memory at one time during a partial OSM map reading. This shouldn't need to be changed. Reducing the value may cause errors on some data formats that read large numbers of entries at one time. Increasing the value will use more RAM in some situations.
+Maximum number of elements that will be read into memory at one time during a partial OSM map
+reading.  This shouldn't need to be changed.  Reducing the value may cause errors on some data
+formats that read large numbers of entries at one time. Increasing the value will use more RAM in
+some situations.
 
 === max.memory.usage
 
 * Data Type: string
 * Default Value: `-1`
 
-Artificially limit the amount of virtual memory that Hootenanny will use. If Hootenanny needs more
-than this amount of virtual memory then a bad_alloc will likely be thrown. In some cases you'll
-receive a totally unrelated error message.
+Allows for artificially limiting the amount of virtual memory that Hootenanny will use. If
+Hootenanny needs more than this amount of virtual memory then a bad_alloc will likely be thrown.
+In some cases you will receive a totally unrelated error message.
 
 Size is specified in bytes unless followed by one of these suffixes.
 
@@ -838,7 +833,8 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during --ogr2osm, what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.
+When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes
+are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
 === merger.creators
@@ -846,7 +842,8 @@ When merging nodes during --ogr2osm, what tolerance should be used for deciding 
 * Data Type: string
 * Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
 
-List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).
+List of merger creators to use during conflation. This can modify what features will be conflated
+(e.g. buildings, roads, etc.).
 
 Possible values include:
 
@@ -857,7 +854,7 @@ Possible values include:
 * `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
   is specified in `match.creators`.
 * `hoot::ScriptMergerCreator` - Required if one or more instances of
-  `hoot::SplitMatchCreator` is specified in `match.creators`. Note that the
+  `hoot::ScriptMatchCreator` is specified in `match.creators`. Note that the
   script name is not specified in this parameter.
 
 === network.conflicts.aggression
@@ -865,16 +862,16 @@ Possible values include:
 * Data Type: double
 * Default Value: `4.4`
 
-A larger value will conflate more aggressively (fewer reviews). Users may want to consider changing
-this value. Reasonable range is [1, ~10].
+A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
+may want to consider changing this value. Reasonable range is [1, ~10].
 
 === network.conflicts.outbound.weighting
 
 * Data Type: double
 * Default Value: `0`
 
-A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor. A value
-of 1 will give approx (1 / n * score * weight) influence to each neighbor.
+A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor when using
+network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each neighbor.
 Reasonable range is [0, 2].
 
 === network.conflicts.partial.handicap
@@ -882,24 +879,25 @@ Reasonable range is [0, 2].
 * Data Type: double
 * Default Value: `0.2`
 
-A larger value will increase the weight of partial matches. A smaller value prefers whole matches
-over partial matches. This value is generally not changed by users. Reasonable range is (0, ~2].
+A larger value will increase the weight of partial matches when using network conflation.  A
+smaller value prefers whole matches over partial matches. This value is generally not changed by
+users. Reasonable range is (0, ~2].
 
 === network.conflicts.stub.handicap
 
 * Data Type: double
 * Default Value: `.86`
 
-A larger value will increase the weight of stubs. This value is generally not changed by
-users. Reasonable range is (0, ~2].
+A larger value will increase the weight of stubs when using network conflation. This value is
+generally not changed by users. Reasonable range is (0, ~2].
 
 === network.conflicts.stub.through.weighting
 
 * Data Type: double
 * Default Value: `0.59`
 
-A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors.
-Higher values will reduce that contribution. Reasonable range is [0, ~10].
+A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors when
+using network conflation.  Higher values will reduce that contribution. Reasonable range is [0, ~10].
 
 === network.conflicts.weight.influence
 
@@ -907,15 +905,15 @@ Higher values will reduce that contribution. Reasonable range is [0, ~10].
 * Default Value: `0`
 
 A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
-give matches with more support a higher weight. This value is generally not changed by
-users. Reasonable range is [0, 2].
+give matches with more support a higher weight when using network conflation. This value is
+generally not changed by users. Reasonable range is [0, 2].
 
 === network.match.threshold
 
 * Data Type: double
 * Default Value: `0.15`
 
-The threshold at which a network match is called a match.
+The threshold at which a network match is called a match when using network conflation.
 
 See also:
 
@@ -926,8 +924,8 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-If true debug maps will be generated at every iteration. This is useful when debugging. The maps
-can be large and slow things down significantly.
+If true debug maps will be generated at every iteration when using network conflation. This is
+useful when debugging. The maps can be large and slow things down significantly.
 
 === network.matcher
 
@@ -943,7 +941,8 @@ debug and test. The parameter must be a class that is registered with the factor
 * Data Type: double
 * Default Value: `20`
 
-The maximum allowable length of a stub connection (way to node match). Value in meters.
+The maximum allowable length of a stub connection (way to node match) when using network conflation.
+Value in meters.
 
 === network.miss.threshold
 
@@ -982,8 +981,8 @@ strict.
 * Data Type: bool
 * Default Value: `false`
 
-If the output file/layer exists when exporting, append the data instead of trying to create a new
-file/layer.
+If the OGR output file/layer exists when exporting, append the data instead of trying to create a
+new file/layer.
 
 === ogr.debug.addfcode
 
@@ -1103,14 +1102,14 @@ it will be exported as one big string.
 * Data Type: string
 * Default Value: `on`
 
-Turn errors into warnings or off. Valid values are: on, off, warn
+Turn OGR related errors into warnings or turn them off. Valid values are: on, off, warn
 
 === ogr.tds.add.etds
 
 * Data Type: bool
 * Default Value: `true`
 
-Add the eLTDS specific attributes (SCAMIN, SCAMAX, LINK_ID) to the output
+Add the eLTDS specific attributes (SCAMIN, SCAMAX, LINK_ID) to the output.
 
 === ogr.tds.extra
 
@@ -1129,7 +1128,7 @@ NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 * Data Type: bool
 * Default Value: `true`
 
-Add the ESRI specific FCSUBTYPE field to the output
+Add the ESRI specific FCSUBTYPE field to the output.
 
 === ogr.tds.fdname
 
@@ -1152,7 +1151,8 @@ FCODE per file/layer (ROAD_L, BUILDING_P etc).
 * Data Type: bool
 * Default Value: `false`
 
-For the schema switcher, throw errors instead of returning a partial translation/o2s_X feature from a translation.
+For the schema switcher, throw errors instead of returning a partial translation/o2s_X feature
+from a translation.
 
 === ogr.writer.create.all.layers
 
@@ -1166,6 +1166,8 @@ this to true can be useful when conforming to strict specifications.
 
 * Data Type: string
 * Default Value: ``
+
+TODO: description
 
 === ogr.writer.script
 
@@ -1189,7 +1191,7 @@ hoot --convert \
 ** `hoot::MergeNearbyNodes`
 ** `hoot::BuildingPartMergeOp`
 
-Operations that should be applied to ingested data before saving the data.
+Operations that should be applied to ingested OGR data before saving the data.
 
 === osm.changeset.sql.file.writer.generate.new.ids
 
@@ -1227,8 +1229,8 @@ Turns on autoformatting (line breaks, indentation etc) for XML output.
 * Data Type: string
 * Default Value: ``
 
-Sets the value for a "schema" attribute when writeing a map to OSM XML.
-NOTE: this will only be written if the value is not empty.
+Sets the value for a "schema" attribute when writeing a map to OSM XML.  NOTE: this will only be
+written if the value is not empty.
 
 === osm2ogr.ops
 
@@ -1237,14 +1239,6 @@ NOTE: this will only be written if the value is not empty.
 ** ``
 
 User specified operations for converting OSM files to OGR compatible file types.
-
-=== pbf.reader.max.elements.per.partial.map
-
-* Data Type: int
-* Default Value: `50000`
-
-The maximum number of OSM elements that may be read from the hootapi services database into a
-single OSM map during a partial map read.
 
 === perty.apply.rubber.sheet
 
@@ -1510,8 +1504,8 @@ final PERTY score for the test run.
 * Data Type: double
 * Default Value: `1`
 
-Distance parameter (in meters) that determines to what degree a way is generalized by PERTY.
-Higher values result in more generalization (more nodes are removed).
+Distance parameter, in meters, that determines to what degree a way is generalized by PERTY.
+Higher values result in more generalization (more nodes removed).
 
 === perty.way.generalize.probability
 
@@ -1580,7 +1574,7 @@ expensive when enabled.
 * Default Value: `true`
 
 If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
-incorrect matches.  This setting is still fairly experimental and can be runtime expensive when
+incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
 === poi.polygon.match.threshold
@@ -1588,7 +1582,7 @@ enabled.
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for PoiPolygon.
+The threshold at which a match is called a match when comparing POIs to polygons.
 
 See also:
 
@@ -1607,7 +1601,7 @@ a match based on distance criteria only.
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for PoiPolygon.
+The threshold at which a miss is called a miss when comparing POIs to polygons.
 
 See also:
 
@@ -1636,8 +1630,8 @@ if running 'hoot score-matches' with POI to polygon conflation.
 * Default Value: `125.0`
 
 The maximum distance, in meters, between a POI and a polygon where they can still be considered
-for review based on distance criteria only (value is added to the circular error of the features
-calculation).
+for review based on distance criteria only (value is added to the circular error of the compared
+features).
 
 === poi.polygon.review.threshold
 
@@ -1679,27 +1673,20 @@ If true, then the OSM API database ingest operation will check the ID sequences 
 database (one time only) to determine the starting changeset and element ID's to use for the entire
 write operation.  Enabling this setting precludes a user from having to specify the
 "postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
-must be used in conjunction with the "postgresql.dumpfile.writer.id.aware.url" setting.  IMPORTANT:
-This setting should only be enabled in situations where a single user is writing to the target OSM
-API database (database is offline).  Since the command does not continuallly check for the next
-available ID (for performance reasons), ID conflict errors may occur if multiple users are writing
-to the database simultaneously when this option is enabled.
-
-=== postgresql.dumpfile.writer.id.aware.url
-
-* Data Type: string
-* Default Value: ``
-
-This is required when "postgresql.dumpfile.writer.auto.calc.ids" is set to true.  It should point
-to the eventual target OSM API database.
+must be used in conjunction with the "osmapidb.id.aware.url" setting.  IMPORTANT: This setting
+should only be enabled in situations where a single user is writing to the target OSM API database
+(database is offline).  Since the command does not continually check for the next available ID
+(for performance reasons), ID conflict errors may occur if multiple users are writing to the
+database simultaneously when this option is enabled.
 
 === postgresql.dumpfile.writer.element.status.count.interval
 
 * Data Type: long
 * Default Value: `100000`
 
-Count at which the load status of each element type should be logged.  e.g. With a value of 100000,
-you will see a element load status update message for every 100000 elements parsed.
+Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
+e.g. With a value of 100000, you will see a element load status update message for every 100000
+elements parsed.
 
 === postgresql.dumpfile.writer.start.id.changeset
 
@@ -1796,7 +1783,7 @@ The plugin name of a filter used to select the elements to delete.
 * Data Type: bool
 * Default Value: `true`
 
-Should it remove the elements recursively?
+Should the element remover remove the elements recursively?
 
 === remove.tag.visitor.keys
 
@@ -1804,14 +1791,14 @@ Should it remove the elements recursively?
 * Default Value:
 ** ``
 
-A list of tag keys for which the RemoveTagVisitor to identify for removal on elements.
+A list of tag keys the RemoveTagVisitor will remove on elements.
 
 === rubber.sheet.debug
 
 * Data Type: bool
 * Default Value: `false`
 
-If set to true then debug symbols will be added to nodes and additional tags will be added to
+If set to true, then debug symbols will be added to nodes and additional tags will be added to
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
 
@@ -1820,15 +1807,14 @@ be used during serious conflation.
 * Data Type: int
 * Default Value: `10`
 
-Sets the minimum number of tie points that will be used when calculating a rubber
-sheeting solution.
+Sets the minimum number of tie points that will be used when calculating a rubbersheeting solution.
 
 === rubber.sheet.ref
 
 * Data Type: bool
 * Default Value: `false`
 
-If this configuration setting is set to true then the first layer is treated as the reference
+If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
 weighting is determined based on the circular error.
 
@@ -1893,14 +1879,6 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 Email address of the DG reader user.  Can be set here for debugging and testing.
 
-=== hootapi.db.reader.max.elements.per.partial.map
-
-* Data Type: int
-* Default Value: `50000`
-
-The maximum number of OSM elements that may be read from the hootapi services database into a
-single OSM map during a partial map read.
-
 === hootapi.db.writer.create.user
 
 * Data Type: bool
@@ -1945,9 +1923,10 @@ Email address of the osm api reader user.  Can be set here for debugging and tes
 * Data Type: string
 * Default Value: ``
 
-This is required when using the OsmApiDbAwareHootApiDbReader or OsmApiDbAwareHootApiDbWriter.  It
-makes Hoot API database reading/writing use the specified OSM API database as master for determining
-the sequencing of element ID's.
+This is required when using either the OsmApiDbAwareHootApiDbReader, OsmApiDbAwareHootApiDbWriter,
+or PostgresqlDumpfileWriter with the postgresql.dumpfile.writer.auto.calc.ids=true setting.  It
+forces database reading/writing use the specified OSM API database as master for determining the
+sequencing of element ID's.
 
 === remove.attribute.visitor.types
 
@@ -1955,21 +1934,24 @@ the sequencing of element ID's.
 * Default Value:
 ** ``
 
-List of element attributes to remove with the RemoveAttributeVisitor.
+List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
+valid values.
 
 === set.tag.visitor.key
 
 * Data Type: string
 * Default Value: ``
 
-Set the key member in the SetTagVisitor class.
+Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
+particular tag on all elements in a map.
 
 === set.tag.visitor.value
 
 * Data Type: string
 * Default Value: ``
 
-Set the value member in the SetTagVisitor class.
+Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
+particular tag on all elements in a map.
 
 === small.way.merger.diff
 
@@ -1984,7 +1966,7 @@ then they'll be a candidate for merging.
 * Data Type: double
 * Default Value: `15`
 
-If highways are smaller than threshold and the tags matched then they will be merged together into
+If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
 === stats.class
@@ -1992,28 +1974,29 @@ a single way.
 * Data Type: string
 * Default Value: `hoot::ScriptStatsComposer`
 
-Class to instantiate from the factory.
+Class to instantiate from the factory for statistics writing.
 
 === status.criterion.status
 
 * Data Type: string
 * Default Value: `Invalid`
 
-The default status to match with a status criterion.
+The default status to match with a status criterion.  Used by various element visitors and map
+operations.
 
 === stats.format
 
 * Data Type: string
 * Default Value: `pdf`
 
-Format type for the statistics generated from conflate.  Can be pdf, html or asciidoc.
+Format type for the statistics generated from conflate.  Can be 'pdf', 'html' or 'asciidoc'.
 
 === stats.output
 
 * Data Type: string
 * Default Value: ``
 
-Path to the output document for the statistics.  If left empty it will not output to a file, only
+Path to the output document for the statistics.  If left empty, it will not output to a file, only
 to screen.
 
 === stats.script
@@ -2028,7 +2011,7 @@ Path to the statistics generator rules in javascript format.
 * Data Type: string
 * Default Value: `${HOOT_HOME}/translations/TDSv61.js`
 
-Path to the translation script to use when translating tags for stats. If the path is empty then
+Path to the translation script to use when translating tags for stats. If the path is empty, then
 all translation stats are disabled.
 
 === tag.ancestor.differencer.name
@@ -2037,7 +2020,7 @@ all translation stats are disabled.
 * Default Value: ``
 
 The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
-Primarily this is useful within the node.js interface.
+Primarily, this is useful within the node.js interface.
 
 === tag.category.differencer.name
 
@@ -2045,14 +2028,15 @@ Primarily this is useful within the node.js interface.
 * Default Value: ``
 
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
-Primarily this is useful within the node.js interface.
+Primarily, this is useful within the node.js interface.
 
 === tag.criterion.kvp
 
 * Data Type: string
 * Default Value: ``
 
-A key value pair to use in the tag criterion by default. E.g. 'highway,road'
+The key/value pair to use in the tag criterion by default. E.g. 'highway,road'  Used by various
+element visitors and map operations.
 
 === tag.merger.default
 
@@ -2076,8 +2060,8 @@ Possible options include:
 * Data Type: string
 * Default Value: `asciidoc`
 
-Output format to use when printing OSM+ Tag documentation. Valid formats are: csv, html, redmine &
-asciidoc (default)
+Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html',
+'redmine' & 'asciidoc' (default)
 
 === tag.printing.script
 
@@ -2091,14 +2075,16 @@ The translation script to use when printing OSM+ Tag documentation.
 * Data Type: string
 * Default Value: ``
 
-The key to replace with by the TagRenameKeyVisitor.
+The key to used to replace an existing by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
+renaming existing tag keys on all elements in a map.
 
 === tag.rename.visitor.old.key
 
 * Data Type: string
 * Default Value: ``
 
-The key to be replaced by the TagRenameKeyVisitor.
+The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
+renaming existing tag keys on all elements in a map.
 
 === test.force.orthographic.projection
 
@@ -2163,7 +2149,7 @@ Set to true if the strings should be tokenized (split into words) before transla
 * Data Type: string
 * Default Value: ``
 
-List of tags that should be ignored when comparing a list of tags using the
+Semi-colon delimited list of tags that should be ignored when comparing a list of tags using the
 hoot::TranslatedTagDifferencer.
 
 See also:
@@ -2188,16 +2174,15 @@ This differencer can be used with:
 * Data Type: string
 * Default Value: `toosm`
 
-The direction that the translation script should translate. `toogr` will
-translate from OSM to OGR. `toosm` will translate from OSM to OGR. This is
-useful with the hoot::TranslationOp.
+The direction that the translation script should translate. `toogr` will translate from OSM to OGR.
+`toosm` will translate from OSM to OGR. This is useful with the hoot::TranslationOp.
 
 === translation.script
 
 * Data Type: string
 * Default Value: ``
 
-Script to use for translation.
+The script to use for translation.
 
 === unify.enable.optimal.constrained.matches
 
@@ -2213,15 +2198,14 @@ Hootenanny will only use Greedy Constrained Matches.
 * Data Type: double
 * Default Value: `30`
 
-The maximum amount of time in seconds to wait for the optimizer to complete. A
-value of -1 makes the time limit unlimited.
+The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes
+the wait time limit unlimited.
 
-If this value is set to something other than -1 your conflation results may
-change between multiple runs. Especially if the machine Hoot is running on is
-under heavy load. If the "CM Score:" value is changing between runs and GLPK
-isn't finding an optimal solution then this is likely causing different output.
-Just because the output is changing doesn't mean it is wrong, but this can be
-problematic if you're doing testing or expecting repeatable output for other
+If this value is set to something other than -1 your conflation results may change between multiple
+runs. Especially if the machine Hoot is running on is under heavy load. If the "CM Score:" value
+is changing between runs and GLPK isn't finding an optimal solution then this is likely causing
+different output.  Just because the output is changing doesn't mean it is wrong, but this can be
+problematic if you're doing testing or expecting repeatable output for other.
 
 === unify.post.ops
 
@@ -2325,7 +2309,7 @@ with river data.
 * Data Type: bool
 * Default Value: `true`
 
-See `rubber.sheet.ref`.
+See `rubber.sheet.ref`.  Used during waterway conflation.
 
 === waterway.subline.matcher
 
@@ -2357,7 +2341,7 @@ Values are in meters.
 * Data Type: double
 * Default Value: `60`
 
-Sets that maximum angle that is still considered a way match. Units in degrees.
+Sets the maximum angle that is still considered a way match. Units in degrees.
 
 === way.max.nodes.per.way
 
@@ -2365,10 +2349,10 @@ Sets that maximum angle that is still considered a way match. Units in degrees.
 * Default Value: `1900`
 
 If unset, or set to zero, there will be no maximum number of nodes stored in a way. If the value is
-set to a non-zero positive value, all way which contain more nodes than this value will be broken
-up into two or more separate ways, all of which will contain the number of nodes in this value
-(or less), and the original way will be removed from the map. Default set to 1900 as OSM imports
-through API DB are capped at 2000 nodes per way.
+set to a non-zero positive value, all ways which contain more nodes than this value will be broken
+up into two or more separate ways, and all of them will contain this number of nodes (or less).
+The original way will be removed from the map. Default set to 1900 as OSM imports through OSM API
+databases are capped at 2000 nodes per way.
 
 === way.merger.min.split.size
 

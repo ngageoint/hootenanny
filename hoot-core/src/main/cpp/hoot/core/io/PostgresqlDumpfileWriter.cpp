@@ -384,7 +384,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   }
   else
   {
-    _db.open(ConfigOptions().getPostgresqlDumpfileWriterIdAwareUrl());
+    _db.open(confOptions.getOsmapidbIdAwareUrl());
     _configData.startingChangesetId = _db.getNextId(ApiDb::getChangesetsTableName());
     _configData.startingNodeId      = _db.getNextId(ElementType::Node);
     _configData.startingWayId       = _db.getNextId(ElementType::Way);

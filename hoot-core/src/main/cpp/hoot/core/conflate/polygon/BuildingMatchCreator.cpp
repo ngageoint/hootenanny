@@ -266,7 +266,7 @@ shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 {
   if (!_rf)
   {
-    QString path = ConfPath::search(ConfigOptions().getBuildingModelPath());
+    QString path = ConfPath::search(ConfigOptions().getConflateMatchBuildingModel());
     LOG_INFO("Loading model from: " << path);
 
     QFile file(path.toAscii().data());
