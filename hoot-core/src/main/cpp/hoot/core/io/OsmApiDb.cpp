@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/db/SqlBulkInsert.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -54,7 +54,7 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "db/InternalIdReserver.h"
+#include "InternalIdReserver.h"
 
 namespace hoot
 {
@@ -354,7 +354,6 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 
 shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 {
-  LOG_DEBUG("IN selectNodeById");
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
   QString sql =
@@ -362,8 +361,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
     " WHERE (id=:elementId) ORDER BY id DESC";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
-
-  LOG_DEBUG(QString("The sql query= "+ sql));
 
   // execute the query on the DB and get the results back
   if (_selectNodeById->exec() == false)
@@ -373,15 +370,14 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
     throw HootException("Error selecting node by id: " + QString::number(elementId) +
       " Error: " + err);
   }
+  LOG_VARD(_selectNodeById->executedQuery());
+  LOG_VARD(_selectNodeById->numRowsAffected());
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectNodeById...");
   return _selectNodeById;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 {
-  LOG_DEBUG("IN selectElement");
-
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
@@ -390,9 +386,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true ORDER BY id DESC";
-
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);
 
@@ -404,8 +397,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " Error: " + err);
   }
+  LOG_VARD(_selectElementsForMap->executedQuery());
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectElements...");
   return _selectElementsForMap;
 }
 
@@ -415,7 +409,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   {
     _selectTagsForRelation.reset(new QSqlQuery(_db));
     _selectTagsForRelation->setForwardOnly(true);
-    QString sql =  "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() + " WHERE relation_id = :relId";
+    QString sql =
+      "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
+      " WHERE relation_id = :relId";
     _selectTagsForRelation->prepare( sql );
   }
 
@@ -425,6 +421,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
     throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
       " Error: " + _selectTagsForRelation->lastError().text());
   }
+  LOG_VART(_selectTagsForRelation->executedQuery());
+  LOG_VART(_selectTagsForRelation->numRowsAffected());
 
   return _selectTagsForRelation;
 }
@@ -445,6 +443,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
     throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
       " Error: " + _selectTagsForWay->lastError().text());
   }
+  LOG_VART(_selectTagsForWay->executedQuery());
+  LOG_VART(_selectTagsForWay->numRowsAffected());
 
   return _selectTagsForWay;
 }
@@ -455,7 +455,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   {
     _selectTagsForNode.reset(new QSqlQuery(_db));
     _selectTagsForNode->setForwardOnly(true);
-    QString sql =  "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
+    QString sql =
+      "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
     _selectTagsForNode->prepare( sql );
   }
 
@@ -465,6 +466,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
     throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
       " Error: " + _selectTagsForNode->lastError().text());
   }
+  LOG_VART(_selectTagsForNode->executedQuery());
+  LOG_VART(_selectTagsForNode->numRowsAffected());
 
   return _selectTagsForNode;
 }
