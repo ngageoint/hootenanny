@@ -1854,14 +1854,6 @@ command).
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
 
-=== script.match.scripts
-
-* Data Type: list
-* Default Value:
-** `rules/PolygonBuildings.js`
-
-List of scripts to use for matching features.
-
 === search.radius.default
 
 * Data Type: double
