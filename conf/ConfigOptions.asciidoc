@@ -2022,14 +2022,6 @@ Format type for the statistics generated from conflate.  Can be pdf, html or asc
 Path to the output document for the statistics.  If left empty it will not output to a file, only
 to screen.
 
-=== stats.precision
-
-* Data Type: double
-* Default Value: `17`
-
-Number of digits of precision to include in the output stats. This may not be honored by all stats
-backends, but will certainly work for the tab delimited text.
-
 === stats.script
 
 * Data Type: string
