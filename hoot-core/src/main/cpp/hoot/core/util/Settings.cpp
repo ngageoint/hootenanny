@@ -541,10 +541,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
       if (!conf().hasKey(kvl[0]))
       {
-        LOG_WARN("Unknown settings option: (" << kvl[0] << ")");
-        // move on to the next argument, don't keep an invalid option
-        args = args.mid(2);
-        continue;
+        throw HootException("Unknown settings option: (" + kvl[0] + ")");
       }
       if (append)
       {
