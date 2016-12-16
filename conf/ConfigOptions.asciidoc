@@ -223,14 +223,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== conflate.load.post.ops
-
-* Data Type: list
-* Default Value:
-
-List of operations to run in the conflate command immediately after map data is loaded and before
-conflation.
-
 === conflate.post.ops
 
 * Data Type: list

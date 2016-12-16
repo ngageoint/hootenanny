@@ -147,9 +147,6 @@ public:
     stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
 
-    NamedOp(ConfigOptions().getConflateLoadPostOps()).apply(map);
-    //stats.append(SingleStat("Apply Load Post Ops Time (sec)", t.getElapsedAndRestart()));
-
     CalculateStatsOp input1Cso(
       ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
     CalculateStatsOp input2Cso(
