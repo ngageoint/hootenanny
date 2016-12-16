@@ -374,7 +374,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 
   _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
   _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
-  _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
+  _configData.changesetUserId     = confOptions.getChangesetUserId();
   if (!confOptions.getPostgresqlDumpfileWriterAutoCalcIds())
   {
     _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();

@@ -1693,13 +1693,6 @@ to the database simultaneously when this option is enabled.
 This is required when "postgresql.dumpfile.writer.auto.calc.ids" is set to true.  It should point
 to the eventual target OSM API database.
 
-=== postgresql.dumpfile.writer.changeset.user.id
-
-* Data Type: int
-* Default Value: `1`
-
-Value that will be set in the "user_id" field for all changesets added by the ingest operation
-
 === postgresql.dumpfile.writer.element.status.count.interval
 
 * Data Type: long
