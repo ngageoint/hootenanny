@@ -1024,12 +1024,13 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== ogr.log.limit
+=== log.identical.message.limit
 
 * Data Type: double
 * Default Value: `3`
 
-The number of identical log messages that will be emitted before they're silenced.
+The number of identical log messages that will be emitted before they're silenced.  Not necessarily
+utilized by all parts of the application.
 
 === ogr.mgcp.extra
 
@@ -1041,7 +1042,8 @@ When exporting to MGCP:
 - "note" Add unused tags to the "TXT" field.
 - "none" Don't save the unused tags, just drop them.
 
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
+255 characters. Extra text will be truncated.
 
 === ogr.reader.bounding.box
 
