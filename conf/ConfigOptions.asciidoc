@@ -750,6 +750,14 @@ Foo: Pre-constraining match count: 11
 <message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
 -----
 
+=== log.identical.message.limit
+
+* Data Type: double
+* Default Value: `3`
+
+The number of identical log messages that will be emitted before they're silenced.  Not necessarily
+utilized by all parts of the application.
+
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
 
@@ -1024,14 +1032,6 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== log.identical.message.limit
-
-* Data Type: double
-* Default Value: `3`
-
-The number of identical log messages that will be emitted before they're silenced.  Not necessarily
-utilized by all parts of the application.
-
 === ogr.mgcp.extra
 
 * Data Type: string
@@ -1246,18 +1246,6 @@ User specified operations for converting OSM files to OGR compatible file types.
 The maximum number of OSM elements that may be read from the hootapi services database into a
 single OSM map during a partial map read.
 
-=== perty.algorithm
-
-* Data Type: string
-* Default Value: `hoot::DirectSequentialSimulation`
-
-Perturbation algorithm to use with the PERTY process.  Valid values is
-hoot::DirectSequentialSimulation.
-
-Previously the full covariance method was also supported as described in Doucette et al. However,
-the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
-the full covariance method we were able to simplify the build process and reduce maintenance cost.
-
 === perty.apply.rubber.sheet
 
 * Data Type: bool
@@ -1265,23 +1253,13 @@ the full covariance method we were able to simplify the build process and reduce
 
 If true, the data is rubbersheeted before conflation, moving perturbed data closer to reference data.
 
-=== perty.csm.beta
-
-* Data Type: double
-* Default Value: `9`
-
-The beta value used in the PERTY simplified community sensor model. This is only relevant when
-perty.algorithm is set to FullCovariance.
-
 === perty.csm.D
 
 * Data Type: double
 * Default Value: `1000`
 
-The PERTY D value. When perty.algorithm is set to FullCovariance this is used in the simplified
-community sensor model. When perty.algorithm is set to DirectSequentialSimulation D is used in
-e ^ (-perty.grid.spacing / D). Defaults to 1000. Larger values result in a more correlated
-permutation grid.
+The PERTY D value. D is used in e ^ (-perty.grid.spacing / D). Defaults to 1000. Larger values
+result in a more correlated permutation grid.
 
 === perty.duplicate.poi.duplicate.sigma
 
