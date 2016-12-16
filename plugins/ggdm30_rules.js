@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -77,13 +77,13 @@ ggdm30.rules = {
      ['F_CODE','AQ125','railway','station'], // Railway Station
      ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
-     ['F_CODE','AQ125','public_transport','stop_position'], 
+     ['F_CODE','AQ125','public_transport','stop_position'],
      ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
      ['F_CODE','AT042','power','pole'], // OSM
      ['F_CODE','AT042','power','tower'], // OSM
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-     ['F_CODE','BH145','natural','sinkhole'], 
+     ['F_CODE','BH145','natural','sinkhole'],
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
@@ -188,7 +188,7 @@ ggdm30.rules = {
 
     // One2one ruled for Number fields
     numBiased : {
-     'ADUR':'raw:ADUR', // Average Water Supply Duration
+     'ADUR':'water_supply_duration', // Average Water Supply Duration
      'AHA':'source:accuracy:horizontal', // Absolute Horizontal Accuracy (90%)
      'ANFL':'raw:ANFL', // Annual Flow Rate
      'AOO':'angle', // Angle of Orientation
@@ -447,7 +447,7 @@ ggdm30.rules = {
      'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
 //     'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
      }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     // taken from TDSv60 with the NGA TDSv61 additions
@@ -10964,18 +10964,18 @@ ggdm30.rules = {
     one2oneOut : [
      // OTH Filler.  These are to build OTH values
      ['RTY','999','highway','other'],
-     ['FFN','999','amenity','other'], 
-     ['FFN','999','building','other'], 
-     ['FFN','999','camp:type','other'], 
-     ['FFN','999','craft','other'], 
-     ['FFN','999','landuse','other'], 
-     ['FFN','999','leisure','other'], 
-     ['FFN','999','military','other'], 
-     ['FFN','999','office','other'], 
-     ['FFN','999','repair','other'], 
-     ['FFN','999','shop','other'], 
-     ['FFN','999','social_facility','other'], 
-     ['FFN','999','tourism','other'], 
+     ['FFN','999','amenity','other'],
+     ['FFN','999','building','other'],
+     ['FFN','999','camp:type','other'],
+     ['FFN','999','craft','other'],
+     ['FFN','999','landuse','other'],
+     ['FFN','999','leisure','other'],
+     ['FFN','999','military','other'],
+     ['FFN','999','office','other'],
+     ['FFN','999','repair','other'],
+     ['FFN','999','shop','other'],
+     ['FFN','999','social_facility','other'],
+     ['FFN','999','tourism','other'],
 
      // Funky Road Type attributes from TDSv40
      ['RTY','4','ref:road:type','boulevard'], // Boulevard
@@ -11023,9 +11023,9 @@ ggdm30.rules = {
      // From MGCP
      ['FFN','480','building','transportation_outbuilding'], // Transportation
      ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-     ['FFN','550','building','dwelling'], // Accomodation 
+     ['FFN','550','building','dwelling'], // Accomodation
      ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-     ['FFN','811','amenity','government_administration_building'], // 
+     ['FFN','811','amenity','government_administration_building'], //
      ['FFN','835','military','military_outbuilding'], // Military
      ['FFN','835','military','barracks'], // Military
      ['FFN','843','amenity','jail'], // Imprisonment
@@ -11039,16 +11039,16 @@ ggdm30.rules = {
 
      // From UFD
      ['CAA','-999999','controlling_authority','unknown'],
-     ['FFN','190','use','oil_gas_facility'], //  
+     ['FFN','190','use','oil_gas_facility'], //
 
      // From UTP
      // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
      ['FFN','482','amenity','bus_station'], // Station
      ['FFN','831','amenity','courthouse'], // Public Order - from spec
-     ['FFN','610','building','communication'], 
-     ['FFN','530','building','warehouse'], 
-     ['FFN','835','building','military'], 
-     // ['FFN','999','landuse','institutional'], //  
+     ['FFN','610','building','communication'],
+     ['FFN','530','building','warehouse'],
+     ['FFN','835','building','military'],
+     // ['FFN','999','landuse','institutional'], //
      ['ZI014_PPO','83','product','oil'], // Petroleum
 
      // From NAVTEQ
@@ -11082,7 +11082,7 @@ ggdm30.rules = {
      ['FFN','558','building','dependents_housing'], // Dependents Housing
      ['FFN','610','office','telecommunication'], // telecommunication
      ['FFN','640','shop','bureau_de_change'], // Financial Services
-     ['FFN','760','amenity','office'], // Business and Personal Support Services 
+     ['FFN','760','amenity','office'], // Business and Personal Support Services
      ['FFN','815','building','palace'], // Palace
 
      // Added to give something for the OTH value to use
@@ -11092,7 +11092,7 @@ ggdm30.rules = {
 
     // ##### End of One2One Rules #####
 
-   
+
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [
