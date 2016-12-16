@@ -56,6 +56,13 @@ Prefix to apply to REF1 values.
 The REF1 values are typically used when training a model. See the Developer Documentation for
 details.
 
+=== api.db.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the API database user.  Can be set here for debugging and testing.
+
 === attribute.count.values
 
 * Data Type: int
@@ -125,7 +132,7 @@ See also:
 * Data Type: long
 * Default Value: `50000`
 
-The maximum allowed size of an OSM changeset written to an OSM API database.
+The maximum allowed element size of an OSM changeset written to an OSM API database.
 
 === changeset.user.id
 
@@ -1872,13 +1879,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== hootapi.db.reader.email
-
-* Data Type: string
-* Default Value: ``
-
-Email address of the DG reader user.  Can be set here for debugging and testing.
-
 === hootapi.db.writer.create.user
 
 * Data Type: bool
@@ -1886,13 +1886,6 @@ Email address of the DG reader user.  Can be set here for debugging and testing.
 
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
-
-=== hootapi.db.writer.email
-
-* Data Type: string
-* Default Value: ``
-
-Email address of the DG writer user.  Can be set here for debugging and testing.
 
 === hootapi.db.writer.output.id.mappings
 
@@ -1910,13 +1903,6 @@ relations that were written to the database.
 
 If set to true then if there is already a map with the specified name then it will be removed before
 a new map is written.
-
-=== osmapi.db.reader.email
-
-* Data Type: string
-* Default Value: ``
-
-Email address of the osm api reader user.  Can be set here for debugging and testing.
 
 === osmapidb.id.aware.url
 
