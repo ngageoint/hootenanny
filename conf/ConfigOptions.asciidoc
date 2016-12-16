@@ -1752,6 +1752,15 @@ specified email address to the database.
 If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
 database will be assigned the user id set by this field.
 
+=== progress.reporting.format
+
+* Data Type: string
+* Default Value: ``
+
+Sets the progress reporting format to the type specified for classes that support progress
+reporting.  Currently, 'json' is the only valid reporting format. If left blank, progress is not
+reported.
+
 === reader.add.source.datetime
 
 * Data Type: bool
@@ -1803,15 +1812,6 @@ Should it remove the elements recursively?
 ** ``
 
 A list of tag keys for which the RemoveTagVisitor to identify for removal on elements.
-
-=== reporting
-
-* Data Type: string
-* Default Value: ``
-
-Sets the reporting format to the type specified.  For now, 'json' is the only
-reporting format. The reporting format controls the format in which things like
-progress are reported.
 
 === rubber.sheet.debug
 
