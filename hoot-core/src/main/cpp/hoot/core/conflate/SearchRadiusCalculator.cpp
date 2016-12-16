@@ -37,6 +37,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/MapProjector.h>
 
+//TODO: a lot of the logging levels in this class need changed, as they've revealed issues
+//with the element status reading...will handle that in #1262
 namespace hoot
 {
 
@@ -86,14 +88,14 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
   {
-    LOG_WARN(
+    LOG_INFO(
       "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
       " conflated or invalid features out of " << map->getElementCount() << " total features.");
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
     _result = _circularError;
-    LOG_WARN(
+    LOG_INFO(
       "Unable to automatically calculate search radius.  All features have already been " <<
       "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
     return;
@@ -110,7 +112,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   {
     //In many cases, the input map will have already been cleaned by this point...but possibly not.
     //Try to clean it to get around this error (call to the stats command, for example).
-    LOG_INFO(
+    LOG_DEBUG(
       "An error occurred calculating the rubber sheet transform during automatic search radius " <<
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
     LOG_DEBUG(e.getWhat());
@@ -150,14 +152,14 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   if (tiePointDistances.size() < 2)
   {
     _result = _circularError;
-    LOG_DEBUG(
+    LOG_INFO(
       QString("Unable to automatically calculate search radius.  Not enough tie points.  ") +
       QString("Using default search radius value = ") + QString::number(_result));
   }
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_DEBUG("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
   }
 }
 
