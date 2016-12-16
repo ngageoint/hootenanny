@@ -48,6 +48,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/visitors/SetTagVisitor.h>
 
 // Standard
 #include <fstream>
@@ -63,7 +64,9 @@ using namespace std;
 
 class ConflateCmd : public BaseCommand
 {
+
 public:
+
   static string className() { return "hoot::ConflateCmd"; }
 
   ConflateCmd() {}
@@ -79,6 +82,85 @@ public:
       cout << stats[i].name << sep << stats[i].value << endl;
     }
   }
+
+  //The logic in this method won't allow ConflateCmd to have any inputs that have ';' in the file
+  //name.
+  int runMultiple(QStringList args)
+  {
+    //TODO: make this work with stats
+
+    const QStringList inputs = args[0].split(";");
+    const QString output = args[1];
+
+    OsmMapPtr map(new OsmMap());
+    const QString sourceTagKey = "hoot:source";
+    LOG_VARD(inputs.size());
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      if (i == 0)
+      {
+        loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+        SetTagVisitor sourceTagVisitor(sourceTagKey, QString::number(i + 1));
+        map->visitRw(sourceTagVisitor);
+      }
+      else
+      {
+        if (i == 1)
+        {
+          LOG_INFO("Conflating " << inputs[i - 1] << " with " << inputs[i] << "...");
+        }
+        else
+        {
+          LOG_INFO("Conflating cumulative map with " << inputs[i] << "...");
+        }
+
+        loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+        if (i == 1 && Log::getInstance().isDebugEnabled())
+        {
+          LOG_DEBUG("Writing debug map.");
+          OsmMapPtr debug(new OsmMap(map));
+          MapProjector::projectToWgs84(debug);
+          OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+        }
+        //keep a source tag history on the data for provenance; append to any existing source values
+        //TODO: this shouldn't be modifying review relations
+        SetTagVisitor sourceTagVisitor(sourceTagKey, QString::number(i + 1), true);
+        map->visitRw(sourceTagVisitor);
+
+        NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+
+        UnifyingConflator().apply(map);
+
+        //NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+
+        if (i < inputs.size() - 1)
+        {
+          //Up until just before the last conflate job, set the status tag back to 1 so that the
+          //accumulated data will conflate with the next dataset.
+          //TODO: this shouldn't be modifying review relations
+          SetTagVisitor statusTagVisitor(
+            "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
+          map->visitRw(statusTagVisitor);
+
+//          if (Log::getInstance().isDebugEnabled())
+//          {
+//            LOG_DEBUG("Writing debug map.");
+//            OsmMapPtr debug(new OsmMap(map));
+//            MapProjector::projectToWgs84(debug);
+//            OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+//          }
+        }
+      }
+    }
+
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+
+    MapProjector::projectToWgs84(map);
+    saveMap(map, output);
+
+    return 0;
+  }
+
 
   int runSimple(QStringList args)
   {
@@ -112,6 +194,10 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
+    if (args.size() == 2 && args[0].split(";").size() > 1)
+    {
+      return runMultiple(args);
+    }
 
     QString input1 = args[0];
     QString input2, output;
@@ -126,7 +212,8 @@ public:
       output = args[1];
     }
 
-    LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
+    LOG_INFO(
+      "Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
     LOG_VAR(bytesRead);
@@ -146,9 +233,6 @@ public:
     stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
-
-    NamedOp(ConfigOptions().getConflateLoadPostOps()).apply(map);
-    //stats.append(SingleStat("Apply Load Post Ops Time (sec)", t.getElapsedAndRestart()));
 
     CalculateStatsOp input1Cso(
       ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");

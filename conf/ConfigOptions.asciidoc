@@ -223,14 +223,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== conflate.load.post.ops
-
-* Data Type: list
-* Default Value:
-
-List of operations to run in the conflate command immediately after map data is loaded and before
-conflation.
-
 === conflate.post.ops
 
 * Data Type: list
@@ -1999,6 +1991,14 @@ relations that were written to the database.
 ** ``
 
 List of element attributes to remove with the RemoveAttributeVisitor.
+
+=== set.tag.visitor.append.to.existing.value
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any element with a value populated for the key defined by set.tag.visitor.key will have
+the value specified in set.tag.visitor.value appended to it.
 
 === set.tag.visitor.key
 
