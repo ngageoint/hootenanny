@@ -1804,6 +1804,15 @@ Should it remove the elements recursively?
 
 A list of tag keys for which the RemoveTagVisitor to identify for removal on elements.
 
+=== reporting
+
+* Data Type: string
+* Default Value: ``
+
+Sets the reporting format to the type specified.  For now, 'json' is the only
+reporting format. The reporting format controls the format in which things like
+progress are reported.
+
 === rubber.sheet.debug
 
 * Data Type: bool
