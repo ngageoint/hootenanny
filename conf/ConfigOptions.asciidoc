@@ -302,7 +302,7 @@ less confident matches.
 * Data Type: string
 * Default Value: ``
 
-If specified the convert reader will limit data read from the data source to only features that
+If specified, readers will limit data read from the data source to only features that
 intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
 of the input data source.  This setting can be used with both the convert and conflate commands, but
 is not supported by all data readers.  See the documentation for details.
