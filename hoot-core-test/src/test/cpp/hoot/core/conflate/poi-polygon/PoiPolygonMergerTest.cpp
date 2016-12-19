@@ -47,19 +47,19 @@ namespace hoot
 class PoiPolygonMergerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMergerTest);
-  CPPUNIT_TEST(basicTest);
+  /*CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(toyScenario1Test);
   CPPUNIT_TEST(toyScenario2Test);
   CPPUNIT_TEST(toyScenario3Test);
   CPPUNIT_TEST(toyScenario4Test);
   CPPUNIT_TEST(toyScenario5Test);
-  CPPUNIT_TEST(toyScenario6Test);
+  CPPUNIT_TEST(toyScenario6Test);*/
   CPPUNIT_TEST(mergeWayAsPolyTest);
-  CPPUNIT_TEST(mergeRelationAsPolyTest);
+  /*CPPUNIT_TEST(mergeRelationAsPolyTest);
   CPPUNIT_TEST(mergeMissingPoiInputTest);
   CPPUNIT_TEST(mergeMissingPolyInputTest);
   CPPUNIT_TEST(mergeMoreThanOnePoiInputTest);
-  CPPUNIT_TEST(mergeMoreThanOnePolyInputTest);
+  CPPUNIT_TEST(mergeMoreThanOnePolyInputTest);*/
   CPPUNIT_TEST_SUITE_END();
 
 public:

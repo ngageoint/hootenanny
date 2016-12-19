@@ -42,35 +42,35 @@ import org.springframework.stereotype.Controller;
 
 
 @Controller
-public class POI2POIMergeServiceResource extends NodejsService {
-    private static final Logger logger = LoggerFactory.getLogger(POI2POIMergeServiceResource.class);
+public class ElementMergeServiceResource extends NodejsService {
+    private static final Logger logger = LoggerFactory.getLogger(ElementMergeServiceResource.class);
 
     // The purpose of this service is to provide the hoot-ui fast way to merge POI to POI.
-    private static Process p2PServiceProcess;
+    private static Process elementMergeServiceProcess;
 
-    public POI2POIMergeServiceResource() {}
+    public ElementMergeServiceResource() {}
 
     /**
-     * Destroys all POI to POI server process where it effectively shutting them down.
+     * Destroys all Element Merge Server processes, where it effectively is shutting them down.
      * 
-     * GET hoot-services/services/p2pserver/stop
+     * GET hoot-services/services/elementmergeserver/stop
      * 
      * @return JSON containing state
      */
     @GET
-    @Path("/p2pserver/stop")
+    @Path("/elementmergeserver/stop")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response stopP2PServiceViaWeb() {
+    public Response stopElementMergeServiceViaWeb() {
         // This also gets called automatically from HootServletContext when
         // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
             // Destroy the reference to the process directly here via the Java
             // API vs having the base class kill it with a unix command. Killing it via command causes
             // the stxxl temp files created hoot threads not to be cleaned up.
-            stopP2PService();
+            stopElementMergeService();
         }
         catch (Exception e) {
-            String msg = "Error stopping POI-To-POI Merge Service: " + e;
+            String msg = "Error stopping Element Merge Service: " + e;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -81,53 +81,53 @@ public class POI2POIMergeServiceResource extends NodejsService {
     }
 
     /**
-     * Gets current status of P2P server.
+     * Gets current status of Element Merge Server.
      * 
-     * GET hoot-services/services/p2pserver/status
+     * GET hoot-services/services/elementmergeserver/status
      * 
      * @return JSON containing state and port it is running
      */
     @GET
-    @Path("/p2pserver/status")
+    @Path("/elementmergeserver/status")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response isP2PServiceRunning() {
+    public Response isElementMergeServiceRunning() {
         boolean isRunning;
 
         try {
-            isRunning = getStatus(p2PServiceProcess);
+            isRunning = getStatus(elementMergeServiceProcess);
         }
         catch (Exception e) {
-            String msg = "Error getting status of POI-To-POI Merge Service.  Cause: " + e.getMessage();
+            String msg = "Error getting status of Element Merge Service.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         JSONObject json = new JSONObject();
         json.put("isRunning", isRunning);
-        json.put("port", P_2_P_SERVER_PORT);
+        json.put("port", ELEMENT_MERGE_SERVER_PORT);
 
         return Response.ok(json.toJSONString()).build();
     }
 
-    public static void startP2PService() {
+    public static void startElementMergeService() {
         try {
-            String p2PServiceScript = HOME_FOLDER + P_2_P_SERVER_SCRIPT;
+            String elementMergeServiceScript = HOME_FOLDER + ELEMENT_MERGE_SERVER_PORT;
 
             // Make sure to wipe out previosuly running servers.
-            stopServer(p2PServiceScript);
+            stopServer(elementMergeServiceScript);
 
-            logger.info("Starting POI-To-POI Merge Service by running {} script", p2PServiceScript);
+            logger.info("Starting POI-To-POI Merge Service by running {} script", elementMergeServiceScript);
 
-            p2PServiceProcess = startServer(P_2_P_SERVER_PORT, P_2_P_SERVER_THREAD_COUNT, p2PServiceScript);
+            elementMergeServiceProcess = startServer(ELEMENT_MERGE_SERVER_PORT, ELEMENT_MERGE_SERVER_THREAD_COUNT, elementMergeServiceScript);
 
-            logger.info("POI-To-POI Service started");
+            logger.info("Element Merge Service started");
         }
         catch (Exception e) {
-            String msg = "Error starting POI-To-POI Merge Service.  Cause: " + e.getMessage();
+            String msg = "Error starting Element Merge Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
 
-    public static void stopP2PService() {
+    public static void stopElementMergeService() {
         // This also gets called automatically from HootServletContext when
         // service exits but should not be reliable since there are many path where it will not be invoked.
         try {
@@ -135,10 +135,10 @@ public class POI2POIMergeServiceResource extends NodejsService {
             // API vs having the base class kill it with a unix command. Killing it via command causes
             // the stxxl temp files created by hoot threads not to be cleaned up.
             // stopServer(homeFolder + "/scripts/" + translationServerScript);
-            p2PServiceProcess.destroy();
+            elementMergeServiceProcess.destroy();
         }
         catch (Exception e) {
-            String msg = "Error stopping POI-To-POI Merge Service.  Cause: " + e.getMessage();
+            String msg = "Error stopping Element Merge Service.  Cause: " + e.getMessage();
             throw new RuntimeException(msg, e);
         }
     }
