@@ -1038,7 +1038,7 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
 //    return false;
 //  }
 
-#warning only check this at vertices.
+//#warning only check this at vertices.
 //  // calculate the angle difference at the edge locations
 //  Radians rString = calculateHeading(elString);
 //  Radians rSubline = calculateHeading(elSubline);
@@ -1112,11 +1112,14 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
   return ws;
 }
 
-void NetworkDetails::_trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
-  const WaySublineCollection& ws) const
+void NetworkDetails::_trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es,
+                                     WayPtr w, const WaySublineCollection& ws) const
 {
   // sanity check to make sure the lengths are about the same.
-  assert(fabs(es->calculateLength(_map) - ElementConverter(provider).calculateLength(w)) < 0.1);
+  const double lengthDiff =
+    fabs(es->calculateLength(_map) - ElementConverter(provider).calculateLength(w));
+  LOG_VART(lengthDiff);
+  assert(lengthDiff < 0.1);
   assert(ws.getSublines().size() == 1);
 
   WaySubline s = ws.getSublines()[0];
