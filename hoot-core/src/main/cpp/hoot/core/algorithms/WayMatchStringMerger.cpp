@@ -393,7 +393,7 @@ WayLocation WayMatchStringMerger::_snapToEnd(const WayLocation& wl) const
   {
     result = WayLocation(wl.getMap(), wl.getWay(), 0, 0.0);
   }
-  else if (wl.getSegmentIndex() == wl.getWay()->getNodeCount() - 1 &&
+  else if ((size_t)wl.getSegmentIndex() == wl.getWay()->getNodeCount() - 1 &&
     wl.getSegmentFraction() >= 1 - WayLocation::SLOPPY_EPSILON)
   {
     result = WayLocation(wl.getMap(), wl.getWay(), wl.getWay()->getNodeCount() - 1, 1.0);
