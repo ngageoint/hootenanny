@@ -42,6 +42,8 @@
 namespace hoot
 {
 
+bool sort_sublines(const frechet_subline& i, const frechet_subline& j) { return i.first > j.first; }
+
 FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &way1, const ConstWayPtr &way2, Radians maxAngle)
   : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]), _maxAngle(maxAngle)
 {
@@ -77,7 +79,6 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   }
   //  Precalculate the discreet matrix
   _matrix = calculateMatrix();
-
 }
 
 frechet_matrix FrechetDistance::calculateMatrix()
@@ -243,8 +244,15 @@ Meters FrechetDistance::distance()
 
 frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
 {
-  frechet_subline best_subline;
+  vector<frechet_subline> frechet = matchingSublines(maxDistance);
+  if (frechet.size() > 0)
+    return frechet[0];
+  return frechet_subline();
+}
 
+vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
+{
+  vector<frechet_subline> results;
   int rows = _ls1->getNumPoints();
   int cols = _ls2->getNumPoints();
   if (rows < 1 || cols < 1)
@@ -252,7 +260,7 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
   //  Get the uninformed Frechet distance as the max
   Meters max_frechet = distance();
 
-  frechet_subline starts;
+  subline_entry starts;
   //  Check if the max subline is the combination of both lines
   if (max_frechet >= maxDistance)
   {
@@ -270,7 +278,7 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
             continue;
           if (c > 0 && _matrix[r][c - 1] < maxDistance)
             continue;
-          if (r > 0 && c > 0 && _matrix[r][c] < maxDistance)
+          if (r > 0 && c > 0 && _matrix[r - 1][c - 1] < maxDistance)
             continue;
           starts.push_back(vertex_match(r, c));
         }
@@ -283,16 +291,15 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
     starts.push_back(vertex_match(0, 0));
   }
 
-  Meters best_frechet = maxDistance;
   //  Iterate all of the valid starting points in order to reduce search
-  for (frechet_subline::size_type i = 0; i < starts.size(); i++)
+  for (subline_entry::size_type i = 0; i < starts.size(); i++)
   {
-    frechet_subline subline;
+    subline_entry sub;
 
     int r = starts[i].first;
     int c = starts[i].second;
     //  Use the starting position and modify it if the ways are reversed
-    subline.push_back(vertex_match(r, c));
+    sub.push_back(vertex_match(r, c));
     //  The beginning frechet distance is between the two starting nodes
     Meters frechet = _matrix[r][c];
     //  Iterate through the matrix from the start position
@@ -312,6 +319,7 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
         advanceAndCheckColumn(rows, cols, r, c, max_frechet);
       else if (_matrix[r + 1][c] <= _matrix[r][c + 1] && _matrix[r + 1][c] <= _matrix[r + 1][c + 1])
         advanceAndCheckRow(rows, cols, r, c, max_frechet);
+
       double value = (max_frechet > 0.0 ? min(_matrix[r][c], max_frechet) : _matrix[r][c]);
       //  Check that the distance is less than the max distance in order to include this node
       if (value < maxDistance)
@@ -322,8 +330,8 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
         Radians delta = WayHeading::deltaMagnitude(h1, h2);
         if (delta <= _maxAngle)
         {
-          subline.push_back(vertex_match(r, c));
-          frechet = min(frechet, value);
+          sub.push_back(vertex_match(r, c));
+          frechet = max(frechet, value);
         }
         else
           break;
@@ -332,25 +340,20 @@ frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
         break;
     }
     //  Do some backtracking if the two endpoints are too far away of each other
-    while (frechet > maxDistance)
+    vertex_match m = sub[sub.size() - 1];
+    while (_matrix[m.first][m.second] > maxDistance && sub.size() >= 2)
     {
       //  Backtrack
-      subline.pop_back();
-      if (subline.size() < 1)
-        break;
-      //  Get the distance between the last two nodes
-      vertex_match m = subline[subline.size() - 1];
-      frechet = _matrix[m.first][m.second];
+      sub.pop_back();
+      m = sub[sub.size() - 1];
     }
-    //  Is this subline "better" than the current best?
-    if ((best_subline.size() == subline.size() && frechet < best_frechet) ||
-        (best_subline.size() < subline.size()))
-    {
-      best_frechet = frechet;
-      best_subline = subline;
-    }
+    if (sub.size() > 1)
+      results.push_back(frechet_subline(sub.size(), sub));
   }
-  return best_subline;
+
+  sort(results.begin(), results.end(), sort_sublines);
+
+  return results;
 }
 
 }

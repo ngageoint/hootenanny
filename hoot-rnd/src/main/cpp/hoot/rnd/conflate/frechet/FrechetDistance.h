@@ -45,7 +45,8 @@ namespace hoot
 typedef boost::multi_array<Meters, 2> frechet_matrix;
 typedef frechet_matrix::index frechet_index;
 typedef std::pair<int, int> vertex_match;
-typedef std::vector<vertex_match> frechet_subline;
+typedef std::vector<vertex_match> subline_entry;
+typedef std::pair<Meters, subline_entry> frechet_subline;
 
 typedef shared_ptr<LineString> LineStringPtr;
 
@@ -80,6 +81,13 @@ public:
    * @return set of matching node indices that represent the subline
    */
   frechet_subline maxSubline(Meters maxDistance = 15.0);
+
+  /**
+   * @brief matchingSublines - find the set of non-overlapping maximal subline matches for the two ways
+   * @param maxDistance - max distance between the two ways to consider as a match
+   * @return set of matching non-overlapping subline matches
+   */
+  std::vector<frechet_subline> matchingSublines(Meters maxDistance = 15.0);
 
 protected:
   /**
@@ -131,7 +139,6 @@ protected:
    */
   Radians getHeadingWay1(int index);
   Radians getHeadingWay2(int index);
-
 
 protected:
   Radians getHeadingAvg(WayPtr way, int index);

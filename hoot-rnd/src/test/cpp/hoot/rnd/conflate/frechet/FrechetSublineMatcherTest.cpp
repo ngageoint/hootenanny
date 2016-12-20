@@ -51,9 +51,9 @@ namespace hoot
 class FrechetSublineMatcherTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(FrechetSublineMatcherTest);
-  CPPUNIT_TEST(sublineTest);
-  CPPUNIT_TEST(runVTest);
-  CPPUNIT_TEST(runCircleTest);
+//  CPPUNIT_TEST(sublineTest);
+//  CPPUNIT_TEST(runVTest);
+//  CPPUNIT_TEST(runCircleTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -135,7 +135,7 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "current");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "quick");
 
 }

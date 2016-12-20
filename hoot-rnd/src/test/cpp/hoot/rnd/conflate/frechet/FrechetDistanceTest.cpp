@@ -55,6 +55,7 @@ class FrechetDistanceTest : public CppUnit::TestFixture
   CPPUNIT_TEST(tailFrechet);
   CPPUNIT_TEST(homologousTest);
   CPPUNIT_TEST(partialTest);
+  CPPUNIT_TEST(splitTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -80,23 +81,40 @@ public:
     frechet_subline subline = fd.maxSubline(5);
     frechet_subline optimal_subline = createTailSubline();
 
-    CPPUNIT_ASSERT_EQUAL(optimal_subline.size(), subline.size());
+    CPPUNIT_ASSERT_EQUAL(optimal_subline.first, subline.first);
 
-    for (frechet_subline::size_type i = 0; i < subline.size(); i++)
+    CPPUNIT_ASSERT_EQUAL(optimal_subline.second.size(), subline.second.size());
+
+    for (subline_entry::size_type i = 0; i < subline.second.size(); i++)
     {
-      CPPUNIT_ASSERT_EQUAL(optimal_subline[i].first, subline[i].first);
-      CPPUNIT_ASSERT_EQUAL(optimal_subline[i].second, subline[i].second);
+      CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].first, subline.second[i].first);
+      CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].second, subline.second[i].second);
     }
+
+    vector<frechet_subline> sublines = fd.matchingSublines(5);
+
+    CPPUNIT_ASSERT_EQUAL((int)sublines.size(), 1);
+
+    CPPUNIT_ASSERT_EQUAL(optimal_subline.first, sublines[0].first);
+
+    CPPUNIT_ASSERT_EQUAL(optimal_subline.second.size(), sublines[0].second.size());
+
+    for (subline_entry::size_type i = 0; i < sublines[0].second.size(); i++)
+    {
+      CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].first, sublines[0].second[i].first);
+      CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].second, sublines[0].second[i].second);
+    }
+
   }
 
   frechet_subline createTailSubline()
   {
-    frechet_subline optimal_subline;
+    subline_entry optimal_subline;
     optimal_subline.push_back(vertex_match(0, 0));
     optimal_subline.push_back(vertex_match(1, 1));
     optimal_subline.push_back(vertex_match(2, 2));
     optimal_subline.push_back(vertex_match(3, 3));
-    return optimal_subline;
+    return frechet_subline(4.0, optimal_subline);
   }
 
   OsmMapPtr createTailMap()
@@ -144,14 +162,13 @@ public:
 
   void homologousTest()
   {
-    /** Example taken from "A new merging process for data integration based on the discrete Fréchet distance"
-     *  http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf
-     *
-     * Table 1 - Matrix of dE between (L1.i, L2.j) distance and ways
-     */
+    // Example taken from "A new merging process for data integration based on the discrete Fréchet distance"
+    //  http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf
+    //
+    // Table 1 - Matrix of dE between (L1.i, L2.j) distance and ways
     const int rows = 7;
     const int cols = 8;
-    const Meters values[rows][cols] = {
+    Meters values[rows][cols] = {
       {  0.86,  2.33,  5.55,  9.97, 10.67, 10.64,  9.52,  6.01 },
       {  2.52,  0.92,  4.18,  8.85,  9.62,  9.70,  8.78,  5.39 },
       {  3.45,  0.91,  3.10,  7.80,  8.60,  8.74,  7.93,  4.70 },
@@ -176,25 +193,27 @@ public:
     frechet_subline subline = fd.maxSubline(2);
     frechet_subline optimal = createTestSublineHomologous();
 
-    CPPUNIT_ASSERT_EQUAL(optimal.size(), subline.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(optimal.first, subline.first, 0.0001);
 
-    for (frechet_subline::size_type i = 0; i < subline.size(); i++)
+    CPPUNIT_ASSERT_EQUAL(optimal.second.size(), subline.second.size());
+
+    for (subline_entry::size_type i = 0; i < subline.second.size(); i++)
     {
-      CPPUNIT_ASSERT_EQUAL(optimal[i].first, subline[i].first);
-      CPPUNIT_ASSERT_EQUAL(optimal[i].second, subline[i].second);
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].first, subline.second[i].first);
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].second, subline.second[i].second);
     }
   }
 
   void partialTest()
   {
-    /** Example taken from "A new merging process for data integration based on the discrete Fréchet distance"
-     *  http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf
-     *
-     *  Table 2 - Matrix of dE between the partial homologous lines of figure 5
-     */
+    // Example taken from "A new merging process for data integration based on the discrete Fréchet distance"
+    //  http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf
+    //
+    //  Table 2 - Matrix of dE between the partial homologous lines of figure 5
+
     const int rows = 9;
     const int cols = 17;
-    const Meters values[rows][cols] = {
+    Meters values[rows][cols] = {
       {  1.60,  0.67,  1.78,  1.17,  0.72,  2.03,  3.62,  4.55,  6.14,  7.74,  8.55,  9.77, 11.40, 13.10, 12.80, 13.20, 12.70 },
       {  3.64,  2.62,  3.82,  2.97,  1.75,  0.11,  1.55,  2.58,  4.17,  5.77,  6.65,  7.89,  9.58, 11.20, 10.90, 11.30, 10.90 },
       {  5.73,  4.71,  5.91,  5.01,  3.80,  2.18,  0.73,  1.22,  2.44,  3.94,  4.91,  6.16,  7.78,  9.37,  9.16,  9.65,  9.35 },
@@ -221,13 +240,75 @@ public:
     frechet_subline subline = fd.maxSubline(1.25);
     frechet_subline optimal = createTestSublinePartial();
 
-    CPPUNIT_ASSERT_EQUAL(optimal.size(), subline.size());
+    CPPUNIT_ASSERT_EQUAL(optimal.first, subline.first);
+    CPPUNIT_ASSERT_EQUAL(optimal.second.size(), subline.second.size());
 
-    for (frechet_subline::size_type i = 0; i < subline.size(); i++)
+    for (subline_entry::size_type i = 0; i < subline.second.size(); i++)
     {
-      CPPUNIT_ASSERT_EQUAL(optimal[i].first, subline[i].first);
-      CPPUNIT_ASSERT_EQUAL(optimal[i].second, subline[i].second);
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].first, subline.second[i].first);
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].second, subline.second[i].second);
     }
+
+    vector<frechet_subline> matches = fd.matchingSublines(1.25);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)matches.size());
+
+    CPPUNIT_ASSERT_EQUAL(optimal.first, matches[0].first);
+    CPPUNIT_ASSERT_EQUAL(optimal.second.size(), matches[0].second.size());
+
+    for (subline_entry::size_type i = 0; i < matches[0].second.size(); i++)
+    {
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].first, matches[0].second[i].first);
+      CPPUNIT_ASSERT_EQUAL(optimal.second[i].second, matches[0].second[i].second);
+    }
+
+//    for (vector<frechet_subline>::size_type i = 0; i < matches.size(); i++)
+//    {
+//    }
+  }
+
+  void splitTest()
+  {
+    const int rows = 5;
+    const int cols = 6;
+    Meters values[rows][cols] = {
+      {  3.00, 10.44, 42.72, 20.22, 30.14, 40.11 },
+      { 10.44,  3.00, 40.31, 10.44, 20.22, 30.14 },
+      { 20.22, 10.44, 40.31,  3.00, 10.44, 20.22 },
+      { 30.14, 20.22, 42.72, 10.44,  3.00, 10.44 },
+      { 40.11, 30.14, 47.16, 20.22, 10.44,  3.00 }
+
+    };
+
+    OsmMapPtr map = createTestSplitMap();
+    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+
+    FrechetDistance fd(map, w1, w2);
+
+    for (int r = 0; r < rows; r++)
+      for (int c = 0; c < cols; c++)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(values[r][c], fd._matrix[r][c], 0.1);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(40.00, fd.distance(), 0.01);
+
+    vector<frechet_subline> matches = fd.matchingSublines(4);
+    vector<frechet_subline> manual = createTestSplitMatches();
+
+    CPPUNIT_ASSERT_EQUAL(manual.size(), matches.size());
+
+    for (vector<frechet_subline>::size_type i = 0; i < matches.size(); i++)
+    {
+      CPPUNIT_ASSERT_EQUAL(manual[i].first, matches[i].first);
+      CPPUNIT_ASSERT_EQUAL(manual[i].second.size(), matches[i].second.size());
+
+      for (subline_entry::size_type j = 0; j < matches[i].second.size(); j++)
+      {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(manual[i].second[j].first, matches[i].second[j].first, 0.01);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(manual[i].second[j].second, matches[i].second[j].second, 0.01);
+      }
+    }
+
   }
 
   OsmMapPtr createTestMapHomologous()
@@ -250,7 +331,7 @@ public:
 
   frechet_subline createTestSublineHomologous()
   {
-    frechet_subline optimal_subline;
+    subline_entry optimal_subline;
     optimal_subline.push_back(vertex_match(0, 0));
     optimal_subline.push_back(vertex_match(1, 1));
     optimal_subline.push_back(vertex_match(2, 1));
@@ -260,7 +341,7 @@ public:
     optimal_subline.push_back(vertex_match(4, 5));
     optimal_subline.push_back(vertex_match(5, 6));
     optimal_subline.push_back(vertex_match(6, 7));
-    return optimal_subline;
+    return frechet_subline(9.0, optimal_subline);
   }
 
   OsmMapPtr createTestMapPartial()
@@ -288,7 +369,7 @@ public:
 
   frechet_subline createTestSublinePartial()
   {
-    frechet_subline optimal_subline;
+    subline_entry optimal_subline;
     optimal_subline.push_back(vertex_match(0, 3));
     optimal_subline.push_back(vertex_match(0, 4));
     optimal_subline.push_back(vertex_match(1, 5));
@@ -300,7 +381,39 @@ public:
     optimal_subline.push_back(vertex_match(6, 11));
     optimal_subline.push_back(vertex_match(7, 12));
     optimal_subline.push_back(vertex_match(8, 13));
-    return optimal_subline;
+    return frechet_subline(11.0, optimal_subline);
+  }
+
+  OsmMapPtr createTestSplitMap()
+  {
+    OsmMapPtr map = createEmptyMap();
+
+    Coordinate c1[] = {
+      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
+      Coordinate::getNull() };
+    TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+
+    Coordinate c2[] = {
+      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
+      Coordinate::getNull() };
+    TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+
+    return map;
+  }
+
+  vector<frechet_subline> createTestSplitMatches()
+  {
+    vector<frechet_subline> matches;
+    subline_entry optimal_subline;
+    optimal_subline.push_back(vertex_match(2, 3));
+    optimal_subline.push_back(vertex_match(3, 4));
+    optimal_subline.push_back(vertex_match(4, 5));
+    matches.push_back(frechet_subline(3.0, optimal_subline));
+    subline_entry secondary_subline;
+    secondary_subline.push_back(vertex_match(0, 0));
+    secondary_subline.push_back(vertex_match(1, 1));
+    matches.push_back(frechet_subline(2.0, secondary_subline));
+    return matches;
   }
 
 };
