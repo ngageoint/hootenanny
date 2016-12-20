@@ -1,0 +1,7 @@
+
+step1:
+	mkdir -p "$(temppath)"
+	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(changesetaoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(temppath)/changeset.osc.sql "$(OSM_API_DB_URL)"
+
+
+

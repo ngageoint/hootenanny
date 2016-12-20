@@ -251,6 +251,9 @@ P2PServerThreadCount=0
 # POI to POI Server Script in scripts folder
 P2PServerScript=/plugins/P2PServer.js
 
+# Used by DeriveChangesetResource
+deriveChangesetScript=derivechangeset
+
 # REVIEW
 
 
