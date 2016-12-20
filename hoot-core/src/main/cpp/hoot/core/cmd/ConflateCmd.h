@@ -112,7 +112,6 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-
     QString input1 = args[0];
     QString input2, output;
 
