@@ -261,10 +261,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(optimal.second[i].first, matches[0].second[i].first);
       CPPUNIT_ASSERT_EQUAL(optimal.second[i].second, matches[0].second[i].second);
     }
-
-//    for (vector<frechet_subline>::size_type i = 0; i < matches.size(); i++)
-//    {
-//    }
   }
 
   void splitTest()

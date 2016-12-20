@@ -51,53 +51,71 @@ namespace hoot
 class FrechetSublineMatcherTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(FrechetSublineMatcherTest);
-//  CPPUNIT_TEST(sublineTest);
-//  CPPUNIT_TEST(runVTest);
-//  CPPUNIT_TEST(runCircleTest);
+  CPPUNIT_TEST(singleSublineTest);
+  CPPUNIT_TEST(doubleSublineTest);
+  CPPUNIT_TEST(runCircleTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  void sublineTest()
-  {
 
-  }
-
-  OsmMapPtr createMap()
-  {
-    OsmMap::resetCounters();
-    OsmMapPtr map(new OsmMap());
-    MapProjector::projectToPlanar(map);
-    return map;
-  }
-
-  void runVTest()
+  void singleSublineTest()
   {
     Settings s;
     OsmMapPtr map = createMap();
 
-    /*
-     * Create ways like this:
-     * w1 \    / w2
-     *     \  /
-     *      \/
-     */
-    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(-15.0, 50.0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+    Coordinate c1[] = {
+      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(15.0, 37.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
+      Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
 
-    Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(15.0, 50.0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+    Coordinate c2[] = {
+      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
+      Coordinate::getNull() };
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);
 
     double score;
-    vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score, 53).getMatches();
+    vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score, 5).getMatches();
 
     HOOT_STR_EQUALS(1, m.size());
     HOOT_STR_EQUALS(
+      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 5 fraction: 0\n"
+      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 5 fraction: 0",
+      m[0].toString());
+  }
+
+  void doubleSublineTest()
+  {
+    Settings s;
+    OsmMapPtr map = createMap();
+
+    Coordinate c1[] = {
+      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
+      Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+
+    Coordinate c2[] = {
+      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
+      Coordinate::getNull() };
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+
+    FrechetSublineMatcher uut;
+    uut.setConfiguration(s);
+
+    double score;
+    vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score, 5).getMatches();
+
+    HOOT_STR_EQUALS(2, m.size());
+    HOOT_STR_EQUALS(
+      "subline 1: start: way: -1 index: 2 fraction: 0 end: way: -1 index: 4 fraction: 0\n"
+      "subline 2: start: way: -2 index: 3 fraction: 0 end: way: -2 index: 5 fraction: 0",
+      m[0].toString());
+    HOOT_STR_EQUALS(
       "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
       "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
-      m[0].toString());
+      m[1].toString());
   }
 
   /**
@@ -128,14 +146,22 @@ public:
       HOOT_STR_EQUALS(1, m.size());
       HOOT_STR_EQUALS(
         "subline 1: start: way: -1 index: 87 fraction: 0 end: way: -1 index: 90 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 5 fraction: 0",
+        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 4 fraction: 0",
         m[0].toString());
     }
   }
 
+  OsmMapPtr createMap()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    MapProjector::projectToPlanar(map);
+    return map;
+  }
+
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "current");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetSublineMatcherTest, "quick");
 
 }
