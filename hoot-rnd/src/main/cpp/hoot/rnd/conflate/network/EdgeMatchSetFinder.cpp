@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -176,7 +176,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
       /*neighbors1[i]->isbb() == false &&*/
       _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()) > 0)
     {
-    #warning review
+    //#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getLastEdge());
       if (next)
       {
@@ -202,7 +202,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
       /*neighbors2[i]->isStub() == false &&*/
       _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()) > 0)
     {
-    #warning review
+    //#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getLastEdge(), neighbor2);
       if (next)
       {
@@ -236,7 +236,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
       _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()) > 0)
     {
       // create and evaluate a new match
-#warning review
+//#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1,
         em->getString2()->getFirstEdge());
       if (next)
@@ -262,7 +262,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
       neighbor2->isStub() == false &&
       _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()) > 0)
     {
-#warning review
+//#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getFirstEdge(),
         neighbor2);
       if (next)
