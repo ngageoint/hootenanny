@@ -19,6 +19,33 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
+echo "### Installing Java 8..."
+
+# jdk-8u112-linux-x64.tar.gz's official checksums:
+#    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
+#    md5: de9b7a90f0f5a13cfcaa3b01451d0337
+echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+
+if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+    echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
+    sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
+    echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+fi
+
+sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+
+if [[ ! -e /usr/lib/jvm ]]; then
+    sudo mkdir /usr/lib/jvm
+else
+    if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
+        sudo rm -rf /usr/lib/jvm/oracle_jdk8
+    fi
+fi
+
+sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
+sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
+echo "### Done with Java 8 install..."
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
@@ -29,7 +56,7 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 openjdk-7-jdk openjdk-7-dbg maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -57,8 +84,10 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64" >> ~/.profile
+    echo "export JAVA_HOME=/usr/lib/jvm/oracle_jdk8" >> ~/.profile
     source ~/.profile
+else
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' ~/.profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
@@ -72,7 +101,7 @@ fi
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
     #echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
-    echo "export PATH=\$PATH:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -336,7 +365,12 @@ fi
 
 if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
     echo "### Changing Tomcat java opts..."
-    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m \-XX:PermSize=512m \-XX:MaxPermSize=4096m@" /etc/default/tomcat6
+    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m@" /etc/default/tomcat6
+fi
+
+if grep -i --quiet '^#JAVA_HOME=' /etc/default/tomcat6; then
+    echo "### Changing Tomcat JAVA_HOME..."
+    sudo sed -i.bak '/.*#JAVA_HOME=.*/c\JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' /etc/default/tomcat6
 fi
 
 if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
@@ -513,7 +547,7 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.7.0-openjdk-amd64/g' $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8/g' $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
   sudo mkdir -p $HOME/hadoop/dfs/name/current
@@ -526,11 +560,6 @@ EOT
   cd /lib64
   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
   cd ~
-
-  echo '1' | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.7.0-openjdk-amd64/bin/java 1
-  echo '1' | sudo update-alternatives --config java
-  echo '1' | sudo update-alternatives --install "/usr/bin/javac" "javac" "$JAVA_HOME/bin/javac" 1
-  echo '1' | sudo update-alternatives --config javac
 
   # test hadoop out
   #stop-all.sh
@@ -572,3 +601,7 @@ mkdir -p $HOOT_HOME/upload
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
 # Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
+
+# switch to auto mode and use the highest priority installed alternatives for Java.
+sudo update-alternatives --auto java
+sudo update-alternatives --auto javac
