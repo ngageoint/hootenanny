@@ -146,8 +146,8 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   }
   if (_userEmail.isEmpty())
   {
-    throw HootException("Please set the user's email address via the '" + emailKey() + "' "
-                        "configuration setting.");
+    throw HootException("Please set the user's email address via the '" +
+                        ConfigOptions().getApiDbEmailKey() + "' configuration setting.");
   }
 
   QUrl url(urlStr);
@@ -179,7 +179,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 {
   if (mapIds.size() > 0)
   {
-    if (_overwriteMap) // delete mape and overwrite it
+    if (_overwriteMap) // delete map and overwrite it
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {

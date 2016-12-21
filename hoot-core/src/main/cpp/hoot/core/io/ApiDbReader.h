@@ -51,8 +51,6 @@ class ApiDbReader
 {
 public:
 
-  static QString emailKey() { return "api.db.email"; }
-
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
