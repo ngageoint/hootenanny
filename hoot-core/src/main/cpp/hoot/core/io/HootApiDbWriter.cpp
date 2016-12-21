@@ -147,7 +147,7 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   if (_userEmail.isEmpty())
   {
     throw HootException("Please set the user's email address via the '" +
-                        ConfigOptions().getApiDbEmailKey() + "' configuration setting.");
+                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
   }
 
   QUrl url(urlStr);

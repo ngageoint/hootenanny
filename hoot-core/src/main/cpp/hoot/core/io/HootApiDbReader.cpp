@@ -97,7 +97,7 @@ void HootApiDbReader::open(QString urlStr)
     if (_email == "")
     {
       throw HootException("If a map name is specified then the user email must also be specified "
-                          "via: " + ConfigOptions().getApiDbEmailKey());
+                          "via: " + ConfigOptions::getApiDbEmailKey());
     }
 
     QString mapName = pList[pList.size() - 1];
