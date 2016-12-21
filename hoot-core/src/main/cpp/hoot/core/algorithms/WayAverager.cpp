@@ -109,7 +109,7 @@ shared_ptr<Way> WayAverager::average()
 
   result->addNode(_merge(_w1->getNodeIds()[0], weight1, _w2->getNodeIds()[0], weight2));
 
-  // we're getting the vectors affter the above merge because the merge will change node ids.
+  // we're getting the vectors after the above merge because the merge will change node ids.
   const std::vector<long>& ns1 = _w1->getNodeIds();
   const std::vector<long>& ns2 = _w2->getNodeIds();
 
