@@ -162,7 +162,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
-  LOG_INFO("Pre-constraining match count: " << allMatches.size());
+  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
 
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
   LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
@@ -221,6 +221,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //_validateConflictSubset(map, _matches);
 
   LOG_DEBUG("Post constraining match count: " << _matches.size());
+  LOG_INFO("Match count: " << _matches.size());
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
