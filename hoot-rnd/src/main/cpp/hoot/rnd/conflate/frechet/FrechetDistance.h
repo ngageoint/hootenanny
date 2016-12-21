@@ -87,12 +87,15 @@ public:
 
 protected:
   /**
-   * @brief calculateMatrix
+   * @brief calculateMatrix - calculate the matrix of distances between any two given points in the ways
    * @return distinct Frechet matrix of distances calculated
    */
   frechet_matrix calculateMatrix();
   /**
-   * @brief advanceAndCheck
+   * @brief advanceAndCheck - advances the current position (r, c) in the Frechet matrix and modifies the
+   *  max_frechet with the maximum distance from the current and next positions to the closest point on the
+   *  other way.  This allows for the use of both the distance between points and distance between the actual
+   *  ways when needed.
    * @param rows - constant number of rows in the Frechet matrix
    * @param cols - constant number of columns in the Frechet matrix
    * @param r - current row number, could be modified in the advance operation
@@ -137,7 +140,21 @@ protected:
   Radians getHeadingWay2(int index);
 
 protected:
+  /**
+   * @brief getHeadingAvg - get the heading of the way averaged over three way segments (if possible)
+   *  using the average allows for better fitting of two different curves
+   * @param way - pointer to the way
+   * @param index - index of the node to check the heading at
+   * @return heading of the way at the given point
+   */
   Radians getHeadingAvg(WayPtr way, int index);
+  /**
+   * @brief getHeadingSimple - get the heading of the way at the current way segment defined between node
+   *  index and index + 1
+   * @param way - pointer to the way
+   * @param index - index of the node to check the heading at
+   * @return heading of the way at the given point
+   */
   Radians getHeadingSimple(WayPtr way, int index);
   //  Allow test class to access protected members for white box testing
   friend class FrechetDistanceTest;
