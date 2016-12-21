@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -122,6 +122,8 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 
 void RubberSheet::apply(shared_ptr<OsmMap>& map)
 {
+  LOG_INFO("Rubbersheeting the map...");
+
   shared_ptr<OGRSpatialReference> oldSrs = _projection;
   calculateTransform(map);
   _projection = oldSrs;
@@ -243,7 +245,7 @@ shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     candidate->setIndependentColumns(ind);
     candidate->setDependentColumns(dep);
     double error = candidate->estimateError();
-    LOG_INFO("candidate: " << candidate->toString() << " RMSE: " << error);
+    LOG_DEBUG("candidate: " << candidate->toString() << " RMSE: " << error);
     if (error < bestError)
     {
       bestCandidate = candidate;
@@ -256,7 +258,7 @@ shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     throw HootException("Unable to determine interpolation candidate.");
   }
 
-  LOG_INFO("Best candidate: " << bestCandidate->toString());
+  LOG_DEBUG("Best candidate: " << bestCandidate->toString());
 
   return bestCandidate;
 }
@@ -323,7 +325,7 @@ void RubberSheet::_findTies()
   t << "amenity=bench";
 
   set<long> touched;
-  LOG_INFO("Found " << _finalPairs.size() << " potential ties.");
+  LOG_DEBUG("Found " << _finalPairs.size() << " potential ties.");
 
   for (size_t i = 0; i < _finalPairs.size(); ++i)
   {
@@ -361,7 +363,7 @@ void RubberSheet::_findTies()
     }
   }
 
-  LOG_INFO("Found " << _ties.size() << " confident ties.");
+  LOG_DEBUG("Found " << _ties.size() << " confident ties.");
 
   if ((long)_ties.size() >= _minimumTies)
   {
@@ -370,11 +372,11 @@ void RubberSheet::_findTies()
     _interpolator2to1 = _buildInterpolator(Status::Unknown2);
     // make sure we use the same interpolator for both directions.
     _interpolatorClassName = _interpolator2to1->getClassName();
-    LOG_INFO(_interpolator2to1->toString());
+    LOG_DEBUG(_interpolator2to1->toString());
     if (_ref == false)
     {
       _interpolator1to2 = _buildInterpolator(Status::Unknown1);
-      LOG_INFO(_interpolator1to2->toString());
+      LOG_DEBUG(_interpolator1to2->toString());
     }
   }
   else
