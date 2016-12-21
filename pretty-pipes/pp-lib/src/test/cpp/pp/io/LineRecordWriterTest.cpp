@@ -78,7 +78,7 @@ public:
     }
 
     shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
-    char buffer[1000];
+    char buffer[1000] = { '\0' };
     is->read(buffer, 1000);
     string output(buffer);
     string base("key\tvalue\nkey2\tvalue2\n");
