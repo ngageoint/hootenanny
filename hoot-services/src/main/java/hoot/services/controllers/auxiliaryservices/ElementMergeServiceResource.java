@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,9 +52,9 @@ public class ElementMergeServiceResource extends NodejsService {
 
     /**
      * Destroys all Element Merge Server processes, where it effectively is shutting them down.
-     * 
+     *
      * GET hoot-services/services/elementmergeserver/stop
-     * 
+     *
      * @return JSON containing state
      */
     @GET
@@ -82,9 +82,9 @@ public class ElementMergeServiceResource extends NodejsService {
 
     /**
      * Gets current status of Element Merge Server.
-     * 
+     *
      * GET hoot-services/services/elementmergeserver/status
-     * 
+     *
      * @return JSON containing state and port it is running
      */
     @GET
@@ -110,7 +110,7 @@ public class ElementMergeServiceResource extends NodejsService {
 
     public static void startElementMergeService() {
         try {
-            String elementMergeServiceScript = HOME_FOLDER + ELEMENT_MERGE_SERVER_PORT;
+            String elementMergeServiceScript = HOME_FOLDER + ELEMENT_MERGE_SERVER_SCRIPT;
 
             // Make sure to wipe out previosuly running servers.
             stopServer(elementMergeServiceScript);
