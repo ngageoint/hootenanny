@@ -86,14 +86,14 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
   {
-    LOG_WARN(
+    LOG_INFO(
       "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
       " conflated or invalid features out of " << map->getElementCount() << " total features.");
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
     _result = _circularError;
-    LOG_WARN(
+    LOG_INFO(
       "Unable to automatically calculate search radius.  All features have already been " <<
       "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
     return;
