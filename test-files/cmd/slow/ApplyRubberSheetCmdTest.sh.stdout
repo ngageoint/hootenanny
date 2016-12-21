@@ -1,0 +1,712 @@
+13:43:00.864 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from /hoot-release-4/hoot/test-files/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm ...
+13:43:00.916 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from /hoot-release-4/hoot/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm ...
+13:43:00.968 WARN  ...core/scoring/MapComparator.cpp( 238) Number of elements does not match.
+3166c3166,3208
+<     <way visible="true" id="-6025" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6101" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15059"/>
+>         <nd ref="-15058"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6100" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15060"/>
+>         <nd ref="-15059"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6099" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15059"/>
+>         <nd ref="-15060"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6098" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15058"/>
+>         <nd ref="-15059"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6096" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15057"/>
+>         <nd ref="-15058"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6095" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15058"/>
+>         <nd ref="-15057"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6093" timestamp="1970-01-01T00:00:00Z" version="1">
+3173c3215
+<     <way visible="true" id="-6024" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6092" timestamp="1970-01-01T00:00:00Z" version="1">
+3184c3226
+<     <way visible="true" id="-6023" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6091" timestamp="1970-01-01T00:00:00Z" version="1">
+3201c3243
+<     <way visible="true" id="-6022" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6090" timestamp="1970-01-01T00:00:00Z" version="1">
+3217c3259,3287
+<     <way visible="true" id="-6021" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6089" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15065"/>
+>         <nd ref="-15066"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6088" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15064"/>
+>         <nd ref="-15065"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6087" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15065"/>
+>         <nd ref="-15064"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6086" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15066"/>
+>         <nd ref="-15065"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6085" timestamp="1970-01-01T00:00:00Z" version="1">
+3227c3297
+<     <way visible="true" id="-6020" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6084" timestamp="1970-01-01T00:00:00Z" version="1">
+3235c3305
+<     <way visible="true" id="-6019" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6083" timestamp="1970-01-01T00:00:00Z" version="1">
+3242c3312
+<     <way visible="true" id="-6018" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6082" timestamp="1970-01-01T00:00:00Z" version="1">
+3251,3255c3321,3323
+<     <way visible="true" id="-6017" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <nd ref="-15057"/>
+<         <nd ref="-15056"/>
+<         <nd ref="-15055"/>
+<         <nd ref="-15054"/>
+---
+>     <way visible="true" id="-6081" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15064"/>
+>         <nd ref="-15063"/>
+3260,3271c3328,3329
+<     <way visible="true" id="-6016" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <nd ref="-1375"/>
+<         <nd ref="-15074"/>
+<         <nd ref="-15073"/>
+<         <nd ref="-15072"/>
+<         <nd ref="-15071"/>
+<         <nd ref="-15070"/>
+<         <nd ref="-15069"/>
+<         <nd ref="-15068"/>
+<         <nd ref="-15067"/>
+<         <nd ref="-15066"/>
+<         <nd ref="-15065"/>
+---
+>     <way visible="true" id="-6078" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15063"/>
+3272a3331,3336
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6076" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15062"/>
+3273a3338,3349
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6075" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15063"/>
+>         <nd ref="-15062"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6073" timestamp="1970-01-01T00:00:00Z" version="1">
+3276,3279d3351
+<         <nd ref="-15060"/>
+<         <nd ref="-15059"/>
+<         <nd ref="-15058"/>
+<         <nd ref="-15057"/>
+3284,3288c3356
+<     <way visible="true" id="-6015" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <nd ref="-15057"/>
+<         <nd ref="-15058"/>
+<         <nd ref="-15059"/>
+<         <nd ref="-15060"/>
+---
+>     <way visible="true" id="-6070" timestamp="1970-01-01T00:00:00Z" version="1">
+3291,3303d3358
+<         <nd ref="-15063"/>
+<         <nd ref="-15064"/>
+<         <nd ref="-15065"/>
+<         <nd ref="-15066"/>
+<         <nd ref="-15067"/>
+<         <nd ref="-15068"/>
+<         <nd ref="-15069"/>
+<         <nd ref="-15070"/>
+<         <nd ref="-15071"/>
+<         <nd ref="-15072"/>
+<         <nd ref="-15073"/>
+<         <nd ref="-15074"/>
+<         <nd ref="-1375"/>
+3308,3310c3363,3377
+<     <way visible="true" id="-6014" timestamp="1970-01-01T00:00:00Z" version="1">
+<         <nd ref="-15054"/>
+<         <nd ref="-15055"/>
+---
+>     <way visible="true" id="-6068" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15060"/>
+>         <nd ref="-15061"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6067" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15061"/>
+>         <nd ref="-15060"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6060" timestamp="1970-01-01T00:00:00Z" version="1">
+3317c3384,3391
+<     <way visible="true" id="-6013" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6059" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15057"/>
+>         <nd ref="-15056"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6057" timestamp="1970-01-01T00:00:00Z" version="1">
+3324c3398
+<     <way visible="true" id="-6012" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6056" timestamp="1970-01-01T00:00:00Z" version="1">
+3332c3406,3420
+<     <way visible="true" id="-6011" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6055" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15056"/>
+>         <nd ref="-15055"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6052" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15055"/>
+>         <nd ref="-15056"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6051" timestamp="1970-01-01T00:00:00Z" version="1">
+3353c3441
+<     <way visible="true" id="-6010" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6050" timestamp="1970-01-01T00:00:00Z" version="1">
+3374c3462,3476
+<     <way visible="true" id="-6009" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6048" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15054"/>
+>         <nd ref="-15055"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6047" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15055"/>
+>         <nd ref="-15054"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-6045" timestamp="1970-01-01T00:00:00Z" version="1">
+3384c3486
+<     <way visible="true" id="-6008" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6044" timestamp="1970-01-01T00:00:00Z" version="1">
+3391c3493
+<     <way visible="true" id="-6007" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6043" timestamp="1970-01-01T00:00:00Z" version="1">
+3398c3500
+<     <way visible="true" id="-6006" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6042" timestamp="1970-01-01T00:00:00Z" version="1">
+3407c3509
+<     <way visible="true" id="-6005" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6041" timestamp="1970-01-01T00:00:00Z" version="1">
+3417c3519
+<     <way visible="true" id="-6004" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6040" timestamp="1970-01-01T00:00:00Z" version="1">
+3430c3532
+<     <way visible="true" id="-6003" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6039" timestamp="1970-01-01T00:00:00Z" version="1">
+3439c3541
+<     <way visible="true" id="-6002" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6038" timestamp="1970-01-01T00:00:00Z" version="1">
+3447c3549
+<     <way visible="true" id="-6001" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6037" timestamp="1970-01-01T00:00:00Z" version="1">
+3455c3557
+<     <way visible="true" id="-6000" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6036" timestamp="1970-01-01T00:00:00Z" version="1">
+3463c3565
+<     <way visible="true" id="-5999" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6035" timestamp="1970-01-01T00:00:00Z" version="1">
+3470c3572
+<     <way visible="true" id="-5998" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6034" timestamp="1970-01-01T00:00:00Z" version="1">
+3477c3579
+<     <way visible="true" id="-5996" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6032" timestamp="1970-01-01T00:00:00Z" version="1">
+3485c3587
+<     <way visible="true" id="-5995" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6031" timestamp="1970-01-01T00:00:00Z" version="1">
+3492c3594
+<     <way visible="true" id="-5994" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6030" timestamp="1970-01-01T00:00:00Z" version="1">
+3500c3602
+<     <way visible="true" id="-5992" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6028" timestamp="1970-01-01T00:00:00Z" version="1">
+3508c3610
+<     <way visible="true" id="-5991" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6027" timestamp="1970-01-01T00:00:00Z" version="1">
+3515c3617
+<     <way visible="true" id="-5990" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6026" timestamp="1970-01-01T00:00:00Z" version="1">
+3522c3624
+<     <way visible="true" id="-5988" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6024" timestamp="1970-01-01T00:00:00Z" version="1">
+3530c3632
+<     <way visible="true" id="-5987" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6023" timestamp="1970-01-01T00:00:00Z" version="1">
+3538c3640
+<     <way visible="true" id="-5986" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6022" timestamp="1970-01-01T00:00:00Z" version="1">
+3548c3650
+<     <way visible="true" id="-5984" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6020" timestamp="1970-01-01T00:00:00Z" version="1">
+3556c3658
+<     <way visible="true" id="-5983" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6019" timestamp="1970-01-01T00:00:00Z" version="1">
+3565c3667
+<     <way visible="true" id="-5982" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6018" timestamp="1970-01-01T00:00:00Z" version="1">
+3573c3675
+<     <way visible="true" id="-5980" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6016" timestamp="1970-01-01T00:00:00Z" version="1">
+3581c3683
+<     <way visible="true" id="-5978" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6014" timestamp="1970-01-01T00:00:00Z" version="1">
+3590c3692
+<     <way visible="true" id="-5977" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6013" timestamp="1970-01-01T00:00:00Z" version="1">
+3597c3699
+<     <way visible="true" id="-5976" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6012" timestamp="1970-01-01T00:00:00Z" version="1">
+3604c3706
+<     <way visible="true" id="-5975" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6011" timestamp="1970-01-01T00:00:00Z" version="1">
+3611c3713
+<     <way visible="true" id="-5974" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6010" timestamp="1970-01-01T00:00:00Z" version="1">
+3618c3720
+<     <way visible="true" id="-5973" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6009" timestamp="1970-01-01T00:00:00Z" version="1">
+3627c3729
+<     <way visible="true" id="-5972" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6008" timestamp="1970-01-01T00:00:00Z" version="1">
+3635c3737
+<     <way visible="true" id="-5971" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6007" timestamp="1970-01-01T00:00:00Z" version="1">
+3663c3765
+<     <way visible="true" id="-5970" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6006" timestamp="1970-01-01T00:00:00Z" version="1">
+3673c3775
+<     <way visible="true" id="-5969" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6005" timestamp="1970-01-01T00:00:00Z" version="1">
+3689c3791
+<     <way visible="true" id="-5968" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6004" timestamp="1970-01-01T00:00:00Z" version="1">
+3696c3798
+<     <way visible="true" id="-5967" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6003" timestamp="1970-01-01T00:00:00Z" version="1">
+3705c3807
+<     <way visible="true" id="-5966" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6002" timestamp="1970-01-01T00:00:00Z" version="1">
+3715c3817
+<     <way visible="true" id="-5965" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6001" timestamp="1970-01-01T00:00:00Z" version="1">
+3722c3824
+<     <way visible="true" id="-5964" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-6000" timestamp="1970-01-01T00:00:00Z" version="1">
+3729c3831
+<     <way visible="true" id="-5962" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5998" timestamp="1970-01-01T00:00:00Z" version="1">
+3743c3845
+<     <way visible="true" id="-5961" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5997" timestamp="1970-01-01T00:00:00Z" version="1">
+3753c3855
+<     <way visible="true" id="-5960" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5996" timestamp="1970-01-01T00:00:00Z" version="1">
+3760c3862
+<     <way visible="true" id="-5959" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5995" timestamp="1970-01-01T00:00:00Z" version="1">
+3772c3874
+<     <way visible="true" id="-5958" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5994" timestamp="1970-01-01T00:00:00Z" version="1">
+3784c3886
+<     <way visible="true" id="-5956" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5992" timestamp="1970-01-01T00:00:00Z" version="1">
+3791c3893
+<     <way visible="true" id="-5955" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5991" timestamp="1970-01-01T00:00:00Z" version="1">
+3803c3905
+<     <way visible="true" id="-5954" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5990" timestamp="1970-01-01T00:00:00Z" version="1">
+3812c3914
+<     <way visible="true" id="-5953" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5989" timestamp="1970-01-01T00:00:00Z" version="1">
+3820c3922
+<     <way visible="true" id="-5952" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5988" timestamp="1970-01-01T00:00:00Z" version="1">
+3828c3930
+<     <way visible="true" id="-5951" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5987" timestamp="1970-01-01T00:00:00Z" version="1">
+3835c3937
+<     <way visible="true" id="-5950" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5986" timestamp="1970-01-01T00:00:00Z" version="1">
+3843c3945
+<     <way visible="true" id="-5949" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5985" timestamp="1970-01-01T00:00:00Z" version="1">
+3853c3955
+<     <way visible="true" id="-5948" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5984" timestamp="1970-01-01T00:00:00Z" version="1">
+3861c3963
+<     <way visible="true" id="-5947" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5983" timestamp="1970-01-01T00:00:00Z" version="1">
+3870c3972
+<     <way visible="true" id="-5946" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5982" timestamp="1970-01-01T00:00:00Z" version="1">
+3877c3979
+<     <way visible="true" id="-5945" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5981" timestamp="1970-01-01T00:00:00Z" version="1">
+3887c3989
+<     <way visible="true" id="-5944" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5980" timestamp="1970-01-01T00:00:00Z" version="1">
+3897c3999
+<     <way visible="true" id="-5943" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5979" timestamp="1970-01-01T00:00:00Z" version="1">
+3907c4009
+<     <way visible="true" id="-5942" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5978" timestamp="1970-01-01T00:00:00Z" version="1">
+3915c4017
+<     <way visible="true" id="-5941" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5977" timestamp="1970-01-01T00:00:00Z" version="1">
+3925c4027
+<     <way visible="true" id="-5940" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5976" timestamp="1970-01-01T00:00:00Z" version="1">
+3935c4037
+<     <way visible="true" id="-5939" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5975" timestamp="1970-01-01T00:00:00Z" version="1">
+3944c4046
+<     <way visible="true" id="-5938" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5974" timestamp="1970-01-01T00:00:00Z" version="1">
+3955c4057
+<     <way visible="true" id="-5937" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5973" timestamp="1970-01-01T00:00:00Z" version="1">
+3963c4065
+<     <way visible="true" id="-5936" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5972" timestamp="1970-01-01T00:00:00Z" version="1">
+3974c4076
+<     <way visible="true" id="-5935" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5971" timestamp="1970-01-01T00:00:00Z" version="1">
+3984c4086
+<     <way visible="true" id="-5934" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5970" timestamp="1970-01-01T00:00:00Z" version="1">
+3992c4094
+<     <way visible="true" id="-5932" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5968" timestamp="1970-01-01T00:00:00Z" version="1">
+4000c4102
+<     <way visible="true" id="-5931" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5967" timestamp="1970-01-01T00:00:00Z" version="1">
+4011c4113
+<     <way visible="true" id="-5930" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5966" timestamp="1970-01-01T00:00:00Z" version="1">
+4021c4123
+<     <way visible="true" id="-5929" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5965" timestamp="1970-01-01T00:00:00Z" version="1">
+4033c4135
+<     <way visible="true" id="-5928" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5964" timestamp="1970-01-01T00:00:00Z" version="1">
+4041c4143
+<     <way visible="true" id="-5926" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5962" timestamp="1970-01-01T00:00:00Z" version="1">
+4048c4150
+<     <way visible="true" id="-5925" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5961" timestamp="1970-01-01T00:00:00Z" version="1">
+4059c4161
+<     <way visible="true" id="-5924" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5960" timestamp="1970-01-01T00:00:00Z" version="1">
+4067c4169
+<     <way visible="true" id="-5920" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5956" timestamp="1970-01-01T00:00:00Z" version="1">
+4076c4178
+<     <way visible="true" id="-5916" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5952" timestamp="1970-01-01T00:00:00Z" version="1">
+4084c4186,4214
+<     <way visible="true" id="-5915" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5951" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15074"/>
+>         <nd ref="-15073"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5950" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-1375"/>
+>         <nd ref="-15074"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5949" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15074"/>
+>         <nd ref="-1375"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5948" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15073"/>
+>         <nd ref="-15074"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5947" timestamp="1970-01-01T00:00:00Z" version="1">
+4091c4221
+<     <way visible="true" id="-5912" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5944" timestamp="1970-01-01T00:00:00Z" version="1">
+4099c4229,4243
+<     <way visible="true" id="-5908" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5942" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15072"/>
+>         <nd ref="-15073"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5941" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15073"/>
+>         <nd ref="-15072"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5936" timestamp="1970-01-01T00:00:00Z" version="1">
+4109c4253,4309
+<     <way visible="true" id="-5907" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5935" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15072"/>
+>         <nd ref="-15071"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5932" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15071"/>
+>         <nd ref="-15072"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5930" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15070"/>
+>         <nd ref="-15071"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5929" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15071"/>
+>         <nd ref="-15070"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5927" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15070"/>
+>         <nd ref="-15069"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5924" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15069"/>
+>         <nd ref="-15070"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5922" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15068"/>
+>         <nd ref="-15069"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5921" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15069"/>
+>         <nd ref="-15068"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5919" timestamp="1970-01-01T00:00:00Z" version="1">
+4116c4316
+<     <way visible="true" id="-5905" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5917" timestamp="1970-01-01T00:00:00Z" version="1">
+4125c4325
+<     <way visible="true" id="-5904" timestamp="1970-01-01T00:00:00Z" version="1">
+---
+>     <way visible="true" id="-5916" timestamp="1970-01-01T00:00:00Z" version="1">
+4128a4329,4356
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5915" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15068"/>
+>         <nd ref="-15067"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5912" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15067"/>
+>         <nd ref="-15068"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5910" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15066"/>
+>         <nd ref="-15067"/>
+>         <tag k="name" v="15th St NW"/>
+>         <tag k="highway" v="unclassified"/>
+>         <tag k="error:circular" v="5"/>
+>     </way>
+>     <way visible="true" id="-5909" timestamp="1970-01-01T00:00:00Z" version="1">
+>         <nd ref="-15067"/>
+>         <nd ref="-15066"/>
+>         <tag k="name" v="Raoul Wallenberg Pl SW"/>
