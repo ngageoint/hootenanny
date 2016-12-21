@@ -192,7 +192,6 @@ void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
 
 QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
 {
-  //LOG_VARD(_changesetDetailsStr);
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
     "Changeset Details: " + _changesetDetailsStr + "\n" +

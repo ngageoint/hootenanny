@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,6 +32,7 @@
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmChangesetXmlFileWriter.h>
 #include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/HootApiDb.h>
 
 // Qt
 #include <QUrl>
@@ -51,42 +52,88 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3 && args.size() != 4)
+    bool isXmlOutput = false;
+
+    QString osmApiDbUrl = "";
+
+    bool writeJobStatus = false;
+    QString jobId = "";
+    QString hootApiDbUrl = "";
+
+    if (args[2].endsWith(".osc"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      isXmlOutput = true;
+      if (args.size() != 3 && args.size() != 5)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 with XML output takes three or five parameters.").arg(getName()));
+      }
+      if (args.size() == 5)
+      {
+        writeJobStatus = true;
+        jobId = args[3];
+        hootApiDbUrl = args[4];
+      }
+    }
+    else if (args[2].endsWith(".osc.sql"))
+    {
+      if (args.size() != 4 && args.size() != 6)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 with SQL output takes four or six parameters.").arg(getName()));
+      }
+      osmApiDbUrl = args[3];
+      if (args.size() == 6)
+      {
+        writeJobStatus = true;
+        jobId = args[4];
+        hootApiDbUrl = args[5];
+      }
+    }
+    else
+    {
+      throw HootException("Unsupported changeset output format: " + args[2]);
     }
 
-    LOG_INFO("Deriving changeset for inputs " << args[0] << ", " << args[1] << "...");
+    const QString input1 = args[0];
+    const QString input2 = args[1];
+    const QString output = args[2];
+
+    LOG_INFO(
+      "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
+      output << "...");
 
     //use the same unknown1 status for both so they pass comparison correctly
     OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true, Status::Unknown1);
+    loadMap(map1, input1, true, Status::Unknown1);
 
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true, Status::Unknown1);
+    loadMap(map2, input2, true, Status::Unknown1);
 
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
-    if (args[2].endsWith(".osc"))
+    if (isXmlOutput)
     {
-      OsmChangesetXmlFileWriter().write(args[2], delta);
-    }
-    else if (args[2].endsWith(".osc.sql"))
-    {
-      if (args.size() != 4)
-      {
-        throw HootException(
-          QString("SQL changeset writing requires a target database URL for configuration purposes."));
-      }
-
-      OsmChangesetSqlFileWriter(QUrl(args[3])).write(args[2], delta);
+      OsmChangesetXmlFileWriter().write(output, delta);
     }
     else
     {
-      throw HootException("Unsupported changeset output format: " + args[2]);
+      assert (!osmApiDbUrl.isEmpty());
+      OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
+    }
+
+    //write the output file name to the job status detail call for later retrieval
+    if (writeJobStatus)
+    {
+      assert(!hootApiDbUrl.isEmpty() && !jobId.isEmpty());
+      HootApiDb hootApiDb;
+      hootApiDb.open(hootApiDbUrl);
+      hootApiDb.writeJobStatus(jobId, output);
+      hootApiDb.close();
     }
 
     return 0;

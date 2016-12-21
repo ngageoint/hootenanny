@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -265,6 +265,7 @@ public:
   inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
   inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
 
+  inline static QString getJobStatusTableName() { return "job_status"; }
 
   /**
    * Very handy for testing.
@@ -275,6 +276,8 @@ public:
   virtual QString tableTypeToTableName(const TableType& tableType) const;
 
   virtual long getNextId(const ElementType& elementType);
+
+  void writeJobStatus(const QString jobId, const QString status);
 
 protected:
 
@@ -300,6 +303,7 @@ private:
   shared_ptr<QSqlQuery> _updateNode;
   shared_ptr<QSqlQuery> _updateRelation;
   shared_ptr<QSqlQuery> _updateWay;
+  shared_ptr<QSqlQuery> _writeJobStatus;
 
   shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

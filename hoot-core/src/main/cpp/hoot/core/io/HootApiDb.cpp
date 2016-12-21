@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -940,6 +940,7 @@ void HootApiDb::_resetQueries()
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
+  _writeJobStatus.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1442,6 +1443,28 @@ QString HootApiDb::_getRenderDBName(long mapId)
   }
 
   return (dbName + "_renderdb_" + mapIdNumber);
+}
+
+void HootApiDb::writeJobStatus(const QString jobId, const QString status)
+{
+  if (!_writeJobStatus.get())
+  {
+    _writeJobStatus.reset(new QSqlQuery(_db));
+    _writeJobStatus->prepare(
+      "UPDATE " + getJobStatusTableName() + " SET status_detail = '" + status +
+      "' WHERE job_id = '" + jobId + "'");
+  }
+  _writeJobStatus->bindValue(":id", jobId);
+  _writeJobStatus->bindValue(":status", status);
+
+  if (_writeJobStatus->exec() == false)
+  {
+    throw HootException(
+      QString("Error executing query: %1 (%2)").arg(_writeJobStatus->executedQuery())
+        .arg(_updateWay->lastError().text()));
+  }
+  LOG_VARD(_writeJobStatus->executedQuery());
+  LOG_VARD(_writeJobStatus->numRowsAffected());
 }
 
 }

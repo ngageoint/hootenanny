@@ -3,25 +3,37 @@
 === Description
 
 The +derive-changeset+ command creates an OSM changeset file that represents the difference
-between two input OSM files.  The changeset can later be applied to an OSM API database.  The
-output changeset is not meant to be written to a Hootenanny API database.
+between two input OSM files.  The changeset can later be applied to an OSM API database.
 
-* +input1+ - Input 1 (e.g. .osm file).
-* +input2+ - Input 2 (e.g. .osm file).
+* +input1+ - OSM data input 1 (e.g. .osm file).
+* +input2+ - OSM data input 2 (e.g. .osm file).
 * +output+ - Output location (e.g. .osc or .osc.sql file).
-* +databaseUrl+ - Database the changeset will eventually be written to (but not by this command).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
+                        element ID continuity with the target database when generating SQL changesets only.  
+                        Required if the changeset output format is .osc.sql.
+* +jobId+ - Optional numeric ID of the Hootenanny web services job which invoked this command.  This 
+            is used only when web service clients need to retrieve the contents of the changeset 
+            output file directly.
+* +hootApiDatabaseUrl+ - Optional Hootenanny API database containing the job status table that 
+                         contains the job with ID=jobId.  Required if jobId is passed in.
 
 === Usage
 
 --------------------------------------
-derive-changeset (input1) (input2) (output.osc) [databaseUrl]
+derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
+
+derive-changeset (input1) (input2) (output.osc.sql) (osmApiDatabaseUrl) [jobId] [hootApiDatabaseUrl]
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot derive-changeset InputMap1.osm InputMap1.osm OutputChangeset.osc
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
 
-hoot derive-changeset InputMap1.osm InputMap1.osm OutputChangeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc 1 hootapidb://username:password@localhost:5432/hootApiDatabaseName
+
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName 1 hootapidb://username:password@localhost:5432/hootApiDatabaseName
 --------------------------------------
 

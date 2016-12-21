@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -185,7 +186,7 @@ public class ExportJobResource extends JobControllerBase {
         return new JobId(jobId);
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs) {
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs) throws IOException {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
@@ -208,7 +209,14 @@ public class ExportJobResource extends JobControllerBase {
         // ignoring outputname, since we're only going to have a single mapedit
         // connection configured in the core for now configured in the core for now
         JSONObject arg = new JSONObject();
-        arg.put("temppath", TEMP_OUTPUT_PATH);
+        File tempOutputDir = new File(TEMP_OUTPUT_PATH);
+        if (!tempOutputDir.exists())
+        {
+          tempOutputDir.mkdir();   
+        }
+        //services currently always write changeset with sql
+        File tempFile = File.createTempFile("changeset", ".osc.sql", tempOutputDir);
+        arg.put("changesetoutput", tempFile.getAbsolutePath());
         commandArgs.add(arg);
 
         // This option allows the job executor return std out to the client.  This is the only way
