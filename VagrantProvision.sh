@@ -20,7 +20,18 @@ sudo ntpd -gq
 sudo service ntp start
 
 echo "### Installing Java 8..."
-sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
+
+# jdk-8u112-linux-x64.tar.gz's official checksums:
+#    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
+#    md5: de9b7a90f0f5a13cfcaa3b01451d0337
+echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+
+if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+    echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
+    sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
+    echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+fi
+
 sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
 
 if [[ ! -e /usr/lib/jvm ]]; then
@@ -34,7 +45,6 @@ fi
 sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
 sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
-sudo rm -f /tmp/jdk-8u112-linux-x64.tar.gz
 echo "### Done with Java 8 install..."
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
