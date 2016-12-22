@@ -1,4 +1,4 @@
-# Hootenanny UI use of Translation and P2PMerge NodeJs Servers
+# Hootenanny UI use of Translation and Element Merge NodeJs Servers
 
 ___
 ## GET /version
@@ -28,6 +28,6 @@ ___
 ## GET /taginfo/key/values
 Used by raw tag editor to populate combobox values with available tag values in English (as opposed to field codes) for selected key
 ___
-## POST /p2pmerge
-Used during conflation review to merge two POIs
+## POST /elementmerge
+Used during conflation review to merge two elements
 ___

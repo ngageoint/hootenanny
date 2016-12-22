@@ -242,14 +242,14 @@ advOptHorizontalOverride=conf/conflationHorizontalOps.json
 # Advanced options horizontal override
 advOptAverageOverride=conf/conflationAverageOps.json
 
-# POI to POI Node Server port
-P2PServerPort=8096
+# Element merge Node Server port
+ElementMergeServerPort=8096
 
-# POI to POI Server Thread Count (0 means auto config which end up being cpu count)
-P2PServerThreadCount=0
+# Element merge Server Thread Count (0 means auto config which end up being cpu count)
+ElementMergeServerThreadCount=0
 
-# POI to POI Server Script in scripts folder
-P2PServerScript=/plugins/P2PServer.js
+# Element merge Server Script in scripts folder
+ElementMergeServerScript=/plugins/ElementMergeServer.js
 
 # REVIEW
 
