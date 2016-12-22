@@ -283,7 +283,7 @@ ___
 ```
 ___
 
-## GET /taginfo/key/values
+## ~~GET /taginfo/key/values~~ _deprecated_
 
 ### URL
 http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
@@ -405,7 +405,7 @@ ___
 ```
 
 ___
-## GET /taginfo/keys/all
+## GET ~~/taginfo/keys/all~~ _deprecated_
 
 ### URL
 http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP

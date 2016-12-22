@@ -157,8 +157,6 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 {
-  LOG_DEBUG("OsmWriter::write");
-
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
