@@ -15,7 +15,7 @@ This document describes how to install Hootenanny in a CentOS/RHEL Environment.
 * Preferred Environment: Amazon AWS
 * Amazon AWS Security Groups is set up to allow communication between ports for the Hootenanny application to function.
     Security Group Setup Required for Hootenanny:
-        ** Custom TCP Rule - Port Range: 8096 = P2P Server Port
+        ** Custom TCP Rule - Port Range: 8096 = Element Merge Server Port
         ** Custom TCP Rule - Port Range: 8080 = Tomcat Web Server Port
         ** Custom TCP Rule - Port Range: 8094 = Translation Server
         ** Port TCP Rule   - Port Range: 22 = SSH into the server

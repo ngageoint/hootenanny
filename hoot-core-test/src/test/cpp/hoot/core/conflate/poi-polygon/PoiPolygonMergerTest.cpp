@@ -449,10 +449,14 @@ public:
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
+    //read everything in as unknown1; the merger will make sure the poi and poly have separate
+    //input types
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/poi-poly-way-poly-in.osm", false, Status::Unknown1);
 
-    PoiPolygonMerger::merge(map);
+    const ElementId polyId = PoiPolygonMerger::merge(map);
+    CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, polyId.getType().getEnum());
 
     QDir().mkdir("test-output/conflate/poi-polygon");
     MapProjector::projectToWgs84(map);
@@ -468,11 +472,14 @@ public:
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
+    //see comments in mergeWayAsPolyTest
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/poi-poly-relation-poly-in.osm", false,
       Status::Unknown1);
 
-    PoiPolygonMerger::merge(map);
+    const ElementId polyId = PoiPolygonMerger::merge(map);
+    CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, polyId.getType().getEnum());
 
     QDir().mkdir("test-output/conflate/poi-polygon");
     MapProjector::projectToWgs84(map);
