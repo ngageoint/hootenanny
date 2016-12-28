@@ -19,33 +19,35 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-echo "### Installing Java 8..."
+if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+    echo "### Installing Java 8..."
 
-# jdk-8u112-linux-x64.tar.gz's official checksums:
-#    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
-#    md5: de9b7a90f0f5a13cfcaa3b01451d0337
-echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+    # jdk-8u112-linux-x64.tar.gz's official checksums:
+    #    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
+    #    md5: de9b7a90f0f5a13cfcaa3b01451d0337
+    echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
 
-if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-    echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
-    sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-    echo "Finished download of jdk-8u112-linux-x64.tar.gz"
-fi
-
-sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
-
-if [[ ! -e /usr/lib/jvm ]]; then
-    sudo mkdir /usr/lib/jvm
-else
-    if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
-        sudo rm -rf /usr/lib/jvm/oracle_jdk8
+    if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
+        echo "Finished download of jdk-8u112-linux-x64.tar.gz"
     fi
-fi
 
-sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
-sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
-sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
-echo "### Done with Java 8 install..."
+    sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+
+    if [[ ! -e /usr/lib/jvm ]]; then
+        sudo mkdir /usr/lib/jvm
+    else
+        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
+            sudo rm -rf /usr/lib/jvm/oracle_jdk8
+        fi
+    fi
+
+    sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
+    sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
+    sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
+    echo "### Done with Java 8 install..."
+fi
 
 if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     echo "### Adding PostgreSQL repository to apt..."
@@ -92,7 +94,6 @@ fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     echo "Adding Hadoop home to profile..."
-    #echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.profile
     echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
@@ -100,39 +101,34 @@ fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    #echo "export PATH=\$PATH:\$HOME/.gem/ruby/1.9.1/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
-# Ruby via rvm - from rvm.io
-gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+if ! ruby -v | grep --quiet 2.3.0; then
+    # Ruby via rvm - from rvm.io
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 
-curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
+    curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
-source /home/vagrant/.rvm/scripts/rvm
+    source /home/vagrant/.rvm/scripts/rvm
 
-rvm install ruby-2.3
-rvm --default use 2.3
+    rvm install ruby-2.3
+    rvm --default use 2.3
 
 # Don't install documentation for gems
 cat > ~/.gemrc <<EOT
   install: --no-document
   update: --no-document
 EOT
+fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-echo "### Installing cucumber gems..."
 gem list --local | grep -q mime-types
 if [ $? -eq 1 ]; then
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
-# gem list --local | grep -q capybara
-# if [ $? -eq 1 ]; then
-#    #sudo gem install capybara -v 2.5.0
-#    gem install capybara
-# fi
 gem list --local | grep -q cucumber
 if [ $? -eq 1 ]; then
    #sudo gem install cucumber
@@ -167,7 +163,7 @@ fi
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-if  ! dpkg -l | grep google-chrome-stable; then
+if  ! dpkg -l | grep --quiet google-chrome-stable; then
     echo "### Installing Chrome..."
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -186,7 +182,7 @@ if [ ! -f bin/chromedriver ]; then
     unzip -d $HOME/bin chromedriver_linux64.zip
 else
   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-  if [[ "$(chromedriver --version)" != "ChromeDriver $(LATEST_RELEASE).*" ]]; then
+  if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
     echo "### Updating Chromedriver"
     rm $HOME/bin/chromedriver
     rm $HOME/chromedriver_linux64.zip
