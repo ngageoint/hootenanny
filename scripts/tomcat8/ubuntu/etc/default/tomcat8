@@ -42,12 +42,8 @@ JSP_COMPILER=javac
 # (yes/no, default: no)
 #AUTHBIND=no
 
-# Unset LC_ALL to prevent user environment executing the init script from
-# influencing servlet behavior.  See Debian bug #645221
-unset LC_ALL
-
 # Set tomcat8 umask to group write because all files in shared folder are owned by vagrant
-umask 002
+UMASK=002
 
 HOOT_HOME=/home/vagrant/hoot
 
@@ -61,4 +57,4 @@ GDAL_LIB_DIR=/usr/local/lib
 
 HOOT_WORKING_NAME=hoot
 
-PATH=$HOOT_HOME/bin:$PATH
+PATH=$HOOT_HOME/bin:$PATH:/usr/local/bin
