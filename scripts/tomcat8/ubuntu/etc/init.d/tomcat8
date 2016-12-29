@@ -22,11 +22,15 @@
 
 set -e
 
-PATH=/bin:/usr/bin:/sbin:/usr/sbin
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 NAME="$(basename "$0" | sed 's/^[KS][0-9]\{2\}//')"
 DESC="Tomcat servlet engine"
 DEFAULT=/etc/default/${NAME}
 JVM_TMP=/tmp/tomcat8-${NAME}-tmp
+
+# Unset LC_ALL to prevent user environment executing the init script from
+# influencing servlet behavior.  See Debian bug #645221
+unset LC_ALL
 
 if [ `id -u` -ne 0 ]; then
     echo "You need root privileges to run this script"
