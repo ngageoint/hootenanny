@@ -157,6 +157,8 @@ private:
   void _iterateRank();
 
   void _seedEdgeScores();
+
+  void _printEdgeMatches();
 };
 
 typedef shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;

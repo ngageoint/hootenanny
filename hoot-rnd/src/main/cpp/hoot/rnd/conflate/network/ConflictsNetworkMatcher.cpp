@@ -588,13 +588,49 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       LOG_VART(e2);
 
       double score = _details->getPartialEdgeMatchScore(e1, e2);
-      LOG_VART(score);
+      //LOG_VART(score);
       if (score > 0)
       {
         // Add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);
       }
     }
+  }
+
+  _printEdgeMatches();
+}
+
+void ConflictsNetworkMatcher::_printEdgeMatches()
+{
+  foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
+  {
+    foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
+    {
+      foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+      {
+        if (elmnt->getElementType() == ElementType::Way)
+        {
+          cout << "(way:" << elmnt->getId() << ")";
+        }
+      }
+    }
+
+    cout << " <<matches>> ";
+    foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
+    {
+      foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+      {
+        if (elmnt->getElementType() == ElementType::Way)
+        {
+          cout << "(way:" << elmnt->getId() << ")";
+        }
+      }
+    }
+
+    cout << std::endl;
+
+    int i = 0;
+    i++;
   }
 }
 
