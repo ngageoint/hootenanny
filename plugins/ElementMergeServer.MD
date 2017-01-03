@@ -1,8 +1,9 @@
-# P2PServer API
+# Element Merge Server API
 
-#### Merges two OSM features using Hootenanny conflation.  Currently only supports POIs.
+#### Merges two OSM features using Hootenanny conflation.  Currently supports merging POIs together or POIs with polygons.
+#### All POIs must OSM nodes and the polygons may be either OSM ways or relations.
 ___
-## POST /p2pmerge
+## POST /elementmerge
 
 ### Body
 
