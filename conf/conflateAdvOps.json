@@ -585,9 +585,9 @@
         "id": "waterway_way_subline_matcher",
         "elem_type": "string",
         "description": "The way subline matcher to use when determining matching sublines.",
-        "name": "Way Subline Matcher",
+        "name": "Waterway Subline Matcher",
         "defaultvalue": "hoot::MaximalSublineMatcher",
-        "hoot_key": "way.subline.matcher",
+        "hoot_key": "waterway.subline.matcher",
 				"required":"true"
       },
       {
