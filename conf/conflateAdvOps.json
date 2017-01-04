@@ -272,6 +272,43 @@
     ]
   },
   {
+    "id": "hoot_poipolygon_options",
+    "elem_type": "group",
+    "description": "Hootenanny Point to Polygon options",
+    "name": "Point to Polygon Options",
+    "members": [
+      {
+        "id": "hoot_enable_poipolygon_options",
+        "elem_type": "checkbox",
+        "description": "Enable point to polygon options",
+        "name": "Enabled",
+        "defaultvalue": "false",
+        "onchange": "true"
+      },
+      {
+        "id": "poipolygon_match_creator",
+        "elem_type": "string",
+        "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Match Creator",
+        "required": "true",
+        "defaultvalue": "hoot::PoiPolygonMatchCreator",
+        "override":{"defaultvalue":"hoot::PoiPolygonMatchCreator"},
+        "hoot_key": "match.creators"
+      },
+      {
+        "id": "poipolygon_merger_creator",
+        "elem_type": "string",
+        "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+        "name": "Merger Creator",
+        "required": "true",
+        "defaultvalue": "hoot::PoiPolygonMergerCreator",
+        "override":{"defaultvalue":"hoot::PoiPolygonMergerCreator"},
+        "hoot_key": "merger.creators",
+        "required":"true"
+      }
+    ]
+  },
+  {
     "id": "hoot_road_options",
     "elem_type": "group",
     "description": "Hootenanny road options",
