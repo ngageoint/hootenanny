@@ -57,4 +57,4 @@ GDAL_LIB_DIR=/usr/local/lib
 
 HOOT_WORKING_NAME=hoot
 
-PATH=$HOOT_HOME/bin:$PATH:/usr/local/bin
+PATH=$HOOT_HOME/bin:$PATH

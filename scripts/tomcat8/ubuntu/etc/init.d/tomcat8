@@ -22,7 +22,6 @@
 
 set -e
 
-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 NAME="$(basename "$0" | sed 's/^[KS][0-9]\{2\}//')"
 DESC="Tomcat servlet engine"
 DEFAULT=/etc/default/${NAME}
