@@ -70,8 +70,6 @@ using namespace std;
 namespace hoot
 {
 
-QString OsmSchema::_layerNameKey = "hoot:layername";
-
 typedef boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
@@ -1748,7 +1746,7 @@ bool OsmSchema::isList(const QString& /*key*/, const QString& value)
 
 bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 {
-  if (key.startsWith("hoot:"))
+  if (key.startsWith(MetadataTags::HootTagPrefix()))
   {
     return true;
   }

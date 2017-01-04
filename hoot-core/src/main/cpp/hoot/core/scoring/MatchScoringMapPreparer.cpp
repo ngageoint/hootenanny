@@ -27,10 +27,11 @@
 #include "MatchScoringMapPreparer.h"
 
 // hoot
+#include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/filters/HasTagCriterion.h>
 #include <hoot/core/filters/IsNodeFilter.h>
-#include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
@@ -45,17 +46,17 @@ namespace hoot
 
       virtual void visit(const shared_ptr<Element>& e)
       {
-        if (!e->getTags().contains("REF1") && !e->getTags().contains("REF2") &&
+        if (!e->getTags().contains(MetadataTags::Ref1()) && !e->getTags().contains(MetadataTags::Ref2()) &&
             e->getTags().contains("uuid"))
         {
           QString uuid = e->getTags()["uuid"];
           if (e->getStatus() == Status::Unknown1)
           {
-            e->setTag("REF1", uuid);
+            e->setTag(MetadataTags::Ref1(), uuid);
           }
           else if (e->getStatus() == Status::Unknown2)
           {
-            e->setTag("REF2", uuid);
+            e->setTag(MetadataTags::Ref2(), uuid);
           }
         }
       }
@@ -74,13 +75,13 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   map->visitRw(convertUuidToRef);
 
   // #5891 if the feature is marked as todo then there is no need to conflate & evaluate it.
-  shared_ptr<TagCriterion> isTodo(new TagCriterion("REF2", "todo"));
+  shared_ptr<TagCriterion> isTodo(new TagCriterion(MetadataTags::Ref2(), "todo"));
   RemoveElementsVisitor remover(isTodo);
   remover.setRecursive(true);
   map->visitRw(remover);
 
   // add a uuid to all elements with a REF tag.
-  HasTagCriterion criterion("REF1", "REF2", "REVIEW");
+  HasTagCriterion criterion(MetadataTags::Ref1(), MetadataTags::Ref2(), "REVIEW");
   AddUuidVisitor uuid("uuid");
   FilteredVisitor v(criterion, uuid);
   map->visitRw(v);
@@ -88,7 +89,7 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   if (removeNodes)
   {
     // remove all REF1/REF2 tags from the nodes.
-    RemoveTagVisitor removeRef("REF1", "REF2");
+    RemoveTagVisitor removeRef(MetadataTags::Ref1(), MetadataTags::Ref2());
     IsNodeFilter nodeFilter(Filter::KeepMatches);
     FilteredVisitor removeRefV(nodeFilter, removeRef);
     map->visitRw(removeRefV);

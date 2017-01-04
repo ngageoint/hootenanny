@@ -27,9 +27,10 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/RemoveElementOp.h>
-#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
 
 #include "../TestUtils.h"
 
@@ -127,8 +128,8 @@ public:
     RelationPtr relation2 = map->getRelation(r2Id.getId());
 
     //go ahead and remove their review member count tags
-    relation1->getTags().remove(ReviewMarker::reviewMemberCountKey);
-    relation2->getTags().remove(ReviewMarker::reviewMemberCountKey);
+    relation1->getTags().remove(MetadataTags::HootReviewMembers());
+    relation2->getTags().remove(MetadataTags::HootReviewMembers());
 
     //remove all of one of the review relation's members
     RemoveElementOp::removeElement(map, n3->getElementId());

@@ -390,7 +390,7 @@ int Tags::getNonDebugCount() const
   for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
   {
     QString key = it.key();
-    if (!key.startsWith("hoot:") && key != "created_by" && it.value() != "")
+    if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
     {
       //LOG_DEBUG("non-debug key: " + key);
       count++;

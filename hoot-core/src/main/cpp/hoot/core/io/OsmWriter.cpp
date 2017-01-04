@@ -38,6 +38,7 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 
 // Qt
@@ -276,7 +277,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(it.key()));
-        if (it.key() == "hoot:status" && n->getStatus() != Status::Invalid)
+        if (it.key() == MetadataTags::HootStatus() && n->getStatus() != Status::Invalid)
         {
           hasStatus = true;
           if (_textStatus)
@@ -302,7 +303,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
         ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "error:circular");
+      writer.writeAttribute("k", MetadataTags::ErrorCircular());
       writer.writeAttribute("v", QString("%1").arg(n->getCircularError()));
       writer.writeEndElement();
     }
@@ -310,7 +311,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     if (_includeDebug || _includeIds)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "hoot:id");
+      writer.writeAttribute("k", MetadataTags::HootId());
       writer.writeAttribute("v", QString("%1").arg(n->getId()));
       writer.writeEndElement();
     }
@@ -318,14 +319,14 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     if (_includeDebug && hasStatus == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "hoot:status");
+      writer.writeAttribute("k", MetadataTags::HootStatus());
       writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
       writer.writeEndElement();
     }
     else if (_textStatus && n->getTags().getNonDebugCount() > 0 && hasStatus == false)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "hoot:status");
+      writer.writeAttribute("k", MetadataTags::HootStatus());
       writer.writeAttribute("v", n->getStatus().toTextStatus());
       writer.writeEndElement();
     }
@@ -377,7 +378,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
-        if (tit.key() == "hoot:status" && w->getStatus() != Status::Invalid)
+        if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
         {
           hasStatus = true;
           if (_textStatus)
@@ -400,7 +401,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "error:circular");
+      writer.writeAttribute("k", MetadataTags::ErrorCircular());
       writer.writeAttribute("v", QString("%1").arg(w->getCircularError()));
       writer.writeEndElement();
     }
@@ -408,7 +409,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     if (_includeDebug || _includeIds)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "hoot:id");
+      writer.writeAttribute("k", MetadataTags::HootId());
       writer.writeAttribute("v", QString("%1").arg(w->getId()));
       writer.writeEndElement();
     }
@@ -418,7 +419,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       if (hasStatus == false)
       {
         writer.writeStartElement("tag");
-        writer.writeAttribute("k", "hoot:status");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
         if (_textStatus)
         {
           writer.writeAttribute("v", w->getStatus().toTextStatus());
@@ -475,7 +476,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
-        if (tit.key() == "hoot:status" && r->getStatus() != Status::Invalid)
+        if (tit.key() == MetadataTags::HootStatus() && r->getStatus() != Status::Invalid)
         {
           hasStatus = true;
           if (_textStatus)
@@ -507,7 +508,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "error:circular");
+      writer.writeAttribute("k", MetadataTags::ErrorCircular());
       writer.writeAttribute("v", QString("%1").arg(r->getCircularError()));
       writer.writeEndElement();
     }
@@ -515,7 +516,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     if (_includeDebug || _includeIds)
     {
       writer.writeStartElement("tag");
-      writer.writeAttribute("k", "hoot:id");
+      writer.writeAttribute("k", MetadataTags::HootId());
       writer.writeAttribute("v", QString("%1").arg(r->getId()));
       writer.writeEndElement();
     }
@@ -525,7 +526,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       if (hasStatus == false)
       {
         writer.writeStartElement("tag");
-        writer.writeAttribute("k", "hoot:status");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
         if (_textStatus)
         {
           writer.writeAttribute("v", r->getStatus().toTextStatus());
