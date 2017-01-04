@@ -932,7 +932,7 @@ can be large and slow things down significantly.
 === network.matcher
 
 * Data Type: string
-* Default Value: `hoot::IterativeNetworkMatcher`
+* Default Value: `hoot::ConflictsNetworkMatcher`
 
 An internal option for manipulating the way network matching occurs. This should only be used for
 debug and test. The parameter must be a class that is registered with the factory and subclasses
