@@ -597,7 +597,10 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     }
   }
 
-  _printEdgeMatches();
+  if (Log::getInstance().getLevel() <= Log::Trace)
+  {
+    _printEdgeMatches();
+  }
 }
 
 void ConflictsNetworkMatcher::_printEdgeMatches()
