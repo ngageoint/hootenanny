@@ -127,6 +127,11 @@ void ConflictsNetworkMatcher::_removeDupes()
 {
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
+
+  //  Check for empty edge matches, only test it1 because currently it1 == it2
+  if (it1 == _edgeMatches->getAllMatches().end())
+    return;
+
   ++it2;
 
   while (it1 != _edgeMatches->getAllMatches().end())
