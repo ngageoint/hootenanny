@@ -37,6 +37,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/MapProjector.h>
 
+//TODO: a lot of the logging levels in this class need changed, as they've revealed issues
+//with the element status reading...will handle that in #1262
 namespace hoot
 {
 
@@ -110,7 +112,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   {
     //In many cases, the input map will have already been cleaned by this point...but possibly not.
     //Try to clean it to get around this error (call to the stats command, for example).
-    LOG_INFO(
+    LOG_DEBUG(
       "An error occurred calculating the rubber sheet transform during automatic search radius " <<
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
     LOG_DEBUG(e.getWhat());

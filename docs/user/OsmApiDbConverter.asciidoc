@@ -30,10 +30,10 @@ environment), as ID conflicts may occur.  It should only be used when the user o
 (database offline).  If you cannot take your database offline, your best course of action is to either use Osmosis or Hootenanny 
 to load your data in as OSM changesets (see Hootenanny derive-changeset and apply-changeset command documentation).
 
-The configuration option, postgresql.dumpfile.writer.changeset.user.id, must match a user existing in your database and one you want
+The configuration option, changeset.user.id, must match a user existing in your database and one you want
 associated with the changesets that write the data.  If you use the hoot scripts to create your OSM API database, this user will
 be created for you.   The default user ID is 1.  To change this value, add the following to the 'hoot convert' line in the scripts referenced
-in this section: -D postgresql.dumpfile.writer.changeset.user.id=<id> , where <id> is your user ID.
+in this section: -D changeset.user.id=<id> , where <id> is your user ID.
 
 Other settings you may be interested in tweaking:
 

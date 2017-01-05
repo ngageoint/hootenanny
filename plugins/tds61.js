@@ -998,7 +998,7 @@ tds61 = {
         }
 
         // Fix up landuse tags
-        if (attrs.FCODE == 'AL020')
+        if (attrs.F_CODE == 'AL020')
         {
             switch (tags.use) // Fixup the landuse tags
             {
@@ -1023,10 +1023,10 @@ tds61 = {
         }
 
         // Fix oil/gas/petroleum fields
-        if (attrs.FCODE == 'AA052')
+        if (attrs.F_CODE == 'AA052')
         {
             tags.landuse = 'industrial';
-            
+
             switch (tags.product)
             {
                 case undefined:

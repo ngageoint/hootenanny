@@ -10,14 +10,14 @@
 # 3. Export your ssh key to Github: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
 # 4. Install git.
 # 5. Clone the hoot repo: git clone git@github.com:ngageoint/hootenanny.git hoot
-# 6. If you are going to use the hoot-tests repo, have a DG admin create you an account on
+# 6. OPTIONAL: If you are going to use the hoot-tests repo, have a DG admin create you an account on
 # that server and add your ssh key to that repo.
-# 7. Clone the hoot-tests repo. 
+# 7. OPTIONAL: Clone the hoot-tests repo. 
 #
 # Before running this script:
 #
 # 1. Temporarily change all references to '/home/vagrant' in VagrantProvision.sh to your home directory.
-# 2. Temporarily change all references to the 'vagrant' user in VagrantProvision.sh to your user.
+# 2. Temporarily change all references to the 'vagrant' user in VagrantProvision.sh to your user name.
 # 3. sudo chmod 755 hoot/VagrantProvision.sh # Does this still have to be done?
 #
 # Run the script:
@@ -26,18 +26,22 @@
 #  git submodule init && git submodule update
 #  scripts/InstallHootDevelopmentEnvironment.sh
 #
-# More details; this script:
+# This script:
 #
 #   - is one possible way to set up a Hootenanny developer environment on bare metal;  Feel free to tweak your own version of it.
-#   - is not actively maintained and may need to be updated to work with the latest version of VagrantProvision.sh
-#   - calls into the vagrant ubuntu script for the first part of the installation
+#   - is not actively maintained and may occasionally need to be updated to work with the latest version of VagrantProvision.sh.
+#   - calls into the vagrant ubuntu script for the first part of the installation.
 #   - adds developer tools; Some of the tools installed (Eclipse, etc.) will require additional manual configuration.
-#   - takes up roughly 13GB space (12/12/16; includes test output)
-#   - sets up an environment which can work with as little as 4GB of ram, but 8-16GB is recommended for working with larger, real world datasets
-#   - does not handle the hoot-tests repo, the translations repo, or the data used by hoot-tests (see Redmine docs for these steps)
-#   - still needs to auto-handle some command prompts
+#   - takes up roughly 13GB space (12/12/16; includes test output).
+#   - sets up an environment which can work with as little as 4 GB of ram, but 8-16 GB is recommended for working with larger, real world 
+#     datasets.
+#   - does not handle setting up the hoot-tests repo, the translations repo, or the data used by hoot-tests (see Redmine docs for 
+#     these steps).
+#   - still needs to be updated to auto-handle some command prompts (TODO: fix)
 
 cd ~
+
+# Run all the default hoot vagrant scripts first, so we're working from the same baseline as the Vagrant users.
 
 echo "Installing base dependencies from Vagrant provision script..."
 hoot/VagrantProvision.sh
@@ -87,7 +91,7 @@ echo "Installing misc..."
 sudo apt-get install -y meld distcc htop synergy gparted kompare xclip
 sleep 3
 
-# This added repo will hose the geos install by exposing a conflict between opencv and 
+# TODO: This added repo will hose the geos install by exposing a conflict between opencv and 
 # geos, so need to find a better way to install it.
 #echo "Installing QGIS..."
 #sudo apt-add-repository ppa:ubuntugis/ppa
@@ -111,7 +115,6 @@ sleep 3
 sudo apt-get autoremove -y
 
 # Eclipse configuration - You will still additional Eclipse configuration (web server integration, extensions, etc.)  See Developer's Guide for details.
-# TODO: there may still be some bugs with this part
 cd $HOOT_HOME
 make eclipse  # generate eclipse project files
 cd ~
@@ -119,7 +122,7 @@ if ! grep -i --quiet '-Xmx' /etc/eclipse.ini; then
   echo "Configuring Eclipse..."
 sudo bash -c "cat >> /etc/eclipse.ini" <<EOT
 
--Dosgi.requiredJavaVersion=1.7
+-Dosgi.requiredJavaVersion=1.8
 -XX:MaxPermSize=2048m
 -Xms512m
 -Xmx2048m
