@@ -40,6 +40,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // standard
 #include <algorithm>
@@ -80,9 +81,9 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 {
   Tags& tags = e->getTags();
 
-  tags.appendValue(reviewScoreKey(), mc.getReviewP());
-  tags.appendValue(matchScoreKey(), mc.getMatchP());
-  tags.appendValue(missScoreKey(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
 void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
@@ -104,8 +105,8 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
 
           _addScoreTags(e1, mc);
           _addScoreTags(e2, mc);
-          e1->getTags().appendValue(scoreUuidKey(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(scoreUuidKey(), e1->getTags().getCreateUuid());
+          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
         }
       }
     }

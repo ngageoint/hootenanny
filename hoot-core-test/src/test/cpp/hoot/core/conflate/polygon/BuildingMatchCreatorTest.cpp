@@ -34,9 +34,9 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/ops/RemoveWayOp.h>
-using namespace hoot;
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -113,7 +113,7 @@ public:
     {
       const ConstWayPtr& w = it->second;
       const Tags& t = w->getTags();
-      if (t["REF1"] != "Target" && t["REF2"] != "Target")
+      if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
       {
         RemoveWayOp::removeWay(map, it->first);
       }

@@ -27,6 +27,7 @@
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/BaseFilter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -34,8 +35,8 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CountNodesVisitor.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
@@ -124,9 +125,9 @@ void BuildingMerger::apply(const OsmMapPtr& map,
     Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
 
     QStringList ref1;
-    e1->getTags().readValues("REF1", ref1);
+    e1->getTags().readValues(MetadataTags::Ref1(), ref1);
     QStringList ref2;
-    e2->getTags().readValues("REF2", ref2);
+    e2->getTags().readValues(MetadataTags::Ref2(), ref2);
 
     ref1.sort();
     ref2.sort();
@@ -135,11 +136,11 @@ void BuildingMerger::apply(const OsmMapPtr& map,
     {
       if (ref1 == ref2)
       {
-        newTags["hoot:building:match"] = "true";
+        newTags[MetadataTags::HootBuildingMatch()] = "true";
       }
       else
       {
-        newTags["hoot:building:match"] = "false";
+        newTags[MetadataTags::HootBuildingMatch()] = "false";
       }
     }
 

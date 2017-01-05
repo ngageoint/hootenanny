@@ -37,6 +37,8 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
+
 using namespace hoot::pb;
 
 // Standard Includes
@@ -134,7 +136,7 @@ void PbfReader::setConfiguration(const Settings &conf)
 
 void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
 {
-  if (key == "hoot:status")
+  if (key == MetadataTags::HootStatus())
   {
     if (_useFileStatus)
     {
@@ -145,7 +147,7 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
       e->setStatus(_status);
     }
   }
-  else if (key == "accuracy" || key == "error:circular")
+  else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
   {
     bool ok;
     Meters circularError = value.toDouble(&ok);
@@ -190,7 +192,7 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
       }
     }
   }
-  else if (key == "hoot:id")
+  else if (key == MetadataTags::HootId())
   {
     // pass
   }

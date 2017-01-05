@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
@@ -596,7 +597,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
 
-        if (_useFileStatus && key == "hoot:status")
+        if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(_parseStatus(value));
         }
@@ -609,7 +610,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
             _element->setTag(key, value);
           }
         }
-        else if (key == "accuracy" || key == "error:circular")
+        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
@@ -657,7 +658,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         }
         else
         {
-          if (key != "hoot:id" && value != "")
+          if (key != MetadataTags::HootId() && value != "")
           {
             _element->setTag(key, value);
           }

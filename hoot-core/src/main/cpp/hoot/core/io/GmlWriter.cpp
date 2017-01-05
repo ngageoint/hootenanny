@@ -37,6 +37,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QFileInfo>
@@ -99,10 +100,10 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 
   if (_includeInfo)
   {
-    OGRFieldDefn oField("error:circular", OFTReal);
+    OGRFieldDefn oField(MetadataTags::ErrorCircular().toStdString().c_str(), OFTReal);
     if( poLayer->CreateField( &oField ) != OGRERR_NONE )
     {
-      throw HootException(QString("Error creating field (error:circular)."));
+      throw HootException(QString("Error creating field (" + MetadataTags::ErrorCircular() + ")."));
     }
   }
 
@@ -127,7 +128,7 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 
       if (_includeInfo)
       {
-        poFeature->SetField("error:circular", node->getCircularError());
+        poFeature->SetField(MetadataTags::ErrorCircular().toStdString().c_str(), node->getCircularError());
       }
 
       // convert the geometry.

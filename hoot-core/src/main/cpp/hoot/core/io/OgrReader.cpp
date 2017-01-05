@@ -44,6 +44,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -979,15 +980,15 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   Meters circularError = _circularError;
 
   // parse the circularError out of the tags.
-  if (t.contains("error:circular"))
+  if (t.contains(MetadataTags::ErrorCircular()))
   {
     bool ok;
-    double a = t["error:circular"].toDouble(&ok);
+    double a = t[MetadataTags::ErrorCircular()].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength("error:circular").value();
+        a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
       catch (const HootException& e)
@@ -998,18 +999,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove("error:circular");
+      t.remove(MetadataTags::ErrorCircular());
     }
   }
-  else if (t.contains("accuracy"))
+  else if (t.contains(MetadataTags::Accuracy()))
   {
     bool ok;
-    double a = t["accuracy"].toDouble(&ok);
+    double a = t[MetadataTags::Accuracy()].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength("accuracy").value();
+        a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
       catch (const HootException& e)
@@ -1020,7 +1021,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove("accuracy");
+      t.remove(MetadataTags::Accuracy());
     }
   }
 
@@ -1171,7 +1172,7 @@ void OgrReaderInternal::_translate(Tags& t)
   }
   else
   {
-    t[OsmSchema::layerNameKey()] = _layer->GetLayerDefn()->GetName();
+    t[MetadataTags::HootLayername()] = _layer->GetLayerDefn()->GetName();
   }
 }
 
