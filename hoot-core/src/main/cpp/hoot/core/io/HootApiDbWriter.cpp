@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -146,8 +146,8 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   }
   if (_userEmail.isEmpty())
   {
-    throw HootException("Please set the user's email address via the '" + emailKey() + "' "
-                        "configuration setting.");
+    throw HootException("Please set the user's email address via the '" +
+                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
   }
 
   QUrl url(urlStr);
@@ -179,7 +179,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 {
   if (mapIds.size() > 0)
   {
-    if (_overwriteMap) // delete mape and overwrite it
+    if (_overwriteMap) // delete map and overwrite it
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
@@ -304,7 +304,7 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 void HootApiDbWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions configOptions(conf);
-  setUserEmail(configOptions.getHootapiDbWriterEmail());
+  setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
 }

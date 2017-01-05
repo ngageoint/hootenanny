@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,8 +44,6 @@ class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
 public:
 
   static std::string className() { return "hoot::HootApiDbWriter"; }
-  static QString emailKey() { return "hootapi.db.writer.email"; }
-  static QString overwriteMapKey() { return "hootapi.db.writer.overwrite.map"; }
 
   HootApiDbWriter();
 
