@@ -40,63 +40,63 @@ public:
   /** Metadata tag names that are used throughout the code.  This class centralizes them
    *  into one place in the code base.  This class also includes a couple of key values too.
    */
-  static const QString HootTagPrefix()        { return "hoot:"; }
+  inline static const QString HootTagPrefix()         { return "hoot:"; }
 
-  static const QString Accuracy()             { return "accuracy"; }
+  inline static const QString Accuracy()              { return "accuracy"; }
 
-  static const QString ErrorCircular()        { return "error:circular"; }
+  inline static const QString ErrorCircular()         { return "error:circular"; }
 
-  static const QString HootBuildingMatch()    { return "hoot:building:match"; }
+  inline static const QString HootBuildingMatch()     { return "hoot:building:match"; }
 
-  static const QString HootActual()           { return "hoot:actual"; }
-  static const QString HootExpected()         { return "hoot:expected"; }
-  static const QString HootMismatch()         { return "hoot:mismatch"; }
-  static const QString HootWrong()            { return "hoot:wrong"; }
+  inline static const QString HootActual()            { return "hoot:actual"; }
+  inline static const QString HootExpected()          { return "hoot:expected"; }
+  inline static const QString HootMismatch()          { return "hoot:mismatch"; }
+  inline static const QString HootWrong()             { return "hoot:wrong"; }
 
-  static const QString HootEdge()             { return "hoot:edge"; }
-  static const QString HootEdgeId()           { return "hoot:edge:id"; }
-  static const QString HootEdgeScore()        { return "hoot:edge:score"; }
-  static const QString HootEdgeScore12()      { return "hoot:edge:score12"; }
-  static const QString HootEdgeScore21()      { return "hoot:edge:score21"; }
+  inline static const QString HootEdge()              { return "hoot:edge"; }
+  inline static const QString HootEdgeId()            { return "hoot:edge:id"; }
+  inline static const QString HootEdgeScore()         { return "hoot:edge:score"; }
+  inline static const QString HootEdgeScore12()       { return "hoot:edge:score12"; }
+  inline static const QString HootEdgeScore21()       { return "hoot:edge:score21"; }
 
-  static const QString HootVertex()           { return "hoot:vertex"; }
-  static const QString HootVertexScore()      { return "hoot:vertex:score"; }
-  static const QString HootVertexScore12()    { return "hoot:vertex:score12"; }
-  static const QString HootVertexScore21()    { return "hoot:vertex:score21"; }
+  inline static const QString HootVertex()            { return "hoot:vertex"; }
+  inline static const QString HootVertexScore()       { return "hoot:vertex:score"; }
+  inline static const QString HootVertexScore12()     { return "hoot:vertex:score12"; }
+  inline static const QString HootVertexScore21()     { return "hoot:vertex:score21"; }
 
-  static const QString HootId()               { return "hoot:id"; }
+  inline static const QString HootId()                { return "hoot:id"; }
 
-  static const QString HootLayername()        { return "hoot:layername"; }
+  inline static const QString HootLayername()         { return "hoot:layername"; }
 
-  static const QString HootMatchOrder()       { return "hoot:match:order"; }
-  static const QString HootMatchP()           { return "hoot:match:p"; }
-  static const QString HootMatchScore()       { return "hoot:match:score"; }
+  inline static const QString HootMatchOrder()        { return "hoot:match:order"; }
+  inline static const QString HootMatchP()            { return "hoot:match:p"; }
+  inline static const QString HootMatchScore()        { return "hoot:match:score"; }
 
-  static const QString HootPertied()          { return "hoot:pertied"; }
+  inline static const QString HootPertied()           { return "hoot:pertied"; }
 
-  static const QString HootReviewChoices()    { return "hoot:review:choices"; }
-  static const QString HootReviewMembers()    { return "hoot:review:members"; }
-  static const QString HootReviewNeeds()      { return "hoot:review:needs"; }
-  static const QString HootReviewNote()       { return "hoot:review:note"; }
-  static const QString HootReviewScore()      { return "hoot:review:score"; }
-  static const QString HootReviewSortOrder()  { return "hoot:review:sort_order"; }
-  static const QString HootReviewType()       { return "hoot:review:type"; }
-  static const QString HootReviewUuid()       { return "hoot:review:uuid"; }
+  inline static const QString HootReviewChoices()     { return "hoot:review:choices"; }
+  inline static const QString HootReviewMembers()     { return "hoot:review:members"; }
+  inline static const QString HootReviewNeeds()       { return "hoot:review:needs"; }
+  inline static const QString HootReviewNote()        { return "hoot:review:note"; }
+  inline static const QString HootReviewScore()       { return "hoot:review:score"; }
+  inline static const QString HootReviewSortOrder()   { return "hoot:review:sort_order"; }
+  inline static const QString HootReviewType()        { return "hoot:review:type"; }
+  inline static const QString HootReviewUuid()        { return "hoot:review:uuid"; }
 
-  static const QString HootScoreMatch()       { return "hoot:score:match"; }
-  static const QString HootScoreMiss()        { return "hoot:score:miss"; }
-  static const QString HootScoreReview()      { return "hoot:score:review"; }
-  static const QString HootScoreUuid()        { return "hoot:score:uuid"; }
+  inline static const QString HootScoreMatch()        { return "hoot:score:match"; }
+  inline static const QString HootScoreMiss()         { return "hoot:score:miss"; }
+  inline static const QString HootScoreReview()       { return "hoot:score:review"; }
+  inline static const QString HootScoreUuid()         { return "hoot:score:uuid"; }
 
-  static const QString HootStatus()           { return "hoot:status"; }
+  inline static const QString HootStatus()            { return "hoot:status"; }
 
-  static const QString HootStub()             { return "hoot:stub"; }
+  inline static const QString HootStub()              { return "hoot:stub"; }
 
-  static const QString Ref1()                 { return "REF1"; }
-  static const QString Ref2()                 { return "REF2"; }
+  inline static const QString Ref1()                  { return "REF1"; }
+  inline static const QString Ref2()                  { return "REF2"; }
 
-  static const QString Unknown1()             { return "Unknown1"; }
-  static const QString Unknown2()             { return "Unknown2"; }
+  inline static const QString Unknown1()              { return "Unknown1"; }
+  inline static const QString Unknown2()              { return "Unknown2"; }
 
 private:
 
