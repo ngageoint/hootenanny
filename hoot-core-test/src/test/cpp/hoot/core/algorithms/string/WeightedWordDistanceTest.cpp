@@ -46,7 +46,7 @@ class WeightedWordDistanceTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(WeightedWordDistanceTest);
   CPPUNIT_TEST(runTest);
-  //CPPUNIT_TEST(runRealWorldTest);
+  CPPUNIT_TEST(runRealWorldTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -126,7 +126,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WeightedWordDistanceTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WeightedWordDistanceTest, "quick");
 
 }
 

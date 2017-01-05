@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -99,9 +99,11 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
          descIt != desc.end(); ++descIt)
     {
       QString testName = QString::fromStdString(descIt->className);
+      LOG_VART(testName);
       if (0 == matchCreatorName.compare(testName))
       {
         featureType = descIt->baseFeatureType;
+        LOG_VART(featureType);
         return (*matchIt);
       }
     }
@@ -253,7 +255,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
 
     _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
     QMap<MatchCreator::BaseFeatureType, double> featureCounts;
-    for(MatchCreator::BaseFeatureType ft = MatchCreator::POI; ft < MatchCreator::Unknown; ft = MatchCreator::BaseFeatureType(ft+1))
+    for (MatchCreator::BaseFeatureType ft = MatchCreator::POI; ft < MatchCreator::Unknown;
+         ft = MatchCreator::BaseFeatureType(ft+1))
     {
       featureCounts[ft] = 0.0;
     }
@@ -268,7 +271,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       const QString matchCreatorName = iterator.key();
       LOG_VARD(matchCreatorName);
       MatchCreator::BaseFeatureType featureType = MatchCreator::Unknown;
-      shared_ptr<MatchCreator> matchCreator = getMatchCreator(matchCreators, iterator.key(), featureType);
+      /*shared_ptr<MatchCreator> matchCreator =*/
+        getMatchCreator(matchCreators, iterator.key(), featureType);
 
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
@@ -278,9 +282,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       }
 
       _stats.append(
-            SingleStat(
-              "Features Conflatable by: " + matchCreatorName,
-              conflatableFeatureCountForFeatureType));
+        SingleStat(
+          "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType));
 
       featureCounts[featureType] += conflatableFeatureCountForFeatureType;
     }
@@ -469,14 +472,21 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
   const double conflatedFeatureCount =
-    _applyVisitor(map, FilteredVisitor(
-      ChainCriterion(new StatusCriterion(Status::Conflated), e_criterion->clone()), new FeatureCountVisitor()));
+    _applyVisitor(
+      map,
+      FilteredVisitor(
+        ChainCriterion(
+          new StatusCriterion(Status::Conflated), e_criterion->clone()), new FeatureCountVisitor()));
   const double featuresMarkedForReview =
-    _applyVisitor(map, FilteredVisitor(
-      ChainCriterion(new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
+    _applyVisitor(
+      map,
+      FilteredVisitor(
+        ChainCriterion(
+          new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
   _stats.append(
     SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
-  _stats.append(SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
+  _stats.append(
+    SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
   const double numFeatureReviewsToBeMade =
     _applyVisitor(
       map,
@@ -484,7 +494,8 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
         e_criterion->clone(),
         new CountUniqueReviewsVisitor()));
   _stats.append(
-    SingleStat(QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
+    SingleStat(
+      QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
   const double unconflatedFeatureCount =
     _applyVisitor(
       map,
@@ -513,7 +524,8 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
       ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   _stats.append(
-    SingleStat(QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated));
+    SingleStat(
+      QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated));
   double percentageOfTotalFeaturesMarkedForReview = 0.0;
   if (totalFeatures > 0.0)
   {
@@ -521,14 +533,19 @@ void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QStr
       ((double)featuresMarkedForReview / (double)totalFeatures) * 100.0;
   }
   _stats.append(
-    SingleStat(QString("Percentage of %1s Marked for Review").arg(description), percentageOfTotalFeaturesMarkedForReview));
+    SingleStat(
+      QString(
+        "Percentage of %1s Marked for Review").arg(description),
+        percentageOfTotalFeaturesMarkedForReview));
   double percentageOfTotalFeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
   {
-    percentageOfTotalFeaturesUnconflated = ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
+    percentageOfTotalFeaturesUnconflated =
+      ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   _stats.append(
-    SingleStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));
+    SingleStat(
+      QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));
 }
 
 }

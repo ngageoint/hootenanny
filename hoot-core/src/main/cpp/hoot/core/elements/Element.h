@@ -97,45 +97,39 @@ public:
   virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
-
   void setId(long id) { _getElementData().setId(id); }
 
   long getChangeset() const { return _getElementData().getChangeset(); }
-
-  void setChangeset(bool changeset) { _getElementData().setChangeset(changeset); }
+  void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
 
   Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
 
   long getVersion() const { return _getElementData().getVersion(); }
-
   void setVersion(long version) { _getElementData().setVersion(version); }
 
   unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
+  void setTimestamp(unsigned int timestamp) { _getElementData().setTimestamp(timestamp); }
 
   QString getUser() const { return _getElementData().getUser(); }
+  void setUser(QString user) { _getElementData().setUser(user); }
 
   long getUid() const { return _getElementData().getUid(); }
+  void setUid(long uid) { _getElementData().setUid(uid); }
 
   const Tags& getTags() const { return _getElementData().getTags(); }
-
   Tags& getTags() { return _getElementData().getTags(); }
 
   bool hasCircularError() const { return _getElementData().hasCircularError(); }
-
-  void removeTag(QString k) { _getElementData().getTags().remove(k); }
-
   void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
 
+  void removeTag(QString k) { _getElementData().getTags().remove(k); }
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
-
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
 
   bool getVisible() const { return _getElementData().getVisible(); }
-
   void setVisible(bool visible) { _getElementData().setVisible(visible); }
 
   Status getStatus() const { return _status; }
-
   QString getStatusString() const;
 
   bool isUnknown() const { return getStatus().isUnknown(); }

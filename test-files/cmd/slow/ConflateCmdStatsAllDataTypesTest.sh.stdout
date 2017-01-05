@@ -15,10 +15,10 @@ Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10
 Total Conflated Features	0	0	18	
 Percentage of Total Features Conflated	0	0	45	
 Total Features Marked for Review	0	0	11	
-Percentage of Total Features Marked for Review	0	0	27.500000000000004	
+Percentage of Total Features Marked for Review	0	0	27.5	
 Total Number of Reviews to be Made	0	0	8	
 Total Unmatched Features	25	22	22	
-Percentage of Total Features Unmatched	100	100	55.000000000000007	
+Percentage of Total Features Unmatched	100	100	55.00000000000001	
 POI Count	11	10	16	
 Conflatable POIs	11	10	0	
 Conflated POIs	0	0	5	
@@ -43,9 +43,9 @@ Conflated Buildings	0	0	4
 Buildings Marked for Review	0	0	0	
 Number of Building Reviews to be Made	0	0	0	
 Unmatched Buildings	10	8	7	
-Percentage of Buildings Conflated	0	0	36.363636363636367	
+Percentage of Buildings Conflated	0	0	36.36363636363637	
 Percentage of Buildings Marked for Review	0	0	0	
-Percentage of Unmatched Buildings	100	100	63.636363636363633	
+Percentage of Unmatched Buildings	100	100	63.63636363636363	
 Waterway Count	0	0	0	
 Conflatable Waterways	0	0	0	
 Conflated Waterways	0	0	0	
@@ -57,5 +57,5 @@ Percentage of Waterways Conflated	0	0	0
 Percentage of Waterways Marked for Review	0	0	0	
 Percentage of Unmatched Waterways	0	0	0	
 Difference Between Total Features in Output and Total Features in Inputs			-7	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-14.893617021276595	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-14.8936170212766	
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,7 +92,7 @@ public:
 
   ~HighwayMatchVisitor()
   {
-    LOG_INFO("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
@@ -264,6 +264,7 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {
+  LOG_VAR(className());
   HighwayMatchVisitor v(map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff);
   map->visitRo(v);
 }

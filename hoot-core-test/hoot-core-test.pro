@@ -193,10 +193,10 @@ SOURCES += \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
-    src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
@@ -246,7 +246,7 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp
+    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp 
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \

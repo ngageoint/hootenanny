@@ -13,7 +13,7 @@ hoot is-match test-output/cmd/ConvertCmdTest/ToyTestAShp.osm test-files/cmd/slow
 
 # Convert to SQL test
 hoot convert \
-        -D postgresql.dumpfile.writer.changeset.user.id=1359 \
+        -D changeset.user.id=1359 \
         -D postgresql.dumpfile.writer.start.id.changeset=10000000000 \
         -D postgresql.dumpfile.writer.start.id.node=10000000000 \
         -D postgresql.dumpfile.writer.start.id.way=20000000000 \

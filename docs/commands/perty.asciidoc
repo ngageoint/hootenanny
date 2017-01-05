@@ -11,27 +11,7 @@ conflation methods using uncertainty modeling," P. Doucette, et. al, 2012.
 
 === Optional Defines
 
-See the Configuration Options section for details on these configuration
-parameters can be used with this command:
-
-* +perty.algorithm+
-* +perty.csm.beta+
-* +perty.csm.D+
-* +perty.grid.spacing+
-* +perty.ops+
-* +perty.random.error.x+
-* +perty.random.error.y+
-* +perty.remove.tag.visitor.exempt.tag.keys+
-* +perty.remove.tag.visitor.substitution.keys+
-* +perty.remove.tag.visitor.substitution.values+
-* +perty.search.distance+
-* +perty.seed+
-* +perty.systematic.error.x+
-* +perty.systematic.error.y+
-* +perty.way.generalize.epsilon+
-* +perty.way.generalize.probability+
-* +perty.way.split.min.node.spacing+
-* +perty.way.split.probability+
+perty.* configuration options can be used with this command.  See the Configuration Options section for details.
 
 === Usage
 

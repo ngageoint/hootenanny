@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,7 +39,6 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/perty/PertyOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/perty/DirectSequentialSimulation.h>
 
 // tbs
 #include <tbs/stats/SampleStats.h>
@@ -90,8 +89,7 @@ public:
 
     PertyOp uut;
     uut.setSeed(1);
-    uut.setPermuteAlgorithm(QString::fromStdString(DirectSequentialSimulation::className()));
-    uut.setCsmParameters(9, 100);
+    uut.setCsmParameters(100);
     uut.setNamedOps(QStringList());
     uut.apply(map);
 

@@ -641,6 +641,11 @@ Then(/^I accept the alert$/) do
   page.driver.browser.switch_to.alert.accept
 end
 
+Then(/^I reject the alert$/) do
+  sleep 5
+  page.driver.browser.switch_to.alert.dismiss
+end
+
 Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|
   # expect(page).to have_selector("input[value='" + value + "']")
   # page.should have_xpath("//input[@value='" + value + "']")

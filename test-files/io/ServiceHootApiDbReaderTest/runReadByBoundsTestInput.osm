@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" lat="38.9008975" lon="-78.0226543">
+        <tag k="node1" v="node1"/>
+    </node>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" lat="39.0008568" lon="-77.0224564">
+	<tag k="node2" v="node2"/>
+    </node>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" lat="38.9008975" lon="-78.0226543">
+	<tag k="node3" v="node3"/>
+    </node>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" lat="38.9008975" lon="-78.0226543">
+	<tag k="node4" v="node4"/>
+    </node>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" lat="38.9008975" lon="-78.0226543">
+	<tag k="node5" v="node5"/>
+    </node>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" lat="33.9008975" lon="-83.0226543">
+	<tag k="node6" v="node6"/>
+    </node>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" lat="28.9008975" lon="-88.0226543">
+	<tag k="node7" v="node7"/>
+    </node>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="5"/>
+	<tag k="way1" v="way1"/>
+    </way>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z">
+        <nd ref="3"/>
+        <nd ref="2"/>
+	<tag k="way2" v="way2"/>
+    </way>
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z">
+        <nd ref="1"/>
+        <nd ref="2"/>
+	<tag k="way3" v="way3"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z">
+        <nd ref="6"/>
+        <nd ref="7"/>
+	<tag k="way4" v="way4"/>
+    </way>
+    <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z">
+        <nd ref="1"/>
+        <nd ref="6"/>
+	<tag k="way5" v="way5"/>
+    </way>
+    <relation visible="true" id="1" timestamp="1970-01-01T00:00:00Z">
+        <member type="node" ref="1" role="role1"/>
+        <member type="way" ref="2" role="role3"/>
+        <member type="way" ref="1" role="role2"/>
+        <member type="node" ref="3" role="role1"/>
+	<tag k="relation1" v="relation1"/>
+    </relation>
+    <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z">
+        <member type="node" ref="5" role="role1"/>
+        <member type="relation" ref="1" role="role1"/>
+	<tag k="relation2" v="relation2"/>
+    </relation>
+    <relation visible="true" id="3" timestamp="1970-01-01T00:00:00Z">
+        <member type="way" ref="2" role="role2"/>
+	<tag k="relation3" v="relation3"/>
+    </relation>
+    <relation visible="true" id="4" timestamp="1970-01-01T00:00:00Z">
+        <member type="node" ref="3" role="role1"/>
+	<tag k="relation4" v="relation4"/>
+    </relation>
+    <relation visible="true" id="5" timestamp="1970-01-01T00:00:00Z">
+        <member type="node" ref="7" role="role1"/>
+        <member type="way" ref="4" role="role1"/>
+	<tag k="relation5" v="relation5"/>
+    </relation>
+    <relation visible="true" id="6" timestamp="1970-01-01T00:00:00Z">
+        <member type="node" ref="7" role="role1"/>
+        <member type="way" ref="1" role="role1"/>
+        <member type="way" ref="4" role="role1"/>
+	<tag k="relation6" v="relation6"/>
+    </relation>
+</osm>

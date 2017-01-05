@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -109,13 +109,14 @@ void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
   LOG_VARD(_changesetBounds.toString());
   LOG_VARD(numChanges);
   _outputSql.write(
-    QString("UPDATE changesets SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%1;\n")
-      .arg(_changesetId)
+    QString("UPDATE %1 SET min_lat=%2, max_lat=%3, min_lon=%4, max_lon=%5, num_changes=%6 WHERE id=%7;\n")
+      .arg(ApiDb::getChangesetsTableName())
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinY()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxY()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMinX()))
       .arg((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetBounds.getMaxX()))
       .arg(numChanges)
+      .arg(_changesetId)
     .toUtf8());
 
    _changesetBounds.init();
@@ -124,17 +125,20 @@ void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
 void OsmChangesetSqlFileWriter::_createChangeSet()
 {
   LOG_DEBUG("Creating changeset...");
-  _changesetId = _db.getNextId("changesets");
+  _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
+  LOG_VART(_changesetId);
   _outputSql.write(
-    QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES "
-            "(%1, %2, %3, %3);\n")
+    QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES "
+            "(%2, %3, %4, %4);\n")
+      .arg(ApiDb::getChangesetsTableName())
       .arg(_changesetId)
       .arg(ConfigOptions().getChangesetUserId())
       .arg(OsmApiDb::TIMESTAMP_FUNCTION)
     .toUtf8());
   _outputSql.write(
-    QString("INSERT INTO changeset_tags (changeset_id, k, v) VALUES "
-            "(%1, '%2', '%3');\n")
+    QString("INSERT INTO %1 (changeset_id, k, v) VALUES "
+            "(%2, '%3', '%4');\n")
+      .arg(ApiDb::getChangesetTagsTableName())
       .arg(_changesetId)
       .arg("written_by")
       .arg("Hootenanny")
@@ -185,15 +189,16 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   changeElement->setVersion(1);
   changeElement->setVisible(true);
   changeElement->setChangeset(_changesetId);
+  LOG_VART(changeElement->getChangeset());
 
   QString note = "";
   /*if (changeElement->getTags().contains("note"))
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -282,9 +287,9 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -308,13 +313,13 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   switch (changeElement->getElementType().getEnum())
   {
     case ElementType::Way:
-      _deleteAll("current_way_nodes", "way_id", changeElement->getId());
-      _deleteAll("way_nodes", "way_id", changeElement->getId());
+      _deleteAll(ApiDb::getCurrentWayNodesTableName(), "way_id", changeElement->getId());
+      _deleteAll(ApiDb::getWayNodesTableName(), "way_id", changeElement->getId());
       _createWayNodes(dynamic_pointer_cast<const Way>(changeElement));
       break;
     case ElementType::Relation:
-      _deleteAll("current_relation_members", "relation_id", changeElement->getId());
-      _deleteAll("relation_members", "relation_id", changeElement->getId());
+      _deleteAll(ApiDb::getCurrentRelationMembersTableName(), "relation_id", changeElement->getId());
+      _deleteAll(ApiDb::getRelationMembersTableName(), "relation_id", changeElement->getId());
       _createRelationMembers(dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
@@ -341,9 +346,9 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   {
     note = changeElement->getTags().get("note");
   }*/
-  //LOG_VARD(changeElement->getId());
-  //LOG_VARD(note);
-  //LOG_VARD(changeElement->getVersion());
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   if (!note.isEmpty())
   {
@@ -364,9 +369,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
     case ElementType::Node:
 
       _outputSql.write(
-        ("DELETE FROM current_way_nodes WHERE node_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() +
+         " WHERE node_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM current_relation_members WHERE member_type = 'Node' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Node' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -375,9 +382,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
 
       //all of its entries in current way nodes are removed
       _outputSql.write(
-        ("DELETE FROM current_way_nodes WHERE way_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() +
+         " WHERE way_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Way' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -385,9 +394,11 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
     case ElementType::Relation:
 
       _outputSql.write(
-        ("DELETE FROM current_relation_members WHERE relation_id=" + elementIdStr + ";\n").toUtf8());
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE relation_id=" + elementIdStr + ";\n").toUtf8());
       _outputSql.write(
-        ("DELETE FROM current_relation_members WHERE member_type = 'Relation' AND member_id = " +
+        ("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() +
+         " WHERE member_type = 'Relation' AND member_id = " +
          elementIdStr + ";\n").toUtf8());
 
       break;
@@ -423,6 +434,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
 
 QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
 {
+  LOG_VART(node->getChangeset());
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, %8, %6, %7);\n")
@@ -497,39 +509,39 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
 
 void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 {
-  //LOG_DEBUG("way nodes create");
-  //LOG_VARD(way->getId());
+  LOG_TRACE("way nodes create");
+  LOG_VART(way->getId());
   const std::vector<long> nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     const long nodeId = nodeIds.at(i);
-    //LOG_VARD(nodeId);
+    LOG_VART(nodeId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
         .arg(way->getId())
         .arg(nodeId)
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO way_nodes " + values).toUtf8());
+    _outputSql.write(("INSERT INTO " + ApiDb::getWayNodesTableName() + " " + values).toUtf8());
 
     values =
       QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
         .arg(way->getId())
         .arg(nodeId)
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO current_way_nodes " + values).toUtf8());
+    _outputSql.write(("INSERT INTO " + ApiDb::getCurrentWayNodesTableName() + " " + values).toUtf8());
   }
 }
 
 void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
 {
-  //LOG_DEBUG("relation members create");
-  //LOG_VARD(relation->getId());
+  LOG_TRACE("relation members create");
+  LOG_VART(relation->getId());
   const vector<RelationData::Entry> members = relation->getMembers();
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry member = members[i];
-    //LOG_VARD(member.toString());
+    LOG_VART(member.toString());
 
     QString values =
       QString(
@@ -539,7 +551,7 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO relation_members " + values).toUtf8());
+    _outputSql.write(("INSERT INTO " + ApiDb::getRelationMembersTableName() + " " + values).toUtf8());
 
     values =
       QString(
@@ -549,7 +561,8 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation
         .arg(member.getElementId().getId())
         .arg(member.getRole())
         .arg(i + 1);
-    _outputSql.write(("INSERT INTO current_relation_members " + values).toUtf8());
+    _outputSql.write(
+      ("INSERT INTO " + ApiDb::getCurrentRelationMembersTableName() + " " + values).toUtf8());
   }
 }
 
@@ -568,7 +581,7 @@ void OsmChangesetSqlFileWriter::_deleteCurrentTags(const ElementId& eid)
 void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
                                            const long id)
 {
-  //LOG_DEBUG("delete all" << tableName);
+  LOG_TRACE("delete all" << tableName);
   _outputSql.write(
     (QString("DELETE FROM %1 WHERE %2 = %3;\n")
       .arg(tableName)

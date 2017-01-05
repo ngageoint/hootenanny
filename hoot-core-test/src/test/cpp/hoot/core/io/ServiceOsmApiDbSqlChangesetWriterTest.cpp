@@ -101,7 +101,8 @@ public:
     LOG_VARD(boundsStr);
     LOG_VARD(createdAt.toString(OsmApiDb::TIME_FORMAT));
     const QString sql =
-      QString("INSERT INTO changesets (id, user_id, created_at, closed_at, min_lat, max_lat, min_lon, max_lon) ") +
+      QString("INSERT INTO %1 (id, user_id, created_at, closed_at, min_lat, max_lat, min_lon, max_lon) ")
+        .arg(ApiDb::getChangesetsTableName()) +
       QString("VALUES (1, 1, '%1', '%2', %3, %4, %5, %6)")
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
         .arg(createdAt.toString(OsmApiDb::TIME_FORMAT))
@@ -151,15 +152,17 @@ public:
     nodesCountBefore--;
     LOG_VARD(nodesCountBefore);
 
-    const long nextNodeId = database.getNextId("current_nodes");
+    const long nextNodeId = database.getNextId(ApiDb::getCurrentNodesTableName());
     LOG_VARD(nextNodeId);
 
     const long nextChangesetId = existingChangesetId + 1;
     QString sql =
-      QString("INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (%1, 1, now(), now());\n")
+      QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES (%2, 1, now(), now());\n")
+        .arg(ApiDb::getChangesetsTableName())
         .arg(nextChangesetId);
     sql +=
-      QString("INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%1, 0, 0, %2, true, now(), 3221225472, 1);")
+      QString("INSERT INTO %1 (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile,  version) VALUES (%2, 0, 0, %3, true, now(), 3221225472, 1);")
+        .arg(ApiDb::getCurrentNodesTableName())
         .arg(nextNodeId)
         .arg(nextChangesetId);
 

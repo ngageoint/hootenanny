@@ -1,0 +1,63 @@
+reference dataset:  test-files/conflate/unified/AllDataTypesA.osm
+secondary dataset:  test-files/conflate/unified/AllDataTypesB.osm
+AOI:  -104.8192,38.8162,-104.6926,38.9181
+TEST_NAME:  ServiceOsmApiDbHootApiDbAllDataTypesConflateTest
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+ setval 
+--------
+      2
+(1 row)
+
+ setval 
+--------
+    118
+(1 row)
+
+ setval 
+--------
+     15
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8: Conflating the two datasets over the specified AOI...
+
+
+STEP 10: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11: Executing the changeset SQL on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=38.858051, max_lat=38.910969, min_lon=-104.786929, max_lon=-104.714569, num_changes=22
+Node(s) Created: 10
+Node(s) Modified: 0
+Node(s) Deleted: 6
+Way(s) Created: 0
+Way(s) Modified: 0
+Way(s) Deleted: 0
+Relation(s) Created: 6
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 13: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+
+18:03:16.194 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/output.osm ...
+18:03:16.206 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/13-complete-output-PulledFromOsmApiDb.osm ...

@@ -102,7 +102,8 @@ public:
    */
   QString removeInvalidCharacters(const QString& s);
 
-protected:
+private:
+
   bool _formatXml;
   bool _includeIds;
   bool _includeDebug;

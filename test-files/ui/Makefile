@@ -20,7 +20,7 @@ $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in Db
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true
-HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
+HOOT_OPTS+= -D api.db.email=test@test.com
 HOOT_OPTS+= -D reader.add.source.datetime=false
 
 test: load-data

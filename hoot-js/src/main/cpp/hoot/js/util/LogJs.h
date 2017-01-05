@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,6 +52,8 @@ private:
 
   static v8::Handle<v8::Value> log(const v8::Arguments& args, Log::WarningLevel level);
   static v8::Handle<v8::Value> debug(const v8::Arguments& args);
+  static v8::Handle<v8::Value> trace(const v8::Arguments& args);
+  static v8::Handle<v8::Value> logTrace(const v8::Arguments& args);
   static v8::Handle<v8::Value> logDebug(const v8::Arguments& args);
   static v8::Handle<v8::Value> logVerbose(const v8::Arguments& args);
   static v8::Handle<v8::Value> logInfo(const v8::Arguments& args);

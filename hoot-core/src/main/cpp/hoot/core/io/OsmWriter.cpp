@@ -51,17 +51,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
 
-OsmWriter::OsmWriter()
+OsmWriter::OsmWriter() :
+_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_includeIds(false),
+_includeDebug(ConfigOptions().getWriterIncludeDebug()),
+_includePointInWays(false),
+_includeCompatibilityTags(true),
+_textStatus(ConfigOptions().getWriterTextStatus()),
+_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+_precision(round(ConfigOptions().getWriterPrecision())),
+_encodingErrorCount(0)
 {
-  _formatXml = ConfigOptions().getOsmMapWriterFormatXml();
-  _includeIds = false;
-  _includeDebug = ConfigOptions().getWriterIncludeDebug();
-  _textStatus = ConfigOptions().getWriterTextStatus();
-  _includePointInWays = false;
-  _includeCompatibilityTags = true;
-  _osmSchema = ConfigOptions().getOsmMapWriterSchema();
-  _precision = round(ConfigOptions().getWriterPrecision());
-  _encodingErrorCount = 0;
+
 }
 
 QString OsmWriter::removeInvalidCharacters(const QString& s)
@@ -156,8 +157,6 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 
 void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 {
-  LOG_DEBUG("OsmWriter::write");
-
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
@@ -222,6 +221,8 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
   else
   {
+    //TODO: This comparison seems to be still unequal when I set an element's timestamp to
+    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributeVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
@@ -297,8 +298,8 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
     }
 
     // turn this on when we start using node circularError.
-    if (n->hasCircularError() &&
-        n->getTags().getNonDebugCount() > 0)
+    if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0 &&
+        ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -396,7 +397,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       }
     }
 
-    if (w->hasCircularError())
+    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");
@@ -503,7 +504,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       writer.writeEndElement();
     }
 
-    if (r->hasCircularError())
+    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", "error:circular");

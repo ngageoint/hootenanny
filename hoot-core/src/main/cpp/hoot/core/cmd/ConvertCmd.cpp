@@ -105,6 +105,7 @@ public:
     }
 
     //LOG_DEBUG(_timer->elapsed());
+    LOG_INFO("Convert operation complete.");
     QString msg = "Convert operation took ";
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
@@ -115,7 +116,7 @@ public:
     {
       msg += QString::number(timeElapsed / 1000) + " seconds";
     }
-    LOG_INFO(msg);
+    LOG_DEBUG(msg);
 
     return 0;
   }

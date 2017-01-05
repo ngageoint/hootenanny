@@ -71,37 +71,34 @@ public:
   bool hasCircularError() const { return _circularError >= 0; }
 
   long getId() const { return _id; }
-
   void setId(long id) { _id = id; }
 
   long getChangeset() const { return _changeset; }
-
   void setChangeset(long changeset) { _changeset = changeset; }
 
   Meters getRawCircularError() const { return _circularError; }
 
   long getVersion() const { return _version; }
-
   void setVersion(long version) { _version = version; }
 
   unsigned int getTimestamp() const { return _timestamp; }
+  void setTimestamp(unsigned int timestamp) { _timestamp = timestamp; }
 
   QString getUser() const { return _user; }
+  void setUser(QString user) { _user = user; }
 
   long getUid() const { return _uid; }
+  void setUid(long uid) { _uid = uid; }
 
   const Tags& getTags() const { return _tags; }
-
   Tags& getTags() { return _tags; }
 
   void setCircularError(Meters circularError) { _circularError = circularError; }
 
   void setTags(const Tags& tags) { _tags = tags; }
-
   void setTag(QString k, QString v) { _tags.insert(k, v); }
 
   bool getVisible() const { return _visible; }
-
   void setVisible(bool visible) { _visible = visible; }
 
 protected:

@@ -65,5 +65,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::MapStatsDriverTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::MapStatsDriverTest, "glacial");
 

@@ -147,6 +147,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMergerCreatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMergerCreatorTest, "quick");
 
 }

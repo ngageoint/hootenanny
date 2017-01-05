@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -120,9 +120,7 @@ private:
         continue;
       if (!_s->hasKey(name))
       {
-        LOG_WARN("Unknown JSON setting: (" << name << ")");
-        //  Don't allow unknown settings to be loaded
-        continue;
+        throw HootException("Unknown JSON setting: (" + name + ")");
       }
       //  Set key/value pair as name and data, data() turns everything to a string
       _s->set(name, QString::fromUtf8(element.second.data().c_str()));
@@ -232,9 +230,9 @@ double Settings::getDouble(const QString& key, double defaultValue, double min, 
   if ( retVal < min )
   {
     retVal = min;
-  } 
-  else if ( retVal > max ) 
-  { 
+  }
+  else if ( retVal > max )
+  {
     retVal = max;
   }
 
@@ -288,10 +286,10 @@ int Settings::getInt(const QString& key, int defaultValue, int min, int max) con
 {
   int retVal = getInt(key, defaultValue);
 
-  if ( retVal < min ) 
+  if ( retVal < min )
   {
     retVal = min;
-  } 
+  }
   else if ( retVal > max )
   {
     retVal = max;
@@ -543,10 +541,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
       if (!conf().hasKey(kvl[0]))
       {
-        LOG_WARN("Unknown settings option: (" << kvl[0] << ")");
-        // move on to the next argument, don't keep an invalid option
-        args = args.mid(2);
-        continue;
+        throw HootException("Unknown settings option: (" + kvl[0] + ")");
       }
       if (append)
       {
