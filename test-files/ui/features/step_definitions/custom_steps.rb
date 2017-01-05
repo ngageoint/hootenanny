@@ -272,6 +272,15 @@ Then(/^I should see these tags in the table:$/) do |table|
     actual.should == expected
   end
 end
+Then(/^I should see tag (.*)=(.*) in the table$/) do |key, value|
+  include_hidden_fields do
+    keys = page.all('ul.tag-list input.key').map(&:value)
+    values = page.all('ul.tag-list input.value').map(&:value)
+    actual = Hash[keys.zip(values)]
+    actual[key].should == value
+  end
+end
+
 Then(/^I click on the "([^"]*)" option in the "([^"]*)"$/) do |label,div|
   find('#' + div).find('label', :text => label).click
 end
