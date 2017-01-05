@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit
@@ -143,8 +144,8 @@ public:
 
     //If any data in the dataset has already been conflated (or is invalid), the operation
     //shouldn't fail.  The data should just be skipped.
-    map->getWay(FindWaysVisitor::findWaysByTag(map, "REF1", "001952")[0])->setStatus(Status::Conflated);
-    map->getWay(FindWaysVisitor::findWaysByTag(map, "REF2", "001f4b")[0])->setStatus(Status::Invalid);
+    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001952")[0])->setStatus(Status::Conflated);
+    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])->setStatus(Status::Invalid);
 
     Settings testSettings = conf();
     testSettings.set("rubber.sheet.ref", "true");

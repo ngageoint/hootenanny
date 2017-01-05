@@ -27,13 +27,14 @@
 
 #include "PoiPolygonMergerJs.h"
 
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 namespace hoot
 {
@@ -80,7 +81,7 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
     //the client
     ElementPtr polyElement = map->getElement(polyId);
     polyElement->setStatus(Status(Status::Conflated));
-    polyElement->getTags()["hoot:status"] = "3";
+    polyElement->getTags()[MetadataTags::HootStatus()] = "3";
 
     if (Log::getInstance().isDebugEnabled())
     {

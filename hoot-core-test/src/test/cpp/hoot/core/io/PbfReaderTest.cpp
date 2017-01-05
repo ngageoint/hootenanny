@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/MetadataTags.h>
 
 using namespace hoot;
 using namespace hoot::pb;
@@ -243,7 +244,7 @@ public:
                     "{\"type\":\"node\",\"ref\":2,\"role\":\"t\"},\n"
                     "{\"type\":\"node\",\"ref\":3,\"role\":\"u\"},\n"
                     "{\"type\":\"way\",\"ref\":1,\"role\":\"f\"},\n"
-                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"note\":\"test tag\",\"hello\":\"world\",\"highway\":\"road\",\"error:circular\":\"1.7\"}]\n"
+                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"note\":\"test tag\",\"hello\":\"world\",\"highway\":\"road\",\"" + MetadataTags::ErrorCircular() + "\":\"1.7\"}]\n"
                     "}\n",
                     OsmJsonWriter().toString(map))
   }
@@ -323,13 +324,13 @@ public:
                     "{\"type\":\"node\",\"id\":-9,\"lat\":39.5910657,\"lon\":-104.8048206},\n"
                     "{\"type\":\"node\",\"id\":-10,\"lat\":39.5910631,\"lon\":-104.8051528},\n"
                     "{\"type\":\"node\",\"id\":-11,\"lat\":39.5909403,\"lon\":-104.8037425},\n"
-                    "{\"type\":\"way\",\"id\":-3,\"nodes\":[-1,-2,-3,-4,-5,-1],\"tags\":{\"REF2\":\"Target\",\"building\":\"yes\",\"name\":\"Target - Aurora South\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-6,-1,-5,-7,-8,-9,-10,-6],\"tags\":{\"REF2\":\"Target\",\"building\":\"yes\",\"name\":\"Target Grocery\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-5,-4,-11,-7,-5],\"tags\":{\"REF2\":\"Target\",\"building\":\"yes\",\"name\":\"Target Pharmacy\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-3,\"nodes\":[-1,-2,-3,-4,-5,-1],\"tags\":{\"" + MetadataTags::Ref2() + "\":\"Target\",\"building\":\"yes\",\"name\":\"Target - Aurora South\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-6,-1,-5,-7,-8,-9,-10,-6],\"tags\":{\"" + MetadataTags::Ref2() + "\":\"Target\",\"building\":\"yes\",\"name\":\"Target Grocery\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-5,-4,-11,-7,-5],\"tags\":{\"" + MetadataTags::Ref2() + "\":\"Target\",\"building\":\"yes\",\"name\":\"Target Pharmacy\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-567,\"role\":\"role1\"},\n"
                     "{\"type\":\"way\",\"ref\":-569,\"role\":\"role2\"},\n"
-                    "{\"type\":\"way\",\"ref\":-568,\"role\":\"role3\"}],\"tags\":{\"foo\":\"bar\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-568,\"role\":\"role3\"}],\"tags\":{\"foo\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter().toString(map));
   }

@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -59,13 +60,13 @@ void SetTagVisitor::visit(const shared_ptr<Element>& e)
   {
     throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
   }
-  if (_k == OsmSchema::errorCircularKey())
+  if (_k == MetadataTags::ErrorCircular())
   {
     bool ok;
     double v = _v.toDouble(&ok);
     if (!ok)
     {
-      throw IllegalArgumentException(OsmSchema::errorCircularKey() + " expects a double value.");
+      throw IllegalArgumentException(MetadataTags::ErrorCircular() + " expects a double value.");
     }
     e->setCircularError(v);
   }

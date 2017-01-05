@@ -26,6 +26,9 @@
  */
 #include "ApiDbReader.h"
 
+// Hoot
+#include <hoot/core/util/MetadataTags.h>
+
 // Qt
 #include <QSet>
 
@@ -104,9 +107,9 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   bool ok;
   Tags& tags = element->getTags();
 
-  if (tags.contains("hoot:status"))
+  if (tags.contains(MetadataTags::HootStatus()))
   {
-    QString statusStr = tags.get("hoot:status");
+    QString statusStr = tags.get(MetadataTags::HootStatus());
     bool ok;
     const int statusInt = statusStr.toInt(&ok);
     Status status = static_cast<Status::Type>(statusInt);
@@ -121,7 +124,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    tags.remove("hoot:status");
+    tags.remove(MetadataTags::HootStatus());
   }
 
   if (tags.contains("type"))
@@ -135,14 +138,14 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
   }
 
-  if (tags.contains("error:circular"))
+  if (tags.contains(MetadataTags::ErrorCircular()))
   {
-    element->setCircularError(tags.get("error:circular").toDouble(&ok));
+    element->setCircularError(tags.get(MetadataTags::ErrorCircular()).toDouble(&ok));
     if (!ok)
     {
       try
       {
-        double tv = tags.getLength("error:circular").value();
+        double tv = tags.getLength(MetadataTags::ErrorCircular()).value();
         element->setCircularError(tv);
         ok = true;
       }
@@ -153,22 +156,22 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing error:circular.");
+        LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
       }
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    tags.remove("error:circular");
+    tags.remove(MetadataTags::ErrorCircular());
   }
-  else if (tags.contains("accuracy"))
+  else if (tags.contains(MetadataTags::Accuracy()))
   {
-    element->setCircularError(tags.get("accuracy").toDouble(&ok));
+    element->setCircularError(tags.get(MetadataTags::Accuracy()).toDouble(&ok));
 
     if (!ok)
     {
       try
       {
-        double tv = tags.getLength("accuracy").value();
+        double tv = tags.getLength(MetadataTags::Accuracy()).value();
         element->setCircularError(tv);
         ok = true;
       }
@@ -179,11 +182,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing accuracy.");
+        LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
       }
     }
     //I don't think OSM non-hoot metadata tags should be removed here...
-    //tags.remove("accuracy");
+    //tags.remove(MetadataTags::Accuracy());
   }
 }
 

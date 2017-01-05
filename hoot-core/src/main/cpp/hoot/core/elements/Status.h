@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QString>
@@ -62,9 +63,9 @@ public:
     case Status::Invalid:
       return "Invalid";
     case Status::Unknown1:
-      return "Unknown1";
+      return MetadataTags::Unknown1();
     case Status::Unknown2:
-      return "Unknown2";
+      return MetadataTags::Unknown2();
     case Status::Conflated:
       return "Conflated";
     default:

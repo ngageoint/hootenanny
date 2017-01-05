@@ -30,6 +30,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/RemoveRef2Visitor.h>
 
 // Qt
@@ -69,13 +70,13 @@ public:
                     "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
                     "{\"type\":\"node\",\"id\":-861035,\"lat\":37.801179,\"lon\":-122.41703},\n"
                     "{\"type\":\"node\",\"id\":-861038,\"lat\":37.801294,\"lon\":-122.41694},\n"
-                    "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"A\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"none\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861077,\"lat\":37.80112,\"lon\":-122.41676,\"tags\":{\"REF2\":\"none\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861082,\"lat\":37.801247,\"lon\":-122.41672,\"tags\":{\"REF2\":\"none\",\"amenity\":\"restaurant\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861083,\"lat\":37.801263,\"lon\":-122.41673,\"tags\":{\"REF1\":\"C\",\"amenity\":\"restaurant\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"REF2\":\"B\",\"highway\":\"road\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"REF1\":\"B\",\"highway\":\"road\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"" + MetadataTags::Ref1() + "\":\"A\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-861077,\"lat\":37.80112,\"lon\":-122.41676,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-861082,\"lat\":37.801247,\"lon\":-122.41672,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"amenity\":\"restaurant\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-861083,\"lat\":37.801263,\"lon\":-122.41673,\"tags\":{\"" + MetadataTags::Ref1() + "\":\"C\",\"amenity\":\"restaurant\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"" + MetadataTags::Ref2() + "\":\"B\",\"highway\":\"road\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"" + MetadataTags::Ref1() + "\":\"B\",\"highway\":\"road\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }
