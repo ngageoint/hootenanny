@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -112,7 +112,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   LOG_INFO("Optimizing network...");
 
-  for (size_t i = 0; i < 10; ++i)
+  const size_t numIterations = 10;
+  for (size_t i = 0; i < numIterations; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
@@ -128,6 +129,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     }
 
     matcher->iterate();
+
+    LOG_INFO("Iteration: " << i + 1 << "/" << numIterations << " complete.");
   }
 
   LOG_INFO("Creating matches...");

@@ -159,6 +159,8 @@ void ConflictsNetworkMatcher::_removeDupes()
 
 void ConflictsNetworkMatcher::_createMatchRelationships()
 {
+  LOG_INFO("Creating match relationships...");
+
   int count = 0;
   foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
   {
@@ -558,6 +560,8 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
 void ConflictsNetworkMatcher::_seedEdgeScores()
 {
+  LOG_INFO("Seeding edge scores...");
+
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
 
   // our stubs don't need to be bidirectional since they don't create new nodes.
