@@ -9,5 +9,5 @@ hoot is-match test-output/cmd/NetworkConflateCmdTest/output.osm test-files/cmd/s
 
 # Check to make sure we don't bomb out on empty files
 # TODO: this fails; see #1282
-#hoot conflate -C Network.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
-#hoot is-match test-files/Empty.osm tmp/dum.osm || cat tmp/dum.osm
+hoot conflate -C Network.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/dum.osm
+hoot is-match test-files/Empty.osm tmp/dum.osm || cat tmp/dum.osm
