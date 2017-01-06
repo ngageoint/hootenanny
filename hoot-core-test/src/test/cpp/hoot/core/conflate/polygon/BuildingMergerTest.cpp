@@ -50,9 +50,9 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -103,8 +103,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Target");
-    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, "REF2", "Target");
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
     set< pair<ElementId, ElementId> > pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
@@ -133,7 +133,7 @@ public:
 
     virtual void visit(const ConstElementPtr& e)
     {
-      if (e->getTags().get("REF1") != _ref && e->getTags().get("REF2") != _ref)
+      if (e->getTags().get(MetadataTags::Ref1()) != _ref && e->getTags().get(MetadataTags::Ref2()) != _ref)
       {
         RecursiveElementRemover(e->getElementId()).apply(_map);
       }
@@ -155,8 +155,8 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
 
-    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Panera");
-    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, "REF2", "Panera");
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
     set< pair<ElementId, ElementId> > pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
@@ -195,11 +195,11 @@ public:
                     "{\"type\":\"node\",\"id\":-231,\"lat\":39.593152,\"lon\":-104.80613},\n"
                     "{\"type\":\"node\",\"id\":-232,\"lat\":39.593143,\"lon\":-104.80622},\n"
                     "{\"type\":\"node\",\"id\":-233,\"lat\":39.593122,\"lon\":-104.80621},\n"
-                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"building:part\":\"yes\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"building:part\":\"yes\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"building:part\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"building:part\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-26,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"REF1\":\"Panera\",\"REF2\":\"Panera\",\"hoot:building:match\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }

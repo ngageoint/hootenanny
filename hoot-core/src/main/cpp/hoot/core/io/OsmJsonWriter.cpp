@@ -38,6 +38,7 @@ using namespace boost;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QBuffer>
@@ -213,13 +214,13 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   if (e->getElementType() != ElementType::Node ||
       (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0))
   {
-    _writeTag("error:circular", QString::number(e->getCircularError(), 'g', _precision), firstTag);
+    _writeTag(MetadataTags::ErrorCircular(), QString::number(e->getCircularError(), 'g', _precision), firstTag);
   }
 
   if (_includeDebug)
   {
-    _writeTag("hoot:id", QString::number(e->getId()), firstTag);
-    _writeTag("hoot:status", QString::number((int)e->getStatus().getEnum()), firstTag);
+    _writeTag(MetadataTags::HootId(), QString::number(e->getId()), firstTag);
+    _writeTag(MetadataTags::HootStatus(), QString::number((int)e->getStatus().getEnum()), firstTag);
   }
 
   if (firstTag == false)

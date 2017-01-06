@@ -32,11 +32,11 @@
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
-
 
 // Boost
 using namespace boost;
@@ -80,14 +80,14 @@ public:
 
     // introduce a false positive in the test data.
     vector<long> wids = FindWaysVisitor::findWaysByTag(map, "name", "Cheddar's Casual Cafe");
-    map->getWay(wids[0])->getTags()["REF1"] = "Bad REF1";
+    map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Bad " + MetadataTags::Ref1();
 
     // introduce a false negative in the test data.
     wids = FindWaysVisitor::findWaysByTag(map, "name", "Freddy's");
-    map->getWay(wids[0])->getTags()["REF1"] = "Biondi";
+    map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.
-    HasTagCriterion filter("REF1", "REF2");
+    HasTagCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
     AddUuidVisitor uuid("uuid");
     FilteredVisitor v(filter, uuid);
     map->visitRw(v);

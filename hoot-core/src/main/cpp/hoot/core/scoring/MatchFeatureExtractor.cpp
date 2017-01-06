@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Standard
 #include <numeric>
@@ -73,7 +74,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     const shared_ptr<const Element>& e = map->getElement(*it);
     if (e->getStatus() == Status::Unknown1)
     {
-      QString r = e->getTags()["REF1"];
+      QString r = e->getTags()[MetadataTags::Ref1()];
       // ignore all features that haven't been matched.
       if (r != "todo")
       {
@@ -83,7 +84,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     else if (e->getStatus() == Status::Unknown2)
     {
       QStringList list;
-      e->getTags().readValues("REF2", list);
+      e->getTags().readValues(MetadataTags::Ref2(), list);
 
       for (int i = 0; i < list.size(); i++)
       {
@@ -110,8 +111,8 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     }
     else
     {
-      LOG_WARN("Expected the element to be either Unknown1 or Unknown2. " << e->getStatus() <<
-               " element: " << e->toString());
+      LOG_WARN("Expected the element to be either " << MetadataTags::Unknown1() << " or " << MetadataTags::Unknown2() <<
+               ". " << e->getStatus() << " element: " << e->toString());
     }
   }
 
