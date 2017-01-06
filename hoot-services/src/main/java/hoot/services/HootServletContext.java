@@ -36,7 +36,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.auxiliaryservices.POI2POIMergeServiceResource;
+import hoot.services.controllers.auxiliaryservices.ElementMergeServiceResource;
 import hoot.services.controllers.auxiliaryservices.TranslationServiceResource;
 
 
@@ -57,14 +57,14 @@ public class HootServletContext implements ServletContextListener {
 
         TranslationServiceResource.startTranslationService();
 
-        POI2POIMergeServiceResource.startP2PService();
+        ElementMergeServiceResource.startElementMergeService();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         TranslationServiceResource.stopTranslationService();
 
-        POI2POIMergeServiceResource.stopP2PService();
+        ElementMergeServiceResource.stopElementMergeService();
 
         FileUtils.deleteQuietly(new File(TEMP_OUTPUT_PATH));
     }

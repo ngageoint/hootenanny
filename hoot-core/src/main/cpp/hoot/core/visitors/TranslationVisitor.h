@@ -59,8 +59,6 @@ public:
 private:
   ScriptTranslator& _t;
   ScriptToOgrTranslator* _togr;
-  QString _circularErrorKey;
-  QString _accuracyKey;
   OsmMap* _map;
   bool _toOgr;
 };

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 
 // Qt
@@ -164,7 +165,7 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
       n->getTags().getNonDebugCount() > 0)
   {
     writer.writeStartElement("tag");
-    writer.writeAttribute("k", "error:circular");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
     writer.writeAttribute("v", QString("%1").arg(n->getCircularError()));
     writer.writeEndElement();
   }
@@ -210,7 +211,7 @@ void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w
   if (w->hasCircularError())
   {
     writer.writeStartElement("tag");
-    writer.writeAttribute("k", "error:circular");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
     writer.writeAttribute("v", QString("%1").arg(w->getCircularError()));
     writer.writeEndElement();
   }
@@ -272,7 +273,7 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
   if (r->hasCircularError())
   {
     writer.writeStartElement("tag");
-    writer.writeAttribute("k", "error:circular");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
     writer.writeAttribute("v", QString("%1").arg(r->getCircularError()));
     writer.writeEndElement();
   }

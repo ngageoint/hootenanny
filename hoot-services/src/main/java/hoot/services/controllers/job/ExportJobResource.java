@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,6 +49,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -100,6 +101,8 @@ public class ExportJobResource extends JobControllerBase {
 
         try {
             JSONArray commandArgs = parseParams(params);
+            JSONParser pars = new JSONParser();
+            JSONObject oParams = (JSONObject) pars.parse(params);
 
             JSONObject arg = new JSONObject();
             arg.put("outputfolder", TEMP_OUTPUT_PATH + "/" + jobId);
@@ -147,7 +150,7 @@ public class ExportJobResource extends JobControllerBase {
                 postChainJobRequest(jobId, jobArgs.toJSONString());
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
-                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs);
+                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
                 postJobRequest(jobId, createPostBody(commandArgs));
             }
             else {
@@ -186,7 +189,7 @@ public class ExportJobResource extends JobControllerBase {
         return new JobId(jobId);
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs) throws IOException {
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) throws IOException {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
@@ -231,7 +234,21 @@ public class ExportJobResource extends JobControllerBase {
         addMapForExportTag(conflatedMap, commandArgs);
 
         //pass the export aoi to the export bash script
-        setAoi(conflatedMap, commandArgs);
+        //if sent a bbox in the url (reflecting task grid bounds)
+        //use that, otherwise use the bounds of the conflated output
+        BoundingBox bbox;
+        if (oParams.get("TASK_BBOX") != null) {
+            bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
+        } else {
+            bbox = getMapBounds(conflatedMap);
+        }
+        setAoi(bbox, commandArgs);
+        //put the osm userid in the command args
+        if (oParams.get("USER_ID") != null) {
+            JSONObject uid = new JSONObject();
+            uid.put("userid", oParams.get("USER_ID"));
+            commandArgs.add(uid);
+        }
 
         return commandArgs;
     }
@@ -281,11 +298,10 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
     }
 
-    private void setAoi(Map conflatedMap, JSONArray commandArgs) {
-        BoundingBox bounds = getMapBounds(conflatedMap);
+    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
-        arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() +
-                "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
+        arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
+                bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
     }
 

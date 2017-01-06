@@ -39,22 +39,23 @@ using namespace geos::geom;
 using namespace geos::operation::buffer;
 
 // Hoot
+#include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/DistanceNodeCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 
 // Qt
@@ -305,7 +306,7 @@ void DualWaySplitter::_addConnector(long /*nodeId*/)
 //            angle = toRadians(360) - angle;
 //          }
 //
-//          if (other->getTags()["hoot:stub"] == "true")
+//          if (other->getTags()[MetadataTags::HootStub()] == "true")
 //          {
 //            map->removeWay(other);
 //          }
@@ -363,7 +364,7 @@ void DualWaySplitter::_createStub(shared_ptr<Way> /*dividedWay*/, long /*centerN
 //  stub->addNode(endNode->getId());
 //  stub->addNode(nodeId);
 //  stub->setTags(_way->getTags());
-//  stub->setTag("hoot:stub", "true");
+//  stub->setTag(MetadataTags::HootStub(), "true");
 //  map->addWay(stub);
 }
 

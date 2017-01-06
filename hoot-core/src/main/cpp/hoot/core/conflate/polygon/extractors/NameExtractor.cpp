@@ -35,6 +35,7 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -87,7 +88,7 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 //    LOG_INFO("target: " << target->toString());
 //    LOG_INFO("candidate: " << candidate->toString());
 
-//    if (candidate->getTags()["REF2"].contains(target->getTags()["REF1"]))
+//    if (candidate->getTags()[MetadataTags::Ref2()].contains(target->getTags()[MetadataTags::Ref1()]))
 //    {
 //      LOG_INFO(getName() << " | Match: " << score << " | " <<
 //               target->getTags().getNames().join(";") << " | " <<

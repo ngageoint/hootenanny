@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -74,7 +74,7 @@ class PermuteGridCalculator
    */
    void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-   void setCsmParameters(double beta, double D) { _beta = beta; _D = D; }
+   void setCsmParameters(double D) { _D = D; }
 
     /**
    * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
@@ -90,7 +90,6 @@ class PermuteGridCalculator
 
     protected:
 
-      double _beta;
       Meters _sigmaRx, _sigmaRy;
 
       Meters _D;

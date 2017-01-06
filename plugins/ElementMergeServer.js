@@ -1,7 +1,5 @@
 /************************************************************************
-This is Node js implementation of Hoot Poi to Poi merge Server.
-The purpose of this module is to provide the hoot-ui fast way
-to merge Poi to Poi.
+This is a nodejs integration with Hootenanny element merging logic.
 ************************************************************************/
 var http = require('http');
 var url = require('url');
@@ -54,14 +52,14 @@ if (require.main === module) {
     } else {
         // We create child process http server
         // and we all listen on serverPort
-        http.createServer(P2Pserver).listen(serverPort);
+        http.createServer(ElementMergeserver).listen(serverPort);
     }
 } else {
     //I'm being called from a mocha test
-    http.createServer(P2Pserver);
+    http.createServer(ElementMergeserver);
 }
 
-function P2Pserver(request, response) {
+function ElementMergeserver(request, response) {
     try {
         var header = {'Accept': 'text/xml', 'Content-Type': 'text/xml', 'Access-Control-Allow-Origin': '*'};
         if (request.method === 'POST') {
@@ -110,14 +108,14 @@ function P2Pserver(request, response) {
 
 function handleInputs(params) {
     switch(params.path) {
-        case '/p2pmerge':
-            return mergeP2P(params);
+        case '/elementmerge':
+            return mergeElement(params);
         default:
             throw new Error('Not found');
     }
 };
 
-var mergeP2P = function(payload)
+var mergeElement = function(payload)
 {
     if (payload.method === 'POST') {
         return postHandler(payload.osm);
@@ -133,8 +131,21 @@ var postHandler = function(data)
     var map = new hoot.OsmMap();
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);
-    var script = 'PoiGeneric.js';
-    var mergedMap = hoot.poiMerge(script, map, -1);
+
+    //Using a simple check here to determine whether the POI/POI merge service or
+    //the POI/Poly merge service should be used (only two that currently exist).  Possibly as
+    //more types of element merging are provided by this service, this check will need to become 
+    //more robust.
+    var mergedMap;
+    if (data.indexOf('<way') === -1 && data.indexOf('<relation') === -1) {
+      var script = 'PoiGeneric.js';
+      mergedMap = hoot.poiMerge(script, map, -1);
+    } else {
+      //Unlike the hoot POI/POI merger which allows for merging more than two elements, the POI/poly 
+      //merger always expects exactly two elements.
+      mergedMap = hoot.poiPolyMerge(map);
+    }
+
     var xml = hoot.OsmWriter.toString(mergedMap);
 
     return xml;
@@ -142,5 +153,5 @@ var postHandler = function(data)
 
 if (typeof exports !== 'undefined') {
     exports.handleInputs = handleInputs;
-    exports.P2Pserver = P2Pserver;
+    exports.ElementMergeserver = ElementMergeserver;
 }

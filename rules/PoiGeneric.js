@@ -13,7 +13,7 @@ exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
 
-hoot.Settings.set({"ogr.log.limit":1000});
+hoot.Settings.set({"log.identical.message.limit":1000});
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());

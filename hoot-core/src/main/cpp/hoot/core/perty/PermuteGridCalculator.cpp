@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,15 +26,13 @@
  */
 #include "PermuteGridCalculator.h"
 
-// hoot
-
 
 namespace hoot
 {
 
 QString PermuteGridCalculator::toString()
 {
-  return "_beta: " + QString::number(_beta) + ", _D: " + QString::number(_D) + ", _gridSpacing: " +
+  return "_D: " + QString::number(_D) + ", _gridSpacing: " +
     QString::number(_gridSpacing) + ", _seed: " + QString::number(_seed) +
     ", _sigmaRx: " + QString::number(_sigmaRx) + ", _sigmaRy: " + QString::number(_sigmaRy) +
     ", _sigmaSx: " + QString::number(_sigmaSx) + ", _sigmaSy: " + QString::number(_sigmaSy);

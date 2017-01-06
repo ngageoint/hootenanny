@@ -66,9 +66,9 @@ public final class HootProperties {
     public static final String TEMP_OUTPUT_PATH;
     public static final String WFS_STORE_CONN_NAME;
     public static final String WFS_STORE_DB;
-    public static final String P_2_P_SERVER_PORT;
-    public static final String P_2_P_SERVER_THREAD_COUNT;
-    public static final String P_2_P_SERVER_SCRIPT;
+    public static final String ELEMENT_MERGE_SERVER_PORT;
+    public static final String ELEMENT_MERGE_SERVER_THREAD_COUNT;
+    public static final String ELEMENT_MERGE_SERVER_SCRIPT;
     public static final String TRANSLATION_SERVER_PORT;
     public static final String TRANSLATION_SERVER_THREAD_COUNT;
     public static final String TRANSLATION_SERVER_SCRIPT;
@@ -176,9 +176,9 @@ public final class HootProperties {
         TEMP_OUTPUT_PATH = getProperty("tempOutputPath");
         WFS_STORE_CONN_NAME = getProperty("wfsStoreConnName");
         WFS_STORE_DB = getProperty("wfsStoreDb");
-        P_2_P_SERVER_PORT = getProperty("P2PServerPort");
-        P_2_P_SERVER_THREAD_COUNT = getProperty("P2PServerThreadCount");
-        P_2_P_SERVER_SCRIPT = getProperty("P2PServerScript");
+        ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
+        ELEMENT_MERGE_SERVER_THREAD_COUNT = getProperty("ElementMergeServerThreadCount");
+        ELEMENT_MERGE_SERVER_SCRIPT = getProperty("ElementMergeServerScript");
         TRANSLATION_SERVER_PORT = getProperty("translationServerPort");
         TRANSLATION_SERVER_THREAD_COUNT = getProperty("translationServerThreadCount");
         TRANSLATION_SERVER_SCRIPT = getProperty("translationServerScript");
