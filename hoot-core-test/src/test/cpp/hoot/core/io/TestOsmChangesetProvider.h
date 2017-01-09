@@ -49,15 +49,24 @@ namespace hoot
  * Implementation of ChangeSetProvider that psuedo-randomly creates, modifies, and deletes
  * nodes, ways, and relations for use with both the SQL and OSM changeset writers.
  */
-class SqlTestChangesetProvider : public ChangeSetProvider
+class TestOsmChangesetProvider : public ChangeSetProvider
 {
 public:
-  SqlTestChangesetProvider() : _ctr(0), _max(10), _node(0), _way(0), _rel(0)
+  /**
+   * Constructor
+   *
+   * @param useCoordScale SQL changeset provider uses the ApiDb::COORDINATE_SCALE
+   *  while the OSM changeset does not
+   */
+  TestOsmChangesetProvider(bool useCoordScale)
+    : _ctr(0), _max(10), _node(0), _way(0), _rel(0), _coordinateScale(1.0)
   {
     Random::instance()->seed(0);
+    if (useCoordScale)
+      _coordinateScale = ApiDb::COORDINATE_SCALE;
   }
 
-  ~SqlTestChangesetProvider() { }
+  ~TestOsmChangesetProvider() { }
 
   boost::shared_ptr<OGRSpatialReference> getProjection() const
   {
@@ -73,8 +82,7 @@ public:
     Change change;
     change.type = (Change::ChangeType)(Random::instance()->generateInt() % 3);
 
-    ElementType::Type element_type = (ElementType::Type)(Random::instance()->generateInt() % 3);
-    switch (element_type)
+    switch ((ElementType::Type)(Random::instance()->generateInt() % 3))
     {
     default:
     case ElementType::Node:
@@ -115,14 +123,15 @@ public:
   }
 
 private:
-  double getLat() { return (Random::instance()->generateInt() % 180 -  90.0) / ApiDb::COORDINATE_SCALE; }
-  double getLon() { return (Random::instance()->generateInt() % 360 - 180.0) / ApiDb::COORDINATE_SCALE; }
+  double getLat() { return (Random::instance()->generateInt() % 180 -  90.0) / _coordinateScale; }
+  double getLon() { return (Random::instance()->generateInt() % 360 - 180.0) / _coordinateScale; }
 
   int _ctr;
   int _max;
   int _node;
   int _way;
   int _rel;
+  double _coordinateScale;
 
 };
 

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include "OsmChangesetTestProvider.h"
+#include "TestOsmChangesetProvider.h"
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmChangesetXmlFileWriter.h>
@@ -56,7 +56,7 @@ public:
 
   void runSimpleTest()
   {
-    shared_ptr<ChangeSetProvider> changesetProvider(new SqlTestChangesetProvider());
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
     OsmChangesetXmlFileWriter().write(
       "test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc", changesetProvider);
@@ -68,23 +68,26 @@ public:
 
   void runSplitTest()
   {
-    shared_ptr<ChangeSetProvider> changesetProvider(new SqlTestChangesetProvider());
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
     OsmChangesetXmlFileWriter writer;
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
-//    writer.setConfiguration(testSettings);
+    writer.setConfiguration(testSettings);
     writer.write(
       "test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc", changesetProvider);
 
     HOOT_STR_EQUALS(
       TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"),
       TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"));
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"),
+      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "current");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "quick");
 
 }
 

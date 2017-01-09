@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include "OsmChangesetTestProvider.h"
+#include "TestOsmChangesetProvider.h"
 #include "ServicesDbTestUtils.h"
 
 #include <hoot/core/io/OsmChangesetSqlFileWriter.h>
@@ -66,7 +66,7 @@ public:
   void runBasicTest()
   {
     QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
-    shared_ptr<ChangeSetProvider> changesetProvider(new SqlTestChangesetProvider());
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -86,7 +86,7 @@ public:
   void runSplitTest()
   {
     QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
-    shared_ptr<ChangeSetProvider> changesetProvider(new SqlTestChangesetProvider());
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -108,7 +108,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "current");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "quick");
 
 }
