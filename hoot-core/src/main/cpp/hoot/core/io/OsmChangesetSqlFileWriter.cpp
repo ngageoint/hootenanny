@@ -38,8 +38,11 @@
 namespace hoot
 {
 
-OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
-_changesetId(0)
+OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url)
+  : _changesetId(0),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+    _changesetUserId(ConfigOptions().getChangesetUserId()),
+    _changesetGenerateNewIds(ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
 {
   _db.open(url);
 }
@@ -90,7 +93,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 
     changes++;
 
-    if (changes > ConfigOptions().getChangesetMaxSize())
+    if (changes > _changesetMaxSize)
     {
       _updateChangeset(changes);
       _createChangeSet();
@@ -132,7 +135,7 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
             "(%2, %3, %4, %4);\n")
       .arg(ApiDb::getChangesetsTableName())
       .arg(_changesetId)
-      .arg(ConfigOptions().getChangesetUserId())
+      .arg(_changesetUserId)
       .arg(OsmApiDb::TIMESTAMP_FUNCTION)
     .toUtf8());
   _outputSql.write(
@@ -176,14 +179,10 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   ElementPtr changeElement = _getChangeElement(element);
 
   long id;
-  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
-  {
+  if (_changesetGenerateNewIds)
     id = _db.getNextId(element->getElementType().getEnum());
-  }
   else
-  {
     id = changeElement->getId();
-  }
 
   changeElement->setId(id);
   changeElement->setVersion(1);
@@ -588,6 +587,12 @@ void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QStrin
       .arg(idFieldName)
       .arg(id))
     .toUtf8());
+}
+
+void OsmChangesetSqlFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _changesetMaxSize = co.getChangesetMaxSize();
 }
 
 }

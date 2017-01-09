@@ -39,10 +39,10 @@
 namespace hoot
 {
 
-/// @todo this writer isn't set up to honor ConfigOptions().getChangesetMaxSize()
 OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
+  : _precision(ConfigOptions().getWriterPrecision()),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize())
 {
-  _precision = ConfigOptions().getWriterPrecision();
 }
 
 void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
@@ -279,6 +279,13 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
   }
 
   writer.writeEndElement();
+}
+
+void OsmChangesetXmlFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _precision = co.getWriterPrecision();
+  _changesetMaxSize = co.getChangesetMaxSize();
 }
 
 }

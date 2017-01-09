@@ -34,6 +34,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QUrl>
@@ -49,7 +50,7 @@ namespace hoot
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
  */
-class OsmChangesetSqlFileWriter
+class OsmChangesetSqlFileWriter : public Configurable
 {
 
 public:
@@ -64,6 +65,13 @@ public:
    * @param changesetProvider changeset data
    */
   void write(const QString path, ChangeSetProviderPtr changesetProvider);
+
+  /**
+   * Set the configuration settings
+   *
+   * @param conf Settings object containing updated value for changeset.max.size setting
+   */
+  virtual void setConfiguration(const Settings &conf);
 
 private:
 
@@ -101,6 +109,11 @@ private:
 
   long _changesetId;
   Envelope _changesetBounds;
+
+  /** Settings from the config file */
+  long _changesetMaxSize;
+  double _changesetUserId;
+  bool _changesetGenerateNewIds;
 
   friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 
