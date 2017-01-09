@@ -48,6 +48,11 @@ public:
 
   DeriveChangesetCmd() { }
 
+  ~DeriveChangesetCmd()
+  {
+    _hootApiDb.close();
+  }
+
   virtual QString getName() const { return "derive-changeset"; }
 
   virtual int runSimple(QStringList args)
@@ -122,22 +127,29 @@ public:
     }
     else
     {
-      assert (!osmApiDbUrl.isEmpty());
+      assert(!osmApiDbUrl.isEmpty());
+      LOG_DEBUG(osmApiDbUrl);
       OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
 
-    //write the output file name to the job status detail call for later retrieval
+    //write the output file name to the job status detail col for later retrieval
     if (writeJobStatus)
     {
       assert(!hootApiDbUrl.isEmpty() && !jobId.isEmpty());
-      HootApiDb hootApiDb;
-      hootApiDb.open(hootApiDbUrl);
-      hootApiDb.writeJobStatus(jobId, output);
-      hootApiDb.close();
+      LOG_DEBUG(
+        "Associating changeset file: " << output << " with services job ID: " << jobId < "...");
+      LOG_VARD(hootApiDbUrl);
+      _hootApiDb.open(QUrl(hootApiDbUrl));
+      _hootApiDb.writeJobStatus(jobId, output);
     }
 
     return 0;
   }
+
+private:
+
+  HootApiDb _hootApiDb;
+
 };
 
 HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)

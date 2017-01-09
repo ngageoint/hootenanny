@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -55,10 +56,10 @@ import hoot.services.utils.XmlDocumentBuilder;
 
 
 /**
- * Derives an XML changeset
+ * Derives an OSM XML changeset (.osc)
  * 
- * Keeping this logic separate from that of ChangesetResource since its is not part of the OSM 
- * web API and ChangesetResource contains all OSM API functions.
+ * Keeping this logic separate from that of ChangesetResource since it is not part of the official 
+ * OSM API and ChangesetResource currently contains only OSM API functions.
  */
 @Controller
 @Path("/changeset")
@@ -71,7 +72,7 @@ public class DeriveChangesetResource extends JobControllerBase {
     }
 
     /**
-     * Derives a diff between two OSM datasets, where one is the source and the other a 
+     * Derives a diff between two OSM datasets, where one dataset is the source and the other a 
      * target, in the form of an OSM XML changeset.
      * 
      * @param input1 path to the first input dataset
@@ -108,7 +109,7 @@ public class DeriveChangesetResource extends JobControllerBase {
             commandArgs.add(arg);
         }
         catch (Exception e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Error deriving changeset").build());
+            throw new WebApplicationException(e, Response.serverError().entity("Error deriving changeset for inputs: " + input1 + ", " + input2).build());
         }
 
         return new JobId(jobId);
@@ -128,14 +129,22 @@ public class DeriveChangesetResource extends JobControllerBase {
     public Response get(@PathParam("jobId") String jobId) {
         
         Document responseDoc = null;
+        String changesetFileName = null;
         try {
             JobStatusManager jobStatusManager = new JobStatusManager();
             JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
-            String changesetFileName = jobStatus.getStatusDetail();
+            if (jobStatus == null)
+            {
+                throw new Exception("Job with ID: " + jobId + " does not exist.");
+            }
+            changesetFileName = jobStatus.getStatusDetail();
             responseDoc = XmlDocumentBuilder.parse(FileUtils.readFileToString(new File(changesetFileName), "UTF-8"));
         }
+        catch (IOException e) {
+            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for job ID=" + jobId + ".  Unable to read changeset temp file at " + changesetFileName + ".").build());
+        }
         catch (Exception e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for ID=" + jobId).build());
+            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for job ID=" + jobId).build());
         }
         return Response.ok(new DOMSource(responseDoc)).build();
     }

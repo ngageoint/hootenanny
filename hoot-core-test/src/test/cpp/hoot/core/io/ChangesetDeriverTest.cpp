@@ -65,7 +65,6 @@ public:
       while (changesetDiff->hasMoreChanges())
       {
         const Change change = changesetDiff->readNextChange();
-        //LOG_VARD(change.toString());
         changeTypeToIds[change.type].append(change.e->getElementId().getId());
       }
 
