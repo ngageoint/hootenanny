@@ -27,10 +27,12 @@
 #ifndef OSMCHANGESETXMLFILEWRITER_H
 #define OSMCHANGESETXMLFILEWRITER_H
 
-#include <hoot/core/io/ChangesetProvider.h>
+// Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 class QXmlStreamWriter;
@@ -45,7 +47,7 @@ namespace hoot
  * would have to be created using the API.  Optionally, after writing this the changeset
  * can be closed via the API.
  */
-class OsmChangesetXmlFileWriter
+class OsmChangesetXmlFileWriter : public Configurable
 {
 
 public:
@@ -58,13 +60,22 @@ public:
 
   void write(QIODevice& d, ChangeSetProviderPtr cs);
 
+  /**
+   * Set the configuration settings
+   *
+   * @param conf Settings object containing updated value for changeset.max.size setting
+   */
+  virtual void setConfiguration(const Settings &conf);
+
+private:
+
   void writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
   void writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
   void writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
 
-private:
-
+  /** Settings from the config file */
   int _precision;
+  long _changesetMaxSize;
 
   Change _change;
 
