@@ -251,6 +251,6 @@ SOURCES += \
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h \
-    src/test/cpp/hoot/core/io/OsmChangesetTestProvider.h
+    src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h
 
 

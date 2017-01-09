@@ -7,7 +7,7 @@
             <tag k="key1" v="value1"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <node id="3" version="0" lat="-0.0000089000000000" lon="0.0000069000000000"/>
+        <node id="3" version="0" lat="-89.0000000000000000" lon="69.0000000000000000"/>
     </modify>
     <delete>
         <way id="2" version="0">
@@ -18,7 +18,7 @@
         </way>
     </delete>
     <create>
-        <node id="6" version="0" lat="0.0000046000000000" lon="-0.0000128000000000"/>
+        <node id="6" version="0" lat="46.0000000000000000" lon="-128.0000000000000000"/>
     </create>
     <delete>
         <relation id="1" version="0">
@@ -27,33 +27,5 @@
             <tag k="key2" v="value2"/>
             <tag k="error:circular" v="15"/>
         </relation>
-        <way id="4" version="0">
-            <nd ref="9"/>
-            <nd ref="10"/>
-            <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-    </delete>
-    <create>
-        <node id="11" version="0" lat="0.0000057000000000" lon="-0.0000031000000000"/>
-    </create>
-    <modify>
-        <way id="5" version="0">
-            <nd ref="12"/>
-            <nd ref="13"/>
-            <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-    </modify>
-    <create>
-        <relation id="2" version="0">
-            <member type="node" ref="14" role="role1"/>
-            <member type="way" ref="6" role="role2"/>
-            <tag k="key2" v="value2"/>
-            <tag k="error:circular" v="15"/>
-        </relation>
-    </create>
-    <delete>
-        <node id="16" version="0" lat="-0.0000044000000000" lon="-0.0000007000000000"/>
     </delete>
 </osmChange>
