@@ -885,7 +885,7 @@ LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
 {
   if (!_vertexMatcher)
   {
-    LOG_INFO("Creating vertex matcher");
+    LOG_INFO("Creating vertex matcher...");
     _vertexMatcher.reset(new LegacyVertexMatcher(_map));
     _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
   }
