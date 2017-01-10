@@ -94,6 +94,11 @@ public:
     else
     {
       shared_ptr<OsmMap> map(new OsmMap());
+
+      // Trying this.
+      conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+      conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+
       loadMap(map, args[0], true, Status::Unknown1);
 
       // Apply any user specified operations.
