@@ -85,6 +85,10 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
+    // This keeps the status and the tags.
+    conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+    conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+
     if (readerFactory.hasElementInputStream(args[0]) &&
         writerFactory.hasElementOutputStream(args[1]) &&
         ConfigOptions().getConvertOps().size() == 0)
@@ -95,7 +99,7 @@ public:
     {
       shared_ptr<OsmMap> map(new OsmMap());
 
-      // Trying this.
+      // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
       conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
