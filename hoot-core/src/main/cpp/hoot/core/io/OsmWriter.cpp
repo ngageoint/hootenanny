@@ -384,50 +384,47 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
     {
       if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
       {
-        if (tit.key() == MetadataTags::HootStatus())
-        {
-          continue;
-        }
-
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
-        writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+
+        if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
+        {
+          if (_textStatus)
+          {
+            writer.writeAttribute("v", w->getStatus().toTextStatus());
+          }
+          else
+          {
+            writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+          }
+        }
+        else
+        {
+          writer.writeAttribute("v", removeInvalidCharacters(tit.value()));
+        }
         writer.writeEndElement();
       }
     }
 
     // Logic: If we already have a "hoot:status" tag, make sure it contains the actual
     // status of the element. See writeNodes for more info
-    if (_textStatus)
+    if (! tags.contains(MetadataTags::HootStatus()))
     {
-      writer.writeStartElement("tag");
-      writer.writeAttribute("k", MetadataTags::HootStatus());
-      writer.writeAttribute("v", w->getStatus().toTextStatus());
-      writer.writeEndElement();
-    }
-    else if (_includeDebug)
-    {
-      writer.writeStartElement("tag");
-      writer.writeAttribute("k", MetadataTags::HootStatus());
-      writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
-      writer.writeEndElement();
-    }
-    else if (tags.contains("hoot:status"))
-    {
-      writer.writeStartElement("tag");
-      writer.writeAttribute("k", MetadataTags::HootStatus());
-      if (w->getStatus() != Status::Invalid)
+      if (_textStatus)
       {
+        writer.writeStartElement("tag");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
+        writer.writeAttribute("v", w->getStatus().toTextStatus());
+        writer.writeEndElement();
+      }
+      else if (_includeDebug)
+      {
+        writer.writeStartElement("tag");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
         writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+        writer.writeEndElement();
       }
-      else
-      {
-        writer.writeAttribute("v", tags["hoot:status"]);
-      }
-
-      writer.writeEndElement();
     }
-
 
     if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
     {
@@ -482,13 +479,15 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
     }
 
     const Tags& tags = r->getTags();
-    bool hasStatus = tags.contains("hoot:status");
+
     for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
     {
       if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", removeInvalidCharacters(tit.key()));
+
+        // Does this need && r->getStatus() != Status::Invalid
         if (tit.key() == MetadataTags::HootStatus())
         {
           if (_textStatus)
@@ -525,30 +524,30 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
       writer.writeEndElement();
     }
 
+    if (! tags.contains(MetadataTags::HootStatus()))
+    {
+      if (_textStatus)
+      {
+        writer.writeStartElement("tag");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
+        writer.writeAttribute("v", r->getStatus().toTextStatus());
+        writer.writeEndElement();
+      }
+      else if (_includeDebug)
+      {
+        writer.writeStartElement("tag");
+        writer.writeAttribute("k", MetadataTags::HootStatus());
+        writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
+        writer.writeEndElement();
+      }
+    }
+
     if (_includeDebug || _includeIds)
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::HootId());
       writer.writeAttribute("v", QString("%1").arg(r->getId()));
       writer.writeEndElement();
-    }
-
-    if (_includeDebug || _textStatus)
-    {
-      if (hasStatus == false)
-      {
-        writer.writeStartElement("tag");
-        writer.writeAttribute("k", MetadataTags::HootStatus());
-        if (_textStatus)
-        {
-          writer.writeAttribute("v", r->getStatus().toTextStatus());
-        }
-        else
-        {
-          writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
-        }
-        writer.writeEndElement();
-      }
     }
 
     writer.writeEndElement();
