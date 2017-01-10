@@ -332,8 +332,11 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
-  //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { node->setStatus(_status); }
+
+  // We want the reader's status to always override any existing status
+  // Unless, we really want to keep the status.
+//    if (_status != Status::Invalid) { node->setStatus(_status); }
+  if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
 
   //LOG_VART(node);
   return node;
