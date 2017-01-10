@@ -596,23 +596,19 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
 
+        LOG_DEBUG("About to parse status");
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(_parseStatus(value));
 
-          if (_keepFileStatus) // Keep the "hoot:status" tag
-          {
-            _element->setTag(key, value);
-          }
+          if (_keepFileStatus)  { _element->setTag(key, value); }
         }
         else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
           shared_ptr<Relation> r = dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
-          if (ConfigOptions().getReaderPreserveAllTags())
-          {
-            _element->setTag(key, value);
-          }
+
+          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
         }
         else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
