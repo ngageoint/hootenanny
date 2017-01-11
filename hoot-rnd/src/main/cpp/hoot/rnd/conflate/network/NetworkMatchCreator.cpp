@@ -140,10 +140,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   LOG_VART(matcher->getMatchThreshold());
   for (int i = 0; i < edgeMatch.size(); i++)
   {
-    LOG_VART(edgeMatch[i]);
+    LOG_VART(edgeMatch[i]->getUid());
+    LOG_VART(edgeMatch[i]->getScore());
+    LOG_VART(edgeMatch[i]->getEdgeMatch());
     /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
+      LOG_TRACE("is match");
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }

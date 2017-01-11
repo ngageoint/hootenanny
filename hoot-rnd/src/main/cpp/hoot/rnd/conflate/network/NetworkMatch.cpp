@@ -63,6 +63,8 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   }
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
+
+  LOG_VART(edgeMatch);
   LOG_VART(score);
   LOG_VART(p);
 
@@ -133,6 +135,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
       if (ip.first == jp.first || ip.second == jp.first ||
         ip.second == jp.first || ip.second == jp.second)
       {
+        LOG_TRACE("conflicting: " << other);
         return true;
       }
     }
