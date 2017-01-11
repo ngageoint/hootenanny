@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -81,7 +81,7 @@ ElementCacheLRU::ElementCacheLRU(const unsigned long maxNodeCount,
   _relations(),
   _relationsIter(_relations.begin())
 {
-  LOG_DEBUG(
+  LOG_TRACE(
     "New LRU cache created, " << _maxNodeCount << " max entries for nodes, " <<
     _maxWayCount << " max entries for ways, " << _maxRelationCount << " max entries for relations.");
 }

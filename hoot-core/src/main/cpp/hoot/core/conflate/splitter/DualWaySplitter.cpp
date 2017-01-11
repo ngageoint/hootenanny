@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -79,12 +79,12 @@ DualWaySplitter::DualWaySplitter()
   if (ConfigOptions().getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
     _drivingSide = DualWaySplitter::Left;
-    LOG_INFO("Assuming drives on left.");
+    LOG_DEBUG("Assuming drives on left.");
   }
   else
   {
     _drivingSide = DualWaySplitter::Right;
-    LOG_INFO("Assuming drives on right.");
+    LOG_DEBUG("Assuming drives on right.");
   }
   _defaultSplitSize = ConfigOptions().getDualWaySplitterSplitSizeDefaultValue();
 }
@@ -247,7 +247,7 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll(shared_ptr<const OsmMap> map, Drivi
 
 shared_ptr<OsmMap> DualWaySplitter::splitAll()
 {
-  LOG_INFO("Splitting divided ways...");
+  //LOG_INFO("Splitting divided ways...");
 
   shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;

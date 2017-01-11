@@ -80,6 +80,8 @@ shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
 {
+  LOG_DEBUG("Creating stub edges...");
+
   if (na == _n1)
   {
     LOG_TRACE("na is n1");
@@ -117,7 +119,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
       // Create stub
       NetworkEdgePtr newStub(new NetworkEdge(va, va, false));
       newStub->addMember(va->getElement());
-      LOG_DEBUG("Adding new edge: " << newStub);
+      LOG_TRACE("Adding new edge: " << newStub);
       na->addEdge(newStub);
     }
   }
@@ -125,6 +127,8 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 
 void ConflictsNetworkMatcher::_removeDupes()
 {
+  LOG_DEBUG("Removing duplicate edges...");
+
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 
@@ -398,6 +402,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
     PROGRESS_INFO(++count << "/" << _scores.size());
+
     double handicap = pow(partialHandicap, em->countPartialMatches());
     LOG_VART(em);
     LOG_VART(handicap);
