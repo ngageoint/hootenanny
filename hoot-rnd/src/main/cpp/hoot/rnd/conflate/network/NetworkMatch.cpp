@@ -48,6 +48,7 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   {
     // Send the score through a logistic function to keep the values in range. These values are
     // arbitrary and may need tweaking.
+
     // steepness
     double k = 2.0;
     // max value

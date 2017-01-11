@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,6 +41,8 @@ NetworkMatcher::~NetworkMatcher()
 
 void NetworkMatcher::_createEdge2Index()
 {
+  LOG_DEBUG("Creating edge index...");
+
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
   shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
