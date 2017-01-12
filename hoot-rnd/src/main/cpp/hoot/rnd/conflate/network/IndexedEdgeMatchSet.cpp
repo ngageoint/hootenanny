@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -87,7 +87,7 @@ shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
   {
     ConstEdgeMatchPtr em = it.key();
     ConstNetworkVertexPtr from1, from2, to1, to2;
-    LOG_VAR(em);
+    LOG_VART(em);
     from1 = em->getString1()->getFromVertex();
     to1 = em->getString1()->getToVertex();
     from2 = em->getString2()->getFromVertex();
