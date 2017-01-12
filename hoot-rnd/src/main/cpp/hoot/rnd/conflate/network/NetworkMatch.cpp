@@ -48,6 +48,7 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   {
     // Send the score through a logistic function to keep the values in range. These values are
     // arbitrary and may need tweaking.
+
     // steepness
     double k = 2.0;
     // max value
@@ -62,6 +63,8 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   }
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
+
+  LOG_VART(edgeMatch);
   LOG_VART(score);
   LOG_VART(p);
 
@@ -132,6 +135,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
       if (ip.first == jp.first || ip.second == jp.first ||
         ip.second == jp.first || ip.second == jp.second)
       {
+        LOG_TRACE("conflicting: " << other);
         return true;
       }
     }

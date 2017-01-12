@@ -339,22 +339,21 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
 {
   SublineCache result;
 
-  Meters srh = ConfigOptions().getSearchRadiusHighway();
-  double sr = srh <= 0.0 ? getSearchRadius(w1, w2) : srh;
+  Meters searchRadiusHighway = ConfigOptions().getSearchRadiusHighway();
+  double searchRadius = searchRadiusHighway <= 0.0 ? getSearchRadius(w1, w2) : searchRadiusHighway;
 
   // Gonna round this up to the nearest whole
   // If this doesn't work out, consider adding some rounding or slop or whatever to
   // WayLocation::move(Meters distance) [which is, like, 7 layers deeper in the onion]
-  sr = ceil(sr); // fixes conflicts/highway-021
-  LOG_VART(srh);
-  LOG_VART(sr);
+  searchRadius = ceil(searchRadius); // fixes conflicts/highway-021
+  LOG_VART(searchRadiusHighway);
+  LOG_VART(searchRadius);
 
   //_sublineMatcher->setMinSplitSize(sr / 2.0);
   // calculated the shared sublines
-  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, sr);
+  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
 
   MatchClassification c;
-  LOG_VART(sr);
   LOG_VART(sublineMatch);
   if (sublineMatch.isValid())
   {

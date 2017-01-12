@@ -497,6 +497,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 {
   bool result = false;
   double score = _scoreMatch(em);
+  LOG_VART(score);
   if (score > 0)
   {
     LOG_TRACE("Recording match: " << em);
