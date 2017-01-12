@@ -901,7 +901,7 @@ generally not changed by users. Reasonable range is (0, ~2].
 === network.conflicts.stub.through.weighting
 
 * Data Type: double
-* Default Value: `0.59`
+* Default Value: `0.32`
 
 A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors when
 using network conflation.  Higher values will reduce that contribution. Reasonable range is [0, ~10].

@@ -127,8 +127,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
     // If any of the partial matches overlap, then mark them all for review.
     else
     {
-      //double sum = 0.0;
-      //QStringList scores;
       LOG_VART(matches.size());
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
@@ -142,11 +140,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
         }
 
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
-        //scores << QString::number(m->getProbability());
-        //sum += m->getScore();
-        //ConstEdgeStringPtr s1 = m->getEdgeMatch()->getString1();
-        //ConstEdgeStringPtr s2 = m->getEdgeMatch()->getString2();
-
         mergers.push_back(
           new MarkForReviewMerger(
             eids,
