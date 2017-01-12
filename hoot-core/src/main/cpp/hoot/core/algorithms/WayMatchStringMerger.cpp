@@ -327,11 +327,17 @@ void WayMatchStringMerger::_rebuildWayString2()
     assert(w2);
     if (_sublineMappingOrder[i]->getStart2() <= _sublineMappingOrder[i]->getEnd2())
     {
-      ws2->append(WaySubline(WayLocation(_map, w2, 0.0), WayLocation::createAtEndOfWay(_map, w2)));
+      //ws2->append(WaySubline(WayLocation(_map, w2, 0.0), WayLocation::createAtEndOfWay(_map, w2)));
+
+      // NOTE: This may or may not be a good idea. This version of append forces.
+      ws2->append(w2, _map, false);
     }
     else
     {
-      ws2->append(WaySubline(WayLocation::createAtEndOfWay(_map, w2), WayLocation(_map, w2, 0.0)));
+      //ws2->append(WaySubline(WayLocation::createAtEndOfWay(_map, w2), WayLocation(_map, w2, 0.0)));
+
+      // NOTE: This may or may not be a good idea. This version of append forces.
+      ws2->append(w2, _map, true);
     }
   }
 

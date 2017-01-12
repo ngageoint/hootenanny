@@ -48,6 +48,9 @@ public:
   WayString();
 
   void append(const WaySubline& subline);
+  void append(WayPtr w, OsmMapPtr map, bool reverse = false);
+  static bool areContiguous(const WaySubline& s1, const WaySubline& s2);
+  bool isOK();
 
   WaySubline& at(int i) { return _sublines[i]; }
 

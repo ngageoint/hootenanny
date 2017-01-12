@@ -94,6 +94,86 @@ void WayString::append(const WaySubline& subline)
   _sublines.append(subline);
 }
 
+void WayString::append(WayPtr w, OsmMapPtr map, bool reverse)
+{
+  WaySubline subline;
+  if (!reverse)
+    subline = WaySubline(WayLocation(map, w, 0.0), WayLocation::createAtEndOfWay(map, w));
+  else
+    subline = WaySubline(WayLocation::createAtEndOfWay(map, w), WayLocation(map, w, 0.0));
+
+  if (_sublines.size() > 0)
+  {
+    if (back().getWay() == subline.getWay() &&
+      back().getEnd() != subline.getStart())
+    {
+      LOG_VART(back());
+      LOG_VART(subline);
+      throw IllegalArgumentException("All consecutive ways must connect end to start in a "
+        "WayString.");
+    }
+    else
+    {
+      if (subline.getStart().isExtreme(WayLocation::SLOPPY_EPSILON) == false ||
+        back().getEnd().isExtreme(WayLocation::SLOPPY_EPSILON) == false)
+      {
+        throw IllegalArgumentException("If ways are different they must connect at an extreme "
+          "node.");
+      }
+      if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
+        subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
+      {
+        // NOTE: This may or may not be a good idea
+        // Add a node to fix it up
+        w->addNode(subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getId());
+        LOG_WARN("Adding Node ("
+                 << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getId()
+                 << ") To Way (" << w->getId() << ")");
+        //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+      }
+    }
+  }
+  _sublines.append(subline);
+}
+
+// MICAH HERE //
+bool WayString::areContiguous(const WaySubline& s1, const WaySubline& s2)
+{
+  if (s1.getWay() == s2.getWay() &&
+    s1.getEnd() != s2.getStart())
+  {
+    return false;
+  }
+  else
+  {
+    if (s2.getStart().isExtreme(WayLocation::SLOPPY_EPSILON) == false ||
+        s1.getEnd().isExtreme(WayLocation::SLOPPY_EPSILON) == false)
+    {
+      return false;
+    }
+    if (s1.getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
+        s2.getStart().getNode(WayLocation::SLOPPY_EPSILON))
+    {
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
+bool WayString::isOK()
+{
+  for (int i = 0; i < _sublines.size()-1; ++i)
+  {
+    if (!areContiguous(_sublines[i], _sublines[i+1]))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 WayLocation WayString::calculateLocationFromStart(Meters distance, ElementId preferredEid) const
 {
   if (distance <= 0.0)
