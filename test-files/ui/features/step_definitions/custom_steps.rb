@@ -507,11 +507,19 @@ When(/^I close the UI alert$/) do
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
-  page.first('div.big.data').click
-  swatch = find('a[data-color="' + color + '"')
+  page.first('div[id^="viewicon"]').click
+  swatch = page.first('a[data-color="' + color + '"')
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
   expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+end
+
+When(/^I change the secondary layer color to ([^"]*)$/) do |color|
+  page.all('div[id^="viewicon"]').last.click
+  swatch = page.all('a[data-color="' + color + '"').last
+  rgb = swatch.native.css_value('background').split(")").first + ')'
+  swatch.click
+  expect(page.all('path.stroke.tag-hoot').last.native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|

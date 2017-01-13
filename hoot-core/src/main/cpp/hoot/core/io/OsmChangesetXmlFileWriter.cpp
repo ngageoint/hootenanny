@@ -34,95 +34,113 @@
 
 // Qt
 #include <QFile>
+#include <QFileInfo>
 #include <QXmlStreamWriter>
 
 namespace hoot
 {
 
-/// @todo this writer isn't set up to honor ConfigOptions().getChangesetMaxSize()
 OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
+  : _precision(ConfigOptions().getWriterPrecision()),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize())
 {
-  _precision = ConfigOptions().getWriterPrecision();
 }
 
 void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
 {
-  LOG_INFO("Writing changeset to " << path);
+  QFileInfo info(path);
+  info.setCaching(false);
+  QString file = info.baseName();
+  QString dir = info.path();
+  QString ext = info.completeSuffix();
+  int fileCount = 0;
 
-  QFile f;
-  f.setFileName(path);
-  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
-  }
-
-  write(f, cs);
-
-  f.close();
-}
-
-void OsmChangesetXmlFileWriter::write(QIODevice &d, ChangeSetProviderPtr cs)
-{
-  QXmlStreamWriter writer(&d);
-  writer.setCodec("UTF-8");
-  writer.setAutoFormatting(true);
-  writer.writeStartDocument();
-
-  writer.writeStartElement("osmChange");
-  writer.writeAttribute("version", "0.6");
-  writer.writeAttribute("generator", "hootenanny");
-
-  Change::ChangeType last = Change::Unknown;
+  QString filepath = path;
 
   while (cs->hasMoreChanges())
   {
-    _change = cs->readNextChange();
-    LOG_VARD(_change.toString());
-    if (_change.type != last)
+    long changesetProgress = 1;
+    //  Create a new filepath if the file is split in multiple files because of the changeset.max.size setting
+    //   i.e. <filepath>/<filename>-001.<ext>
+    if (fileCount > 0)
+      filepath = QString("%1/%2-%3.%4").arg(dir).arg(file).arg(fileCount, 3, 10, QChar('0')).arg(ext);
+
+    LOG_INFO("Writing changeset to " << filepath);
+
+    QFile f;
+    f.setFileName(filepath);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-      if (last != Change::Unknown)
+      throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
+    }
+
+    QXmlStreamWriter writer(&f);
+    writer.setCodec("UTF-8");
+    writer.setAutoFormatting(true);
+    writer.writeStartDocument();
+
+    writer.writeStartElement("osmChange");
+    writer.writeAttribute("version", "0.6");
+    writer.writeAttribute("generator", "hootenanny");
+
+    Change::ChangeType last = Change::Unknown;
+
+    while (cs->hasMoreChanges() && changesetProgress <= _changesetMaxSize)
+    {
+      _change = cs->readNextChange();
+      LOG_VARD(_change.toString());
+      if (_change.type != last)
       {
-        writer.writeEndElement();
+        if (last != Change::Unknown)
+        {
+          writer.writeEndElement();
+        }
+        switch (_change.type)
+        {
+          case Change::Create:
+            writer.writeStartElement("create");
+            break;
+          case Change::Delete:
+            writer.writeStartElement("delete");
+            break;
+          case Change::Modify:
+            writer.writeStartElement("modify");
+            break;
+          default:
+            throw IllegalArgumentException("Unexepected change type.");
+        }
+        last = _change.type;
       }
-      switch (_change.type)
+
+      switch (_change.e->getElementType().getEnum())
       {
-        case Change::Create:
-          writer.writeStartElement("create");
+        case ElementType::Node:
+          writeNode(writer, dynamic_pointer_cast<const Node>(_change.e));
           break;
-        case Change::Delete:
-          writer.writeStartElement("delete");
+        case ElementType::Way:
+          writeWay(writer, dynamic_pointer_cast<const Way>(_change.e));
           break;
-        case Change::Modify:
-          writer.writeStartElement("modify");
+        case ElementType::Relation:
+          writeRelation(writer, dynamic_pointer_cast<const Relation>(_change.e));
           break;
         default:
-          throw IllegalArgumentException("Unexepected change type.");
+          throw IllegalArgumentException("Unexpected element type.");
       }
-      last = _change.type;
+      //  Increment the changeset progress
+      changesetProgress++;
     }
 
-    switch (_change.e->getElementType().getEnum())
+    if (last != Change::Unknown)
     {
-      case ElementType::Node:
-        writeNode(writer, dynamic_pointer_cast<const Node>(_change.e));
-        break;
-      case ElementType::Way:
-        writeWay(writer, dynamic_pointer_cast<const Way>(_change.e));
-        break;
-      case ElementType::Relation:
-        writeRelation(writer, dynamic_pointer_cast<const Relation>(_change.e));
-        break;
-      default:
-        throw IllegalArgumentException("Unexpected element type.");
+      writer.writeEndElement();
     }
-  }
-
-  if (last != Change::Unknown)
-  {
     writer.writeEndElement();
+    writer.writeEndDocument();
+
+    f.close();
+    //  Increment the file number if needed for split files
+    fileCount++;
   }
-  writer.writeEndElement();
-  writer.writeEndDocument();
 }
 
 void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
@@ -279,6 +297,13 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
   }
 
   writer.writeEndElement();
+}
+
+void OsmChangesetXmlFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _precision = co.getWriterPrecision();
+  _changesetMaxSize = co.getChangesetMaxSize();
 }
 
 }
