@@ -111,7 +111,6 @@ public:
       settings.set("uuid.helper.repeatable", "true");
       settings.set("writer.include.debug", "true");
       settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
-      //settings.set("conflate.add.scores.tags", "false");
 
       TempFileName temp;
       LOG_VARW(temp.getFileName());
@@ -119,6 +118,7 @@ public:
 
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
 
+      const int testCount = suite.getChildTestCount() - 1;
       int failures = 0;
 
       for (int i = 0; i < suite.getChildTestCount(); ++i)
@@ -126,8 +126,9 @@ public:
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
         const QString testName = QString::fromStdString(test->getName());
 
-        // TODO: this one fails due to review score tag values
-        if (testName.contains("highway-009"))
+        if (testName.contains("highway-009") //TODO: fails due to review score tag values
+            //|| testName.contains("highway-008")
+            )
         {
           continue;
         }
@@ -147,9 +148,9 @@ public:
       }
 
       LOG_VARW(failures);
-      LOG_VARW(suite.getChildTestCount());
+      LOG_VARW(testCount);
 
-      return (double)failures / (double)suite.getChildTestCount();
+      return (double)failures / (double)testCount;
     }
   };
 
@@ -158,41 +159,40 @@ public:
     StateDescriptionPtr desc(new StateDescription());
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
-        VariableDescription::Real, 0.2, 0.2)); //default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.2, 0.2)); //default
+        VariableDescription::Real, 0.0, 2.0)); //min/max
         //VariableDescription::Real, 0.2, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
-        // value of 0.5 here gives good results in test highway-008
-        VariableDescription::Real, .86, .86)); //default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, .86, .86)); //default
+        VariableDescription::Real, 0.0, 2.0)); //min/max
         //VariableDescription::Real, 0.5, 0.86));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        VariableDescription::Real, 4.4, 4.4)); //default
-        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        //VariableDescription::Real, 4.4, 4.4)); //default
+        VariableDescription::Real, 0.0, 10.0)); //min/max
         //VariableDescription::Real, 2.0, 6.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
-        VariableDescription::Real, 0.0, 0.0)); //default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.0, 0.0)); //default
+        VariableDescription::Real, 0.0, 2.0)); //min/max
         //VariableDescription::Real, 0.0, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        VariableDescription::Real, 0.0, 0.0)); //default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.0, 0.0)); //default
+        VariableDescription::Real, 0.0, 2.0)); //min/max
         //VariableDescription::Real, 0.0, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
         //VariableDescription::Real, 0.32, 0.32)); //default
-        //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 0.32, 0.75));
+        VariableDescription::Real, 0.0, 10.0)); //min/max
+        //VariableDescription::Real, 0.32, 0.75));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
-//#error modify fitness function to give variable failure based on the number of reviews
+    //TODO: modify fitness function to give variable failure based on the number of reviews
     sa.setPickFromBestScores(true);
-    sa.iterate(20);
+    sa.iterate(50);
 
     foreach (ConstStatePtr state, sa.getBestStates())
     {
