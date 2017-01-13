@@ -143,6 +143,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_VART(edgeMatch[i]->getUid());
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
+
     /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
