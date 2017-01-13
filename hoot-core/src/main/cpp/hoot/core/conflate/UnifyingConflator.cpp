@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,6 +40,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // standard
 #include <algorithm>
@@ -80,9 +81,9 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 {
   Tags& tags = e->getTags();
 
-  tags.appendValue(reviewScoreKey(), mc.getReviewP());
-  tags.appendValue(matchScoreKey(), mc.getMatchP());
-  tags.appendValue(missScoreKey(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
 void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
@@ -104,8 +105,8 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
 
           _addScoreTags(e1, mc);
           _addScoreTags(e2, mc);
-          e1->getTags().appendValue(scoreUuidKey(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(scoreUuidKey(), e1->getTags().getCreateUuid());
+          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
         }
       }
     }
@@ -136,7 +137,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }
 
-  LOG_DEBUG("Creating matches...");
+  LOG_INFO("Creating matches...");
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -221,6 +222,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //_validateConflictSubset(map, _matches);
 
   LOG_DEBUG("Post constraining match count: " << _matches.size());
+  LOG_INFO("Match count: " << _matches.size());
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
@@ -253,19 +255,18 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
+  LOG_INFO("Applying mergers...");
   vector< pair<ElementId, ElementId> > replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    //LOG_DEBUG("merger: " + _mergers[i]->toString());
+    LOG_DEBUG(
+      "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " << _mergers[i]->toString());
+
     _mergers[i]->apply(map, replaced);
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
-    if (Log::getInstance().getLevel() == Log::Debug)
-    {
-      cout << "Applying mergers: " << i + 1 << " / " << _mergers.size() << "       \r" << flush;
-    }
   }
   if (Log::getInstance().getLevel() == Log::Debug)
   {

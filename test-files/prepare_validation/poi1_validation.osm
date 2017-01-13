@@ -1,44 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618557942462957" lon="-104.8786905089454109">
-        <tag k="poi" v="yes"/>
-        <tag k="leisure" v="park"/>
-        <tag k="name" v="Garden of the Gods"/>
-        <tag k="error:circular" v="1000"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218120797497" lon="-104.8852148410949496">
-        <tag k="poi" v="yes"/>
-        <tag k="leisure" v="park"/>
-        <tag k="name" v="Red Rock Canyon"/>
-        <tag k="error:circular" v="1000"/>
-    </node>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025332214523" lon="-104.9197586162135565">
-        <tag k="place" v="town"/>
-        <tag k="poi" v="yes"/>
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="error:circular" v="2000"/>
-    </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566428667481" lon="-104.9070371581716046">
-        <tag k="place" v="town"/>
-        <tag k="poi" v="yes"/>
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="error:circular" v="1500"/>
-    </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412840235" lon="-104.7869287551585984">
-        <tag k="place" v="city"/>
-        <tag k="poi" v="yes"/>
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="error:circular" v="20000"/>
-    </node>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295816245" lon="-104.7179399970222704">
-        <tag k="note" v="1-d"/>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774040227218" lon="-104.8439481192893510">
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
-        <tag k="error:circular" v="1000"/>
+        <tag k="error:circular" v="50"/>
     </node>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941427828896" lon="-104.7196458819557705">
-        <tag k="note" v="1-e"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860705601636" lon="-104.7174958015344259">
+        <tag k="note" v="1-b"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="200"/>
+    </node>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119273824316" lon="-104.7175564929962519">
+        <tag k="note" v="1-c"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
@@ -51,30 +27,55 @@
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="100"/>
     </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119273824316" lon="-104.7175564929962519">
-        <tag k="note" v="1-c"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941427828896" lon="-104.7196458819557705">
+        <tag k="note" v="1-e"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
     </node>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860705601636" lon="-104.7174958015344259">
-        <tag k="note" v="1-b"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295816245" lon="-104.7179399970222704">
+        <tag k="note" v="1-d"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
-        <tag k="error:circular" v="200"/>
+        <tag k="error:circular" v="1000"/>
     </node>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774040227218" lon="-104.8439481192893510">
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412840235" lon="-104.7869287551585984">
+        <tag k="place" v="city"/>
         <tag k="poi" v="yes"/>
-        <tag k="name" v="Starbucks"/>
-        <tag k="amenity" v="cafe"/>
-        <tag k="error:circular" v="50"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="error:circular" v="20000"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566428667481" lon="-104.9070371581716046">
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="error:circular" v="1500"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025332214523" lon="-104.9197586162135565">
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="error:circular" v="2000"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218120797497" lon="-104.8852148410949496">
+        <tag k="poi" v="yes"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Red Rock Canyon"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618557942462957" lon="-104.8786905089454109">
+        <tag k="poi" v="yes"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Garden of the Gods"/>
+        <tag k="error:circular" v="1000"/>
     </node>
     <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-8" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Validation"/>
+        <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:choices:1" v="{&quot;label&quot;:&quot;Confirmed&quot;,&quot;description&quot;:&quot;You can look at the point and tell what it is (e.g. mosque or airport)&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;confirmed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:2" v="{&quot;label&quot;:&quot;Assessed&quot;,&quot;description&quot;:&quot;The point is on a building, but you can't verify its type (e.g. hair salon).&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;assessed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:3" v="{&quot;label&quot;:&quot;Reported&quot;,&quot;description&quot;:&quot;Imagery is pixelated or cloudy -- can not be assessed.&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;reported&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
@@ -86,6 +87,7 @@
         <member type="node" ref="-9" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Validation"/>
+        <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:choices:1" v="{&quot;label&quot;:&quot;Confirmed&quot;,&quot;description&quot;:&quot;You can look at the point and tell what it is (e.g. mosque or airport)&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;confirmed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:2" v="{&quot;label&quot;:&quot;Assessed&quot;,&quot;description&quot;:&quot;The point is on a building, but you can't verify its type (e.g. hair salon).&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;assessed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:3" v="{&quot;label&quot;:&quot;Reported&quot;,&quot;description&quot;:&quot;Imagery is pixelated or cloudy -- can not be assessed.&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;reported&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
@@ -97,6 +99,7 @@
         <member type="node" ref="-10" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Validation"/>
+        <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:choices:1" v="{&quot;label&quot;:&quot;Confirmed&quot;,&quot;description&quot;:&quot;You can look at the point and tell what it is (e.g. mosque or airport)&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;confirmed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:2" v="{&quot;label&quot;:&quot;Assessed&quot;,&quot;description&quot;:&quot;The point is on a building, but you can't verify its type (e.g. hair salon).&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;assessed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:3" v="{&quot;label&quot;:&quot;Reported&quot;,&quot;description&quot;:&quot;Imagery is pixelated or cloudy -- can not be assessed.&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;reported&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
@@ -108,6 +111,7 @@
         <member type="node" ref="-11" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Validation"/>
+        <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:choices:1" v="{&quot;label&quot;:&quot;Confirmed&quot;,&quot;description&quot;:&quot;You can look at the point and tell what it is (e.g. mosque or airport)&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;confirmed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:2" v="{&quot;label&quot;:&quot;Assessed&quot;,&quot;description&quot;:&quot;The point is on a building, but you can't verify its type (e.g. hair salon).&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;assessed&quot;,&quot;hgis:accuracy&quot;:&quot;high&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>
         <tag k="hoot:review:choices:3" v="{&quot;label&quot;:&quot;Reported&quot;,&quot;description&quot;:&quot;Imagery is pixelated or cloudy -- can not be assessed.&quot;,&quot;changes&quot;:{&quot;replaceTags&quot;:{&quot;hgis:imagery_confirmed&quot;:&quot;reported&quot;},&quot;appendTags&quot;:{&quot;source:geometry&quot;:&quot;${BASEMAP_IMAGE_SOURCE}&quot;,&quot;source:geometry:sensor&quot;:&quot;${BASEMAP_IMAGE_SENSOR}&quot;,&quot;source:geometry:date&quot;:&quot;${BASEMAP_IMAGE_DATETIME}&quot;,&quot;source:geometry:id&quot;:&quot;${BASEMAP_IMAGE_ID}&quot;}}}"/>

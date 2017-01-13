@@ -68,7 +68,7 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
   ElementId result;
 
   long id = oldId.getId();
-  //LOG_VARD(oldId);
+  LOG_VART(oldId);
   switch (oldId.getType().getEnum())
   {
     case ElementType::Node:
@@ -111,7 +111,7 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
       throw IllegalArgumentException("Expected a valid element type, but got: " +
                                      QString::number(oldId.getType().getEnum()));
   }
-  //LOG_VARD(result);
+  LOG_VART(result);
 
   return result;
 }

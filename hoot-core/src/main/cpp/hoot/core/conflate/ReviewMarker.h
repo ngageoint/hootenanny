@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,15 +47,6 @@ class ReviewMarker
 public:
   /// This definition may change over time.
   typedef ElementId ReviewUid;
-
-  /// Should only be used by AddHilbertReviewSortOrder. Please use the ReviewMarker helper methods
-  /// for other operations.
-  static QString reviewSortOrderKey;
-
-  /// This is in place so that we know the original number of members in the review relations in case
-  /// one of them is deleted during the process as a result of a merge.  This information can then
-  /// be used during cleanup of review relations for validity purposes.
-  static QString reviewMemberCountKey;
 
   ReviewMarker();
 
@@ -127,12 +118,6 @@ private:
   // don't use these keys directly, instead call the helper functions above.
   static QString _complexGeometryType;
   static QString _revieweeKey;
-  static QString _reviewUuidKey;
-  static QString _reviewScoreKey;
-  static QString _reviewNeedsKey;
-  static QString _reviewNoteKey;
-  static QString _reviewTypeKey;
-  static QString _reviewChoicesKey;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.

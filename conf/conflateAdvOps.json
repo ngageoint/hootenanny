@@ -198,6 +198,63 @@
     "name": "General Conflation Options",
     "members": [
       {
+        "id": "hoot_poipolygon_conflation",
+        "elem_type": "checkplus",
+        "override":{
+                "elem_type":"checkplus"
+              },
+        "description": "POI to Polygon",
+        "name": "POI to Polygon",
+        "onchange":"true",
+        "defaultvalue": "false",
+        "members": [
+          {
+            "id": "poipolygon_match_creator",
+            "elem_type": "string",
+            "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name": "Match Creator",
+            "required": "true",
+            "defaultvalue": "hoot::PoiPolygonMatchCreator",
+            "override":{"defaultvalue":"hoot::PoiPolygonMatchCreator"},
+            "hoot_key": "match.creators"
+          },
+          {
+            "id": "poipolygon_merger_creator",
+            "elem_type": "string",
+            "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name": "Merger Creator",
+            "required": "true",
+            "defaultvalue": "hoot::PoiPolygonMergerCreator",
+            "override":{"defaultvalue":"hoot::PoiPolygonMergerCreator"},
+            "hoot_key": "merger.creators",
+            "required":"true"
+          }
+        ]
+      },
+      {
+        "id": "frechet_distance",
+        "elem_type": "checkplus",
+        "override":{
+                "elem_type":"checkplus"
+              },
+        "description": "Frechet Distance",
+        "name": "Frechet Distance",
+        "onchange":"true",
+        "defaultvalue": "false",
+        "members": [
+          {
+            "id": "frechet_way_subline_matcher",
+            "elem_type": "string",
+            "description": "The way subline matcher to use when determining matching sublines.",
+            "name": "Way Subline Matcher (Frechet)",
+            "defaultvalue": "hoot::FrechetSublineMatcher",
+            "override":{"defaultvalue":"hoot::FrechetSublineMatcher"},
+            "hoot_key": "way.subline.matcher",
+            "required":"true"
+          }
+        ]
+      },
+      {
         "id": "unify_optimizer_time_limit",
         "minvalue": "-1",
         "elem_type": "double",
@@ -548,9 +605,9 @@
         "id": "waterway_way_subline_matcher",
         "elem_type": "string",
         "description": "The way subline matcher to use when determining matching sublines.",
-        "name": "Way Subline Matcher",
+        "name": "Waterway Subline Matcher",
         "defaultvalue": "hoot::MaximalSublineMatcher",
-        "hoot_key": "way.subline.matcher",
+        "hoot_key": "waterway.subline.matcher",
 				"required":"true"
       },
       {

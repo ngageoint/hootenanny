@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -69,8 +69,6 @@ using namespace std;
 
 namespace hoot
 {
-
-QString OsmSchema::_layerNameKey = "hoot:layername";
 
 typedef boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
@@ -1748,7 +1746,7 @@ bool OsmSchema::isList(const QString& /*key*/, const QString& value)
 
 bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 {
-  if (key.startsWith("hoot:"))
+  if (key.startsWith(MetadataTags::HootTagPrefix()))
   {
     return true;
   }
@@ -1806,6 +1804,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
+  LOG_INFO("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

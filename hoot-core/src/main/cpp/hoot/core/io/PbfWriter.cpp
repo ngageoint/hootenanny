@@ -36,7 +36,9 @@
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
+
 using namespace hoot::pb;
 
 // Qt
@@ -462,14 +464,14 @@ void PbfWriter::_writeNode(const shared_ptr<const hoot::Node>& n)
   // at this point. Instead the way records the CE for the entire way. No need to waste disk.
   if (n->getTags().getNonDebugCount() > 0)
   {
-    int kid = _convertString("error:circular");
+    int kid = _convertString(MetadataTags::ErrorCircular());
     int vid = _convertString(QString::number(n->getCircularError()));
     newNode->add_keys(kid);
     newNode->add_vals(vid);
 
     if (n->getStatus() != Status::Invalid)
     {
-      kid = _convertString("hoot:status");
+      kid = _convertString(MetadataTags::HootStatus());
       vid = _convertString(QString::number(n->getStatus().getEnum()));
       newNode->add_keys(kid);
       newNode->add_vals(vid);
@@ -524,14 +526,14 @@ void PbfWriter::_writeNodeDense(const shared_ptr<const hoot::Node>& n)
   // at this point. Instead the way records the CE for the entire way. No need to waste disk.
   if (n->getTags().getNonDebugCount() > 0)
   {
-    int kid = _convertString("error:circular");
+    int kid = _convertString(MetadataTags::ErrorCircular());
     int vid = _convertString(QString::number(n->getCircularError()));
     _dn->add_keys_vals(kid);
     _dn->add_keys_vals(vid);
 
     if (n->getStatus() != Status::Invalid)
     {
-      kid = _convertString("hoot:status");
+      kid = _convertString(MetadataTags::HootStatus());
       vid = _convertString(QString::number(n->getStatus().getEnum()));
       _dn->add_keys_vals(kid);
       _dn->add_keys_vals(vid);
@@ -668,14 +670,14 @@ void PbfWriter::_writeRelation(const shared_ptr<const hoot::Relation>& r)
       pbr->add_vals(_convertString(value));
     }
   }
-  int kid = _convertString("error:circular");
+  int kid = _convertString(MetadataTags::ErrorCircular());
   int vid = _convertString(QString::number(r->getCircularError()));
   pbr->add_keys(kid);
   pbr->add_vals(vid);
 
   if (r->getStatus() != Status::Invalid)
   {
-    kid = _convertString("hoot:status");
+    kid = _convertString(MetadataTags::HootStatus());
     vid = _convertString(QString::number(r->getStatus().getEnum()));
     pbr->add_keys(kid);
     pbr->add_vals(vid);
@@ -735,14 +737,14 @@ void PbfWriter::_writeWay(const shared_ptr<const hoot::Way>& w)
       pbw->add_vals(_convertString(value));
     }
   }
-  int kid = _convertString("error:circular");
+  int kid = _convertString(MetadataTags::ErrorCircular());
   int vid = _convertString(QString::number(w->getCircularError()));
   pbw->add_keys(kid);
   pbw->add_vals(vid);
 
   if (w->getStatus() != Status::Invalid)
   {
-    kid = _convertString("hoot:status");
+    kid = _convertString(MetadataTags::HootStatus());
     vid = _convertString(QString::number(w->getStatus().getEnum()));
     pbw->add_keys(kid);
     pbw->add_vals(vid);

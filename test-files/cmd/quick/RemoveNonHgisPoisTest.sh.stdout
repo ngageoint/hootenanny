@@ -1,0 +1,9 @@
+17:40:54.383 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
+17:40:54.583 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/quick/RemoveNonHgisPoisTest.osm ...
+Reprojecting 0 / 8         
+17:40:54.632 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
+17:40:54.632 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
+Stat Name	test-output/cmd/quick/RemoveNonHgisPoisTest.osm
+Node Count	8
+Way Count	0
+Relation Count	0

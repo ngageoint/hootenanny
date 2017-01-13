@@ -272,6 +272,15 @@ Then(/^I should see these tags in the table:$/) do |table|
     actual.should == expected
   end
 end
+Then(/^I should see tag (.*)=(.*) in the table$/) do |key, value|
+  include_hidden_fields do
+    keys = page.all('ul.tag-list input.key').map(&:value)
+    values = page.all('ul.tag-list input.value').map(&:value)
+    actual = Hash[keys.zip(values)]
+    actual[key].should == value
+  end
+end
+
 Then(/^I click on the "([^"]*)" option in the "([^"]*)"$/) do |label,div|
   find('#' + div).find('label', :text => label).click
 end
@@ -498,11 +507,19 @@ When(/^I close the UI alert$/) do
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
-  page.first('div.big.data').click
-  swatch = find('a[data-color="' + color + '"')
+  page.first('div[id^="viewicon"]').click
+  swatch = page.first('a[data-color="' + color + '"')
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
   expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+end
+
+When(/^I change the secondary layer color to ([^"]*)$/) do |color|
+  page.all('div[id^="viewicon"]').last.click
+  swatch = page.all('a[data-color="' + color + '"').last
+  rgb = swatch.native.css_value('background').split(")").first + ')'
+  swatch.click
+  expect(page.all('path.stroke.tag-hoot').last.native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|
@@ -639,6 +656,11 @@ end
 Then(/^I accept the alert$/) do
   sleep 5
   page.driver.browser.switch_to.alert.accept
+end
+
+Then(/^I reject the alert$/) do
+  sleep 5
+  page.driver.browser.switch_to.alert.dismiss
 end
 
 Then(/^I should see element "([^"]*)" with value "([^"]*)"$/) do |id, value|

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,7 @@
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -103,9 +104,9 @@ public:
   virtual void visit(const ConstElementPtr& e)
   {
     QStringList refs;
-    if (e->getTags().contains("REF1"))
+    if (e->getTags().contains(MetadataTags::Ref1()))
     {
-      e->getTags().readValues("REF1", refs);
+      e->getTags().readValues(MetadataTags::Ref1(), refs);
 
       refs.removeAll("todo");
       refs.removeAll("none");
@@ -232,7 +233,7 @@ AttributeCoOccurence::AttributeCoOccurence() {}
 void AttributeCoOccurence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
-  RefToEidVisitor ref2("REF2");
+  RefToEidVisitor ref2(MetadataTags::Ref2());
 
   in->visitRo(ref2);
 
@@ -276,7 +277,7 @@ QString AttributeCoOccurence::printList()
   keyList.sort();
 
   // Print the Matrix as a list, sorted by REF1 keys
-  result += "N  : REF1 -> REF2\n";
+  result += QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1()).arg(MetadataTags::Ref2());
 
   for(int it=0; it < keyList.size(); it++)
   {

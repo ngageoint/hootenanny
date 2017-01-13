@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 #include "../PoiPolygonDistanceTruthRecorder.h"
 
@@ -271,8 +272,8 @@ bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
   if (_allTagKeys.size() == 0)
   {
     _allTagKeys = OsmSchema::getInstance().getAllTagKeys();
-    _allTagKeys.remove("REF1");
-    _allTagKeys.remove("REF2");
+    _allTagKeys.remove(MetadataTags::Ref1());
+    _allTagKeys.remove(MetadataTags::Ref2());
     _allTagKeys.remove("uuid");
     _allTagKeys.remove("name");
   }

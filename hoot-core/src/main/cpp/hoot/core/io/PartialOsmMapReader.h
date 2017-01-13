@@ -49,11 +49,6 @@ public:
 
   long getMaxElementsPerMap() { return _maxElementsPerMap; }
 
-  /**
-   *  @todo is this needed?
-   */
-  //virtual void initializePartial() = 0;
-
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 
   /**
@@ -83,7 +78,6 @@ protected:
   long _maxElementsPerMap;
   long _elementsRead;
   shared_ptr<OsmMap> _partialMap;
-  QString _bbox;
 
 };
 

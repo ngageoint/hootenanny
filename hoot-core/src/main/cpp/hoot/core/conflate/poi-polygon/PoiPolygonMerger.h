@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -55,8 +55,9 @@ public:
    *
    * @param map an OSM map containing a single node POI and a single polygon area or building, which
    * can be a way or a relation (multipolygon)
+   * @return the polygon element ID
    */
-  static void merge(OsmMapPtr map);
+  static ElementId merge(OsmMapPtr map);
 
   virtual QString toString() const;
 

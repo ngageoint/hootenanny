@@ -236,7 +236,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/MatchFactory.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatch.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatchCreator.cpp \
-    src/main/cpp/hoot/core/cmd/UnifyCmd.cpp \
     src/main/cpp/hoot/core/ops/RecursiveElementRemover.cpp \
     src/main/cpp/hoot/core/visitors/SetVisitor.cpp \
     src/main/cpp/hoot/core/scoring/MatchComparator.cpp \
@@ -350,8 +349,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/BaseFilter.cpp \
     src/main/cpp/hoot/core/visitors/CalculateAreaVisitor.cpp \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.cpp \
-    src/main/cpp/hoot/core/io/db/BulkInsert.cpp \
-    src/main/cpp/hoot/core/io/db/SqlBulkInsert.cpp \
+    src/main/cpp/hoot/core/io/BulkInsert.cpp \
+    src/main/cpp/hoot/core/io/SqlBulkInsert.cpp \
     src/main/cpp/hoot/core/conflate/extractors/WeightedShapeDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/WayFeatureExtractor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/DistanceScoreExtractor.cpp \
@@ -367,7 +366,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.cpp \
     src/main/cpp/hoot/core/cmd/CropMapCmd.cpp \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.cpp \
-    src/main/cpp/hoot/core/io/db/InternalIdReserver.cpp \
+    src/main/cpp/hoot/core/io/InternalIdReserver.cpp \
     src/main/cpp/hoot/core/conflate/ReviewMarker.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCoOccuranceCmd.cpp \
     src/main/cpp/hoot/core/scoring/AttributeCoOccurence.cpp \
@@ -461,7 +460,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/io/PostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -538,7 +537,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp \
+    src/main/cpp/hoot/core/io/ApiDbReader.cpp \
+    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -877,8 +878,8 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.h \
     src/main/cpp/hoot/core/visitors/CountVisitor.h \
     src/main/cpp/hoot/core/visitors/UniqueNamesVisitor.h \
-    src/main/cpp/hoot/core/io/db/BulkInsert.h \
-    src/main/cpp/hoot/core/io/db/SqlBulkInsert.h \
+    src/main/cpp/hoot/core/io/BulkInsert.h \
+    src/main/cpp/hoot/core/io/SqlBulkInsert.h \
     src/main/cpp/hoot/core/conflate/extractors/WeightedShapeDistanceExtractor.h \
     src/main/cpp/hoot/core/conflate/extractors/FeatureExtractorBase.h \
     src/main/cpp/hoot/core/visitors/WayVisitor.h \
@@ -901,13 +902,12 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.h \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.h \
     src/main/cpp/hoot/core/util/MultiPolygonCreator.h \
-    src/main/cpp/hoot/core/io/db/InternalIdReserver.h \
+    src/main/cpp/hoot/core/io/InternalIdReserver.h \
     src/main/cpp/hoot/core/conflate/ReviewMarker.h \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.h \
     src/main/cpp/hoot/core/conflate/MatchMembers.h \
     src/main/cpp/hoot/core/scoring/AttributeCoOccurence.h \
     src/main/cpp/hoot/core/visitors/TagCountVisitor.h \
-    src/main/cpp/hoot/core/cmd/UnifyCmd.h \
     src/main/cpp/hoot/core/scoring/TextTable.h \
     src/main/cpp/hoot/core/algorithms/linearreference/MultiLineStringLocation.h \
     src/main/cpp/hoot/core/perty/PertyWaySplitVisitor.h \
@@ -1056,7 +1056,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
-    src/main/cpp/hoot/core/io/db/PostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/PostgresqlDumpfileWriter.h \
     src/main/cpp/hoot/core/visitors/MapExtentVisitor.h \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
@@ -1081,5 +1081,9 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h \
-    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h
+    src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h \
+    src/main/cpp/hoot/core/io/TableType.h \
+    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.h \
+    src/main/cpp/hoot/core/elements/ElementAttributeType.h \
+    src/main/cpp/hoot/core/util/MetadataTags.h
 

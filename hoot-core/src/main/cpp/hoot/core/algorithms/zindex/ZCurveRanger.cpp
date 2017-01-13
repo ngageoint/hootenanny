@@ -37,6 +37,9 @@
 //Boost Includes
 #include <boost/make_shared.hpp>
 
+//Qt includes
+#include <QStringList>
+
 namespace hoot
 {
 class LongBox;
@@ -112,9 +115,9 @@ private:
   long int _excess;
 };
 
-struct range_sort
-{
-  bool operator() (Range a, Range b) { return (a.getMin() < b.getMin());}
+
+struct range_sort {
+  bool operator() (const Range& i, const Range& j) { return (i < j);}
 } range_object;
 
 ZCurveRanger::ZCurveRanger(const ZValue& zv)
@@ -388,9 +391,9 @@ LongBox ZCurveRanger::_clipBox(LongBox box)
   return result;
 }
 
-vector<Range> ZCurveRanger::_condenseRanges(vector<Range> r)
+vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r)
 {
-  sort(r.begin(), r.end(), range_object);
+  std::sort(r.begin(), r.end(), range_object);
 
   vector<Range> result;
   result.push_back(r[0]);

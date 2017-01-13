@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -252,9 +252,6 @@ class OsmSchema
 {
 public:
 
-  static QString errorCircularKey() { return "error:circular"; }
-  static const QString& layerNameKey() { return _layerNameKey; }
-
   OsmSchema();
 
   virtual ~OsmSchema();
@@ -452,7 +449,6 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
-  static QString _layerNameKey;
 };
 
 }

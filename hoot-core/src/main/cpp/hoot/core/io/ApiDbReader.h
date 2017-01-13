@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,107 +28,58 @@
 #define APIDBREADER_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/io/ApiDb.h>
 
 #include <boost/shared_ptr.hpp>
+
+// Qt
+#include <QtSql/QSqlQuery>
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
 
+#include <ogr_spatialref.h>
+
 namespace hoot
 {
 
+/**
+ * Abstract parent class for reading from an API style OSM database
+ */
 class ApiDbReader
 {
 public:
 
-  static void addTagsToElement(shared_ptr<Element> element)
-  {
-    bool ok;
-    Tags& tags = element->getTags();
+  ApiDbReader();
+  virtual ~ApiDbReader() {}
 
-    if (tags.contains("hoot:status"))
-    {
-      QString statusStr = tags.get("hoot:status");
-      bool ok;
-      const int statusInt = statusStr.toInt(&ok);
-      Status status = static_cast<Status::Type>(statusInt);
-      if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
-      {
-        element->setStatus(status);
-      }
-      else
-      {
-        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                 QString::number(element->getId()));
-      }
-      tags.remove("hoot:status");
-    }
+protected:
 
-    if (tags.contains("type"))
-    {
-      Relation* r = dynamic_cast<Relation*>(element.get());
-      if (r)
-      {
-        r->setType(tags["type"]);
-        tags.remove("type");
-      }
-    }
+  bool _useDataSourceIds;
+  Status _status;
+  bool _open;
 
-    if (tags.contains("error:circular"))
-    {
-      element->setCircularError(tags.get("error:circular").toDouble(&ok));
-      if (!ok)
-      {
-        try
-        {
-          double tv = tags.getLength("error:circular").value();
-          element->setCircularError(tv);
-          ok = true;
-          /*LOG_DEBUG(
-            "Set circular error from error:circular tag to " << tv << " for element with ID: " <<
-            element->getId());*/
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+  Tgs::BigMap<long, long> _nodeIdMap;
+  Tgs::BigMap<long, long> _relationIdMap;
+  Tgs::BigMap<long, long> _wayIdMap;
 
-        if (!ok)
-        {
-          LOG_WARN("Error parsing error:circular.");
-        }
-      }
-      tags.remove("error:circular");
-    }
-    else if (tags.contains("accuracy"))
-    {
-      element->setCircularError(tags.get("accuracy").toDouble(&ok));
+  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+                                                 const OsmMap& map) = 0;
 
-      if (!ok)
-      {
-        try
-        {
-          double tv = tags.getLength("accuracy").value();
-          element->setCircularError(tv);
-          ok = true;
-          /*LOG_DEBUG(
-            "Set circular error from accuracy tag to " << tv << " for element with ID: " <<
-            element->getId());*/
-        }
-        catch (const HootException& e)
-        {
-          ok = false;
-        }
+  virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-        if (!ok)
-        {
-          LOG_WARN("Error parsing accuracy.");
-        }
-      }
-      tags.remove("accuracy");
-    }
-  }
+  virtual shared_ptr<ApiDb> _getDatabase() const = 0;
+
+  /*
+   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
+   * implemented yet.
+   */
+  virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
+
+  void _updateMetadataOnElement(ElementPtr element);
 };
 
 }

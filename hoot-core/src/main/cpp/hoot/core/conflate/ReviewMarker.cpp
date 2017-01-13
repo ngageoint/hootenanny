@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,8 +26,9 @@
  */
 #include "ReviewMarker.h"
 
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -37,15 +38,6 @@ namespace hoot
 
 QString ReviewMarker::_complexGeometryType = "Bad Geometry";
 QString ReviewMarker::_revieweeKey = "reviewee";
-QString ReviewMarker::_reviewUuidKey = "hoot:review:uuid";
-QString ReviewMarker::_reviewScoreKey = "hoot:review:score";
-QString ReviewMarker::reviewSortOrderKey = "hoot:review:sort_order";
-QString ReviewMarker::_reviewNeedsKey = "hoot:review:needs";
-QString ReviewMarker::_reviewNoteKey = "hoot:review:note";
-QString ReviewMarker::_reviewTypeKey = "hoot:review:type";
-QString ReviewMarker::_reviewChoicesKey = "hoot:review:choices";
-QString ReviewMarker::reviewMemberCountKey = "hoot:review:members";
-
 
 ReviewMarker::ReviewMarker()
 {
@@ -94,7 +86,7 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr &map, ReviewUid uid)
 
   ConstRelationPtr r = map->getRelation(uid.getId());
 
-  return r->getTags()[_reviewTypeKey];
+  return r->getTags()[MetadataTags::HootReviewType()];
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map)
@@ -153,7 +145,7 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   {
     ConstRelationPtr r = map->getRelation(uid.getId());
 
-    if (r->getTags().isTrue(_reviewNeedsKey))
+    if (r->getTags().isTrue(MetadataTags::HootReviewNeeds()))
     {
       result = true;
     }
@@ -173,13 +165,13 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   }
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
-  r->getTags().set(_reviewNeedsKey, true);
-  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
-  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
-  r->getTags().set(_reviewScoreKey, score);
+  r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
+  r->getTags().set(MetadataTags::HootReviewScore(), score);
   r->addElement(_revieweeKey, e1->getElementId());
   r->addElement(_revieweeKey, e2->getElementId());
-  r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
+  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
 
@@ -189,7 +181,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
-    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+    r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);
@@ -204,10 +196,10 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   }
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
-  r->getTags().set(_reviewNeedsKey, true);
-  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
-  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
-  r->getTags().set(_reviewScoreKey, score);
+  r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
+  r->getTags().set(MetadataTags::HootReviewScore(), score);
   set<ElementId>::iterator it = ids.begin();
   while (it != ids.end())
   {
@@ -215,7 +207,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
     r->addElement(_revieweeKey, id);
     it++;
   }
-  r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
+  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
   //LOG_VARD(r->getId());
@@ -223,7 +215,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
-    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+    r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);
@@ -240,12 +232,12 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   }
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
-  r->getTags().set(_reviewNeedsKey, true);
-  r->getTags().appendValueIfUnique(_reviewNoteKey, note);
-  r->getTags().appendValueIfUnique(_reviewTypeKey, reviewType);
-  r->getTags().set(_reviewScoreKey, score);
+  r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+  r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
+  r->getTags().set(MetadataTags::HootReviewScore(), score);
   r->addElement(_revieweeKey, e->getElementId());
-  r->getTags().set(reviewMemberCountKey, (int)r->getMembers().size());
+  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
   //LOG_VARD(r->getId());
@@ -253,7 +245,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
-    r->getTags()[_reviewChoicesKey + ":" + QString::number(i+1)] = choices[i];
+    r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
   }
 
   map->addElement(r);

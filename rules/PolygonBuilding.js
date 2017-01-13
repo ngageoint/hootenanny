@@ -3,6 +3,7 @@ var MATCH_OVERLAP_THRESHOLD = 0.75;
 var MISS_OVERLAP_THRESHOLD = 0.15;
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.description = "Polygon Building";
 exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));

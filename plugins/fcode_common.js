@@ -45,7 +45,7 @@ fcodeCommon = {
       ['F_CODE','AA020','mine:superstructure','yes'], // Mine Shaft Superstructure 
       ['F_CODE','AA040','man_made','rig'], // Rig/Superstructure
       ['F_CODE','AA045','man_made','borehole'], // Borehole
-      ['F_CODE','AA052','landuse','hydrocarbons_field'], // Hydrocarbons Field
+      ['F_CODE','AA052','industrial','hydrocarbons_field'], // Hydrocarbons Field
       ['F_CODE','AA054','man_made','well'], // Non-water Well
       ['F_CODE','AB000','landuse','landfill'], // Disposal Site / Waste Pile
       ['F_CODE','AB010','amenity','recycling'], // Wrecking Yard/Scrap Yard, Recycling Site

@@ -36,8 +36,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmReader.h>
 #include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -86,7 +86,7 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "REF1", "Target");
+    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
     vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
 
     shared_ptr<const Way> w1 = map->getWay(r1[0]);

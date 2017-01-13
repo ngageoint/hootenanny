@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,24 +34,17 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
-
-// tgs
-#include <tgs/BigContainers/BigMap.h>
-
 namespace hoot
 {
 
 class OsmApiDbReader :
+    public ApiDbReader,
     public OsmMapReader,
     public Configurable
 {
 public:
 
   static std::string className() { return "hoot::OsmApiDbReader"; }
-  static QString emailKey() { return "osmapi.db.reader.email"; }
 
   OsmApiDbReader();
 
@@ -77,48 +70,41 @@ public:
    */
   virtual void read(shared_ptr<OsmMap> map);
 
-  //virtual void finalizePartial();
-
   void close();
 
   virtual void setConfiguration(const Settings &conf);
 
-  void setUserEmail(const QString& email) { _email = email; }
+  void setUserEmail(const QString email) { _email = email; }
 
-  void setBoundingBox(const QString& bbox) { _bbox = bbox; }
+  void setBoundingBox(const QString bbox);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+protected:
+
+  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+                                                 const OsmMap& map);
+
+  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+
 private:
 
-  Status _status;
-  bool _useDataSourceIds;
-
-  OsmApiDb _database;
-  bool _open;
+  shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  QString _bbox;
+  Envelope _bounds;
 
   long _osmElemId;
   ElementType _osmElemType;
   ElementType _selectElementType;
 
-  Tgs::BigMap<long, long> _nodeIdMap;
-  Tgs::BigMap<long, long> _relationIdMap;
-  Tgs::BigMap<long, long> _wayIdMap;
+  void _read(OsmMapPtr map, const ElementType& elementType);
 
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
-  void _readBounded(shared_ptr<OsmMap> map, const ElementType& elementType, const Envelope& env);
-  void _processRelation(const QSqlQuery& resultIterator, OsmMap& map, const Envelope& env);
-
-  ElementId _mapElementId(const OsmMap& map, ElementId oldId);
-
-  // Osm Api data assignment methods
-  shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
   void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+
+  void _parseAndSetTagsOnElement(ElementPtr element);
 };
 
 }

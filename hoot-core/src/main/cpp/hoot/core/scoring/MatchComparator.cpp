@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,24 +28,24 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
+#include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
+#include <hoot/core/filters/HasTagCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/CountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/SetVisitor.h>
-#include <hoot/core/filters/HasTagCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/visitors/SingleStatistic.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/CountVisitor.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
 
 // Qt
 #include <QSet>
@@ -218,8 +218,8 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
 
   for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
   {
-    QString ref1 = in->getElement(*it)->getTags()["REF1"];
-    QString ref2 = in->getElement(*it)->getTags()["REF2"];
+    QString ref1 = in->getElement(*it)->getTags()[MetadataTags::Ref1()];
+    QString ref2 = in->getElement(*it)->getTags()[MetadataTags::Ref2()];
     for (int i = 0; i < interesting.size(); i++)
     {
       if (ref1.contains(interesting[i]) || ref2.contains(interesting[i]))
@@ -518,10 +518,10 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
 void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 {
   // extract all of the REF2 values in in2
-  GetRefUuidVisitor ref1("REF1");
+  GetRefUuidVisitor ref1(MetadataTags::Ref1());
   in->visitRo(ref1);
 
-  GetRefUuidVisitor ref2("REF2");
+  GetRefUuidVisitor ref2(MetadataTags::Ref2());
   in->visitRo(ref2);
 
   GetRefUuidVisitor review("REVIEW");
@@ -622,7 +622,7 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
 void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
                                       const QString expected, const QString actual)
 {
-  SetTagVisitor stv1("hoot:expected", expected);
+  SetTagVisitor stv1(MetadataTags::HootExpected(), expected);
   MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
@@ -634,7 +634,7 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
     it++;
   }
 
-  SetTagVisitor stv2("hoot:actual", actual);
+  SetTagVisitor stv2(MetadataTags::HootActual(), actual);
   it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
@@ -650,7 +650,7 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
 void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
 {
   // if the uuid contains the first uuid, set mismatch
-  SetTagVisitor stv("hoot:mismatch", value);
+  SetTagVisitor stv(MetadataTags::HootMismatch(), value);
   MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
@@ -666,7 +666,7 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
 void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
 {
   // if the uuid contains the first uuid, set mismatch
-  SetTagVisitor stv("hoot:wrong", "1");
+  SetTagVisitor stv(MetadataTags::HootWrong(), "1");
   MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
   while (it != _actualUuidToEid.end())
   {
@@ -692,7 +692,7 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
   FilteredVisitor elementWrongVisitor(
     new ChainCriterion(
       new ElementTypeCriterion(elementType),
-      new HasTagCriterion("hoot:wrong")),
+      new HasTagCriterion(MetadataTags::HootWrong())),
     new CountVisitor());
   FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
   SingleStatistic* singleStat =

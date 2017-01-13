@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -426,6 +426,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
+  LOG_VAR(className());
   ScriptMatchVisitor v(map, matches, threshold, _script);
   v.customScriptInit();
   map->visitRo(v);
@@ -448,16 +449,17 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
       if (!d.description.isEmpty())
       {
         result.push_back(d);
+        LOG_TRACE(d.description);
       }
       else
       {
-        LOG_DEBUG(QString("Skipping reporting script %1 because it has no "
+        LOG_TRACE(QString("Skipping reporting script %1 because it has no "
           "description.").arg(scripts[i]));
       }
     }
     catch (HootException& e)
     {
-      LOG_INFO("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
+      LOG_WARN("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
     }
   }
 

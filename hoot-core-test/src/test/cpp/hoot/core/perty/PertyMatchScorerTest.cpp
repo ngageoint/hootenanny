@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,12 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
-#include <hoot/core/visitors/TagKeyCountVisitor.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/TagKeyCountVisitor.h>
 
 // Qt
 #include <QString>
@@ -117,10 +118,10 @@ public:
     //can't do a file comparison on the output here since the UUID's added to the file will be
     //different with each run
     CPPUNIT_ASSERT_EQUAL(100, (int)combinedMap->getElementCount());
-    shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor("REF1"));
+    shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
     combinedMap->visitRw(*tagKeyCountVisitorRef1);
     CPPUNIT_ASSERT_EQUAL(8, (int)tagKeyCountVisitorRef1->getStat());
-    shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor("REF2"));
+    shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor(MetadataTags::Ref2()));
     combinedMap->visitRw(*tagKeyCountVisitorRef2);
     CPPUNIT_ASSERT_EQUAL(10, (int)tagKeyCountVisitorRef2->getStat());
   }
@@ -138,7 +139,7 @@ public:
     reader.setUseDataSourceIds(true);
     reader.read(
       "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-combined-out-1.osm", combinedMap);
-      
+
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
@@ -158,6 +159,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyMatchScorerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyMatchScorerTest, "slow");
 
 }
