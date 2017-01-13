@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -98,6 +98,7 @@ public:
   class CaseFitnessFunction : public Tgs::FitnessFunction
   {
   public:
+
     virtual double f(const ConstStatePtr& s) const
     {
       Settings settings;
@@ -105,6 +106,12 @@ public:
       {
         settings.set(k, s->get(k));
       }
+      settings.set("match.creators", "hoot::NetworkMatchCreator");
+      settings.set("merger.creators", "hoot::NetworkMergerCreator");
+      settings.set("uuid.helper.repeatable", "true");
+      settings.set("writer.include.debug", "true");
+      settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
+      //settings.set("conflate.add.scores.tags", "false");
 
       TempFileName temp;
       LOG_VARW(temp.getFileName());
@@ -117,13 +124,15 @@ public:
       for (int i = 0; i < suite.getChildTestCount(); ++i)
       {
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
+        const QString testName = QString::fromStdString(test->getName());
 
-        // this one fails due to review scores and we don't really care.
-        if (QString::fromStdString(test->getName()).contains("highway-009"))
+        // TODO: this one fails due to review score tag values
+        if (testName.contains("highway-009"))
         {
           continue;
         }
 
+        //LOG_WARN("Running " << testName << "...");
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -132,7 +141,7 @@ public:
 
         if (listener.isFailure())
         {
-          LOG_WARN("Failure: " << test->getName());
+          LOG_WARN("Failure: " << testName);
           failures++;
         }
       }
@@ -147,47 +156,43 @@ public:
   void optimizeTest()
   {
     StateDescriptionPtr desc(new StateDescription());
-
-    // good for highway-008
-    // getNetworkConflictsPartialHandicapKey - 0.5
-    // getNetworkConflictsStubHandicapKey - 0.5
-    // getNetworkConflictsStubThroughWeightingKey - 1.0
-
-
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
-        VariableDescription::Real, 0.5, 0.5));
-        //VariableDescription::Real, 0.0, 1.5));
+        VariableDescription::Real, 0.2, 0.2)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.2, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
         // value of 0.5 here gives good results in test highway-008
-        //VariableDescription::Real, 0.6, 0.6));
-        VariableDescription::Real, .86, .86));
-        //VariableDescription::Real, 0.5, 1.0));
+        VariableDescription::Real, .86, .86)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.5, 0.86));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        VariableDescription::Real, 4.4, 4.4));
-        //VariableDescription::Real, 3.0, 7.0));
+        VariableDescription::Real, 4.4, 4.4)); //default
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        //VariableDescription::Real, 2.0, 6.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
-        VariableDescription::Real, 0.0, 0.0));
-        //VariableDescription::Real, 0.0, 2.0));
+        VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.0, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        VariableDescription::Real, 0.0, 0.0));
-        //VariableDescription::Real, 0.0, 2.0));
+        VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        //VariableDescription::Real, 0.0, 0.5));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
-        // value of 5 here gives good results in test highway-008
-        // value of 0, 0.5 here gives good results in test highway-011/010
-        VariableDescription::Real, 0.59, 0.59));
-        //VariableDescription::Real, 0.5, 1.0));
+        //VariableDescription::Real, 0.32, 0.32)); //default
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 0.32, 0.75));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
 //#error modify fitness function to give variable failure based on the number of reviews
     sa.setPickFromBestScores(true);
-    sa.iterate(000);
+    sa.iterate(20);
 
     foreach (ConstStatePtr state, sa.getBestStates())
     {

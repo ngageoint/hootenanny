@@ -523,9 +523,9 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
   if (!foundEnd)
   {
-    LOG_VARW(es->validate());
-    LOG_VARW(es);
-    LOG_VARW(e);
+    LOG_VART(es->validate());
+    LOG_VART(es);
+    LOG_VART(e);
     throw IllegalArgumentException("Could not extend specified string with the specified edge.");
   }
 
