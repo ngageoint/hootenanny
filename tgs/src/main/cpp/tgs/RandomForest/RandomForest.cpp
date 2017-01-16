@@ -49,7 +49,7 @@ namespace Tgs
 
   RandomForest::~RandomForest()
   {
-   
+
   }
 
   void RandomForest::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
@@ -175,7 +175,7 @@ namespace Tgs
         }
         std::cout << std::endl;
 
-        //std::cout << "Mode Trained " << std::endl;
+        //std::cout << "Model Trained " << std::endl;
         if(retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;

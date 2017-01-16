@@ -38,6 +38,7 @@
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -103,9 +104,9 @@ public:
   virtual void visit(const ConstElementPtr& e)
   {
     QStringList refs;
-    if (e->getTags().contains("REF1"))
+    if (e->getTags().contains(MetadataTags::Ref1()))
     {
-      e->getTags().readValues("REF1", refs);
+      e->getTags().readValues(MetadataTags::Ref1(), refs);
 
       refs.removeAll("todo");
       refs.removeAll("none");
@@ -184,7 +185,7 @@ public:
             {
               // Check if the names match
               double nameScore = _calculateNameScore(e, _map->getElement(*eid));
-              bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonMatchNameThreshold();
+              bool nameMatch = nameScore >= ConfigOptions().getPoiPolygonNameScoreThreshold();
 
               if (nameMatch)
               {
@@ -232,7 +233,7 @@ AttributeCoOccurence::AttributeCoOccurence() {}
 void AttributeCoOccurence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
-  RefToEidVisitor ref2("REF2");
+  RefToEidVisitor ref2(MetadataTags::Ref2());
 
   in->visitRo(ref2);
 
@@ -276,7 +277,7 @@ QString AttributeCoOccurence::printList()
   keyList.sort();
 
   // Print the Matrix as a list, sorted by REF1 keys
-  result += "N  : REF1 -> REF2\n";
+  result += QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1()).arg(MetadataTags::Ref2());
 
   for(int it=0; it < keyList.size(); it++)
   {

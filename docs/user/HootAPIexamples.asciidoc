@@ -25,11 +25,11 @@ Ingest a *.osm.pbf dataset into a HootAPI database.
 Example Usage:
 
 ------
-hoot convert -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email='test@test.com' test-files/DcGisRoads.osm  hootapidb://hoot:hoottest@localhost:5432/hoot/DcGISRoads2
+hoot convert -D hootapi.db.writer.create.user=true -D api.db.email='test@test.com' test-files/DcGisRoads.osm  hootapidb://hoot:hoottest@localhost:5432/hoot/DcGISRoads2
 ------
 
 * +-D hootapi.db.writer.create.user+ - a required parameter when using instantiating a new user from the hoot.json file.
-* +-D hootapi.db.writer.email+ - a required email notification parameter for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
+* +-D api.db.email+ - a required email notification parameter for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
 * input - a path to any input data (e.g. .osm, .shp, etc..)
 * output - output dataset name (name of the layer to appear in the Hootenanny database)
 
@@ -41,11 +41,11 @@ Conflate two layers from a HootAPI database.
 Example Usage:
 
 ------
-hoot conflate -D hootapi.db.reader.email='test@test.com' -D hootapi.db.writer.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads hootapidb://hoot:hoottest@localhost:5432/hoot/DcTigerRoads  hootapidb://hoot:hoottest@localhost:5432/hoot/Merged_Roads_test
+hoot conflate -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads hootapidb://hoot:hoottest@localhost:5432/hoot/DcTigerRoads  hootapidb://hoot:hoottest@localhost:5432/hoot/Merged_Roads_test
 ------
 
-* +-D hootapi.db.reader.email+ - required email notification parameters for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
-* +-D hootapi.db.writer.email+ - required email notification parameters for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
+* +-D api.db.email+ - required email notification parameters for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
+* +-D api.db.email+ - required email notification parameters for the hoot.json file.  The value should appear in +hoot.json+ with a placeholder email address.
 * input 1 - Input 1 (e.g. postgres map name in MAPS table)
 * input 2 - Input 2 (e.g. postgres map name in MAPS table)
 * output - Output name (name to appear in PostGIS)
@@ -57,7 +57,7 @@ Exporting data from a HootAPI database using an OSM translation schema.
 Shapefile export:
 
 ------
-hoot osm2shp -D hootapi.db.reader.email='test@test.com' translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp
+hoot osm2shp -D api.db.email='test@test.com' translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp
 ------
 
 * translation file - a translation file used to translate source data attribution
@@ -67,7 +67,7 @@ hoot osm2shp -D hootapi.db.reader.email='test@test.com' translations/OSM_Ingest.
 File Geodatabase export:
 
 ------
-hoot osm2ogr -D hootapi.db.reader.email='test@test.com' translations/MGCP_TRD4.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb
+hoot osm2ogr -D api.db.email='test@test.com' translations/MGCP_TRD4.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb
 ------
 
 * translations/MGCP_TRD4.js - the MGCP_TRD4 translation used to translate the data.
@@ -92,7 +92,7 @@ The stats command reads input and write out hootenanny map statistics such as no
 Example Usage:
 
 ------
-hoot stats -D hootapi.db.reader.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads
+hoot stats -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads
 ------
 
 Sample Output:

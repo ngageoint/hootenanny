@@ -25,8 +25,33 @@
     },
     {
         "isA": "landuse",
+        "name": "landuse=installation",
+        "objectType": "tag",
+        "similarTo": {
+                "name": "facility=yes",
+                "weight": 0.9
+         }
+    },
+    {
+        "isA": "landuse",
         "name": "landuse=military",
         "objectType": "tag"
+    },
+    {
+        "description": "FCODE: FA165 Training Site",
+        "isA": "landuse",
+        "name": "landuse=training_area",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "landuse=military",
+                "weight": 0.9
+            },
+            {
+                "name": "military=installation",
+                "weight": 0.8
+            }
+         ]
     },
     {
         "isA": "landuse",
@@ -45,5 +70,35 @@
             "name": "place=village",
             "weight": 0.9
         }
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=residential",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "landuse=built_up_area",
+            "weight": 0.9
+        }
+    },
+    {
+        "isA": "landuse",
+        "name": "landuse=reservoir",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "man_made=water_works",
+            "weight": 0.9
+        }
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "poi"
+        ],
+        "isA": "landuse",
+        "name": "landuse=farm",
+        "objectType": "tag"
     }
 ]

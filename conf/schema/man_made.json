@@ -224,5 +224,47 @@
                 "weight": 0.8
             }
         ]
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "man_made",
+        "name": "man_made=water_works",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "man_made=reservoir_covered",
+                "weight": 0.8
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "categories": [
+            "poi"
+        ],
+        "isA": "man_made",
+        "name": "man_made=reservoir_covered",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area",
+            "node"
+        ],
+        "categories": [
+            "poi"
+        ],
+        "isA": "man_made",
+        "name": "man_made=water_tower",
+        "objectType": "tag"
+    },
+    {
+        "isA": "man_made",
+        "name": "man_made=surveillance",
+        "objectType": "tag"
     }
 ]

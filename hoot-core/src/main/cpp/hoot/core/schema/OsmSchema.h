@@ -140,7 +140,7 @@ struct OsmSchemaCategory {
 
   /**
    * Returns true if any of the categories in c are the same as the categories in this. If one or
-   * both are emtpy then it returns false.
+   * both are empty then it returns false.
    */
   bool intersects(const OsmSchemaCategory& c) const
   {
@@ -252,9 +252,6 @@ class OsmSchema
 {
 public:
 
-  static QString errorCircularKey() { return "error:circular"; }
-  static const QString& layerNameKey() { return _layerNameKey; }
-
   OsmSchema();
 
   virtual ~OsmSchema();
@@ -287,6 +284,8 @@ public:
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
   vector<SchemaVertex> getAllTags();
+
+  QSet<QString> getAllTagKeys();
 
   vector<SchemaVertex> getChildTags(QString name);
 
@@ -450,7 +449,6 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
-  static QString _layerNameKey;
 };
 
 }

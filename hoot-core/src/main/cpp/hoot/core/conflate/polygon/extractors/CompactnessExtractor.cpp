@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CompactnessExtractor.h"
 
@@ -59,14 +59,14 @@ double CompactnessExtractor::characteristic(Geometry* g) const
 double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  if (candidate->getElementType() == ElementType::Node)
+  /*if (candidate->getElementType() == ElementType::Node)
   {
-    LOG_INFO("candidate: " << candidate->toString());
+    LOG_DEBUG("candidate: " << candidate->toString());
   }
   if (target->getElementType() == ElementType::Node)
   {
-    LOG_INFO("target: " << target->toString());
-  }
+    LOG_DEBUG("target: " << target->toString());
+  }*/
   ElementConverter ec(map.shared_from_this());
   shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);

@@ -8,15 +8,15 @@ Percentage of Total Features Conflatable	100	100	0
 Untagged Feature Count	0	0	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
-Number of Match Creators	3	3	3	
+Number of Match Creators	5	5	5	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
 Total Conflated Features	0	0	8	
-Percentage of Total Features Conflated	0	0	88.888888888888886	
+Percentage of Total Features Conflated	0	0	88.88888888888889	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Number of Reviews to be Made	0	0	0	
 Total Unmatched Features	4	4	1	
-Percentage of Total Features Unmatched	100	100	11.111111111111111	
+Percentage of Total Features Unmatched	100	100	11.11111111111111	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -32,9 +32,9 @@ Conflated Highways	0	0	8
 Highways Marked for Review	0	0	0	
 Number of Highway Reviews to be Made	0	0	0	
 Unmatched Highways	4	4	1	
-Percentage of Highways Conflated	0	0	88.888888888888886	
+Percentage of Highways Conflated	0	0	88.88888888888889	
 Percentage of Highways Marked for Review	0	0	0	
-Percentage of Unmatched Highways	100	100	11.111111111111111	
+Percentage of Unmatched Highways	100	100	11.11111111111111	
 Building Count	0	0	0	
 Conflatable Buildings	0	0	0	
 Conflated Buildings	0	0	0	

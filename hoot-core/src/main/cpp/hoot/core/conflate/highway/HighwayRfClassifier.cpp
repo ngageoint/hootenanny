@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -302,7 +302,7 @@ void HighwayRfClassifier::_init() const
     }
 
     vector<string> factorLabels = _rf->getFactorLabels();
-    LOG_VAR(factorLabels);
+    LOG_VARD(factorLabels);
 
     QStringList extractorNames;
     for (size_t i = 0; i < _extractors.size(); i++)
@@ -321,9 +321,9 @@ void HighwayRfClassifier::_init() const
       }
       _rfFactorLabels.append(fn);
     }
-    LOG_VAR(extractorNames);
-    LOG_VAR(missingExtractors);
-    LOG_VAR(_rfFactorLabels);
+    LOG_VARD(extractorNames);
+    LOG_VARD(missingExtractors);
+    LOG_VARD(_rfFactorLabels);
 
     if (missingExtractors.size() > 0)
     {

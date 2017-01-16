@@ -36,8 +36,8 @@
 tds61 = {
     // getDbSchema - Load the standard schema or modify it into the TDS structure.
     getDbSchema: function() {
-        layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-        nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+        tds61.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
+        tds61.nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         tds61.rawSchema = tds61.schema.getDbSchema();
@@ -69,18 +69,18 @@ tds61 = {
      */
 
         // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
-        nfddAttrLookup = translate.makeAttrLookup(tds61.rawSchema);
+        tds61.nfddAttrLookup = translate.makeAttrLookup(tds61.rawSchema);
 
         // Debug:
-        // print("nfddAttrLookup");
-        // translate.dumpLookup(nfddAttrLookup);
+        // print("tds61.nfddAttrLookup");
+        // translate.dumpLookup(tds61.nfddAttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds61.rawSchema
         if (config.getOgrTdsStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-            layerNameLookup = translate.makeLayerNameLookup(tds61.rawSchema);
+            tds61.layerNameLookup = translate.makeLayerNameLookup(tds61.rawSchema);
 
             // Now add an o2s[A,L,P] feature to the tds61.rawSchema
             // We can drop features but this is a nice way to see what we would drop
@@ -237,7 +237,7 @@ tds61 = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds61.nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -419,7 +419,7 @@ tds61 = {
     validateTDSAttrs: function(gFcode, attrs) {
 
         var tdsAttrList = tdsAttrLookup[tds61.rules.thematicGroupList[gFcode]];
-        var nfddAttrList = nfddAttrLookup[gFcode];
+        var nfddAttrList = tds61.nfddAttrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
@@ -879,7 +879,6 @@ tds61 = {
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
             ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
-            ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
@@ -989,8 +988,6 @@ tds61 = {
             }
         }
 
-
-
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
         {
@@ -1001,7 +998,7 @@ tds61 = {
         }
 
         // Fix up landuse tags
-        if (attrs.FCODE == 'AL020')
+        if (attrs.F_CODE == 'AL020')
         {
             switch (tags.use) // Fixup the landuse tags
             {
@@ -1024,6 +1021,26 @@ tds61 = {
                     break;
             } // End switch
         }
+
+        // Fix oil/gas/petroleum fields
+        if (attrs.F_CODE == 'AA052')
+        {
+            tags.landuse = 'industrial';
+
+            switch (tags.product)
+            {
+                case undefined:
+                    break;
+
+                case 'gas':
+                    tags.industrial = 'gas';
+                    break;
+
+                case 'petroleum':
+                    tags.industrial = 'oil';
+                    break;
+            }
+        } // End Hydrocarbons
 
         // Fix up lifestyle tags.
         // This needs to be expanded to handle all of the options.
@@ -1117,6 +1134,14 @@ tds61 = {
             }
         } // End process tags.note
 
+        // Fix up areas
+        // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
 
     }, // End of applyToOsmPostProcessing
 
@@ -1356,9 +1381,26 @@ tds61 = {
                 delete tags.landuse;
                 break;
 
-            case 'industrial':
-                tags.use = 'industrial';
-                tags.landuse = 'built_up_area';
+            case 'industrial': // Deconflict with AA052 Hydrocarbons Field
+                switch (tags.industrial)
+                {
+                    case undefined: // Built up Area
+                        tags.use = 'industrial';
+                        tags.landuse = 'built_up_area';
+                        break;
+
+                    case 'oil':
+                        tags.product = 'petroleum';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+
+                    case 'gas':
+                        tags.product = 'gas';
+                        tags.industrial = 'hydrocarbons_field';
+                        delete tags.landuse;
+                        break;
+                }
                 break;
 
             case 'military':
@@ -1628,48 +1670,52 @@ tds61 = {
 
         // The follwing bit of ugly code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes. Bleah!
-        // Format is: <FCODE>:[<from>:<to>]
+        // Format is: <FCODE>:{<from>:<to>}
         var swapList = {
-            'AA010':['ZI014_PPO','PPO'], 'AA010':['ZI014_PPO2','PPO2'], 'AA010':['ZI014_PPO3','PPO3'],
-            'AA020':['ZI014_PPO','PPO'], 'AA020':['ZI014_PPO2','PPO2'], 'AA020':['ZI014_PPO3','PPO3'],
-            'AA040':['ZI014_PPO','PPO'], 'AA040':['ZI014_PPO2','PPO2'], 'AA040':['ZI014_PPO3','PPO3'],
-            'AA052':['ZI014_PPO','PPO'], 'AA052':['ZI014_PPO2','PPO2'], 'AA052':['ZI014_PPO3','PPO3'],
-            'AA054':['ZI014_PPO','PPO'], 'AA054':['ZI014_PPO2','PPO2'], 'AA054':['ZI014_PPO3','PPO3'],
-            'AB000':['ZI014_PBY','PBY'], 'AB000':['ZI014_PBY2','PBY2'], 'AB000':['ZI014_PBY3','PBY3'],
-            'AC060':['ZI014_PPO','PPO'], 'AC060':['ZI014_PPO2','PPO2'], 'AC060':['ZI014_PPO3','PPO3'],
-            'AD020':['ZI014_PPO','PPO'], 'AD020':['ZI014_PPO2','PPO2'], 'AD020':['ZI014_PPO3','PPO3'],
-            'AD025':['ZI014_PPO','PPO'], 'AD025':['ZI014_PPO2','PPO2'], 'AD025':['ZI014_PPO3','PPO3'],
-            'AJ050':['ZI014_PPO','PPO'], 'AJ050':['ZI014_PPO2','PPO2'], 'AJ050':['ZI014_PPO3','PPO3'],
-            'AL020':['ZI005_NFN','ZI005_NFN1'],
-            'AM010':['ZI014_PPO','PPO'], 'AM010':['ZI014_PPO2','PPO2'], 'AM010':['ZI014_PPO3','PPO3'],
-            'AM040':['ZI014_PRW','PRW'], 'AM040':['ZI014_PRW2','PRW2'], 'AM040':['ZI014_PRW3','PRW3'],
-            'AM060':['ZI014_PPO','PPO'], 'AM060':['ZI014_PPO2','PPO2'], 'AM060':['ZI014_PPO3','PPO3'],
-            'AM070':['ZI014_PPO','PPO'], 'AM070':['ZI014_PPO2','PPO2'], 'AM070':['ZI014_PPO3','PPO3'],
-            'AM071':['ZI014_PPO','PPO'], 'AM071':['ZI014_PPO2','PPO2'], 'AM071':['ZI014_PPO3','PPO3'],
-            'AM080':['ZI014_YWQ','YWQ'],
-            'AQ059':['ZI016_WD1','WD1'],
-            'AQ113':['ZI014_PPO','PPO'], 'AQ113':['ZI014_PPO2','PPO2'], 'AQ113':['ZI014_PPO3','PPO3'],
-            'AQ116':['ZI014_PPO','PPO'], 'AQ116':['ZI014_PPO2','PPO2'], 'AQ116':['ZI014_PPO3','PPO3'],
-            'AT005':['WLE','ZI025_WLE'],
-            'AT042':['GUG','ZI032_GUG'], 'AT042':['PYC','ZI032_PYC'], 'AT042':['PYM','ZI032_PYM'],
-            'AT042':['TOS','ZI032_TOS'], 'AT042':['CAB','AT005_CAB'],
-            'BD100':['WLE','ZI025_WLE'],
-            'BH051':['ZI014_PPO','PPO'], 'BH051':['ZI014_PPO2','PPO2'], 'BH051':['ZI014_PPO3','PPO3'],
-            'BH070':['PWA','WBD'],
-            'DB029':['FFN','ZI071_FFN'], 'DB029':['FFN2','ZI071_FFN2'], 'DB029':['FFN3','ZI071_FFN3'],
-            'ED010':['ZI024_HYP','HYP'],
-            'GB045':['ZI019_ASU','ASU'], 'GB045':['ZI019_ASU2','ASU2'], 'GB045':['ZI019_ASU3','ASU3'],
-            'BD115':['MAN','ZI025_MAN'],
-            'AP055':['RIN_RTN','RTN'], 'AP055':['RIN_RTN2','RTN2'], 'AP055':['RIN_RTN3','RTN3'],
-            'ZI031':['ZI006_MEM','MEM'], 'ZI031':['ZI004_RCG','RCG'],
-            'ZI026':['ZI026_SUR','SUR']
+            'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+            'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+            'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+            'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM080':{'ZI014_YWQ':'YWQ'},
+            'AQ059':{'ZI016_WD1':'WD1'},
+            'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AT005':{'WLE':'ZI025_WLE'},
+            'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
+            'BD100':{'WLE':'ZI025_WLE'},
+            'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'BH070':{'PWA':'WBD'},
+            'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+            'ED010':{'ZI024_HYP':'HYP'},
+            'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+            'BD115':{'MAN':'ZI025_MAN'},
+            'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
+            'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
+            'ZI026':{'ZI026_SUR':'SUR'}
                 };
 
-        // Shorter but more ugly version of a set of if..else if statements
-        if (swapList[attrs.F_CODE] && attrs[swapList[attrs.F_CODE][0]])
+        if (swapList[attrs.F_CODE])
         {
-            attrs[swapList[attrs.F_CODE][1]] = attrs[swapList[attrs.F_CODE][0]];
-            delete attrs[swapList[attrs.F_CODE][0]];
+            for (var i in swapList[attrs.F_CODE])
+            {
+                if (i in attrs)
+                {
+                    attrs[swapList[attrs.F_CODE][i]] = attrs[i];
+                    delete attrs[i]
+                }
+            }
         }
 
         // Sort out the UUID
@@ -1893,13 +1939,11 @@ tds61 = {
         translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
 
         // Crack open the OTH field and populate the appropriate attributes
+        // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
         if (attrs.OTH) translate.processOTH(attrs, tags, tds61.lookup);
 
         // post processing
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
-
-        // Debug
-        for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -1907,6 +1951,8 @@ tds61 = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
@@ -2024,7 +2070,7 @@ tds61 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(nfddAttrLookup[gFcode]))
+        if (!(tds61.nfddAttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (config.getOgrThrowError() == 'true')
@@ -2092,28 +2138,36 @@ tds61 = {
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-
-                // Validate attrs: remove all that are not supposed to be part of a feature
-                tds61.validateAttrs(geometryType,returnData[i]['attrs']);
-
-                // Now set the FCSubtype.
-                // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrTdsAddFcsubtype() == 'true')
-                {
-                    returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-                }
-
+                // Make sure that we have a valid FCODE
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                if (config.getOgrTdsStructure() == 'true')
+                if (tds61.nfddAttrLookup[gFcode.toUpperCase()])
                 {
-                    returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
-                    tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    tds61.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    // Now set the FCSubtype.
+                    // NOTE: If we export to shapefile, GAIT _will_ complain about this
+                    if (config.getOgrTdsAddFcsubtype() == 'true')
+                    {
+                        returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                    }
+
+                    // If we are using the TDS structre, fill the rest of the unused attrs in the schema
+                    if (config.getOgrTdsStructure() == 'true')
+                    {
+                        returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
+                        tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    }
+                    else
+                    {
+                        returnData[i]['tableName'] = tds61.layerNameLookup[gFcode.toUpperCase()];
+                    }
                 }
-                else
-                {
-                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
-                }
+//                 else
+//                 {
+//                     // Debug
+//                     print('## Skipping: ' + gFcode);
+//                 }
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer

@@ -25,6 +25,8 @@ image::user/images/id/hoot_UI_layout.png[]
 
 _Note: Some screenshots may not reflect the latest version of Hootenanny UI._
 
+IMPORTANT: Drop-down menus in iD Editor can also act as a filter on the data.  If something is typed into the input box, the drop down will only show the user matching values if clicking in the input box.  If the user clicks on the down arrow, all options will be shown.
+
 === Adding Layers to the Map
 
 During conflation, source datasets are merged based on user-specified conflation parameters to create an output layer that is ultimately superior in terms of complete geometry and attribution. Two datasets are required to perform a conflation; _Reference_ and _Secondary_ Data. To add a new Reference Dataset to the map, click on the _Add Reference Dataset_ button on the left side. A list of available layers will appear in the drop down menu as shown in <<hoot_add_datasets>>. Note that in order to add a layer it must be <<Hoot-iD_Datasets,imported>> into Hootenanny using the workflow described in <<Hoot-iD_Datasets>>. Layers can also be added directly from the Dataset tab in Manage.  This is described in <<HootAddDataFromManage>>.
@@ -165,7 +167,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
 image::user/images/id/hoot_background_new.png[]
 
-NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT6_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
+NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT8_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
 
 ==== Image Carousel
 
@@ -952,7 +954,6 @@ The following advanced configuration parameters are provided to the user via the
 * *Enabled*: Enables POI conflation options.
 * *POI Options*: POI conflation engine to be used.
 
-** *Places*: Conflates POIs using the  PLACES algorithms which looks for name similarity and geographic proximity. Predates the Unify conflation engine which incorporates additional business logic and review similar to unify road conflation. See Hootenanny - Algorithms Guide for more detail.
 ** *Unify*: Conflates POIs with Unify algorithm routines into a single process flow and flag reviewable items to the user. See Hootenanny - Algorithms Guide for more detail.
 ** *Disabled*: Disables the POI conflation options.
 

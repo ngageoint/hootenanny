@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MatchFeatureExtractor.h"
@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Standard
 #include <numeric>
@@ -73,7 +74,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     const shared_ptr<const Element>& e = map->getElement(*it);
     if (e->getStatus() == Status::Unknown1)
     {
-      QString r = e->getTags()["REF1"];
+      QString r = e->getTags()[MetadataTags::Ref1()];
       // ignore all features that haven't been matched.
       if (r != "todo")
       {
@@ -83,7 +84,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     else if (e->getStatus() == Status::Unknown2)
     {
       QStringList list;
-      e->getTags().readValues("REF2", list);
+      e->getTags().readValues(MetadataTags::Ref2(), list);
 
       for (int i = 0; i < list.size(); i++)
       {
@@ -110,8 +111,8 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     }
     else
     {
-      LOG_WARN("Expected the element to be either Unknown1 or Unknown2. " << e->getStatus() <<
-               " element: " << e->toString());
+      LOG_WARN("Expected the element to be either " << MetadataTags::Unknown1() << " or " << MetadataTags::Unknown2() <<
+               ". " << e->getStatus() << " element: " << e->toString());
     }
   }
 
@@ -212,6 +213,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
   shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   // go through all the manipulators
+  LOG_INFO("Processing " << matches.size() << " matches...");
   for (size_t i = 0; i < matches.size(); i++)
   {
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
@@ -236,7 +238,9 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
           set<ElementId> eids;
           eids.insert(pairs.begin()->first);
           eids.insert(pairs.begin()->second);
+          LOG_VART(eids);
           s["class"] = _getActualMatchType(eids, map).toEnum();
+          LOG_VART(s["class"]);
           _samples.push_back(s);
         }
       }
@@ -246,6 +250,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
       }
     }
   }
+  LOG_INFO("Collected " << _samples.size() << " samples.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

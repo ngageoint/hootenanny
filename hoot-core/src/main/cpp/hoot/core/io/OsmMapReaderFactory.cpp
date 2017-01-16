@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,6 +97,10 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
                                                            Status defaultStatus)
 {
+  LOG_VART(url);
+  LOG_VART(useDataSourceIds);
+  LOG_VART(defaultStatus);
+
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
   /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
@@ -118,7 +122,7 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
     Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   for (size_t i = 0; i < names.size() && !reader; ++i)
   {
-    //LOG_DEBUG("Checking input " << url << " with reader " << names[i]);
+    LOG_TRACE("Checking input " << url << " with reader " << names[i]);
     reader.reset(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
     if (reader->isSupported(url))
     {

@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -56,9 +57,9 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getTags().contains("REF1"))
+    if (e->getTags().contains(MetadataTags::Ref1()))
     {
-      QString ref1 = e->getTags().get("REF1");
+      QString ref1 = e->getTags().get(MetadataTags::Ref1());
       _ref1ToEid[ref1] = e->getElementId();
     }
   }
@@ -68,14 +69,15 @@ private:
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
-RemoveRef2Visitor::RemoveRef2Visitor()
+RemoveRef2Visitor::RemoveRef2Visitor() :
+_errorOnMissingRef1(false)
 {
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
 
   if (_ref2Keys.size() == 0)
   {
-    _ref2Keys << "REF2";
+    _ref2Keys << MetadataTags::Ref2();
     _ref2Keys << "REVIEW";
     _ref2Keys << "CONFLICT";
     _ref2Keys << "DIVIDED1";
@@ -112,19 +114,34 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      LOG_WARN(key << " contains " << r);
-      throw IllegalArgumentException("Found a REF2 that references a non-existing REF1.");
+      const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
+      //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
+      //if (_errorOnMissingRef1)
+      //{
+        //throw IllegalArgumentException(errMsg);
+      //}
+      //else
+      //{
+        LOG_WARN(errMsg);
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == MetadataTags::Ref2())
+        {
+          refs.append("none");
+        }
+      //}
     }
-
-    ElementPtr e = _map->getElement(eid);
-    // if the REF1 element meets the criterion.
-    if (_criterion->isSatisfied(e))
+    else
     {
-      // remove the specified REF2 from the appropriate REF2 field.
-      refs.removeAll(r);
-      if (refs.size() == 0 && key == "REF2")
+      ElementPtr e = _map->getElement(eid);
+      // if the REF1 element meets the criterion.
+      if (ref1CriterionSatisfied(e))
       {
-        refs.append("none");
+        // remove the specified REF2 from the appropriate REF2 field.
+        refs.removeAll(r);
+        if (refs.size() == 0 && key == MetadataTags::Ref2())
+        {
+          refs.append("none");
+        }
       }
     }
   }
@@ -178,7 +195,7 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
   ElementPtr ee = _map->getElement(ElementId(type, id));
 
   // if e has a REF2 and meets the criterion
-  if (_hasRef2Tag(ee) && _criterion->isSatisfied(ee))
+  if (_hasRef2Tag(ee) && ref2CriterionSatisfied(ee))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
@@ -186,6 +203,16 @@ void RemoveRef2Visitor::visit(const ConstElementPtr& e)
       _checkAndDeleteRef2(ee, _ref2Keys[i]);
     }
   }
+}
+
+bool RemoveRef2Visitor::ref1CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return _criterion->isSatisfied(e);
+}
+
+bool RemoveRef2Visitor::ref2CriterionSatisfied(const ConstElementPtr& e) const
+{
+  return ref1CriterionSatisfied(e);
 }
 
 }

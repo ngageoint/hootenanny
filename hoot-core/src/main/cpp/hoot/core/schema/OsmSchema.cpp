@@ -70,8 +70,6 @@ using namespace std;
 namespace hoot
 {
 
-QString OsmSchema::_layerNameKey = "hoot:layername";
-
 typedef boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
@@ -460,6 +458,18 @@ public:
       result.push_back(_graph[it.value()]);
     }
 
+    return result;
+  }
+
+  QSet<QString> getAllTagKeys()
+  {
+    QSet<QString> result;
+    result.reserve(_name2Vertex.size());
+    for (QHash<QString, VertexId>::const_iterator it = _name2Vertex.begin();
+      it != _name2Vertex.end(); ++it)
+    {
+      result.insert(it.key());
+    }\
     return result;
   }
 
@@ -1378,6 +1388,11 @@ vector<SchemaVertex> OsmSchema::getAllTags()
   return d->getAllTags();
 }
 
+QSet<QString> OsmSchema::getAllTagKeys()
+{
+  return d->getAllTagKeys();
+}
+
 vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
 {
   return d->getAssociatedTags(name);
@@ -1731,7 +1746,7 @@ bool OsmSchema::isList(const QString& /*key*/, const QString& value)
 
 bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 {
-  if (key.startsWith("hoot:"))
+  if (key.startsWith(MetadataTags::HootTagPrefix()))
   {
     return true;
   }
@@ -1789,6 +1804,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
+  LOG_INFO("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

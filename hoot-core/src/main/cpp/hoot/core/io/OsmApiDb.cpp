@@ -30,12 +30,13 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/db/SqlBulkInsert.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // qt
 #include <QStringList>
@@ -53,7 +54,7 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "db/InternalIdReserver.h"
+#include "InternalIdReserver.h"
 
 namespace hoot
 {
@@ -69,6 +70,14 @@ OsmApiDb::OsmApiDb()
 OsmApiDb::~OsmApiDb()
 {
   close();
+}
+
+void OsmApiDb::_init()
+{
+  _floatingPointCoords = false;
+  _capitalizeRelationMemberType = true;
+  _inTransaction = false;
+  _resetQueries();
 }
 
 void OsmApiDb::close()
@@ -89,46 +98,47 @@ void OsmApiDb::close()
 void OsmApiDb::deleteData()
 {
   // delete ways data first
-  _execNoPrepare("DELETE FROM current_relation_members CASCADE");
-  _execNoPrepare("DELETE FROM current_relation_tags CASCADE");
-  _execNoPrepare("DELETE FROM current_relations CASCADE");
-  _execNoPrepare("ALTER SEQUENCE current_relations_id_seq RESTART WITH 1");
-  _execNoPrepare("DELETE FROM relation_members CASCADE");
-  _execNoPrepare("DELETE FROM relation_tags CASCADE");
-  _execNoPrepare("DELETE FROM relations CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationsTableName() + " CASCADE");
+  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentRelationsSequenceName() + " RESTART WITH 1");
+  _execNoPrepare("DELETE FROM " + ApiDb::getRelationMembersTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
 
   // delete relations data 2nd
-  _execNoPrepare("DELETE FROM current_way_nodes CASCADE");
-  _execNoPrepare("DELETE FROM current_way_tags CASCADE");
-  _execNoPrepare("DELETE FROM current_ways CASCADE");
-  _execNoPrepare("ALTER SEQUENCE current_ways_id_seq RESTART WITH 1");
-  _execNoPrepare("DELETE FROM way_nodes CASCADE");
-  _execNoPrepare("DELETE FROM way_tags CASCADE");
-  _execNoPrepare("DELETE FROM ways CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWaysTableName() + " CASCADE");
+  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentWaysSequenceName() + " RESTART WITH 1");
+  _execNoPrepare("DELETE FROM " + ApiDb::getWayNodesTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
 
   // delete nodes data 3rd
-  _execNoPrepare("DELETE FROM current_node_tags CASCADE");
-  _execNoPrepare("DELETE FROM current_nodes CASCADE");
-  _execNoPrepare("ALTER SEQUENCE current_nodes_id_seq RESTART WITH 1");
-  _execNoPrepare("DELETE FROM node_tags CASCADE");
-  _execNoPrepare("DELETE FROM nodes CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodesTableName() + " CASCADE");
+  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentNodesSequenceName() + " RESTART WITH 1");
+  _execNoPrepare("DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
 
   // delete changesets
-  _execNoPrepare("DELETE FROM changesets_subscribers CASCADE");
-  _execNoPrepare("DELETE FROM changeset_tags CASCADE");
-  _execNoPrepare("DELETE FROM changesets CASCADE");
-  _execNoPrepare("ALTER SEQUENCE changesets_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetTagsTableName() + " CASCADE");
+  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsTableName() + " CASCADE");
+  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getChangesetsSequenceName() + " RESTART WITH 1");
 
   // delete users
-  _execNoPrepare("DELETE FROM users CASCADE");
-  _execNoPrepare("ALTER SEQUENCE users_id_seq RESTART WITH 1");
+  _execNoPrepare("DELETE FROM " + ApiDb::getUsersTableName() + " CASCADE");
+  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
 }
 
 bool OsmApiDb::isSupported(QUrl url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql") //postgresql is deprecated but still support
+  //postgresql is deprecated but still supported
+  if (url.scheme() != "osmapidb" && url.scheme() != "postgresql")
   {
     valid = false;
   }
@@ -159,18 +169,15 @@ void OsmApiDb::open(const QUrl& url)
 
 void OsmApiDb::deleteUser(long userId)
 {
-  _exec("DELETE FROM users WHERE id=:id", (qlonglong)userId);
-}
-
-void OsmApiDb::_init()
-{
-  _inTransaction = false;
-  _resetQueries();
+  _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
 void OsmApiDb::_resetQueries()
 {
+  ApiDb::_resetQueries();
+
   _selectElementsForMap.reset();
+  _selectTagsForNode.reset();
   _selectTagsForWay.reset();
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
@@ -183,7 +190,6 @@ void OsmApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-  _selectChangesetsCreatedAfterTime.reset();
 }
 
 void OsmApiDb::rollback()
@@ -230,31 +236,57 @@ void OsmApiDb::commit()
   _inTransaction = false;
 }
 
-/**************************************************************
- * Purpose: support method for OsmApi selects returns a query
- *   string
- * Note: The sql queries in here are getting large to the point where
- *   they might not be as efficient as initially planned and it may be
- *   more efficient to read the element table and by id call the tags
- *   tables to extract the table.  Hard to compare without testing.
- *   Save that for a future exercise.
- **************************************************************/
+QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
+{
+  if (tableType == TableType::Node)
+  {
+    return ApiDb::getCurrentNodesTableName();
+  }
+  else if (tableType == TableType::Way)
+  {
+    return ApiDb::getCurrentWaysTableName();
+  }
+  else if (tableType == TableType::Relation)
+  {
+    return ApiDb::getCurrentRelationsTableName();
+  }
+  else if (tableType == TableType::WayNode)
+  {
+    return ApiDb::getCurrentWayNodesTableName();
+  }
+  else if (tableType == TableType::RelationMember)
+  {
+    return ApiDb::getCurrentRelationMembersTableName();
+  }
+  else
+  {
+    throw HootException("Unsupported table type.");
+  }
+}
+
+//TODO: this needs to be better named
 QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
   {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ")+
-      QString("from current_nodes left outer join current_node_tags on current_nodes.id=current_node_tags.node_id");
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ") +
+      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.node_id")
+      .arg(ApiDb::getCurrentNodesTableName())
+      .arg(ApiDb::getCurrentNodeTagsTableName());
   }
   else if (elementType == ElementType::Way)
   {
-    return QString("id, changeset_id, timestamp, visible, version, k, v ")+
-      QString("from current_ways left outer join current_way_tags on current_ways.id=current_way_tags.way_id");
+    return QString("id, changeset_id, timestamp, visible, version, k, v ") +
+      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.way_id")
+      .arg(ApiDb::getCurrentWaysTableName())
+      .arg(ApiDb::getCurrentWayTagsTableName());
   }
   else if (elementType == ElementType::Relation)
   {
-    return QString("id, changeset_id, timestamp, visible, version, k, v ")+
-      QString("from current_relations left outer join current_relation_tags on current_relations.id=current_relation_tags.relation_id");
+    return QString("id, changeset_id, timestamp, visible, version, k, v ") +
+      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.relation_id")
+      .arg(ApiDb::getCurrentRelationsTableName())
+      .arg(ApiDb::getCurrentRelationTagsTableName());
   }
   else
   {
@@ -264,16 +296,19 @@ QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType)
 
 vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
 {
-  QString sql =  "SELECT ";
-  sql += "node_id FROM " + _getWayNodesTableName() + " WHERE way_id = :wayId ORDER BY sequence_id";
+  QString sql =  "SELECT node_id FROM " +
+                  getCurrentWayNodesTableName() +
+                 " WHERE way_id = :wayId ORDER BY sequence_id";
 
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
 {
-  QString sql =  "SELECT ";
-  sql += "node_id, latitude, longitude FROM current_way_nodes inner join current_nodes on current_way_nodes.node_id=current_nodes.id and way_id = :wayId ORDER BY sequence_id";
+  QString sql =  QString("SELECT node_id, latitude, longitude FROM %1 INNER JOIN %2 ON "
+                         "%1.node_id=%2.id AND way_id = :wayId ORDER BY sequence_id")
+                         .arg(ApiDb::getCurrentWayNodesTableName())
+                         .arg(ApiDb::getCurrentNodesTableName());
   return ApiDb::selectNodesForWay(wayId, sql);
 }
 
@@ -286,7 +321,7 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     _selectMembersForRelation.reset(new QSqlQuery(_db));
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
-      "SELECT member_type, member_id, member_role FROM " + _getRelationMembersTableName() +
+      "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName() +
       " WHERE relation_id = :relationId ORDER BY sequence_id");
   }
 
@@ -319,14 +354,13 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 
 shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 {
-  LOG_DEBUG("IN selectNodeById");
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
-  QString sql = "SELECT " + _elementTypeToElementTableName(ElementType::Node) + " WHERE (id=:elementId) ORDER BY id DESC";
+  QString sql =
+    "SELECT " + _elementTypeToElementTableName(ElementType::Node) +
+    " WHERE (id=:elementId) ORDER BY id DESC";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
-
-  LOG_DEBUG(QString("The sql query= "+ sql));
 
   // execute the query on the DB and get the results back
   if (_selectNodeById->exec() == false)
@@ -336,108 +370,14 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
     throw HootException("Error selecting node by id: " + QString::number(elementId) +
       " Error: " + err);
   }
+  LOG_VARD(_selectNodeById->executedQuery());
+  LOG_VARD(_selectNodeById->numRowsAffected());
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectNodeById...");
   return _selectNodeById;
-}
-
-shared_ptr<QSqlQuery> OsmApiDb::selectBoundedElements(const long elementId,
-                                                      const ElementType& elementType,
-                                                      const QString& bbox)
-{
-  LOG_DEBUG("IN selectBoundedElement");
-
-  QStringList bboxParts = bbox.split(",");
-  double minLat = bboxParts[1].toDouble()*(double)COORDINATE_SCALE;
-  double minLon = bboxParts[0].toDouble()*(double)COORDINATE_SCALE;
-  double maxLat = bboxParts[3].toDouble()*(double)COORDINATE_SCALE;
-  double maxLon = bboxParts[2].toDouble()*(double)COORDINATE_SCALE;
-
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  // setup base sql query string
-  QString sql =  "SELECT ";
-
-  /// @todo This logic seems inconsistent.  _elementTypeToElementTableName is used for one element
-  /// type but not others. - may be OBE after #772
-  if (elementType == ElementType::Node)
-  {
-    sql += _elementTypeToElementTableName(elementType) +
-      " where (latitude between "+ QString::number(minLat)+" and "+QString::number(maxLat) +
-      ") and (longitude between "+ QString::number(minLon)+" and "+QString::number(maxLon) + ")";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " AND (id = :elementId) ";
-    }
-    sql += " AND visible = true ";
-  }
-  else if (elementType == ElementType::Way)
-  {
-    sql += "* FROM current_ways ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
-    }
-    else
-    {
-      sql += " WHERE visible = true ";
-    }
-  }
-  else if (elementType == ElementType::Relation)
-  {
-    sql += "* FROM current_relations ";
-
-    // if requesting a specific id then append this string
-    if (elementId > -1)
-    {
-      sql += " WHERE id = :elementId AND visible = true ";
-    }
-    else
-    {
-      sql += " WHERE visible = true ";
-    }
-  }
-  else
-  {
-    throw HootException("selectBoundedElements cannot operate on an unknown data type.");
-  }
-
-  // sort them in descending order, set limit and offset
-  sql += " ORDER BY id DESC";
-
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
-
-  _selectElementsForMap->prepare(sql);
-
-  // add the element id value if needed by inserting where the marker was placed
-  if (elementId > -1)
-  {
-    _selectElementsForMap->bindValue(":elementId", (qlonglong)elementId);
-  }
-
-  // execute the query on the DB and get the results back
-  if (_selectElementsForMap->exec() == false)
-  {
-    QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " Error: " + err);
-  }
-
-  LOG_DEBUG("LEAVING OsmApiDb::selectBoundedElements...");
-  return _selectElementsForMap;
 }
 
 shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 {
-  LOG_DEBUG("IN selectElement");
-
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
@@ -447,9 +387,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true ORDER BY id DESC";
 
-  // let's see what that sql query string looks like
-  LOG_DEBUG(QString("The sql query= "+sql));
-
   _selectElementsForMap->prepare(sql);
 
   // execute the query on the DB and get the results back
@@ -460,8 +397,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " Error: " + err);
   }
+  LOG_VARD(_selectElementsForMap->executedQuery());
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
 
-  LOG_DEBUG("LEAVING OsmApiDb::selectElements...");
   return _selectElementsForMap;
 }
 
@@ -471,8 +409,9 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   {
     _selectTagsForRelation.reset(new QSqlQuery(_db));
     _selectTagsForRelation->setForwardOnly(true);
-    QString sql =  "SELECT ";
-    sql += "relation_id, k, v FROM current_relation_tags where relation_id = :relId";
+    QString sql =
+      "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
+      " WHERE relation_id = :relId";
     _selectTagsForRelation->prepare( sql );
   }
 
@@ -482,6 +421,8 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
     throw HootException("Error selecting tags for relation with ID: " + QString::number(relId) +
       " Error: " + _selectTagsForRelation->lastError().text());
   }
+  LOG_VART(_selectTagsForRelation->executedQuery());
+  LOG_VART(_selectTagsForRelation->numRowsAffected());
 
   return _selectTagsForRelation;
 }
@@ -492,8 +433,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   {
     _selectTagsForWay.reset(new QSqlQuery(_db));
     _selectTagsForWay->setForwardOnly(true);
-    QString sql =  "SELECT ";
-    sql += "way_id, k, v FROM current_way_tags where way_id = :wayId";
+    QString sql =  "SELECT way_id, k, v FROM " + ApiDb::getCurrentWayTagsTableName() + " WHERE way_id = :wayId";
     _selectTagsForWay->prepare( sql );
   }
 
@@ -503,19 +443,35 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
     throw HootException("Error selecting tags for way with ID: " + QString::number(wayId) +
       " Error: " + _selectTagsForWay->lastError().text());
   }
+  LOG_VART(_selectTagsForWay->executedQuery());
+  LOG_VART(_selectTagsForWay->numRowsAffected());
 
   return _selectTagsForWay;
 }
 
-/************************************************************************
- * Purpose: to extract tags from the extra lines returned in the
- *   selectAll for OsmApi data
- * Input: apidb row in form with row[8]=k, row[9]=v
- * Output: "k"=>"v"
- * Note: this gets the tags in a form that is the same as how selectAll
- *       returns them for Services DB
- * **********************************************************************
- */
+shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
+{
+  if (!_selectTagsForNode)
+  {
+    _selectTagsForNode.reset(new QSqlQuery(_db));
+    _selectTagsForNode->setForwardOnly(true);
+    QString sql =
+      "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
+    _selectTagsForNode->prepare( sql );
+  }
+
+  _selectTagsForNode->bindValue(":nodeId", (qlonglong)nodeId);
+  if (_selectTagsForNode->exec() == false)
+  {
+    throw HootException("Error selecting tags for node with ID: " + QString::number(nodeId) +
+      " Error: " + _selectTagsForNode->lastError().text());
+  }
+  LOG_VART(_selectTagsForNode->executedQuery());
+  LOG_VART(_selectTagsForNode->numRowsAffected());
+
+  return _selectTagsForNode;
+}
+
 QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
   QString tag = "";
@@ -533,14 +489,12 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
   return tag;
 }
 
-long OsmApiDb::getNextId(const ElementType type)
+long OsmApiDb::getNextId(const ElementType& type)
 {
   switch (type.getEnum())
   {
     case ElementType::Node:
-      return getNextId("current_" + type.toString().toLower() + "s");
     case ElementType::Way:
-      return getNextId("current_" + type.toString().toLower() + "s");
     case ElementType::Relation:
       return getNextId("current_" + type.toString().toLower() + "s");
     default:
@@ -555,7 +509,9 @@ long OsmApiDb::getNextId(const QString tableName)
   {
     _seqQueries[tableName].reset(new QSqlQuery(_db));
     _seqQueries[tableName]->setForwardOnly(true);
-    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1_id_seq')").arg(tableName.toLower()));
+    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1%2')")
+                                    .arg(tableName.toLower())
+                                    .arg(ApiDb::getSequenceId()));
   }
 
   shared_ptr<QSqlQuery> query = _seqQueries[tableName];
@@ -583,28 +539,6 @@ long OsmApiDb::getNextId(const QString tableName)
   query->finish();
 
   return result;
-}
-
-shared_ptr<QSqlQuery> OsmApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
-{
-  LOG_VARD(timeStr);
-  _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
-  _selectChangesetsCreatedAfterTime->prepare(
-    QString("SELECT min_lon, max_lon, min_lat, max_lat FROM changesets ") +
-    QString("WHERE created_at > :createdAt"));
-  _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
-
-  if (_selectChangesetsCreatedAfterTime->exec() == false)
-  {
-    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
-    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
-    throw HootException(
-      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
-  }
-  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
-  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
-
-  return _selectChangesetsCreatedAfterTime;
 }
 
 long OsmApiDb::toOsmApiDbCoord(const double x)

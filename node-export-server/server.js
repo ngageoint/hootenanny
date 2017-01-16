@@ -74,7 +74,8 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     var output = 'export_' + id;
     var hootHome = process.env['HOOT_HOME'];
     var isFile = req.params.format === 'OSM XML';
-    var outDir = hootHome + '/node-export-server/' + output;
+    var appDir = hootHome + '/node-export-server/';
+    var outDir = appDir + output;
     var outFile = outDir + config.formats[req.params.format];
     if (req.params.format === 'File Geodatabase') outDir = outFile;
     var outzip = outDir + '.zip';
@@ -148,8 +149,12 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         if (input.substring(0,2) === 'PG') bbox_param = 'ogr.reader.bounding.box.latlng';
 
         if (input.substring(0,4) === 'http') {
+            var cert_param = '';
+            if (input.substring(0,5) === 'https' && fs.existsSync(appDir + 'key.pem') && fs.existsSync(appDir + 'cert.pem')) {
+                cert_param = '--private-key=' + appDir + 'key.pem --certificate=' + appDir + 'cert.pem';
+            }
             temp_file = outDir + '.osm';
-            command += 'wget -q -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
+            command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
             input = temp_file;
         }
 
@@ -198,7 +203,9 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                     if (isFile) {
                         zip.file(outFile, { name: output + config.formats[req.params.format]});
                     } else {
-                        zip.directory(outDir, output + config.formats[req.params.format]);
+                        //Don't include file extension for shapefile
+                        var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
+                        zip.directory(outDir, output + ext);
                     }
                     zip.finalize();
 

@@ -47,7 +47,7 @@ Feature: Translation Assistant
         Then I press enter in the "[placeholder='Search tag']" input
         Then I select the "linktag" div
         Then I type "quickbird" in input "preset-input--118997366"
-        Then I press "Next"
+        Then I click on "a.next"
         Then I should see "ID"
         Then I select the "backarrow" div
         Then I should see "FCC"
@@ -63,7 +63,7 @@ Feature: Translation Assistant
         Then I click the "plus" classed link under "add-mapping"
         And I fill input under "lookup" with "name_alt"
         Then I press enter in the "[placeholder='Search tag']" input
-        Then I press "Next"
+        Then I click on "a.next"
         Then I press "Save Translation"
         And I wait 5 seconds
         Then the download file pattern "*-translation.js" should exist
@@ -95,7 +95,7 @@ Feature: Translation Assistant
         Then I press the down arrow key on "[placeholder='Search tag']"
         Then I press enter in the "[placeholder='Search tag']" input
         And I should see "Geographic Name Information : Full Name"
-        Then I press "Next"
+        Then I click on "a.next"
         Then I press "Save Translation"
         Then I should see "A mapping for Feature Code is required"
         Then I select the "backarrow" div
@@ -108,7 +108,7 @@ Feature: Translation Assistant
         Then I select the last "linktag" div
         Then I type "AP030" in input "preset-input-1313887511"
         Then I press enter in the "[id='preset-input-1313887511']" input
-        Then I press "Next"
+        Then I click on "a.next"
         Then I click the "plus" classed link under "add-mapping"
         And I fill input under "lookup" with "Feature Function"
         Then I select the first "search-result" div

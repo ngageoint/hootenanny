@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,11 +29,13 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 class Status
 {
@@ -61,9 +63,29 @@ public:
     case Status::Invalid:
       return "Invalid";
     case Status::Unknown1:
-      return "Unknown1";
+      return MetadataTags::Unknown1();
     case Status::Unknown2:
-      return "Unknown2";
+      return MetadataTags::Unknown2();
+    case Status::Conflated:
+      return "Conflated";
+    default:
+      return QString("Unknown (%1)").arg(_type);
+    }
+  }
+
+  // This is not pretty and it is a copy of "toString".
+  // It is a lot easier to change this when the users want different text output
+  // instead of changing "toString" and all of code, unit tests etc that rely on it.
+  QString toTextStatus() const
+  {
+    switch (_type)
+    {
+    case Status::Invalid:
+      return "Invalid";
+    case Status::Unknown1:
+      return "Input1";
+    case Status::Unknown2:
+      return "Input2";
     case Status::Conflated:
       return "Conflated";
     default:
@@ -80,11 +102,11 @@ public:
     {
       return Invalid;
     }
-    else if (typeString == "unknown1")
+    else if (typeString == "unknown1" || typeString == "input1")
     {
       return Unknown1;
     }
-    else if (typeString == "unknown2")
+    else if (typeString == "unknown2" || typeString == "input2")
     {
       return Unknown2;
     }

@@ -146,6 +146,7 @@ tagCountHistogram2.png
 uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
+test-files/DcTigerRoadsFrechetInput.osm
 data/
 .vagrant/
 inputFeatures.png
@@ -158,6 +159,8 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
+plugins/eggdm30_osm_rules.js
+plugins/eggdm30_rules.js
 
 ###### hoot-services ignores
 hoot-services/db.properties

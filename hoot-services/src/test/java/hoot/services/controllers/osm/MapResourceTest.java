@@ -1016,26 +1016,16 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test
-    @Category(UnitTest.class)
-    public void testGetMapBoundsOutsideWorld() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        // Try to query nodes with invalid bounds.
-        // "bbox" of "-181,-90,180,90" should be corrected to "-180,-90,180,90" on the server side
-        // Therefore, the call should not fail because of invalid coordinates
-        Document doc = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", "-181,-90,180,90")
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-
-        assertNotNull(doc);
-    }
+//    @Test(expected = WebApplicationException.class)
+//    @Category(UnitTest.class)
+//    public void testGetMapBoundsOutsideWorld() throws Exception {
+//        // Try to query nodes with invalid bounds.
+//        Document doc = target("api/0.6/map")
+//                    .queryParam("mapId", String.valueOf(mapId))
+//                    .queryParam("bbox", "-181,-90,180,90")
+//                    .request(MediaType.TEXT_XML)
+//                    .get(Document.class);
+//    }
 
     @Test
     @Category(UnitTest.class)

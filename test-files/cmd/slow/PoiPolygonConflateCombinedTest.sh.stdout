@@ -1,0 +1,13 @@
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-791.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4736 in Relation:-764.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-664 in Relation:-552.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-665 in Relation:-551.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-682 in Relation:-547.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1288 in Relation:-286.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-268.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-267.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-266.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-265.
+15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  64) Reached maximum number of missing reports. No longer reporting.
+15:25:44.031 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm ...
+15:25:44.181 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonConflateCombinedTest/output1.osm ...

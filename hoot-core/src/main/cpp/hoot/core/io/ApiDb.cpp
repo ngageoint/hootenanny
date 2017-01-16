@@ -30,18 +30,21 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/db/SqlBulkInsert.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
+#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
 
 // qt
 #include <QStringList>
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
+#include <QSet>
 
 // Standard
 #include <math.h>
@@ -51,7 +54,7 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "db/InternalIdReserver.h"
+#include "InternalIdReserver.h"
 
 namespace hoot
 {
@@ -63,6 +66,16 @@ ApiDb::ApiDb()
 }
 
 ApiDb::~ApiDb()
+{
+  _resetQueries();
+
+  if (_db.isOpen())
+  {
+    _db.close();
+  }
+}
+
+void ApiDb::_resetQueries()
 {
   if (_selectUserByEmail != 0)
   {
@@ -76,10 +89,12 @@ ApiDb::~ApiDb()
   {
     _selectNodeIdsForWay.reset();
   }
-  if (_db.isOpen())
-  {
-    _db.close();
-  }
+  _selectNodesByBounds.reset();
+  _selectWayIdsByWayNodeIds.reset();
+  _selectElementsByElementIdList.reset();
+  _selectWayNodeIdsByWayIds.reset();
+  _selectRelationIdsByMemberIds.reset();
+  _selectChangesetsCreatedAfterTime.reset();
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -144,7 +159,7 @@ void ApiDb::open(const QUrl& url)
   LOG_DEBUG("Successfully opened _db: " << url.toString());
 }
 
-long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
+long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
   //LOG_DEBUG("debug email = " + email);
   //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
@@ -152,7 +167,8 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
-    _selectUserByEmail->prepare("SELECT email, id, display_name FROM users WHERE email LIKE :email");
+    _selectUserByEmail->prepare(
+      "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() + " WHERE email LIKE :email");
   }
   _selectUserByEmail->bindValue(":email", email);
   if (_selectUserByEmail->exec() == false)
@@ -184,7 +200,7 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
   return result;
 }
 
-long ApiDb::insertUser(const QString& email, const QString& displayName)
+long ApiDb::insertUser(const QString email, const QString displayName)
 {
   long id = -1;
 
@@ -192,7 +208,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
-    _insertUser->prepare("INSERT INTO users (email, display_name) "
+    _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "
                          "VALUES (:email, :display_name) "
                          "RETURNING id");
   }
@@ -244,8 +260,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 }
 
 
-vector<long> ApiDb::selectNodeIdsForWay(long wayId,
-                                        const QString& sql)
+vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
 {
   vector<long> result;
 
@@ -279,7 +294,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId,
   return result;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
+shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -294,6 +309,8 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
     throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
       " Error: " + _selectNodeIdsForWay->lastError().text());
   }
+  LOG_VART(_selectNodeIdsForWay->numRowsAffected());
+  LOG_VART(_selectNodeIdsForWay->executedQuery());
 
   return _selectNodeIdsForWay;
 }
@@ -302,18 +319,27 @@ Tags ApiDb::unescapeTags(const QVariant &v)
 {
   assert(v.type() == QVariant::String);
   QString s = v.toString();
-  // convert backslash and double quotes to their octal form so we can safely split on double quotes
-  s.replace("\\\\", "\\134");
-  s.replace("\\\"", "\\042");
 
   Tags result;
-  QStringList l = s.split("\"");
-  for (int i = 1; i < l.size(); i+=4)
-  {
-    _unescapeString(l[i]);
-    _unescapeString(l[i + 2]);
 
-    result.insert(l[i], l[i + 2]);
+  QStringList list = s.split("=>");
+  while (list.size() > 1)
+  {
+    QString key = list.first();
+    list.pop_front();
+    QString value = list.first();
+    list.pop_front();
+    //  Split the value/key that wasn't split at the beginning
+    if (list.size() > 0)
+    {
+      QStringList vk = value.split("\", \"");
+      value = vk[0];
+      list.push_front(vk[1]);
+    }
+    //  Unescape the rest
+    _unescapeString(key);
+    _unescapeString(value);
+    result.insert(key, value);
   }
 
   return result;
@@ -336,7 +362,7 @@ void ApiDb::_unescapeString(QString& s)
   s.replace("\\134", "\\");
 }
 
-QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3) const
+QSqlQuery ApiDb::_exec(const QString sql, QVariant v1, QVariant v2, QVariant v3) const
 {
   QSqlQuery q(_db);
 
@@ -385,7 +411,7 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   return tile;
 }
 
-QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
+QSqlQuery ApiDb::_execNoPrepare(const QString sql) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
@@ -404,6 +430,256 @@ QSqlQuery ApiDb::_execNoPrepare(const QString& sql) const
 long ApiDb::round(double x)
 {
   return (long)(x + 0.5);
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
+{
+  LOG_VARD(bounds);
+  const vector<Range> tileRanges = _getTileRanges(bounds);
+  LOG_VARD(tileRanges.size());
+
+  //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
+  //modify this to add placeholders for the tile ID ranges and make it so the query only gets
+  //prepared once.
+  if (!_selectNodesByBounds)
+  {
+    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds->setForwardOnly(true);
+  }
+  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::Node) + " WHERE";
+  sql += " visible = true";
+  sql += " AND (" + _getTileWhereCondition(tileRanges) + ")";
+  sql += " AND longitude >= :minLon AND longitude <= :maxLon AND latitude >= :minLat ";
+  sql += " AND latitude <= :maxLat";
+  sql += " ORDER BY id DESC";
+  _selectNodesByBounds->prepare(sql);
+  if (!_floatingPointCoords)
+  {
+    _selectNodesByBounds->bindValue(":minLon", (qlonglong)(bounds.getMinX() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":maxLon", (qlonglong)(bounds.getMaxX() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":minLat", (qlonglong)(bounds.getMinY() * COORDINATE_SCALE));
+    _selectNodesByBounds->bindValue(":maxLat", (qlonglong)(bounds.getMaxY() * COORDINATE_SCALE));
+  }
+  else
+  {
+    _selectNodesByBounds->bindValue(":minLon", bounds.getMinX());
+    _selectNodesByBounds->bindValue(":maxLon", bounds.getMaxX());
+    _selectNodesByBounds->bindValue(":minLat", bounds.getMinY());
+    _selectNodesByBounds->bindValue(":maxLat", bounds.getMaxY());
+  }
+  LOG_VARD(_selectNodesByBounds->lastQuery());
+  LOG_VARD(_selectNodesByBounds->boundValues());
+
+  if (_selectNodesByBounds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting nodes by bounds: " + QString::fromStdString(bounds.toString()) + " Error: " +
+      _selectNodesByBounds->lastError().text());
+  }
+  LOG_VARD(_selectNodesByBounds->numRowsAffected());
+  return _selectNodesByBounds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
+{
+  if (nodeIds.size() == 0)
+  {
+    throw HootException("Empty node ID list.");
+  }
+
+  if (!_selectWayIdsByWayNodeIds)
+  {
+    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "SELECT DISTINCT way_id FROM " + tableTypeToTableName(TableType::WayNode) + " WHERE";
+  sql += " node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
+  //sql += " ORDER BY way_id desc";
+  _selectWayIdsByWayNodeIds->prepare(sql);
+  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery());
+
+  if (_selectWayIdsByWayNodeIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way IDs by way node IDs.  Error: " +
+      _selectWayIdsByWayNodeIds->lastError().text());
+  }
+  LOG_VARD(_selectWayIdsByWayNodeIds->numRowsAffected());
+  return _selectWayIdsByWayNodeIds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
+                                                           const TableType& tableType)
+{
+  if (elementIds.size() == 0)
+  {
+    throw HootException("Empty element ID list.");
+  }
+
+  if (!_selectElementsByElementIdList)
+  {
+    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "SELECT * FROM " + tableTypeToTableName(tableType) + " WHERE";
+  sql += " visible = true";
+  sql += " AND id IN (" + QStringList(elementIds.toList()).join(",") + ")";
+  sql += " ORDER BY id DESC";
+  _selectElementsByElementIdList->prepare(sql);
+  LOG_VARD(_selectElementsByElementIdList->lastQuery());
+
+  if (_selectElementsByElementIdList->exec() == false)
+  {
+    throw HootException(
+      "Error selecting elements by element ID list:  Error: " +
+      _selectElementsByElementIdList->lastError().text());
+  }
+  LOG_VARD(_selectElementsByElementIdList->numRowsAffected());
+  return _selectElementsByElementIdList;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
+{
+  if (wayIds.size() == 0)
+  {
+    throw HootException("Empty way ID list.");
+  }
+
+  if (!_selectWayNodeIdsByWayIds)
+  {
+    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "SELECT DISTINCT node_id FROM " + tableTypeToTableName(TableType::WayNode) + " WHERE";
+  sql += " way_id IN (" + QStringList(wayIds.toList()).join(",") + ")";
+  //sql += " ORDER BY sequence_id";
+  _selectWayNodeIdsByWayIds->prepare(sql);
+  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery());
+
+  if (_selectWayNodeIdsByWayIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting way node IDs by way IDs.  Error: " +
+      _selectWayNodeIdsByWayIds->lastError().text());
+  }
+  LOG_VARD(_selectWayNodeIdsByWayIds->numRowsAffected());
+  return _selectWayNodeIdsByWayIds;
+}
+
+shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+                                                          const ElementType& memberElementType)
+{
+  if (memberIds.size() == 0)
+  {
+    throw HootException("Empty member ID list.");
+  }
+
+  if (!_selectRelationIdsByMemberIds)
+  {
+    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds->setForwardOnly(true);
+  }
+  //this has to be prepared every time due to the varying number of IDs passed in
+  QString sql = "SELECT DISTINCT relation_id FROM " +
+    tableTypeToTableName(TableType::RelationMember) + " WHERE";
+  sql += " member_type = :elementType";
+  sql += " AND member_id IN (" + QStringList(memberIds.toList()).join(",") + ")";
+  //sql += " ORDER BY relation_id DESC";
+  _selectRelationIdsByMemberIds->prepare(sql);
+  if (!_capitalizeRelationMemberType)
+  {
+    _selectRelationIdsByMemberIds->bindValue(":elementType", memberElementType.toString().toLower());
+  }
+  else
+  {
+    _selectRelationIdsByMemberIds->bindValue(":elementType", memberElementType.toString());
+  }
+  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery());
+  LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
+
+  if (_selectRelationIdsByMemberIds->exec() == false)
+  {
+    throw HootException(
+      "Error selecting relation IDs by member IDs.  Error: " +
+      _selectRelationIdsByMemberIds->lastError().text());
+  }
+  LOG_VARD(_selectRelationIdsByMemberIds->numRowsAffected());
+  return _selectRelationIdsByMemberIds;
+}
+
+vector<Range> ApiDb::_getTileRanges(const Envelope& env) const
+{
+  const double minLat = env.getMinY();
+  const double minLon = env.getMinX();
+  const double maxLat = env.getMaxY();
+  const double maxLon = env.getMaxX();
+
+  vector<double> minV;
+  minV.push_back(-90.0);
+  minV.push_back(-180.0);
+  vector<double> maxV;
+  maxV.push_back(90.0);
+  maxV.push_back(180.0);
+  ZValue zv(2, 16, minV, maxV);
+  ZCurveRanger ranger(zv);
+
+  vector<double> minB;
+  minB.push_back(minLat);
+  minB.push_back(minLon);
+  vector<double> maxB;
+  maxB.push_back(maxLat);
+  maxB.push_back(maxLon);
+
+  BBox b(minB, maxB);
+  return ranger.decomposeRange(b, 1);
+}
+
+QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
+{
+  QString sql = "";
+  for (uint i = 0; i < tileIdRanges.size(); i++)
+  {
+    if (i == tileIdRanges.size() - 1)
+    {
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ")";
+    }
+    else
+    {
+      sql += "(tile between " + QString::number(tileIdRanges[i].getMin()) + " and " +
+          QString::number(tileIdRanges[i].getMax()) + ") or ";
+    }
+  }
+  return sql;
+}
+
+shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+{
+  LOG_VARD(timeStr);
+  if (!_selectChangesetsCreatedAfterTime)
+  {
+    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime->prepare(
+      QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ")
+        .arg(ApiDb::getChangesetsTableName()) +
+      QString("WHERE created_at > :createdAt"));
+    _selectChangesetsCreatedAfterTime->bindValue(":createdAt", "'" + timeStr + "'");
+  }
+
+  if (_selectChangesetsCreatedAfterTime->exec() == false)
+  {
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
+    LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
+    throw HootException(
+      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
+  }
+  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
+
+  return _selectChangesetsCreatedAfterTime;
 }
 
 }

@@ -47,7 +47,7 @@
 // This class was extracted from ScriptMatchCreator so that it could
 // be used by the other match creators (highway, building, etc). It is
 // used to build an index of input elements (which can be filterd by
-// various criteria, if need be). The evelope plus the search
+// various criteria, if need be). The envelope plus the search
 // radius is created as the index box for each element. This is more
 // efficient than using the OsmMapIndex index.
 

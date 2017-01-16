@@ -32,6 +32,7 @@
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/Factory.h>
 
 namespace hoot
 {
@@ -42,6 +43,8 @@ namespace hoot
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer
 {
 public:
+
+  static std::string className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() {}
 
@@ -95,6 +98,7 @@ protected:
   }
 
   vector< shared_ptr<ElementCriterion> > _filters;
+
 };
 
 }

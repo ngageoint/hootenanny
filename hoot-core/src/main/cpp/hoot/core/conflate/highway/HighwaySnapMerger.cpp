@@ -179,7 +179,7 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 {
   if (!e1 && !e2)
   {
-    LOG_WARN("Error marking element as needing review. Neither element exists. " << note);
+    LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
   }
   else if (e1 && e2)
   {

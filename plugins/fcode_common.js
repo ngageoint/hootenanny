@@ -45,7 +45,7 @@ fcodeCommon = {
       ['F_CODE','AA020','mine:superstructure','yes'], // Mine Shaft Superstructure 
       ['F_CODE','AA040','man_made','rig'], // Rig/Superstructure
       ['F_CODE','AA045','man_made','borehole'], // Borehole
-      ['F_CODE','AA052','landuse','hydrocarbons_field'], // Hydrocarbons Field
+      ['F_CODE','AA052','industrial','hydrocarbons_field'], // Hydrocarbons Field
       ['F_CODE','AA054','man_made','well'], // Non-water Well
       ['F_CODE','AB000','landuse','landfill'], // Disposal Site / Waste Pile
       ['F_CODE','AB010','amenity','recycling'], // Wrecking Yard/Scrap Yard, Recycling Site
@@ -116,7 +116,7 @@ fcodeCommon = {
       ['F_CODE','AK170','leisure','swimming_pool'], // Swimming Pool 
       ['F_CODE','AK180','tourism','zoo'], // Zoo/Safari Park
       ['F_CODE','AL010','facility','yes'], // Facility 
-      ['F_CODE','AL011','landuse','installation'], // Installation # Not sure the difference to AL010 Facility
+      ['F_CODE','AL011','landuse','installation'], // Installation. This is a group of AL010 Facilities.
       ['F_CODE','AL012','historic','archaeological_site'], // Archeological Site
       ['F_CODE','AL013','building','yes'], // Building - See custom rules
       ['F_CODE','AL014','man_made','structure'], // Non-building Structure

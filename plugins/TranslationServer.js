@@ -442,9 +442,9 @@ var getFilteredSchema = function(params) {
 
 var searchSchema = function(options) {
     var translation = options.translation || 'TDSv61';
-    var geomType = options.geomType || 'point';
+    var geomType = options.geomType || '';
     var searchStr = options.searchStr || '';
-    var limitResult = options.limitResult || 12;
+    var limitResult = options.limitResult || 1000;
     var maxLevDistance = options.maxLevDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
 
@@ -454,7 +454,7 @@ var searchSchema = function(options) {
         //Check for search string in the description or fcode
         var exactMatches = schema
             .filter(function(d) {
-                return d.geom.toLowerCase() === geomType.toLowerCase() &&
+                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
                 ( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
                     d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 )
                 ;
@@ -484,7 +484,7 @@ var searchSchema = function(options) {
                     return (! exactMatches.some(function(e) { //filter out exact matches
                         return e.desc === d.desc;
                     }) ) &&
-                    d.geom.toLowerCase() === geomType.toLowerCase() &&
+                    d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
                     ( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()) <= maxLevDistance ||
                         getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) <= maxLevDistance )
                     ;
@@ -511,7 +511,7 @@ var searchSchema = function(options) {
     } else {
         // Return the first N elements of the schema
         result = schema.filter(function(d) {
-                return d.geom.toLowerCase() === geomType.toLowerCase()
+                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
             })
             .slice(0, limitResult)
             .map(function(d) {

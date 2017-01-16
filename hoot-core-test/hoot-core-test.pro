@@ -97,8 +97,6 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractorTest.cpp \
     src/test/cpp/hoot/core/algorithms/MaximalSublineTest.cpp \
     src/test/cpp/hoot/core/algorithms/ExpectationIntersectionTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMergerTest.cpp \
     src/test/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolverTest.cpp \
     src/test/cpp/hoot/core/elements/NodeTest.cpp \
     src/test/cpp/hoot/core/perty/PertyNameVisitorTest.cpp \
@@ -161,8 +159,6 @@ SOURCES += \
     src/test/cpp/hoot/core/scoring/MapScoringStatusAndRefTagValidatorTest.cpp \
     src/test/cpp/hoot/core/ops/BuildingOutlineUpdateOpTest.cpp \
     src/test/cpp/hoot/core/conflate/highway/HighwayMatchCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/PlacesPoiMatchCreatorTest.cpp \
-    src/test/cpp/hoot/core/conflate/point/CustomPoiMatchCreatorTest.cpp \
     src/test/cpp/hoot/core/conflate/ConflateStatsHelperTest.cpp \
     src/test/cpp/hoot/core/visitors/MatchCandidateCountVisitorTest.cpp \
     src/test/cpp/hoot/core/visitors/KeepTagsVisitorTest.cpp \
@@ -177,15 +173,30 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
-    src/test/cpp/hoot/core/visitors/RemoveEmptyReviewRelationsVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitorTest.cpp \
     src/test/cpp/hoot/core/filters/BuildingWayNodeCriterionTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractorTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterionTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/AreaCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/WayCriterionTest.cpp \
+    src/test/cpp/hoot/core/filters/NonBuildingAreaCriterionTest.cpp \
+    src/test/cpp/hoot/core/visitors/CountManualMatchesVisitorTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/core/io/HootApiDbTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
-    src/test/cpp/hoot/core/io/HootApiDbReaderTest.cpp \
-    src/test/cpp/hoot/core/io/HootApiDbWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
@@ -235,10 +246,11 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp
+    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp 
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
-    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h
+    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h \
+    src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h
 
 

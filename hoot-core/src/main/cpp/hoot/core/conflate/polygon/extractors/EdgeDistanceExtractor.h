@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -40,7 +40,7 @@ class ValueAggregator;
  * Calculates the distance from one set of lines to the other set of lines. There are several
  * options for how to aggregate the distances. See subclasses of ValueAggregator.
  *
- * The distance will be calaculated from target to candidate and candidate to target. The lower
+ * The distance will be calculated from target to candidate and candidate to target. The lower
  * of the two values will be returned.
  *
  * The distances are determined by sampling one of the geometries into points every samples meters

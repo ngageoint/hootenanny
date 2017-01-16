@@ -27,7 +27,11 @@
 package hoot.services.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 /**
@@ -56,5 +60,49 @@ public final class PostgresUtils {
         }
 
         return hstore;
+    }
+
+    /**
+     * Converts JSON object to Postgesql hStore objects
+     *
+     * @param tags
+     *            - json containing tags kv
+     * @return - Expression Object for QueryDSL consumption
+     */
+    public static Object jsonToHStore(JSONObject tags) {
+        Map<String, String> hStoreObject = new HashMap<>();
+
+        if (tags != null) {
+            for (Object it : tags.entrySet()) {
+                Map.Entry<Object, Object> pairs = (Map.Entry<Object, Object>) it;
+
+                String jsonStr;
+                Object oVal = tags.get(pairs.getKey());
+
+                if (oVal instanceof JSONObject) {
+                    jsonStr = ((JSONObject) oVal).toJSONString();
+                }
+                else if (oVal instanceof JSONArray) {
+                    jsonStr = ((JSONArray) oVal).toJSONString();
+                }
+                else if (oVal instanceof Map) {
+                    jsonStr = JSONObject.toJSONString((Map) oVal);
+                }
+                else if (oVal instanceof List) {
+                    jsonStr = JSONArray.toJSONString((List) oVal);
+                }
+                else {
+                    jsonStr = oVal.toString();
+                }
+
+                jsonStr = jsonStr.replace("\\", "\\\\");
+                jsonStr = jsonStr.replace("'", "''");
+                jsonStr = jsonStr.replace("\"", "\\\"");
+
+                hStoreObject.put(pairs.getKey().toString(), jsonStr);
+            }
+        }
+
+        return hStoreObject;
     }
 }

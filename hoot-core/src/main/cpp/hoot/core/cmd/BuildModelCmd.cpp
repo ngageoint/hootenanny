@@ -60,6 +60,13 @@ public:
 
   virtual int runSimple(QStringList args)
   {
+    bool exportArffOnly = false;
+    if (args.contains("--export-arff-only"))
+    {
+      args.removeAll("--export-arff-only");
+      exportArffOnly = true;
+    }
+
     if (args.size() < 3 || args.size() % 2 == 0)
     {
       cout << getHelp() << endl << endl;
@@ -93,7 +100,7 @@ public:
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      LOG_INFO("Training on : " << args[0] << " and " << args[1]);
+      LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
       shared_ptr<OsmMap> map(new OsmMap());
 
       loadMap(map, args[i], false, Status::Unknown1);
@@ -106,6 +113,10 @@ public:
 
     ArffWriter aw(output + ".arff", true);
     aw.write(mfe.getSamples());
+    if (exportArffOnly)
+    {
+      return 0;
+    }
 
     // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
     // ideally we'll circle back and update RF to use null values.
@@ -120,6 +131,7 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
+    LOG_INFO("Training on data with " << numFactors << " factors...");
     rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
@@ -128,6 +140,7 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
+    LOG_INFO("Writing .rf file...");
     ofstream fileStream;
     fileStream.open((output + ".rf").toStdString().data());
     rf.exportModel(fileStream);

@@ -47,7 +47,7 @@ class CountUniqueReviewsVisitor : public ElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  static string className() { return "hoot::CountUniqueReviewsVisitors"; }
+  static string className() { return "hoot::CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() {}
 

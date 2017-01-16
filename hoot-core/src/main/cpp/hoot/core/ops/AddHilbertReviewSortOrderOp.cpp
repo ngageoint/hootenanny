@@ -31,6 +31,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
 // Tgs
@@ -103,7 +104,7 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
   {
     RelationPtr r = map->getRelation(reviewOrder[i].first.getId());
 
-    r->getTags().set(ReviewMarker::reviewSortOrderKey, (long)i);
+    r->getTags().set(MetadataTags::HootReviewSortOrder(), (long)i);
   }
 }
 

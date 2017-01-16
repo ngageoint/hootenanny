@@ -87,7 +87,7 @@ public class ConflationResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ConflationResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -132,7 +132,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
+                    .getResource("hoot.services.controllers.job/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -157,7 +157,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
+                    .getResource("hoot.services.controllers.job/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -182,7 +182,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                 .currentThread()
                 .getContextClassLoader()
-                .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
+                .getResource("hoot.services.controllers.job/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
                 .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -210,7 +210,7 @@ public class ConflationResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/job/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot.services.controllers.job/ConflationResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());

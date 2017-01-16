@@ -325,14 +325,14 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
 
   for (size_t i = 0; i < randomized.size(); i++)
   {
-    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    if (i % 10000 == 0 && Log::getInstance().getLevel() <= Log::Trace)
     {
       cout << "Progress: " << i << " of " << randomized.size() - 1 << "          \r";
       cout << flush;
     }
     _dt->insert(randomized[i].first, randomized[i].second);
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     cout << endl;
   }

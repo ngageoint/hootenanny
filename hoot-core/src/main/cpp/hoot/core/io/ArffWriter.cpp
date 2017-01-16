@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ArffWriter.h"
@@ -60,6 +60,8 @@ void ArffWriter::_w(const QString& s)
 
 void ArffWriter::write(const vector<Sample> &samples)
 {
+  LOG_INFO("Writing .arff file...");
+
   set<QString> attributes;
 
   for (vector<Sample>::const_iterator it = samples.begin(); it != samples.end(); ++it)

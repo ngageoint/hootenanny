@@ -30,6 +30,7 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -616,14 +617,14 @@ public:
     {
         Tags t1;
         t1["building"] = "residential";
-        t1["REF1"] = "foo";
+        t1[MetadataTags::Ref1()] = "foo";
 
         Tags t2;
         t2["building"] = "no";
-        t2["REF1"] = "bar";
+        t2[MetadataTags::Ref1()] = "bar";
 
         Tags expected;
-        expected["REF1"] = "foo;bar";
+        expected[MetadataTags::Ref1()] = "foo;bar";
 
         Tags gen = uut.generalize(t1, t2);
         compareTags(expected, gen);
@@ -886,7 +887,7 @@ public:
       t2["bridge"] = "";
       t2["surface"] = "paved";
       t2["tunnel"] = "";
-      t2["hoot:id"] = "1";
+      t2[MetadataTags::HootId()] = "1";
 
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
     }
@@ -905,7 +906,7 @@ public:
       t2["tunnel"] = "";
       t2["all_weather"] = "yes";
       t2["surface"] = "paved";
-      t2["hoot:id"] = "1";
+      t2[MetadataTags::HootId()] = "1";
       t2["bridge"] = "";
 
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
@@ -926,7 +927,7 @@ public:
       t2["bridge"] = "";
       t2["surface"] = "paved";
       t2["tunnel"] = "";
-      t2["hoot:id"] = "1";
+      t2[MetadataTags::HootId()] = "1";
 
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
     }
@@ -945,7 +946,7 @@ public:
       t2["tunnel"] = "";
       t2["all_weather"] = "yes";
       t2["surface"] = "paved";
-      t2["hoot:id"] = "1";
+      t2[MetadataTags::HootId()] = "1";
       t2["BRIDGE"] = "";
 
       CPPUNIT_ASSERT(uut.nonNameTagsExactlyMatch(t1, t2));
@@ -966,7 +967,7 @@ public:
       t2["bridge"] = "";
       t2["surface"] = "paved";
       t2["tunnel"] = "";
-      t2["hoot:id"] = "1";
+      t2[MetadataTags::HootId()] = "1";
 
       CPPUNIT_ASSERT(!uut.nonNameTagsExactlyMatch(t1, t2));
     }

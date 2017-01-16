@@ -402,6 +402,14 @@ MassNh = {
             } // End switch
         } // End Mass Waterways
 
+        // Fix up areas
+        if (geometryType == 'Area' && ! translate.isOsmArea(tags))
+        {
+            // Debug
+            // print('Adding area=yes');
+            tags.area = 'yes';
+        }
+
 
 
     }, // End of applyToOsmPostProcessing

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NameExtractor.h"
 
@@ -35,6 +35,7 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -61,10 +62,19 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 
   for (int i = 0; i < targetNames.size(); i++)
   {
+    const QString targetName = targetNames[i];
     for (int j = 0; j < candidateNames.size(); j++)
     {
-      double thisScore = _d->compare(targetNames[i], candidateNames[j]);
+      const QString candidateName = candidateNames[j];
+      LOG_VART(targetName);
+      LOG_VART(candidateName);
+      const double thisScore = _d->compare(targetName, candidateName);
       score = max(thisScore, score);
+      LOG_VART(score);
+      if (score == 1.0)
+      {
+        return score;
+      }
     }
   }
 
@@ -78,7 +88,7 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 //    LOG_INFO("target: " << target->toString());
 //    LOG_INFO("candidate: " << candidate->toString());
 
-//    if (candidate->getTags()["REF2"].contains(target->getTags()["REF1"]))
+//    if (candidate->getTags()[MetadataTags::Ref2()].contains(target->getTags()[MetadataTags::Ref1()]))
 //    {
 //      LOG_INFO(getName() << " | Match: " << score << " | " <<
 //               target->getTags().getNames().join(";") << " | " <<

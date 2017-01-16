@@ -278,7 +278,8 @@ public:
                     "cached envelope: 0,-1,0,-1\n"
                     "status: unknown1\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 1",
                     wayCopy);
   }
 
@@ -303,7 +304,7 @@ public:
 
     WayPtr wayCopy = ws->copySimplifiedWayIntoMap(*map, map);
 
-    // there was a bug at one point that modifed the original way, make sure it didn't change
+    // there was a bug at one point that modified the original way, make sure it didn't change
     // length.
     HOOT_STR_EQUALS(70, ElementConverter(map).calculateLength(w1));
     HOOT_STR_EQUALS(40, ElementConverter(map).calculateLength(wayCopy));
@@ -313,7 +314,8 @@ public:
                     "cached envelope: 0,-1,0,-1\n"
                     "status: unknown1\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 1",
                     wayCopy);
   }
 
@@ -356,7 +358,8 @@ public:
                     "cached envelope: 0,-1,0,-1\n"
                     "status: unknown1\n"
                     "version: 0\n"
-                    "visible: 1",
+                    "visible: 1\n"
+                    "circular error: 1",
                     wayCopy);
   }
 };

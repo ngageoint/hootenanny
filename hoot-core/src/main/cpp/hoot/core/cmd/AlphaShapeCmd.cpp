@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -63,7 +63,7 @@ public:
 
     shared_ptr<OsmMap> pointsMap(new OsmMap());
     loadMap(pointsMap, pointsPath, false, Status::Unknown1);
-    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generate(pointsMap);
+    OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
 
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);

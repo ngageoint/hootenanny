@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,6 +41,7 @@
 #include "PertyRemoveTagVisitor.h"
 #include "PertyRemoveRandomElementVisitor.h"
 #include "PermuteGridCalculator.h"
+#include "DirectSequentialSimulation.h"
 
 //Qt
 #include <QVector>
@@ -170,6 +171,7 @@ private:
 };
 
 PertyOp::PertyOp() :
+_permuteAlgorithm(QString::fromStdString(DirectSequentialSimulation::className())),
 _settings(conf())
 {
   _configure();
@@ -182,8 +184,7 @@ void PertyOp::_configure()
   setSystematicError(
     configOptions.getPertySystematicErrorX(), configOptions.getPertySystematicErrorY());
   setGridSpacing(configOptions.getPertyGridSpacing());
-  setCsmParameters(configOptions.getPertyCsmBeta(), configOptions.getPertyCsmD());
-  setPermuteAlgorithm(configOptions.getPertyAlgorithm());
+  setCsmParameters(configOptions.getPertyCsmD());
   setSeed(configOptions.getPertySeed());
   setNamedOps(configOptions.getPertyOps());
 }
@@ -228,7 +229,7 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
   _gridCalculator.reset(
     Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm));
-  _gridCalculator->setCsmParameters(_beta, _D);
+  _gridCalculator->setCsmParameters(_D);
   _gridCalculator->setGridSpacing(_gridSpacing);
   _gridCalculator->setRandomError(_sigmaRx, _sigmaRy);
   _gridCalculator->setSeed(_seed);
@@ -296,18 +297,6 @@ void PertyOp::permute(const shared_ptr<OsmMap> &map)
   // interpolate values from the grid and shift nodes accordingly
   ShiftMapVisitor v(EX, cols, env, _gridSpacing);
   map->visitRw(v);
-}
-
-void PertyOp::setPermuteAlgorithm(QString algo)
-{
-  if (!QVector<std::string>::fromStdVector(
-       Factory::getInstance()
-         .getObjectNamesByBase(PermuteGridCalculator::className()))
-         .contains(algo.toStdString()))
-  {
-    throw HootException("Unexpected permute algorithm type. " + algo);
-  }
-  _permuteAlgorithm = algo;
 }
 
 }

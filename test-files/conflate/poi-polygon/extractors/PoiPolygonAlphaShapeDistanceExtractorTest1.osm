@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='828501448' visible='true' version='1' lat='37.7541373' lon='-122.4386561' />
+  <node id='828501449' visible='true' version='1' lat='37.7541691' lon='-122.4381328' />
+  <node id='828501452' visible='true' version='1' lat='37.7540063' lon='-122.438117' />
+  <node id='828501456' visible='true' version='1' lat='37.7539887' lon='-122.4384069' />
+  <node id='828501461' visible='true' version='1' lat='37.753314' lon='-122.4383413' />
+  <node id='828501465' visible='true' version='1' lat='37.7532998' lon='-122.4385748' />
+  <way id='69029718' visible='true' version='1'>
+    <nd ref='828501448' />
+    <nd ref='828501449' />
+    <nd ref='828501452' />
+    <nd ref='828501456' />
+    <nd ref='828501461' />
+    <nd ref='828501465' />
+    <nd ref='828501448' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='test1' />
+  </way>
+</osm>

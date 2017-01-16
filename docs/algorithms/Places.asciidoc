@@ -5,7 +5,7 @@
 The following sections describe the attempt to emulated PLACES point conflation
 and provides some simple examples of data processing.
 
-NOTE: This implementation is based on PLACES as of 3/11/2014. Regular updates
+NOTE: This implementation was based on PLACES as of 3/11/2014 and has been removed from Hootenanny as of November 2016. Regular updates
 are not being made to the PLACES algorithm within Hootenanny. Unifying POI Conflation is now the default in Hootenanny and is recommended in most situations.
 
 Hootenanny now provides a simple function for performing point-based conflation.
@@ -161,15 +161,7 @@ wget http://download.geonames.org/export/dump/allCountries.zip
 unzip allCountries.zip
 mv allCountries.txt allCountries.geonames
 hoot convert -D "convert.ops=hoot::TranslationOp" -D translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
-------
-
-==== Conflate using PLACES Algorithm
-
-To run an example conflation:
-
-------
-hoot --conflate test-files/conflate/point/Poi1.osm test-files/conflate/point/Poi2.osm conflated.osm
-------
+-------
 
 === Hootenanny Example Conflation Results
 

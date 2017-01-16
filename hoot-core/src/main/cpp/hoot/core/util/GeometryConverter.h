@@ -61,8 +61,8 @@ using namespace geos::geom;
 /**
  * GeometryConverter is undergoing a transition. We've moving from using the element's pointers to
  * the OsmMap to an internal pointer. Ultimately this will fix some circular errors (see #4120).
- * For new code please use the constructor that takes a map, old code should be transitioned
- * eventually.
+ * For new code please use the constructor that takes a map.
+ * @todo old code should be transitioned eventually.
  */
 class GeometryConverter
 {

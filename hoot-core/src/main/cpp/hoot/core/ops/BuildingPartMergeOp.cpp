@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -267,9 +267,15 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const shared_ptr<Way>& w, con
 shared_ptr<Relation> BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< shared_ptr<Element> >& parts)
 {
+  LOG_VART(parts.size());
   assert(parts.size() > 0);
-  shared_ptr<Relation> building(new Relation(parts[0]->getStatus(),
-    map->createNextRelationId(), -1, "building"));
+
+  shared_ptr<Relation> building(
+    new Relation(
+      parts[0]->getStatus(),
+      map->createNextRelationId(),
+      -1,
+      "building"));
 
   OsmSchema& schema = OsmSchema::getInstance();
   Tags& t = building->getTags();

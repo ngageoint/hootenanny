@@ -1,9 +1,15 @@
+12:17:23.696 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcGisRoads.osm ...
 Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
-Progress: 0 of 4326          
 Reprojecting 0 / 56         
+12:17:25.351 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/AlphaShapeCmdTest/output-1.osm ...
+12:17:25.353 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/AlphaShapeCmdTest/output-1.osm ...
+12:17:25.489 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcGisRoads.osm ...
 Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
-Progress: 0 of 4326          
 Reprojecting 0 / 90         
+12:17:27.149 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/AlphaShapeCmdTest/output-2.osm ...
+12:17:27.151 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/AlphaShapeCmdTest/output-2.osm ...
+12:17:27.287 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcGisRoads.osm ...
 Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
-Progress: 0 of 4326          
 Reprojecting 0 / 30         
+12:17:28.936 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/AlphaShapeCmdTest/output-3.osm ...
+12:17:28.938 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/AlphaShapeCmdTest/output-3.osm ...

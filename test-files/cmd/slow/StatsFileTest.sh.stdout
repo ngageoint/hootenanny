@@ -1,8 +1,9 @@
 ****Quick Stats****
+14:10:57.859 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:46.446 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
-17:39:46.447 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+14:10:57.894 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
+14:10:57.894 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
+14:10:57.894 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -10,15 +11,26 @@ Minimum Node ID	-1559901
 Maximum Node ID	-1559547
 Minimum Way ID	-1559905
 Maximum Way ID	-1559687
-Minimum Relation ID	9.2233720368547758e+18
-Maximum Relation ID	-9.2233720368547758e+18
+Minimum Relation ID	9.223372036854776e+18
+Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
+14:10:58.031 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
 Reprojecting 0 / 117         
-17:39:46.722 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:47.501 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:10:58.066 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
+14:10:58.067 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
+14:10:58.174 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+14:10:58.175 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 131 conflated or invalid features out of 131 total features.
+14:10:58.175 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+ Using default search radius value = 15
+14:10:59.405 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
+14:10:59.405 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
 Reprojecting 0 / 116         
-17:39:47.524 INFO  .../core/ops/CalculateStatsOp.cpp( 120) Calculating map statistics...
-17:39:48.091 INFO  .../core/ops/CalculateStatsOp.cpp( 365) Map statistics calculated.
+14:10:59.438 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
+14:10:59.447 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
+14:10:59.448 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 128 conflated or invalid features out of 128 total features.
+14:10:59.448 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+ Using default search radius value = 15
+14:11:01.250 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
 {
     "Node Count":
     [
@@ -57,13 +69,13 @@ Reprojecting 0 / 116
     ],
     "Minimum Relation ID":
     [
-        "9.2233720368547758e+18",
-        "9.2233720368547758e+18"
+        "9.223372036854776e+18",
+        "9.223372036854776e+18"
     ],
     "Maximum Relation ID":
     [
-        "-9.2233720368547758e+18",
-        "-9.2233720368547758e+18"
+        "-9.223372036854776e+18",
+        "-9.223372036854776e+18"
     ],
     "Total Feature Tags":
     [
@@ -87,18 +99,18 @@ Reprojecting 0 / 116
     ],
     "Meters of Linear Features":
     [
-        "1268.3914716830379",
-        "1199.5578038005933"
+        "1268.391471683038",
+        "1199.557803800593"
     ],
     "Meters Squared of Area Features":
     [
-        "20531.705361263041",
-        "18518.601059491091"
+        "20531.70536126304",
+        "18518.60105949109"
     ],
     "Meters of Highway":
     [
-        "1268.3914716830379",
-        "1199.5578038005933"
+        "1268.391471683038",
+        "1199.557803800593"
     ],
     "Highway Unique Name Count":
     [
@@ -107,8 +119,8 @@ Reprojecting 0 / 116
     ],
     "Meters Squared of Buildings":
     [
-        "20531.705361263041",
-        "18518.601059491091"
+        "20531.70536126304",
+        "18518.60105949109"
     ],
     "Building Unique Name Count":
     [
@@ -147,8 +159,8 @@ Reprojecting 0 / 116
     ],
     "Number of Match Creators":
     [
-        "3",
-        "3"
+        "5",
+        "5"
     ],
     "Features Conflatable by: hoot::BuildingMatchCreator":
     [
@@ -160,11 +172,14 @@ Reprojecting 0 / 116
         "4",
         "4"
     ],
-    "Features Conflatable by: hoot::PlacesPoiMatchCreator":
-    [
-        "11",
-        "10"
-    ],
+    "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric":
+    {
+        "js":
+        [
+            "11",
+            "10"
+        ]
+    },
     "Total Conflated Features":
     [
         "0",
@@ -402,8 +417,8 @@ Reprojecting 0 / 116
     ],
     "Translated Populated Tag Percent":
     [
-        "0.050805452292441142",
-        "0.047729379054680263"
+        "0.05080545229244114",
+        "0.04772937905468026"
     ],
     "Translated Populated Tag Count":
     [
@@ -422,18 +437,18 @@ Reprojecting 0 / 116
     ],
     "Building Translated Populated Tag Percent":
     [
-        "0.050505050505050504",
+        "0.0505050505050505",
         "0.04924242424242424"
     ],
     "Highway Translated Populated Tag Percent":
     [
-        "0.031847133757961783",
-        "0.025477707006369428"
+        "0.03184713375796178",
+        "0.02547770700636943"
     ],
     "POI Translated Populated Tag Percent":
     [
-        "0.066002490660024907",
-        "0.065040650406504072"
+        "0.06600249066002491",
+        "0.06504065040650407"
     ],
     "Waterway Translated Populated Tag Percent":
     [

@@ -58,6 +58,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 
 #include "OgrOptions.h"
@@ -94,6 +95,9 @@ OgrWriter::OgrWriter():
   _failOnSkipRelation(false)
 {
   setConfiguration(conf());
+
+  _textStatus = ConfigOptions().getWriterTextStatus();
+
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
@@ -557,8 +561,17 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
              g->getGeometryType() );*/
 
     Tags t = e->getTags();
-    t["error:circular"] = QString::number(e->getCircularError());
-    t["hoot:status"] = e->getStatusString();
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+
+    if (_textStatus)
+    {
+      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
+    }
+    else
+    {
+      t[MetadataTags::HootStatus()] = e->getStatusString();
+    }
+
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")

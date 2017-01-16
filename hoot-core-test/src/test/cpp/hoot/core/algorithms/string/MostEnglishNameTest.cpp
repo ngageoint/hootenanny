@@ -70,7 +70,7 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MostEnglishNameTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MostEnglishNameTest, "quick");
 
 }
 

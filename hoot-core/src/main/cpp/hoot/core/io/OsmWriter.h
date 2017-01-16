@@ -102,12 +102,14 @@ public:
    */
   QString removeInvalidCharacters(const QString& s);
 
-protected:
+private:
+
   bool _formatXml;
   bool _includeIds;
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  bool _textStatus;
   QString _osmSchema;
   QString _timestamp;
   int _precision;

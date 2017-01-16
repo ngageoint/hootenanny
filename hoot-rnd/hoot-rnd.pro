@@ -43,10 +43,6 @@ DESTDIR = ../lib/
 
 cppunit {
 SOURCES += \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreatorTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreatorTest.cpp \
     src/test/cpp/hoot/rnd/visitors/MatchCandidateCountVisitorRndTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/IterativeNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/VagabondNetworkMatcherTest.cpp \
@@ -62,17 +58,16 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/EdgeLocationTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/polygon/AreaMergerTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp
 
 HEADERS += \
-
+    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h 
 }
 
 SOURCES += \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.cpp \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.cpp \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.cpp \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.cpp \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
@@ -102,13 +97,12 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.cpp \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
+    src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.cpp \
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.cpp \
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.cpp 
 
 HEADERS += \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatchCreator.h \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMatch.h \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMerger.h \
-    src/main/cpp/hoot/rnd/conflate/poi-polygon/PoiPolygonMergerCreator.h \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.h \
@@ -136,14 +130,16 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/SearchRadiusProvider.h \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h \
     src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeLocation.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSubline.h \
     src/main/cpp/hoot/rnd/conflate/network/EdgeSublineMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/PartialNetworkMerger.h \
     src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.h \
-    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h
+    src/main/cpp/hoot/rnd/conflate/network/EidMapper.h \
+    src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.h \
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.h \
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.h
 
 FORMS +=
 

@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/io/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include "TestOsmChangesetProvider.h"
 #include "ServicesDbTestUtils.h"
+
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 
 // Boost
 using namespace boost;
@@ -45,68 +45,11 @@ using namespace boost;
 namespace hoot
 {
 
-//dummy implementation for testing
-class TestChangesetProvider : public ChangeSetProvider
-{
-
-public:
-
-  TestChangesetProvider() : _ctr(0) { }
-  ~TestChangesetProvider() { }
-
-  boost::shared_ptr<OGRSpatialReference> getProjection() const
-  {
-    return boost::shared_ptr<OGRSpatialReference>();
-  }
-
-  void close() { }
-
-  bool hasMoreChanges() { while (_ctr < 3) { return true; } return false; }
-
-  Change readNextChange()
-  {
-    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
-    NodePtr node2(new Node(Status::Unknown1, 2, 1.0, 0.0, 15.0));
-    WayPtr way(new Way(Status::Unknown1, 3, 15.0));
-    way->addNode(node1->getId());
-    way->addNode(node2->getId());
-    way->setTag("key1", "value1");
-    RelationPtr relation(new Relation(Status::Unknown1, 1, 15.0));
-    relation->addElement("role1", node1->getElementId());
-    relation->addElement("role2", way->getElementId());
-    relation->setTag("key2", "value2");
-
-    Change change;
-    if (_ctr == 0)
-    {
-      change.e = node1;
-      change.type = Change::Create;
-    }
-    else if (_ctr == 1)
-    {
-      change.e = relation;
-      change.type = Change::Delete;
-    }
-    else if (_ctr == 2)
-    {
-      change.e = way;
-      change.type = Change::Modify;
-    }
-    _ctr++;
-
-    return change;
-  }
-
-private:
-
-  int _ctr;
-
-};
-
 class ServiceOsmApiDbChangesetSqlFileWriterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(ServiceOsmApiDbChangesetSqlFileWriterTest);
     CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runSplitTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -122,8 +65,8 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkdir("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
+    QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -139,8 +82,33 @@ public:
       TestUtils::readFile("test-files/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql"),
       TestUtils::readFile("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql"));
   }
+
+  void runSplitTest()
+  {
+    QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+
+    //clear out the db so we get consistent next id results
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
+    database.deleteData();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    //  Set the changeset max size to 5 (half of the changes) for this test only
+    Settings testSettings = conf();
+    testSettings.set("changeset.max.size", "5");
+    writer.setConfiguration(testSettings);
+    writer
+      .write(
+        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql",
+        changesetProvider);
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql"),
+      TestUtils::readFile("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql"));
+  }
 };
 
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "quick");
 
 }

@@ -166,7 +166,7 @@ The advantage to this method is that you're using the package manager to keep th
 
 ==== Configure Eclipse
 
-* Go to Window --> Preferences --> Java --> Installed JRE's to make sure your JDK is correctly set to: @/usr/lib/jvm/java-6-openjdk-amd64@.
+* Go to Window --> Preferences --> Java --> Installed JRE's to make sure your JDK is correctly set to: @/usr/lib/jvm/oracle_jdk8/@.
 * Set your tab spacing to 2 spaces.
 * See "steps 7 and above here":https://127.0.0.1:9443/redmine/projects/mrgeo/wiki/DeveloperDocumentationBuildEnvironment2#Eclipse for some optional Eclipse configuration steps to make it behave more nicely. (Optional)
 * *TODO: Set up source code formatting in eclipse*
@@ -174,7 +174,7 @@ The advantage to this method is that you're using the package manager to keep th
 ** Find Windows --> Show view --> Other  and find Server --> Servers (select that)
 ** Right-click the Servers tab --> "Add a new server"
 ** Select "Tomcat v6.0 Server".  Click "Next".
-** Browse to the installation directory at /usr/share/tomcat6 Click "Next".
+** Browse to the installation directory at /usr/share/tomcat8 Click "Next".
 ** Add the hoot-services project to the configuration.  Click "Finish".
 * *TODO: This isn't working. (#4630)* To serve up the Density Raster tile images, the Tomcat server has to be configured with a static image directory.  From the Navigator or Project Explorer tab, open the "Servers" --> "Tomcat v6.0 Server at localhost-config" --> server.xml Then, under the <Host> section add: 
 ------
@@ -202,7 +202,7 @@ Hoot UI (hoot-ui) - Hootenanny customized version of the iD OSM editor.  No .pro
 * Set up the Tomcat Server
 ** Stop any existing Tomcat server you are running as a service:
 ------
-sudo service tomcat6 stop
+sudo service tomcat8 stop
 ------
 ** Select Window --> Show View --> Servers
 ** Right-click in the dialog, New --> Server
@@ -216,8 +216,8 @@ sudo service tomcat6 stop
 ** Left click User Entries
 ** Click Add External Jars
 ** Add the following jars if they are not already present:
-*** /usr/share/tomcat6/bin/bootstrap.jar
-*** /usr/lib/jvm/java-6-openjdk-amd64/lib/tools.jar
+*** /usr/share/tomcat8/bin/bootstrap.jar
+*** /usr/lib/jvm/oracle_jdk8/lib/tools.jar
 *** Click the Arguments tab
 *** Program arguments should contain the text:
 ------
@@ -225,7 +225,7 @@ start
 ------
 *** VM arguments should contain text similar to:
 ------
--Dcatalina.base="/home/bwitham/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0" -Dcatalina.home="/usr/share/tomcat6" -Dwtp.deploy="/home/bwitham/workspace/.metadata/.plugins/org.eclipse.wst.server.core  /tmp0/wtpwebapps" -Djava.endorsed.dirs="/usr/share/tomcat6/endorsed"
+-Dcatalina.base="/home/bwitham/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0" -Dcatalina.home="/usr/share/tomcat8" -Dwtp.deploy="/home/bwitham/workspace/.metadata/.plugins/org.eclipse.wst.server.core  /tmp0/wtpwebapps" -Djava.endorsed.dirs="/usr/share/tomcat8/endorsed"
 ------
 where "/home/bwitham/workspace" should be replaced by your Eclipse workspace directory root.
 ** Click Apply and Close.
@@ -239,7 +239,7 @@ where "/home/bwitham/workspace" should be replaced by your Eclipse workspace dir
 
 * Stop any existing Tomcat server you are running as a service:
  ------
- sudo service tomcat6 stop
+ sudo service tomcat8 stop
  ------
 * Launch hoot-services in debug mode by right-click on the project and select "Debug as"->"Debug on Server"   You should see the Tomcat server startup logging in the console view.  The only error you should see at this time is the one described in #2738, which will eventually be fixed.
 * hoot-services should start and load all the REST/Node.js services.  If you see class not found errors, your Tomcat debug environment probably is not set up properly...see the troubleshooting guide.

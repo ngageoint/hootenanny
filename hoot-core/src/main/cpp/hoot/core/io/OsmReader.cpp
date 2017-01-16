@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
@@ -66,6 +67,7 @@ OsmReader::OsmReader()
 {
   _status = hoot::Status::Invalid;
   _circularError = -1;
+  _keepFileStatus = ConfigOptions().getReaderKeepFileStatus();
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
@@ -294,7 +296,16 @@ Status OsmReader::_parseStatus(QString s)
 {
   Status result;
 
-  result = Status((Status::Type)_parseInt(s));
+  if (s.length() > 2)
+  {
+    // Try parsing the status as a string, not an int
+    result = Status::fromString(s);
+  }
+  else
+  {
+    result = Status((Status::Type)_parseInt(s));
+  }
+
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
   {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));
@@ -362,7 +373,6 @@ void OsmReader::read(shared_ptr<OsmMap> map)
     }
 
     LOG_DEBUG("Uncompress succeeded!");
-
   }
 
   // do xml parsing
@@ -418,7 +428,7 @@ void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
-      throw Exception(_errorString);
+    throw Exception(_errorString);
   }
 
   ReportMissingElementsVisitor visitor;
@@ -464,7 +474,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
               }
           }
       }
-
 
       if (qName == "node")
       {
@@ -589,16 +598,21 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
 
-        if (_useFileStatus && key == "hoot:status")
+        LOG_DEBUG("About to parse status");
+        if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(_parseStatus(value));
+
+          if (_keepFileStatus)  { _element->setTag(key, value); }
         }
         else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
           shared_ptr<Relation> r = dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
+
+          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
         }
-        else if (key == "accuracy" || key == "error:circular")
+        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
@@ -606,9 +620,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
           if (circularError > 0 && ok)
           {
             _element->setCircularError(circularError);
-            /*LOG_DEBUG(
-              "Set circular error from accuracy or error:circular tag to " << circularError <<
-              " for element with ID: " << _element->getId());*/
           }
           else
           {
@@ -642,10 +653,14 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
               }
             }
           }
+          if (ConfigOptions().getReaderPreserveAllTags())
+          {
+            _element->setTag(key, value);
+          }
         }
         else
         {
-          if (key != "hoot:id" && value != "")
+          if (key != MetadataTags::HootId() && value != "")
           {
             _element->setTag(key, value);
           }

@@ -137,6 +137,8 @@ private:
   int _tp, _fp, _fn;
   bool _tagErrors;
 
+  QMap<ElementType::Type, long> _elementWrongCounts;
+
   void _addWrong(const Tags& t1, const Tags& t2);
 
   void _clearCache();
@@ -156,6 +158,10 @@ private:
 
   void _tagError(const OsmMapPtr& map, const QString &uuid, const QString& value);
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);
+  void _tagTestOutcome(const OsmMapPtr& map, const QString uuid, const QString expected,
+                       const QString actual);
+  void _setElementWrongCounts(const ConstOsmMapPtr& map);
+  void _setElementWrongCount(const ConstOsmMapPtr& map, const ElementType::Type& elementType);
 };
 
 }

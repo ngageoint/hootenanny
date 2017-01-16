@@ -150,7 +150,6 @@ public:
    */
   void beginChangeset();
 
-
   /**
    * Starts a new changeset
    * @param tags Tags for the new changeset
@@ -232,7 +231,7 @@ public:
   void dropDatabase(const QString& databaseName);
 
   /**
-   * Drops the specified table and cascades (removes depedants). No warning or error will be given
+   * Drops the specified table and cascades (removes dependants). No warning or error will be given
    * if the table does not exist.
    *
    * No validation is done on the table names. In other words, don't pass in user provided strings.
@@ -249,34 +248,37 @@ public:
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
    */
-  static QString getMapIdString(long id) { return QString("_%1").arg(id); }
+  inline static QString getMapIdString(long id) { return QString("_%1").arg(id); }
 
   // Services DB table strings
-  static QString getNodeSequenceName(long mapId)
-  { return "current_nodes" + getMapIdString(mapId) + "_id_seq"; }
-  static QString getRelationSequenceName(long mapId)
-  { return "current_relations" + getMapIdString(mapId) + "_id_seq"; }
-  static QString getWaySequenceName(long mapId)
-  { return "current_ways" + getMapIdString(mapId) + "_id_seq"; }
+  inline static QString getChangesetsTableName(long mapId)                { return ApiDb::getChangesetsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentNodesTableName(long mapId)              { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationMembersTableName(long mapId)    { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationsTableName(long mapId)          { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWayNodesTableName(long mapId)           { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWaysTableName(long mapId)               { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId); }
 
-  static QString getChangesetsTableName(long mapId)
-  { return "changesets" + getMapIdString(mapId); }
-  static QString getNodesTableName(long mapId)
-  { return "current_nodes" + getMapIdString(mapId); }
-  static QString getRelationMembersTableName(long mapId)
-  { return "current_relation_members" + getMapIdString(mapId); }
-  static QString getRelationsTableName(long mapId)
-  { return "current_relations" + getMapIdString(mapId); }
-  static QString getWayNodesTableName(long mapId)
-  { return "current_way_nodes" + getMapIdString(mapId); }
-  static QString getWaysTableName(long mapId)
-  { return "current_ways" + getMapIdString(mapId); }
+  inline static QString getChangesetsSequenceName(long mapId)             { return ApiDb::getChangesetsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentNodesSequenceName(long mapId)           { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationMembersSequenceName(long mapId) { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationsSequenceName(long mapId)       { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+
 
   /**
    * Very handy for testing.
    */
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                        QVariant v3 = QVariant());
+                       QVariant v3 = QVariant());
+
+  virtual QString tableTypeToTableName(const TableType& tableType) const;
+
+  virtual long getNextId(const ElementType& elementType);
+
+protected:
+
+  virtual void _resetQueries();
 
 private:
 
@@ -360,8 +362,6 @@ private:
    */
   void _copyTableStructure(QString from, QString to);
 
-  QString _elementTypeToElementTableName(long mapId, const ElementType& elementType) const;
-
   QString _escapeTags(const Tags& tags) const;
 
   void _flushBulkInserts();
@@ -370,7 +370,6 @@ private:
   long _getNextWayId();
   void _init();
   void _lazyFlushBulkInsert();
-  void _resetQueries();
 
   /**
    * Executes the insert, performs error checking and returns the new ID.
