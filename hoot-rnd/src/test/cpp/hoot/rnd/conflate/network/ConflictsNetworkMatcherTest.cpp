@@ -133,7 +133,7 @@ public:
           continue;
         }
 
-        //LOG_WARN("Running " << testName << "...");
+        LOG_WARN("Running " << testName << "...");
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -160,33 +160,33 @@ public:
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //default
-        VariableDescription::Real, 0.0, 2.0)); //min/max
-        //VariableDescription::Real, 0.2, 0.5));
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 0.802995443913618, 0.802995443913618));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
         //VariableDescription::Real, .86, .86)); //default
-        VariableDescription::Real, 0.0, 2.0)); //min/max
-        //VariableDescription::Real, 0.5, 0.86));
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 2.0, 2.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
         //VariableDescription::Real, 4.4, 4.4)); //default
-        VariableDescription::Real, 0.0, 10.0)); //min/max
-        //VariableDescription::Real, 2.0, 6.0));
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 9.90983951227266, 9.90983951227266));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
-        VariableDescription::Real, 0.0, 2.0)); //min/max
-        //VariableDescription::Real, 0.0, 0.5));
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 0.176475931544078, 0.176475931544078));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
-        VariableDescription::Real, 0.0, 2.0)); //min/max
-        //VariableDescription::Real, 0.0, 0.5));
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 0.502448795159557, 0.502448795159557));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
         //VariableDescription::Real, 0.32, 0.32)); //default
-        VariableDescription::Real, 0.0, 10.0)); //min/max
-        //VariableDescription::Real, 0.32, 0.75));
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 1.9957798094469, 1.9957798094469));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
