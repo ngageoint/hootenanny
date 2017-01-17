@@ -43,11 +43,11 @@
 namespace hoot
 {
 
-class ConflictsNetworkMatcherTest : public CppUnit::TestFixture
+// used for parameter tuning only and isn't a true test.
+class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherTest);
-  // used for parameter tuning and isn't a true test.
-  //CPPUNIT_TEST(optimizeTest);
+  CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
+  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -99,6 +99,7 @@ public:
   {
   public:
 
+    //TODO: modify fitness function to give variable failure based on the number of reviews
     virtual double f(const ConstStatePtr& s) const
     {
       Settings settings;
@@ -106,34 +107,27 @@ public:
       {
         settings.set(k, s->get(k));
       }
+      //possibly an easier way to do this would be to read these directly from
+      //test-files/cases/hoot-rnd/network/Config.conf instead
       settings.set("match.creators", "hoot::NetworkMatchCreator");
       settings.set("merger.creators", "hoot::NetworkMergerCreator");
       settings.set("uuid.helper.repeatable", "true");
       settings.set("writer.include.debug", "true");
       settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
+      settings.set("conflate.add.review.detail", "false");
 
       TempFileName temp;
       LOG_VARW(temp.getFileName());
       settings.storeJson(temp.getFileName());
 
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
-
-      const int testCount = suite.getChildTestCount() - 1;
+      const int testCount = suite.getChildTestCount();
       int failures = 0;
-
-      for (int i = 0; i < suite.getChildTestCount(); ++i)
+      for (int i = 0; i < testCount; ++i)
       {
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
         const QString testName = QString::fromStdString(test->getName());
-
-        if (testName.contains("highway-009") //TODO: fails due to review score tag values
-            //|| testName.contains("highway-008")
-            )
-        {
-          continue;
-        }
-
-        LOG_WARN("Running " << testName << "...");
+        //LOG_WARN("Running " << testName << "...");
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -147,50 +141,57 @@ public:
         }
       }
 
-      LOG_VARW(failures);
-      LOG_VARW(testCount);
+      LOG_WARN(failures << "/" << testCount << " tests failed");
+      if (failures == 0)
+      {
+        LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
+      }
 
       return (double)failures / (double)testCount;
     }
   };
 
-  void optimizeTest()
+  void optimizeAgainstCaseDataTest()
   {
     StateDescriptionPtr desc(new StateDescription());
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.802995443913618, 0.802995443913618));
+        VariableDescription::Real, 0.1, 0.3));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
         //VariableDescription::Real, .86, .86)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 2.0, 2.0));
+        VariableDescription::Real, 0.75, 0.95));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
         //VariableDescription::Real, 4.4, 4.4)); //default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 9.90983951227266, 9.90983951227266));
+        VariableDescription::Real, 3.4, 5.4));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.176475931544078, 0.176475931544078));
+        VariableDescription::Real, 0.0, 0.25));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.502448795159557, 0.502448795159557));
+        VariableDescription::Real, 0.0, 0.25));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
         //VariableDescription::Real, 0.32, 0.32)); //default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 1.9957798094469, 1.9957798094469));
+        VariableDescription::Real, 0.22, 0.42));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
+        //VariableDescription::Real, 20.0, 20.0)); //default
+        //VariableDescription::Real, 1.0, 100.0));  //min/max??
+        VariableDescription::Real, 15.0, 25.0));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
-    //TODO: modify fitness function to give variable failure based on the number of reviews
     sa.setPickFromBestScores(true);
     sa.iterate(50);
 
@@ -201,6 +202,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizer, "current");
 
 }

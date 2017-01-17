@@ -115,6 +115,8 @@ double SimulatedAnnealing::iterate(int kmax)
 
   for (int k = 0; k < kmax; ++k)
   {
+    cout << "Running Simulated Annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
+
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);
 //    std::cout << "s: " << s->toString().toUtf8().data() << std::endl;
@@ -142,8 +144,6 @@ double SimulatedAnnealing::iterate(int kmax)
     {
       s = sNew;
     }
-
-    //cout << "simulated annealing iteration: " << k+1 << "/" << kmax << endl;
   }
 
   return _bestScore;
