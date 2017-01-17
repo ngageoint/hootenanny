@@ -6,7 +6,7 @@
 
 sudo service postgresql-9.1 restart
 sleep 10
-sudo service tomcat6 restart
+sudo service tomcat8 restart
 sleep 10
 
 echo "The Hootenanny server has been reset."
