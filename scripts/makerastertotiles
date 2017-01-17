@@ -9,7 +9,7 @@ HOOT_OPTS+= -D api.db.email=test@test.com
 #DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 
 
-GDAL2TILES=gdal2tiles.py
+GDAL2TILES=/usr/local/bin/gdal2tiles.py
 TMP_DIR=$(HOOT_HOME)/tmp
 DENSITY_RASTER_PATH=$(TMP_DIR)/$(jobid)
 OP_TILE_INPUT=$(DB_URL)/$(INPUT)
