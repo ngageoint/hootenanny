@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025849889206867" lon="-77.0533054075183941"/>
+    <node visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025799927627176" lon="-77.0514144254945137"/>
+    <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025297142290327" lon="-77.0547409354412025"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025729926266308" lon="-77.0547420000000045"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025319926266633" lon="-77.0547399999999811"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025844486266692" lon="-77.0550999999999959"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025844486266692" lon="-77.0550999999999959"/>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024925064565750" lon="-77.0550999999999959"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024603694165947" lon="-77.0513349999999946"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024603694165947" lon="-77.0513349999999946"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804519266458" lon="-77.0513349999999946"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027399926266853" lon="-77.0547488009000006"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804519266458" lon="-77.0513349999999946"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022760854964815" lon="-77.0547478698200052"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022952740464802" lon="-77.0547462705499981"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022482327464445" lon="-77.0514145964300070"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023203829365229" lon="-77.0514145590900057"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024040131565627" lon="-77.0514145163299844"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024604533365874" lon="-77.0514144871199989"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232049866148" lon="-77.0514144552499971"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025897728166328" lon="-77.0514144203699942"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9026433246866716" lon="-77.0514143926800017"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027123698067001" lon="-77.0514143574200006"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023225427065000" lon="-77.0533076275099802"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023955065765321" lon="-77.0533073491500033"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025284682866399" lon="-77.0533059865399963"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9026471190166845" lon="-77.0533047710299996"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027221018167282" lon="-77.0533046411700013"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025297238965990" lon="-77.0547521492199934"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025235118265940" lon="-77.0516034805999936"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025244139966091" lon="-77.0522087328999987"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025264671065898" lon="-77.0526521244700007"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025283951965761" lon="-77.0531686073299937"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025283591366247" lon="-77.0531847423000045"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025300517965746" lon="-77.0550999999999959"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387926264628" lon="-77.0547484074700009"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027399926266853" lon="-77.0533046103400068"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387926264628" lon="-77.0514146507699991"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027399926266853" lon="-77.0514145757999955"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387926264628" lon="-77.0533079467499959"/>
+    <way visible="true" id="-259" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-26"/>
+        <nd ref="-121"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-257" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-27"/>
+        <nd ref="-26"/>
+        <tag k="alt_name" v="26th St NW"/>
+        <tag k="name" v="26TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-254" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-125"/>
+        <nd ref="-14"/>
+        <nd ref="-13"/>
+        <nd ref="-4"/>
+        <tag k="alt_name" v="25th St NW"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-250" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15"/>
+        <nd ref="-125"/>
+        <tag k="alt_name" v="25th St NW"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-247" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <tag k="alt_name" v="25th St NW"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-244" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="-25"/>
+        <nd ref="-24"/>
+        <nd ref="-23"/>
+        <nd ref="-22"/>
+        <nd ref="-21"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-123"/>
+        <nd ref="-20"/>
+        <nd ref="-19"/>
+        <nd ref="-18"/>
+        <nd ref="-2"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-237" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="-123"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15"/>
+        <nd ref="-121"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-121"/>
+        <nd ref="-12"/>
+        <nd ref="-6"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="-11"/>
+        <nd ref="-10"/>
+        <nd ref="-9"/>
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="-15"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-121"/>
+        <nd ref="-50"/>
+        <nd ref="-57"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="-21"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-123"/>
+        <nd ref="-125"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-33"/>
+        <nd ref="-123"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-125"/>
+        <nd ref="-57"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-57"/>
+        <nd ref="-40"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-57"/>
+        <nd ref="-31"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-57"/>
+        <nd ref="-41"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28"/>
+        <nd ref="-123"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-121"/>
+        <nd ref="-39"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-34"/>
+        <nd ref="-21"/>
+        <tag k="name" v="K St NW"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+</osm>
