@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,11 +43,11 @@
 namespace hoot
 {
 
-class ConflictsNetworkMatcherTest : public CppUnit::TestFixture
+// used for parameter tuning only and isn't a true test.
+class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherTest);
-  // used for parameter tuning and isn't a true test.
-  //CPPUNIT_TEST(optimizeTest);
+  CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
+  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -98,6 +98,8 @@ public:
   class CaseFitnessFunction : public Tgs::FitnessFunction
   {
   public:
+
+    //TODO: modify fitness function to give variable failure based on the number of reviews
     virtual double f(const ConstStatePtr& s) const
     {
       Settings settings;
@@ -105,25 +107,27 @@ public:
       {
         settings.set(k, s->get(k));
       }
+      //possibly an easier way to do this would be to read these directly from
+      //test-files/cases/hoot-rnd/network/Config.conf instead
+      settings.set("match.creators", "hoot::NetworkMatchCreator");
+      settings.set("merger.creators", "hoot::NetworkMergerCreator");
+      settings.set("uuid.helper.repeatable", "true");
+      settings.set("writer.include.debug", "true");
+      settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
+      settings.set("conflate.add.review.detail", "false");
 
       TempFileName temp;
       LOG_VARW(temp.getFileName());
       settings.storeJson(temp.getFileName());
 
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
-
+      const int testCount = suite.getChildTestCount();
       int failures = 0;
-
-      for (int i = 0; i < suite.getChildTestCount(); ++i)
+      for (int i = 0; i < testCount; ++i)
       {
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
-
-        // this one fails due to review scores and we don't really care.
-        if (QString::fromStdString(test->getName()).contains("highway-009"))
-        {
-          continue;
-        }
-
+        const QString testName = QString::fromStdString(test->getName());
+        //LOG_WARN("Running " << testName << "...");
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -132,62 +136,81 @@ public:
 
         if (listener.isFailure())
         {
-          LOG_WARN("Failure: " << test->getName());
+          LOG_WARN("Failure: " << testName);
           failures++;
         }
       }
 
-      LOG_VARW(failures);
-      LOG_VARW(suite.getChildTestCount());
+      LOG_WARN(failures << "/" << testCount << " tests failed");
+      if (failures == 0)
+      {
+        //TODO: This message will actually show if, by chance, the first selected random state
+        //is successful.  However, that state won't be included in what's returned from sa.
+        LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
+      }
 
-      return (double)failures / (double)suite.getChildTestCount();
+      return (double)failures / (double)testCount;
     }
   };
 
-  void optimizeTest()
+  void optimizeAgainstCaseDataTest()
   {
     StateDescriptionPtr desc(new StateDescription());
-
-    // good for highway-008
-    // getNetworkConflictsPartialHandicapKey - 0.5
-    // getNetworkConflictsStubHandicapKey - 0.5
-    // getNetworkConflictsStubThroughWeightingKey - 1.0
-
-
-    desc->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
-        VariableDescription::Real, 0.5, 0.5));
-        //VariableDescription::Real, 0.0, 1.5));
-    desc->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
-        // value of 0.5 here gives good results in test highway-008
-        //VariableDescription::Real, 0.6, 0.6));
-        VariableDescription::Real, .86, .86));
-        //VariableDescription::Real, 0.5, 1.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        VariableDescription::Real, 4.4, 4.4));
-        //VariableDescription::Real, 3.0, 7.0));
+        //VariableDescription::Real, 4.4, 4.4)); //default
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 9.59, 9.69));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
+        //VariableDescription::Real, 0.2, 0.2)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 0.2, 0.2));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
+        //VariableDescription::Real, .86, .86)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 1.8, 1.9));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
+        //VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
         VariableDescription::Real, 0.0, 0.0));
-        //VariableDescription::Real, 0.0, 2.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        VariableDescription::Real, 0.0, 0.0));
-        //VariableDescription::Real, 0.0, 2.0));
+        //VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.0, 2.0)); //min/max
+        VariableDescription::Real, 0.68, 0.89));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
-        // value of 5 here gives good results in test highway-008
-        // value of 0, 0.5 here gives good results in test highway-011/010
-        VariableDescription::Real, 0.59, 0.59));
-        //VariableDescription::Real, 0.5, 1.0));
+        //VariableDescription::Real, 0.32, 0.32)); //default
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 8.0, 8.1));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
+        //VariableDescription::Real, 20.0, 20.0)); //default
+        //VariableDescription::Real, 1.0, 100.0));  //min/max??
+        VariableDescription::Real, 35.0, 46.0));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
+        //VariableDescription::Real, 0.15, 0.15)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.15, 0.15));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
+        //VariableDescription::Real, 0.85, 0.85)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.85, 0.85));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
+        //VariableDescription::Real, 0.5, 0.5)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.5, 0.5));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
-//#error modify fitness function to give variable failure based on the number of reviews
     sa.setPickFromBestScores(true);
-    sa.iterate(000);
+    sa.iterate(50);
 
     foreach (ConstStatePtr state, sa.getBestStates())
     {
@@ -196,6 +219,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizer, "current");
 
 }
