@@ -880,7 +880,7 @@ Possible values include:
 === network.conflicts.aggression
 
 * Data Type: double
-* Default Value: `4.4`
+* Default Value: `8.8`
 
 A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
 may want to consider changing this value. Reasonable range is [1, ~10].
@@ -888,7 +888,7 @@ may want to consider changing this value. Reasonable range is [1, ~10].
 === network.conflicts.outbound.weighting
 
 * Data Type: double
-* Default Value: `0.0`
+* Default Value: `0.25`
 
 A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor when using
 network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each
@@ -906,7 +906,7 @@ users. Reasonable range is (0, ~2].
 === network.conflicts.stub.handicap
 
 * Data Type: double
-* Default Value: `0.86`
+* Default Value: `1.7`
 
 A larger value will increase the weight of stubs when using network conflation. This value is
 generally not changed by users. Reasonable range is (0, ~2].
@@ -914,7 +914,7 @@ generally not changed by users. Reasonable range is (0, ~2].
 === network.conflicts.stub.through.weighting
 
 * Data Type: double
-* Default Value: `0.32`
+* Default Value: `0.5`
 
 A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors when
 using network conflation.  Higher values will reduce that contribution.  This value is generally

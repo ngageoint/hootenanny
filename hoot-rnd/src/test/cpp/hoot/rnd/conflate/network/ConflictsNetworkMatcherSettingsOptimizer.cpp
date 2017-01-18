@@ -47,7 +47,7 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
-  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -144,6 +144,8 @@ public:
       LOG_WARN(failures << "/" << testCount << " tests failed");
       if (failures == 0)
       {
+        //TODO: This message will actually show if, by chance, the first selected random state
+        //is successful.  However, that state won't be included in what's returned from sa.
         LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
       }
 
@@ -155,40 +157,55 @@ public:
   {
     StateDescriptionPtr desc(new StateDescription());
     desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
+        //VariableDescription::Real, 4.4, 4.4)); //default
+        //VariableDescription::Real, 0.0, 10.0)); //min/max
+        VariableDescription::Real, 9.59, 9.69));
+    desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.1, 0.3));
+        VariableDescription::Real, 0.2, 0.2));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
         //VariableDescription::Real, .86, .86)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.75, 0.95));
-    desc->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        //VariableDescription::Real, 4.4, 4.4)); //default
-        //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 3.4, 5.4));
+        VariableDescription::Real, 1.8, 1.9));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.25));
+        VariableDescription::Real, 0.0, 0.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.25));
+        VariableDescription::Real, 0.68, 0.89));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
         //VariableDescription::Real, 0.32, 0.32)); //default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 0.22, 0.42));
+        VariableDescription::Real, 8.0, 8.1));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
         //VariableDescription::Real, 20.0, 20.0)); //default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        VariableDescription::Real, 15.0, 25.0));
+        VariableDescription::Real, 35.0, 46.0));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
+        //VariableDescription::Real, 0.15, 0.15)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.15, 0.15));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
+        //VariableDescription::Real, 0.85, 0.85)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.85, 0.85));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
+        //VariableDescription::Real, 0.5, 0.5)); //default
+        //VariableDescription::Real, 0.01, 0.99));  //min/max
+        VariableDescription::Real, 0.5, 0.5));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
