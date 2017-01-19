@@ -39,6 +39,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributeVisitor.h>
@@ -264,7 +265,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
     CPPUNIT_ASSERT_EQUAL(10.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(0, node->getTags().size());
-    QString tagValue = node->getTags().get("hoot:status");
+    QString tagValue = node->getTags().get(MetadataTags::HootStatus());
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(10.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getVersion());

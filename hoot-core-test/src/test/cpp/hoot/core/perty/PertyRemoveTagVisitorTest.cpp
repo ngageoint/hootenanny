@@ -36,6 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/perty/PertyRemoveTagVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 using namespace std;
 
@@ -91,13 +92,13 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-    n1->getTags()["REF1"] = "REF1";
-    n1->getTags()["REF2"] = "REF2";
+    n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
+    n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n1);
 
     NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
-    n2->getTags()["REF1"] = "REF1";
-    n2->getTags()["REF2"] = "REF2";
+    n2->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
+    n2->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n2);
 
     boost::minstd_rand rng;
@@ -106,19 +107,19 @@ public:
     v.setRng(rng);
     v.setProbability(1.0);
     QStringList exemptTagKeys;
-    exemptTagKeys.append("REF1");
+    exemptTagKeys.append(MetadataTags::Ref1());
     v.setExemptTagKeys(exemptTagKeys);
     map->visitRw(v);
 
     CPPUNIT_ASSERT_EQUAL(1, n1->getTags().size());
     stringstream ss1;
     ss1 << n1->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[1]{REF1}"), ss1.str());
+    CPPUNIT_ASSERT_EQUAL(string("[1]{" + MetadataTags::Ref1().toStdString() + "}"), ss1.str());
 
     CPPUNIT_ASSERT_EQUAL(1, n2->getTags().size());
     stringstream ss2;
     ss2 << n2->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[1]{REF1}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[1]{" + MetadataTags::Ref1().toStdString() + "}"), ss2.str());
   }
 
   void runSubstituteValuesTest()
@@ -127,13 +128,13 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-    n1->getTags()["REF1"] = "REF1";
-    n1->getTags()["REF2"] = "REF2";
+    n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
+    n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n1);
 
     NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
     n2->getTags()["highway"] = "blah";
-    n2->getTags()["REF2"] = "REF2";
+    n2->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n2);
 
     boost::minstd_rand rng;

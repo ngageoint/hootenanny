@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
 
 #include "../TestUtils.h"
 
@@ -149,12 +150,12 @@ public:
     r1->replaceElement(w1, newWays);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
@@ -186,15 +187,15 @@ public:
     r1->replaceElement(w1, newWays);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"error:circular\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"error:circular\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }

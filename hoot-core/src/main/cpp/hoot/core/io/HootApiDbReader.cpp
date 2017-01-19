@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -97,7 +97,7 @@ void HootApiDbReader::open(QString urlStr)
     if (_email == "")
     {
       throw HootException("If a map name is specified then the user email must also be specified "
-                          "via: " + emailKey());
+                          "via: " + ConfigOptions::getApiDbEmailKey());
     }
 
     QString mapName = pList[pList.size() - 1];
@@ -332,8 +332,11 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
-  //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { node->setStatus(_status); }
+
+  // We want the reader's status to always override any existing status
+  // Unless, we really want to keep the status.
+//    if (_status != Status::Invalid) { node->setStatus(_status); }
+  if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
 
   //LOG_VART(node);
   return node;
@@ -412,7 +415,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
-  setUserEmail(configOptions.getHootapiDbReaderEmail());
+  setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
 }
 

@@ -19,4 +19,4 @@ else
     psql $AUTH -d $RENDER_DB -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql &> /dev/null
 fi
 
-hoot osm2ogr -D hootapi.db.reader.email=test@test.com -D hootapi.db.writer.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$MAP_ID" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"
+hoot osm2ogr -D api.db.email=test@test.com $HOOT_HOME/translations/RenderDb.js "$DB_URL/$MAP_ID" "PG:dbname='$RENDER_DB' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"

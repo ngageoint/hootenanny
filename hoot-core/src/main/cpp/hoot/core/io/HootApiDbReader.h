@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,8 +48,6 @@ class HootApiDbReader :
 public:
 
   static std::string className() { return "hoot::HootApiDbReader"; }
-  static QString maxElementsPerMapKey() { return "hootapi.db.reader.max.elements.per.partial.map"; }
-  static QString emailKey() { return "hootapi.db.reader.email"; }
 
   HootApiDbReader();
 

@@ -47,7 +47,7 @@ is similar to the file provided with Hootenanny for conflating rivers,
 
 ----------------
 {
-  "ogr.log.limit": "999999",
+  "log.identical.message.limit": "999999",
   "match.creators" : "hoot::ScriptMatchCreator,LinearWaterway.js",
   "merger.creators" : "hoot::ScriptMergerCreator",
 }
@@ -59,7 +59,7 @@ for the new feature type.  Of note from this example are: +match.creators+ and +
 +match.creators+ uses the ScriptMatchCreator, taking advantage of the generic conflation framework 
 and also specifies a conflation rules file, "LinearWaterway.js", which will be discussed in a later 
 section.  +merger.creators+ specifies the ScriptMergerCreator, which is also part of the generic 
-conflation framework.  "ogr.log.limit" is included here only, so you can see all of the script match
+conflation framework.  "log.identical.message.limit" is included here only, so you can see all of the script match
 log messages for debugging purposes.
 
 As you build your model, you may need to add new configuration options which can be customized at

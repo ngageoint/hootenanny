@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include "TestOsmChangesetProvider.h"
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmChangesetXmlFileWriter.h>
@@ -44,75 +45,18 @@ using namespace boost;
 namespace hoot
 {
 
-//dummy implementation for testing the OsmChangeWriter
-class TestChangesetProvider : public ChangeSetProvider
-{
-
-public:
-
-  TestChangesetProvider() : _ctr(0) { }
-  ~TestChangesetProvider() { }
-
-  boost::shared_ptr<OGRSpatialReference> getProjection() const
-  {
-    return boost::shared_ptr<OGRSpatialReference>();
-  }
-
-  void close() { }
-
-  bool hasMoreChanges() { while (_ctr < 3) { return true; } return false; }
-
-  Change readNextChange()
-  {
-    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
-    NodePtr node2(new Node(Status::Unknown1, 2, 1.0, 0.0, 15.0));
-    WayPtr way(new Way(Status::Unknown1, 3, 15.0));
-    way->addNode(node1->getId());
-    way->addNode(node2->getId());
-    way->setTag("key1", "value1");
-    RelationPtr relation(new Relation(Status::Unknown1, 1, 15.0));
-    relation->addElement("role1", node1->getElementId());
-    relation->addElement("role2", way->getElementId());
-    relation->setTag("key2", "value2");
-
-    Change change;
-    if (_ctr == 0)
-    {
-      change.e = node1;
-      change.type = Change::Create;
-    }
-    else if (_ctr == 1)
-    {
-      change.e = relation;
-      change.type = Change::Delete;
-    }
-    else if (_ctr == 2)
-    {
-      change.e = way;
-      change.type = Change::Modify;
-    }
-    _ctr++;
-
-    return change;
-  }
-
-private:
-
-  int _ctr;
-
-};
-
 class OsmChangesetXmlFileWriterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(OsmChangesetXmlFileWriterTest);
-    CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST(runSimpleTest);
+    CPPUNIT_TEST(runSplitTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runSimpleTest()
   {
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestChangesetProvider());
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
     OsmChangesetXmlFileWriter().write(
       "test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc", changesetProvider);
@@ -121,8 +65,28 @@ public:
       TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset.osc"),
       TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc"));
   }
+
+  void runSplitTest()
+  {
+    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
+    OsmChangesetXmlFileWriter writer;
+    Settings testSettings = conf();
+    testSettings.set("changeset.max.size", "5");
+    writer.setConfiguration(testSettings);
+    writer.write(
+      "test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc", changesetProvider);
+
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"),
+      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"));
+    HOOT_STR_EQUALS(
+      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"),
+      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"));
+  }
 };
 
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "quick");
 
 }

@@ -32,6 +32,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -53,9 +54,9 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     bool invalidRelation = false;
     if (r->getType() == Relation::REVIEW)
     {
-      const bool hasMemberCountTag = r->getTags().contains(ReviewMarker::reviewMemberCountKey);
+      const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
       if (hasMemberCountTag &&
-          (int)r->getMembers().size() != r->getTags().get(ReviewMarker::reviewMemberCountKey).toInt())
+          (int)r->getMembers().size() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
       {
         invalidRelation = true;
       }

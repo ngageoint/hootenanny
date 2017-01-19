@@ -8,7 +8,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
-# Check if we are using a different Tomcat6 port
+# Check if we are using a different Tomcat8 port
 ifeq ($(TOMCAT_PORT),)
   TOMCAT_PORT=8080
 endif
@@ -20,7 +20,7 @@ $(shell $(HOOT_HOME)/scripts/ReplaceEnvironmentVariables.sh DbSettings.inc.in Db
 
 HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true
-HOOT_OPTS+= -D hootapi.db.writer.email=test@test.com -D hootapi.db.reader.email=test@test.com
+HOOT_OPTS+= -D api.db.email=test@test.com
 HOOT_OPTS+= -D reader.add.source.datetime=false
 
 test: load-data

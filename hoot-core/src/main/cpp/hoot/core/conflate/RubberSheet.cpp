@@ -35,6 +35,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
@@ -354,11 +355,11 @@ void RubberSheet::_findTies()
 
       if (_debug)
       {
-        n1->getTags()["hoot:match:score"] = QString("%1").arg(_finalPairs[i].score);
-        n1->getTags()["hoot:match:p"] = QString("%1").arg(_finalPairs[i].p);
-        n1->getTags()["hoot:match:order"] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
-        n2->getTags()["hoot:match:p"] = QString("%1").arg(_finalPairs[i].p);
-        n2->getTags()["hoot:match:order"] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n1->getTags()[MetadataTags::HootMatchScore()] = QString("%1").arg(_finalPairs[i].score);
+        n1->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
+        n1->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n2->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
+        n2->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
       }
     }
   }

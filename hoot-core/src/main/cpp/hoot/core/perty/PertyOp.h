@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -83,7 +83,7 @@ public:
 
   void permute(const shared_ptr<OsmMap>& map);
 
-  void setCsmParameters(double beta, double D) { _beta = beta; _D = D; }
+  void setCsmParameters(double D) { _D = D; }
 
   void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
 
@@ -91,13 +91,6 @@ public:
    * Sets a list of operations that should be run after the permute method is called.
    */
   void setNamedOps(QStringList namedOps) { _namedOps = namedOps; }
-
-  /**
-   * Set the permutation algorithm to one of:
-   * - "DirectSequentialSimulation" (default)
-   * - "FullCovariance" (older and slower)
-   */
-  void setPermuteAlgorithm(QString algo);
 
   /**
    * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
@@ -126,14 +119,17 @@ public:
 
 private:
 
-  /// values used in the Community Sensor Model.
-  double _beta;
   Meters _D;
 
   Meters _gridSpacing;
   int _seed;
   Meters _sigmaRx, _sigmaRy;
   Meters _sigmaSx, _sigmaSy;
+  /*
+  * Previously the full covariance method was also supported as described in Doucette et al. However,
+  the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+  the full covariance method we were able to simplify the build process and reduce maintenance cost.
+  */
   QString _permuteAlgorithm;
   shared_ptr<PermuteGridCalculator> _gridCalculator;
   QStringList _namedOps;

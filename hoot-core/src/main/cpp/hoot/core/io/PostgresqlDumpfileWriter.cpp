@@ -374,7 +374,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 
   _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
   _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
-  _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
+  _configData.changesetUserId     = confOptions.getChangesetUserId();
   if (!confOptions.getPostgresqlDumpfileWriterAutoCalcIds())
   {
     _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
@@ -384,7 +384,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   }
   else
   {
-    _db.open(ConfigOptions().getPostgresqlDumpfileWriterIdAwareUrl());
+    _db.open(confOptions.getOsmapidbIdAwareUrl());
     _configData.startingChangesetId = _db.getNextId(ApiDb::getChangesetsTableName());
     _configData.startingNodeId      = _db.getNextId(ElementType::Node);
     _configData.startingWayId       = _db.getNextId(ElementType::Way);

@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
@@ -66,6 +67,7 @@ OsmReader::OsmReader()
 {
   _status = hoot::Status::Invalid;
   _circularError = -1;
+  _keepFileStatus = ConfigOptions().getReaderKeepFileStatus();
   _useFileStatus = ConfigOptions().getReaderUseFileStatus();
   _useDataSourceId = false;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
@@ -596,20 +598,21 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
 
-        if (_useFileStatus && key == "hoot:status")
+        LOG_DEBUG("About to parse status");
+        if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(_parseStatus(value));
+
+          if (_keepFileStatus)  { _element->setTag(key, value); }
         }
         else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
           shared_ptr<Relation> r = dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
-          if (ConfigOptions().getReaderPreserveAllTags())
-          {
-            _element->setTag(key, value);
-          }
+
+          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
         }
-        else if (key == "accuracy" || key == "error:circular")
+        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
           bool ok;
           Meters circularError = value.toDouble(&ok);
@@ -657,7 +660,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         }
         else
         {
-          if (key != "hoot:id" && value != "")
+          if (key != MetadataTags::HootId() && value != "")
           {
             _element->setTag(key, value);
           }

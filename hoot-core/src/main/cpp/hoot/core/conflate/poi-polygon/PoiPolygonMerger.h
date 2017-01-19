@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,8 +55,9 @@ public:
    *
    * @param map an OSM map containing a single node POI and a single polygon area or building, which
    * can be a way or a relation (multipolygon)
+   * @return the polygon element ID
    */
-  static void merge(OsmMapPtr map);
+  static ElementId merge(OsmMapPtr map);
 
   virtual QString toString() const;
 

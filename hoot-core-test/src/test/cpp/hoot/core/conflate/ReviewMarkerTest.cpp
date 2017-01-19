@@ -30,6 +30,8 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
+
 using namespace hoot;
 
 #include "../TestUtils.h"
@@ -100,7 +102,7 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:members\":\"2\",\"hoot:review:score\":\"-1\",\"hoot:review:note\":\"a note\",\"error:circular\":\"15\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewScore() + "\":\"-1\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
@@ -134,10 +136,10 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:members\":\"2\",\"hoot:review:score\":\"0.5\",\"hoot:review:note\":\"a note 2\",\"error:circular\":\"15\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewScore() + "\":\"0.5\",\"" + MetadataTags::HootReviewNote() + "\":\"a note 2\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"test\",\"hoot:review:members\":\"2\",\"hoot:review:score\":\"0.15\",\"hoot:review:note\":\"a note\",\"error:circular\":\"15\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
