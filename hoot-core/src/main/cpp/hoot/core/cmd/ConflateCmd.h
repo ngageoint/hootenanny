@@ -215,7 +215,7 @@ public:
       "Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
-    LOG_VAR(bytesRead);
+    LOG_VART(bytesRead);
     QList< QList<SingleStat> > allStats;
 
     // read input 1
@@ -227,7 +227,7 @@ public:
       loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
     }
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
-    LOG_VAR(inputBytes);
+    LOG_VART(inputBytes);
     double elapsed = t.getElapsedAndRestart();
     stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));

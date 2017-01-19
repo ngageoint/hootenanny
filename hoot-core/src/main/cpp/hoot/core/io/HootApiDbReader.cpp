@@ -46,7 +46,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 HootApiDbReader::HootApiDbReader() :
 _database(new HootApiDb())
 {
-  LOG_VARD(_useDataSourceIds);
+  LOG_VART(_useDataSourceIds);
   setConfiguration(conf());
 }
 
