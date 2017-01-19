@@ -49,6 +49,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/KeepReviewsVisitor.h>
 
 // Standard
 #include <fstream>
@@ -87,18 +89,27 @@ public:
   //name.
   int runMultiple(QStringList args)
   {
+    if (!ConfigOptions().getReviewTagsTreatAsMetadata())
+    {
+      throw HootException(
+        "Multi-conflation must be run with " + ConfigOptions::getReviewTagsTreatAsMetadataKey() +
+        "=false");
+    }
+
     const QStringList inputs = args[0].split(";");
     const QString output = args[1];
 
     OsmMapPtr map(new OsmMap());
-    const QString sourceTagKey = "hoot:source";
+    OsmMapPtr reviewCache;
     LOG_VARD(inputs.size());
     for (int i = 0; i < inputs.size(); i++)
     {
       if (i == 0)
       {
         loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
-        SetTagVisitor sourceTagVisitor(sourceTagKey, QString::number(i + 1));
+
+        LOG_DEBUG("Setting source tags...");
+        SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1));
         map->visitRw(sourceTagVisitor);
       }
       else
@@ -113,6 +124,7 @@ public:
         }
 
         loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+
         if (i == 1 && Log::getInstance().isDebugEnabled())
         {
           LOG_DEBUG("Writing debug map.");
@@ -120,10 +132,26 @@ public:
           MapProjector::projectToWgs84(debug);
           OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
         }
+
         //keep a source tag history on the data for provenance; append to any existing source values
-        //TODO: this shouldn't be modifying review relations
-        SetTagVisitor sourceTagVisitor(sourceTagKey, QString::number(i + 1), true);
+        //(this shouldn't be added to any review relations)
+        LOG_DEBUG("Setting source tags...");
+        SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1), true);
         map->visitRw(sourceTagVisitor);
+
+        //load in cached reviews from previous conflations
+        if (reviewCache.get() && reviewCache->getElementCount() > 0)
+        {
+          LOG_DEBUG("Adding previous reviews...");
+          const RelationMap& reviews = reviewCache->getRelationMap();
+          for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
+          {
+            RelationPtr review = it->second;
+            review->setId(map->createNextRelationId());
+            map->addRelation(review);
+          }
+          LOG_DEBUG("Added " << reviews.size() << " cached reviews.");
+        }
 
         NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
@@ -148,6 +176,13 @@ public:
 //            OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 //          }
         }
+
+        //copy the map and save the reviews
+        LOG_DEBUG("Caching reviews...");
+        reviewCache.reset(new OsmMap(map->getProjection()));
+        KeepReviewsVisitor vis;
+        reviewCache->visitRw(vis);
+        LOG_DEBUG("Cached " << reviewCache->getElementCount() << " reviews.");
       }
     }
 

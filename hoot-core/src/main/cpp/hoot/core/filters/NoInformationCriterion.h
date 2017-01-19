@@ -28,7 +28,12 @@
 #define NOINFORMATIONCRITERION_H
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Element.h>
 
 #include "ElementCriterion.h"
 
@@ -36,24 +41,50 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A filter that will remove elements with no non-metadata information.
  */
-class NoInformationCriterion : public ElementCriterion
+class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
   static string className() { return "hoot::NoInformationCriterion"; }
 
-  NoInformationCriterion() {}
+  NoInformationCriterion() { setConfiguration(conf()); }
+  NoInformationCriterion(bool treatReviewTagsAsMetadata) :
+    _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
 
   bool isSatisfied(const shared_ptr<const Element> &e) const
   {
+    const Tags tags = e->getTags();
+    const int informationCount = tags.getInformationCount();
+    const int reviewTagCount =
+      tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
+
     LOG_VART(e);
-    LOG_VART(e->getTags().getInformationCount());
-    return e->getTags().getInformationCount() == 0;
+    LOG_VART(informationCount);
+    LOG_VART(_treatReviewTagsAsMetadata);
+    LOG_VART(reviewTagCount);
+
+    bool isSatisified = informationCount == 0;
+    if (!_treatReviewTagsAsMetadata)
+    {
+      isSatisified &= reviewTagCount == 0;
+    }
+    LOG_VART(isSatisified);
+    return isSatisified;
   }
 
-  virtual ElementCriterion* clone() { return new NoInformationCriterion(); }
+  virtual void setConfiguration(const Settings& conf)
+  {
+    _treatReviewTagsAsMetadata = ConfigOptions(conf).getReviewTagsTreatAsMetadata();
+    //LOG_VART(_treatReviewTagsAsMetadata);
+  }
+
+  virtual ElementCriterion* clone() { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }
+
+private:
+
+  bool _treatReviewTagsAsMetadata;
 
 };
 

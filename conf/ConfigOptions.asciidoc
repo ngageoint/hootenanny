@@ -1808,6 +1808,14 @@ Should the element remover remove the elements recursively?
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
 
+=== review.tags.treat.as.metadata
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
+
 === rubber.sheet.debug
 
 * Data Type: bool
