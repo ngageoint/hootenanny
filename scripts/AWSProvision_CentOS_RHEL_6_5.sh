@@ -232,16 +232,16 @@ EOT
   sudo service postgresql-9.1 restart
 
   echo "Installing FileGDB"
-  sudo rm -rf ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.3
-  sudo tar -xzf ${HOOT_HOME_RPMS}/FileGDB_API_1_3-64.tar.gz --directory ${HOOT_CORE_INSTALL_DIR}
-  sudo chown -R root:${CORE_INSTALL_USER_GROUP} ${HOOT_CORE_INSTALL_DIR}/FileGDB_API
-  sudo cp -R ${HOOT_CORE_INSTALL_DIR}/FileGDB_API ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.3
-  sudo cp ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.3/lib/* ${HOOT_CORE_INSTALL_DIR}/lib/
+  sudo rm -rf ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.4
+  sudo tar -xzf ${HOOT_HOME_RPMS}/FileGDB_API_1_4-64.tar.gz --directory ${HOOT_CORE_INSTALL_DIR}
+  sudo chown -R root:${CORE_INSTALL_USER_GROUP} ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-64
+  sudo cp -R ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-64 ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.4
+  sudo cp ${HOOT_CORE_INSTALL_DIR}/FileGDB_API-1.4/lib/* ${HOOT_CORE_INSTALL_DIR}/lib/
 
   echo "Installing GDAL..."
   sudo tar -xzf ${HOOT_HOME_RPMS}/gdal-1.10.1.tar.gz --directory ${HOOT_CORE_INSTALL_DIR}
   cd ${HOOT_CORE_INSTALL_DIR}/gdal-1.10.1
-  sudo ./configure -q --with-pg=/usr/pgsql-9.1/bin/pg_config --with-fgdb=/usr/local/FileGDB_API-1.3/ --with-python --prefix=/usr/local 
+  sudo ./configure -q --with-pg=/usr/pgsql-9.1/bin/pg_config --with-fgdb=/usr/local/FileGDB_API-1.4/ --with-python --prefix=/usr/local 
   
   sudo make -sj$(nproc) && sudo make install
 
