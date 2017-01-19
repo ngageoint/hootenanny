@@ -220,9 +220,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local
-        # Newer version changes directory name, setup symbolic link
-        sudo ln -s /usr/local/FileGDB_API-64 /usr/local/FileGDB_API
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
