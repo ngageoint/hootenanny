@@ -48,7 +48,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/conflate/MultiConflator.h>
+#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/KeepReviewsVisitor.h>
 
 // Standard
 #include <fstream>
@@ -83,6 +85,122 @@ public:
     }
   }
 
+  //The logic in this method won't allow ConflateCmd to have any inputs that have ';' in the file
+  //name.
+  int runMultiple(QStringList args)
+  {
+    //TODO: make this work with stats
+    if (args.contains("--stats"))
+    {
+      throw HootException("Multi-conflation does not work with the --stats option.");
+    }
+
+    if (!ConfigOptions().getReviewTagsTreatAsMetadata())
+    {
+      throw HootException(
+        "Multi-conflation must be run with " + ConfigOptions::getReviewTagsTreatAsMetadataKey() +
+        "=false");
+    }
+
+    const QStringList inputs = args[0].split(";");
+    const QString output = args[1];
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapPtr reviewCache;
+    LOG_VARD(inputs.size());
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      if (i == 0)
+      {
+        loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+
+        LOG_DEBUG("Setting source tags...");
+        SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1));
+        map->visitRw(sourceTagVisitor);
+      }
+      else
+      {
+        if (i == 1)
+        {
+          LOG_INFO("Conflating " << inputs[i - 1] << " with " << inputs[i] << "...");
+        }
+        else
+        {
+          LOG_INFO("Conflating cumulative map with " << inputs[i] << "...");
+        }
+
+        loadMap(map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+
+        if (i == 1 && Log::getInstance().isDebugEnabled())
+        {
+          LOG_DEBUG("Writing debug map.");
+          OsmMapPtr debug(new OsmMap(map));
+          MapProjector::projectToWgs84(debug);
+          OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+        }
+
+        //keep a source tag history on the data for provenance; append to any existing source values
+        //(this shouldn't be added to any review relations)
+        LOG_DEBUG("Setting source tags...");
+        SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1), true);
+        map->visitRw(sourceTagVisitor);
+
+        //load in cached reviews from previous conflations
+        if (reviewCache.get() && reviewCache->getElementCount() > 0)
+        {
+          LOG_DEBUG("Adding previous reviews...");
+          const RelationMap& reviews = reviewCache->getRelationMap();
+          for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
+          {
+            RelationPtr review = it->second;
+            review->setId(map->createNextRelationId());
+            map->addRelation(review);
+          }
+          LOG_DEBUG("Added " << reviews.size() << " cached reviews.");
+        }
+
+        NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+
+        UnifyingConflator().apply(map);
+
+        //NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+
+        if (i < inputs.size() - 1)
+        {
+          //Up until just before the last conflate job, set the status tag back to 1 so that the
+          //accumulated data will conflate with the next dataset.
+          //TODO: this shouldn't be modifying review relations
+          SetTagVisitor statusTagVisitor(
+            "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
+          map->visitRw(statusTagVisitor);
+
+//          if (Log::getInstance().isDebugEnabled())
+//          {
+//            LOG_DEBUG("Writing debug map.");
+//            OsmMapPtr debug(new OsmMap(map));
+//            MapProjector::projectToWgs84(debug);
+//            OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+//          }
+        }
+
+        //copy the map and save the reviews
+        LOG_DEBUG("Caching reviews...");
+        reviewCache.reset(new OsmMap(map->getProjection()));
+        KeepReviewsVisitor vis;
+        reviewCache->visitRw(vis);
+        LOG_DEBUG("Cached " << reviewCache->getElementCount() << " reviews.");
+      }
+    }
+
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+
+    MapProjector::projectToWgs84(map);
+    saveMap(map, output);
+
+    return 0;
+  }
+
+
   int runSimple(QStringList args)
   {
     Timer totalTime;
@@ -109,12 +227,9 @@ public:
       }
     }
 
-    //The logic in this method won't allow ConflateCmd to have any inputs that have ';' in the file
-    //name.
     if (args.size() == 2 && args[0].split(";").size() > 1)
     {
-      MultiConflator().conflate(args);
-      return 0;
+      return runMultiple(args);
     }
 
     if (args.size() < 2 || args.size() > 3)

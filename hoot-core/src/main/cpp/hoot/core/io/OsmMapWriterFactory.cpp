@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -131,6 +131,8 @@ bool OsmMapWriterFactory::hasWriter(QString url)
 
 void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
 {
+  LOG_INFO("Writing map data to " << url << " ...");
+
   shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
   writer->open(url);
   writer->write(map);

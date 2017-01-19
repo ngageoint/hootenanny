@@ -148,6 +148,8 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
 void OsmMapReaderFactory::read(shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
+  LOG_INFO("Loading map data from " << url << " ...");
+
   shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   reader->open(url);
