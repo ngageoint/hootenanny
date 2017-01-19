@@ -95,11 +95,14 @@ public:
     QString _name;
   };
 
+  //Things that would be nice:
+  //  - show the iteration number w/o having to temporarily add a cout statement to
+  //    SimulatedAnnealing
+  //  - modify fitness function to give variable failure based on the number of reviews
   class CaseFitnessFunction : public Tgs::FitnessFunction
   {
   public:
 
-    //TODO: modify fitness function to give variable failure based on the number of reviews
     virtual double f(const ConstStatePtr& s) const
     {
       Settings settings;
@@ -144,8 +147,9 @@ public:
       LOG_WARN(failures << "/" << testCount << " tests failed");
       if (failures == 0)
       {
-        //TODO: This message will actually show if, by chance, the first selected random state
-        //is successful.  However, that state won't be included in what's returned from sa.
+        //This message will actually show if, by chance, the first selected random state
+        //is successful.  However, that state won't be included in what's returned from sa...
+        //so its a little misleading.
         LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
       }
 
@@ -158,54 +162,54 @@ public:
     StateDescriptionPtr desc(new StateDescription());
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        //VariableDescription::Real, 4.4, 4.4)); //default
+        //VariableDescription::Real, 8.8, 8.8)); //default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 9.59, 9.69));
+        VariableDescription::Real, 5.0, 9.7));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.2, 0.2));
+        VariableDescription::Real, 0.0, 0.46));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
-        //VariableDescription::Real, .86, .86)); //default
+        //VariableDescription::Real, 1.7, 1.7)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 1.8, 1.9));
+        VariableDescription::Real, 0.0, 0.56));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
         //VariableDescription::Real, 0.0, 0.0)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.0));
+        VariableDescription::Real, 0.34, 1.49));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        //VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.25, 0.25)); //default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.68, 0.89));
+        VariableDescription::Real, 0.0, 0.51));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
-        //VariableDescription::Real, 0.32, 0.32)); //default
+        //VariableDescription::Real, 0.5, 0.5)); //default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 8.0, 8.1));
+        VariableDescription::Real, 6.5, 10.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
         //VariableDescription::Real, 20.0, 20.0)); //default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        VariableDescription::Real, 35.0, 46.0));
+        VariableDescription::Real, 36.0, 100.0));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
         //VariableDescription::Real, 0.15, 0.15)); //default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.15, 0.15));
+        VariableDescription::Real, 0.01, 0.39));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
         //VariableDescription::Real, 0.85, 0.85)); //default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.85, 0.85));
+        VariableDescription::Real, 0.72, 0.99));
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
         //VariableDescription::Real, 0.5, 0.5)); //default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.5, 0.5));
+        VariableDescription::Real, 0.8, 0.99));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
