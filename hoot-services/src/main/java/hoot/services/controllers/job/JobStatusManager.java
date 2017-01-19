@@ -55,7 +55,7 @@ public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
 
     public enum JOB_STATUS {
-        RUNNING, COMPLETE, FAILED, CANCELLED, UNKNOWN;
+        RUNNING, COMPLETED, FAILED, CANCELLED, UNKNOWN, COMPLETED_WITH_WARNINGS;
 
         public static JOB_STATUS fromInteger(int value) {
             if ((value >= 0) && (value < JOB_STATUS.values().length)) {
@@ -72,11 +72,6 @@ public class JobStatusManager {
 
     public JobStatusManager() {}
 
-    /**
-     * Creates job status. It sets JOB_STATUS_RUNNING
-     *
-     * @param jobId
-     */
     public void addJob(String jobId) {
         try {
             this.updateJob(jobId, RUNNING, null);
@@ -97,29 +92,19 @@ public class JobStatusManager {
         }
     }
 
-    /**
-     * Updates to Complete. (Convenience function)
-     *
-     * @param jobId
-     */
-    public void setComplete(String jobId) {
+    public void setCompletedWithWarnings(String jobId, String warnings) {
         try {
-            this.updateJob(jobId, COMPLETE, null);
+            this.updateJob(jobId, COMPLETED_WITH_WARNINGS, warnings);
         }
         catch (Exception e) {
-            logger.error("Error setting job with ID = {} status to COMPLETE", jobId, e);
+            logger.error("Error setting job with ID = {} status to COMPLETED_WITH_WARNINGS", jobId, e);
             throw e;
         }
     }
 
-    /**
-     * Updates to Complete. (Convenience function)
-     *
-     * @param jobId
-     */
-    public void setCancelled(String jobId) {
+    public void setCancelled(String jobId, String reason) {
         try {
-            this.updateJob(jobId, CANCELLED, null);
+            this.updateJob(jobId, CANCELLED, reason);
         }
         catch (Exception e) {
             logger.error("Error setting job with ID = {} status to CANCELLED", jobId, e);
@@ -127,47 +112,16 @@ public class JobStatusManager {
         }
     }
 
-    /**
-     * Updates to Complete. (Convenience function)
-     *
-     * @param jobId
-     * @param statusDetail
-     *            final job status detail message
-     */
-    public void setComplete(String jobId, String statusDetail) {
+    public void setCompleted(String jobId, String statusDetail) {
         try {
-            this.updateJob(jobId, COMPLETE, statusDetail);
+            this.updateJob(jobId, COMPLETED, statusDetail);
         }
         catch (Exception e) {
-            logger.error("Error setting job with ID = {} status to COMPLETE with status detail = '{}'", jobId, statusDetail, e);
+            logger.error("Error setting job with ID = {} status to COMPLETED with status detail = '{}'", jobId, statusDetail, e);
             throw e;
         }
     }
 
-    /**
-     * Updates to Failed. (Convenience function) and logs it.
-     *
-     * @param jobId
-     */
-    public void setFailed(String jobId) {
-        logger.error("Job with ID: {} failed.", jobId);
-        try {
-            this.updateJob(jobId, FAILED, null);
-        }
-        catch (Exception e) {
-            logger.error("Error setting job with ID: {} status to FAILED", jobId, e);
-        }
-    }
-
-    /**
-     * Updates to Failed and adds cause of failure. (Convenience function) and
-     * logs it.
-     *
-     * @param jobId
-     *            ID of the job being updated
-     * @param statusDetail
-     *            detail on the job failure
-     */
     public void setFailed(String jobId, String statusDetail) {
         logger.error("Job with ID: {} failed: {}", jobId, statusDetail);
         try {
@@ -224,7 +178,7 @@ public class JobStatusManager {
                 .fetchOne();
 
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETED) || (newStatus == FAILED) || (newStatus == COMPLETED_WITH_WARNINGS)) {
                 currentJobStatus.setPercentComplete(100.0);
                 currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
             }
@@ -244,7 +198,7 @@ public class JobStatusManager {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             currentJobStatus.setStart(ts);
 
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETED) || (newStatus == FAILED) || (newStatus == COMPLETED_WITH_WARNINGS)) {
                 currentJobStatus.setPercentComplete(100.0);
                 currentJobStatus.setEnd(ts);
             }

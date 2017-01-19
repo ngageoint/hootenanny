@@ -39,18 +39,16 @@ public interface NativeInterface {
     /**
      * Performs execution. All required meta data should be in command parameter.
      *
-     * @param command
-     * @throws NativeInterfaceException
+     * @param command command to execute
      */
-    JSONObject exec(JSONObject command) throws NativeInterfaceException;
+    CommandResult exec(JSONObject command);
 
     String getJobProgress(String jobId);
 
     /**
      * Terminates job
      *
-     * @param jobId
-     * @throws NativeInterfaceException
+     * @param jobId ID of the job to terminate
      */
-    void terminate(String jobId) throws NativeInterfaceException;
+    void terminate(String jobId);
 }

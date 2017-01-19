@@ -45,7 +45,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 /**
@@ -199,7 +198,7 @@ public class AboutResource {
         return coreVersion;
     }
 
-    private String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
+    private String getCoreInfo(boolean withDetails) {
         JSONObject command = new JSONObject();
         command.put("exectype", "hoot");
         command.put("exec", "version");
@@ -215,7 +214,7 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        String output = this.jobExecutionManager.exec(command).get("stdout").toString();
+        String output = this.jobExecutionManager.exec(command).getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);
     }

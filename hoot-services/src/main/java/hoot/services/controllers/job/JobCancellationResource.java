@@ -73,16 +73,15 @@ public class JobCancellationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response process(String args) {
         String jobIdToCancel = null;
-        String mapDisplayName = null;
 
         try {
             JSONParser parser = new JSONParser();
             JSONObject command = (JSONObject) parser.parse(args);
             jobIdToCancel = command.get("jobid").toString();
-            mapDisplayName = command.get("mapid").toString();
+            String mapDisplayName = command.get("mapid").toString();
 
             this.jobExecManager.terminate(jobIdToCancel);
-            this.jobStatusManager.setCancelled(jobIdToCancel);
+            this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
 
             // TODO: should be trying to cleanup any files DB data already created by the cancelled job?
             // TODO: Is this where mapId could come in handy?

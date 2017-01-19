@@ -154,10 +154,10 @@ public class HGISReviewResource extends HGISResource {
 
             updateMapTagWithReviewType(mapId);
 
-            jobStatusManager.setComplete(jobId);
+            jobStatusManager.setCompleted(jobId, null);
         }
         catch (ReviewMapTagUpdateException e) {
-            jobStatusManager.setFailed(jobId);
+            jobStatusManager.setFailed(jobId, e.getMessage());
             throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
         }
 

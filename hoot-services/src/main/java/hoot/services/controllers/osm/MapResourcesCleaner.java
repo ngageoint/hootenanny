@@ -64,7 +64,7 @@ public class MapResourcesCleaner {
 
             deleteLayerBy(mapName);
 
-            jobStatusManager.setComplete(jobId);
+            jobStatusManager.setCompleted(jobId, null);
         }
         catch (Exception e) {
             jobStatusManager.setFailed(jobId, e.getMessage());

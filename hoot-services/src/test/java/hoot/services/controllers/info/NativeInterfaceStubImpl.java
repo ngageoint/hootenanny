@@ -28,14 +28,14 @@ package hoot.services.controllers.info;
 
 import org.json.simple.JSONObject;
 
+import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.nativeinterfaces.NativeInterface;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 public class NativeInterfaceStubImpl implements NativeInterface {
     @Override
-    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
-        JSONObject json = new JSONObject();
+    public CommandResult exec(JSONObject command) {
+        CommandResult result = new CommandResult();
 
         // hoot version --debug
         String coreVersionWithDebugInfo = "Hootenanny 0.2.23_1036_ga13f8a9_dirty Built By: vagrant\n"
@@ -48,8 +48,10 @@ public class NativeInterfaceStubImpl implements NativeInterface {
                 + "17:14:43.797 DEBUG ...p/hoot/core/cmd/VersionCmd.cpp(  93) CppUnit Version: 1.13.1\n"
                 + "17:14:43.797 DEBUG ...p/hoot/core/cmd/VersionCmd.cpp(  96) Memory usage, vm: 402.3MB rss: 35.93MB\n";
 
-        json.put("stdout", coreVersionWithDebugInfo);
-        return json;
+
+        result.setStdout(coreVersionWithDebugInfo);
+
+        return result;
     }
 
     @Override
@@ -58,7 +60,6 @@ public class NativeInterfaceStubImpl implements NativeInterface {
     }
 
     @Override
-    public void terminate(String jobId) throws NativeInterfaceException {
-
+    public void terminate(String jobId) {
     }
 }

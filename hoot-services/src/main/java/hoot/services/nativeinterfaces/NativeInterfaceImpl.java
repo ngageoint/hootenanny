@@ -28,16 +28,12 @@ package hoot.services.nativeinterfaces;
 
 import static hoot.services.HootProperties.*;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -63,8 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @Profile("production")
-class ProcessStreamInterface implements NativeInterface {
-    private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
+class NativeInterfaceImpl implements NativeInterface {
+    private static final Logger logger = LoggerFactory.getLogger(NativeInterfaceImpl.class);
 
     // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.
     private static final Map<String, CommandRunner> jobProcesses = new ConcurrentHashMap<>();
@@ -81,25 +77,15 @@ class ProcessStreamInterface implements NativeInterface {
     }
 
     @Override
-    public void terminate(String jobId) throws NativeInterfaceException {
-        try {
-            CommandRunner cmdRunner = jobProcesses.get(jobId);
-            if (cmdRunner != null) {
-                cmdRunner.terminate();
-            }
-        }
-        catch (Exception e) {
-            throw new NativeInterfaceException("Failed to execute." + e.getMessage(),
-                    NativeInterfaceException.HttpCode.SERVER_ERROR, e);
+    public void terminate(String jobId) {
+        CommandRunner cmdRunner = jobProcesses.get(jobId);
+        if (cmdRunner != null) {
+            cmdRunner.terminate();
         }
     }
 
     @Override
-    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
-        logger.debug("Executing command : {}", command.toJSONString());
-
-        JSONObject json = new JSONObject();
-
+    public CommandResult exec(JSONObject command) {
         String exec = command.get("exectype").toString();
 
         String[] commandArr;
@@ -113,12 +99,9 @@ class ProcessStreamInterface implements NativeInterface {
             commandArr = createBashScriptCmdArray(command);
         }
         else {
-            logger.error("Failed to parse params: {}", command.toJSONString());
-            throw new NativeInterfaceException("Failed to parse params.", NativeInterfaceException.HttpCode.BAD_RQUEST);
+            throw new IllegalArgumentException("Invalid exectype specified");
         }
 
-        String commandStr = ArrayUtils.toString(commandArr);
-        logger.debug("Native call: {}", commandStr);
         CommandRunner cmdRunner = new CommandRunnerImpl();
 
         String jobId = null;
@@ -129,60 +112,12 @@ class ProcessStreamInterface implements NativeInterface {
             }
         }
 
-        logger.debug("Start: {}", new Date().getTime());
-
+        CommandResult commandResult;
         try {
-            CommandResult commandResult = cmdRunner.exec(commandArr);
-
-            logger.debug("End: {}", new Date().getTime());
-
-            if (commandResult != null) {
-                if (commandResult.getExitStatus() == 0) {
-                    String stdOut = commandResult.getStdout();
-                    logger.debug("stdout: {}", stdOut);
-                    json.put("stdout", stdOut);
-
-                    StringBuffer warnings = new StringBuffer();
-                    List<String> stdLines = IOUtils.readLines(new StringReader(stdOut));
-                    for (String line : stdLines) {
-                        if (line.contains(" WARN ")) {
-                            warnings.append(line);
-                            warnings.append(System.lineSeparator());
-                        }
-
-                        // we will cap the maximum length of warnings to 1k
-                        if (warnings.length() > 1028) {
-                            warnings.append(" more ..");
-                            break;
-                        }
-                    }
-
-                    if (warnings.length() > 0) {
-                        json.put("warnings", warnings);
-                    }
-                }
-                else {
-                    logger.debug("Command failed.  {}", commandResult);
-                    String err = commandResult.getStderr();
-
-                    boolean doThrowException = true;
-                    if (command.containsKey("throwerror")) {
-                        doThrowException = Boolean.parseBoolean(command.get("throwerror").toString());
-                    }
-
-                    if (doThrowException) {
-                        throw new Exception(err);
-                    }
-
-                    String stdOut = commandResult.getStdout();
-                    json.put("stdout", stdOut);
-                    json.put("stderr", err);
-                }
-            }
+            commandResult = cmdRunner.exec(commandArr);
         }
         catch (Exception e) {
-            throw new NativeInterfaceException("Failed to execute.  Cause: " + e.getMessage(),
-                    NativeInterfaceException.HttpCode.SERVER_ERROR, e);
+            throw new RuntimeException("Failed to execute: " + command, e);
         }
         finally {
             if ((jobId != null) && jobProcesses.containsKey(jobId)) {
@@ -190,7 +125,7 @@ class ProcessStreamInterface implements NativeInterface {
             }
         }
 
-        return json;
+        return commandResult;
     }
 
     /**

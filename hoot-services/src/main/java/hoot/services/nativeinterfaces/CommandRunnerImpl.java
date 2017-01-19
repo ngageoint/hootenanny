@@ -30,20 +30,21 @@ package hoot.services.nativeinterfaces;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * Utility class for running a subprocess synchronously from Java and retrieving
- * the contents of System.out and/or system.err.
+ * Utility class for running a subprocess synchronously from Java.
  */
 class CommandRunnerImpl implements CommandRunner {
     private static final Logger logger = LoggerFactory.getLogger(CommandRunnerImpl.class);
@@ -61,6 +62,10 @@ class CommandRunnerImpl implements CommandRunner {
         try (OutputStream stdout = new ByteArrayOutputStream();
              OutputStream stderr = new ByteArrayOutputStream()) {
 
+            LocalDateTime start = LocalDateTime.now();
+
+            logger.debug("Command {} started at {}", Arrays.toString(command), start);
+
             this.stdout = stdout;
             this.stderr = stderr;
 
@@ -70,29 +75,33 @@ class CommandRunnerImpl implements CommandRunner {
             }
 
             ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
-            DefaultExecutor executor = new DefaultExecutor();
+            Executor executor = new DefaultExecutor();
             this.watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
             executor.setWatchdog(this.watchDog);
             executor.setStreamHandler(executeStreamHandler);
 
-            int exitValue;
+            int exitCode;
             try {
-                exitValue = executor.execute(cmdLine);
+                exitCode = executor.execute(cmdLine);
 
-                if (executor.isFailure(exitValue) && this.watchDog.killedProcess()) {
+                if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
                     // it was killed on purpose by the watchdog
                     logger.info("Process for '{}' command was killed!", cmdLine);
                 }
             }
             catch (Exception e) {
-                exitValue = -1;
+                exitCode = CommandResult.FAILURE;
                 logger.warn("Error executing: {}", cmdLine, e);
             }
 
-            CommandResult commandResult = new CommandResult(cmdLine.toString(), exitValue,
-                    stdout.toString(), stderr.toString());
+            LocalDateTime finish = LocalDateTime.now();
 
-            logger.debug("Finished executing: {}", commandResult);
+            CommandResult commandResult = new CommandResult(cmdLine.toString(), exitCode,
+                    stdout.toString(), stderr.toString());
+            commandResult.setStart(start);
+            commandResult.setFinish(finish);
+
+            logger.debug("Command {} finished at {}", Arrays.toString(command), finish);
 
             return commandResult;
         }

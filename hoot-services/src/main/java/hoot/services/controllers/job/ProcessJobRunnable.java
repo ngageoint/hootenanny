@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -42,8 +42,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
+import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 class ProcessJobRunnable implements Runnable {
@@ -86,41 +86,24 @@ class ProcessJobRunnable implements Runnable {
 
         jobStatusManager.addJob(jobId);
 
-        JSONObject command = null;
         try {
             JSONParser parser = new JSONParser();
-            command = (JSONObject) parser.parse(params);
+            JSONObject command = (JSONObject) parser.parse(params);
 
-            //log.debug(JsonUtils.objectToJson(command));
-            JSONObject result = processJob(jobId, command);
-            //log.debug(JsonUtils.objectToJson(result));
+            CommandResult result = processJob(jobId, command);
 
-            String warnings = null;
-            Object oWarn = result.get("warnings");
-            if (oWarn != null) {
-                warnings = oWarn.toString();
+            if (result.failed()) {
+                jobStatusManager.setFailed(jobId, result.getStderr());
             }
-
-            String statusDetail = "";
-            if (warnings != null) {
-                statusDetail += "WARNINGS: " + warnings;
-            }
-
-            Map<String, String> params = paramsToMap(command);
-            if (params.containsKey("writeStdOutToStatusDetail")
-                    && Boolean.parseBoolean(params.get("writeStdOutToStatusDetail"))) {
-                statusDetail += "INFO: " + result.get("stdout");
-            }
-
-            if (StringUtils.trimToNull(statusDetail) != null) {
-                jobStatusManager.setComplete(jobId, statusDetail);
+            else if (result.hasWarnings()) {
+                jobStatusManager.setCompletedWithWarnings(jobId, result.getStdout());
             }
             else {
-                jobStatusManager.setComplete(jobId);
+                jobStatusManager.setCompleted(jobId, result.getStdout());
             }
         }
         catch (Exception e) {
-            jobStatusManager.setFailed(jobId, e.getMessage());
+            jobStatusManager.setFailed(jobId, ExceptionUtils.getStackTrace(e));
             throw e;
         }
         finally {
@@ -128,7 +111,7 @@ class ProcessJobRunnable implements Runnable {
         }
     }
 
-    private JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
+    private CommandResult processJob(String jobId, JSONObject command) {
         logger.debug("processing Job: {}", jobId);
 
         command.put("jobId", jobId);

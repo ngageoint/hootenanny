@@ -57,7 +57,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.wfs.WFSManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.FileUtils;
 
@@ -322,31 +321,17 @@ public class ExportJobResource extends JobControllerBase {
                                @QueryParam("outputname") String outputname,
                                @QueryParam("removecache") String remove,
                                @QueryParam("ext") String ext) {
-        File out = null;
         String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-        try {
-            File folder = FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
+        File folder = FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
 
-            if (folder != null) {
-                String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
-                out = FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
+        File out = null;
+        if (folder != null) {
+            String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
+            out = FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
 
-                if ((out == null) || !out.exists()) {
-                    throw new NativeInterfaceException("Missing output file",
-                            NativeInterfaceException.HttpCode.SERVER_ERROR);
-                }
+            if ((out == null) || !out.exists()) {
+                throw new IllegalStateException("Missing output file: " + outputname + " with extension " + fileExt);
             }
-        }
-        catch (NativeInterfaceException ne) {
-            int nStat = ne.getExceptionCode().toInt();
-            return Response.status(nStat).entity(ne.getMessage()).build();
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error exporting data: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         String outFileName = id;
@@ -354,10 +339,10 @@ public class ExportJobResource extends JobControllerBase {
             outFileName = outputname;
         }
 
-        ResponseBuilder rBuild = Response.ok(out);
-        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+        ResponseBuilder responseBuilder = Response.ok(out);
+        responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
-        return rBuild.build();
+        return responseBuilder.build();
     }
 
     /**

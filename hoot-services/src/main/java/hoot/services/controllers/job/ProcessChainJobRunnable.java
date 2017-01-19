@@ -45,8 +45,8 @@ import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.models.db.JobStatus;
+import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 import hoot.services.utils.JsonUtils;
 
 
@@ -104,8 +104,9 @@ class ProcessChainJobRunnable implements Runnable {
         try {
             JSONParser parser = new JSONParser();
             JSONArray chain = (JSONArray) parser.parse(jobs);
-
+            String warnings = null;
             int nChain = chain.size();
+
             jobInfo.put("childrencount", String.valueOf(nChain));
 
             for (Object aChain : chain) {
@@ -115,7 +116,6 @@ class ProcessChainJobRunnable implements Runnable {
 
                 JSONObject job = (JSONObject) aChain;
                 String excType = job.get("exectype").toString();
-                String warnings = null;
 
                 if (excType.equalsIgnoreCase("reflection")) {
                     // getting jobInfo from inside since it generates job id.
@@ -134,27 +134,30 @@ class ProcessChainJobRunnable implements Runnable {
                     setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.RUNNING.toString(), "processing");
                     jobStatusManager.updateJob(jobId, jobInfo.toString());
 
-                    JSONObject result = processJob(internalJobId, job);
+                    CommandResult result = processJob(internalJobId, job);
 
-                    // try to get warning
-                    Object oWarn = result.get("warnings");
-                    if (oWarn != null) {
-                        warnings = oWarn.toString();
+                    if (result.hasWarnings()) {
+                        warnings = result.getStdout();
                     }
                 }
 
                 // if we have warnings then pass on
                 String resDetail = "success";
                 if (warnings != null) {
-                    resDetail = "WARNINGS: " + warnings;
+                    resDetail = warnings;
                 }
 
-                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.COMPLETE.toString(), resDetail);
+                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.COMPLETED.toString(), resDetail);
 
                 jobStatusManager.updateJob(jobId, jobInfo.toString());
             }
 
-            jobStatusManager.setComplete(jobId, jobInfo.toString());
+            if (warnings != null) {
+                jobStatusManager.setCompletedWithWarnings(jobId, jobInfo.toString());
+            }
+            else {
+                jobStatusManager.setCompleted(jobId, jobInfo.toString());
+            }
         }
         catch (Exception e) {
             logger.error("Error during processing command where jobId = {}, jobs = {}", jobId, jobs, e);
@@ -262,7 +265,7 @@ class ProcessChainJobRunnable implements Runnable {
                         if (status.get("statusDetail") != null) {
                             childJobInfo.put("warnings", status.get("statusDetail").toString());
                             childJobInfo.put("detail", "warning");
-                            childJobInfo.put("status", JobStatusManager.JOB_STATUS.COMPLETE.toString());
+                            childJobInfo.put("status", JobStatusManager.JOB_STATUS.COMPLETED.toString());
                         }
                     }
                 }
@@ -293,7 +296,7 @@ class ProcessChainJobRunnable implements Runnable {
         return childJobInfo;
     }
 
-    private JSONObject processJob(String jobId, JSONObject command) throws NativeInterfaceException {
+    private CommandResult processJob(String jobId, JSONObject command) {
         logger.debug("processing Job: {}", jobId);
 
         command.put("jobId", jobId);

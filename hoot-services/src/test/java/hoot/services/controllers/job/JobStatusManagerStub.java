@@ -42,13 +42,10 @@ public class JobStatusManagerStub extends JobStatusManager {
     public void updateJob(String jobId, String statusDetail) {}
 
     @Override
-    public void setComplete(String jobId) {}
+    public void setCompletedWithWarnings(String jobId, String warnings) {}
 
     @Override
-    public void setComplete(String jobId, String statusDetail) {}
-
-    @Override
-    public void setFailed(String jobId) {}
+    public void setCompleted(String jobId, String statusDetail) {}
 
     @Override
     public void setFailed(String jobId, String statusDetail) {}

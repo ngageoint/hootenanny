@@ -49,15 +49,15 @@ public class JobExecutionManager {
 
     public JobExecutionManager() {}
 
-    public String getProgress(String jobId) throws NativeInterfaceException {
+    public String getProgress(String jobId) {
         return this.nativeInterface.getJobProgress(jobId);
     }
 
-    public JSONObject exec(JSONObject command) throws NativeInterfaceException {
+    public CommandResult exec(JSONObject command) {
         return this.nativeInterface.exec(command);
     }
 
-    public void terminate(String jobId) throws NativeInterfaceException {
+    public void terminate(String jobId) {
         this.nativeInterface.terminate(jobId);
     }
 }

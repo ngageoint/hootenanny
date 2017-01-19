@@ -990,7 +990,7 @@ public class MapResource extends JobControllerBase {
                 }
 
                 DbUtils.updateMapsTableTags(tags, mapId);
-                jobStatusManager.setComplete(jobId);
+                jobStatusManager.setCompleted(jobId, null);
             }
         }
         catch (Exception ex) {

@@ -56,7 +56,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
 import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 
 
 /**
@@ -257,7 +256,7 @@ public class JobResource {
         return status;
     }
 
-    private String getProgressText(String jobId) throws NativeInterfaceException {
+    private String getProgressText(String jobId) {
         return this.jobExecMan.getProgress(jobId);
     }
 }

@@ -27,34 +27,89 @@
 package hoot.services.nativeinterfaces;
 
 
-class CommandResult {
+import java.time.Duration;
+import java.time.LocalDateTime;
 
-    private final String command;
-    private final int exitStatus;
-    private final String stdout;
-    private final String stderr;
 
-    CommandResult(String cmdString, int result, String stdoutString, String stderrString) {
+public class CommandResult {
+
+    public static final int SUCCESS = 0;
+    public static final int FAILURE = -1;
+
+    private String command;
+    private int exitStatus;
+    private String stdout;
+    private String stderr;
+
+    private LocalDateTime start;
+    private LocalDateTime finish;
+    private Duration duration;
+    private boolean hasWarnings;
+
+    public CommandResult() {}
+
+    public CommandResult(String cmdString, int result, String stdout, String stderr) {
         this.command = cmdString;
         this.exitStatus = result;
-        this.stdout = stdoutString;
-        this.stderr = stderrString;
+        this.stdout = stdout;
+        this.stderr = stderr;
     }
 
-    String getCommand() {
+    public String getCommand() {
         return command;
     }
 
-    int getExitStatus() {
+    public int getExitStatus() {
         return exitStatus;
     }
 
-    String getStderr() {
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public LocalDateTime getFinish() {
+        return finish;
+    }
+
+    public void setFinish(LocalDateTime finish) {
+        this.finish = finish;
+    }
+
+    public String getStderr() {
         return stderr;
     }
 
-    String getStdout() {
+    public Duration getDuration() {
+        if ((start != null) && (finish != null)) {
+            return Duration.between(finish, start);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public String getStdout() {
         return stdout;
+    }
+
+    public void setStdout(String stdout) {
+        this.stdout = stdout;
+    }
+
+    public void setStderr(String stderr) {
+        this.stderr = stderr;
+    }
+
+    public boolean hasWarnings() {
+        return (stdout != null) && stdout.contains(" WARN ");
+    }
+
+    public boolean failed() {
+        return (exitStatus != SUCCESS);
     }
 
     @Override
@@ -64,6 +119,8 @@ class CommandResult {
                 ", exitStatus=" + exitStatus +
                 ", stdout='" + stdout + '\'' +
                 ", stderr='" + stderr + '\'' +
+                ", start='" + start + '\'' +
+                ", finish='" + finish + '\'' +
                 '}';
     }
 }

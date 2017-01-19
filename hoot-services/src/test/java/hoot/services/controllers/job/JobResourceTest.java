@@ -102,7 +102,7 @@ public class JobResourceTest {
         JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
         Mockito.doNothing().when(mockJobStatusManager).addJob(Matchers.anyString());
         Mockito.doNothing().when(mockJobStatusManager).updateJob(Matchers.anyString(), Matchers.anyString());
-        Mockito.doNothing().when(mockJobStatusManager).setComplete(Matchers.anyString(), Matchers.anyString());
+        Mockito.doNothing().when(mockJobStatusManager).setCompleted(Matchers.anyString(), Matchers.anyString());
         Mockito.doNothing().when(mockJobStatusManager).setFailed(Matchers.anyString(), Matchers.anyString());
 
         // Mock child info
@@ -223,7 +223,7 @@ public class JobResourceTest {
         JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
         Mockito.doNothing().when(mockJobStatusManager).addJob(Matchers.anyString());
         Mockito.doNothing().when(mockJobStatusManager).updateJob(Matchers.anyString(), Matchers.anyString());
-        Mockito.doNothing().when(mockJobStatusManager).setComplete(Matchers.anyString(), Matchers.anyString());
+        Mockito.doNothing().when(mockJobStatusManager).setCompleted(Matchers.anyString(), Matchers.anyString());
         Mockito.doNothing().when(mockJobStatusManager).setFailed(Matchers.anyString(), Matchers.anyString());
 
         // Mock child info

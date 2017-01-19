@@ -48,6 +48,7 @@ import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
@@ -129,19 +130,20 @@ public class RasterToTilesService extends JobControllerBase {
                     JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
                     argStr.put("jobId", jobId);
 
-                    JSONObject res = this.jobExecManager.exec(argStr);
-                    Object oRes = res.get("warnings");
+                    CommandResult commandResult = this.jobExecManager.exec(argStr);
 
-                    if (oRes != null) {
-                        warn = oRes.toString();
+                    if (commandResult.failed()) {
+                        jobStatusManager.setFailed(jobId, commandResult.getStderr());
+                    }
+                    else if (commandResult.hasWarnings()) {
+                        jobStatusManager.setCompletedWithWarnings(jobId, commandResult.getStdout());
+                    }
+                    else {
+                        jobStatusManager.setCompleted(jobId, commandResult.getStdout());
                     }
                 }
-
-                if (warn == null) {
-                    jobStatusManager.setComplete(jobId);
-                }
                 else {
-                    jobStatusManager.setComplete(jobId, "WARNINGS: " + warn);
+                    throw new IllegalArgumentException("Invalid bbox!");
                 }
             }
             catch (Exception ex) {

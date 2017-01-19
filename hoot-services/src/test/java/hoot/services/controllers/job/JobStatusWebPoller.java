@@ -124,8 +124,8 @@ public class JobStatusWebPoller {
             }
         }
         if (!jobShouldFail) {
-            Assert.assertEquals(JOB_STATUS.COMPLETE, jobStatus);
-            verifyJobStatusInDb(jobId, JOB_STATUS.COMPLETE);
+            Assert.assertEquals(JOB_STATUS.COMPLETED, jobStatus);
+            verifyJobStatusInDb(jobId, JOB_STATUS.COMPLETED);
         }
     }
 
