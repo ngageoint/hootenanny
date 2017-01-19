@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -685,9 +685,8 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   RelationMap allRelations = getRelationMap();
   const ElementId oldNodeId = ElementId::node(oldId);
 
-  LOG_DEBUG("Replace node in relations: replace " << oldId << " with " << newId );
+  LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );
 
-  ConstElementPtr emptyElement;
   NodeMap::iterator it;
 
   // Make sure both nodes exist; calling getNode on non-existent IDs causes failed assert
