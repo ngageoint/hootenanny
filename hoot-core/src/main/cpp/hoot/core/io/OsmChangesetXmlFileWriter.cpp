@@ -147,24 +147,21 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
 {
   writer.writeStartElement("node");
   writer.writeAttribute("id", QString::number(n->getId()));
-  if (n->getTimestamp() != 0)
-  {
-    writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
-  }
   long version = -1;
+  //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.type == Change::Create)
-  {
-    //for xml changeset OSM rails port expects created elements to have version = 0
     version = 0;
-  }
   else
-  {
     version = n->getVersion();
-  }
   writer.writeAttribute("version", QString::number(version));
 
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
   writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
+
+  if (n->getTimestamp() != 0)
+    writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
+  else
+    writer.writeAttribute("timestamp", "");
 
   const Tags& tags = n->getTags();
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
@@ -196,16 +193,16 @@ void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w
   writer.writeStartElement("way");
   writer.writeAttribute("id", QString::number(w->getId()));
   long version = -1;
+  // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.type == Change::Create)
-  {
-    //for xml changeset OSM rails port expects created elements to have version = 0
     version = 0;
-  }
   else
-  {
     version = w->getVersion();
-  }
   writer.writeAttribute("version", QString::number(version));
+  if (w->getTimestamp() != 0)
+    writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
+  else
+    writer.writeAttribute("timestamp", "");
 
   for (size_t j = 0; j < w->getNodeCount(); j++)
   {
@@ -241,21 +238,17 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
 {
   writer.writeStartElement("relation");
   writer.writeAttribute("id", QString::number(r->getId()));
-  if (r->getTimestamp() != 0)
-  {
-    writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
-  }
   long version = -1;
+  //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.type == Change::Create)
-  {
-    //for xml changeset OSM rails port expects created elements to have version = 0
     version = 0;
-  }
   else
-  {
     version = r->getVersion();
-  }
   writer.writeAttribute("version", QString::number(version));
+  if (r->getTimestamp() != 0)
+    writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
+  else
+    writer.writeAttribute("timestamp", "");
 
   const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)
