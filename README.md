@@ -1,3 +1,5 @@
+![hoot_logo_icon](https://cloud.githubusercontent.com/assets/17434033/22118537/3dda4c3e-de46-11e6-95fe-ad9c4e933534.png)
+
 # Introduction
 
 Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation 
