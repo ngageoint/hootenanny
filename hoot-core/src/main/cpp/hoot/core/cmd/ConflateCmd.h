@@ -89,6 +89,12 @@ public:
   //name.
   int runMultiple(QStringList args)
   {
+    //TODO: make this work with stats
+    if (args.contains("--stats"))
+    {
+      throw HootException("Multi-conflation does not work with the --stats option.");
+    }
+
     if (!ConfigOptions().getReviewTagsTreatAsMetadata())
     {
       throw HootException(
@@ -221,7 +227,6 @@ public:
       }
     }
 
-    //TODO: make this work with stats
     if (args.size() == 2 && args[0].split(";").size() > 1)
     {
       return runMultiple(args);
