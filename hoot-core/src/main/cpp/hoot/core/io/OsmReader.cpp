@@ -321,8 +321,6 @@ void OsmReader::open(QString url)
 
 void OsmReader::read(shared_ptr<OsmMap> map)
 {
-  LOG_DEBUG("OsmReader::read");
-
   _osmFound = false;
 
   _missingNodeCount = 0;
@@ -598,7 +596,6 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
         const QString& key = _saveMemory(attributes.value("k"));
         const QString& value = _saveMemory(attributes.value("v"));
 
-        LOG_DEBUG("About to parse status");
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(_parseStatus(value));
