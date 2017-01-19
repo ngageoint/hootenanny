@@ -87,8 +87,6 @@ public:
   //name.
   int runMultiple(QStringList args)
   {
-    //TODO: make this work with stats
-
     const QStringList inputs = args[0].split(";");
     const QString output = args[1];
 
@@ -188,15 +186,16 @@ public:
       }
     }
 
+    //TODO: make this work with stats
+    if (args.size() == 2 && args[0].split(";").size() > 1)
+    {
+      return runMultiple(args);
+    }
+
     if (args.size() < 2 || args.size() > 3)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
-    }
-
-    if (args.size() == 2 && args[0].split(";").size() > 1)
-    {
-      return runMultiple(args);
     }
 
     QString input1 = args[0];
