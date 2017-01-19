@@ -687,7 +687,6 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
   LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );
 
-  ConstElementPtr emptyElement;
   NodeMap::iterator it;
 
   // Make sure both nodes exist; calling getNode on non-existent IDs causes failed assert

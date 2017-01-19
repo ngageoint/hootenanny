@@ -57,8 +57,6 @@ void SuperfluousWayRemover::removeWays(shared_ptr<OsmMap> map)
 
 void SuperfluousWayRemover::removeWays()
 {
-  //LOG_INFO("Removing superfluous ways...");
-
   shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 
   // make a copy of the ways to avoid issues when removing.

@@ -128,8 +128,6 @@ void IntersectionSplitter::splitIntersections(shared_ptr<OsmMap> map)
 
 void IntersectionSplitter::splitIntersections()
 {
-  //LOG_INFO("Splitting intersections...");
-
   // make a map of nodes to ways.
   _mapNodesToWays();
 

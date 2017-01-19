@@ -247,8 +247,6 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll(shared_ptr<const OsmMap> map, Drivi
 
 shared_ptr<OsmMap> DualWaySplitter::splitAll()
 {
-  //LOG_INFO("Splitting divided ways...");
-
   shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
