@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,9 +40,10 @@
 namespace hoot
 {
 
-OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
-  : _precision(ConfigOptions().getWriterPrecision()),
-    _changesetMaxSize(ConfigOptions().getChangesetMaxSize())
+OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter() :
+_precision(ConfigOptions().getWriterPrecision()),
+_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+_multipleChangesetsWritten(false)
 {
 }
 
@@ -60,11 +61,14 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
   while (cs->hasMoreChanges())
   {
     long changesetProgress = 1;
-    //  Create a new filepath if the file is split in multiple files because of the changeset.max.size setting
+    //  Create a new filepath if the file is split in multiple files because of the
+    //  changeset.max.size setting
     //   i.e. <filepath>/<filename>-001.<ext>
     if (fileCount > 0)
+    {
       filepath = QString("%1/%2-%3.%4").arg(dir).arg(file).arg(fileCount, 3, 10, QChar('0')).arg(ext);
-
+      _multipleChangesetsWritten = true;
+    }
     LOG_INFO("Writing changeset to " << filepath);
 
     QFile f;

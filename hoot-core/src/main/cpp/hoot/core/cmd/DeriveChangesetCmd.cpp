@@ -121,9 +121,10 @@ public:
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
+    OsmChangesetXmlFileWriter xmlWriter;
     if (isXmlOutput)
     {
-      OsmChangesetXmlFileWriter().write(output, delta);
+      xmlWriter.write(output, delta);
     }
     else
     {
@@ -140,7 +141,20 @@ public:
         "Associating changeset file: " << output << " with services job ID: " << jobId < "...");
       LOG_VARD(hootApiDbUrl);
       _hootApiDb.open(QUrl(hootApiDbUrl));
-      _hootApiDb.writeJobStatus(jobId, output);
+      QString outputPath = output;
+      if (isXmlOutput && xmlWriter.getMultipleChangesetsWritten())
+      {
+        //The xml writer will break up changesets into multiple files if they exceed the maximum
+        //changeset size.  Thus, the path will be changed.  The sql writer does not break up the
+        //output into seperate files.
+
+        //We're just going to punt on multiple changeset files for now and make sure the services
+        //handle the situation appropriately.  We don't want to have to deal with the potentially
+        //large size of multiple changesets worth of data when returning changeset data from the
+        //services.
+        outputPath = "<multiple files>";
+      }
+      _hootApiDb.writeJobStatus(jobId, outputPath);
     }
 
     return 0;

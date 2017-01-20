@@ -59,7 +59,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Derives an OSM XML changeset (.osc)
  * 
  * Keeping this logic separate from that of ChangesetResource since it is not part of the official 
- * OSM API and ChangesetResource currently contains only OSM API functions.
+ * OSM API and ChangesetResource is made up of pure OSM API functions.
  */
 @Controller
 @Path("/changeset")
@@ -107,6 +107,8 @@ public class DeriveChangesetResource extends JobControllerBase {
             arg.put("jobId", jobId);
             
             commandArgs.add(arg);
+            
+            postJobRequest(jobId, createPostBody(commandArgs));
         }
         catch (Exception e) {
             throw new WebApplicationException(e, Response.serverError().entity("Error deriving changeset for inputs: " + input1 + ", " + input2).build());
@@ -114,14 +116,26 @@ public class DeriveChangesetResource extends JobControllerBase {
 
         return new JobId(jobId);
     }
+    
+    public String getJobStatusDetail(String jobId) throws Exception
+    {
+        JobStatusManager jobStatusManager = new JobStatusManager();
+        JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
+        if (jobStatus == null)
+        {
+            throw new IOException("Job with ID: " + jobId + " does not exist.");
+        }
+        return jobStatus.getStatusDetail(); 
+    }
 
     /**
      * Returns the contents of an XML changeset file 
      * 
      * @param jobId job ID the changeset file is associated with
      * @return changeset XML contents
-     * @throws WebApplicationException if the job with ID = jobID does not exist; or the referenced
-     * temp changeset file no longer exists
+     * @throws WebApplicationException if the job with ID = jobID does not exist, the referenced
+     * temp changeset file no longer exists, or the changeset is made up of multiple changeset 
+     * files.
      */
     @GET
     @Path("/getderived")
@@ -131,20 +145,18 @@ public class DeriveChangesetResource extends JobControllerBase {
         Document responseDoc = null;
         String changesetFileName = null;
         try {
-            JobStatusManager jobStatusManager = new JobStatusManager();
-            JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
-            if (jobStatus == null)
+            changesetFileName = getJobStatusDetail(jobId);
+            if (changesetFileName == "<multiple files>")
             {
-                throw new Exception("Job with ID: " + jobId + " does not exist.");
+                throw new Exception("Changeset requested is made up of multiple changesets in multiple files.  /getderived does not currently support this.");
             }
-            changesetFileName = jobStatus.getStatusDetail();
             responseDoc = XmlDocumentBuilder.parse(FileUtils.readFileToString(new File(changesetFileName), "UTF-8"));
         }
         catch (IOException e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for job ID=" + jobId + ".  Unable to read changeset temp file at " + changesetFileName + ".").build());
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("Error fetching changeset contents for job ID=" + jobId + ".  Unable to read changeset temp file at " + changesetFileName + ".").build());
         }
         catch (Exception e) {
-            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for job ID=" + jobId).build());
+            throw new WebApplicationException(e, Response.serverError().entity("Error fetching changeset contents for job ID=" + jobId + " " + e.getMessage()).build());
         }
         return Response.ok(new DOMSource(responseDoc)).build();
     }

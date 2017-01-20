@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -75,6 +75,8 @@ public:
    */
   virtual void setConfiguration(const Settings &conf);
 
+  bool getMultipleChangesetsWritten() const { return _multipleChangesetsWritten; }
+
 private:
 
   /** Helper functions to write nodes, ways, and relations. */
@@ -87,6 +89,8 @@ private:
   long _changesetMaxSize;
 
   Change _change;
+
+  bool _multipleChangesetsWritten;
 
 };
 

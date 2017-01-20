@@ -67,6 +67,7 @@ import hoot.services.utils.FileUtils;
 @Path("/export")
 @Transactional
 public class ExportJobResource extends JobControllerBase {
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
     public ExportJobResource() {
