@@ -61,7 +61,8 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp \
     src/test/cpp/hoot/rnd/conflate/polygon/AreaMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp
+    src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h

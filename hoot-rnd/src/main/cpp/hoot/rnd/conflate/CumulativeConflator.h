@@ -42,15 +42,12 @@ class CumulativeConflator
 public:
 
   /**
-   * Conflates the input files in a cumulative fashion.
+   * Conflates three or more input files in a cumulative fashion.
    *
-   * Expects two inputs: the first is a ';' delimited list of paths and the second is the conflated
-   * output file path
-   *
-   * @param args conflation arguments
+   * @param inputs input file paths to conflate
+   * @param output output file path to write conflated data
    */
-  static void conflate(const QStringList args);
-
+  static void conflate(const QStringList inputs, const QString output);
 };
 
 }

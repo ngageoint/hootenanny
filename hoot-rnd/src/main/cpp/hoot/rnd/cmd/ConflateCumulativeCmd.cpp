@@ -45,6 +45,12 @@ public:
 
   virtual int runSimple(QStringList args)
   {
+    //TODO: make this work with stats
+    if (args.contains("--stats"))
+    {
+      throw HootException("Multi-conflation does not work with the --stats option.");
+    }
+
     if (args.size() < 4)
     {
       cout << getHelp() << endl << endl;
@@ -53,7 +59,12 @@ public:
         QString("one output path. ").arg(getName()));
     }
 
-    CumulativeConflator::conflate(args);
+    QStringList inputsTemp = args;
+    inputsTemp.removeLast();
+    const QStringList inputs = inputsTemp;
+    const QString output = args.last();
+
+    CumulativeConflator::conflate(inputs, output);
 
     return 0;
   }

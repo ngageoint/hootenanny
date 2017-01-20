@@ -42,16 +42,11 @@
 namespace hoot
 {
 
-void CumulativeConflator::conflate(const QStringList args)
+void CumulativeConflator::conflate(const QStringList inputs, const QString output)
 {
-  assert(args.size() >= 4);
+  assert(inputs.size() >= 3);
 
-  //TODO: make this work with stats
-  if (args.contains("--stats"))
-  {
-    throw HootException("Multi-conflation does not work with the --stats option.");
-  }
-
+  //for NoInformationElementRemover
   if (ConfigOptions().getReviewTagsTreatAsMetadata())
   {
     throw HootException(
@@ -59,17 +54,13 @@ void CumulativeConflator::conflate(const QStringList args)
       "=false");
   }
 
+  //for TagMergerFactory
   if (ConfigOptions().getTagMergerDefault() != "hoot::ProvenanceAwareOverwriteTagMerger")
   {
     throw HootException(
       "Multi-conflation must be run with " + ConfigOptions::getTagMergerDefaultKey() +
       "=hoot::ProvenanceAwareOverwriteTagMerger");
   }
-
-  QStringList inputsTemp = args;
-  inputsTemp.removeLast();
-  const QStringList inputs = inputsTemp;
-  const QString output = args.last();
 
   OsmMapPtr cumulativeMap(new OsmMap());
   LOG_VARD(inputs.size());
