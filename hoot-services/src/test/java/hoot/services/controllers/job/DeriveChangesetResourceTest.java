@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static org.mockito.Matchers.anyString;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.ws.rs.WebApplicationException;
@@ -43,7 +42,6 @@ import javax.xml.transform.stream.StreamResult;
 import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Matchers;
@@ -56,6 +54,7 @@ import hoot.services.UnitTest;
 
 public class DeriveChangesetResourceTest {
 
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(DeriveChangesetResourceTest.class);
     
     @Test
