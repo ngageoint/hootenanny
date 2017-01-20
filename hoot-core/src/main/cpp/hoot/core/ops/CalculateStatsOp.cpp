@@ -83,7 +83,7 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput)
 {
-  LOG_VARD(_inputIsConflatedMapOutput);
+  LOG_VART(_inputIsConflatedMapOutput);
 }
 
 shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(

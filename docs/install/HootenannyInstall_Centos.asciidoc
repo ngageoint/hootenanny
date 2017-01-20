@@ -63,7 +63,7 @@ The following instructions assumed you have used the Hootenanny build process to
 .. From the right hand menu in iD, click "Custom".
 .. Add the URL for the basemap you wish to use.
 
-. If you want to define a starting AOI for your maps, so you begin in the same location every time you open the browser, modify the "hoot.center" variable in +/var/lib/tomcat6/webapps/WEB-INF/hootenanny-id/hoot/js/custom/hoot.js+.
+. If you want to define a starting AOI for your maps, so you begin in the same location every time you open the browser, modify the "hoot.center" variable in +/var/lib/tomcat8/webapps/WEB-INF/hootenanny-id/hoot/js/custom/hoot.js+.
 
 . You can quickly zoom to an AOI by modifying the end of the browser URL. The parts you modify are of the form /[zoom]/[longitude]/[latitude].
 
@@ -74,7 +74,7 @@ The following instructions assumed you have used the Hootenanny build process to
 If you're on a new server and want a rudimentary test for bandwidth then do the following:
 
 --------------------------------------
-cd /var/lib/tomcat6/webapps
+cd /var/lib/tomcat8/webapps
 sudo fallocate -l 100M dum.txt
 sudo chmod 777 dum.txt
 --------------------------------------

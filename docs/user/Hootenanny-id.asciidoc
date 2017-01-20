@@ -167,7 +167,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
 image::user/images/id/hoot_background_new.png[]
 
-NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT6_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
+NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT8_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
 
 ==== Image Carousel
 
