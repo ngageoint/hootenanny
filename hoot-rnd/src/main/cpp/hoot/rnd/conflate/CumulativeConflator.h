@@ -41,8 +41,6 @@ class CumulativeConflator
 {
 public:
 
-  CumulativeConflator();
-
   /**
    * Conflates the input files in a cumulative fashion.
    *
@@ -51,7 +49,7 @@ public:
    *
    * @param args conflation arguments
    */
-  void conflate(const QStringList args);
+  static void conflate(const QStringList args);
 
 };
 

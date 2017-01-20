@@ -48,7 +48,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/conflate/CumulativeConflator.h>
 
 // Standard
 #include <fstream>
@@ -107,14 +106,6 @@ public:
         args.pop_back();
         args.pop_back();
       }
-    }
-
-    //The logic in this method won't allow ConflateCmd to have any inputs that have ';' in the file
-    //name.
-    if (args.size() == 2 && args[0].split(";").size() > 1)
-    {
-      CumulativeConflator().conflate(args);
-      return 0;
     }
 
     if (args.size() < 2 || args.size() > 3)
