@@ -63,9 +63,9 @@ HootApiDb::HootApiDb()
 
 HootApiDb::~HootApiDb()
 {
-  LOG_VARD(_nodesInsertElapsed);
-  LOG_VARD(_wayNodesInsertElapsed);
-  LOG_VARD(_wayInsertElapsed);
+  LOG_VART(_nodesInsertElapsed);
+  LOG_VART(_wayNodesInsertElapsed);
+  LOG_VART(_wayInsertElapsed);
   close();
 }
 

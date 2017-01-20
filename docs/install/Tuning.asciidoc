@@ -28,7 +28,7 @@ and only a fixed number can be executed at one time.
 
 The number of batch jobs available in the queue at one time is specified in the
 hoot-services configuration file,
-`$TOMCAT6_HOME/webapps/hoot-services/WEB-INF/classes/conf/local.conf` with the
+`$TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/conf/local.conf` with the
 `internalJobThreadSize` configuration option. By default the value is 5. E.g.
 
 ----

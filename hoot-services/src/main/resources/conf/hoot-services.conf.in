@@ -177,7 +177,7 @@ BasemapRasterToTiles=makebasemaprastertotiles.sh
 BasemapRasterExtensions=png,tif
 
 # Catalina log location
-ErrorLogPath=/var/log/tomcat6/catalina.out
+ErrorLogPath=/var/log/tomcat8/catalina.out
 
 # Job query interval in milli second
 JobQueryInterval=3000

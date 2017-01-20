@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "mapnik": "3.4.x",
-    "generic-pool": "*",
-    "pg": "*"
+    "generic-pool": "2.4.x",
+    "pg": "6.1.x"
   },
   "scripts": {
     "start": "node app.js hoot_style.xml 8000"
