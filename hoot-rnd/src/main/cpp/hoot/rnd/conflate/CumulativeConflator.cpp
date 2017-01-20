@@ -31,7 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/KeepReviewsVisitor.h>
+#include <hoot/rnd/visitors/KeepReviewsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

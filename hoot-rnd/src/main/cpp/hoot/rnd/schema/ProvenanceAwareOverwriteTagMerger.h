@@ -27,7 +27,7 @@
 #ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
 #define PROVENANCEAWAREOVERWRITETAGMERGER_H
 
-#include "OverwriteTagMerger.h"
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 namespace hoot
 {

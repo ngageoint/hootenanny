@@ -102,7 +102,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.cpp \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.cpp \
     src/main/cpp/hoot/rnd/cmd/ConflateCumulativeCmd.cpp \
-    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp
+    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
+    src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
@@ -142,7 +144,9 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.h \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.h \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.h \
-    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h
+    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h \
+    src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h
 
 FORMS +=
 

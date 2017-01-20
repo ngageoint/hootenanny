@@ -539,9 +539,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp \
     src/main/cpp/hoot/core/io/ApiDbReader.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/KeepReviewsVisitor.cpp \
-    src/main/cpp/hoot/core/schema/ProvenanceAwareOverwriteTagMerger.cpp
+    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1087,7 +1085,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/TableType.h \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.h \
     src/main/cpp/hoot/core/elements/ElementAttributeType.h \
-    src/main/cpp/hoot/core/util/MetadataTags.h \
-    src/main/cpp/hoot/core/visitors/KeepReviewsVisitor.h \
-    src/main/cpp/hoot/core/schema/ProvenanceAwareOverwriteTagMerger.h
+    src/main/cpp/hoot/core/util/MetadataTags.h
 
