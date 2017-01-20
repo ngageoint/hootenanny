@@ -22,39 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
+#define PROVENANCEAWAREOVERWRITETAGMERGER_H
 
-#ifndef MULTICONFLATOR_H
-#define MULTICONFLATOR_H
-
-// Qt
-#include <QStringList>
+#include "OverwriteTagMerger.h"
 
 namespace hoot
 {
 
 /**
- * Allows for conflating more than two inputs in a cumulative fashion.
+ * Same as OverwriteTag2Merger except the provenance tag, hoot:source, which will be merged using
+ * values from both features.
  */
-class MultiConflator
+class ProvenanceAwareOverwriteTagMerger : public OverwriteTagMerger
 {
+
 public:
 
-  MultiConflator();
+  static string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
 
-  /**
-   * Conflates the input files in a cumulative fashion.
-   *
-   * Expects two inputs: the first is a ';' delimited list of paths and the second is the conflated
-   * output file path
-   *
-   * @param args conflation arguments
-   */
-  void conflate(const QStringList args);
+  ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
+  virtual ~ProvenanceAwareOverwriteTagMerger() {}
+
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 };
 
 }
 
-#endif // MULTICONFLATOR_H
+#endif // PROVENANCEAWAREOVERWRITETAGMERGER_H

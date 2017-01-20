@@ -61,22 +61,31 @@ void MultiConflator::conflate(const QStringList args)
       "=false");
   }
 
+  if (ConfigOptions().getTagMergerDefault() != "hoot::ProvenanceAwareOverwriteTagMerger")
+  {
+    throw HootException(
+      "Multi-conflation must be run with " + ConfigOptions().getTagMergerDefaultKey() +
+      "=hoot::ProvenanceAwareOverwriteTagMerger");
+  }
+
   const QStringList inputs = args[0].split(";");
   const QString output = args[1];
 
-  OsmMapPtr map(new OsmMap());
-  OsmMapPtr reviewCache;
+  OsmMapPtr cumulativeMap(new OsmMap());
   LOG_VARD(inputs.size());
   for (int i = 0; i < inputs.size(); i++)
   {
+    OsmMapPtr reviewCache;
     if (i == 0)
     {
       OsmMapReaderFactory::read(
-        map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+        cumulativeMap, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
 
-      LOG_DEBUG("Setting source tags...");
+      //keep a source tag history on the data for provenance; append to any existing source values
+      //(this shouldn't be added to any review relations)
+      LOG_DEBUG("Setting source tags for map " << QString::number(i + 1) << "...");
       SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1));
-      map->visitRw(sourceTagVisitor);
+      cumulativeMap->visitRw(sourceTagVisitor);
     }
     else
     {
@@ -89,23 +98,24 @@ void MultiConflator::conflate(const QStringList args)
         LOG_INFO("Conflating cumulative map with " << inputs[i] << "...");
       }
 
+      OsmMapPtr unknown2Map(new OsmMap());
       OsmMapReaderFactory::read(
-        map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+        unknown2Map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+      MapProjector::projectToWgs84(unknown2Map);
 
-      if (i == 1 && Log::getInstance().isDebugEnabled())
-      {
-        LOG_DEBUG("Writing debug map.");
-        OsmMapPtr debug(new OsmMap(map));
-        MapProjector::projectToWgs84(debug);
-        OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
-      }
+      //Same as above, but do this before combining the cumulative map with the unknown2 map to
+      //prevent incorrect tags from being added to the cumulative map.
+      LOG_DEBUG("Setting source tags for map " << QString::number(i + 1) << "...");
+      SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1)/*, true*/);
+      unknown2Map->visitRw(sourceTagVisitor);
 
-      //keep a source tag history on the data for provenance; append to any existing source values
-      //(this shouldn't be added to any review relations)
-      LOG_DEBUG("Setting source tags...");
-      SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1), true);
-      map->visitRw(sourceTagVisitor);
+      //now combine the two maps before conflation
+      MapProjector::projectToWgs84(cumulativeMap);
+      MapProjector::projectToWgs84(unknown2Map);
+      cumulativeMap->append(unknown2Map);
 
+      //TODO: sloppy...need to investigate why OsmReader is dropping the review tags in the first
+      //place.
       //load in cached reviews from previous conflations
       if (reviewCache.get() && reviewCache->getElementCount() > 0)
       {
@@ -114,15 +124,15 @@ void MultiConflator::conflate(const QStringList args)
         for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
         {
           RelationPtr review = it->second;
-          review->setId(map->createNextRelationId());
-          map->addRelation(review);
+          review->setId(cumulativeMap->createNextRelationId());
+          cumulativeMap->addRelation(review);
         }
         LOG_DEBUG("Added " << reviews.size() << " cached reviews.");
       }
 
-      NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+      NamedOp(ConfigOptions().getConflatePreOps()).apply(cumulativeMap);
 
-      UnifyingConflator().apply(map);
+      UnifyingConflator().apply(cumulativeMap);
 
       //NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
 
@@ -130,33 +140,25 @@ void MultiConflator::conflate(const QStringList args)
       {
         //Up until just before the last conflate job, set the status tag back to 1 so that the
         //accumulated data will conflate with the next dataset.
-        //TODO: this shouldn't be modifying review relations
+        LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");
         SetTagVisitor statusTagVisitor(
           "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
-        map->visitRw(statusTagVisitor);
-
-//          if (Log::getInstance().isDebugEnabled())
-//          {
-//            LOG_DEBUG("Writing debug map.");
-//            OsmMapPtr debug(new OsmMap(map));
-//            MapProjector::projectToWgs84(debug);
-//            OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
-//          }
+        cumulativeMap->visitRw(statusTagVisitor);
       }
 
       //copy the map and save the reviews
       LOG_DEBUG("Caching reviews...");
-      reviewCache.reset(new OsmMap(map->getProjection()));
+      reviewCache.reset(new OsmMap(cumulativeMap->getProjection()));
       KeepReviewsVisitor vis;
       reviewCache->visitRw(vis);
       LOG_DEBUG("Cached " << reviewCache->getElementCount() << " reviews.");
     }
   }
 
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+  NamedOp(ConfigOptions().getConflatePostOps()).apply(cumulativeMap);
 
-  MapProjector::projectToWgs84(map);
-  OsmMapWriterFactory::write(map, output);
+  MapProjector::projectToWgs84(cumulativeMap);
+  OsmMapWriterFactory::write(cumulativeMap, output);
 }
 
 }
