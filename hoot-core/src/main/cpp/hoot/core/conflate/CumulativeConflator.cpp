@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "MultiConflator.h"
+#include "CumulativeConflator.h"
 
 // Hoot
 #include <hoot/core/OsmMap.h>
@@ -42,11 +42,11 @@
 namespace hoot
 {
 
-MultiConflator::MultiConflator()
+CumulativeConflator::CumulativeConflator()
 {
 }
 
-void MultiConflator::conflate(const QStringList args)
+void CumulativeConflator::conflate(const QStringList args)
 {
   //TODO: make this work with stats
   if (args.contains("--stats"))
@@ -64,7 +64,7 @@ void MultiConflator::conflate(const QStringList args)
   if (ConfigOptions().getTagMergerDefault() != "hoot::ProvenanceAwareOverwriteTagMerger")
   {
     throw HootException(
-      "Multi-conflation must be run with " + ConfigOptions().getTagMergerDefaultKey() +
+      "Multi-conflation must be run with " + ConfigOptions::getTagMergerDefaultKey() +
       "=hoot::ProvenanceAwareOverwriteTagMerger");
   }
 
@@ -98,6 +98,9 @@ void MultiConflator::conflate(const QStringList args)
         LOG_INFO("Conflating cumulative map with " << inputs[i] << "...");
       }
 
+      //I'm not yet sure all the projecting going on here is the right way to go about this, but
+      //the maps must be in the same projection for the appending to work.
+
       OsmMapPtr unknown2Map(new OsmMap());
       OsmMapReaderFactory::read(
         unknown2Map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
@@ -114,9 +117,10 @@ void MultiConflator::conflate(const QStringList args)
       MapProjector::projectToWgs84(unknown2Map);
       cumulativeMap->append(unknown2Map);
 
-      //TODO: sloppy...need to investigate why OsmReader is dropping the review tags in the first
-      //place.
-      //load in cached reviews from previous conflations
+      //load in cached reviews from previous conflations - I believe this is necessary, b/c the
+      //UnifyingConflator is ignoring any incoming reviews by design (need to verify this).  It
+      //could be argued that modifying it to optionally retain the reviews is a better design
+      //than the caching going on here...
       if (reviewCache.get() && reviewCache->getElementCount() > 0)
       {
         LOG_DEBUG("Adding previous reviews...");
@@ -131,10 +135,10 @@ void MultiConflator::conflate(const QStringList args)
       }
 
       NamedOp(ConfigOptions().getConflatePreOps()).apply(cumulativeMap);
-
       UnifyingConflator().apply(cumulativeMap);
-
-      //NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+      //going to apply this at the end of all conflation jobs, but maybe we'll find out later that
+      //it needs to be done here instead (?)
+      //NamedOp(ConfigOptions().getConflatePostOps()).apply(cumulativeMap);
 
       if (i < inputs.size() - 1)
       {

@@ -48,7 +48,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/conflate/MultiConflator.h>
+#include <hoot/core/conflate/CumulativeConflator.h>
 
 // Standard
 #include <fstream>
@@ -113,7 +113,7 @@ public:
     //name.
     if (args.size() == 2 && args[0].split(";").size() > 1)
     {
-      MultiConflator().conflate(args);
+      CumulativeConflator().conflate(args);
       return 0;
     }
 

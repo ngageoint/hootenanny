@@ -541,7 +541,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ApiDbReader.cpp \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp \
     src/main/cpp/hoot/core/visitors/KeepReviewsVisitor.cpp \
-    src/main/cpp/hoot/core/conflate/MultiConflator.cpp \
+    src/main/cpp/hoot/core/conflate/CumulativeConflator.cpp \
     src/main/cpp/hoot/core/schema/ProvenanceAwareOverwriteTagMerger.cpp
 
 HEADERS += \
@@ -1090,6 +1090,6 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/ElementAttributeType.h \
     src/main/cpp/hoot/core/util/MetadataTags.h \
     src/main/cpp/hoot/core/visitors/KeepReviewsVisitor.h \
-    src/main/cpp/hoot/core/conflate/MultiConflator.h \
+    src/main/cpp/hoot/core/conflate/CumulativeConflator.h \
     src/main/cpp/hoot/core/schema/ProvenanceAwareOverwriteTagMerger.h
 

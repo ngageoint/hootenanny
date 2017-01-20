@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef MULTICONFLATOR_H
-#define MULTICONFLATOR_H
+#ifndef CUMULATIVECONFLATOR_H
+#define CUMULATIVECONFLATOR_H
 
 // Qt
 #include <QStringList>
@@ -37,11 +37,11 @@ namespace hoot
 /**
  * Allows for conflating more than two inputs in a cumulative fashion.
  */
-class MultiConflator
+class CumulativeConflator
 {
 public:
 
-  MultiConflator();
+  CumulativeConflator();
 
   /**
    * Conflates the input files in a cumulative fashion.
@@ -57,4 +57,4 @@ public:
 
 }
 
-#endif // MULTICONFLATOR_H
+#endif // CUMULATIVECONFLATOR_H
