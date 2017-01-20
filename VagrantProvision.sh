@@ -205,13 +205,13 @@ if [ ! -f bin/osmosis ]; then
 fi
 
 if ! ogrinfo --formats | grep --quiet FileGDB; then
-    if [ ! -f gdal-1.10.1.tar.gz ]; then
+    if [ ! -f gdal-2.1.2.tar.gz ]; then
         echo "### Downloading GDAL source..."
-        wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz
     fi
-    if [ ! -d gdal-1.10.1 ]; then
+    if [ ! -d gdal-2.1.2 ]; then
         echo "### Extracting GDAL source..."
-        tar zxfp gdal-1.10.1.tar.gz
+        tar zxfp gdal-2.1.2.tar.gz
     fi
 
     if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
@@ -226,7 +226,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
 
     echo "### Building GDAL w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-1.10.1
+    cd gdal-2.1.2
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
