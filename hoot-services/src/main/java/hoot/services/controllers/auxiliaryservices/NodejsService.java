@@ -27,12 +27,21 @@
 package hoot.services.controllers.auxiliaryservices;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteStreamHandler;
+import org.apache.commons.exec.Executor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,28 +60,34 @@ abstract class NodejsService {
 
         // This combines stdout and stderr into one stream
         builder.redirectErrorStream(true);
-        final Process serverProcess = builder.start();
+        Process serverProcess = builder.start();
 
         // Pumping the output to service output stream
         // Also, if there is no handler to pump out the std and stderr stream
         // for Processbuilder (Also applies to Runtime.exe)
         // the outputs get built up and then end up locking up process. Quite nasty!
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    processStreamHandler(serverProcess);
-                }
-                catch (IOException ioe) {
-                    logger.error("Error during a call to processStreamHandler()", ioe);
+        new Thread(() -> {
+            try {
+                try (InputStreamReader combinedStream = new InputStreamReader(serverProcess.getInputStream())) {
+                    try (BufferedReader bufferedCombinedStream = new BufferedReader(combinedStream)) {
+                        StringBuilder combinedOutput = new StringBuilder();
+                        String line;
+                        while ((line = bufferedCombinedStream.readLine()) != null) {
+                            combinedOutput.append(line).append(System.lineSeparator());
+                        }
+                        logger.info(combinedOutput.toString());
+                    }
                 }
             }
-        }.start();
+            catch (IOException ioe) {
+                logger.error("Error during a call to processStreamHandler()", ioe);
+            }
+        }).start();
 
         return serverProcess;
     }
 
-    static void stopServer(String processSignature) throws IOException {
+    static void stopServer(String processSignature) {
         closeAllServers(processSignature);
     }
 
@@ -85,60 +100,71 @@ abstract class NodejsService {
         // We first get the server process ID
         if (serverProc.getClass().getName().equals("java.lang.UNIXProcess")) {
             Integer transServerPID = getProcessId();
-
-            // And then gets the status
-            boolean isRunning = false;
-            if (transServerPID > 0) {
-                try {
-                    Runtime runtime = Runtime.getRuntime();
-
-                    // kill -0 checks if a process with the given PID is running
-                    // and you have the permission to send a signal to it.
-                    Process statusProcess = runtime.exec(new String[] { "kill", "-0", String.valueOf(transServerPID)});
-
-                    // usually we should not get any output but just in case if we get some error..
-                    processStreamHandler(statusProcess);
-
-                    int exitCode = statusProcess.waitFor();
-                    isRunning = (exitCode == 0);
-                }
-                catch (Exception e) {
-                    throw new RuntimeException("Error running 'kill -0 " + transServerPID + "'", e);
-                }
-            }
-
-            return isRunning;
+            return (transServerPID > 0) && isProcessRunning(String.valueOf(transServerPID));
         }
         else {
-            logger.error("server has started but failed to get process ID."
-                    + " You will not be able to stop server through the service. To stop, use the manual process!");
+            logger.error("Server has started but failed to get process ID.  " +
+                         "You will not be able to stop server through the service.  " +
+                         "To stop, use the manual process!");
 
             return false;
         }
     }
 
-    private static void closeAllServers(String processSignature) throws IOException {
-        // Note that we kill process that contains the name of server script
-        Process killProc = Runtime.getRuntime().exec("pkill -f " + processSignature);
-        processStreamHandler(killProc);
-    }
+    private static void closeAllServers(String processSignature) {
+        // First check if the process is still running
+        if (isProcessRunning(processSignature)) {
+            // The process is running.  We want to stop it.
+            // Note that we kill process that contains the name of server script
+            String[] command = {"pkill", "-f", processSignature};
 
-    private static void processStreamHandler(Process proc) throws IOException {
-        try (InputStreamReader stdStream = new InputStreamReader(proc.getInputStream())) {
-            try (BufferedReader stdInput = new BufferedReader(stdStream)) {
-                try (InputStreamReader stdErrStream = new InputStreamReader(proc.getErrorStream())) {
-                    try (BufferedReader stdError = new BufferedReader(stdErrStream)) {
-                        String s;
-                        while ((s = stdInput.readLine()) != null) {
-                            logger.info(s);
-                        }
+            try (OutputStream stdout = new ByteArrayOutputStream();
+                 OutputStream stderr = new ByteArrayOutputStream()) {
 
-                        while ((s = stdError.readLine()) != null) {
-                            logger.error(s);
-                        }
-                    }
+                CommandLine cmdLine = new CommandLine(command[0]);
+                for (int i = 1; i < command.length; i++) {
+                    cmdLine.addArgument(command[i], false);
                 }
+
+                ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
+                Executor executor = new DefaultExecutor();
+                executor.setStreamHandler(executeStreamHandler);
+                executor.execute(cmdLine);
+            }
+            catch (ExecuteException ignored) {
+                logger.error("Failed to execute {}!", Arrays.toString(command));
+            }
+            catch (IOException e) {
+                logger.error("Error encountered while executing {} command!", Arrays.toString(command), e);
             }
         }
+    }
+
+    private static boolean isProcessRunning(String processSignature) {
+        // kill -0 checks if a process with the given PID is running
+        // and you have the permission to send a signal to it.
+        String[] command = { "pkill", "-0", processSignature};
+
+        try (OutputStream stdout = new ByteArrayOutputStream();
+             OutputStream stderr = new ByteArrayOutputStream()) {
+
+            CommandLine cmdLine = new CommandLine(command[0]);
+            for (int i = 1; i < command.length; i++) {
+                cmdLine.addArgument(command[i], false);
+            }
+
+            ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
+            Executor executor = new DefaultExecutor();
+            executor.setStreamHandler(executeStreamHandler);
+            executor.execute(cmdLine);
+        }
+        catch (ExecuteException ignored) {
+            return false;
+        }
+        catch (IOException e) {
+            logger.error("Error executing {} command!", Arrays.toString(command), e);
+        }
+
+        return false;
     }
 }
