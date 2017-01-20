@@ -26,10 +26,8 @@
  */
 package hoot.services.nativeinterfaces;
 
-import java.io.IOException;
 
-
-interface CommandRunner {
+public interface CommandRunner {
 
     /**
      * Runs a process. The command to run is passed as a
@@ -37,7 +35,7 @@ interface CommandRunner {
      * the CommandResult. Waits for all output and process completion then
      * returns the process exit status.  This is a blocking call.
      */
-    CommandResult exec(String[] command) throws IOException;
+    CommandResult exec(String[] command);
 
     String getStdout();
 

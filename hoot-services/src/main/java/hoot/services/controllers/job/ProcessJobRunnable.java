@@ -89,8 +89,9 @@ class ProcessJobRunnable implements Runnable {
         try {
             JSONParser parser = new JSONParser();
             JSONObject command = (JSONObject) parser.parse(params);
+            command.put("jobId", jobId);
 
-            CommandResult result = processJob(jobId, command);
+            CommandResult result = processJob(command);
 
             if (result.failed()) {
                 jobStatusManager.setFailed(jobId, result.getStderr());
@@ -111,11 +112,7 @@ class ProcessJobRunnable implements Runnable {
         }
     }
 
-    private CommandResult processJob(String jobId, JSONObject command) {
-        logger.debug("processing Job: {}", jobId);
-
-        command.put("jobId", jobId);
-
+    private CommandResult processJob(JSONObject command) {
         String resourceName = command.get("caller").toString();
         JobFieldsValidator validator = new JobFieldsValidator(resourceName);
 
@@ -125,8 +122,6 @@ class ProcessJobRunnable implements Runnable {
         if (!validator.validateRequiredExists(paramsMap, missingList)) {
             logger.error("Missing following required field(s): {}", missingList);
         }
-
-        logger.debug("calling native request Job: {}", jobId);
 
         return jobExecMan.exec(command);
     }

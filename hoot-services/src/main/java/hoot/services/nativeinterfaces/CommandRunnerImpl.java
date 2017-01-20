@@ -28,7 +28,6 @@ package hoot.services.nativeinterfaces;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -46,17 +45,17 @@ import org.slf4j.LoggerFactory;
 /**
  * Utility class for running a subprocess synchronously from Java.
  */
-class CommandRunnerImpl implements CommandRunner {
+public class CommandRunnerImpl implements CommandRunner {
     private static final Logger logger = LoggerFactory.getLogger(CommandRunnerImpl.class);
 
     private ExecuteWatchdog watchDog;
     private OutputStream stdout;
     private OutputStream stderr;
 
-    CommandRunnerImpl() {}
+    public CommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String[] command) throws IOException {
+    public CommandResult exec(String[] command) {
         logger.debug("Executing the following command: {}", Arrays.toString(command));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
@@ -104,6 +103,9 @@ class CommandRunnerImpl implements CommandRunner {
             logger.debug("Command {} finished at {}", Arrays.toString(command), finish);
 
             return commandResult;
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error executing " + Arrays.toString(command) + " command!", e);
         }
     }
 
