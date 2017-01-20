@@ -162,7 +162,7 @@ public class ExportJobResourceTest {
             assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
             assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
             assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
-            assertTrue(commandArgs.contains("{\"temppath\":"));
+            assertTrue(commandArgs.contains("{\"changesetoutput\":"));
             assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
             assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
         }
