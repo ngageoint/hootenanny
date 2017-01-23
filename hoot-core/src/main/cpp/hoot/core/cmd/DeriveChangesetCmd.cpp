@@ -143,7 +143,7 @@ public:
     {
       assert(!hootApiDbUrl.isEmpty() && !jobId.isEmpty());
       LOG_DEBUG(
-        "Associating changeset file: " << output << " with services job ID: " << jobId < "...");
+        "Associating changeset file: " << output << " with services job ID: " << jobId << "...");
       LOG_VARD(hootApiDbUrl);
       _hootApiDb.open(QUrl(hootApiDbUrl));
       QString outputPath = output;
