@@ -1,6 +1,7 @@
 
+# HootApiDb requires a map layer, though (hence, 'blah').
 step1:
-	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(DB_URL)/$(input1) $(DB_URL)/$(input2) $(output) $(jobid) $(DB_URL)
+	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) $(output) $(jobid) $(DB_URL)/blah
 
 
 

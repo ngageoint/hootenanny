@@ -65,7 +65,12 @@ public:
     QString jobId = "";
     QString hootApiDbUrl = "";
 
-    if (args[2].endsWith(".osc"))
+    if (args.size() == 0)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 with takes three to six parameters.").arg(getName()));
+    }
+    else if (args[2].endsWith(".osc"))
     {
       isXmlOutput = true;
       if (args.size() != 3 && args.size() != 5)
@@ -154,6 +159,9 @@ public:
         //services.
         outputPath = "<multiple files>";
       }
+      //There technically is no use case for recording the changeset file output in the db for sql
+      //changesets, but the behavior is being made identical with xml changeset derivation for
+      //consistency's sake.
       _hootApiDb.writeJobStatus(jobId, outputPath);
     }
 

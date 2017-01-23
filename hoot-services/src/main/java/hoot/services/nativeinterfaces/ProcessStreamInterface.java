@@ -63,7 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @Profile("production")
-class ProcessStreamInterface implements NativeInterface {
+public class ProcessStreamInterface implements NativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
     // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.

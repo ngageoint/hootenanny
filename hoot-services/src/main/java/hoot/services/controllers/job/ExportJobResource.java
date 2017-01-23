@@ -219,7 +219,7 @@ public class ExportJobResource extends JobControllerBase {
           tempOutputDir.mkdir();   
         }
         //services currently always write changeset with sql
-        File tempFile = File.createTempFile("changeset", ".osc.sql", tempOutputDir);
+        File tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
         arg.put("changesetoutput", tempFile.getAbsolutePath());
         commandArgs.add(arg);
 

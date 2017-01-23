@@ -72,12 +72,12 @@ public class DeriveChangesetResource extends JobControllerBase {
     }
 
     /**
-     * Derives a diff between two OSM datasets, where one dataset is the source and the other a 
-     * target, in the form of an OSM XML changeset.
+     * Derives the difference between two OSM datasets, where the first dataset is a source and the 
+     * other a target.  The difference is derived in the form of an OSM XML changeset.
      * 
-     * @param input1 path to the first input dataset
-     * @param input2 path to the second input dataset
-     * @param aoi bounding box to which the changeset derivation should be applied
+     * @param input1 database layer name of the first input dataset
+     * @param input2 database layer name of the second input dataset
+     * @param aoi bounding box used to filter the changeset derivation
      * @return job ID of the changeset derivation job
      */
     @POST
@@ -90,22 +90,24 @@ public class DeriveChangesetResource extends JobControllerBase {
 
         try {
             JSONArray commandArgs = new JSONArray();
-
-            // ignoring outputname, since we're only going to have a single mapedit
-            // connection configured in the core for now configured in the core for now
             JSONObject arg = new JSONObject();
-            arg.put("input1", input1);
-            arg.put("input2", input2);
+            
+            //assuming that this would only be used with data layers already being loaded into the
+            //database
+            arg.put("input1", DB_URL + "/" + input1);
+            arg.put("input2", DB_URL + "/" + input2);
             arg.put("aoi", aoi);
+            //write the changeset to a temp file which can be retrieved through this class
             File tempOutputDir = new File(TEMP_OUTPUT_PATH);
             if (!tempOutputDir.exists())
             {
               tempOutputDir.mkdir();   
             }
-            //services currently always write changeset with xml
-            arg.put("output", File.createTempFile("changeset", ".osc", tempOutputDir).getAbsolutePath());
+            //don't auto-delete this temp file, since we want it to be available for future access;
+            //users will be responsible for manually clearing this out of the hoot temp folder
+            //services always write changeset with xml; no use case for the sql right now
+            arg.put("output", File.createTempFile("changeset-", ".osc", tempOutputDir).getAbsolutePath());
             arg.put("jobId", jobId);
-            
             commandArgs.add(arg);
             
             postJobRequest(jobId, createPostBody(commandArgs));
@@ -119,8 +121,7 @@ public class DeriveChangesetResource extends JobControllerBase {
     
     public String getJobStatusDetail(String jobId) throws Exception
     {
-        JobStatusManager jobStatusManager = new JobStatusManager();
-        JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
+        JobStatus jobStatus = (new JobStatusManager()).getJobStatusObj(jobId);
         if (jobStatus == null)
         {
             throw new IOException("Job with ID: " + jobId + " does not exist.");
@@ -129,7 +130,7 @@ public class DeriveChangesetResource extends JobControllerBase {
     }
 
     /**
-     * Returns the contents of an XML changeset file 
+     * Returns the contents of an XML changeset file (.osc)
      * 
      * @param jobId job ID the changeset file is associated with
      * @return changeset XML contents
@@ -146,7 +147,7 @@ public class DeriveChangesetResource extends JobControllerBase {
         String changesetFileName = null;
         try {
             changesetFileName = getJobStatusDetail(jobId);
-            if (changesetFileName == "<multiple files>")
+            if (changesetFileName.equals("<multiple files>"))
             {
                 throw new Exception("Changeset requested is made up of multiple changesets in multiple files.  /getderived does not currently support this.");
             }
