@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source conf/DatabaseConfig.sh
 # We only need to query against the job status table, so no map layer is needed.  HootApiDb 
 # requires a map layer, though (hence, 'blah').
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME/blah"
 
+rm -rf test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest
-rm -f test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest/changeset.osc
 
 # insert a dummy job record
 JOB_ID="ServiceDeriveChangesetCmdXmlJobIdTest_"$((( RANDOM % 10000 ) + 1))
