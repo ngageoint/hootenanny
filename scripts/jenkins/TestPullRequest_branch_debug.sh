@@ -8,18 +8,9 @@ cd $HOOT_HOME
 
 hoot --version --debug
 
-#export HOOT_TEST_DIFF=--diff
-#make -sj`nproc` pp-test
-#make -sj`nproc` plugins-test
-# Removing Poi test to troubleshoot hanging jobs on Jenkins
-#bin/HootTest $HOOT_TEST_DIFF --glacial --exclude=".*ConflatePoiStatsTest.*"
-#time -p make -sj`nproc` test-all-core
-
-# This is done in VagrantBuild.sh
-# cd $HOOT_HOME/docs
-# make -sj`nproc`
-
-#time -p make -sj`nproc` archive
-
+export HOOT_TEST_DIFF=--diff
+bin/HootTest $HOOT_TEST_DIFF --glacial -D script.test.max.exec.time=30 --include=".*ServiceDeriveChangesetCmdXmlJobIdTest.*"
+cat test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.stdout.failed
+cat test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.stderr.failed
 # TODO: make this smart enough to pass in custom test commands
-test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.sh
+#test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.sh

@@ -44,5 +44,5 @@ mkdir -p test-output/cmd/slow
 export SHAPE_ENCODING=UTF-8
 hoot osm2ogr test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
 mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
-hoot stats --quick test-output/cmd/slow/delaware-tds.shp
+hoot stats --brief test-output/cmd/slow/delaware-tds.shp
 
