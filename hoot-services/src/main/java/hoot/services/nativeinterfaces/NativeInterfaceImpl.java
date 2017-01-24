@@ -114,7 +114,7 @@ class NativeInterfaceImpl implements NativeInterface {
 
         CommandResult commandResult;
         try {
-            commandResult = cmdRunner.exec(commandArr);
+            commandResult = cmdRunner.exec(commandArr, jobId);
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to execute: " + command, e);
@@ -179,8 +179,11 @@ class NativeInterfaceImpl implements NativeInterface {
             execCmd.add("jobid=" + jobid);
         }
 
-        execCmd.add("DB_URL=" + DB_URL);
-        execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
+        String dbURL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
+        String osmAPIDBURL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + ":" + OSM_API_DB_PORT + "/" + OSM_API_DB_NAME;
+
+        execCmd.add("DB_URL=" + dbURL);
+        execCmd.add("OSM_API_DB_URL=" + osmAPIDBURL);
 
         Object[] objectArray = execCmd.toArray();
 

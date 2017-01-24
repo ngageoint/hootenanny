@@ -35,9 +35,11 @@ public interface CommandRunner {
      * the CommandResult. Waits for all output and process completion then
      * returns the process exit status.  This is a blocking call.
      */
-    CommandResult exec(String[] command);
+    CommandResult exec(String[] command, String jobId);
 
     String getStdout();
+
+    String getStderr();
 
     void terminate();
 }

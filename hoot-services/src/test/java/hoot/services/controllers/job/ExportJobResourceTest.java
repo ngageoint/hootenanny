@@ -81,9 +81,8 @@ public class ExportJobResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessForWFS() throws Exception {
-        String[] hostParts = DB_HOST.split(":");
-        String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + DB_USER_ID + "' password='" + DB_PASSWORD
-                + "' dbname='" + WFS_STORE_DB + "'";
+        String pgUrl = replaceSensitiveData("host='" + DB_HOST + "' port='" + DB_PORT + "' user='" + DB_USER_ID + "' password='" + DB_PASSWORD
+                + "' dbname='" + WFS_STORE_DB + "'");
 
         String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
 

@@ -96,9 +96,6 @@ class ProcessJobRunnable implements Runnable {
             if (result.failed()) {
                 jobStatusManager.setFailed(jobId, result.getStderr());
             }
-            else if (result.hasWarnings()) {
-                jobStatusManager.setCompletedWithWarnings(jobId, result.getStdout());
-            }
             else {
                 jobStatusManager.setCompleted(jobId, result.getStdout());
             }

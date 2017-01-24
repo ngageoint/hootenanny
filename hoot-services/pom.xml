@@ -242,7 +242,21 @@
                     <jdbcUser>hoot</jdbcUser>
                     <jdbcPassword>hoottest</jdbcPassword>
                     <packageName>hoot.services.models.db</packageName>
-                    <tableNamePattern>changesets,current_nodes,current_relation_members,current_relations,current_way_nodes,current_ways,folder_map_mappings,folders,job_status,maps,users,review_bookmarks</tableNamePattern>
+                    <tableNamePattern>
+                                      changesets,
+                                      current_nodes,
+                                      current_relation_members,
+                                      current_relations,
+                                      current_way_nodes,
+                                      current_ways,
+                                      folder_map_mappings,
+                                      folders,
+                                      job_status,
+                                      maps,
+                                      users,
+                                      review_bookmarks,
+                                      command_status
+                    </tableNamePattern>
                     <targetFolder>src/main/java</targetFolder>
                     <sourceFolder>target/generated-sources/java</sourceFolder>
                     <exportBeans>true</exportBeans>

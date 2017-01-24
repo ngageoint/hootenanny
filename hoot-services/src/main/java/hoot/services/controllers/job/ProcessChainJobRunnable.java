@@ -61,7 +61,6 @@ class ProcessChainJobRunnable implements Runnable {
     private final JSONObject jobInfo = new JSONObject();
     private final JSONArray childrenInfo = new JSONArray();
 
-
     static {
         Long value = Long.parseLong(CHAIN_JOS_STATUS_PING_INTERVAL);
         CHAIN_JOS_STATUS_PING_INTERVAL_VALUE = (value < 1000) ? 1000 : value;
@@ -104,7 +103,6 @@ class ProcessChainJobRunnable implements Runnable {
         try {
             JSONParser parser = new JSONParser();
             JSONArray chain = (JSONArray) parser.parse(jobs);
-            String warnings = null;
             int nChain = chain.size();
 
             jobInfo.put("childrencount", String.valueOf(nChain));
@@ -113,17 +111,12 @@ class ProcessChainJobRunnable implements Runnable {
                 String internalJobId = UUID.randomUUID().toString();
 
                 // prep child job
-
                 JSONObject job = (JSONObject) aChain;
                 String excType = job.get("exectype").toString();
 
                 if (excType.equalsIgnoreCase("reflection")) {
                     // getting jobInfo from inside since it generates job id.
                     childJobInfo = execReflection(jobId, job, jobStatusManager);
-                    Object oWarn = childJobInfo.get("warnings");
-                    if (oWarn != null) {
-                        warnings = oWarn.toString();
-                    }
                 }
                 else if (excType.equalsIgnoreCase("reflection_sync")) {
                     childJobInfo = execReflectionSync(jobId, internalJobId, job, jobStatusManager);
@@ -135,29 +128,14 @@ class ProcessChainJobRunnable implements Runnable {
                     jobStatusManager.updateJob(jobId, jobInfo.toString());
 
                     CommandResult result = processJob(internalJobId, job);
-
-                    if (result.hasWarnings()) {
-                        warnings = result.getStdout();
-                    }
                 }
 
-                // if we have warnings then pass on
-                String resDetail = "success";
-                if (warnings != null) {
-                    resDetail = warnings;
-                }
-
-                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.COMPLETED.toString(), resDetail);
+                setJobInfo(jobInfo, childJobInfo, childrenInfo, JobStatusManager.JOB_STATUS.COMPLETED.toString(), null);
 
                 jobStatusManager.updateJob(jobId, jobInfo.toString());
             }
 
-            if (warnings != null) {
-                jobStatusManager.setCompletedWithWarnings(jobId, jobInfo.toString());
-            }
-            else {
-                jobStatusManager.setCompleted(jobId, jobInfo.toString());
-            }
+            jobStatusManager.setCompleted(jobId, jobInfo.toString());
         }
         catch (Exception e) {
             logger.error("Error during processing command where jobId = {}, jobs = {}", jobId, jobs, e);
@@ -356,7 +334,6 @@ class ProcessChainJobRunnable implements Runnable {
         JSONObject child = new JSONObject();
         child.put("id", id);
         child.put("status", stat);
-
         return child;
     }
 }

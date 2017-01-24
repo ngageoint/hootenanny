@@ -42,9 +42,6 @@ public class JobStatusManagerStub extends JobStatusManager {
     public void updateJob(String jobId, String statusDetail) {}
 
     @Override
-    public void setCompletedWithWarnings(String jobId, String warnings) {}
-
-    @Override
     public void setCompleted(String jobId, String statusDetail) {}
 
     @Override

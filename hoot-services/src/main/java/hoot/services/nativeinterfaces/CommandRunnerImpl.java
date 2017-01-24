@@ -27,10 +27,16 @@
 package hoot.services.nativeinterfaces;
 
 
+import static hoot.services.HootProperties.replaceSensitiveData;
+import static hoot.services.utils.DbUtils.createQuery;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -40,6 +46,9 @@ import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import hoot.services.models.db.CommandStatus;
+import hoot.services.models.db.QCommandStatus;
 
 
 /**
@@ -55,23 +64,14 @@ public class CommandRunnerImpl implements CommandRunner {
     public CommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String[] command) {
-        logger.debug("Executing the following command: {}", Arrays.toString(command));
+    public CommandResult exec(String[] command, String jobId) {
+        logger.debug("Trying to execute the following command: {}", commandArrayToString(command));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
              OutputStream stderr = new ByteArrayOutputStream()) {
 
-            LocalDateTime start = LocalDateTime.now();
-
-            logger.debug("Command {} started at {}", Arrays.toString(command), start);
-
             this.stdout = stdout;
             this.stderr = stderr;
-
-            CommandLine cmdLine = new CommandLine(command[0]);
-            for (int i = 1; i < command.length; i++) {
-                cmdLine.addArgument(command[i], false);
-            }
 
             ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
             Executor executor = new DefaultExecutor();
@@ -79,39 +79,86 @@ public class CommandRunnerImpl implements CommandRunner {
             executor.setWatchdog(this.watchDog);
             executor.setStreamHandler(executeStreamHandler);
 
+            LocalDateTime start = null;
+            Exception exception = null;
             int exitCode;
-            try {
-                exitCode = executor.execute(cmdLine);
 
-                if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
-                    // it was killed on purpose by the watchdog
-                    logger.info("Process for '{}' command was killed!", cmdLine);
+            try {
+                CommandLine cmdLine = new CommandLine(command[0]);
+                for (int i = 1; i < command.length; i++) {
+                    cmdLine.addArgument(replaceSensitiveData(command[i]), false);
                 }
+
+                start = LocalDateTime.now();
+
+                logger.debug("Command {} started at: {}", commandArrayToString(command), start);
+
+                exitCode = executor.execute(cmdLine);
             }
             catch (Exception e) {
                 exitCode = CommandResult.FAILURE;
-                logger.warn("Error executing: {}", cmdLine, e);
+                exception = e;
+            }
+
+            if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
+                // it was killed on purpose by the watchdog
+                logger.info("Process for {} command was killed!", commandArrayToString(command));
             }
 
             LocalDateTime finish = LocalDateTime.now();
 
-            CommandResult commandResult = new CommandResult(cmdLine.toString(), exitCode,
-                    stdout.toString(), stderr.toString());
+            //, exitCode, stdout.toString(), stderr.toString()
+            CommandResult commandResult = new CommandResult();
+            commandResult.setCommand(commandArrayToString(command));
+            commandResult.setExitCode(exitCode);
+            commandResult.setStderr(stderr.toString());
+            commandResult.setStdout(stdout.toString());
             commandResult.setStart(start);
             commandResult.setFinish(finish);
+            commandResult.setJobId(jobId);
 
-            logger.debug("Command {} finished at {}", Arrays.toString(command), finish);
+            updateDatabase(commandResult);
+
+            if (commandResult.failed()) {
+                logger.error("FAILURE of: {}", commandResult, exception);
+            }
+            else {
+                logger.debug("SUCCESS of: {}", commandResult);
+            }
 
             return commandResult;
         }
-        catch (Exception e) {
-            throw new RuntimeException("Error executing " + Arrays.toString(command) + " command!", e);
+        catch (IOException e) {
+            throw new RuntimeException("Error executing: " + commandArrayToString(command), e);
         }
+    }
+
+    private static void updateDatabase(CommandResult commandResult) {
+        CommandStatus commandStatus = new CommandStatus();
+        commandStatus.setCommand(commandResult.getCommand());
+        commandStatus.setExitCode(commandResult.getExitCode());
+        commandStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
+        commandStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
+        commandStatus.setId(UUID.randomUUID().toString());
+        commandStatus.setJobId(commandResult.getJobId());
+        commandStatus.setStderr(commandResult.getStderr());
+        commandStatus.setStdout(commandResult.getStdout());
+
+        createQuery().insert(QCommandStatus.commandStatus).populate(commandStatus).execute();
+    }
+
+    private static String commandArrayToString(String[] command) {
+        return Arrays.toString(command).replace(",", "");
     }
 
     @Override
     public String getStdout() {
         return this.stdout.toString();
+    }
+
+    @Override
+    public String getStderr() {
+        return this.stderr.toString();
     }
 
     @Override

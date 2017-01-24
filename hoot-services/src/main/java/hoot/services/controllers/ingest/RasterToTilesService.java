@@ -133,13 +133,10 @@ public class RasterToTilesService extends JobControllerBase {
                     CommandResult commandResult = this.jobExecManager.exec(argStr);
 
                     if (commandResult.failed()) {
-                        jobStatusManager.setFailed(jobId, commandResult.getStderr());
-                    }
-                    else if (commandResult.hasWarnings()) {
-                        jobStatusManager.setCompletedWithWarnings(jobId, commandResult.getStdout());
+                        jobStatusManager.setFailed(jobId, "job failed");
                     }
                     else {
-                        jobStatusManager.setCompleted(jobId, commandResult.getStdout());
+                        jobStatusManager.setCompleted(jobId, "job succeeded");
                     }
                 }
                 else {

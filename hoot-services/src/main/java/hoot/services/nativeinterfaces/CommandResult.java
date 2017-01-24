@@ -37,30 +37,21 @@ public class CommandResult {
     public static final int FAILURE = -1;
 
     private String command;
-    private int exitStatus;
+    private int exitCode;
     private String stdout;
     private String stderr;
-
     private LocalDateTime start;
     private LocalDateTime finish;
-    private Duration duration;
-    private boolean hasWarnings;
+    private String jobId;
 
     public CommandResult() {}
-
-    public CommandResult(String cmdString, int result, String stdout, String stderr) {
-        this.command = cmdString;
-        this.exitStatus = result;
-        this.stdout = stdout;
-        this.stderr = stderr;
-    }
 
     public String getCommand() {
         return command;
     }
 
-    public int getExitStatus() {
-        return exitStatus;
+    public int getExitCode() {
+        return exitCode;
     }
 
     public LocalDateTime getStart() {
@@ -84,12 +75,7 @@ public class CommandResult {
     }
 
     public Duration getDuration() {
-        if ((start != null) && (finish != null)) {
-            return Duration.between(finish, start);
-        }
-        else {
-            return null;
-        }
+        return ((start != null) && (finish != null)) ? Duration.between(finish, start) : null;
     }
 
     public String getStdout() {
@@ -104,23 +90,36 @@ public class CommandResult {
         this.stderr = stderr;
     }
 
-    public boolean hasWarnings() {
-        return (stdout != null) && stdout.contains(" WARN ");
+    public boolean failed() {
+        return (exitCode != SUCCESS);
     }
 
-    public boolean failed() {
-        return (exitStatus != SUCCESS);
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public void setExitCode(int exitCode) {
+        this.exitCode = exitCode;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
     @Override
     public String toString() {
         return "CommandResult{" +
-                "command='" + command + '\'' +
-                ", exitStatus=" + exitStatus +
-                ", stdout='" + stdout + '\'' +
-                ", stderr='" + stderr + '\'' +
+                "command='" + command.replace(",", "") + '\'' +
                 ", start='" + start + '\'' +
                 ", finish='" + finish + '\'' +
+                ", exitCode=" + exitCode +
+                ", stdout='" + stdout + '\'' +
+                ", stderr='" + stderr + '\'' +
+                ", jobId='" + jobId + '\'' +
                 '}';
     }
 }

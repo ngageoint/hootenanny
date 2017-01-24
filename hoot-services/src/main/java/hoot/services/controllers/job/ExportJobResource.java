@@ -116,10 +116,8 @@ public class ExportJobResource extends JobControllerBase {
                 arg.put("outputname", jobId);
                 commandArgs.add(arg);
 
-                String[] hostParts = DB_HOST.split(":");
-
-                String pgUrl = "host='" + hostParts[0] + "' port='" + hostParts[1] + "' user='" + DB_USER_ID
-                        + "' password='" + DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
+                String pgUrl = "host='" + DB_HOST + "' port='" + DB_PORT + "' user='" + DB_USER_ID
+                         + "' password='" + DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
 
                 arg = new JSONObject();
                 arg.put("PG_URL", pgUrl);
@@ -127,8 +125,7 @@ public class ExportJobResource extends JobControllerBase {
 
                 JSONObject osm2orgCommand = _createPostBody(commandArgs);
 
-                // this may need change in the future if we decided to use user
-                // defined ouputname..
+                // This may need change in the future if we decided to use user defined ouputname..
                 String outname = jobId;
 
                 JSONArray wfsArgs = new JSONArray();
