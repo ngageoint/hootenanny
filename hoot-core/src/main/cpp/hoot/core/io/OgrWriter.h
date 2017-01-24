@@ -141,7 +141,7 @@ protected:
   bool _appendData;
   QString _scriptPath;
   mutable shared_ptr<ScriptToOgrTranslator> _translator;
-  shared_ptr<OGRDataSource> _ds;
+  shared_ptr<GDALDataset> _ds;
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;

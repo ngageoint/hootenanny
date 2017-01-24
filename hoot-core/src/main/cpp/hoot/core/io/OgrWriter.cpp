@@ -225,8 +225,9 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   OgrOptions options;
   if (_ds->GetDriver())
   {
+    QString name = _ds->GetDriverName();
     // if this is a CSV file
-    if (_ds->GetDriver()->GetName() == QString("CSV"))
+    if (name == QString("CSV"))
     {
       // if we're exporting point data, then export with x/y at the front
       if (gtype == wkbPoint)
@@ -241,13 +242,13 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       options["CREATE_CSVT"] = "YES";
     }
 
-    if (_ds->GetDriver()->GetName() == QString("ESRI Shapefile"))
+    if (name == QString("ESRI Shapefile"))
     {
       options["ENCODING"] = "UTF-8";
     }
 
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
-    if (_ds->GetDriver()->GetName() == QString("FileGDB"))
+    if (name == QString("FileGDB"))
     {
       if (layer->getFdName() != "")
       {
