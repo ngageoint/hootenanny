@@ -59,13 +59,13 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
   OGRRegisterAll();
 
   const char *pszDriverName = "GML";
-  OGRSFDriver *poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if( poDriver == NULL )
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  OGRDataSource* poDS = poDriver->CreateDataSource(path.toAscii(), NULL );
+  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -148,7 +148,7 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
     }
   }
 
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 }
 
 }

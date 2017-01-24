@@ -28,7 +28,8 @@
 
 // gdal
 #include <gdal.h>
-#include <ogrsf_frmts.h>
+#include <gdal_frmts.h>
+#include <gdal_priv.h>
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -94,7 +95,7 @@ OgrUtilities& OgrUtilities::getInstance()
   return *_theInstance;
 }
 
-shared_ptr<OGRDataSource> OgrUtilities::createDataSource(QString url)
+shared_ptr<GDALDataset> OgrUtilities::createDataSource(QString url)
 {
   const char* driverName = NULL;
   int i = 0;
@@ -120,7 +121,7 @@ shared_ptr<OGRDataSource> OgrUtilities::createDataSource(QString url)
     throw HootException("No driver found for: " + url);
   }
 
-  OGRSFDriver* driver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName);
+  GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverName);
   if (driver == 0)
   {
     throw HootException("Error getting driver by name: " + QString(driverName));
@@ -132,13 +133,12 @@ shared_ptr<OGRDataSource> OgrUtilities::createDataSource(QString url)
     url = url.mid(0, url.length() - 4);
   }
 
-  shared_ptr<OGRDataSource> result(driver->CreateDataSource(url.toAscii()));
+  shared_ptr<GDALDataset> result(driver->Create(url.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
     throw HootException("Unable to create data source: " + url +
                         " (" + QString(CPLGetLastErrorMsg()) + ")");
   }
-  result->SetDriver(driver);
 
   if (QString(driverName) == "FileGDB")
   {
@@ -181,11 +181,9 @@ bool OgrUtilities::isReasonableUrl(QString url)
   return reasonable;
 }
 
-shared_ptr<OGRDataSource> OgrUtilities::openDataSource(QString url)
+shared_ptr<GDALDataset> OgrUtilities::openDataSource(QString url)
 {
-  shared_ptr<OGRDataSource> result;
-
-  result.reset(OGRSFDriverRegistrar::Open(url.toUtf8().data(), false));
+  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(), GDAL_OF_ALL, 0, 0, 0));
 
   if (!result)
   {

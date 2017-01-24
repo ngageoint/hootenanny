@@ -28,7 +28,7 @@
 #define OGRUTILITIES_H
 
 // GDAL
-class OGRDataSource;
+class GDALDataset;
 
 // Qt
 #include <QString>
@@ -44,7 +44,7 @@ class OgrUtilities
 public:
   OgrUtilities();
 
-  shared_ptr<OGRDataSource> createDataSource(QString url);
+  shared_ptr<GDALDataset> createDataSource(QString url);
 
   static OgrUtilities& getInstance();
 
@@ -54,7 +54,7 @@ public:
    */
   bool isReasonableUrl(QString url);
 
-  shared_ptr<OGRDataSource> openDataSource(QString url);
+  shared_ptr<GDALDataset> openDataSource(QString url);
 
 private:
   static shared_ptr<OgrUtilities> _theInstance;

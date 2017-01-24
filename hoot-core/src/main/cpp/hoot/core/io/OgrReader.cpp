@@ -138,7 +138,7 @@ protected:
   long _count;
   long _featureCount;
   bool _useFileId;
-  shared_ptr<OGRDataSource> _dataSource;
+  shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
@@ -360,7 +360,7 @@ shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
-  shared_ptr<OGRDataSource> ds = OgrUtilities::getInstance().openDataSource(path);
+  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -517,7 +517,7 @@ OgrReaderInternal::~OgrReaderInternal()
 QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
 {
   QStringList result;
-  shared_ptr<OGRDataSource> ds = OgrUtilities::getInstance().openDataSource(path);
+  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
