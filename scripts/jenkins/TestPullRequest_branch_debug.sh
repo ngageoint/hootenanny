@@ -12,5 +12,3 @@ hoot --version --debug
 #test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.sh
 export HOOT_TEST_DIFF=--diff
 bin/HootTest $HOOT_TEST_DIFF --glacial -D script.test.max.exec.time=30 --include=".*ServiceDeriveChangesetCmdXmlJobIdTest.*"
-#cat test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.stdout.failed
-#cat test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.stderr.failed
