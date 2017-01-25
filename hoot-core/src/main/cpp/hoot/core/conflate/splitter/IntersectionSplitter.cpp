@@ -189,7 +189,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   {
     QList<long> ways = _nodeToWays.values(nodeId);
     int concurrent_count = 0;
-    //int otherWays_count = ways.count() - 1;
+    int otherWays_count = ways.count() - 1;
     for (QList<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       //  Don't compare it against itself
@@ -213,7 +213,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 
     // TODO: Need to figure out why this doesn't play nice with network conflation
     //  A split point is found when there is at least one non-concurrent way at this node
-    if (true) //concurrent_count < otherWays_count)
+    if (concurrent_count < otherWays_count)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);

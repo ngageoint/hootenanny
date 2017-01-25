@@ -21,30 +21,9 @@
     <node visible="true" id="-1" lat="38.8859770672199971" lon="-77.0336980544699941">
         <tag k="name" v="Top"/>
     </node>
-    <way visible="true" id="-14">
-        <nd ref="-4"/>
-        <nd ref="-7"/>
-        <tag k="name" v="Cross Road"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13">
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <tag k="name" v="Cross Road"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-12">
+    <way visible="true" id="-10">
         <nd ref="-4"/>
         <nd ref="-5"/>
-        <tag k="name" v="Vertical Road"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-11">
-        <nd ref="-3"/>
-        <nd ref="-4"/>
         <tag k="name" v="Vertical Road"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
@@ -52,13 +31,22 @@
     <way visible="true" id="-9">
         <nd ref="-2"/>
         <nd ref="-3"/>
+        <nd ref="-4"/>
         <tag k="name" v="Vertical Road"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-8">
+        <nd ref="-4"/>
+        <nd ref="-7"/>
+        <tag k="name" v="Cross Road"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-7">
         <nd ref="-2"/>
         <nd ref="-3"/>
+        <nd ref="-4"/>
         <tag k="name" v="Cross Road"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
