@@ -66,12 +66,6 @@ be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
 An RPM based installation is also available for CentOS 6.7.
 
-Optional file download:
-* https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
-
-Additional instructions for setting up a Hootenanny development environment may be found in the Hootenanny
-Developer's Guide.
-
 # Getting Started
 Once installed and configured, Hootenanny can be accessed from a browser by opening the application URL.  http://localhost:port/hootenanny-id
 
@@ -83,7 +77,11 @@ Once installed and configured, Hootenanny can be accessed from a browser by open
 Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
 
 # Contributing
-Please read the Hootenanny Developer's Guide for details on environment, coding standards, and development process.  Perform work for new features on a new git feature branch and open a pull request to merge that branch into the "develop" branch when the feature is complete.
+Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny development uses the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).  
+## Summary
+* Open a repository issue for the new feature to be worked on.
+* Perform work for the feature on a new git feature branch named with the number of the issue opened.
+* Open a pull request and assign at least one reviewer to merge the feature branch into the "develop" branch mainline when the feature is complete.
 
 # Specifications
 Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
