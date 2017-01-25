@@ -23,9 +23,10 @@ echo $DB_HOST
 echo $DB_PORT
 echo $DB_NAME
 echo $DB_USER
+echo "test3b"
 #export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
 #echo "insert job response: " $INSERT_JOB_RESPONSE
-echo `psql -a -e -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
+psql -a -e -L=/home/vagrant/hoot/test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.sh.stdout -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"
 
 echo "test4"
 
