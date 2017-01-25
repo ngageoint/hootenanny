@@ -1,28 +1,32 @@
 ![hoot_logo_icon](https://cloud.githubusercontent.com/assets/17434033/22118537/3dda4c3e-de46-11e6-95fe-ad9c4e933534.png)
 
 # Introduction
+_Hootenanny_: 
+
+1. a gathering at which folksingers entertain often with the audience joining in
+
+_Conflation_: 
+
+1. Fancy word for merge
 
 Hootenanny is an open source conflation tool developed to facilitate automated and semi-automated conflation 
-of critical Foundation GEOINT features in the topographic domain, namely: 
+of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps of geodata into a 
+single seamless map.
+
+Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
+
+## Project Goals
+* Create up-to-date routable transportation networks from multiple sources
+* Combine attributes from different sources
+* Combine POIs and polygons for geolocation and sense making
+* Maintain geometry and attribute provenance
+
+## Supported Geodata Types
+Hootenanny can conflate:
 * POIs
 * Building polygons
 * Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
 * Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
-
-Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
-
-Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
-
-Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience without the extra overhead of thick desktop GIS clients.  The application is primarily supported in either the Chrome or Chromium browser with more limited supported in Firefox.   
-
-A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open interoperability. 
-
-If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
-
-# Specifications
-
-We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions) 
-so please refer to that page for any questions about general Hootenanny capabilities.
 
 ## Supported Data Formats
 Hootenanny can import from:
@@ -75,10 +79,23 @@ Once installed and configured, Hootenanny can be accessed from a browser by open
 
 * Note that the specific port designation can be configured from either the Vagrantfile (if using Vagrant installation approach) or from the Tomcat/conf/server.xml file.  
 
-## Hootenanny User Interface Guide
-The Hootenanny User Interface Guide contains all of the background required to walk through each functional 
-component of the software.  Sample datasets can be acquired from the provided URLs in the guide or within the 
-%HOOT_HOME/test-files directory.
+## Documentation
+Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
+
+## Contributing
+Please read the Hootenanny Developer's Guide for details on environment, coding standards, and development process.  Perform work for new features on a new git feature branch and open a pull request to merge that branch into the "develop" branch when the feature is complete.
+
+# Specifications
+Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
+
+Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience without the extra overhead of thick desktop GIS clients.  The application is primarily supported in either the Chrome or Chromium browser with more limited supported in Firefox.   
+
+A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open interoperability. 
+
+We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions) 
+so please refer to that page for any questions about general Hootenanny capabilities.
+
+If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 
 # Redistribution
 
