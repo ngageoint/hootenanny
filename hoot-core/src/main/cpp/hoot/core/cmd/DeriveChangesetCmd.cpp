@@ -115,13 +115,11 @@ public:
       "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
       output << "...");
 
-    //use the same unknown1 status for both so they pass comparison correctly
+    //use the same unknown1 status for both so that difference doesn't influence the comparison
     OsmMapPtr map1(new OsmMap());
     loadMap(map1, input1, true, Status::Unknown1);
-
     OsmMapPtr map2(new OsmMap());
     loadMap(map2, input2, true, Status::Unknown1);
-
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
@@ -137,10 +135,6 @@ public:
       LOG_DEBUG(osmApiDbUrl);
       OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
-
-    //There technically is no use case for recording the changeset file output in the db for sql
-    //changesets, but the behavior is being made identical with xml changeset derivation for
-    //consistency's sake.
 
     //write the output file name to the job status detail col for later retrieval
     if (writeJobStatus)
@@ -164,12 +158,16 @@ public:
         outputPath = "<multiple files>";
       }
 
+      //There technically is no use case for recording the changeset file output in the db for sql
+      //changesets in addition to xml changesets, but the behavior is being made identical to that
+      //of xml changeset derivation for consistency's sake.
+
       //The job record with the specified ID should really always exist, but we'll go ahead and
       //create it anyway if it doesn't just to be safe.
-      if (!_hootApiDb.jobStatusExists(jobId))
-      {
-        _hootApiDb.insertJobStatus(jobId);
-      }
+//      if (!_hootApiDb.jobStatusExists(jobId))
+//      {
+//        _hootApiDb.insertJobStatus(jobId);
+//      }
       _hootApiDb.updateJobStatus(jobId, outputPath);
     }
 
