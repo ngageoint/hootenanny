@@ -26,7 +26,7 @@ echo $DB_USER
 echo "test3b"
 #export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
 #echo "insert job response: " $INSERT_JOB_RESPONSE
-psql -a -e -L=/home/vagrant/hoot/test-files/cmd/slow/ServiceDeriveChangesetCmdXmlJobIdTest.sh.stdout -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"
+psql -a -e -E -L=/home/vagrant/hoot/test-files/cmd/slow/1263-test -o=-L=/home/vagrant/hoot/test-files/cmd/slow/1263-test2 -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"
 
 echo "test4"
 
