@@ -399,11 +399,11 @@ EOT
   sudo service postgresql-9.1 restart
 
   echo "Installing GDAL..."
-  test -f FileGDB_API_1_3-64.tar.gz || wget http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
-  sudo rm -rf $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.3
-  sudo tar -xzf FileGDB_API_1_3-64.tar.gz --directory /usr/local
-  sudo cp -R FileGDB_API $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.3
-  sudo cp $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.3/lib/* $HOOT_CORE_INSTALL_DIR/lib/
+  test -f FileGDB_API_1_4-64.tar.gz || wget https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
+  sudo rm -rf $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.4
+  sudo mkdir -p /usr/local/FileGDB_API && sudo tar -xzf FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB --strip-components 1
+  sudo cp -R FileGDB_API $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.4
+  sudo cp $HOOT_CORE_INSTALL_DIR/FileGDB_API-1.4/lib/* $HOOT_CORE_INSTALL_DIR/lib/
   rm -rf gdal-1.10.1
   test -f gdal-1.10.1.tar.gz || wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
   tar -xzf gdal-1.10.1.tar.gz
