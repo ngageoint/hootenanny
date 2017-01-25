@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# See https://github.com/ngageoint/hootenanny/issues/586
+
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/NonContiguousRoadReviewsTest
 
