@@ -1,15 +1,15 @@
 #### Shapefile Output ####
-17:12:30.317 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
-17:12:30.334 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-17:12:30.468 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: PAL015 not found.  Creating layer...
-17:12:30.472 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: AAL015 not found.  Creating layer...
-17:12:30.472 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP010 not found.  Creating layer...
-17:12:30.473 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP030 not found.  Creating layer...
+08:56:23.895 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
+08:56:23.898 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:24.035 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: PAL015 not found.  Creating layer...
+08:56:24.039 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: AAL015 not found.  Creating layer...
+08:56:24.039 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP010 not found.  Creating layer...
+08:56:24.040 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP030 not found.  Creating layer...
 AAL015
 
 Layer name: AAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(AAL015):0
  NAM (String) = w1
  ARA (Real) = 10.000000000000000
@@ -24,7 +24,7 @@ LAP010
 
 Layer name: LAP010
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(LAP010):0
  NAM (String) = w2
  ARA (Real) = -999999.000000000000000
@@ -35,7 +35,7 @@ LAP030
 
 Layer name: LAP030
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(LAP030):0
  NAM (String) = w3
  ARA (Real) = -999999.000000000000000
@@ -47,19 +47,19 @@ PAL015
 
 Layer name: PAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(PAL015):0
  NAM (String) = n1
  ARA (Real) = -999999.000000000000000
  POINT : 
 
 #### FileGDB Output ####
-17:12:30.726 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
-17:12:30.728 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-17:12:30.863 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: PAL015 not found.  Creating layer...
-17:12:30.888 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: AAL015 not found.  Creating layer...
-17:12:30.915 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP010 not found.  Creating layer...
-17:12:30.944 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP030 not found.  Creating layer...
+08:56:24.283 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
+08:56:24.285 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:24.420 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: PAL015 not found.  Creating layer...
+08:56:24.446 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: AAL015 not found.  Creating layer...
+08:56:24.471 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP010 not found.  Creating layer...
+08:56:24.500 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: LAP030 not found.  Creating layer...
 AAL015
 
 Layer name: AAL015
@@ -105,24 +105,24 @@ OGRFeature(PAL015):1
  POINT : 
 
 #### Test prepending layer names and lazy layer creation ####
-17:12:31.285 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
-17:12:31.288 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-17:12:31.437 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_PAL015 not found.  Creating layer...
-17:12:31.441 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_AAL015 not found.  Creating layer...
-17:12:31.442 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_LAP010 not found.  Creating layer...
-17:12:31.443 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_LAP030 not found.  Creating layer...
-17:12:31.576 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_AAL015 not found.  Creating layer...
-17:12:31.580 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP010 not found.  Creating layer...
-17:12:31.580 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP020 not found.  Creating layer...
-17:12:31.580 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP030 not found.  Creating layer...
-17:12:31.581 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_PAL015 not found.  Creating layer...
-17:12:31.582 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
-17:12:31.585 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:24.818 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
+08:56:24.821 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:24.958 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_PAL015 not found.  Creating layer...
+08:56:24.963 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_AAL015 not found.  Creating layer...
+08:56:24.963 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_LAP010 not found.  Creating layer...
+08:56:24.964 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: bar_LAP030 not found.  Creating layer...
+08:56:25.093 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_AAL015 not found.  Creating layer...
+08:56:25.097 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP010 not found.  Creating layer...
+08:56:25.098 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP020 not found.  Creating layer...
+08:56:25.098 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_LAP030 not found.  Creating layer...
+08:56:25.098 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: foo_PAL015 not found.  Creating layer...
+08:56:25.100 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/io/SampleTranslation.osm ...
+08:56:25.101 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
 bar_AAL015
 
 Layer name: bar_AAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(bar_AAL015):0
  NAM (String) = w1
  ARA (Real) = 10.000000000000000
@@ -137,7 +137,7 @@ bar_LAP010
 
 Layer name: bar_LAP010
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(bar_LAP010):0
  NAM (String) = w2
  ARA (Real) = -999999.000000000000000
@@ -148,7 +148,7 @@ bar_LAP030
 
 Layer name: bar_LAP030
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(bar_LAP030):0
  NAM (String) = w3
  ARA (Real) = -999999.000000000000000
@@ -160,7 +160,7 @@ bar_PAL015
 
 Layer name: bar_PAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(bar_PAL015):0
  NAM (String) = n1
  ARA (Real) = -999999.000000000000000
@@ -170,7 +170,7 @@ foo_AAL015
 
 Layer name: foo_AAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(foo_AAL015):0
  NAM (String) = w1
  ARA (Real) = 10.000000000000000
@@ -185,7 +185,7 @@ foo_LAP010
 
 Layer name: foo_LAP010
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(foo_LAP010):0
  NAM (String) = w2
  ARA (Real) = -999999.000000000000000
@@ -196,12 +196,12 @@ foo_LAP020
 
 Layer name: foo_LAP020
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 foo_LAP030
 
 Layer name: foo_LAP030
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(foo_LAP030):0
  NAM (String) = w3
  ARA (Real) = -999999.000000000000000
@@ -213,62 +213,62 @@ foo_PAL015
 
 Layer name: foo_PAL015
 Metadata:
- DBF_DATE_LAST_UPDATE=2017-01-20
+ DBF_DATE_LAST_UPDATE=2017-01-24
 OGRFeature(foo_PAL015):0
  NAM (String) = n1
  ARA (Real) = -999999.000000000000000
  POINT : 
 
 #### Test to make sure all layers are read from a data source. ####
-17:12:32.102 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-17:12:32.241 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}
-17:12:32.241 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_l not found.  Creating layer...
-17:12:32.243 WARN  ...?(  -1) CPL Error #: 1 Value '{"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}' of field tags has been truncated to 254 characters.
+08:56:25.652 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:25.790 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}
+08:56:25.790 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_l not found.  Creating layer...
+08:56:25.792 WARN  ...?(  -1) CPL Error #: 1 Value '{"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}' of field tags has been truncated to 254 characters.
 This warning will not be emitted any more for that layer.
-17:12:32.246 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2258990","route":"railway","error:circular":"15","hoot:layername":"planet_osm_line","operator":"NS","hoot:status":"invalid","z_order":"0","tags":"\"route_name\"=>\"Delmarva Secondary\", \"route_pref_color\"=>\"0\"","way_area":"0"}
-17:12:32.250 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-934717","error:circular":"15","admin_leve":"6","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"wikipedia\"=>\"en:Wicomico County, Maryland\", \"attribution\"=>\"USGS 2001 County Boundary\", \"border_type\"=>\"county\", \"nist:fips_code\"=>\"24045\", \"nist:state_fips\"=>\"24\"","name":"Wicomico County","way_area":"0"}
-17:12:32.255 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2319895","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"NHS\"=>\"STRAHNET\", \"route_pref_color\"=>\"0\"","way_area":"0"}
-17:12:32.260 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17707365","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"4","tags":"\"odbl\"=>\"clean\", \"odbl:note\"=>\"All changes made by non-CT-accepting contributors have been reverted.\", \"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114478990:114478991:114478998:114494961:114479002:114480720:114480721:114480671:114480672:114480723:114480724:10613","name":"Waller Road","way_area":"0","highway":"tertiary"}
-17:12:32.261 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"109829734","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"4","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114445550:114460681:114485462:114485464:114485466:114485467\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Jersey\", \"tiger:name_type\"=>\"R","name":"Jersey Road","way_area":"0","highway":"tertiary"}
-17:12:32.263 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2319895","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"NHS\"=>\"STRAHNET\", \"route_pref_color\"=>\"0\"","way_area":"0"}
-17:12:32.265 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"169849446","error:circular":"15","hoot:layername":"planet_osm_line","operator":"NS","hoot:status":"invalid","z_order":"5","tags":"\"gauge\"=>\"1435\", \"tiger:cfcc\"=>\"B11\", \"tiger:tlid\"=>\"106074354:106074356:106074358:106074363:10609:106092347:106092349:106092542:106092668:106100243:106100973:106104568:106104569:106107231:106107232:106107872:106107873:106108164:106108165:106110525:10611","name":"Delmarva Secondary","railway":"rail","way_area":"0"}
-17:12:32.266 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
-17:12:32.266 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_a not found.  Creating layer...
-17:12:32.267 WARN  ...?(  -1) CPL Error #: 1 Value '{"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}' of field tags has been truncated to 254 characters.
+08:56:25.795 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2258990","route":"railway","error:circular":"15","hoot:layername":"planet_osm_line","operator":"NS","hoot:status":"invalid","z_order":"0","tags":"\"route_name\"=>\"Delmarva Secondary\", \"route_pref_color\"=>\"0\"","way_area":"0"}
+08:56:25.799 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-934717","error:circular":"15","admin_leve":"6","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"wikipedia\"=>\"en:Wicomico County, Maryland\", \"attribution\"=>\"USGS 2001 County Boundary\", \"border_type\"=>\"county\", \"nist:fips_code\"=>\"24045\", \"nist:state_fips\"=>\"24\"","name":"Wicomico County","way_area":"0"}
+08:56:25.805 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2319895","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"NHS\"=>\"STRAHNET\", \"route_pref_color\"=>\"0\"","way_area":"0"}
+08:56:25.809 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17707365","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"4","tags":"\"odbl\"=>\"clean\", \"odbl:note\"=>\"All changes made by non-CT-accepting contributors have been reverted.\", \"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114478990:114478991:114478998:114494961:114479002:114480720:114480721:114480671:114480672:114480723:114480724:10613","name":"Waller Road","way_area":"0","highway":"tertiary"}
+08:56:25.811 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"109829734","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"4","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114445550:114460681:114485462:114485464:114485466:114485467\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Jersey\", \"tiger:name_type\"=>\"R","name":"Jersey Road","way_area":"0","highway":"tertiary"}
+08:56:25.812 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2319895","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"NHS\"=>\"STRAHNET\", \"route_pref_color\"=>\"0\"","way_area":"0"}
+08:56:25.814 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"169849446","error:circular":"15","hoot:layername":"planet_osm_line","operator":"NS","hoot:status":"invalid","z_order":"5","tags":"\"gauge\"=>\"1435\", \"tiger:cfcc\"=>\"B11\", \"tiger:tlid\"=>\"106074354:106074356:106074358:106074363:10609:106092347:106092349:106092542:106092668:106100243:106100973:106104568:106104569:106107231:106107232:106107872:106107873:106108164:106108165:106110525:10611","name":"Delmarva Secondary","railway":"rail","way_area":"0"}
+08:56:25.815 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
+08:56:25.815 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_a not found.  Creating layer...
+08:56:25.817 WARN  ...?(  -1) CPL Error #: 1 Value '{"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}' of field tags has been truncated to 254 characters.
 This warning will not be emitted any more for that layer.
-17:12:32.268 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320474","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
-17:12:32.270 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320466","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
-17:12:32.272 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
-17:12:32.274 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17707651","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114446918:114446893:114446958:114446938:114446866:114448029:114484855:114484856\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Pennsylvan","name":"South Pennsylvania Avenue","way_area":"0","highway":"residential"}
-17:12:32.274 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17705776","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114446919:114446895:114446939\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"1st\", \"tiger:name_type\"=>\"St\", \"tiger:separated\"=>\"no\", \"tig","name":"South 1st Street","way_area":"0","highway":"residential"}
-17:12:32.275 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"85462125","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"2nd\", \"tiger:name_type\"=>\"St\", \"tiger:name_direction_prefix\"=>\"S\"","name":"South 2nd Street","way_area":"0","highway":"residential"}
-17:12:32.275 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2301100","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"symbol\"=>\"http://upload.wikimedia.org/wikipedia/commons/e/e8/US_13.svg\", \"network\"=>\"US:US\", \"wikipedia\"=>\"en:U.S. Route 13 in Maryland\", \"route_name\"=>\"US 13 (MD)\", \"is_in:state\"=>\"MD\", \"route_pref_color\"=>\"0\"","ref":"13","way_area":"0"}
-17:12:32.276 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709181","error:circular":"15","hoot:layername":"planet_osm_line","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:name_base_1\"=>\"Ocean\", \"tiger:","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
-17:12:32.277 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2301100","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"symbol\"=>\"http://upload.wikimedia.org/wikipedia/commons/e/e8/US_13.svg\", \"network\"=>\"US:US\", \"wikipedia\"=>\"en:U.S. Route 13 in Maryland\", \"route_name\"=>\"US 13 (MD)\", \"is_in:state\"=>\"MD\", \"route_pref_color\"=>\"0\"","ref":"13","way_area":"0"}
-17:12:32.278 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709194","error:circular":"15","hoot:layername":"planet_osm_line","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:zip_left\"=>\"21875\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:nam","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
-17:12:32.279 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17704553","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Stage\", \"tiger:name_type\"=>\"Rd\"","name":"Stage Road","way_area":"0","highway":"residential"}
-17:12:32.281 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183418011","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
-17:12:32.282 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_p not found.  Creating layer...
-17:12:32.282 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183410950","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
-17:12:32.283 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183292835","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
-17:12:32.283 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183430685","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
-17:12:32.286 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_polygon","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0.000192"}
-17:12:32.287 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"311461170","error:circular":"15","hoot:layername":"planet_osm_polygon","hoot:status":"invalid","z_order":"0","landuse":"residential","way_area":"0.00016799999999999999"}
-17:12:32.289 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_polygon","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0.000252"}
-17:12:32.293 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}
-17:12:32.295 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-934717","error:circular":"15","admin_leve":"6","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"wikipedia\"=>\"en:Wicomico County, Maryland\", \"attribution\"=>\"USGS 2001 County Boundary\", \"border_type\"=>\"county\", \"nist:fips_code\"=>\"24045\", \"nist:state_fips\"=>\"24\"","name":"Wicomico County","way_area":"0"}
-17:12:32.296 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"169849446","error:circular":"15","hoot:layername":"planet_osm_roads","operator":"NS","hoot:status":"invalid","z_order":"5","tags":"\"gauge\"=>\"1435\", \"tiger:cfcc\"=>\"B11\", \"tiger:tlid\"=>\"106074354:106074356:106074358:106074363:10609:106092347:106092349:106092542:106092668:106100243:106100973:106104568:106104569:106107231:106107232:106107872:106107873:106108164:106108165:106110525:10611","name":"Delmarva Secondary","railway":"rail","way_area":"0"}
-17:12:32.298 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
-17:12:32.299 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320474","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
-17:12:32.301 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
-17:12:32.304 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320466","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
-17:12:32.305 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709181","error:circular":"15","hoot:layername":"planet_osm_roads","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:name_base_1\"=>\"Ocean\", \"tiger:","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
-17:12:32.306 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709194","error:circular":"15","hoot:layername":"planet_osm_roads","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:zip_left\"=>\"21875\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:nam","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
-17:12:32.423 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/delaware-tds.shp ...
-17:12:32.431 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+08:56:25.818 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320474","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
+08:56:25.819 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320466","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
+08:56:25.822 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_line","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
+08:56:25.823 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17707651","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114446918:114446893:114446958:114446938:114446866:114448029:114484855:114484856\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Pennsylvan","name":"South Pennsylvania Avenue","way_area":"0","highway":"residential"}
+08:56:25.824 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17705776","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:tlid\"=>\"114446919:114446895:114446939\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:source\"=>\"tiger_import_dch_v0.6_20070813\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"1st\", \"tiger:name_type\"=>\"St\", \"tiger:separated\"=>\"no\", \"tig","name":"South 1st Street","way_area":"0","highway":"residential"}
+08:56:25.825 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"85462125","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"2nd\", \"tiger:name_type\"=>\"St\", \"tiger:name_direction_prefix\"=>\"S\"","name":"South 2nd Street","way_area":"0","highway":"residential"}
+08:56:25.825 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2301100","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"symbol\"=>\"http://upload.wikimedia.org/wikipedia/commons/e/e8/US_13.svg\", \"network\"=>\"US:US\", \"wikipedia\"=>\"en:U.S. Route 13 in Maryland\", \"route_name\"=>\"US 13 (MD)\", \"is_in:state\"=>\"MD\", \"route_pref_color\"=>\"0\"","ref":"13","way_area":"0"}
+08:56:25.826 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709181","error:circular":"15","hoot:layername":"planet_osm_line","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:name_base_1\"=>\"Ocean\", \"tiger:","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
+08:56:25.827 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-2301100","route":"road","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"0","tags":"\"symbol\"=>\"http://upload.wikimedia.org/wikipedia/commons/e/e8/US_13.svg\", \"network\"=>\"US:US\", \"wikipedia\"=>\"en:U.S. Route 13 in Maryland\", \"route_name\"=>\"US 13 (MD)\", \"is_in:state\"=>\"MD\", \"route_pref_color\"=>\"0\"","ref":"13","way_area":"0"}
+08:56:25.828 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709194","error:circular":"15","hoot:layername":"planet_osm_line","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:zip_left\"=>\"21875\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:nam","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
+08:56:25.829 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17704553","error:circular":"15","hoot:layername":"planet_osm_line","hoot:status":"invalid","z_order":"3","tags":"\"tiger:cfcc\"=>\"A41\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Stage\", \"tiger:name_type\"=>\"Rd\"","name":"Stage Road","way_area":"0","highway":"residential"}
+08:56:25.831 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183418011","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
+08:56:25.831 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 288) Layer: o2s_p not found.  Creating layer...
+08:56:25.831 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183410950","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
+08:56:25.832 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183292835","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
+08:56:25.832 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"183430685","error:circular":"15","hoot:layername":"planet_osm_point","hoot:status":"invalid","railway":"level_crossing"}
+08:56:25.834 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_polygon","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0.000192"}
+08:56:25.836 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"311461170","error:circular":"15","hoot:layername":"planet_osm_polygon","hoot:status":"invalid","z_order":"0","landuse":"residential","way_area":"0.00016799999999999999"}
+08:56:25.838 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_polygon","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0.000252"}
+08:56:25.842 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-162112","error:circular":"15","admin_leve":"4","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"name:ar\"=>\"ماريلاند\", \"name:az\"=>\"Merilend\", \"name:bg\"=>\"Мериленд\", \"name:bn\"=>\"মেরিল্যান্ড\", \"name:el\"=>\"Μέριλαντ\", \"name:en\"=>\"Maryland\", \"name:eo\"=>\"Marilando\", \"name:fa\"=>\"مریلند\", \"name:fy\"=>\"Mary","name":"Maryland","ref":"MD","way_area":"0"}
+08:56:25.844 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"-934717","error:circular":"15","admin_leve":"6","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"wikipedia\"=>\"en:Wicomico County, Maryland\", \"attribution\"=>\"USGS 2001 County Boundary\", \"border_type\"=>\"county\", \"nist:fips_code\"=>\"24045\", \"nist:state_fips\"=>\"24\"","name":"Wicomico County","way_area":"0"}
+08:56:25.846 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"169849446","error:circular":"15","hoot:layername":"planet_osm_roads","operator":"NS","hoot:status":"invalid","z_order":"5","tags":"\"gauge\"=>\"1435\", \"tiger:cfcc\"=>\"B11\", \"tiger:tlid\"=>\"106074354:106074356:106074358:106074363:10609:106092347:106092349:106092542:106092668:106100243:106100973:106104568:106104569:106107231:106107232:106107872:106107873:106108164:106108165:106110525:10611","name":"Delmarva Secondary","railway":"rail","way_area":"0"}
+08:56:25.847 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
+08:56:25.848 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320474","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
+08:56:25.850 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"place":"town","osm_id":"-2057485","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","tags":"\"is_in\"=>\"USA, Maryland\", \"tiger:CPI\"=>\"N\", \"wikipedia\"=>\"en:Delmar, Maryland\", \"tiger:LSAD\"=>\"43\", \"tiger:NAME\"=>\"Delmar\", \"border_type\"=>\"town\", \"is_in:state\"=>\"Maryland\", \"tiger:MTFCC\"=>\"G4110\", \"is_in:country\"=>\"USA\", \"tiger:CLASSFP\"=>\"C1\", \"tiger:PC","name":"Delmar","way_area":"0"}
+08:56:25.853 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"34320466","error:circular":"15","admin_leve":"8","hoot:layername":"planet_osm_roads","boundary":"administrative","hoot:status":"invalid","z_order":"0","way_area":"0"}
+08:56:25.855 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709181","error:circular":"15","hoot:layername":"planet_osm_roads","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:name_base_1\"=>\"Ocean\", \"tiger:","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
+08:56:25.855 INFO  ...e-1/hoot/rules/lib/HootLib.js"( 260) {"osm_id":"17709194","error:circular":"15","hoot:layername":"planet_osm_roads","oneway":"yes","hoot:status":"invalid","z_order":"8","tags":"\"NHS\"=>\"STRAHNET\", \"hgv\"=>\"designated\", \"lanes\"=>\"2\", \"name_1\"=>\"Ocean Highway\", \"tiger:cfcc\"=>\"A25\", \"tiger:county\"=>\"Wicomico, MD\", \"tiger:reviewed\"=>\"no\", \"tiger:zip_left\"=>\"21875\", \"tiger:name_base\"=>\"Salisbury\", \"tiger:name_type\"=>\"Blvd\", \"tiger:nam","name":"North Salisbury Boulevard","ref":"US 13","way_area":"0","highway":"trunk"}
+08:56:25.986 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/delaware-tds.shp ...
+08:56:25.994 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
 Reprojecting 0 / 5664         Reprojecting 1000 / 5664         Reprojecting 2000 / 5664         Reprojecting 3000 / 5664         Reprojecting 4000 / 5664         Reprojecting 5000 / 5664         
-17:12:32.625 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
-17:12:32.632 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
+08:56:26.186 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
+08:56:26.194 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
 Stat Name	test-output/cmd/slow/delaware-tds.shp
 Node Count	5664
 Way Count	32
