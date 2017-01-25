@@ -73,7 +73,7 @@ shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString&
   static bool first = true;
   if (first == true)
   {
-    OGRRegisterAll();
+    GDALAllRegister();
     first = false;
   }
 

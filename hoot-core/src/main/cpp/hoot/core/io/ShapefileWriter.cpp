@@ -164,7 +164,7 @@ void ShapefileWriter::write(shared_ptr<const OsmMap> map)
 
 void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
@@ -275,7 +275,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
 
 void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
@@ -379,7 +379,7 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
 
 void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
