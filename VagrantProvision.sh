@@ -213,13 +213,14 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
         echo "### Extracting GDAL source..."
         tar zxfp gdal-1.10.1.tar.gz
     fi
-    if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
+
+    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo tar xfp FileGDB_API_1_3-64.tar.gz --directory /usr/local
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
