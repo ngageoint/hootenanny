@@ -44,46 +44,46 @@ namespace hoot
 {
 
 static const char* extensions[][2] = { { "shp"    , "ESRI Shapefile" },
-                                           { "dbf"    , "ESRI Shapefile" },
-                                           { "sqlite" , "SQLite" },
-                                           { "db"     , "SQLite" },
-                                           { "mif"    , "MapInfo File" },
-                                           { "tab"    , "MapInfo File" },
-                                           { "s57"    , "S57" },
-                                           { "bna"    , "BNA" },
-                                           { "csv"    , "CSV" },
-                                           { "gml"    , "GML" },
-                                           { "gpx"    , "GPX" },
-                                           { "kml"    , "KML/LIBKML" },
-                                           { "kmz"    , "LIBKML" },
-                                           { "json"   , "GeoJSON" },
-                                           { "geojson", "GeoJSON" },
-                                           { "dxf"    , "DXF" },
-                                           { "gdb"    , "FileGDB" },
-                                           { "pix"    , "PCIDSK" },
-                                           { "sql"    , "PGDump" },
-                                           { "gtm"    , "GPSTrackMaker" },
-                                           { "gmt"    , "GMT" },
-                                           { "vrt"    , "VRT" },
-                                           { NULL, NULL }
-                                          };
+                                       { "dbf"    , "ESRI Shapefile" },
+                                       { "sqlite" , "SQLite" },
+                                       { "db"     , "SQLite" },
+                                       { "mif"    , "MapInfo File" },
+                                       { "tab"    , "MapInfo File" },
+                                       { "s57"    , "S57" },
+                                       { "bna"    , "BNA" },
+                                       { "csv"    , "CSV" },
+                                       { "gml"    , "GML" },
+                                       { "gpx"    , "GPX" },
+                                       { "kml"    , "KML/LIBKML" },
+                                       { "kmz"    , "LIBKML" },
+                                       { "json"   , "GeoJSON" },
+                                       { "geojson", "GeoJSON" },
+                                       { "dxf"    , "DXF" },
+                                       { "gdb"    , "FileGDB" },
+                                       { "pix"    , "PCIDSK" },
+                                       { "sql"    , "PGDump" },
+                                       { "gtm"    , "GPSTrackMaker" },
+                                       { "gmt"    , "GMT" },
+                                       { "vrt"    , "VRT" },
+                                       { NULL, NULL }
+                                      };
 static const char* beginName[][2] =  { { "PG:"      , "PGeo" },
-                                           { "MySQL:"   , "MySQL" },
-                                           { "CouchDB:" , "CouchDB" },
-                                           { "GFT:"     , "GFT" },
-                                           { "MSSQL:"   , "MSSQLSpatial" },
-                                           { "ODBC:"    , "ODBC" },
-                                           { "OCI:"     , "OCI" },
-                                           { "SDE:"     , "SDE" },
-                                           { "WFS:"     , "WFS" },
-                                           { NULL, NULL }
-                                         };
+                                       { "MySQL:"   , "MySQL" },
+                                       { "CouchDB:" , "CouchDB" },
+                                       { "GFT:"     , "GFT" },
+                                       { "MSSQL:"   , "MSSQLSpatial" },
+                                       { "ODBC:"    , "ODBC" },
+                                       { "OCI:"     , "OCI" },
+                                       { "SDE:"     , "SDE" },
+                                       { "WFS:"     , "WFS" },
+                                       { NULL, NULL }
+                                     };
 
 shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
 
 OgrUtilities::OgrUtilities()
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 }
 
 OgrUtilities& OgrUtilities::getInstance()

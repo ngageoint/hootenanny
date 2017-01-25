@@ -56,7 +56,8 @@ void GmlWriter::write(shared_ptr<const OsmMap> map, QString path)
 
 void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
+  OGRSetNonLinearGeometriesEnabledFlag(FALSE);
 
   const char *pszDriverName = "GML";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
