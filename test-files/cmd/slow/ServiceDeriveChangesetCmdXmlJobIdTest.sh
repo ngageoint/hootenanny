@@ -23,8 +23,9 @@ echo $DB_HOST
 echo $DB_PORT
 echo $DB_NAME
 echo $DB_USER
-export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
-echo "insert job response: " $INSERT_JOB_RESPONSE
+#export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
+#echo "insert job response: " $INSERT_JOB_RESPONSE
+psql -a -e -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"
 
 echo "test4"
 
