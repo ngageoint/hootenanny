@@ -23,5 +23,5 @@ hoot derive-changeset test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-
 diff test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest/changeset.osc test-files/cmd/quick/DeriveChangesetCmdTest/changeset.osc
 
 # verify the job status detail field contains the changeset file path
-export JOB_STATUS_DETAIL=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "SELECT status_detail FROM job_status WHERE job_id=$JOB_ID"`
+export JOB_STATUS_DETAIL=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "SELECT status_detail FROM job_status WHERE job_id='$JOB_ID'"`
 echo "changeset file: " $JOB_STATUS_DETAIL
