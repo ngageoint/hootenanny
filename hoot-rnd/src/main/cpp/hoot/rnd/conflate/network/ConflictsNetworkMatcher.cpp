@@ -437,11 +437,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
       LOG_VART(handicap);
     }
 
-//    if (em->containsPartial())
-//    {
-//      aggression += 8;
-//    }
-
     double numerator = _scores[em] * handicap;
     double denominator = numerator;
     LOG_VART(numerator);
@@ -470,16 +465,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
         LOG_VART(childHandicap);
       }
 
-//      if (r->getEdge()->containsStub() && r->isConflict())
-//      {
-//        aggression += 3.0;
-//      }
-
-//      if (r->getEdge()->containsStub() && em->containsStub() && r->isConflict())
-//      {
-//        handicap = 2.0;
-//      }
-
       // s is modified throughout the function to represent how important this edge match is to
       // em.
       double s = _scores[r->getEdge()] * childHandicap;
@@ -499,9 +484,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
       if (stubWeight != -1)
       {
         LOG_VART(stubWeight);
-        //s *= stubWeight / 10.0;
         s *= pow(stubWeight, _stubThroughWeighting);
-        //s = 0.0;
         LOG_VART(s);
       }
 
@@ -523,7 +506,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
       s = s * _weights[r->getEdge()];
       LOG_VART(s);
 
-      //s = s / (double)relationCount;
       // if network.conflicts.outbound.weighting is non-zero, use the number of neighboring matches
       // to weight the influence of this edge match.
       s = s * pow(1.0 / (double)relationCount, _outboundWeighting);
@@ -532,14 +514,12 @@ void ConflictsNetworkMatcher::_iterateSimple()
       if (r->isConflict() == false)
       {
         LOG_TRACE("support:  " << s << "\t" << r->getEdge()->toString().left(80));
-        //s = s / (double)supportCount;
         numerator += s;
         LOG_VART(numerator);
       }
       else
       {
         LOG_TRACE("conflict: " << s << "\t" << r->getEdge()->toString().left(80));
-        //s = s / (double)relationCount;
       }
 
       denominator += s;
