@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 echo "test1"
 
@@ -18,6 +19,10 @@ echo "test3"
 # insert a dummy job record
 JOB_ID="ServiceDeriveChangesetCmdXmlJobIdTest_"$((( RANDOM % 10000 ) + 1))
 echo $JOB_ID
+echo $DB_HOST
+echo $DB_PORT
+echo $DB_NAME
+echo $DB_USER
 export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
 echo "insert job response: " $INSERT_JOB_RESPONSE
 
