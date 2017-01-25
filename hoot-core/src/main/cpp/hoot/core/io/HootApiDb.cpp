@@ -940,7 +940,9 @@ void HootApiDb::_resetQueries()
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
-  _writeJobStatus.reset();
+  _updateJobStatus.reset();
+  _insertJobStatus.reset();
+  _jobStatusExists.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1445,26 +1447,78 @@ QString HootApiDb::_getRenderDBName(long mapId)
   return (dbName + "_renderdb_" + mapIdNumber);
 }
 
-void HootApiDb::writeJobStatus(const QString jobId, const QString status)
+void HootApiDb::updateJobStatus(const QString jobId, const QString status)
 {
-  if (!_writeJobStatus.get())
+  if (!_updateJobStatus.get())
   {
-    _writeJobStatus.reset(new QSqlQuery(_db));
-    _writeJobStatus->prepare(
-      "UPDATE " + getJobStatusTableName() + " SET status_detail = '" + status +
-      "' WHERE job_id = '" + jobId + "'");
+    _updateJobStatus.reset(new QSqlQuery(_db));
+    _updateJobStatus->prepare(
+      "UPDATE " + getJobStatusTableName() + " SET status_detail = :status WHERE job_id = :jobId");
   }
-  _writeJobStatus->bindValue(":id", jobId);
-  _writeJobStatus->bindValue(":status", status);
+  _updateJobStatus->bindValue(":jobId", jobId);
+  _updateJobStatus->bindValue(":status", status);
 
-  if (_writeJobStatus->exec() == false)
+  if (_updateJobStatus->exec() == false)
   {
     throw HootException(
-      QString("Error executing query: %1 (%2)").arg(_writeJobStatus->executedQuery())
-        .arg(_updateWay->lastError().text()));
+      QString("Error executing query: %1 (%2)").arg(_updateJobStatus->executedQuery())
+        .arg(_updateJobStatus->lastError().text()));
   }
-  LOG_VARD(_writeJobStatus->executedQuery());
-  LOG_VARD(_writeJobStatus->numRowsAffected());
+  LOG_VARD(_updateJobStatus->executedQuery());
+  LOG_VARD(_updateJobStatus->numRowsAffected());
+}
+
+bool HootApiDb::jobStatusExists(const QString jobId)
+{
+  if (!_jobStatusExists.get())
+  {
+    _jobStatusExists.reset(new QSqlQuery(_db));
+    _jobStatusExists->prepare(
+      "SELECT COUNT(*) FROM " + getJobStatusTableName() + " WHERE job_id = :jobId");
+  }
+  _jobStatusExists->bindValue(":jobId", jobId);
+
+  if (_jobStatusExists->exec() == false)
+  {
+    LOG_ERROR(_jobStatusExists->executedQuery());
+    LOG_ERROR(_jobStatusExists->lastError().text());
+    throw HootException(_jobStatusExists->lastError().text());
+  }
+
+  long result = -1;
+  if (_jobStatusExists->next())
+  {
+    bool ok;
+    result = _jobStatusExists->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for job status.");
+    }
+  }
+  _jobStatusExists->finish();
+  LOG_DEBUG("Job status exists count: " << result);
+  return result > 0;
+}
+
+void HootApiDb::insertJobStatus(const QString jobId)
+{
+  if (!_insertJobStatus.get())
+  {
+    _insertJobStatus.reset(new QSqlQuery(_db));
+    _insertJobStatus->prepare(
+      "INSERT INTO " + getJobStatusTableName() +
+      " (job_id, start, status) VALUES (:jobId, now(), 2)");
+  }
+  _insertJobStatus->bindValue(":jobId", jobId);
+
+  if (_insertJobStatus->exec() == false)
+  {
+    throw HootException(
+      QString("Error executing query: %1 (%2)").arg(_insertJobStatus->executedQuery())
+        .arg(_insertJobStatus->lastError().text()));
+  }
+  LOG_VARD(_insertJobStatus->executedQuery());
+  LOG_VARD(_insertJobStatus->numRowsAffected());
 }
 
 }

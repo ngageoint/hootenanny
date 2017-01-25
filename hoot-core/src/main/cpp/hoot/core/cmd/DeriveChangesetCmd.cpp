@@ -138,6 +138,10 @@ public:
       OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
 
+    //There technically is no use case for recording the changeset file output in the db for sql
+    //changesets, but the behavior is being made identical with xml changeset derivation for
+    //consistency's sake.
+
     //write the output file name to the job status detail col for later retrieval
     if (writeJobStatus)
     {
@@ -159,10 +163,14 @@ public:
         //services.
         outputPath = "<multiple files>";
       }
-      //There technically is no use case for recording the changeset file output in the db for sql
-      //changesets, but the behavior is being made identical with xml changeset derivation for
-      //consistency's sake.
-      _hootApiDb.writeJobStatus(jobId, outputPath);
+
+      //The job record with the specified ID should really always exist, but we'll go ahead and
+      //create it anyway if it doesn't just to be safe.
+      if (!_hootApiDb.jobStatusExists(jobId))
+      {
+        _hootApiDb.insertJobStatus(jobId);
+      }
+      _hootApiDb.updateJobStatus(jobId, outputPath);
     }
 
     return 0;

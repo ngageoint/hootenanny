@@ -277,7 +277,28 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
-  void writeJobStatus(const QString jobId, const QString status);
+  /**
+   * Updates an existing job status; assumes the job record already exists
+   *
+   * @param jobId ID of an existing job
+   * @param status status text to update the job status field with
+   */
+  void updateJobStatus(const QString jobId, const QString status);
+
+  /**
+   * Determines whether a job status exists
+   *
+   * @param jobId the ID of the job status to determine the existence of
+   * @return true if it exists; false otherwise
+   */
+  bool jobStatusExists(const QString jobId);
+
+  /**
+   * Inserts a new job status
+   *
+   * @param jobId the ID of the newly inserted job status
+   */
+  void insertJobStatus(const QString jobId);
 
 protected:
 
@@ -303,7 +324,9 @@ private:
   shared_ptr<QSqlQuery> _updateNode;
   shared_ptr<QSqlQuery> _updateRelation;
   shared_ptr<QSqlQuery> _updateWay;
-  shared_ptr<QSqlQuery> _writeJobStatus;
+  shared_ptr<QSqlQuery> _updateJobStatus;
+  shared_ptr<QSqlQuery> _insertJobStatus;
+  shared_ptr<QSqlQuery> _jobStatusExists;
 
   shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
