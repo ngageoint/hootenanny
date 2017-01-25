@@ -15,20 +15,20 @@ single seamless map.
 
 Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
 
-## Project Goals
+# Project Goals
 * Create up-to-date routable transportation networks from multiple sources
 * Combine attributes from different sources
 * Combine POIs and polygons for geolocation and sense making
 * Maintain geometry and attribute provenance
 
-## Supported Geodata Types
+# Supported Geodata Types
 Hootenanny can conflate:
 * POIs
 * Building polygons
 * Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
 * Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
 
-## Supported Data Formats
+# Supported Data Formats
 Hootenanny can import from:
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
@@ -50,7 +50,7 @@ Note:
 associated files
 * WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
 
-## Tag Schemas
+# Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
 * Topographic Data Store (TDS) v6.1/v4.0 
 * Multi-National Geospatial Co-Production Program (MGCP)
@@ -79,10 +79,10 @@ Once installed and configured, Hootenanny can be accessed from a browser by open
 
 * Note that the specific port designation can be configured from either the Vagrantfile (if using Vagrant installation approach) or from the Tomcat/conf/server.xml file.  
 
-## Documentation
+# Documentation
 Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
 
-## Contributing
+# Contributing
 Please read the Hootenanny Developer's Guide for details on environment, coding standards, and development process.  Perform work for new features on a new git feature branch and open a pull request to merge that branch into the "develop" branch when the feature is complete.
 
 # Specifications
@@ -98,7 +98,6 @@ so please refer to that page for any questions about general Hootenanny capabili
 If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 
 # Redistribution
-
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
 
 All pull requests contributions to this project will be released under the GNU General Public License 3.0. Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
@@ -112,7 +111,6 @@ Imagery provided by permission from DigitalGlobe. Users are responsible for comp
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 # Developers
-
 In alphabetical order:
 * Trey Caldwell (Trey.Caldwell@digitalglobe.com)
 * Jong Choi (Jong.Choi@digitalglobe.com)
