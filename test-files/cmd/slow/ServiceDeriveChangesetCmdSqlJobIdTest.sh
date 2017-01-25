@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
@@ -15,12 +15,12 @@ psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.
 rm -rf test-output/cmd/ServiceDeriveChangesetCmdSqlJobIdTest
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdSqlJobIdTest
 
-# generate a dummy job record; derive-changeset will auto-insert the record
+# generate a dummy job record
 JOB_ID="ServiceDeriveChangesetCmdSqlJobIdTest_"$((( RANDOM % 10000 ) + 1))
 # echo $JOB_ID
-# See comment in ServiceDeriveChangesetCmdXmlJobId.sh.
-#export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
-#echo "insert job response: " $INSERT_JOB_RESPONSE
+# insert the job record
+export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
+echo "insert job response: " $INSERT_JOB_RESPONSE
 
 # derive the changeset
 hoot derive-changeset test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlJobIdTest/changeset.osc.sql $OSM_API_DB_URL $JOB_ID $HOOT_DB_URL

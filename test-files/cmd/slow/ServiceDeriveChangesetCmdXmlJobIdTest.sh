@@ -2,19 +2,18 @@
 set -e
 
 source $HOOT_HOME/conf/DatabaseConfig.sh
+export PGPASSWORD=$DB_PASSWORD
 # We only need to query against the job status table, so no map layer is needed.  HootApiDb 
 # requires a map layer, though (hence, 'blah').
-export PGPASSWORD=$DB_PASSWORD
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME/blah"
 
 rm -rf test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdXmlJobIdTest
 
-# generate a dummy job record; derive-changeset will auto-insert the record
+# generate a dummy job record
 JOB_ID="ServiceDeriveChangesetCmdXmlJobIdTest_"$((( RANDOM % 10000 ) + 1))
 # echo $JOB_ID
-# For an unknown reason I've had difficulty running this insert command in Jenkins jobs (it hangs), whereas it succeeds locally.  
-# Therefore, derive-changeset  was modified to automatically insert a new job status record if the one with the specified job ID doesn't exist.
+# insert the job record
 export INSERT_JOB_RESPONSE=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "INSERT INTO job_status (job_id, start, status) VALUES ('$JOB_ID', now(), 2)"`
 echo "insert job response: " $INSERT_JOB_RESPONSE
 
