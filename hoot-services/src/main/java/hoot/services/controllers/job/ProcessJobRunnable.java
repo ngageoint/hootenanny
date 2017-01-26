@@ -26,15 +26,7 @@
  */
 package hoot.services.controllers.job;
 
-import static hoot.services.utils.JsonUtils.paramsToMap;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -43,23 +35,20 @@ import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
 class ProcessJobRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ProcessJobRunnable.class);
 
     private final String jobId;
-    private final String params;
+    private final Command command;
     private final JobStatusManager jobStatusManager;
-    private final JobExecutionManager jobExecMan;
 
 
-    ProcessJobRunnable(String jobid, String jobParams, JobStatusManager jobStatusManager, JobExecutionManager jobExecMan) {
-        this.jobId = jobid;
-        this.params = jobParams;
+    ProcessJobRunnable(String jobId, Command command, JobStatusManager jobStatusManager) {
+        this.jobId = jobId;
+        this.command = command;
         this.jobStatusManager = jobStatusManager;
-        this.jobExecMan = jobExecMan;
     }
 
     @Override
@@ -87,39 +76,20 @@ class ProcessJobRunnable implements Runnable {
         jobStatusManager.addJob(jobId);
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject command = (JSONObject) parser.parse(params);
-            command.put("jobId", jobId);
-
-            CommandResult result = processJob(command);
+            CommandResult result = command.execute();
 
             if (result.failed()) {
-                jobStatusManager.setFailed(jobId, result.getStderr());
+                jobStatusManager.setFailed(jobId, "Job FAILED due to --> " + result.getCommand());
             }
             else {
-                jobStatusManager.setCompleted(jobId, result.getStdout());
+                jobStatusManager.setCompleted(jobId, "PROCESSED");
             }
         }
         catch (Exception e) {
             jobStatusManager.setFailed(jobId, ExceptionUtils.getStackTrace(e));
             throw e;
         }
-        finally {
-            logger.debug("End process Job: {}", jobId);
-        }
-    }
 
-    private CommandResult processJob(JSONObject command) {
-        String resourceName = command.get("caller").toString();
-        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
-
-        Map<String, String> paramsMap = paramsToMap(command);
-
-        List<String> missingList = new ArrayList<>();
-        if (!validator.validateRequiredExists(paramsMap, missingList)) {
-            logger.error("Missing following required field(s): {}", missingList);
-        }
-
-        return jobExecMan.exec(command);
+        logger.debug("End of processing job: {}", jobId);
     }
 }

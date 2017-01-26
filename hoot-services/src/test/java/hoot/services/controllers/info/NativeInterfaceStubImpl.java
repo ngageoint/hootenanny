@@ -34,7 +34,7 @@ import hoot.services.nativeinterfaces.NativeInterface;
 
 public class NativeInterfaceStubImpl implements NativeInterface {
     @Override
-    public CommandResult exec(JSONObject command) {
+    public CommandResult exec(String jobId, JSONObject command) {
         CommandResult result = new CommandResult();
 
         // hoot version --debug

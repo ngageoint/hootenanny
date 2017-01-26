@@ -43,7 +43,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.job.JobControllerBase;
 
 
 public class HGISFilterResourceTest {
@@ -58,7 +57,7 @@ public class HGISFilterResourceTest {
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
-        Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(Matchers.anyString(), argCaptor.capture());
+//        Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(Matchers.anyString(), argCaptor.capture());
 
         FilterNonHgisPoisRequest request = new FilterNonHgisPoisRequest();
         request.setSource("testSrc1");
@@ -114,7 +113,7 @@ public class HGISFilterResourceTest {
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
-        Mockito.doNothing().when(spy).postJobRequest(Matchers.anyString(), argCaptor.capture());
+//        Mockito.doNothing().when(spy).postJobRequest(Matchers.anyString(), argCaptor.capture());
         FilterNonHgisPoisRequest request = new FilterNonHgisPoisRequest();
         request.setSource("testSrc1");
         request.setOutput("out1");

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,29 +26,11 @@
  */
 package hoot.services.controllers.job;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
-import hoot.services.models.db.JobStatus;
+import hoot.services.nativeinterfaces.CommandResult;
 
-@Component
-@Profile("test")
-public class JobStatusManagerStub extends JobStatusManager {
 
-    @Override
-    public void addJob(String jobId) {}
-
-    @Override
-    public void updateJob(String jobId, String statusDetail, Double percentComplete) {}
-
-    @Override
-    public void setCompleted(String jobId, String statusDetail) {}
-
-    @Override
-    public void setFailed(String jobId, String statusDetail) {}
-
-    @Override
-    public JobStatus getJobStatusObj(String jobId) {
-        return null;
-    }
+// Functional interface
+public interface Command {
+    CommandResult execute();
 }

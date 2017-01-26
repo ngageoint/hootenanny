@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.CommandResult;
+import hoot.services.nativeinterfaces.NativeInterface;
 
 
 /**
@@ -56,7 +57,7 @@ public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
     @Autowired
-    private JobExecutionManager jobExecutionManager;
+    private NativeInterface nativeInterface;
 
     public AboutResource() {}
 
@@ -214,7 +215,8 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        String output = this.jobExecutionManager.exec(command).getStdout();
+        CommandResult commandResult = this.nativeInterface.exec(null, command);
+        String output = commandResult.getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);
     }

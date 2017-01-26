@@ -29,27 +29,19 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.RASTER_TO_TILES;
 import static hoot.services.HootProperties.TILE_SERVER_PATH;
 
-import java.util.UUID;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.geo.BoundingBox;
-import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.JobExecutionManager;
 
 
 @Transactional
@@ -57,145 +49,96 @@ import hoot.services.nativeinterfaces.JobExecutionManager;
 public class RasterToTilesService extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
 
-    @Autowired
-    private JobExecutionManager jobExecManager;
-
-    @Autowired
-    private JobStatusManager jobStatusManager;
-
 
     public RasterToTilesService() {
         super(RASTER_TO_TILES);
     }
 
-    public String ingestOSMResourceDirect(String name, String userEmail) {
-        String jobId = UUID.randomUUID().toString();
-        return ingestOSMResourceDirect(name, userEmail, jobId);
-    }
+    public CommandResult ingestOSMResourceDirect(String name, String jobId, String userEmail) {
+        long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
-    /**
-     * This function executes directly. This should be used when called from
-     * JobResource it prevents the thread race condition when threadpool maxes out.
-     */
-    public String ingestOSMResourceDirect(String name, String userEmail, String jobId) {
-        // _zoomLevels
+        BoundingBox queryBounds;
         try {
-            try {
-                jobStatusManager.addJob(jobId);
-
-                QMaps maps = QMaps.maps;
-                long mapIdNum = ModelDaoUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
-
-                BoundingBox queryBounds;
-                try {
-                    queryBounds = new BoundingBox("-180,-90,180,90");
-                    logger.debug("Query bounds area: {}", queryBounds.getArea());
-                }
-                catch (Exception e) {
-                    throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                            + e.getMessage() + ")", e);
-                }
-
-                Map currMap = new Map(mapIdNum);
-                JSONObject extents = currMap.retrieveNodesMBR(queryBounds);
-
-                Object oMinLon = extents.get("minlon");
-                Object oMaxLon = extents.get("maxlon");
-                Object oMinLat = extents.get("minlat");
-                Object oMaxLat = extents.get("maxlat");
-
-                String warn = null;
-
-                // Make sure we have valid bbox. We may end up with invalid bbox and
-                // in that case we should not produce raster density map
-                if ((oMinLon != null) && (oMaxLon != null) && (oMinLat != null) && (oMaxLat != null)) {
-                    double dMinLon = (Double) extents.get("minlon");
-                    double dMaxLon = (Double) extents.get("maxlon");
-                    double dMinLat = (Double) extents.get("minlat");
-                    double dMaxLat = (Double) extents.get("maxlat");
-
-                    double deltaLon = dMaxLon - dMinLon;
-                    double deltaLat = dMaxLat - dMinLat;
-
-                    double maxDelta = deltaLon;
-                    if (deltaLat > maxDelta) {
-                        maxDelta = deltaLat;
-                    }
-
-                    JSONObject zoomInfo = getZoomInfo(maxDelta);
-
-                    String zoomList = zoomInfo.get("zoomlist").toString();
-                    int rasterSize = (Integer) zoomInfo.get("rastersize");
-
-                    JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapIdNum);
-                    argStr.put("jobId", jobId);
-
-                    CommandResult commandResult = this.jobExecManager.exec(argStr);
-
-                    if (commandResult.failed()) {
-                        jobStatusManager.setFailed(jobId, "job failed");
-                    }
-                    else {
-                        jobStatusManager.setCompleted(jobId, "job succeeded");
-                    }
-                }
-                else {
-                    throw new IllegalArgumentException("Invalid bbox!");
-                }
-            }
-            catch (Exception ex) {
-                jobStatusManager.setFailed(jobId, ex.getMessage());
-                String msg = "Failure ingesting resource: " + ex.getMessage();
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            queryBounds = new BoundingBox("-180,-90,180,90");
+            logger.debug("Query bounds area: {}", queryBounds.getArea());
         }
         catch (Exception e) {
-            String msg = "Failure resource ingestion: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
+                    + e.getMessage() + ")", e);
         }
 
-        return jobId;
+        Map currentMap = new Map(mapId);
+        JSONObject extents = currentMap.retrieveNodesMBR(queryBounds);
+
+        Object oMinLon = extents.get("minlon");
+        Object oMaxLon = extents.get("maxlon");
+        Object oMinLat = extents.get("minlat");
+        Object oMaxLat = extents.get("maxlat");
+
+        // Make sure we have valid bbox. We may end up with invalid bbox and
+        // in that case we should not produce raster density map
+        if ((oMinLon == null) || (oMaxLon == null) || (oMinLat == null) || (oMaxLat == null)) {
+            throw new IllegalArgumentException("Invalid bbox!");
+        }
+        else {
+            double dMinLon = (Double) extents.get("minlon");
+            double dMaxLon = (Double) extents.get("maxlon");
+            double dMinLat = (Double) extents.get("minlat");
+            double dMaxLat = (Double) extents.get("maxlat");
+
+            double deltaLon = dMaxLon - dMinLon;
+            double deltaLat = dMaxLat - dMinLat;
+
+            double maxDelta = deltaLon;
+            if (deltaLat > maxDelta) {
+                maxDelta = deltaLat;
+            }
+
+            JSONObject zoomInfo = getZoomInfo(maxDelta);
+
+            String zoomList = zoomInfo.get("zoomlist").toString();
+            int rasterSize = (Integer) zoomInfo.get("rastersize");
+
+            JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapId);
+            argStr.put("jobId", jobId);
+
+            return super.jobExecutionManager.exec(jobId, argStr);
+        }
     }
 
     private JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
-        JSONObject arg = new JSONObject();
-        arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH);
-        commandArgs.add(arg);
 
-        arg = new JSONObject();
-        arg.put("INPUT", name);
-        commandArgs.add(arg);
+        JSONObject argument = new JSONObject();
+        argument.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH);
+        commandArgs.add(argument);
 
-        arg = new JSONObject();
-        arg.put("ZOOM_LIST", zoomList);
-        commandArgs.add(arg);
+        argument = new JSONObject();
+        argument.put("INPUT", name);
+        commandArgs.add(argument);
 
-        arg = new JSONObject();
-        arg.put("RASTER_SIZE", String.valueOf(rasterSize));
-        commandArgs.add(arg);
+        argument = new JSONObject();
+        argument.put("ZOOM_LIST", zoomList);
+        commandArgs.add(argument);
 
-        arg = new JSONObject();
-        arg.put("MAP_ID", String.valueOf(mapId));
-        commandArgs.add(arg);
+        argument = new JSONObject();
+        argument.put("RASTER_SIZE", String.valueOf(rasterSize));
+        commandArgs.add(argument);
+
+        argument = new JSONObject();
+        argument.put("MAP_ID", String.valueOf(mapId));
+        commandArgs.add(argument);
 
         if (userEmail != null) {
-            arg = new JSONObject();
-            arg.put("USER_EMAIL", userEmail);
-            commandArgs.add(arg);
+            argument = new JSONObject();
+            argument.put("USER_EMAIL", userEmail);
+            commandArgs.add(argument);
         }
 
-        JSONObject jsonArgs = _createPostBody(commandArgs);
+        JSONObject jsonArgs = super.createMakeScriptJobReq(commandArgs);
         jsonArgs.put("erroraswarning", "true");
 
         return jsonArgs;
-    }
-
-    private String createCommand(String name, String zoomList, int rasterSize, long mapId) {
-        return createCommandObj(name, zoomList, rasterSize, null, mapId).toJSONString();
     }
 
     private JSONObject getZoomInfo(double maxDelta) {

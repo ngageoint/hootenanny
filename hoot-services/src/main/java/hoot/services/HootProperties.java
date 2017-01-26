@@ -76,8 +76,6 @@ public final class HootProperties {
     public static final String TRANSLATION_SERVER_THREAD_COUNT;
     public static final String TRANSLATION_SERVER_SCRIPT;
     public static final String TRANSLATION_EXT_PATH;
-    public static final String CORE_JOB_SERVER_URL;
-    public static final String INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
     public static final String DB_NAME;
     public static final String DB_USER_ID;
     public static final String DB_PASSWORD;
@@ -120,7 +118,6 @@ public final class HootProperties {
     public static final String TEST_CHANGESET_AUTO_CLOSE;
     public static final String RANDOM_QUERY_SEED;
     public static final String SEED_RANDOM_QUERIES;
-    public static final String CHAIN_JOS_STATUS_PING_INTERVAL;
     public static final String INTERNAL_JOB_THREAD_SIZE;
     public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
     public static final String TRANSLATION_SCRIPT_PATH;
@@ -181,8 +178,6 @@ public final class HootProperties {
         TRANSLATION_SERVER_THREAD_COUNT = getProperty("translationServerThreadCount");
         TRANSLATION_SERVER_SCRIPT = getProperty("translationServerScript");
         TRANSLATION_EXT_PATH = getProperty("translationExtPath");
-        CORE_JOB_SERVER_URL = getProperty("coreJobServerUrl");
-        INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI = getProperty("internalJobRequestWaitTimeMilli");
         HGIS_FILTER_SCRIPT = getProperty("hgisFilterScript");
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
@@ -215,7 +210,6 @@ public final class HootProperties {
         TEST_CHANGESET_AUTO_CLOSE = getProperty("testChangesetAutoClose");
         RANDOM_QUERY_SEED = getProperty("randomQuerySeed");
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
-        CHAIN_JOS_STATUS_PING_INTERVAL = getProperty("chainJosStatusPingInterval");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");

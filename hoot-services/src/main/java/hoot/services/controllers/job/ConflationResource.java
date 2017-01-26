@@ -48,6 +48,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,12 @@ import hoot.services.utils.JsonUtils;
 @Transactional
 public class ConflationResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
+
+    @Autowired
+    private RasterToTilesService rasterToTilesService;
+
+    @Autowired
+    private MapResource mapResource;
 
 
     public ConflationResource() {
@@ -133,8 +140,8 @@ public class ConflationResource extends JobControllerBase {
             String input1Name = oParams.get("INPUT1").toString();
             String input2Name = oParams.get("INPUT2").toString();
 
-            JSONArray commandArgs = parseParams(oParams.toJSONString());
-            JSONObject conflationCommand = createMakeScriptJobReq(commandArgs);
+            JSONArray commandArgs = super.parseParams(oParams.toJSONString());
+            JSONObject conflationCommand = super.createMakeScriptJobReq(commandArgs);
 
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
@@ -193,52 +200,16 @@ public class ConflationResource extends JobControllerBase {
                 tags.put("osm_api_db_export_time", now);
             }
 
-            JSONArray mapTagsArgs = new JSONArray();
-
-            JSONObject param = new JSONObject();
-            param.put("value", tags);
-            param.put("paramtype", java.util.Map.class.getName());
-            param.put("isprimitivetype", "false");
-            mapTagsArgs.add(param);
-
-            param = new JSONObject();
-            param.put("value", confOutputName);
-            param.put("paramtype", String.class.getName());
-            param.put("isprimitivetype", "false");
-            mapTagsArgs.add(param);
-
-            JSONObject updateMapsTagsCommand = createReflectionJobReq(mapTagsArgs,
-                    MapResource.class.getName(), "updateTagsDirect");
-
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
 
-            // Density Raster
-            JSONArray rasterTilesArgs = new JSONArray();
+            Command[] commands = {
+                    () -> { return jobExecutionManager.exec(jobId, conflationCommand); },
+                    () -> { return mapResource.updateTagsDirect(tags, confOutputName, jobId); },
+                    () -> { return rasterToTilesService.ingestOSMResourceDirect(confOutputName, jobId, userEmail); }
+            };
 
-            JSONObject rasterTilesparam = new JSONObject();
-            rasterTilesparam.put("value", confOutputName);
-            rasterTilesparam.put("paramtype", String.class.getName());
-            rasterTilesparam.put("isprimitivetype", "false");
-            rasterTilesArgs.add(rasterTilesparam);
-
-            rasterTilesparam = new JSONObject();
-            rasterTilesparam.put("value", userEmail);
-            rasterTilesparam.put("paramtype", String.class.getName());
-            rasterTilesparam.put("isprimitivetype", "false");
-            rasterTilesArgs.add(rasterTilesparam);
-
-            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs,
-                    RasterToTilesService.class.getName(), "ingestOSMResourceDirect");
-
-            JSONArray jobArgs = new JSONArray();
-            jobArgs.add(conflationCommand);
-            jobArgs.add(updateMapsTagsCommand);
-            jobArgs.add(ingestOSMResource);
-
-            logger.debug(jobArgs.toJSONString());
-
-            postChainJobRequest(jobId, jobArgs.toJSONString());
+            processChainJob(jobId, commands);
         }
         catch (WebApplicationException wae) {
             throw wae;

@@ -57,8 +57,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import hoot.services.controllers.job.Command;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
@@ -67,6 +69,10 @@ import hoot.services.utils.MultipartSerializer;
 @Path("/ingest")
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
+
+    @Autowired
+    private RasterToTilesService rasterToTilesService;
+
 
     public FileUploadResource() {
         super(ETL_MAKEFILE);
@@ -109,7 +115,7 @@ public class FileUploadResource extends JobControllerBase {
                                    @QueryParam("FGDB_FC") String fgdbFeatureClasses,
                                     FormDataMultiPart multiPart) {
         String jobId = UUID.randomUUID().toString();
-        JSONArray resA = new JSONArray();
+        JSONArray response = new JSONArray();
 
         try {
             // Save multipart data into file
@@ -224,27 +230,22 @@ public class FileUploadResource extends JobControllerBase {
                 osmCnt = 1;
             }
 
-            String batchJobId = UUID.randomUUID().toString();
-            JSONArray jobArgs = createNativeRequest(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+            Command[] commands = createNativeRequest(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
                     noneTranslation, fgdbFeatureClasses);
 
-            // userEmail
-
-            logger.debug("Posting Job Request for Job :{} With Args: {}", batchJobId, jobArgs.toJSONString());
-
-            postChainJobRequest(batchJobId, jobArgs.toJSONString());
+            super.processChainJob(jobId, commands);
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();
-            res.put("jobid", batchJobId);
+            res.put("jobid", jobId);
             res.put("input", mergedInputList);
             res.put("output", etlName);
 
             String batchJobReqStatus = "success";
             res.put("status", batchJobReqStatus);
 
-            resA.add(res);
+            response.add(res);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -254,19 +255,14 @@ public class FileUploadResource extends JobControllerBase {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(resA.toJSONString()).build();
+        return Response.ok(response.toJSONString()).build();
     }
 
-    /*
-     * final int shpZipCnt, final int osmZipCnt, final int geonamesZipCnt, final
-     * List<String> inputsList,
-     */
-    private JSONArray createNativeRequest(JSONArray reqList, int zipCnt, int shpZipCnt,
+    private Command[] createNativeRequest(JSONArray reqList, int zipCnt, int shpZipCnt,
             int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
             int osmCnt, int geonamesCnt, List<String> zipList, String translation,
             String jobId, String etlName, List<String> inputsList, String userEmail,
             String isNoneTranslation, String fgdbFeatureClasses) throws ParseException {
-        JSONArray jobArgs = new JSONArray();
 
         String inputs = "";
         for (Object r : reqList) {
@@ -374,32 +370,17 @@ public class FileUploadResource extends JobControllerBase {
             }
         }
 
-        JSONArray commandArgs = parseParams(param.toJSONString());
+        JSONArray commandArgs = super.parseParams(param.toJSONString());
+        JSONObject etlCommand = super.createMakeScriptJobReq(commandArgs);
 
-        JSONObject etlCommand = createMakeScriptJobReq(commandArgs);
+        Command[] commands = {
+                // Clip to a bounding box
+                () -> { return jobExecutionManager.exec(jobId, etlCommand); },
+                // Ingest
+                () -> { return rasterToTilesService.ingestOSMResourceDirect(etlName, jobId, userEmail); }
+        };
 
-        // Density Raster
-        String internalJobId = UUID.randomUUID().toString();
-        JSONArray rasterTilesArgs = new JSONArray();
-        JSONObject rasterTilesparam = new JSONObject();
-        rasterTilesparam.put("value", etlName);
-        rasterTilesparam.put("paramtype", String.class.getName());
-        rasterTilesparam.put("isprimitivetype", "false");
-        rasterTilesArgs.add(rasterTilesparam);
-
-        rasterTilesparam = new JSONObject();
-        rasterTilesparam.put("value", userEmail);
-        rasterTilesparam.put("paramtype", String.class.getName());
-        rasterTilesparam.put("isprimitivetype", "false");
-        rasterTilesArgs.add(rasterTilesparam);
-
-        JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
-                "ingestOSMResourceDirect", internalJobId);
-
-        jobArgs.add(etlCommand);
-        jobArgs.add(ingestOSMResource);
-
-        return jobArgs;
+        return commands;
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,

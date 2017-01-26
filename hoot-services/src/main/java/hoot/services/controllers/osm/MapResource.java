@@ -37,6 +37,7 @@ import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,9 +81,9 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.controllers.job.Command;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
-import hoot.services.controllers.job.JobStatusManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
@@ -94,6 +95,7 @@ import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -108,7 +110,8 @@ public class MapResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
     @Autowired
-    private JobStatusManager jobStatusManager;
+    private MapResourcesCleaner mapResourcesCleaner;
+
 
     public MapResource() {
         super(null);
@@ -689,33 +692,19 @@ public class MapResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public JobId deleteLayers(@QueryParam("mapId") String mapId) {
-        String uuid = UUID.randomUUID().toString();
-
         try {
-            JSONObject commandParams = new JSONObject();
-            commandParams.put("value", mapId);
-            commandParams.put("paramtype", String.class.getName());
-            commandParams.put("isprimitivetype", "false");
+            String uuid = UUID.randomUUID().toString();
 
-            JSONArray commandArgs = new JSONArray();
-            commandArgs.add(commandParams);
+            Command command = () -> { return mapResourcesCleaner.exec(mapId); };
 
-            JSONObject command = createReflectionJobReq(commandArgs, MapResourcesCleaner.class.getName(), "exec");
+            super.processJob(uuid, command);
 
-            JSONArray jobArgs = new JSONArray();
-            jobArgs.add(command);
-
-            super.postChainJobRequest(uuid, jobArgs.toJSONString());
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
+            return new JobId(uuid);
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        return new JobId(uuid);
     }
 
     /**
@@ -949,9 +938,11 @@ public class MapResource extends JobControllerBase {
         return Response.ok(json.toJSONString()).build();
     }
 
-    public String updateTagsDirect(java.util.Map<String, String> tags, String mapName) {
-        // _zoomLevels
-        String jobId = UUID.randomUUID().toString();
+    public CommandResult updateTagsDirect(java.util.Map<String, String> tags, String mapName, String jobId) {
+        CommandResult commandResult = new CommandResult();
+        commandResult.setJobId(jobId);
+        commandResult.setCommand("updateTagsDirect()");
+        commandResult.setStart(LocalDateTime.now());
 
         try {
             // Currently we do not have any way to get map id directly from hoot
@@ -962,8 +953,6 @@ public class MapResource extends JobControllerBase {
 
             Long mapId = DbUtils.getMapIdByName(mapName);
             if (mapId != null) {
-                jobStatusManager.addJob(jobId);
-
                 // Hack alert!
                 // Add special handling of stats tag key
                 // We need to read the file in here, because the file doesn't
@@ -990,19 +979,17 @@ public class MapResource extends JobControllerBase {
                 }
 
                 DbUtils.updateMapsTableTags(tags, mapId);
-                jobStatusManager.setCompleted(jobId, null);
             }
         }
         catch (Exception ex) {
-            if (jobStatusManager != null) {
-                jobStatusManager.setFailed(jobId, ex.getMessage());
-            }
-
             String msg = "Failure update map tags resource" + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+            throw new RuntimeException(msg, ex);
         }
 
-        return jobId;
+        commandResult.setFinish(LocalDateTime.now());
+        commandResult.setExitCode(CommandResult.SUCCESS);
+
+        return commandResult;
     }
 
     @GET

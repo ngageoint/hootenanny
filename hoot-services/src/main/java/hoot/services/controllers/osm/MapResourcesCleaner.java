@@ -35,15 +35,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.controllers.job.JobStatusManager;
+import hoot.services.nativeinterfaces.CommandResult;
 
 
 @Service
@@ -51,28 +51,26 @@ import hoot.services.controllers.job.JobStatusManager;
 public class MapResourcesCleaner {
     private static final Logger logger = LoggerFactory.getLogger(MapResourcesCleaner.class);
 
-    @Autowired
-    private JobStatusManager jobStatusManager;
-
     public MapResourcesCleaner() {}
 
-    public String exec(String mapName) {
-        String jobId = UUID.randomUUID().toString();
+    public CommandResult exec(String mapName) {
+        CommandResult commandResult = new CommandResult();
+        commandResult.setCommand("deleteLayerBy(mapName)");
+        commandResult.setStart(LocalDateTime.now());
 
         try {
-            jobStatusManager.addJob(jobId);
-
             deleteLayerBy(mapName);
-
-            jobStatusManager.setCompleted(jobId, null);
         }
         catch (Exception e) {
-            jobStatusManager.setFailed(jobId, e.getMessage());
             String msg = "Error deleting layer where mapName = " +  mapName;
             throw new RuntimeException(msg, e);
         }
 
-        return jobId;
+        commandResult.setExitCode(CommandResult.SUCCESS);
+        commandResult.setFinish(LocalDateTime.now());
+        commandResult.setJobId(UUID.randomUUID().toString());
+
+        return commandResult;
     }
 
     private static void deleteLayerBy(String mapName) {

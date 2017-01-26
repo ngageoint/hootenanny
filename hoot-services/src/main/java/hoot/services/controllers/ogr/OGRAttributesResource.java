@@ -61,8 +61,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
+import hoot.services.controllers.job.Command;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
+
 
 @Controller
 @Path("/info")
@@ -99,7 +101,6 @@ public class OGRAttributesResource extends JobControllerBase {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_TYPE") String inputType, FormDataMultiPart multiPart) {
-        JSONObject response = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -166,15 +167,18 @@ public class OGRAttributesResource extends JobControllerBase {
             param.put("INPUT_ZIPS", mergedZipList);
             params.add(param);
 
-            String argStr = createPostBody(params);
+            JSONObject json = super.createMakeScriptJobReq(params);
 
-            postJobRequest(jobId, argStr);
+            Command command = () -> { return jobExecutionManager.exec(jobId, json); };
+
+            super.processJob(jobId, command);
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
+        JSONObject response = new JSONObject();
         response.put("jobId", jobId);
 
         return Response.ok(response.toJSONString()).build();
@@ -209,7 +213,7 @@ public class OGRAttributesResource extends JobControllerBase {
             }
         }
         catch (Exception e) {
-            String msg = "Error getting attribute: " + id + ".  Cause : " + e.getMessage();
+            String msg = "Error getting attribute: " + id + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

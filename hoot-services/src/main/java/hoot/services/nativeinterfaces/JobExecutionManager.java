@@ -53,8 +53,8 @@ public class JobExecutionManager {
         return this.nativeInterface.getJobProgress(jobId);
     }
 
-    public CommandResult exec(JSONObject command) {
-        return this.nativeInterface.exec(command);
+    public CommandResult exec(String jobId, JSONObject command) {
+        return this.nativeInterface.exec(jobId, command);
     }
 
     public void terminate(String jobId) {

@@ -55,7 +55,7 @@ public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);
 
     public enum JOB_STATUS {
-        RUNNING, COMPLETED, FAILED, CANCELLED, UNKNOWN;
+        RUNNING, COMPLETE, FAILED, CANCELLED, UNKNOWN;
 
         public static JOB_STATUS fromInteger(int value) {
             if ((value >= 0) && (value < JOB_STATUS.values().length)) {
@@ -74,7 +74,7 @@ public class JobStatusManager {
 
     public void addJob(String jobId) {
         try {
-            this.updateJob(jobId, RUNNING, null);
+            this.updateJob(jobId, RUNNING, "PROCESSING", 0.0);
         }
         catch (Exception e) {
             logger.error("Error adding a new job with ID = {} ", jobId, e);
@@ -82,9 +82,9 @@ public class JobStatusManager {
         }
     }
 
-    public void updateJob(String jobId, String statusDetail) {
+    public void updateJob(String jobId, String statusDetail, Double percentComplete) {
         try {
-            this.updateJob(jobId, RUNNING, statusDetail);
+            this.updateJob(jobId, RUNNING, statusDetail, percentComplete);
         }
         catch (Exception e) {
             logger.error("Error updating RUNNING job with ID = {} with new status detail", jobId, e);
@@ -94,7 +94,7 @@ public class JobStatusManager {
 
     public void setCancelled(String jobId, String reason) {
         try {
-            this.updateJob(jobId, CANCELLED, reason);
+            this.updateJob(jobId, CANCELLED, reason, null);
         }
         catch (Exception e) {
             logger.error("Error setting job with ID = {} status to CANCELLED", jobId, e);
@@ -104,10 +104,10 @@ public class JobStatusManager {
 
     public void setCompleted(String jobId, String statusDetail) {
         try {
-            this.updateJob(jobId, COMPLETED, statusDetail);
+            this.updateJob(jobId, COMPLETE, statusDetail, 100.0);
         }
         catch (Exception e) {
-            logger.error("Error setting job with ID = {} status to COMPLETED with status detail = '{}'", jobId, statusDetail, e);
+            logger.error("Error setting job with ID = {} status to COMPLETE with status detail = '{}'", jobId, statusDetail, e);
             throw e;
         }
     }
@@ -115,7 +115,7 @@ public class JobStatusManager {
     public void setFailed(String jobId, String statusDetail) {
         logger.error("Job with ID: {} failed: {}", jobId, statusDetail);
         try {
-            this.updateJob(jobId, FAILED, statusDetail);
+            this.updateJob(jobId, FAILED, statusDetail, null);
         }
         catch (Exception e) {
             logger.error("Error setting job with ID: {} status to FAILED with status detal = '{}'", jobId, statusDetail, e);
@@ -144,9 +144,9 @@ public class JobStatusManager {
      * Updates job. This one should be used to any storage behavior like add or
      * update Since the serialization routine can change.
      */
-    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail) {
+    private void updateJob(String jobId, JOB_STATUS jobStatus, String statusDetail, Double percentComplete) {
         try {
-            updateJobStatus(jobId, jobStatus, statusDetail);
+            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -160,19 +160,22 @@ public class JobStatusManager {
      * @param jobId
      * @param newStatus
      */
-    private void updateJobStatus(String jobId, JOB_STATUS newStatus, String statusDetail) {
+    private void updateJobStatus(String jobId, JOB_STATUS newStatus, String statusDetail, Double percentComplete) {
         JobStatus currentJobStatus = createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
 
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
-            if ((newStatus == COMPLETED) || (newStatus == FAILED)) {
-                currentJobStatus.setPercentComplete(100.0);
-                currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
-            }
-
             currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {
                 currentJobStatus.setStatusDetail(statusDetail);
+            }
+
+            if (percentComplete != null) {
+                currentJobStatus.setPercentComplete(percentComplete);
+            }
+
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+                currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
             }
 
             createQuery().update(jobStatus).where(jobStatus.jobId.eq(jobId)).populate(currentJobStatus).execute();
@@ -181,15 +184,20 @@ public class JobStatusManager {
             currentJobStatus = new JobStatus();
             currentJobStatus.setJobId(jobId);
             currentJobStatus.setStatus(newStatus.ordinal());
+
+            if (statusDetail != null) {
+                currentJobStatus.setStatusDetail(statusDetail);
+            }
+
+            if (percentComplete != null) {
+                currentJobStatus.setPercentComplete(percentComplete);
+            }
+
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             currentJobStatus.setStart(ts);
 
-            if ((newStatus == COMPLETED) || (newStatus == FAILED)) {
-                currentJobStatus.setPercentComplete(100.0);
+            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
                 currentJobStatus.setEnd(ts);
-            }
-            else {
-                currentJobStatus.setPercentComplete(0.0);
             }
 
            createQuery().insert(jobStatus).populate(currentJobStatus).execute();

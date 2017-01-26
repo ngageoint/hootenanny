@@ -41,7 +41,7 @@ public interface NativeInterface {
      *
      * @param command command to execute
      */
-    CommandResult exec(JSONObject command);
+    CommandResult exec(String jobId, JSONObject command);
 
     String getJobProgress(String jobId);
 

@@ -39,10 +39,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+
+import hoot.services.controllers.job.Command;
 
 
 @Controller
@@ -70,7 +73,7 @@ public class HGISFilterResource extends HGISResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) {
-        FilterNonHgisPoisResponse resp = new FilterNonHgisPoisResponse();
+        FilterNonHgisPoisResponse response = new FilterNonHgisPoisResponse();
         String src = request.getSource();
         String output = request.getOutput();
 
@@ -91,15 +94,19 @@ public class HGISFilterResource extends HGISResource {
 
         try {
             String jobId = UUID.randomUUID().toString();
-            String argStr = createBashPostBody(createParamObj(src, output));
-            postJobRequest(jobId, argStr);
-            resp.setJobId(jobId);
+            JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(createParamObj(src, output));
+
+            Command command = () -> { return jobExecutionManager.exec(jobId, filterNonHgisPoisCommand); };
+
+            super.processJob(jobId, command);
+
+            response.setJobId(jobId);
         }
         catch (Exception e) {
             String msg = "Error while trying to filter non-HGIS POI's.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return resp;
+        return response;
     }
 }

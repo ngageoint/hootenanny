@@ -94,11 +94,10 @@ public class ExportJobResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public JobId process(String params) {
-        String jobId = UUID.randomUUID().toString();
-        jobId = "ex_" + jobId.replace("-", "");
+        String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            JSONArray commandArgs = parseParams(params);
+            JSONArray commandArgs = super.parseParams(params);
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -123,37 +122,36 @@ public class ExportJobResource extends JobControllerBase {
                 arg.put("PG_URL", pgUrl);
                 commandArgs.add(arg);
 
-                JSONObject osm2orgCommand = _createPostBody(commandArgs);
+                JSONObject osm2orgCommand = super.createMakeScriptJobReq(commandArgs);
 
-                // This may need change in the future if we decided to use user defined ouputname..
-                String outname = jobId;
+                Command[] commands = {
+                        () -> { return jobExecutionManager.exec(jobId, osm2orgCommand); },
+                        () -> {
+                            try {
+                                return WFSManager.createWfsResource(jobId, jobId);
+                            }
+                            catch (Exception e) {
+                                throw new RuntimeException("Error creating WFS resource!", e);
+                            }
+                        }
+                };
 
-                JSONArray wfsArgs = new JSONArray();
-                JSONObject param = new JSONObject();
-                param.put("value", outname);
-                param.put("paramtype", String.class.getName());
-                param.put("isprimitivetype", "false");
-                wfsArgs.add(param);
-
-                JSONObject createWfsResCommand = createReflectionSycJobReq(wfsArgs,
-                        "hoot.services.wfs.WfsManager", "createWfsResource");
-
-                JSONArray jobArgs = new JSONArray();
-                jobArgs.add(osm2orgCommand);
-                jobArgs.add(createWfsResCommand);
-
-                postChainJobRequest(jobId, jobArgs.toJSONString());
+                super.processChainJob(jobId, commands);
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
-                postJobRequest(jobId, createPostBody(commandArgs));
+                JSONObject exportToOSMCommand = super.createMakeScriptJobReq(commandArgs);
+
+                Command command = () -> { return jobExecutionManager.exec(jobId, exportToOSMCommand); };
+
+                super.processJob(jobId, command);
             }
             else {
                 // replace with with getParameterValue
                 boolean paramFound = false;
                 for (Object commandArg : commandArgs) {
-                    JSONObject jo = (JSONObject) commandArg;
-                    Object oo = jo.get("outputname");
+                    JSONObject json = (JSONObject) commandArg;
+                    Object oo = json.get("outputname");
                     if (oo != null) {
                         String strO = (String) oo;
                         if (!strO.isEmpty()) {
@@ -169,8 +167,11 @@ public class ExportJobResource extends JobControllerBase {
                     commandArgs.add(arg);
                 }
 
-                String argStr = createPostBody(commandArgs);
-                postJobRequest(jobId, argStr);
+                JSONObject exportCommand = super.createMakeScriptJobReq(commandArgs);
+
+                Command command = () -> { return jobExecutionManager.exec(jobId, exportCommand); };
+
+                super.processJob(jobId, command);
             }
         }
         catch (WebApplicationException wae) {

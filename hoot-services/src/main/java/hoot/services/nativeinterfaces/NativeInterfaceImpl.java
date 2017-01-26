@@ -42,6 +42,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.job.JobFieldsValidator;
+import hoot.services.utils.JsonUtils;
+
 
 /**
  * @author Jong Choi
@@ -85,7 +88,7 @@ class NativeInterfaceImpl implements NativeInterface {
     }
 
     @Override
-    public CommandResult exec(JSONObject command) {
+    public CommandResult exec(String jobId, JSONObject command) {
         String exec = command.get("exectype").toString();
 
         String[] commandArr;
@@ -102,14 +105,12 @@ class NativeInterfaceImpl implements NativeInterface {
             throw new IllegalArgumentException("Invalid exectype specified");
         }
 
+        validate(command);
+
         CommandRunner cmdRunner = new CommandRunnerImpl();
 
-        String jobId = null;
-        if (command.get("jobId") != null) {
-            jobId = command.get("jobId").toString();
-            if (jobId != null) {
-                jobProcesses.put(jobId, cmdRunner);
-            }
+        if (jobId != null) {
+            jobProcesses.put(jobId, cmdRunner);
         }
 
         CommandResult commandResult;
@@ -214,5 +215,17 @@ class NativeInterfaceImpl implements NativeInterface {
         Object[] objectArray = execCmd.toArray();
 
         return Arrays.copyOf(objectArray, objectArray.length, String[].class);
+    }
+
+    private void validate(JSONObject command) {
+        String resourceName = command.get("caller").toString();
+        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+
+        Map<String, String> paramsMap = JsonUtils.paramsToMap(command);
+
+        List<String> missingList = new ArrayList<>();
+        if (!validator.validateRequiredExists(paramsMap, missingList)) {
+            throw new RuntimeException("Missing following required field(s): " + missingList);
+        }
     }
 }

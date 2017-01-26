@@ -43,6 +43,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.controllers.ingest.RasterToTilesService;
@@ -52,6 +53,10 @@ import hoot.services.controllers.ingest.RasterToTilesService;
 @Path("/clipdataset")
 public class ClipDatasetResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
+
+    @Autowired
+    private RasterToTilesService rasterToTilesService;
+
 
     public ClipDatasetResource() {
         super(CLIP_DATASET_MAKEFILE_PATH);
@@ -78,45 +83,30 @@ public class ClipDatasetResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public JobId process(String params) {
-        String uuid = UUID.randomUUID().toString();
-        
         try {
-            JSONParser pars = new JSONParser();
-            JSONObject oParams = (JSONObject)pars.parse(params);
-            String clipOutputName = oParams.get("OUTPUT_NAME").toString();
+            String jobId = UUID.randomUUID().toString();
 
-            JSONArray commandArgs = parseParams(params);
-            JSONObject clipCommand = createMakeScriptJobReq(commandArgs);
+            JSONParser parser = new JSONParser();
+            JSONObject arguments = (JSONObject) parser.parse(params);
+            String clipOutputName = arguments.get("OUTPUT_NAME").toString();
 
-            // Density Raster
-            JSONArray rasterTilesArgs = new JSONArray();
+            JSONArray commandArgs = super.parseParams(params);
+            JSONObject clipCommand = super.createMakeScriptJobReq(commandArgs);
 
-            JSONObject rasterTilesparam = new JSONObject();
-            rasterTilesparam.put("value", clipOutputName);
-            rasterTilesparam.put("paramtype", String.class.getName());
-            rasterTilesparam.put("isprimitivetype", "false");
-            rasterTilesArgs.add(rasterTilesparam);
+            Command[] commands = {
+                    // Clip to a bounding box
+                    () -> { return jobExecutionManager.exec(jobId, clipCommand); },
+                    // Ingest
+                    () -> { return rasterToTilesService.ingestOSMResourceDirect(clipOutputName, jobId, null); }
+            };
 
-            rasterTilesparam = new JSONObject();
-            rasterTilesparam.put("value", null);
-            rasterTilesparam.put("paramtype", String.class.getName());
-            rasterTilesparam.put("isprimitivetype", "false");
-            rasterTilesArgs.add(rasterTilesparam);
+            super.processChainJob(jobId, commands);
 
-            JSONObject ingestOSMResource = createReflectionJobReq(rasterTilesArgs, RasterToTilesService.class.getName(),
-                           "ingestOSMResourceDirect");
-
-            JSONArray jobArgs = new JSONArray();
-            jobArgs.add(clipCommand);
-            jobArgs.add(ingestOSMResource);
-
-            postChainJobRequest(uuid, jobArgs.toJSONString());
+            return new JobId(jobId);
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        return new JobId(uuid);
     }
 }

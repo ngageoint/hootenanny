@@ -69,6 +69,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import hoot.services.controllers.job.Command;
 import hoot.services.controllers.job.JobControllerBase;
 
 @Controller
@@ -150,7 +151,6 @@ public class BasemapResource extends JobControllerBase {
             }
 
             for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String jobId = UUID.randomUUID().toString();
                 String fName = pairs.getKey();
 
                 logger.debug("Preparing Basemap Ingest for :{}", fName);
@@ -188,14 +188,19 @@ public class BasemapResource extends JobControllerBase {
                 arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
                 commandArgs.add(arg);
 
-                String argStr = createBashPostBody(commandArgs);
-                postJobRequest(jobId, argStr);
+                JSONObject json = super.createBashScriptJobReq(commandArgs);
 
-                JSONObject res = new JSONObject();
-                res.put("jobid", jobId);
-                res.put("name", bmName);
+                String jobId = UUID.randomUUID().toString();
 
-                jobsArr.add(res);
+                Command command = () -> { return jobExecutionManager.exec(jobId, json); };
+
+                super.processJob(jobId, command);
+
+                JSONObject response = new JSONObject();
+                response.put("jobid", jobId);
+                response.put("name", bmName);
+
+                jobsArr.add(response);
             }
         }
         catch (Exception e) {
