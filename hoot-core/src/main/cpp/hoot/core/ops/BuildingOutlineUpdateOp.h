@@ -74,6 +74,9 @@ private:
   void _mergeNodes(const shared_ptr<Element>& changed,
     const shared_ptr<Relation>& reference);
 
+  void _unionOutline(const RelationPtr& building, shared_ptr<Geometry> outline,
+                     ElementPtr buildingMember);
+
 };
 
 }
