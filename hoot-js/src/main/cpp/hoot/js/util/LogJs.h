@@ -55,7 +55,6 @@ private:
   static v8::Handle<v8::Value> trace(const v8::Arguments& args);
   static v8::Handle<v8::Value> logTrace(const v8::Arguments& args);
   static v8::Handle<v8::Value> logDebug(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logVerbose(const v8::Arguments& args);
   static v8::Handle<v8::Value> logInfo(const v8::Arguments& args);
   static v8::Handle<v8::Value> logWarn(const v8::Arguments& args);
   static v8::Handle<v8::Value> logError(const v8::Arguments& args);
