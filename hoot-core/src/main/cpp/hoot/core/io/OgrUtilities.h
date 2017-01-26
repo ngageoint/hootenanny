@@ -44,7 +44,7 @@ class OgrUtilities
 public:
   OgrUtilities();
 
-  shared_ptr<GDALDataset> createDataSource(QString url);
+  shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   static OgrUtilities& getInstance();
 
@@ -52,9 +52,11 @@ public:
    * Returns true if this is likely a data source OGR can open. This will just do a quick check
    * and doesn't verify that the source exists or is a proper format.
    */
-  bool isReasonableUrl(QString url);
+  bool isReasonableUrl(const QString& url);
 
-  shared_ptr<GDALDataset> openDataSource(QString url);
+  shared_ptr<GDALDataset> openDataSource(const QString& url);
+
+  const char* getDriverName(const QString& url);
 
 private:
   static shared_ptr<OgrUtilities> _theInstance;

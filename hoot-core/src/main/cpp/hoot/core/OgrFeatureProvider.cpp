@@ -25,6 +25,7 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrFeatureProvider.h"
+#include <hoot/core/io/OgrUtilities.h>
 
 // Local Includes
 #include "Exception.h"
@@ -77,7 +78,15 @@ shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString&
     first = false;
   }
 
-  GDALDataset* dataSource = (GDALDataset*)GDALOpenEx(ds.toAscii(), GDAL_OF_ALL, 0, 0, 0);
+  /* Check for the correct driver name in OgrUtilities, if unknown try all drivers.
+   * This can be an issue because drivers are tried in the order that they are
+   * loaded which has been known to cause issues.
+   */
+  const char* driver = OgrUtilities::getInstance().getDriverName(ds);
+  const char* drivers[2] = { driver, NULL };
+  GDALDataset* dataSource = (GDALDataset*)GDALOpenEx(ds.toAscii(), GDAL_OF_ALL,
+    (driver != NULL ? drivers : NULL), NULL, NULL);
+
 
   QString errorMsg = CPLGetLastErrorMsg();
   qDebug() << errorMsg;
