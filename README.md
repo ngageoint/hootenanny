@@ -1,5 +1,7 @@
 ![hoot_logo_icon](https://cloud.githubusercontent.com/assets/17434033/22118537/3dda4c3e-de46-11e6-95fe-ad9c4e933534.png)
 
+![](https://github.com/ngageoint/hootenanny/blob/master/docs/user/images/id/hoot_conflation_new.png)
+
 # Introduction
 _Hootenanny_: 
 
@@ -46,8 +48,7 @@ Hootenanny can export to:
 * Directly to an OSM API database via SQL changeset
 
 Note:
-* .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the relevant 
-associated files
+* .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the associated files
 * WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
 
 # Tag Schemas
@@ -64,21 +65,14 @@ For custom translations, a specific mapping can be defined based on an uploaded 
 Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
-An RPM based installation is also available for CentOS 6.7.
-
-# Getting Started
-Once installed and configured, Hootenanny can be accessed from a browser by opening the application URL.  http://localhost:port/hootenanny-id
-
-![](https://cloud.githubusercontent.com/assets/7560096/11984226/6ed7b6ae-a96e-11e5-9470-dc1f987f0b7a.png)
-
-* Note that the specific port designation can be configured from either the Vagrantfile (if using Vagrant installation approach) or from the Tomcat/conf/server.xml file.  
+An RPM based installation is also available for CentOS 6.7. 
 
 # Documentation
 Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
 
 # Contributing
-Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny development uses the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).  
-## Summary
+Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny developers use the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).  
+## Workflow Summary
 * Open a repository issue for the new feature to be worked on.
 * Perform work for the feature on a new git feature branch named with the number of the issue opened.
 * Open a pull request and assign at least one reviewer to merge the feature branch into the "develop" branch mainline when the feature is complete.
@@ -90,10 +84,7 @@ Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/o
 
 A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open interoperability. 
 
-We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions) 
-so please refer to that page for any questions about general Hootenanny capabilities.
-
-If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
+We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions), so please refer to that page for any questions about general Hootenanny capabilities.  If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
