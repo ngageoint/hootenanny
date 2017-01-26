@@ -38,6 +38,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -45,6 +46,7 @@ import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
+@Ignore
 public class RasterToTilesResourceTest {
     private static File homeFolder;
     private static String tileServerPath;

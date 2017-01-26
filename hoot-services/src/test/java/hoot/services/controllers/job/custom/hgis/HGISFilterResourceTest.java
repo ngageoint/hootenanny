@@ -36,6 +36,7 @@ import javax.ws.rs.WebApplicationException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.ArgumentCaptor;
@@ -45,6 +46,7 @@ import org.mockito.Mockito;
 import hoot.services.UnitTest;
 
 
+@Ignore
 public class HGISFilterResourceTest {
 
     @Test

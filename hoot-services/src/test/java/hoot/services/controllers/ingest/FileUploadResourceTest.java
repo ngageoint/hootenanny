@@ -54,6 +54,7 @@ import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
+@Ignore
 public class FileUploadResourceTest {
     private static File homeFolder;
     private static String original_HOME_FOLDER;
