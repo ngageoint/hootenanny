@@ -18,7 +18,8 @@ function printLayerInfo() {
     for l in $layerNames
     do
         echo $l
-        ogrinfo -q -geom=SUMMARY $path $l | sed "s/  */ /g"
+        ogrinfo -q -geom=SUMMARY $path $l | sed "s/  */ /g" \
+            | sed "s/DBF_DATE_LAST_UPDATE=.*/DBF_DATE_LAST_UPDATE/"
     done
 }
 

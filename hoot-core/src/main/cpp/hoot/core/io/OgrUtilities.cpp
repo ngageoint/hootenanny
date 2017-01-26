@@ -67,7 +67,7 @@ static const char* extensions[][2] = { { "shp"    , "ESRI Shapefile" },
                                        { "vrt"    , "VRT" },
                                        { NULL, NULL }
                                       };
-static const char* beginName[][2] =  { { "PG:"      , "PGeo" },
+static const char* beginName[][2] =  { { "PG:"      , "PostgreSQL" },
                                        { "MySQL:"   , "MySQL" },
                                        { "CouchDB:" , "CouchDB" },
                                        { "GFT:"     , "GFT" },
@@ -89,54 +89,47 @@ OgrUtilities::OgrUtilities()
 OgrUtilities& OgrUtilities::getInstance()
 {
   if (!_theInstance.get())
-  {
       _theInstance.reset(new OgrUtilities());
-  }
   return *_theInstance;
 }
 
-shared_ptr<GDALDataset> OgrUtilities::createDataSource(QString url)
+const char* OgrUtilities::getDriverName(const QString& url)
 {
   const char* driverName = NULL;
   int i = 0;
   while (extensions[i][0] != NULL)
   {
     if (url.endsWith(extensions[i][0]))
-    {
       driverName = extensions[i][1];
-    }
     i++;
   }
   i = 0;
   while (beginName[i][0] != NULL)
   {
     if (url.startsWith(beginName[i][0]))
-    {
       driverName = beginName[i][1];
-    }
     i++;
   }
-  if (driverName == NULL)
-  {
-    throw HootException("No driver found for: " + url);
-  }
+  return driverName;
+}
 
+
+shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
+{
+  QString source = url;
+  const char *driverName = getDriverName(url);
   GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverName);
   if (driver == 0)
-  {
     throw HootException("Error getting driver by name: " + QString(driverName));
-  }
 
   // if the user specifies a shapefile then crop off the .shp and create a directory.
   if (url.toLower().endsWith(".shp"))
-  {
-    url = url.mid(0, url.length() - 4);
-  }
+    source = url.mid(0, url.length() - 4);
 
-  shared_ptr<GDALDataset> result(driver->Create(url.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
+  shared_ptr<GDALDataset> result(driver->Create(source.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
-    throw HootException("Unable to create data source: " + url +
+    throw HootException("Unable to create data source: " + source +
                         " (" + QString(CPLGetLastErrorMsg()) + ")");
   }
 
@@ -155,40 +148,24 @@ shared_ptr<GDALDataset> OgrUtilities::createDataSource(QString url)
   return result;
 }
 
-bool OgrUtilities::isReasonableUrl(QString url)
+bool OgrUtilities::isReasonableUrl(const QString& url)
 {
-  bool reasonable = false;
-
-  int i = 0;
-  while (extensions[i][0] != NULL)
-  {
-    if (url.endsWith(extensions[i][0]))
-    {
-      reasonable = true;
-    }
-    i++;
-  }
-  i = 0;
-  while (beginName[i][0] != NULL)
-  {
-    if (url.startsWith(beginName[i][0]))
-    {
-      reasonable = true;
-    }
-    i++;
-  }
-
-  return reasonable;
+  return getDriverName(url) != NULL;
 }
 
-shared_ptr<GDALDataset> OgrUtilities::openDataSource(QString url)
+shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
 {
-  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(), GDAL_OF_ALL, 0, 0, 0));
+  /* Check for the correct driver name, if unknown try all drivers.
+   * This can be an issue because drivers are tried in the order that they are
+   * loaded which has been known to cause issues.
+   */
+  const char* driver = getDriverName(url);
+  const char* drivers[2] = { driver, NULL };
+  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(), GDAL_OF_ALL,
+    (driver != NULL ? drivers : NULL), NULL, NULL));
 
   if (!result)
-  {
     throw HootException("Unable to open: " + url);
-  }
 
   return result;
 }
