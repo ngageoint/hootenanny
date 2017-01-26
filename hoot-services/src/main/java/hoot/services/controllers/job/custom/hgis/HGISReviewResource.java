@@ -43,6 +43,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,8 +107,17 @@ public class HGISReviewResource extends HGISResource {
 
         try {
             String jobId = UUID.randomUUID().toString();
+            JSONArray commandArgs = new JSONArray();
 
-            JSONObject validationCommand = createBashScriptJobReq(createParamObj(src, outputMap));
+            JSONObject arg = new JSONObject();
+            arg.put("SOURCE", src);
+            commandArgs.add(arg);
+
+            arg = new JSONObject();
+            arg.put("OUTPUT", outputMap);
+            commandArgs.add(arg);
+
+            JSONObject validationCommand = createBashScriptJobReq(commandArgs);
 
             Command[] commands = {
                     () -> { return jobExecutionManager.exec(jobId, validationCommand); },

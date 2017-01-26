@@ -56,7 +56,7 @@ public class HGISReviewResourceTest {
         HGISReviewResource real = new HGISReviewResource();
         HGISReviewResource spy = Mockito.spy(real);
 
-        Mockito.doReturn(true).when(spy).mapExists(Matchers.anyString());
+        HGISResource.mapExists(Matchers.anyString());
 
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -136,7 +136,7 @@ public class HGISReviewResourceTest {
             HGISReviewResource real = new HGISReviewResource();
             HGISReviewResource spy = Mockito.spy(real);
 
-            Mockito.doReturn(false).when(spy).mapExists(Matchers.anyString());
+            HGISResource.mapExists(Matchers.anyString());
 
             ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
 

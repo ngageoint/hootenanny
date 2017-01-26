@@ -29,8 +29,6 @@ package hoot.services.controllers.job.custom.hgis;
 import static hoot.services.HootProperties.*;
 import static hoot.services.models.db.QMaps.maps;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +53,7 @@ public class HGISResource extends JobControllerBase {
      * @param mapName
      * @return returns true when exists else false
      */
-    boolean mapExists(String mapName) {
+    static boolean mapExists(String mapName) {
         boolean exists;
 
         try {
@@ -81,28 +79,8 @@ public class HGISResource extends JobControllerBase {
     }
 
     /**
-     * Default parameter creator. Child class probably will override this to
-     * meet its need. TODO: We would need to figure out the transport object and
-     * replace jsonarray with it
-     */
-    static JSONArray createParamObj(String in, String out) {
-        JSONArray commandArgs = new JSONArray();
-
-        JSONObject arg = new JSONObject();
-        arg.put("SOURCE", generateDbMapParam(in));
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("OUTPUT", generateDbMapParam(out));
-        commandArgs.add(arg);
-
-        return commandArgs;
-    }
-
-    /**
      * Determines whether a maps data has been prepared for review; more or less
-     * a wrapper with a more identifiable name around ModelDaoUtils map
-     * functionality
+     * a wrapper with a more identifiable name around ModelDaoUtils map functionality
      *
      * @param mapIdStr
      *            map ID; may be a map ID or unique map name

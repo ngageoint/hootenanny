@@ -100,7 +100,6 @@ public class RasterToTilesService extends JobControllerBase {
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
             JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapId);
-            argStr.put("jobId", jobId);
 
             return super.jobExecutionManager.exec(jobId, argStr);
         }

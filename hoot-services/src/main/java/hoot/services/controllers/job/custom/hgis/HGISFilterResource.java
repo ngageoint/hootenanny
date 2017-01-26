@@ -39,6 +39,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +95,18 @@ public class HGISFilterResource extends HGISResource {
 
         try {
             String jobId = UUID.randomUUID().toString();
-            JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(createParamObj(src, output));
+
+            JSONArray commandArgs = new JSONArray();
+
+            JSONObject arg = new JSONObject();
+            arg.put("SOURCE", generateDbMapParam(src));
+            commandArgs.add(arg);
+
+            arg = new JSONObject();
+            arg.put("OUTPUT", generateDbMapParam(output));
+            commandArgs.add(arg);
+
+            JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(commandArgs);
 
             Command command = () -> { return jobExecutionManager.exec(jobId, filterNonHgisPoisCommand); };
 
