@@ -1,5 +1,13 @@
 Feature: DG G-EGD plugin
 
+    Scenario: The image carousel says to zoom in
+        Given I am on Hootenanny at location "10.00/151.21546/-33.85727"
+        And I resize the window
+        And I click Get Started
+        Given that the EGD plugin is available
+        When I click the image carousel button
+        Then I should see "Zoom in to display image metadata"
+
     Scenario: The image carousel loads tiles
         Given I am on Hootenanny at location "18.00/151.21546/-33.85727"
         And I resize the window
@@ -34,12 +42,4 @@ Feature: DG G-EGD plugin
         And I wait 1 seconds
         When I click the image carousel button
         And I wait 1 seconds
-        Then I should see "Zoom in to display image metadata"
-
-    Scenario: The image carousel says to zoom in
-        Given I am on Hootenanny at location "10.00/151.21546/-33.85727"
-        And I resize the window
-        And I click Get Started
-        Given that the EGD plugin is available
-        When I click the image carousel button
         Then I should see "Zoom in to display image metadata"
