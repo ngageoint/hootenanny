@@ -91,6 +91,9 @@ class NativeInterfaceImpl implements NativeInterface {
     public CommandResult exec(String jobId, JSONObject command) {
         String exec = command.get("exectype").toString();
 
+        // Always add jobId to every command executed
+        command.put("jobId", jobId);
+
         String[] commandArr;
         if (exec.equalsIgnoreCase("hoot")) {
             commandArr = createCmdArray(command);
