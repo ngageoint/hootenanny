@@ -203,8 +203,8 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
                 const QString errMsg =
-                    QString("Element with uncleanable topology.  Error occurred during union ") +
-                    QString("operation of element: ") + way->getElementId().toString();
+                  "Marking parent element for review for element with uncleanable topology: " +
+                  way->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
                 LOG_WARN(errMsg + ": " + QString(e.what()))
               }
@@ -247,8 +247,8 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
                 const QString errMsg =
-                    QString("Element with uncleanable topology.  Error occurred during union ") +
-                    QString("operation of element: ") + relation->getElementId().toString();
+                  "Marking parent element for review for element with uncleanable topology: " +
+                  relation->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
                 LOG_WARN(errMsg + ": " + QString(e.what()))
               }
