@@ -487,10 +487,9 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
   return dbIdentifier;
 }
 
-/// @todo This should use ApiDb::COORDINATE_SCALE instead.
 unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
 {
-  return ( round(degrees * 10000000.0) );
+  return (round(degrees * ApiDb::COORDINATE_SCALE));
 }
 
 void PostgresqlDumpfileWriter::_writeNodeToTables(
