@@ -14,10 +14,10 @@ Feature: Review Bookmarks
         Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
         Then I wait 30 "seconds" to see "Conflate"
         And I press "Conflate"
-        Then I fill "saveAs" input with "mergedBookmarkTest"
+        Then I fill "saveAs" input with "mergedBookmarkCucumberTest"
         And I scroll element into view and press "conflate2"
         Then I wait 5 "seconds" to see "Conflating …"
-        Then I wait 2 "minutes" to see "mergedBookmarkTest"
+        Then I wait 2 "minutes" to see "mergedBookmarkCucumberTest"
 
     Scenario: Create Bookmark with Note
         Then I click the "Bookmark Review" link
@@ -49,6 +49,7 @@ Feature: Review Bookmarks
     Scenario: Add new comment to bookmark
         Then I select the "sprocket" div
         And I click on the "Review Bookmarks" option in the "settingsSidebar"
+        Then I wait
         And I click the "Cucumber Bookmark 1:" link
         Then I wait 30 "seconds" to see "Cucumber Bookmark 1"
         And I wait 30 "seconds" to see "User cucumber1@hootenanny.digitalglobe.com commented"
@@ -65,7 +66,7 @@ Feature: Review Bookmarks
         And I accept the alert
         And I wait 30 seconds
         And I accept the alert
-        Then I wait 30 "seconds" to see "mergedBookmarkTest"
+        Then I wait 30 "seconds" to see "mergedBookmarkCucumberTest"
         Then I wait 30 "seconds" to not see "Please wait while panning to review item."
         And I click on ".activeReviewFeature"
         Then I click the "preset-close" button
@@ -95,18 +96,18 @@ Feature: Review Bookmarks
         And I check the "cucumber2@hootenanny.digitalglobe.com" checkbox
         And I wait 30 "seconds" to see "Cucumber Bookmark 2"
         Then I click on the "Filter By Layers" label
-        And I wait 30 "seconds" to see "mergedBookmarkTest"
-        Then I uncheck the "mergedBookmarkTest" checkbox
+        And I wait 30 "seconds" to see "mergedBookmarkCucumberTest"
+        Then I uncheck the "mergedBookmarkCucumberTest" checkbox
         And I wait 30 "seconds" to not see "Cucumber Bookmark 1"
         And I wait 30 "seconds" to not see "Cucumber Bookmark 2"
-        And I check the "mergedBookmarkTest" checkbox
+        And I check the "mergedBookmarkCucumberTest" checkbox
         And I wait 30 "seconds" to see "Cucumber Bookmark 1"
         And I wait 30 "seconds" to see "Cucumber Bookmark 2"
-        Then I uncheck the "mergedBookmarkTest" checkbox
+        Then I uncheck the "mergedBookmarkCucumberTest" checkbox
         And I press "big.loud" span with text "Reset"
         And I wait 30 "seconds" to see "Cucumber Bookmark 1"
         And I wait 30 "seconds" to see "Cucumber Bookmark 2"
-        And I should see checkbox "mergedBookmarkTest" checked
+        And I should see checkbox "mergedBookmarkCucumberTest" checked
 
     Scenario: Delete Bookmark
         Then I click on the "trash" button in the "reviewBookmarksContent"
@@ -116,12 +117,12 @@ Feature: Review Bookmarks
         Then I click on the "Datasets" option in the "settingsSidebar"
         And I press "Refresh Datasets"
         And I wait
-        When I click the "mergedBookmarkTest" Dataset
-        When I context click the "mergedBookmarkTest" Dataset
+        When I click the "mergedBookmarkCucumberTest" Dataset
+        When I context click the "mergedBookmarkCucumberTest" Dataset
         And I click the "Delete (1)" context menu item
         And I accept the alert
         And I accept the alert
         Then I click on the "Review Bookmarks" option in the "settingsSidebar"
         And I wait 5 "seconds" to not see "Cucumber Bookmark"
         Then I click on the "Datasets" option in the "settingsSidebar"
-        #And I wait 5 "seconds" to not see "mergedBookmarkTest"
+        #And I wait 5 "seconds" to not see "mergedBookmarkCucumberTest"
