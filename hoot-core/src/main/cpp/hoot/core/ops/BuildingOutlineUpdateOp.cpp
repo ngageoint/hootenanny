@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -139,14 +139,15 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
   {
     if (entries[i].role == "outline")
     {
+      LOG_TRACE("Removing outline from building: " << entries[i].getElementId() << "...");
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
     else if (entries[i].role == "part")
     {
+      LOG_TRACE("Processing building part: " << entries[i].getElementId() << "...");
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
         shared_ptr<Way> way = _map->getWay(entries[i].getElementId().getId());
-
         if (way->getNodeCount() >= 4)
         {
           shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
@@ -156,9 +157,9 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
           }
           catch (geos::util::TopologyException& e)
           {
-            LOG_VARD(building->toString());
-            LOG_DEBUG("Attempting to clean way geometry after union error: " << e.what());
-            LOG_VARD(way->toString());
+            LOG_VART(building->toString());
+            LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
+            LOG_VART(way->toString());
             Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
             try
             {
@@ -168,15 +169,11 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
             {
               //couldn't clean, so mark parent relation for review (eventually we'll come up with
               //cleaning that works here)
-              ElementPtr elem = boost::dynamic_pointer_cast<Element>(building);
-              ReviewMarker().mark(
-                _map,
-                elem,
-                "Element with uncleanable topology.  Error occurred during union operation.",
-                ReviewMarker::getBadGeometryType());
-              LOG_WARN(
-                "Element with uncleanable topology.  Error occurred during union operation: " +
-                QString(e.what()))
+              const QString errMsg =
+                QString("Element with uncleanable topology.  Error occurred during union ") +
+                QString("operation of element: ") + way->getElementId().toString();
+              ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+              LOG_WARN(errMsg + ": " + QString(e.what()))
             }
           }
         }
@@ -187,7 +184,31 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
         if (relation->isMultiPolygon())
         {
           shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
-          outline.reset(outline->Union(g.get()));
+          try
+          {
+            outline.reset(outline->Union(g.get()));
+          }
+          catch (geos::util::TopologyException& e)
+          {
+            LOG_VART(building->toString());
+            LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
+            LOG_VART(relation->toString());
+            Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
+            try
+            {
+              outline.reset(outline->Union(cleanedGeom));
+            }
+            catch (geos::util::TopologyException& e)
+            {
+              //couldn't clean, so mark parent relation for review (eventually we'll come up with
+              //cleaning that works here)
+              const QString errMsg =
+                QString("Element with uncleanable topology.  Error occurred during union ") +
+                QString("operation of element: ") + relation->getElementId().toString();
+              ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+              LOG_WARN(errMsg + ": " + QString(e.what()))
+            }
+          }
         }
         else
         {
@@ -201,8 +222,10 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
 
   if (outline->isEmpty() == false)
   {
-    const shared_ptr<Element> outlineElement = GeometryConverter(_map).convertGeometryToElement(
-      outline.get(), building->getStatus(), building->getCircularError());
+    LOG_TRACE("Processing outline...");
+    const shared_ptr<Element> outlineElement =
+      GeometryConverter(_map).convertGeometryToElement(
+        outline.get(), building->getStatus(), building->getCircularError());
     _mergeNodes(outlineElement, building);
     outlineElement->setTags(building->getTags());
     // we don't need the relation "type" tag.
