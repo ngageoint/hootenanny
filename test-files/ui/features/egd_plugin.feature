@@ -5,7 +5,7 @@ Feature: DG G-EGD plugin
         And I resize the window
         And I click Get Started
         Given that the EGD plugin is available
-        When I click the image carousel button
+        When I open the image carousel
         Then I should see "Zoom in to display image metadata"
 
     Scenario: The image carousel loads tiles
@@ -13,7 +13,7 @@ Feature: DG G-EGD plugin
         And I resize the window
         And I click Get Started
         Given that the EGD plugin is available
-        When I click the image carousel button
+        When I open the image carousel
         Then I wait 10 seconds to see image thumbnails
         When I hover over the first thumbnail
         Then I should see an image footprint on the map
@@ -40,6 +40,6 @@ Feature: DG G-EGD plugin
         And I wait 1 seconds
         When I click on "button.zoom-out"
         And I wait 1 seconds
-        When I click the image carousel button
+        When I open the image carousel
         And I wait 1 seconds
         Then I should see "Zoom in to display image metadata"
