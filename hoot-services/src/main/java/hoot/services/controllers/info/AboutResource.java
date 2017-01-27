@@ -45,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.NativeInterface;
+import hoot.services.nativeinterfaces.ExternalCommandInterface;
 
 
 /**
@@ -57,7 +57,7 @@ public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
     @Autowired
-    private NativeInterface nativeInterface;
+    private ExternalCommandInterface externalCommandInterface;
 
     public AboutResource() {}
 
@@ -215,7 +215,7 @@ public class AboutResource {
         command.put("params", params);
         command.put("caller", AboutResource.class.getSimpleName());
 
-        CommandResult commandResult = this.nativeInterface.exec(null, command);
+        CommandResult commandResult = this.externalCommandInterface.exec(null, command);
         String output = commandResult.getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);

@@ -29,10 +29,10 @@ package hoot.services.controllers.info;
 import org.json.simple.JSONObject;
 
 import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.NativeInterface;
+import hoot.services.nativeinterfaces.ExternalCommandInterface;
 
 
-public class NativeInterfaceStubImpl implements NativeInterface {
+public class ExternalCommandInterfaceStubImpl implements ExternalCommandInterface {
     @Override
     public CommandResult exec(String jobId, JSONObject command) {
         CommandResult result = new CommandResult();

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,38 +26,15 @@
  */
 package hoot.services.nativeinterfaces;
 
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import hoot.services.controllers.job.Command;
 
 
-/**
- * @author Jong Choi
- *
- *   The purpose of this class is to provide one additional indirection for managing Native Interface execution.
- **/
-@Transactional
-@Component("jobExecutionManagerNative")
-public class JobExecutionManager {
-    private static final Logger logger = LoggerFactory.getLogger(JobExecutionManager.class);
+public interface InternalCommandInterface {
 
-    @Autowired
-    private NativeInterface nativeInterface;
-
-    public JobExecutionManager() {}
-
-    public String getProgress(String jobId) {
-        return this.nativeInterface.getJobProgress(jobId);
-    }
-
-    public CommandResult exec(String jobId, JSONObject command) {
-        return this.nativeInterface.exec(jobId, command);
-    }
-
-    public void terminate(String jobId) {
-        this.nativeInterface.terminate(jobId);
-    }
+    /**
+     * Performs execution. All required meta data should be in command parameter.
+     *
+     * @param command command to execute
+     */
+    CommandResult exec(String jobId, Command command);
 }

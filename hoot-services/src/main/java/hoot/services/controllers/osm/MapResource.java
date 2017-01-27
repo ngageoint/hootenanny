@@ -31,13 +31,11 @@ import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +62,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -95,7 +92,6 @@ import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeinterfaces.CommandResult;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -936,60 +932,6 @@ public class MapResource extends JobControllerBase {
         json.put("success", true);
 
         return Response.ok(json.toJSONString()).build();
-    }
-
-    public CommandResult updateTagsDirect(java.util.Map<String, String> tags, String mapName, String jobId) {
-        CommandResult commandResult = new CommandResult();
-        commandResult.setJobId(jobId);
-        commandResult.setCommand("updateTagsDirect()");
-        commandResult.setStart(LocalDateTime.now());
-
-        try {
-            // Currently we do not have any way to get map id directly from hoot
-            // core command when it runs so for now we need get the all the map ids matching name and pick
-            // first one..
-            // THIS WILL NEED TO CHANGE when we implement handle map by Id
-            // instead of name..
-
-            Long mapId = DbUtils.getMapIdByName(mapName);
-            if (mapId != null) {
-                // Hack alert!
-                // Add special handling of stats tag key
-                // We need to read the file in here, because the file doesn't
-                // exist at the time
-                // the updateMapsTagsCommand job is created in
-                // ConflationResource.java
-                String statsKey = "stats";
-                if (tags.containsKey(statsKey)) {
-                    String statsName = tags.get(statsKey);
-                    File statsFile = new File(statsName);
-                    if (statsFile.exists()) {
-                        logger.debug("Found {}", statsName);
-                        String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                        tags.put(statsKey, stats);
-
-                        if (!statsFile.delete()) {
-                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
-                        }
-                    }
-                    else {
-                        logger.error("Can't find {}", statsName);
-                        tags.remove(statsKey);
-                    }
-                }
-
-                DbUtils.updateMapsTableTags(tags, mapId);
-            }
-        }
-        catch (Exception ex) {
-            String msg = "Failure update map tags resource" + ex.getMessage();
-            throw new RuntimeException(msg, ex);
-        }
-
-        commandResult.setFinish(LocalDateTime.now());
-        commandResult.setExitCode(CommandResult.SUCCESS);
-
-        return commandResult;
     }
 
     @GET

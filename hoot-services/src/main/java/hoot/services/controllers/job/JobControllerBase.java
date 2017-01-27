@@ -41,7 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.ExternalCommandInterface;
+import hoot.services.nativeinterfaces.InternalCommandInterface;
 
 
 public class JobControllerBase {
@@ -55,7 +56,10 @@ public class JobControllerBase {
     private JobStatusManager jobStatusManager;
 
     @Autowired
-    protected JobExecutionManager jobExecutionManager;
+    protected ExternalCommandInterface externalCommandInterface;
+
+    @Autowired
+    protected InternalCommandInterface internalCommandInterface;
 
     protected String processScriptName;
 

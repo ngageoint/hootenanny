@@ -36,25 +36,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.nativeinterfaces.CommandResult;
 
 
-@Transactional
 @Component
-public class RasterToTilesService extends JobControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(RasterToTilesService.class);
+@Transactional
+public class RasterToTilesCommandFactory {
+    private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommandFactory.class);
 
-
-    public RasterToTilesService() {
-        super(RASTER_TO_TILES);
-    }
-
-    public CommandResult ingestOSMResourceDirect(String name, String jobId, String userEmail) {
+    public JSONObject createExternalCommand(String name, String userEmail) {
         long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
         BoundingBox queryBounds;
@@ -99,13 +92,20 @@ public class RasterToTilesService extends JobControllerBase {
             String zoomList = zoomInfo.get("zoomlist").toString();
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
-            JSONObject argStr = createCommandObj(name, zoomList, rasterSize, userEmail, mapId);
-
-            return super.jobExecutionManager.exec(jobId, argStr);
+            return createCommandObj(name, zoomList, rasterSize, userEmail, mapId);
         }
     }
 
-    private JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
+    private static JSONObject createMakeScriptJobReq(JSONArray args) {
+        JSONObject command = new JSONObject();
+        command.put("exectype", "make");
+        command.put("exec", RASTER_TO_TILES);
+        command.put("caller", RasterToTilesCommandFactory.class.getSimpleName());
+        command.put("params", args);
+        return command;
+    }
+
+    private static JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject argument = new JSONObject();
@@ -134,13 +134,13 @@ public class RasterToTilesService extends JobControllerBase {
             commandArgs.add(argument);
         }
 
-        JSONObject jsonArgs = super.createMakeScriptJobReq(commandArgs);
+        JSONObject jsonArgs = createMakeScriptJobReq(commandArgs);
         jsonArgs.put("erroraswarning", "true");
 
         return jsonArgs;
     }
 
-    private JSONObject getZoomInfo(double maxDelta) {
+    private static JSONObject getZoomInfo(double maxDelta) {
         JSONObject zoomInfo = new JSONObject();
         int rasterSize = 500;
 

@@ -39,7 +39,7 @@ import hoot.services.models.osm.ModelDaoUtils;
 /**
  * Base code for HGIS specific Rest endpoint.
  */
-public class HGISResource extends JobControllerBase {
+abstract class HGISResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
 

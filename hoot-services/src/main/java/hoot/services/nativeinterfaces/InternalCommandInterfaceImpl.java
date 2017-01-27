@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,29 +26,18 @@
  */
 package hoot.services.nativeinterfaces;
 
-import org.json.simple.JSONObject;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import hoot.services.controllers.job.Command;
 
 
-/**
- * @author Jong Choi
- *
- *         Abstract class for Native Interface.
- */
-public interface NativeInterface {
+@Transactional
+@Component
+public class InternalCommandInterfaceImpl implements InternalCommandInterface {
 
-    /**
-     * Performs execution. All required meta data should be in command parameter.
-     *
-     * @param command command to execute
-     */
-    CommandResult exec(String jobId, JSONObject command);
-
-    String getJobProgress(String jobId);
-
-    /**
-     * Terminates job
-     *
-     * @param jobId ID of the job to terminate
-     */
-    void terminate(String jobId);
+    @Override
+    public CommandResult exec(String jobId, Command command) {
+        return command.execute();
+    }
 }

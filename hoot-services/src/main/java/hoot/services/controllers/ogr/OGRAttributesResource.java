@@ -169,7 +169,7 @@ public class OGRAttributesResource extends JobControllerBase {
 
             JSONObject json = super.createMakeScriptJobReq(params);
 
-            Command command = () -> { return jobExecutionManager.exec(jobId, json); };
+            Command command = () -> { return externalCommandInterface.exec(jobId, json); };
 
             super.processJob(jobId, command);
         }

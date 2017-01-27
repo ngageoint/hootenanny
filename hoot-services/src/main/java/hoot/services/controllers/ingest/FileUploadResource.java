@@ -59,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.Command;
 import hoot.services.controllers.job.JobControllerBase;
@@ -67,11 +68,12 @@ import hoot.services.utils.MultipartSerializer;
 
 @Controller
 @Path("/ingest")
+@Transactional
 public class FileUploadResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
 
     @Autowired
-    private RasterToTilesService rasterToTilesService;
+    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
 
     public FileUploadResource() {
@@ -375,9 +377,12 @@ public class FileUploadResource extends JobControllerBase {
 
         Command[] commands = {
                 // Clip to a bounding box
-                () -> { return jobExecutionManager.exec(jobId, etlCommand); },
+                () -> { return externalCommandInterface.exec(jobId, etlCommand); },
                 // Ingest
-                () -> { return rasterToTilesService.ingestOSMResourceDirect(etlName, jobId, userEmail); }
+                () -> {
+                    JSONObject rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
+                    return externalCommandInterface.exec(jobId, rasterToTilesCommand);
+                }
         };
 
         return commands;

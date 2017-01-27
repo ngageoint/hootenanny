@@ -67,15 +67,62 @@ public class HGISReviewResource extends HGISResource {
         super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
     }
 
+    private class UpdateMapTagsCommand implements Command {
+
+        private final String jobId;
+        private final String mapName;
+
+        UpdateMapTagsCommand(String jobId, String mapName) {
+            this.jobId = jobId;
+            this.mapName = mapName;
+        }
+
+        @Override
+        public CommandResult execute() {
+            CommandResult commandResult = new CommandResult();
+            commandResult.setCommand("updateMapsTag");
+            commandResult.setJobId(this.jobId);
+            commandResult.setStart(LocalDateTime.now());
+
+            updateMapsTag();
+
+            commandResult.setExitCode(CommandResult.SUCCESS);
+            commandResult.setFinish(LocalDateTime.now());
+
+            return commandResult;
+        }
+
+        private void updateMapsTag() {
+            try {
+                long mapId = ModelDaoUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
+                updateMapTagWithReviewType(mapId);
+            }
+            catch (ReviewMapTagUpdateException e) {
+                throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
+            }
+        }
+
+        private void updateMapTagWithReviewType(long mapId) throws ReviewMapTagUpdateException {
+            Map<String, String> tags = new HashMap<>();
+            tags.put("reviewtype", "hgisvalidation");
+
+            long count = DbUtils.updateMapsTableTags(tags, mapId);
+
+            if (count < 1) {
+                throw new ReviewMapTagUpdateException("Failed to update maps table for mapid = " + mapId);
+            }
+        }
+    }
+
     /**
-     * This resource prepares existing map for 30% of random HGIS specific
-     * validation.
+     * This resource prepares existing map for 30% of random HGIS specific validation.
      * <p>
-     * POST hoot-services/job/review/custom/HGIS/preparevalidation
+     *     POST hoot-services/job/review/custom/HGIS/preparevalidation
      * <p>
-     * { "sourceMap":"AllDataTypesA", //Name of source layer
-     * "outputMap":"AllDataTypesAtest1" //Name of new output layer with
-     * reviewables }
+     * {
+     *   "sourceMap":"AllDataTypesA", //Name of source layer
+     *   "outputMap":"AllDataTypesAtest1" //Name of new output layer with reviewables
+     * }
      *
      * @param request
      * @return Job ID
@@ -117,11 +164,12 @@ public class HGISReviewResource extends HGISResource {
             arg.put("OUTPUT", outputMap);
             commandArgs.add(arg);
 
-            JSONObject validationCommand = createBashScriptJobReq(commandArgs);
+            JSONObject validationCommand = super.createBashScriptJobReq(commandArgs);
+            Command updateMapTagsCommand = new UpdateMapTagsCommand(jobId, outputMap);
 
             Command[] commands = {
-                    () -> { return jobExecutionManager.exec(jobId, validationCommand); },
-                    () -> { return updateMapsTag(jobId, outputMap); }
+                    () -> { return super.externalCommandInterface.exec(jobId, validationCommand); },
+                    () -> { return super.internalCommandInterface.exec(jobId, updateMapTagsCommand); }
             };
 
             super.processChainJob(jobId, commands);
@@ -134,36 +182,5 @@ public class HGISReviewResource extends HGISResource {
         }
 
         return response;
-    }
-
-    private static CommandResult updateMapsTag(String jobId, String mapName) {
-        CommandResult commandResult = new CommandResult();
-        commandResult.setCommand("updateMapsTag");
-        commandResult.setJobId(jobId);
-        commandResult.setStart(LocalDateTime.now());
-
-        try {
-            long mapId = ModelDaoUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
-            updateMapTagWithReviewType(mapId);
-        }
-        catch (ReviewMapTagUpdateException e) {
-            throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
-        }
-
-        commandResult.setExitCode(CommandResult.SUCCESS);
-        commandResult.setFinish(LocalDateTime.now());
-
-        return commandResult;
-    }
-
-    private static void updateMapTagWithReviewType(long mapId) throws ReviewMapTagUpdateException {
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reviewtype", "hgisvalidation");
-
-        long count = DbUtils.updateMapsTableTags(tags, mapId);
-
-        if (count < 1) {
-            throw new ReviewMapTagUpdateException("Failed to update maps table for mapid = " + mapId);
-        }
     }
 }

@@ -108,7 +108,7 @@ public class HGISFilterResource extends HGISResource {
 
             JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(commandArgs);
 
-            Command command = () -> { return jobExecutionManager.exec(jobId, filterNonHgisPoisCommand); };
+            Command command = () -> { return externalCommandInterface.exec(jobId, filterNonHgisPoisCommand); };
 
             super.processJob(jobId, command);
 

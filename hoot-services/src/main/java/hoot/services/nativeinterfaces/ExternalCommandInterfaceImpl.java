@@ -52,7 +52,7 @@ import hoot.services.utils.JsonUtils;
  *         The purpose of this class is to run command line execution in a
  *         separate process. It inherit from INativeInterface so it can be
  *         switched out with any other class implementing INativeInterface if
- *         needed. It is called by jobExecutionManager and it gets associated
+ *         needed. It is called by nativeInterface and it gets associated
  *         through spring entry located in applicationContext.xml. This class
  *         handles 2 types of execution format. 1. direct exec call like hoot
  *         --ogr2osm target input output if the "exectype" is "hoot" 2. make
@@ -62,8 +62,8 @@ import hoot.services.utils.JsonUtils;
 @Transactional
 @Component
 @Profile("production")
-class NativeInterfaceImpl implements NativeInterface {
-    private static final Logger logger = LoggerFactory.getLogger(NativeInterfaceImpl.class);
+class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
+    private static final Logger logger = LoggerFactory.getLogger(ExternalCommandInterfaceImpl.class);
 
     // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.
     private static final Map<String, CommandRunner> jobProcesses = new ConcurrentHashMap<>();

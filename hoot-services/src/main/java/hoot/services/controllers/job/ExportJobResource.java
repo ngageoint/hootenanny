@@ -125,7 +125,7 @@ public class ExportJobResource extends JobControllerBase {
                 JSONObject osm2orgCommand = super.createMakeScriptJobReq(commandArgs);
 
                 Command[] commands = {
-                        () -> { return jobExecutionManager.exec(jobId, osm2orgCommand); },
+                        () -> { return externalCommandInterface.exec(jobId, osm2orgCommand); },
                         () -> {
                             try {
                                 return WFSManager.createWfsResource(jobId, jobId);
@@ -142,7 +142,7 @@ public class ExportJobResource extends JobControllerBase {
                 commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
                 JSONObject exportToOSMCommand = super.createMakeScriptJobReq(commandArgs);
 
-                Command command = () -> { return jobExecutionManager.exec(jobId, exportToOSMCommand); };
+                Command command = () -> { return externalCommandInterface.exec(jobId, exportToOSMCommand); };
 
                 super.processJob(jobId, command);
             }
@@ -169,7 +169,7 @@ public class ExportJobResource extends JobControllerBase {
 
                 JSONObject exportCommand = super.createMakeScriptJobReq(commandArgs);
 
-                Command command = () -> { return jobExecutionManager.exec(jobId, exportCommand); };
+                Command command = () -> { return externalCommandInterface.exec(jobId, exportCommand); };
 
                 super.processJob(jobId, command);
             }

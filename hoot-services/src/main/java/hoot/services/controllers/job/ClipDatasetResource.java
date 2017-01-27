@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.controllers.ingest.RasterToTilesService;
+import hoot.services.controllers.ingest.RasterToTilesCommandFactory;
 
 
 @Controller
@@ -55,7 +55,7 @@ public class ClipDatasetResource extends JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
     @Autowired
-    private RasterToTilesService rasterToTilesService;
+    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
 
     public ClipDatasetResource() {
@@ -95,9 +95,12 @@ public class ClipDatasetResource extends JobControllerBase {
 
             Command[] commands = {
                     // Clip to a bounding box
-                    () -> { return jobExecutionManager.exec(jobId, clipCommand); },
+                    () -> { return externalCommandInterface.exec(jobId, clipCommand); },
                     // Ingest
-                    () -> { return rasterToTilesService.ingestOSMResourceDirect(clipOutputName, jobId, null); }
+                    () -> {
+                        JSONObject rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(clipOutputName, null);
+                        return externalCommandInterface.exec(jobId, rasterToTilesCommand);
+                    }
             };
 
             super.processChainJob(jobId, commands);

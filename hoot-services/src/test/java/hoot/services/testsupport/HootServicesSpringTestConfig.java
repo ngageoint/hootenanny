@@ -44,8 +44,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.HootServicesSpringConfig;
-import hoot.services.controllers.info.NativeInterfaceStubImpl;
-import hoot.services.nativeinterfaces.NativeInterface;
+import hoot.services.controllers.info.ExternalCommandInterfaceStubImpl;
+import hoot.services.nativeinterfaces.ExternalCommandInterface;
 
 
 @Configuration
@@ -84,8 +84,8 @@ public class HootServicesSpringTestConfig {
     }
 
     @Bean
-    public NativeInterface nativeInterface() {
-        return new NativeInterfaceStubImpl();
+    public ExternalCommandInterface nativeInterface() {
+        return new ExternalCommandInterfaceStubImpl();
     }
 
     @Bean

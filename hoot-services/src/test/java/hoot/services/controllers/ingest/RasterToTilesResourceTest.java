@@ -87,7 +87,7 @@ public class RasterToTilesResourceTest {
         assertNotNull(processScriptName);
         assertTrue(!processScriptName.isEmpty());
 
-        RasterToTilesService rts = new RasterToTilesService();
+        RasterToTilesCommandFactory rts = new RasterToTilesCommandFactory();
 
         JSONObject oExpected = new JSONObject();
         oExpected.put("caller", "RasterToTilesService");
@@ -119,8 +119,8 @@ public class RasterToTilesResourceTest {
         oExpected.put("exectype", "make");
         oExpected.put("erroraswarning", "true");
 
-        Method createCommandMethod = RasterToTilesService.class.
-                getDeclaredMethod("createCommand", String.class, String.class, int.class, long.class);
+        Method createCommandMethod = RasterToTilesCommandFactory.class.
+                getDeclaredMethod("createExternalCommand", String.class, String.class, int.class, long.class);
 
         createCommandMethod.setAccessible(true);
 
@@ -135,8 +135,8 @@ public class RasterToTilesResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestGetZoomInfo() throws Exception {
-        RasterToTilesService rts = new RasterToTilesService();
-        Method getZoomInfoMethod = RasterToTilesService.class.getDeclaredMethod("getZoomInfo", double.class);
+        RasterToTilesCommandFactory rts = new RasterToTilesCommandFactory();
+        Method getZoomInfoMethod = RasterToTilesCommandFactory.class.getDeclaredMethod("getZoomInfo", double.class);
         getZoomInfoMethod.setAccessible(true);
 
         JSONObject oActual = (JSONObject) getZoomInfoMethod.invoke(rts, 0.025);

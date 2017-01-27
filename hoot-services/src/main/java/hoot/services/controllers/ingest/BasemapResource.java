@@ -192,7 +192,7 @@ public class BasemapResource extends JobControllerBase {
 
                 String jobId = UUID.randomUUID().toString();
 
-                Command command = () -> { return jobExecutionManager.exec(jobId, json); };
+                Command command = () -> { return externalCommandInterface.exec(jobId, json); };
 
                 super.processJob(jobId, command);
 

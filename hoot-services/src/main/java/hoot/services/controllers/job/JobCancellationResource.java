@@ -40,17 +40,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.nativeinterfaces.ExternalCommandInterface;
 
 
 @Controller
 @Path("/cancel")
+@Transactional
 public class JobCancellationResource {
     private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
     @Autowired
-    private JobExecutionManager jobExecManager;
+    private ExternalCommandInterface externalCommandInterface;
 
     @Autowired
     private JobStatusManager jobStatusManager;
@@ -80,7 +82,7 @@ public class JobCancellationResource {
             jobIdToCancel = command.get("jobid").toString();
             String mapDisplayName = command.get("mapid").toString();
 
-            this.jobExecManager.terminate(jobIdToCancel);
+            this.externalCommandInterface.terminate(jobIdToCancel);
             this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
 
             // TODO: should be trying to cleanup any files DB data already created by the cancelled job?
