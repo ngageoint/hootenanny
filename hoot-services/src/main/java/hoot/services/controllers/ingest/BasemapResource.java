@@ -69,7 +69,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hoot.services.controllers.job.Command;
+import hoot.services.command.Command;
 import hoot.services.controllers.job.JobControllerBase;
 
 @Controller

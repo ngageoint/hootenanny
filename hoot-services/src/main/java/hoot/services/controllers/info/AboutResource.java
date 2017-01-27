@@ -44,8 +44,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.ExternalCommandInterface;
+import hoot.services.command.CommandResult;
+import hoot.services.command.ExternalCommandInterface;
 
 
 /**

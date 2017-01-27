@@ -78,7 +78,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
-import hoot.services.controllers.job.Command;
+import hoot.services.command.Command;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
 import hoot.services.geo.BoundingBox;

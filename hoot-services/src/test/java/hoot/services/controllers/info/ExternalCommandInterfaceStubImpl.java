@@ -28,8 +28,8 @@ package hoot.services.controllers.info;
 
 import org.json.simple.JSONObject;
 
-import hoot.services.nativeinterfaces.CommandResult;
-import hoot.services.nativeinterfaces.ExternalCommandInterface;
+import hoot.services.command.CommandResult;
+import hoot.services.command.ExternalCommandInterface;
 
 
 public class ExternalCommandInterfaceStubImpl implements ExternalCommandInterface {

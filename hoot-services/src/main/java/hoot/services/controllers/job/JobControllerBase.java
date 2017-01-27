@@ -41,8 +41,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import hoot.services.nativeinterfaces.ExternalCommandInterface;
-import hoot.services.nativeinterfaces.InternalCommandInterface;
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommandInterface;
+import hoot.services.command.InternalCommandInterface;
 
 
 public class JobControllerBase {
@@ -71,14 +72,14 @@ public class JobControllerBase {
     protected void processChainJob(String jobId, Command[] commands) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
-        Runnable chainJobWorker = new ProcessChainJobRunnable(jobId, commands, jobStatusManager);
+        Runnable chainJobWorker = new JobChainRunnable(jobId, commands, jobStatusManager);
         jobThreadExecutor.execute(chainJobWorker);
     }
 
     protected void processJob(String jobId, Command command) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
-        Runnable jobWorker = new ProcessJobRunnable(jobId, command, jobStatusManager);
+        Runnable jobWorker = new JobRunnable(jobId, command, jobStatusManager);
         jobThreadExecutor.execute(jobWorker);
     }
 

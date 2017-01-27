@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.nativeinterfaces.CommandResult;
+import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
