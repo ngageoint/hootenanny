@@ -36,6 +36,7 @@ public class CommandResult {
     public static final int SUCCESS = 0;
     public static final int FAILURE = -1;
 
+    private Long id;
     private String command;
     private int exitCode;
     private String stdout;
@@ -110,16 +111,26 @@ public class CommandResult {
         this.jobId = jobId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "CommandResult{" +
-                "command='" + command.replace(",", "") + '\'' +
-                ", start='" + start + '\'' +
-                ", finish='" + finish + '\'' +
-                ", exitCode=" + exitCode +
-                ", stdout='" + stdout + '\'' +
-                ", stderr='" + stderr + '\'' +
-                ", jobId='" + jobId + '\'' +
+                "command=" + command.replace(",", "") +
+                ", jobId=[" + jobId + ']' +
+                ", command_id=[" + id + ']' +
+                ", start=[" + start + ']' +
+                ", finish=[" + finish + ']' +
+                ", duration=[" + getDuration() + "]" +
+                ", exitCode=[" + exitCode + ']' +
+                ", stdout=[" + stdout + ']' +
+                ", stderr=[" + stderr + ']' +
                 '}';
     }
 }

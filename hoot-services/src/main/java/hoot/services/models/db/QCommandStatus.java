@@ -1,15 +1,17 @@
 package hoot.services.models.db;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
-import com.querydsl.core.types.dsl.*;
-
-import com.querydsl.core.types.PathMetadata;
-import javax.annotation.Generated;
-import com.querydsl.core.types.Path;
-
-import com.querydsl.sql.ColumnMetadata;
 import java.sql.Types;
+
+import javax.annotation.Generated;
+
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ColumnMetadata;
 
 
 
@@ -30,7 +32,7 @@ public class QCommandStatus extends com.querydsl.sql.RelationalPathBase<CommandS
 
     public final DateTimePath<java.sql.Timestamp> finish = createDateTime("finish", java.sql.Timestamp.class);
 
-    public final StringPath id = createString("id");
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath jobId = createString("jobId");
 
@@ -40,7 +42,7 @@ public class QCommandStatus extends com.querydsl.sql.RelationalPathBase<CommandS
 
     public final StringPath stdout = createString("stdout");
 
-    public final com.querydsl.sql.PrimaryKey<CommandStatus> commandStatusPkey = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<CommandStatus> commandStatusPk = createPrimaryKey(id);
 
     public QCommandStatus(String variable) {
         super(CommandStatus.class, forVariable(variable), "public", "command_status");
@@ -63,14 +65,14 @@ public class QCommandStatus extends com.querydsl.sql.RelationalPathBase<CommandS
     }
 
     public void addMetadata() {
-        addMetadata(command, ColumnMetadata.named("command").withIndex(4).ofType(Types.VARCHAR).withSize(2147483647).notNull());
-        addMetadata(exitCode, ColumnMetadata.named("exit_code").withIndex(6).ofType(Types.INTEGER).withSize(10));
-        addMetadata(finish, ColumnMetadata.named("finish").withIndex(5).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
-        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.VARCHAR).withSize(64).notNull());
-        addMetadata(jobId, ColumnMetadata.named("job_id").withIndex(2).ofType(Types.VARCHAR).withSize(64).notNull());
+        addMetadata(command, ColumnMetadata.named("command").withIndex(6).ofType(Types.VARCHAR).withSize(2147483647).notNull());
+        addMetadata(exitCode, ColumnMetadata.named("exit_code").withIndex(5).ofType(Types.INTEGER).withSize(10));
+        addMetadata(finish, ColumnMetadata.named("finish").withIndex(4).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
+        addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(jobId, ColumnMetadata.named("job_id").withIndex(2).ofType(Types.VARCHAR).withSize(64));
         addMetadata(start, ColumnMetadata.named("start").withIndex(3).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
-        addMetadata(stderr, ColumnMetadata.named("stderr").withIndex(8).ofType(Types.VARCHAR).withSize(2147483647));
-        addMetadata(stdout, ColumnMetadata.named("stdout").withIndex(7).ofType(Types.VARCHAR).withSize(2147483647));
+        addMetadata(stderr, ColumnMetadata.named("stderr").withIndex(8).ofType(Types.VARCHAR).withSize(2147483647).notNull());
+        addMetadata(stdout, ColumnMetadata.named("stdout").withIndex(7).ofType(Types.VARCHAR).withSize(2147483647).notNull());
     }
 
 }

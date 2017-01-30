@@ -14,7 +14,7 @@ public class CommandStatus {
 
     private java.sql.Timestamp finish;
 
-    private String id;
+    private Long id;
 
     private String jobId;
 
@@ -48,11 +48,11 @@ public class CommandStatus {
         this.finish = finish;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -8,23 +8,9 @@
     <changeSet author="jong.choi" id="3" context="default">
         <comment>Command Status table for hoot service</comment>
 
-        <!--
-            CREATE TABLE public.command_status
-            (
-                id character varying(64) NOT NULL,
-                job_id character varying(64) NOT NULL REFERENCES job_status (job_id),
-                start timestamp with time zone NOT NULL,
-                command text NOT NULL,
-                finish timestamp with time zone,
-                exit_code integer,
-                stdout text,
-                stderr text,
-                CONSTRAINT command_status_pkey PRIMARY KEY (id)
-            );
-        -->
         <createTable tableName="command_status">
-            <column name="id" type="varchar(64)">
-                <constraints nullable="false"/>
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="job_id" type="varchar(64)">
                 <constraints nullable="true"/>
@@ -48,11 +34,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <addPrimaryKey
-                constraintName="command_status_pkey"
-                tableName="command_status"
-                columnNames="id" />
 
         <addForeignKeyConstraint
                 constraintName="job_status_jobid_fkey"
