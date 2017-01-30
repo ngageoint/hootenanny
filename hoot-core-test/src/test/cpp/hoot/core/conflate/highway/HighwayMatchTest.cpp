@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -89,7 +89,7 @@ public:
   /**
    * Creates three ways like this:
    *
-   * x and o signifiy Unknown1 and Unknown2, respectively.
+   * x and o signify Unknown1 and Unknown2, respectively.
    *
    * x-------x
    * o---------o
