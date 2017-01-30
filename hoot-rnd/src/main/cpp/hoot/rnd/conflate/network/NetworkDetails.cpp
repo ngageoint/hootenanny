@@ -51,20 +51,18 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
   _n1(n1),
   _n2(n2)
 {
+  setConfiguration(conf());
+}
+
+void NetworkDetails::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
   _sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-//  _classifier.reset(
-//    Factory::getInstance().constructObject<HighwayClassifier>(
-//      ConfigOptions().getConflateMatchHighwayClassifier()));
-
+      opts.getHighwaySublineStringMatcher()));
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
-      QString::fromAscii("hoot::HighwayExpertClassifier")));
-
-  Settings s(conf());
-  s.set(ConfigOptions::getWaySublineMatcherKey(), MaximalSublineMatcher::className());
-  _sublineMatcher->setConfiguration(s);
+      opts.getConflateMatchHighwayClassifier()));
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
