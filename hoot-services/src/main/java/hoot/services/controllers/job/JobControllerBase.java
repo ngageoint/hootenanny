@@ -62,21 +62,21 @@ public class JobControllerBase {
     @Autowired
     protected InternalCommandInterface internalCommandInterface;
 
-    protected String processScriptName;
+    private final String processScriptName;
 
 
     public JobControllerBase(String processScriptName) {
         this.processScriptName = processScriptName;
     }
 
-    protected void processChainJob(String jobId, Command[] commands) {
+    public void processChainJob(String jobId, Command[] commands) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         Runnable chainJobWorker = new JobChainRunnable(jobId, commands, jobStatusManager);
         jobThreadExecutor.execute(chainJobWorker);
     }
 
-    protected void processJob(String jobId, Command command) {
+    public void processJob(String jobId, Command command) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
 
         Runnable jobWorker = new JobRunnable(jobId, command, jobStatusManager);
@@ -107,7 +107,7 @@ public class JobControllerBase {
         return command;
     }
 
-    protected JSONArray parseParams(String params) throws ParseException {
+    public static JSONArray parseParams(String params) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject command = (JSONObject) parser.parse(params);
         JSONArray commandArgs = new JSONArray();
