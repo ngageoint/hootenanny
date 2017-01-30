@@ -70,6 +70,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.job.JobControllerBase;
 
 @Controller
@@ -188,13 +189,14 @@ public class BasemapResource extends JobControllerBase {
                 arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
                 commandArgs.add(arg);
 
-                JSONObject json = super.createBashScriptJobReq(commandArgs);
-
                 String jobId = UUID.randomUUID().toString();
 
-                Command command = () -> { return externalCommandInterface.exec(jobId, json); };
+                Command job = () -> {
+                    ExternalCommand externalCommand = super.createBashScriptJobReq(commandArgs);
+                    return externalCommandManager.exec(jobId, externalCommand);
+                };
 
-                super.processJob(jobId, command);
+                super.processJob(jobId, job);
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);

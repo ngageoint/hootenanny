@@ -62,16 +62,16 @@ import hoot.services.utils.JsonUtils;
 @Transactional
 @Component
 @Profile("production")
-class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
-    private static final Logger logger = LoggerFactory.getLogger(ExternalCommandInterfaceImpl.class);
+class ExternalCommandManagerImpl implements ExternalCommandManager {
+    private static final Logger logger = LoggerFactory.getLogger(ExternalCommandManagerImpl.class);
 
     // This contains the command runner objects for the executing commands. Used for job cancellation and tracking.
-    private static final Map<String, CommandRunner> activeCommands = new ConcurrentHashMap<>();
+    private static final Map<String, ExternalCommandRunner> activeCommands = new ConcurrentHashMap<>();
 
     @Override
     public String getJobProgress(String jobId) {
         String stdStr = "";
-        CommandRunner commandRunner = activeCommands.get(jobId);
+        ExternalCommandRunner commandRunner = activeCommands.get(jobId);
         if (commandRunner != null) {
             stdStr = commandRunner.getStdout();
         }
@@ -81,18 +81,15 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
 
     @Override
     public void terminate(String jobId) {
-        CommandRunner cmdRunner = activeCommands.get(jobId);
+        ExternalCommandRunner cmdRunner = activeCommands.get(jobId);
         if (cmdRunner != null) {
             cmdRunner.terminate();
         }
     }
 
     @Override
-    public CommandResult exec(String jobId, JSONObject command) {
+    public CommandResult exec(String jobId, ExternalCommand command) {
         String exec = command.get("exectype").toString();
-
-        // Always add jobId to every command executed
-        command.put("jobId", jobId);
 
         String[] commandArr;
         if (exec.equalsIgnoreCase("hoot")) {
@@ -110,7 +107,7 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
 
         validate(command);
 
-        CommandRunner cmdRunner = new CommandRunnerImpl();
+        ExternalCommandRunner cmdRunner = new ExternalCommandRunnerImpl();
 
         if (jobId != null) {
             activeCommands.put(jobId, cmdRunner);
@@ -118,7 +115,7 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
 
         CommandResult commandResult;
         try {
-            commandResult = cmdRunner.exec(commandArr, jobId);
+            commandResult = cmdRunner.exec(commandArr, jobId, command.get("caller").toString());
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to execute: " + command, e);

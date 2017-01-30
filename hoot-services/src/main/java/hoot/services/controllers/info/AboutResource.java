@@ -45,7 +45,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommandInterface;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
 
 
 /**
@@ -57,7 +58,7 @@ public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
     @Autowired
-    private ExternalCommandInterface externalCommandInterface;
+    private ExternalCommandManager externalCommandInterface;
 
     public AboutResource() {}
 
@@ -200,7 +201,7 @@ public class AboutResource {
     }
 
     private String getCoreInfo(boolean withDetails) {
-        JSONObject command = new JSONObject();
+        ExternalCommand command = new ExternalCommand();
         command.put("exectype", "hoot");
         command.put("exec", "version");
 

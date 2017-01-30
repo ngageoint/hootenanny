@@ -53,18 +53,18 @@ import hoot.services.models.db.QCommandStatus;
 /**
  * Utility class for running a subprocess synchronously from Java.
  */
-public class CommandRunnerImpl implements CommandRunner {
-    private static final Logger logger = LoggerFactory.getLogger(CommandRunnerImpl.class);
+public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
+    private static final Logger logger = LoggerFactory.getLogger(ExternalCommandRunnerImpl.class);
 
     private ExecuteWatchdog watchDog;
     private OutputStream stdout;
     private OutputStream stderr;
 
-    public CommandRunnerImpl() {}
+    public ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String[] command, String jobId) {
-        logger.debug("Trying to execute the following command: {}", commandArrayToString(command));
+    public CommandResult exec(String[] command, String jobId, String caller) {
+        logger.debug("Trying to execute the following command: {}", commandArrayToString(command, caller));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
              OutputStream stderr = new ByteArrayOutputStream()) {
@@ -90,7 +90,7 @@ public class CommandRunnerImpl implements CommandRunner {
 
                 start = LocalDateTime.now();
 
-                logger.debug("Command {} started at: {}", commandArrayToString(command), start);
+                logger.debug("Command {} started at: {}", commandArrayToString(command, caller), start);
 
                 exitCode = executor.execute(cmdLine);
             }
@@ -101,14 +101,14 @@ public class CommandRunnerImpl implements CommandRunner {
 
             if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
                 // it was killed on purpose by the watchdog
-                logger.info("Process for {} command was killed!", commandArrayToString(command));
+                logger.info("Process for {} command was killed!", commandArrayToString(command, caller));
             }
 
             LocalDateTime finish = LocalDateTime.now();
 
             //, exitCode, stdout.toString(), stderr.toString()
             CommandResult commandResult = new CommandResult();
-            commandResult.setCommand(commandArrayToString(command));
+            commandResult.setCommand(commandArrayToString(command, caller));
             commandResult.setExitCode(exitCode);
             commandResult.setStderr(stderr.toString());
             commandResult.setStdout(stdout.toString());
@@ -128,7 +128,7 @@ public class CommandRunnerImpl implements CommandRunner {
             return commandResult;
         }
         catch (IOException e) {
-            throw new RuntimeException("Error executing: " + commandArrayToString(command), e);
+            throw new RuntimeException("Error executing: " + commandArrayToString(command, caller), e);
         }
     }
 
@@ -150,8 +150,8 @@ public class CommandRunnerImpl implements CommandRunner {
         commandResult.setId(id);
     }
 
-    private static String commandArrayToString(String[] command) {
-        return Arrays.toString(command).replace(",", "");
+    private static String commandArrayToString(String[] command, String caller) {
+        return Arrays.toString(command).replace(",", "") + ", Caller=" + caller ;
     }
 
     @Override

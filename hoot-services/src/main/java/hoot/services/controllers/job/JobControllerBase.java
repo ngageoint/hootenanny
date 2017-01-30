@@ -42,8 +42,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommandInterface;
-import hoot.services.command.InternalCommandInterface;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.InternalCommandManager;
 
 
 public class JobControllerBase {
@@ -57,10 +58,10 @@ public class JobControllerBase {
     private JobStatusManager jobStatusManager;
 
     @Autowired
-    protected ExternalCommandInterface externalCommandInterface;
+    protected ExternalCommandManager externalCommandManager;
 
     @Autowired
-    protected InternalCommandInterface internalCommandInterface;
+    protected InternalCommandManager internalCommandManager;
 
     private final String processScriptName;
 
@@ -99,20 +100,20 @@ public class JobControllerBase {
         return commandArgs;
     }
 
-    protected JSONObject createMakeScriptJobReq(JSONArray args) {
-        JSONObject command = new JSONObject();
+    protected ExternalCommand createMakeScriptJobReq(JSONArray args) {
+        ExternalCommand command = new ExternalCommand();
         command.put("exectype", "make");
         command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass().getSimpleName());
+        command.put("caller", this.getClass());
         command.put("params", args);
         return command;
     }
 
-    protected JSONObject createBashScriptJobReq(JSONArray args) {
-        JSONObject command = new JSONObject();
+    protected ExternalCommand createBashScriptJobReq(JSONArray args) {
+        ExternalCommand command = new ExternalCommand();
         command.put("exectype", "bash");
         command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass().getSimpleName());
+        command.put("caller", this.getClass());
         command.put("params", args);
         return command;
     }

@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -271,7 +272,7 @@ public class CustomScriptResource {
                             if (oTrans.get("PATH") != null) {
                                 File fScript = new File(HOME_FOLDER + "/" + oTrans.get("PATH"));
                                 if (fScript.exists()) {
-                                    String sScript = FileUtils.readFileToString(fScript);
+                                    String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
                                     boolean canExport = validateExport(sScript);
                                     oTrans.put("CANEXPORT", canExport);
                                 }
@@ -437,7 +438,7 @@ public class CustomScriptResource {
             if (pathValidated) {
                 File scriptFile = new File(HOME_FOLDER, scriptPath);
                 if (scriptFile.exists()) {
-                    script = FileUtils.readFileToString(scriptFile);
+                    script = FileUtils.readFileToString(scriptFile, Charset.defaultCharset());
                 }
             }
             else {
@@ -622,7 +623,7 @@ public class CustomScriptResource {
         header += oHeader.toString();
         header += HEADER_END;
 
-        FileUtils.writeStringToFile(fScript, header + content);
+        FileUtils.writeStringToFile(fScript, header + content, Charset.defaultCharset());
 
         logger.debug("Saved script: {}", name);
 

@@ -56,12 +56,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
 import hoot.services.controllers.ingest.RasterToTilesCommandFactory;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
 
@@ -75,7 +77,7 @@ public class ConflationResource extends JobControllerBase {
     @Autowired
     private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
-    private static class UpdateTagsCommand implements Command {
+    private static class UpdateTagsCommand implements InternalCommand {
         private final java.util.Map<String, String> tags;
         private final String mapName;
         private final String jobId;
@@ -211,7 +213,7 @@ public class ConflationResource extends JobControllerBase {
             String input2Name = oParams.get("INPUT2").toString();
 
             JSONArray commandArgs = super.parseParams(oParams.toJSONString());
-            JSONObject conflationCommand = super.createMakeScriptJobReq(commandArgs);
+            //JSONObject conflationCommand = super.createMakeScriptJobReq(commandArgs);
 
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
@@ -273,18 +275,22 @@ public class ConflationResource extends JobControllerBase {
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
 
-            Command updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
-
-            Command[] commands = {
-                    () -> { return externalCommandInterface.exec(jobId, conflationCommand); },
-                    () -> { return internalCommandInterface.exec(jobId, updateTagsCommand); },
+            Command[] chainJob = {
                     () -> {
-                        JSONObject rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(confOutputName, userEmail);
-                        return externalCommandInterface.exec(jobId, rasterToTilesCommand);
+                        ExternalCommand conflationCommand = super.createMakeScriptJobReq(commandArgs);
+                        return externalCommandManager.exec(jobId, conflationCommand);
+                    },
+                    () -> {
+                        InternalCommand updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
+                        return internalCommandManager.exec(jobId, updateTagsCommand);
+                    },
+                    () -> {
+                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(confOutputName, userEmail);
+                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };
 
-            processChainJob(jobId, commands);
+            super.processChainJob(jobId, chainJob);
         }
         catch (WebApplicationException wae) {
             throw wae;

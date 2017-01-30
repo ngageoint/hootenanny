@@ -47,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.ingest.RasterToTilesCommandFactory;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
@@ -86,33 +87,35 @@ public class ClipDatasetResource extends JobControllerBase {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public JobId process(String params) {
-        try {
-            String jobId = UUID.randomUUID().toString();
+        String jobId = UUID.randomUUID().toString();
 
+        try {
             JSONParser parser = new JSONParser();
             JSONObject arguments = (JSONObject) parser.parse(params);
             String clipOutputName = arguments.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = JobControllerBase.parseParams(params);
-            JSONObject clipCommand = super.createMakeScriptJobReq(commandArgs);
 
-            Command[] commands = {
+            Command[] chainJob = {
                     // Clip to a bounding box
-                    () -> { return externalCommandInterface.exec(jobId, clipCommand); },
+                    () -> {
+                        ExternalCommand clipCommand = super.createMakeScriptJobReq(commandArgs);
+                        return externalCommandManager.exec(jobId, clipCommand);
+                    },
                     // Ingest
                     () -> {
-                        JSONObject rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(clipOutputName, null);
-                        return externalCommandInterface.exec(jobId, rasterToTilesCommand);
+                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(clipOutputName, null);
+                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };
 
-            super.processChainJob(jobId, commands);
-
-            return new JobId(jobId);
+            super.processChainJob(jobId, chainJob);
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return new JobId(jobId);
     }
 }

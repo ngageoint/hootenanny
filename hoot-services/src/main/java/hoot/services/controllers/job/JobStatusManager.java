@@ -27,10 +27,12 @@
 package hoot.services.controllers.job;
 
 import static hoot.services.controllers.job.JobStatusManager.JOB_STATUS.*;
+import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
 
 
@@ -138,6 +141,16 @@ public class JobStatusManager {
         }
 
         return null;
+    }
+
+    public List<CommandStatus> getCommandStatusUsing(String jobId) {
+        try {
+            return createQuery().select(commandStatus).from(commandStatus).where(commandStatus.jobId.eq(jobId)).fetch();
+        }
+        catch (Exception e) {
+            logger.error("{} failed to fetch command status(es) for job with ID = {}", jobId, e);
+            throw e;
+        }
     }
 
     /**

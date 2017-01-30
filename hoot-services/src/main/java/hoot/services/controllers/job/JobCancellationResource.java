@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.command.ExternalCommandInterface;
+import hoot.services.command.ExternalCommandManager;
 
 
 @Controller
@@ -52,7 +52,7 @@ public class JobCancellationResource {
     private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
     @Autowired
-    private ExternalCommandInterface externalCommandInterface;
+    private ExternalCommandManager externalCommandInterface;
 
     @Autowired
     private JobStatusManager jobStatusManager;

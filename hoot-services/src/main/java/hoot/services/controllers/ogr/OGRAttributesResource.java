@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
@@ -167,11 +168,12 @@ public class OGRAttributesResource extends JobControllerBase {
             param.put("INPUT_ZIPS", mergedZipList);
             params.add(param);
 
-            JSONObject json = super.createMakeScriptJobReq(params);
+            Command job = () -> {
+                ExternalCommand externalCommand = super.createMakeScriptJobReq(params);
+                return externalCommandManager.exec(jobId, externalCommand);
+            };
 
-            Command command = () -> { return externalCommandInterface.exec(jobId, json); };
-
-            super.processJob(jobId, command);
+            super.processJob(jobId, job);
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();

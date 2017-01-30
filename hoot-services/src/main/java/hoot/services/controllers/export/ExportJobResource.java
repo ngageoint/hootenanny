@@ -55,6 +55,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
 import hoot.services.wfs.WFSManager;
@@ -125,10 +126,11 @@ public class ExportJobResource extends JobControllerBase {
                 arg.put("PG_URL", pgUrl);
                 commandArgs.add(arg);
 
-                JSONObject osm2orgCommand = super.createMakeScriptJobReq(commandArgs);
-
-                Command[] commands = {
-                        () -> { return externalCommandInterface.exec(jobId, osm2orgCommand); },
+                Command[] chainJob = {
+                        () -> {
+                            ExternalCommand osm2orgCommand = super.createMakeScriptJobReq(commandArgs);
+                            return externalCommandManager.exec(jobId, osm2orgCommand);
+                        },
                         () -> {
                             try {
                                 return WFSManager.createWfsResource(jobId, jobId);
@@ -139,15 +141,17 @@ public class ExportJobResource extends JobControllerBase {
                         }
                 };
 
-                super.processChainJob(jobId, commands);
+                super.processChainJob(jobId, chainJob);
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
-                commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
-                JSONObject exportToOSMCommand = super.createMakeScriptJobReq(commandArgs);
+                JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
 
-                Command command = () -> { return externalCommandInterface.exec(jobId, exportToOSMCommand); };
+                Command job = () -> {
+                    ExternalCommand exportToOSMCommand = super.createMakeScriptJobReq(args);
+                    return externalCommandManager.exec(jobId, exportToOSMCommand);
+                };
 
-                super.processJob(jobId, command);
+                super.processJob(jobId, job);
             }
             else {
                 // replace with with getParameterValue
@@ -170,11 +174,12 @@ public class ExportJobResource extends JobControllerBase {
                     commandArgs.add(arg);
                 }
 
-                JSONObject exportCommand = super.createMakeScriptJobReq(commandArgs);
+                Command job = () -> {
+                    ExternalCommand exportCommand = super.createMakeScriptJobReq(commandArgs);
+                    return externalCommandManager.exec(jobId, exportCommand);
+                };
 
-                Command command = () -> { return externalCommandInterface.exec(jobId, exportCommand); };
-
-                super.processJob(jobId, command);
+                super.processJob(jobId, job);
             }
         }
         catch (WebApplicationException wae) {

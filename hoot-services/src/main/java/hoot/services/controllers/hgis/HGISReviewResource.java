@@ -51,8 +51,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
+import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
 
 
@@ -67,7 +69,7 @@ public class HGISReviewResource extends HGISResource {
         super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
     }
 
-    private class UpdateMapTagsCommand implements Command {
+    private class UpdateMapTagsCommand implements InternalCommand {
 
         private final String jobId;
         private final String mapName;
@@ -163,17 +165,20 @@ public class HGISReviewResource extends HGISResource {
             arg.put("OUTPUT", outputMap);
             commandArgs.add(arg);
 
-            JSONObject validationCommand = super.createBashScriptJobReq(commandArgs);
-
             String jobId = UUID.randomUUID().toString();
-            Command updateMapTagsCommand = new UpdateMapTagsCommand(jobId, outputMap);
 
-            Command[] commands = {
-                    () -> { return super.externalCommandInterface.exec(jobId, validationCommand); },
-                    () -> { return super.internalCommandInterface.exec(jobId, updateMapTagsCommand); }
+            Command[] chainJob = {
+                    () -> {
+                        ExternalCommand validationCommand = super.createBashScriptJobReq(commandArgs);
+                        return super.externalCommandManager.exec(jobId, validationCommand);
+                    },
+                    () -> {
+                        InternalCommand updateMapTagsCommand = new UpdateMapTagsCommand(jobId, outputMap);
+                        return super.internalCommandManager.exec(jobId, updateMapTagsCommand);
+                    }
             };
 
-            super.processChainJob(jobId, commands);
+            super.processChainJob(jobId, chainJob);
 
             response.setJobId(jobId);
         }

@@ -62,6 +62,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.utils.MultipartSerializer;
 
@@ -116,7 +117,6 @@ public class FileUploadResource extends JobControllerBase {
                                    @QueryParam("NONE_TRANSLATION") String noneTranslation,
                                    @QueryParam("FGDB_FC") String fgdbFeatureClasses,
                                     FormDataMultiPart multiPart) {
-        String jobId = UUID.randomUUID().toString();
         JSONArray response = new JSONArray();
 
         try {
@@ -124,6 +124,8 @@ public class FileUploadResource extends JobControllerBase {
             logger.debug("Starting ETL Process for:{}", inputName);
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
+
+            String jobId = UUID.randomUUID().toString();
 
             MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
 
@@ -373,19 +375,21 @@ public class FileUploadResource extends JobControllerBase {
         }
 
         JSONArray commandArgs = super.parseParams(param.toJSONString());
-        JSONObject etlCommand = super.createMakeScriptJobReq(commandArgs);
 
-        Command[] commands = {
+        Command[] chainJob = {
                 // Clip to a bounding box
-                () -> { return externalCommandInterface.exec(jobId, etlCommand); },
+                () -> {
+                    ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs);
+                    return externalCommandManager.exec(jobId, etlCommand);
+                },
                 // Ingest
                 () -> {
-                    JSONObject rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
-                    return externalCommandInterface.exec(jobId, rasterToTilesCommand);
+                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
+                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
                 }
         };
 
-        return commands;
+        return chainJob;
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,

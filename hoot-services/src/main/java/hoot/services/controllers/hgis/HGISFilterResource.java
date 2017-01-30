@@ -47,6 +47,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 
 
 @Controller
@@ -62,7 +63,7 @@ public class HGISFilterResource extends HGISResource {
     /**
      * This resource produces layer that filters Non HGIS POIs.
      * <p>
-     * POST hoot-services/job/filter/custom/HGIS/filternonhgispois
+     *     POST hoot-services/job/filter/custom/HGIS/filternonhgispois
      * <p>
      * { "source":"AllDataTypesA", "output":"AllDataTypesAtest1" }
      *
@@ -104,13 +105,14 @@ public class HGISFilterResource extends HGISResource {
             arg.put("OUTPUT", generateDbMapParam(output));
             commandArgs.add(arg);
 
-            JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(commandArgs);
-
             String jobId = UUID.randomUUID().toString();
 
-            Command command = () -> { return externalCommandInterface.exec(jobId, filterNonHgisPoisCommand); };
+            Command job = () -> {
+                ExternalCommand filterNonHgisPoisCommand = super.createBashScriptJobReq(commandArgs);
+                return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
+            };
 
-            super.processJob(jobId, command);
+            super.processJob(jobId, job);
 
             response.setJobId(jobId);
         }

@@ -26,10 +26,14 @@
  */
 package hoot.services.controllers.job;
 
+import java.util.List;
+
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,6 +46,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
+import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
 
 
@@ -77,7 +82,8 @@ public class JobResource {
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobStatus(@PathParam("jobId") String jobId) {
+    public Response getJobStatus(@PathParam("jobId") String jobId,
+                                 @QueryParam("includeCommandStatus") @DefaultValue("false") Boolean includeCommandStatus) {
         try {
             JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
             JSONObject response = new JSONObject();
@@ -88,6 +94,11 @@ public class JobResource {
                 response.put("statusDetail", jobStatus.getStatusDetail());
                 response.put("percentcomplete", jobStatus.getPercentComplete());
                 response.put("lasttext", jobStatus.getStatusDetail());
+
+                if (includeCommandStatus) {
+                    List<CommandStatus> commandStatuses = this.jobStatusManager.getCommandStatusUsing(jobId);
+                    response.put("commandStatuses", commandStatuses);
+                }
 
                 return Response.ok(response.toJSONString()).build();
             }

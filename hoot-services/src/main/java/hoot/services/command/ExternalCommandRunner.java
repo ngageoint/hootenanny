@@ -26,29 +26,20 @@
  */
 package hoot.services.command;
 
-import org.json.simple.JSONObject;
 
-
-/**
- * @author Jong Choi
- *
- *         Abstract class for Native Interface.
- */
-public interface ExternalCommandInterface {
+public interface ExternalCommandRunner {
 
     /**
-     * Performs execution. All required meta data should be in command parameter.
-     *
-     * @param command command to execute
+     * Runs a process. The command to run is passed as a
+     * String[]. Collects all output on System.out and System.err, passing it to
+     * the CommandResult. Waits for all output and process completion then
+     * returns the process exit status.  This is a blocking call.
      */
-    CommandResult exec(String jobId, JSONObject command);
+    CommandResult exec(String[] command, String jobId, String caller);
 
-    String getJobProgress(String jobId);
+    String getStdout();
 
-    /**
-     * Terminates job
-     *
-     * @param jobId ID of the job to terminate
-     */
-    void terminate(String jobId);
+    String getStderr();
+
+    void terminate();
 }

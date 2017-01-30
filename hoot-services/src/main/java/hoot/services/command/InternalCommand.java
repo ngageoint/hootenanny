@@ -26,16 +26,5 @@
  */
 package hoot.services.command;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-
-@Transactional
-@Component
-public class InternalCommandInterfaceImpl implements InternalCommandInterface {
-
-    @Override
-    public CommandResult exec(String jobId, Command command) {
-        return command.execute();
-    }
-}
+public interface InternalCommand extends Command {}

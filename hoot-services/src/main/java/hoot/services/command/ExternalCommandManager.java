@@ -26,20 +26,26 @@
  */
 package hoot.services.command;
 
-
-public interface CommandRunner {
+/**
+ * @author Jong Choi
+ *
+ *         Abstract class for Native Interface.
+ */
+public interface ExternalCommandManager {
 
     /**
-     * Runs a process. The command to run is passed as a
-     * String[]. Collects all output on System.out and System.err, passing it to
-     * the CommandResult. Waits for all output and process completion then
-     * returns the process exit status.  This is a blocking call.
+     * Performs execution. All required meta data should be in command parameter.
+     *
+     * @param command command to execute
      */
-    CommandResult exec(String[] command, String jobId);
+    CommandResult exec(String jobId, ExternalCommand command);
 
-    String getStdout();
+    String getJobProgress(String jobId);
 
-    String getStderr();
-
-    void terminate();
+    /**
+     * Terminates job
+     *
+     * @param jobId ID of the job to terminate
+     */
+    void terminate(String jobId);
 }

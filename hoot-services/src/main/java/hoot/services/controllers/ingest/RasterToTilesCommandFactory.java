@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
@@ -47,7 +48,7 @@ import hoot.services.models.osm.ModelDaoUtils;
 public class RasterToTilesCommandFactory {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommandFactory.class);
 
-    public JSONObject createExternalCommand(String name, String userEmail) {
+    public ExternalCommand createExternalCommand(String name, String userEmail) {
         long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
         BoundingBox queryBounds;
@@ -96,8 +97,8 @@ public class RasterToTilesCommandFactory {
         }
     }
 
-    private static JSONObject createMakeScriptJobReq(JSONArray args) {
-        JSONObject command = new JSONObject();
+    private static ExternalCommand createMakeScriptJobReq(JSONArray args) {
+        ExternalCommand command = new ExternalCommand();
         command.put("exectype", "make");
         command.put("exec", RASTER_TO_TILES);
         command.put("caller", RasterToTilesCommandFactory.class.getSimpleName());
@@ -105,7 +106,7 @@ public class RasterToTilesCommandFactory {
         return command;
     }
 
-    private static JSONObject createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
+    private static ExternalCommand createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject argument = new JSONObject();
@@ -134,7 +135,7 @@ public class RasterToTilesCommandFactory {
             commandArgs.add(argument);
         }
 
-        JSONObject jsonArgs = createMakeScriptJobReq(commandArgs);
+        ExternalCommand jsonArgs = createMakeScriptJobReq(commandArgs);
         jsonArgs.put("erroraswarning", "true");
 
         return jsonArgs;
