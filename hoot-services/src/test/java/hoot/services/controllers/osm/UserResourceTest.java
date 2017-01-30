@@ -40,7 +40,6 @@ import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -54,7 +53,6 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlUtils;
 
 
-@Ignore
 public class UserResourceTest extends OSMResourceTestAbstract {
 
     @Test
@@ -166,7 +164,7 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-    @Test(expected = NotAllowedException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetEmptyUserId() throws Exception {
         try {
@@ -174,12 +172,12 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         }
         catch (NotAllowedException e) {
             Response r = e.getResponse();
-            assertEquals(405, r.getStatus());
+            assertEquals(404, r.getStatus());
             throw e;
         }
     }
 
-    @Test(expected = NotAllowedException.class)
+    @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMissingUserId() throws Exception {
         try {
@@ -187,7 +185,7 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         }
         catch (NotAllowedException e) {
             Response r = e.getResponse();
-            assertEquals(405, r.getStatus());
+            assertEquals(404, r.getStatus());
             throw e;
         }
     }
