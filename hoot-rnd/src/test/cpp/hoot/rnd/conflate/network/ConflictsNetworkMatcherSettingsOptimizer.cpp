@@ -95,7 +95,7 @@ public:
     QString _name;
   };
 
-  //Things that would be nice:
+  //Things that could be better:
   //  - show the iteration number w/o having to temporarily add a cout statement to
   //    SimulatedAnnealing
   //  - modify fitness function to give variable failure based on the number of reviews
@@ -149,7 +149,7 @@ public:
       {
         //This message will actually show if, by chance, the first selected random state
         //is successful.  However, that state won't be included in what's returned from sa...
-        //so its a little misleading.
+        //so this logging this success message is a little misleading in that situation.
         LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
       }
 
@@ -210,6 +210,21 @@ public:
         //VariableDescription::Real, 0.5, 0.5)); //default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
         VariableDescription::Real, 0.8, 0.99));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getWayMergerMinSplitSizeKey(),
+        VariableDescription::Real, 5.0, 5.0)); //default
+        //VariableDescription::Real, 0.01, 100.0));  //min/max??
+        //VariableDescription::Real, 0.5, 30.0));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getWayMatcherMaxAngleKey(),
+        VariableDescription::Real, 60.0, 60.0)); //default
+        //VariableDescription::Real, 0.01, 90.0));  //min/max
+        //VariableDescription::Real, 20.0, 75.0));
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getWayMatcherHeadingDeltaKey(),
+        VariableDescription::Real, 5.0, 5.0)); //default
+        //VariableDescription::Real, 0.01, 100.0));  //min/max??
+        //VariableDescription::Real, 0.5, 50.0));
 
     shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);

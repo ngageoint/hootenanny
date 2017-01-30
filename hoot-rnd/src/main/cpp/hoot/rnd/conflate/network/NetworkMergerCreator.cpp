@@ -49,10 +49,6 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 NetworkMergerCreator::NetworkMergerCreator()
 {
   _map = 0;
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-  _minSplitSize = ConfigOptions(conf()).getWayMergerMinSplitSize();
 }
 
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
