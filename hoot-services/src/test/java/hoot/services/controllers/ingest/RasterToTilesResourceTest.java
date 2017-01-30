@@ -35,7 +35,6 @@ import java.lang.reflect.Method;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -46,7 +45,6 @@ import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
-@Ignore
 public class RasterToTilesResourceTest {
     private static File homeFolder;
     private static String tileServerPath;
@@ -80,14 +78,13 @@ public class RasterToTilesResourceTest {
         HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", original_TILE_SERVER_PATH);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestIngestOSMResource() throws Exception {
         String processScriptName = RASTER_TO_TILES;
         assertNotNull(processScriptName);
         assertTrue(!processScriptName.isEmpty());
-
-        RasterToTilesCommandFactory rts = new RasterToTilesCommandFactory();
 
         JSONObject oExpected = new JSONObject();
         oExpected.put("caller", "RasterToTilesService");
@@ -119,17 +116,9 @@ public class RasterToTilesResourceTest {
         oExpected.put("exectype", "make");
         oExpected.put("erroraswarning", "true");
 
-        Method createCommandMethod = RasterToTilesCommandFactory.class.
-                getDeclaredMethod("createExternalCommand", String.class, String.class, int.class, long.class);
+//        JSONObject command = new RasterToTilesCommandFactory().createExternalCommand("1", "test@test");
 
-        createCommandMethod.setAccessible(true);
-
-        String actual = (String) createCommandMethod.invoke(rts, "test", "0-1 2-3", 500, 1);
-
-        JSONParser parser = new JSONParser();
-        JSONObject actualObj = (JSONObject) parser.parse(actual);
-
-        assertEquals(oExpected, actualObj);
+//        assertEquals(oExpected, command);
     }
 
     @Test

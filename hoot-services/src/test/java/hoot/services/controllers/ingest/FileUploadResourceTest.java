@@ -54,7 +54,6 @@ import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
-@Ignore
 public class FileUploadResourceTest {
     private static File homeFolder;
     private static String original_HOME_FOLDER;
@@ -166,6 +165,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestFgdbOgrZip() throws Exception {
@@ -254,6 +254,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZipAndShp() throws Exception {
@@ -362,6 +363,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsmZipAndOsm() throws Exception {
@@ -471,6 +473,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZip() throws Exception {
@@ -573,6 +576,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgr() throws Exception {
@@ -669,6 +673,7 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsm() throws Exception {

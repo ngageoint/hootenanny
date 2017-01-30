@@ -28,8 +28,7 @@ package hoot.services.controllers.conflation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,19 +38,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
+import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.controllers.job.JobId;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
-@Ignore
 public class ConflationResourceTest {
 
     @Test
@@ -74,7 +72,7 @@ public class ConflationResourceTest {
                 + "{\"isprimitivetype\":\"false\",\"value\":\"test@test.com\",\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection\"}]";
 
         ConflationResource spy = Mockito.spy(new ConflationResource());
-        //Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+        Mockito.doNothing().when((JobControllerBase) spy).processChainJob(anyString(), any());
         JobId resp = spy.process(params);
         //verify(spy).postChainJobRequest(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
     }
@@ -91,7 +89,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-//            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).processChainJob(anyString(), any());
             Mockito.doReturn(true).when(spy).mapExists(anyLong());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
@@ -103,18 +101,17 @@ public class ConflationResourceTest {
             // got added; testProcess checks the generated input at a more
             // detailed
             // level
-/*
-            verify(spy).postChainJobRequest(Matchers.matches(jobId),
-            // wasn't able to get the mockito matcher to take the timestamp
+
+            //verify(spy).processChainJob(Matchers.matches(jobId),
+                    // wasn't able to get the mockito matcher to take the timestamp
             // regex...validated the
             // regex externally, and it looks correct
-                    / *
+                    /*
                      * Matchers.matches("\"osm_api_db_export_time\":\"" +
                      * DbUtils.TIME_STAMP_REGEX + "\"")
-                     * /
-            AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
-                    Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
-*/
+                     */
+            //AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
+            //        Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
         }
         finally {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
@@ -137,7 +134,7 @@ public class ConflationResourceTest {
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-//            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).processChainJob(anyString(), any());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
@@ -162,7 +159,7 @@ public class ConflationResourceTest {
                     .getPath()));
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-//            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).processChainJob(anyString(), any());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
@@ -188,7 +185,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-//            Mockito.doNothing().when((JobControllerBase) spy).postJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).processJob(anyString(), any());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
@@ -216,7 +213,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-//            Mockito.doNothing().when((JobControllerBase) spy).postChainJobRequest(anyString(), anyString());
+            Mockito.doNothing().when((JobControllerBase) spy).processJob(anyString(), any());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);

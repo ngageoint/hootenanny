@@ -41,7 +41,6 @@ import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -58,7 +57,6 @@ import hoot.services.testsupport.HootCustomPropertiesSetter;
 import hoot.services.testsupport.HootServicesSpringTestConfig;
 
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 //@Transactional
@@ -103,7 +101,7 @@ public class JobResourceTest {
         // Create Mock JobStatusManager Class
         JobStatusManager mockJobStatusManager = Mockito.mock(JobStatusManager.class);
         Mockito.doNothing().when(mockJobStatusManager).addJob(Matchers.anyString());
-//        Mockito.doNothing().when(mockJobStatusManager).updateJob(Matchers.anyString(), Matchers.anyString());
+        Mockito.doNothing().when(mockJobStatusManager).updateJob(Matchers.anyString(), Matchers.anyString(), Matchers.anyDouble());
         Mockito.doNothing().when(mockJobStatusManager).setCompleted(Matchers.anyString(), Matchers.anyString());
         Mockito.doNothing().when(mockJobStatusManager).setFailed(Matchers.anyString(), Matchers.anyString());
 
