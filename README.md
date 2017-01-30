@@ -1,4 +1,4 @@
-![hoot_logo_icon](https://cloud.githubusercontent.com/assets/17434033/22118537/3dda4c3e-de46-11e6-95fe-ad9c4e933534.png)
+![hoot_logo](https://github.com/ngageoint/hootenanny-ui/blob/develop/dist/img/logo/hoot_logo_dark.png)
 
 ![](https://github.com/ngageoint/hootenanny/blob/master/docs/user/images/id/hoot_conflation_new.png)
 
