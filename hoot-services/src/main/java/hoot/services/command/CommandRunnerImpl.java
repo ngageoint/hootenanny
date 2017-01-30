@@ -36,7 +36,6 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.UUID;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -139,12 +138,16 @@ public class CommandRunnerImpl implements CommandRunner {
         commandStatus.setExitCode(commandResult.getExitCode());
         commandStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
         commandStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
-        commandStatus.setId(UUID.randomUUID().toString());
         commandStatus.setJobId(commandResult.getJobId());
         commandStatus.setStderr(commandResult.getStderr());
         commandStatus.setStdout(commandResult.getStdout());
 
-        createQuery().insert(QCommandStatus.commandStatus).populate(commandStatus).execute();
+        Long id = createQuery()
+                .insert(QCommandStatus.commandStatus)
+                .populate(commandStatus)
+                .executeWithKey(QCommandStatus.commandStatus.id);
+
+        commandResult.setId(id);
     }
 
     private static String commandArrayToString(String[] command) {
