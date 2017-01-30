@@ -35,6 +35,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -682,7 +683,7 @@ public class CustomScriptResourceTest {
             File fScript = new File(homefolder, (String) oPath);
             assertTrue(fScript.exists());
 
-            String sScript = FileUtils.readFileToString(fScript);
+            String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
             validateExportMethod.invoke(null, sScript);
 
             if (jsTrans.get("FOUO_PATH") != null) {

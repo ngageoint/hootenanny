@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -83,7 +84,7 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
         InputStream is = responseData.readEntity(InputStream.class);
         StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer);
+        IOUtils.copy(is, writer, Charset.defaultCharset());
         String theString = writer.toString();
         assertFalse(theString.isEmpty());
     }

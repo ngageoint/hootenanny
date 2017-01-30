@@ -27,6 +27,7 @@
 package hoot.services.testsupport;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,8 @@ public class ReviewTestUtils {
         elementWriter.write(mapId, changesetId,
                 FileUtils
                         .readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                                .getResource("hoot.services.review/allDataTypesConflatedOut.osm").getPath()))
+                                .getResource("hoot.services.review/allDataTypesConflatedOut.osm").getPath()),
+                                Charset.defaultCharset())
                         .replaceAll("changeset=\"\"", "changeset=\"" + changesetId + "\""));
         parsedElementIdsToElementsByType = elementWriter.getParsedElementIdsToElementsByType();
         return changesetId;

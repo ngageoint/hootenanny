@@ -66,11 +66,11 @@ public class ProcessStreamInterfaceTest {
         command.put("exec", "ogr2osm");
         command.put("params", args);
 
-        ExternalCommandInterfaceImpl ps = new ExternalCommandInterfaceImpl();
+        ExternalCommandManagerImpl ps = new ExternalCommandManagerImpl();
 
         Class<?>[] cArg = new Class[1];
         cArg[0] = JSONObject.class;
-        Method method = ExternalCommandInterfaceImpl.class.getDeclaredMethod("createCmdArray", cArg);
+        Method method = ExternalCommandManagerImpl.class.getDeclaredMethod("createCmdArray", cArg);
         method.setAccessible(true);
         String[] ret = (String[]) method.invoke(ps, command);
         String commandStr = ArrayUtils.toString(ret);

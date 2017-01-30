@@ -34,6 +34,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.anyLong;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import javax.ws.rs.WebApplicationException;
@@ -144,7 +145,7 @@ public class ExportJobResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
             Mockito.doNothing().when((JobControllerBase) spy).processJob(anyString(), any());
@@ -183,7 +184,7 @@ public class ExportJobResourceTest {
                             Thread.currentThread()
                                     .getContextClassLoader()
                                     .getResource("hoot.services.controllers.job/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
-                                    .getPath()));
+                                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
@@ -218,7 +219,7 @@ public class ExportJobResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
@@ -253,7 +254,7 @@ public class ExportJobResourceTest {
                     .getContextClassLoader()
                     .getResource(
                             "hoot.services.controllers.job/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
-                    .getPath()));
+                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
@@ -291,7 +292,7 @@ public class ExportJobResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 
@@ -326,7 +327,7 @@ public class ExportJobResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot.services.controllers.job/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()));
+                    .getPath()), Charset.defaultCharset());
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
 

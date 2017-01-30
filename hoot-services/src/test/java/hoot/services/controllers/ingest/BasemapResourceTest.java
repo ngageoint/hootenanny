@@ -31,6 +31,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -98,13 +99,13 @@ public class BasemapResourceTest {
         cont.put("path", "/projects/hoot/ingest/processed/BASEMAP/TestMap");
 
         File file = new File(ingestStagingPath + "/BASEMAP/TestMap.enabled");
-        FileUtils.writeStringToFile(file, cont.toJSONString());
+        FileUtils.writeStringToFile(file, cont.toJSONString(), Charset.defaultCharset());
 
         File f2 = new File(tileServerPath + "/BASEMAP/TestMap2");
         FileUtils.forceMkdir(f2);
 
         File file2 = new File(ingestStagingPath + "/BASEMAP/TestMap2.enabled");
-        FileUtils.writeStringToFile(file2, cont.toJSONString());
+        FileUtils.writeStringToFile(file2, cont.toJSONString(), Charset.defaultCharset());
 
         Method getBasemapListHelperMethod = BasemapResource.class.getDeclaredMethod("getBasemapListHelper");
         getBasemapListHelperMethod.setAccessible(true);

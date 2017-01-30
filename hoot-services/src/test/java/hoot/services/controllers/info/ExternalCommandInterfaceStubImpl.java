@@ -26,15 +26,14 @@
  */
 package hoot.services.controllers.info;
 
-import org.json.simple.JSONObject;
-
 import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommandInterface;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
 
 
-public class ExternalCommandInterfaceStubImpl implements ExternalCommandInterface {
+public class ExternalCommandInterfaceStubImpl implements ExternalCommandManager {
     @Override
-    public CommandResult exec(String jobId, JSONObject command) {
+    public CommandResult exec(String jobId, ExternalCommand command) {
         CommandResult result = new CommandResult();
 
         // hoot version --debug

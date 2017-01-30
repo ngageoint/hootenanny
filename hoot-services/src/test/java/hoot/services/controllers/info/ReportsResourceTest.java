@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -101,7 +102,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("created", currTime);
         metaData.put("reportpath", storePath + "/123_test/report.pdf");
         File meta = new File(storePath + "/123_test/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         res = (JSONObject) getMetaDataMethod.invoke(null, "123_test");
 
@@ -139,7 +140,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("created", currTime);
         metaData.put("reportpath", storePath + "/123_test1/report.pdf");
         File meta = new File(storePath, "123_test1/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         FileUtils.forceMkdir(fWks2);
         currTime = String.valueOf(System.currentTimeMillis());
@@ -149,7 +150,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("created", currTime);
         metaData.put("reportpath", storePath + "/123_test2/report.pdf");
         meta = new File(storePath, "123_test2/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         FileUtils.forceMkdir(fWks3);
         currTime = String.valueOf(System.currentTimeMillis());
@@ -159,7 +160,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("created", currTime);
         metaData.put("reportpath", storePath + "/123_test3/report.pdf");
         meta = new File(storePath + "/123_test3/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         Response responseData =
                 target("/reports/list")
@@ -218,7 +219,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         FileUtils.copyURLToFile(inputUrl, dest);
 
         File meta = new File(storePath + "/123_test_file/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         Response responseData =
                 target("/reports/get")
@@ -261,7 +262,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("created", currTime);
         metaData.put("reportpath", HOME_FOLDER + "/test-files/test_report1.pdf");
         File meta = new File(storePath + "/123_test_del/meta.data");
-        FileUtils.write(meta, metaData.toJSONString());
+        FileUtils.write(meta, metaData.toJSONString(), Charset.defaultCharset());
 
         Response responseData =
                 target("/reports/delete")
