@@ -65,13 +65,13 @@ import hoot.services.utils.JsonUtils;
 class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandInterfaceImpl.class);
 
-    // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.
-    private static final Map<String, CommandRunner> jobProcesses = new ConcurrentHashMap<>();
+    // This contains the command runner objects for the executing commands. Used for job cancellation and tracking.
+    private static final Map<String, CommandRunner> activeCommands = new ConcurrentHashMap<>();
 
     @Override
     public String getJobProgress(String jobId) {
         String stdStr = "";
-        CommandRunner commandRunner = jobProcesses.get(jobId);
+        CommandRunner commandRunner = activeCommands.get(jobId);
         if (commandRunner != null) {
             stdStr = commandRunner.getStdout();
         }
@@ -81,7 +81,7 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
 
     @Override
     public void terminate(String jobId) {
-        CommandRunner cmdRunner = jobProcesses.get(jobId);
+        CommandRunner cmdRunner = activeCommands.get(jobId);
         if (cmdRunner != null) {
             cmdRunner.terminate();
         }
@@ -113,7 +113,7 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
         CommandRunner cmdRunner = new CommandRunnerImpl();
 
         if (jobId != null) {
-            jobProcesses.put(jobId, cmdRunner);
+            activeCommands.put(jobId, cmdRunner);
         }
 
         CommandResult commandResult;
@@ -124,8 +124,8 @@ class ExternalCommandInterfaceImpl implements ExternalCommandInterface {
             throw new RuntimeException("Failed to execute: " + command, e);
         }
         finally {
-            if ((jobId != null) && jobProcesses.containsKey(jobId)) {
-                jobProcesses.remove(jobId);
+            if ((jobId != null) && activeCommands.containsKey(jobId)) {
+                activeCommands.remove(jobId);
             }
         }
 
