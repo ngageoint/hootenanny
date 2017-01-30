@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,7 +49,7 @@ namespace hoot
  * The advantage is that we don't link concepts such as OsmMap and ElementIds directly to the
  * network algorithms.
  */
-class NetworkDetails : public SearchRadiusProvider
+class NetworkDetails : public SearchRadiusProvider, public Configurable
 {
 public:
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
@@ -106,7 +106,7 @@ public:
     ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
   double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-  
+
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
   virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
@@ -172,6 +172,8 @@ public:
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
 
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
   shared_ptr<HighwayClassifier> _classifier;
