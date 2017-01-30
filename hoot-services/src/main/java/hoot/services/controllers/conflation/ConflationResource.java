@@ -106,23 +106,19 @@ public class ConflationResource extends JobControllerBase {
                 // Currently we do not have any way to get map id directly from hoot
                 // core command when it runs so for now we need get the all the map ids matching name and pick
                 // first one..
-                // THIS WILL NEED TO CHANGE when we implement handle map by Id
-                // instead of name..
+                // THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
 
                 Long mapId = DbUtils.getMapIdByName(mapName);
                 if (mapId != null) {
                     // Hack alert!
                     // Add special handling of stats tag key
                     // We need to read the file in here, because the file doesn't
-                    // exist at the time
-                    // the updateMapsTagsCommand job is created in
-                    // ConflationResource.java
+                    // exist at the time the updateMapsTagsCommand job is created in ConflationResource.java
                     String statsKey = "stats";
                     if (tags.containsKey(statsKey)) {
                         String statsName = tags.get(statsKey);
                         File statsFile = new File(statsName);
                         if (statsFile.exists()) {
-                            logger.debug("Found {}", statsName);
                             String stats = FileUtils.readFileToString(statsFile, "UTF-8");
                             tags.put(statsKey, stats);
 

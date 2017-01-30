@@ -94,8 +94,6 @@ public class HGISFilterResource extends HGISResource {
         }
 
         try {
-            String jobId = UUID.randomUUID().toString();
-
             JSONArray commandArgs = new JSONArray();
 
             JSONObject arg = new JSONObject();
@@ -107,6 +105,8 @@ public class HGISFilterResource extends HGISResource {
             commandArgs.add(arg);
 
             JSONObject filterNonHgisPoisCommand = createBashScriptJobReq(commandArgs);
+
+            String jobId = UUID.randomUUID().toString();
 
             Command command = () -> { return externalCommandInterface.exec(jobId, filterNonHgisPoisCommand); };
 

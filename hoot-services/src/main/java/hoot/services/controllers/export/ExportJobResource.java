@@ -100,7 +100,7 @@ public class ExportJobResource extends JobControllerBase {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            JSONArray commandArgs = super.parseParams(params);
+            JSONArray commandArgs = JobControllerBase.parseParams(params);
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -231,7 +231,8 @@ public class ExportJobResource extends JobControllerBase {
         BoundingBox bbox;
         if (oParams.get("TASK_BBOX") != null) {
             bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
-        } else {
+        }
+        else {
             bbox = getMapBounds(conflatedMap);
         }
         setAoi(bbox, commandArgs);
@@ -362,14 +363,11 @@ public class ExportJobResource extends JobControllerBase {
     @Path("/wfs/remove/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeWfsResource(@PathParam("id") String id) {
-        JSONObject entity = new JSONObject();
 
         try {
             WFSManager.removeWfsResource(id);
-
-            List<String> tbls = DbUtils.getTablesList(id);
-
-            DbUtils.deleteTables(tbls);
+            List<String> tables = DbUtils.getTablesList(id);
+            DbUtils.deleteTables(tables);
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -379,9 +377,10 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        entity.put("id", id);
+        JSONObject resource = new JSONObject();
+        resource.put("id", id);
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(resource.toJSONString()).build();
     }
 
     /**
@@ -437,26 +436,26 @@ public class ExportJobResource extends JobControllerBase {
 
         JSONArray exportResources = new JSONArray();
         try {
-            JSONObject o = new JSONObject();
-            o.put("name", "TDS");
-            o.put("description", "LTDS 4.0");
-            exportResources.add(o);
+            JSONObject resource = new JSONObject();
+            resource.put("name", "TDS");
+            resource.put("description", "LTDS 4.0");
+            exportResources.add(resource);
 
-            o = new JSONObject();
-            o.put("name", "MGCP");
-            o.put("description", "MGCP");
-            exportResources.add(o);
+            resource = new JSONObject();
+            resource.put("name", "MGCP");
+            resource.put("description", "MGCP");
+            exportResources.add(resource);
 
-            File f = new File(transExtPath);
-            if (f.exists() && f.isDirectory()) {
-                o = new JSONObject();
-                o.put("name", "UTP");
-                o.put("description", "UTP");
-                exportResources.add(o);
+            File file = new File(transExtPath);
+            if (file.exists() && file.isDirectory()) {
+                resource = new JSONObject();
+                resource.put("name", "UTP");
+                resource.put("description", "UTP");
+                exportResources.add(resource);
             }
         }
         catch (Exception e) {
-            String msg = "Error retrieving exported resource list!";
+            String msg = "Error retrieving export resources list!";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

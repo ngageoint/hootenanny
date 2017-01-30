@@ -93,7 +93,7 @@ public class ClipDatasetResource extends JobControllerBase {
             JSONObject arguments = (JSONObject) parser.parse(params);
             String clipOutputName = arguments.get("OUTPUT_NAME").toString();
 
-            JSONArray commandArgs = super.parseParams(params);
+            JSONArray commandArgs = JobControllerBase.parseParams(params);
             JSONObject clipCommand = super.createMakeScriptJobReq(commandArgs);
 
             Command[] commands = {

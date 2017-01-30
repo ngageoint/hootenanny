@@ -153,7 +153,6 @@ public class HGISReviewResource extends HGISResource {
         }
 
         try {
-            String jobId = UUID.randomUUID().toString();
             JSONArray commandArgs = new JSONArray();
 
             JSONObject arg = new JSONObject();
@@ -165,6 +164,8 @@ public class HGISReviewResource extends HGISResource {
             commandArgs.add(arg);
 
             JSONObject validationCommand = super.createBashScriptJobReq(commandArgs);
+
+            String jobId = UUID.randomUUID().toString();
             Command updateMapTagsCommand = new UpdateMapTagsCommand(jobId, outputMap);
 
             Command[] commands = {

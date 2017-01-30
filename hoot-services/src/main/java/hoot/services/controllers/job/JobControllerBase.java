@@ -49,7 +49,7 @@ import hoot.services.command.InternalCommandInterface;
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
 
-    // Thread pool for chain and job processing
+    // Thread pool for job processing
     private static final ExecutorService jobThreadExecutor =
             Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
 
@@ -71,40 +71,14 @@ public class JobControllerBase {
 
     public void processChainJob(String jobId, Command[] commands) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
-
-        Runnable chainJobWorker = new JobChainRunnable(jobId, commands, jobStatusManager);
-        jobThreadExecutor.execute(chainJobWorker);
+        Runnable chainJob = new JobChainRunnable(jobId, commands, jobStatusManager);
+        jobThreadExecutor.execute(chainJob);
     }
 
     public void processJob(String jobId, Command command) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
-
-        Runnable jobWorker = new JobRunnable(jobId, command, jobStatusManager);
-        jobThreadExecutor.execute(jobWorker);
-    }
-
-    protected JSONObject createMakeScriptJobReq(JSONArray args) {
-        String resourceName = this.getClass().getSimpleName();
-
-        JSONObject command = new JSONObject();
-        command.put("exectype", "make");
-        command.put("exec", this.processScriptName);
-        command.put("caller", resourceName);
-        command.put("params", args);
-
-        return command;
-    }
-
-    protected JSONObject createBashScriptJobReq(JSONArray args) {
-        String resourceName = this.getClass().getSimpleName();
-
-        JSONObject command = new JSONObject();
-        command.put("exectype", "bash");
-        command.put("exec", this.processScriptName);
-        command.put("caller", resourceName);
-        command.put("params", args);
-
-        return command;
+        Runnable job = new JobRunnable(jobId, command, jobStatusManager);
+        jobThreadExecutor.execute(job);
     }
 
     public static JSONArray parseParams(String params) throws ParseException {
@@ -120,17 +94,34 @@ public class JobControllerBase {
             JSONObject arg = new JSONObject();
             arg.put(key, val);
             commandArgs.add(arg);
-
         }
 
         return commandArgs;
     }
 
+    protected JSONObject createMakeScriptJobReq(JSONArray args) {
+        JSONObject command = new JSONObject();
+        command.put("exectype", "make");
+        command.put("exec", this.processScriptName);
+        command.put("caller", this.getClass().getSimpleName());
+        command.put("params", args);
+        return command;
+    }
+
+    protected JSONObject createBashScriptJobReq(JSONArray args) {
+        JSONObject command = new JSONObject();
+        command.put("exectype", "bash");
+        command.put("exec", this.processScriptName);
+        command.put("caller", this.getClass().getSimpleName());
+        command.put("params", args);
+        return command;
+    }
+
     protected String getParameterValue(String key, JSONArray args) {
         for (Object arg : args) {
-            JSONObject o = (JSONObject) arg;
-            if (o.containsKey(key)) {
-                return o.get(key).toString();
+            JSONObject jsonObject = (JSONObject) arg;
+            if (jsonObject.containsKey(key)) {
+                return jsonObject.get(key).toString();
             }
         }
 
