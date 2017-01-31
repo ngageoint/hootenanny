@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -184,7 +184,6 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   else
   {
     char *wkt;
-    //map->getProjection()->exportToPrettyWkt(&wkt);
     map->getProjection()->exportToWkt(&wkt);
     writer.writeAttribute("srs", wkt);
     free(wkt);
@@ -209,7 +208,8 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 
 void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
-  LOG_VART(e->toString());
+  LOG_VART(e->getElementId());
+
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));

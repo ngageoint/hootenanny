@@ -176,12 +176,16 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
   return _nodeToWayLocation2[nodeId];
 }
 
-void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
+void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 {
-  LOG_VART(scrapNode);
-  LOG_VART(_map->getNode(scrapNode));
+  LOG_VART(scrapNodeId);
+  ConstNodePtr scrapNode = _map->getNode(scrapNodeId);
+  LOG_VART(scrapNode->getElementId());
+  LOG_VART(scrapNode->getX());
+  LOG_VART(scrapNode->getY());
+
   // find the first instance of scrapNode in way 2
-  WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);
+  WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNodeId);
 
   // map the WayLocation of scrapNode to way string 1
   WayLocation wl1 = _mapping->map2To1(wl2);
@@ -190,7 +194,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
   {
     LOG_VARD(_mapping->getWayString1());
     LOG_VARD(_mapping->getWayString2());
-    LOG_VARD(scrapNode);
+    LOG_VARD(scrapNodeId);
     LOG_VARD(wl2);
     LOG_VARD(wl1.getWay());
     LOG_VARD(wl1);
@@ -200,7 +204,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNode)
   }
 
   // move scrapNode to the WayLocation in way string 1
-  _moveNode(scrapNode, wl1);
+  _moveNode(scrapNodeId, wl1);
 
   // notify _sublineMapping that way string 1 changed.
   _rebuildWayString1();

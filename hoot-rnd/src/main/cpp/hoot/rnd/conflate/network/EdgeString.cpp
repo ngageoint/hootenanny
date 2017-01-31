@@ -294,7 +294,7 @@ ConstNetworkVertexPtr EdgeString::getFromVertex() const
 }
 
 ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map,
-  Meters offset) const
+                                                     Meters offset) const
 {
   Meters d = 0.0;
 
@@ -306,11 +306,11 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map
   LOG_VART(offset);
   foreach (EdgeEntry ee, _edges)
   {
-    Meters l = ee.getSubline()->calculateLength(map);
-    LOG_VART(l);
+    Meters length = ee.getSubline()->calculateLength(map);
+    LOG_VART(length);
     LOG_VART(ee.getSubline()->getStart());
 
-    if (d + l >= offset)
+    if (d + length >= offset)
     {
       if (ee.getSubline()->isBackwards())
       {
@@ -322,7 +322,7 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map
       }
     }
 
-    d += l;
+    d += length;
   }
   LOG_VART(d);
 

@@ -538,10 +538,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
 
     LOG_TRACE("\ns1: " << em->getString1() << "\ns2: " << em->getString2() << "\n"
              << numerator << "/" << denominator << " " << newScores[em]
-             << " " << newWeights[em] << "\n\n");
-
-    //LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
-    //         newWeights[em]);
+             << " " << newWeights[em]);
+    LOG_TRACE(em << " " << numerator << "/" << denominator << " " << newScores[em] << " " <<
+             newWeights[em]);
   }
 
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
