@@ -50,12 +50,6 @@ import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
 
 
-/**
- * @author Jong Choi
- *
- *         Servlet class for handling job execution internally.
- *
- */
 @Controller
 @Path("")
 @Transactional
@@ -69,24 +63,27 @@ public class JobResource {
     public JobResource() {}
 
     /**
-     * This service allows for executing Hootenanny tasks and tracking the
-     * status of Hootenanny jobs launched by other web services. Not all
-     * Hootenanny web services create jobs which can be tracked by this service.
-     * 
+     * This service allows for tracking the status of Hootenanny jobs launched by other web services.
+     *
      * GET hoot-services/job/status/{Job Id}
      * 
      * @param jobId
-     *            id of the job to track
+     *            ID of the job to track.
+     *
+     * @param includeCommandDetail
+     *            flag to signal whether to include command level detail.
+     *
      * @return job status JSON
      */
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJobStatus(@PathParam("jobId") String jobId,
-                                 @QueryParam("includeCommandStatus") @DefaultValue("false") Boolean includeCommandStatus) {
+                                 @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
+        JSONObject response = new JSONObject();
+
         try {
             JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
-            JSONObject response = new JSONObject();
 
             if (jobStatus != null) {
                 response.put("jobId", jobId);
@@ -95,22 +92,21 @@ public class JobResource {
                 response.put("percentcomplete", jobStatus.getPercentComplete());
                 response.put("lasttext", jobStatus.getStatusDetail());
 
-                if (includeCommandStatus) {
-                    List<CommandStatus> commandStatuses = this.jobStatusManager.getCommandStatusUsing(jobId);
-                    response.put("commandStatuses", commandStatuses);
+                if (includeCommandDetail) {
+                    List<CommandStatus> commandDetail = this.jobStatusManager.getCommandStatusUsing(jobId);
+                    response.put("commandDetail", commandDetail);
                 }
-
-                return Response.ok(response.toJSONString()).build();
             }
             else {
                 response.put("jobId", jobId);
                 response.put("status", JOB_STATUS.UNKNOWN.toString());
-                return Response.ok(response.toJSONString()).build();
             }
         }
         catch (Exception ex) {
-            String msg = "Error retrieving job status for job: " + jobId + " Error: " + ex.getMessage();
+            String msg = "Error retrieving job status for job with ID = " + jobId + ".  Cause: " + ex.getMessage();
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
+
+        return Response.ok(response.toJSONString()).build();
     }
 }

@@ -34,17 +34,12 @@ import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
 
 
 public class ProcessStreamInterfaceTest {
 
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(ProcessStreamInterfaceTest.class);
-    
     @Test
     @Category(UnitTest.class)
     public void testcreateCmd() throws Exception {
