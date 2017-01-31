@@ -20,6 +20,16 @@ TOMCAT_CACHE_HOME_PERMISSIONS=775
 
 TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-8.5.8.tar.gz
 
+# Find out what user we have: vagrant or ubuntu
+# This comes from a user difference in one of the Vagrant boxes
+if [ "$(getent passwd vagrant)" ]; then
+  VMUSER=vagrant
+else
+  if [ "$(getent passwd ubuntu)" ]; then
+    VMUSER=ubuntu
+  fi
+fi
+
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
    exit 1
@@ -37,17 +47,18 @@ getent group ${TOMCAT_GROUP} >/dev/null || groupadd -r ${TOMCAT_GROUP}
 # Create tomcat user if not already created
 getent passwd ${TOMCAT_USER} >/dev/null || useradd --comment "$TOMCAT_NAME daemon user" --shell /bin/bash -M -r -g ${TOMCAT_GROUP} --home ${TOMCAT_HOME} ${TOMCAT_USER}
 
-# Add tomcat and vagrant to each other's groups so we can get the group write working with nfs
-if ! groups vagrant | grep --quiet "\b$TOMCAT_GROUP\b"; then
-    echo "### Adding vagrant user to $TOMCAT_GROUP user group..."
-    usermod -a -G ${TOMCAT_GROUP} vagrant
+# Add tomcat and ubuntu to each other's groups so we can get the group write working with nfs
+if ! groups $VMUSER | grep --quiet "\b$TOMCAT_GROUP\b"; then
+    echo "### Adding $VMUSER user to $TOMCAT_GROUP user group..."
+    usermod -a -G ${TOMCAT_GROUP} ${VMUSER}
 fi
 
-# Add tomcat and vagrant to each other's groups so we can get the group write working with nfs
-if ! groups ${TOMCAT_GROUP} | grep --quiet "\bvagrant\b"; then
-    echo "### Adding $TOMCAT_GROUP user to vagrant user group..."
-    usermod -a -G vagrant ${TOMCAT_GROUP}
+# Add tomcat and ubuntu to each other's groups so we can get the group write working with nfs
+if ! groups ${TOMCAT_GROUP} | grep --quiet "\b$VMUSER\b"; then
+    echo "### Adding $TOMCAT_GROUP user to $VMUSER user group..."
+    usermod -a -G ${VMUSER}${TOMCAT_GROUP}
 fi
+
 
 mkdir -p ${TOMCAT_HOME}
 tar -zxf ${TOMCAT_TAR_FILE} -C ${TOMCAT_HOME} --strip-components 1
