@@ -168,7 +168,7 @@ emgcp_osm = {
                 {
                     if (ftag[1] !== tags[ftag[0]])
                     {
-                        hoot.logVerbose('emgcp_osm: fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                        hoot.logTrace('emgcp_osm: fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                 }
             }
         }

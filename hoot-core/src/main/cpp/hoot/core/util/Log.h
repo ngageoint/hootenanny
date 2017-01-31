@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -147,7 +147,7 @@ public:
   DisableLog(Log::WarningLevel tmpLevel = Log::Error)
   {
     _oldLevel = Log::getInstance().getLevel();
-    Log::getInstance().log(Log::Debug, "Disabling logging.");
+    Log::getInstance().log(Log::Trace, "Disabling logging.");
     Log::getInstance().setLevel(tmpLevel);
   }
 
@@ -159,7 +159,7 @@ public:
   void reset()
   {
     Log::getInstance().setLevel(_oldLevel);
-    Log::getInstance().log(Log::Debug, "Enabled logging.");
+    Log::getInstance().log(Log::Trace, "Enabled logging.");
   }
 
 private:
