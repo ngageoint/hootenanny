@@ -168,6 +168,10 @@ public class OGRAttributesResource extends JobControllerBase {
             param.put("INPUT_ZIPS", mergedZipList);
             params.add(param);
 
+            param = new JSONObject();
+            param.put("jobid", jobId);
+            params.add(param);
+
             Command job = () -> {
                 ExternalCommand externalCommand = super.createMakeScriptJobReq(params);
                 return externalCommandManager.exec(jobId, externalCommand);
