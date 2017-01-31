@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -193,12 +193,14 @@ bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
     /// other   *-----f----l--*
     if (other->getFormer() < getLatter() && other->getLatter() >= getLatter())
     {
+      LOG_TRACE("overlaps; this edge: " << toString() << ", other: " << other);
       result = true;
     }
     /// this    *-----f----l--*
     /// other   *--f----l-----*
     else if (other->getFormer() <= getFormer() && other->getLatter() > getFormer())
     {
+      LOG_TRACE("overlaps; this edge: " << toString() << ", other: " << other);
       result = true;
     }
   }

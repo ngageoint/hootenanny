@@ -182,12 +182,10 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetw
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
 {
   QSet<ConstEdgeMatchPtr> result;
-
   foreach (const EdgeString::EdgeEntry& ee, str->getAllEdges())
   {
     result.unite(getMatchesThatContain(ee.getEdge()));
   }
-
   return result;
 }
 
@@ -216,8 +214,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
 
   foreach (const ConstEdgeMatchPtr& em, candidates)
   {
-    if (em->getString1()->overlaps(e->getString1()) ||
-      em->getString2()->overlaps(e->getString2()))
+    if (em->getString1()->overlaps(e->getString1()) || em->getString2()->overlaps(e->getString2()))
     {
       result.insert(em);
     }

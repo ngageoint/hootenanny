@@ -184,7 +184,6 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb,
   ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB)
 {
-
   /// @todo break this into smaller functions
   // Find all the edges that connect to eb
   QSet<ConstNetworkEdgePtr> ebNeighborhood = QSet<ConstNetworkEdgePtr>::fromList(

@@ -51,8 +51,7 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   assert(_pairs.size() >= 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const
 {
   LOG_INFO("Applying network merger...");
 

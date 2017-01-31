@@ -123,7 +123,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
     // If any of the partial matches overlap, then mark them all for review.
     else
     {
-      LOG_VART(matches.size());
+      LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
       // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {

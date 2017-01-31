@@ -221,6 +221,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
+  //TODO: this isn't right for network
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_INFO("Match count: " << _matches.size());
 

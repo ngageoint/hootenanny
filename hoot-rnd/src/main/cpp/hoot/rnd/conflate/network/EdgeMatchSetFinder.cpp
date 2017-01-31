@@ -266,7 +266,7 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&
       _details->isStringCandidate(em->getString2()->getFirstEdge(), neighbor2) &&
-    /// @todo comment me and retest
+      /// @todo comment me and retest
       neighbor2->isStub() == false &&
       _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()) > 0)
     {

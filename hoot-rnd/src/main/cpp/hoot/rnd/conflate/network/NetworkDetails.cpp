@@ -619,6 +619,8 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
     // if this is a partial match in the middle of an edge then we want to be more strict about
     // accepting the match.
+    LOG_VART(e1->isFullPartial());
+    LOG_VART(e2->isFullPartial());
     if (e1->isFullPartial() || e2->isFullPartial())
     {
       sr *= 2;
@@ -626,8 +628,10 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
     // we won't even try to make partial matches smaller than the search radius. It just creates too
     // much noise.
+    LOG_VART(e1->isPartial());
+    LOG_VART(e2->isPartial());
     if (ws1->calculateLength() < sr && ws2->calculateLength() < sr &&
-      (e1->isPartial() || e2->isPartial()))
+        (e1->isPartial() || e2->isPartial()))
     {
       result = 0.0;
     }
@@ -943,7 +947,6 @@ bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetw
 {
   double score = getPartialEdgeMatchScore(e1, e2);
   score *= _getEdgeAngleScore(v1, v2, e1, e2);
-
   return score >= ConfigOptions().getConflatorMinValidScore();
 }
 

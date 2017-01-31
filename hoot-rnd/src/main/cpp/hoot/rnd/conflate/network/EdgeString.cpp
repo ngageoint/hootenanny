@@ -388,6 +388,7 @@ bool EdgeString::overlaps(shared_ptr<const EdgeString> other) const
   {
     if (other->overlaps(_edges[i].getSubline()))
     {
+      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
       return true;
     }
   }
@@ -414,6 +415,7 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
   {
     if (_edges[i].getSubline()->overlaps(es))
     {
+      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
       return true;
     }
   }

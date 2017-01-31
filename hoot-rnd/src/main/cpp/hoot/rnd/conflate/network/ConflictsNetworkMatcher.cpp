@@ -188,7 +188,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     //    board example)
     // They're conflicts!
     QSet<ConstEdgeMatchPtr> conflict = _edgeMatches->getMatchesThatOverlap(em);
-    LOG_VART(conflict.size());
+    LOG_TRACE("conflicting overlapping matches: " << conflict.size());
     QSet<ConstEdgeMatchPtr> touches;
     ConstNetworkVertexPtr from1, to1;
     ConstNetworkVertexPtr from2, to2;
@@ -356,7 +356,6 @@ QSet<ConstEdgeMatchPtr> ConflictsNetworkMatcher::_getMatchesWithSharedTerminatio
 
 void ConflictsNetworkMatcher::iterate()
 {
-  //_iterateRank();
   _iterateSimple();
 }
 
@@ -364,18 +363,25 @@ void ConflictsNetworkMatcher::_iterateRank()
 {
   const double partialHandicap = 0.5;
   EdgeScoreMap newScores;
-  LOG_VARW(_scores.size());
+  LOG_VART(_scores.size());
   foreach(ConstEdgeMatchPtr em, _scores.keys())
   {
-    double numerator = em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
+    LOG_VART(em->containsPartial());
+    LOG_VART(em->containsStub());
+
+    double numerator =
+      em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
     double denominator = numerator;
 
     foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
-      double handicap = r->getEdge()->containsPartial() || em->containsStub() ? partialHandicap : 1.0;
+      LOG_VART(r->getEdge()->containsPartial());
+
+      double handicap =
+        r->getEdge()->containsPartial() || em->containsStub() ? partialHandicap : 1.0;
       double s = _scores[r->getEdge()] * handicap;
       //s = pow(s, 2);
-      LOG_VAR(s);
+      LOG_VART(s);
 
       int supportCount = 0;
       int relationCount = 0;
@@ -401,7 +407,7 @@ void ConflictsNetworkMatcher::_iterateRank()
     }
 
     newScores[em] = pow(numerator / denominator, 4);
-    LOG_INFO(em << " " << numerator << "/" << denominator << " " << newScores[em]);
+    LOG_TRACE(em << " " << numerator << "/" << denominator << " " << newScores[em]);
   }
 
   _scores = newScores;
@@ -613,7 +619,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       LOG_VART(e2);
 
       double score = _details->getPartialEdgeMatchScore(e1, e2);
-      LOG_VART(score);
+      LOG_TRACE("partial edge match score:" << score);
       if (score > 0)
       {
         // Add all the EdgeMatches that are seeded with this edge pair.
