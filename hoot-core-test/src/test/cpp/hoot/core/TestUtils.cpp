@@ -41,6 +41,9 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
 
+//  tgs
+#include <tgs/Statistics/Random.h>
+
 // Qt
 #include <QFile>
 
@@ -210,6 +213,8 @@ void TestUtils::resetEnvironment()
   {
     rr->reset();
   }
+  //  Reset the pseudo random number generator seed
+  Tgs::Random::instance()->seed();
 }
 
 QString TestUtils::toQuotedString(QString str)
