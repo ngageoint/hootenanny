@@ -29,7 +29,9 @@ echo "######## Begin $TOMCAT_NAME installation ########"
 echo "SCRIPT_HOME=$SCRIPT_HOME"
 
 # Stop tomcat service if it already exists
-service ${TOMCAT_NAME} stop
+if service --status-all 2>&1 | grep -q ${TOMCAT_NAME}; then
+  service ${TOMCAT_NAME} stop
+fi
 
 # Create tomcat group if not already created
 getent group ${TOMCAT_GROUP} >/dev/null || groupadd -r ${TOMCAT_GROUP}
