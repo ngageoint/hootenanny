@@ -39,6 +39,8 @@ void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score
 {
   if (!contains(em))
   {
+    LOG_TRACE("Adding edge match...");
+
     _matches.insert(em, score);
 
     // index it so we can quickly determine which match an edge is part of.

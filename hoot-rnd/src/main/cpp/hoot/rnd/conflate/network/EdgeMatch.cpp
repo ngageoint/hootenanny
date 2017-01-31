@@ -118,13 +118,13 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
   if (other->getString1()->overlaps(getString1()))
   {
-    LOG_TRACE("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps; this edge: " << toString() << " other edge: " << other);
     return true;
   }
 
   if (other->getString2()->overlaps(getString2()))
   {
-    LOG_TRACE("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps; this edge: " << toString() << " other edge: " << other);
     return true;
   }
 

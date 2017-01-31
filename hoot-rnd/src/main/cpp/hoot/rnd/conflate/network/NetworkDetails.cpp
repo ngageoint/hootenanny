@@ -161,6 +161,8 @@ Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
 QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetworkEdgePtr e1,
   ConstNetworkEdgePtr e2)
 {
+  LOG_TRACE("Calculating matching sublines...");
+
   QList<EdgeSublineMatchPtr> result;
 
   if (e1->isStub() || e2->isStub())
@@ -193,6 +195,8 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
   ConstEdgeSublinePtr subline, ConstEdgeLocationPtr& elString, ConstEdgeLocationPtr& elSubline)
     const
 {
+  LOG_DEBUG("Calculating nearest location...");
+
   elString.reset();
   elSubline.reset();
 
@@ -281,6 +285,8 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
 double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeLocationPtr el)
   const
 {
+  LOG_DEBUG("Calculating string location...");
+
   Meters beginningD = -calculateDistance(es->getFrom());
   ConstNetworkVertexPtr edgeStartVertex;
 
@@ -335,6 +341,8 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
 NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapPtr map,
   ConstWayPtr w1, ConstWayPtr w2) const
 {
+  LOG_TRACE("Calculating subline score...");
+
   SublineCache result;
 
   Meters searchRadiusHighway = ConfigOptions().getSearchRadiusHighway();
@@ -401,6 +409,8 @@ double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetwork
 EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
   ConstNetworkEdgePtr e2) const
 {
+  LOG_TRACE("Extending edge match...");
+
   EdgeMatchPtr result;
   // Run an experiment to see if a valid match is created by adding esm onto em.
 
@@ -469,6 +479,8 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 
 void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) const
 {
+  LOG_TRACE("Extending edge string...");
+
   bool foundEnd = false;
   // if e is the same as the last edge in the string
   if (es->getLastEdge() == e ||
@@ -882,7 +894,7 @@ LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
 {
   if (!_vertexMatcher)
   {
-    LOG_INFO("Creating vertex matcher...");
+    LOG_TRACE("Creating vertex matcher...");
     _vertexMatcher.reset(new LegacyVertexMatcher(_map));
     _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
   }
@@ -1112,6 +1124,8 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
 void NetworkDetails::_trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es,
                                      WayPtr w, const WaySublineCollection& ws) const
 {
+  LOG_TRACE("Trimming edge string...");
+
   (void) provider; // unused var
   (void) w; // unused var
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -129,7 +129,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   if (Log::getInstance().isDebugEnabled())
   {
-    LOG_DEBUG("Writing debug map.");
+    LOG_DEBUG("Writing debug map...");
     OsmMapPtr debug(new OsmMap(map));
     MapProjector::projectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());

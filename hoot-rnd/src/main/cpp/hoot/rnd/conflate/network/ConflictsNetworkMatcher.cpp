@@ -73,6 +73,11 @@ double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
   return result;
 }
 
+QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
+{
+  return QList<NetworkVertexScorePtr>();
+}
+
 shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
   return shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
@@ -292,13 +297,6 @@ QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
     result.append(p);
   }
 
-  return result;
-}
-
-//??
-QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
-{
-  QList<NetworkVertexScorePtr> result;
   return result;
 }
 

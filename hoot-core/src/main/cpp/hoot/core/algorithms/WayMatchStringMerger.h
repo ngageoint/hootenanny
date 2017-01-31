@@ -43,11 +43,14 @@ class WayMatchStringMergerTest;
  */
 class WayMatchStringMerger
 {
+
 public:
+
   /// @todo clean me
   class SublineMapping
   {
   public:
+
     WayPtr newWay1;
     WaySubline subline2;
     ConstWayPtr way2;
@@ -82,7 +85,9 @@ public:
         .arg(hoot::toString(subline2))
         .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
     }
+
   private:
+
     WayLocation _start;
     WayLocation _end;
     WayPtr _newWay2;
@@ -92,6 +97,7 @@ public:
   class SublineMappingLessThan1
   {
   public:
+
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
@@ -102,6 +108,7 @@ public:
   class SublineMappingLessThan2
   {
   public:
+
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
