@@ -423,9 +423,9 @@ bool EdgeMatchSetFinder::_hasConfidentTiePoint(ConstEdgeLocationPtr l) const
 {
   bool result;
 
-  if (l->isExtreme())
+  if (l->isExtreme(EdgeLocation::SLOPPY_EPSILON))
   {
-    result = _details->hasConfidentTiePoint(l->getVertex());
+    result = _details->hasConfidentTiePoint(l->getVertex(EdgeLocation::SLOPPY_EPSILON));
   }
   else
   {
