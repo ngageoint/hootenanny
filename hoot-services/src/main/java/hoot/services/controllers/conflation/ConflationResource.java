@@ -212,8 +212,7 @@ public class ConflationResource extends JobControllerBase {
             String input1Name = oParams.get("INPUT1").toString();
             String input2Name = oParams.get("INPUT2").toString();
 
-            JSONArray commandArgs = super.parseParams(oParams.toJSONString());
-            //JSONObject conflationCommand = super.createMakeScriptJobReq(commandArgs);
+            JSONArray commandArgs = parseParams(oParams.toJSONString());
 
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
@@ -225,8 +224,7 @@ public class ConflationResource extends JobControllerBase {
             tags.put("params", JsonUtils.escapeJson(params));
 
             // Hack alert!
-            // Write stats file name to tags, if the file exists
-            // when this updateMapsTagsCommand job is run, the
+            // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
             // file will be read and its contents placed in the stats tag.
             if ((oParams.get("COLLECT_STATS") != null)
                     && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
@@ -241,8 +239,6 @@ public class ConflationResource extends JobControllerBase {
 
                 String secondaryParameterKey = (firstLayerIsOsmApiDb(oParams)) ? "INPUT2" : "INPUT1";
 
-                //logger.debug(commandArgs.toJSONString());
-
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
@@ -254,7 +250,8 @@ public class ConflationResource extends JobControllerBase {
                 BoundingBox bbox;
                 if (oParams.get("TASK_BBOX") != null) {
                     bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
-                } else {
+                }
+                else {
                     Map secondaryMap = new Map(secondaryMapId);
                     bbox = getMapBounds(secondaryMap);
                 }
@@ -315,10 +312,10 @@ public class ConflationResource extends JobControllerBase {
     private static void validateOsmApiDbConflateParams(JSONObject inputParams) {
         // default REFERENCE_LAYER = 1
         if (inputParams.get("REFERENCE_LAYER") != null) {
-            if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
-                    .get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
-                    || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") && inputParams
-                    .get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
+            if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
+                    inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
+                    || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
+                    inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
                 String msg = "OSM_API_DB not allowed as secondary input type.";
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
@@ -339,10 +336,9 @@ public class ConflationResource extends JobControllerBase {
         return Map.mapExists(id);
     }
 
-    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
+    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
-        arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
-                bounds.getMaxLon() + "," + bounds.getMaxLat());
+        arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
     }
 }
