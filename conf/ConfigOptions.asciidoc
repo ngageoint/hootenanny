@@ -1196,7 +1196,7 @@ hoot --convert \
 * Data Type: list
 * Default Value:
 ** `hoot::MergeNearbyNodes` - Merges nodes within the distance defined by merge.nearby.nodes.distance.
-** `hoot::BuildingPartMergeOp` - Implicitly merges ceratin individual building parts into a single part.
+** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
 
 Operations that should be applied to ingested OGR data before saving the data.
 
