@@ -37,10 +37,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -76,39 +73,14 @@ public class HGISFilterResource extends HGISResource {
     @Produces(MediaType.APPLICATION_JSON)
     public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) {
         FilterNonHgisPoisResponse response = new FilterNonHgisPoisResponse();
-        String src = request.getSource();
-        String output = request.getOutput();
 
-        if (src == null) {
-            String msg = "Invalid or empty sourceMap.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        if (output == null) {
-            String msg = "Invalid or empty outputMap.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        if (!mapExists(src)) {
-            String msg = "Map " + src + " does not exist.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
+        checkHGISCommandParams(request.getSource(), request.getOutput());
 
         try {
-            JSONArray commandArgs = new JSONArray();
-
-            JSONObject arg = new JSONObject();
-            arg.put("SOURCE", generateDbMapParam(src));
-            commandArgs.add(arg);
-
-            arg = new JSONObject();
-            arg.put("OUTPUT", generateDbMapParam(output));
-            commandArgs.add(arg);
-
             String jobId = UUID.randomUUID().toString();
 
             Command job = () -> {
-                ExternalCommand filterNonHgisPoisCommand = super.createBashScriptJobReq(commandArgs);
+                ExternalCommand filterNonHgisPoisCommand = super.createHGISCommand(request.getSource(), request.getOutput());
                 return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
             };
 

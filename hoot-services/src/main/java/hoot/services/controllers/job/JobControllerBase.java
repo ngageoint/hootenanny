@@ -104,7 +104,7 @@ public class JobControllerBase {
         ExternalCommand command = new ExternalCommand();
         command.put("exectype", "make");
         command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass());
+        command.put("caller", this.getClass().getName());
         command.put("params", args);
         return command;
     }
@@ -113,7 +113,7 @@ public class JobControllerBase {
         ExternalCommand command = new ExternalCommand();
         command.put("exectype", "bash");
         command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass());
+        command.put("caller", this.getClass().getName());
         command.put("params", args);
         return command;
     }

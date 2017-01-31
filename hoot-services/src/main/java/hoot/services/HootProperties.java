@@ -87,10 +87,6 @@ public final class HootProperties {
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String ETL_MAKEFILE;
     public static final String OSM_API_DB_NAME;
-    public static final String OSM_API_DB_USER_ID;
-    public static final String OSM_API_DB_PASSWORD;
-    public static final String OSM_API_DB_HOST;
-    public static final String OSM_API_DB_PORT;
     public static final String EXPORT_SCRIPT;
     public static final String OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
@@ -122,6 +118,13 @@ public final class HootProperties {
     public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String UPLOAD_FOLDER;
+    public static final String HOOT_APIDB_URL;
+    public static final String OSM_APIDB_URL;
+
+    private static final String OSM_API_DB_USER_ID;
+    private static final String OSM_API_DB_PASSWORD;
+    private static final String OSM_API_DB_HOST;
+    private static final String OSM_API_DB_PORT;
 
     static {
         try {
@@ -227,6 +230,8 @@ public final class HootProperties {
         OSM_API_DB_PASSWORD = "${osmApiDbPassword}";
         OSM_API_DB_HOST = "${osmApiDbHost}";
         OSM_API_DB_PORT = "${osmApiDbPort}";
+        HOOT_APIDB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
+        OSM_APIDB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + ":" + OSM_API_DB_PORT + "/" + OSM_API_DB_NAME;
     }
 
     private HootProperties() {}

@@ -41,10 +41,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -69,12 +66,12 @@ public class HGISReviewResource extends HGISResource {
         super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
     }
 
-    private class UpdateMapTagsCommand implements InternalCommand {
+    private static final class UpdateMapTagsCommand implements InternalCommand {
 
         private final String jobId;
         private final String mapName;
 
-        UpdateMapTagsCommand(String jobId, String mapName) {
+        private UpdateMapTagsCommand(String jobId, String mapName) {
             this.jobId = jobId;
             this.mapName = mapName;
         }
@@ -82,11 +79,11 @@ public class HGISReviewResource extends HGISResource {
         @Override
         public CommandResult execute() {
             CommandResult commandResult = new CommandResult();
-            commandResult.setCommand("updateMapsTag");
+            commandResult.setCommand("updateMapTags");
             commandResult.setJobId(this.jobId);
             commandResult.setStart(LocalDateTime.now());
 
-            updateMapsTag();
+            this.updateMapTags();
 
             commandResult.setExitCode(CommandResult.SUCCESS);
             commandResult.setFinish(LocalDateTime.now());
@@ -94,24 +91,15 @@ public class HGISReviewResource extends HGISResource {
             return commandResult;
         }
 
-        private void updateMapsTag() {
-            try {
-                long mapId = ModelDaoUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
-                updateMapTagWithReviewType(mapId);
-            }
-            catch (ReviewMapTagUpdateException e) {
-                throw new RuntimeException("Error updating map " + mapName + "'s tags!", e);
-            }
-        }
-
-        private void updateMapTagWithReviewType(long mapId) throws ReviewMapTagUpdateException {
+        private void updateMapTags() {
+            long mapId = ModelDaoUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
             Map<String, String> tags = new HashMap<>();
             tags.put("reviewtype", "hgisvalidation");
 
             long count = DbUtils.updateMapsTableTags(tags, mapId);
 
             if (count < 1) {
-                throw new ReviewMapTagUpdateException("Failed to update maps table for mapid = " + mapId);
+                throw new RuntimeException("Error updating map " + mapId + "'s tags!");
             }
         }
     }
@@ -136,44 +124,18 @@ public class HGISReviewResource extends HGISResource {
     public PrepareForValidationResponse prepareItemsForValidationReview(PrepareForValidationRequest request) {
         PrepareForValidationResponse response = new PrepareForValidationResponse();
 
-        String src = request.getSourceMap();
-        String outputMap = request.getOutputMap();
-
-        if (src == null) {
-            String msg = "Invalid or empty sourceMap.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        if (outputMap == null) {
-            String msg = "Invalid or empty outputMap.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
-
-        if (!mapExists(src)) {
-            String msg = "sourceMap does not exist.";
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
+        checkHGISCommandParams(request.getSourceMap(), request.getOutputMap());
 
         try {
-            JSONArray commandArgs = new JSONArray();
-
-            JSONObject arg = new JSONObject();
-            arg.put("SOURCE", src);
-            commandArgs.add(arg);
-
-            arg = new JSONObject();
-            arg.put("OUTPUT", outputMap);
-            commandArgs.add(arg);
-
             String jobId = UUID.randomUUID().toString();
 
             Command[] chainJob = {
                     () -> {
-                        ExternalCommand validationCommand = super.createBashScriptJobReq(commandArgs);
+                        ExternalCommand validationCommand = super.createHGISCommand(request.getSourceMap(), request.getOutputMap());
                         return super.externalCommandManager.exec(jobId, validationCommand);
                     },
                     () -> {
-                        InternalCommand updateMapTagsCommand = new UpdateMapTagsCommand(jobId, outputMap);
+                        InternalCommand updateMapTagsCommand = new UpdateMapTagsCommand(jobId, request.getOutputMap());
                         return super.internalCommandManager.exec(jobId, updateMapTagsCommand);
                     }
             };

@@ -26,12 +26,19 @@
  */
 package hoot.services.controllers.hgis;
 
-import static hoot.services.HootProperties.*;
 import static hoot.services.models.db.QMaps.maps;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.job.JobControllerBase;
 import hoot.services.models.osm.ModelDaoUtils;
 
@@ -47,35 +54,45 @@ abstract class HGISResource extends JobControllerBase {
         super(processName);
     }
 
+    ExternalCommand createHGISCommand(String sourceMap, String outputMap) {
+        JSONArray commandArgs = new JSONArray();
+
+        JSONObject arg = new JSONObject();
+        arg.put("SOURCE", generateDbMapParam(sourceMap));
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("OUTPUT", generateDbMapParam(outputMap));
+        commandArgs.add(arg);
+
+        return super.createBashScriptJobReq(commandArgs);
+    }
+
+    static void checkHGISCommandParams(String sourceMap, String outputMap) {
+        if (StringUtils.isBlank(sourceMap)) {
+            String msg = "Empty sourceMap!";
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        if (StringUtils.isBlank(outputMap)) {
+            String msg = "Empty outputMap!";
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+        }
+
+        if (!mapExists(sourceMap)) {
+            String msg = "sourceMap [" + sourceMap + "] does not exist.";
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+        }
+    }
+
     /**
      * Checks for the existence of map
      *
      * @param mapName
      * @return returns true when exists else false
      */
-    static boolean mapExists(String mapName) {
-        boolean exists;
-
-        try {
-            exists = (verifyMapExists(mapName) > -1);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error verifying that map '" + mapName + "' exists!", e);
-        }
-
-        return exists;
-    }
-
-    /**
-     * Creates db conection string based on config settings in
-     * hoot-services.conf
-     *
-     * @param mapName
-     * @return output looks like
-     *         postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-     */
-    static String generateDbMapParam(String mapName) {
-        return "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "/" + mapName;
+    private static boolean mapExists(String mapName) {
+        return (verifyMapExists(mapName) > -1);
     }
 
     /**
@@ -89,5 +106,16 @@ abstract class HGISResource extends JobControllerBase {
     private static long verifyMapExists(String mapIdStr) {
         // this will throw if it doesn't find the map
         return ModelDaoUtils.getRecordIdForInputString(mapIdStr, maps, maps.id, maps.displayName);
+    }
+
+    /**
+     * Creates db conection string based on config settings in
+     * hoot-services.conf
+     *
+     * @param mapName
+     * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
+     */
+    private static String generateDbMapParam(String mapName) {
+        return HootProperties.HOOT_APIDB_URL + "/" + mapName;
     }
 }

@@ -180,11 +180,8 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
             execCmd.add("jobid=" + jobid);
         }
 
-        String dbURL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
-        String osmAPIDBURL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + ":" + OSM_API_DB_PORT + "/" + OSM_API_DB_NAME;
-
-        execCmd.add("DB_URL=" + dbURL);
-        execCmd.add("OSM_API_DB_URL=" + osmAPIDBURL);
+        execCmd.add("DB_URL=" + HOOT_APIDB_URL);
+        execCmd.add("OSM_API_DB_URL=" + OSM_APIDB_URL);
 
         Object[] objectArray = execCmd.toArray();
 
