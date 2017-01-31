@@ -1114,7 +1114,10 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
 void NetworkDetails::_trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es,
                                      WayPtr w, const WaySublineCollection& ws) const
 {
-  // sanity check
+  (void) provider; // unused var
+  (void) w; // unused var
+
+  // sanity check to make sure the lengths are about the same.
   assert(ws.getSublines().size() == 1);
 
   WaySubline s = ws.getSublines()[0];
