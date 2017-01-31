@@ -7,6 +7,9 @@ source ~/.profile
 
 #To get rid of "dpkg-preconfigure: unable to re-open stdin: No such file or directory" warnings
 export DEBIAN_FRONTEND=noninteractive
+if [ -f /etc/apt/apt.conf.d/70debconf ]; then
+  sudo sed -i 's/ --apt//' /etc/apt/apt.conf.d/70debconf
+fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
@@ -14,7 +17,7 @@ sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
-sudo apt-get -q -y install ntp
+sudo apt-get -q -y install ntp 2>&1
 sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
@@ -58,7 +61,15 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
+ libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
+ automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
+ libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 \
+ libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
+ texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev \
+ gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
+ htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
+ libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -107,13 +118,13 @@ fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
     # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
     source /home/vagrant/.rvm/scripts/rvm
 
-    rvm install ruby-2.3
+    stdbuf -o L -e L rvm install ruby-2.3
     rvm --default use 2.3
 
 # Don't install documentation for gems
@@ -168,6 +179,7 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
+    sudo apt-get -f -y -q install
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -f -y -q install
 fi
@@ -204,7 +216,7 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
-if ! ogrinfo --formats | grep --quiet FileGDB; then
+if ! hash ogrinfo >/dev/null 2>&1 || ogrinfo --formats | grep --quiet FileGDB; then
     if [ ! -f gdal-1.10.1.tar.gz ]; then
         echo "### Downloading GDAL source..."
         wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
@@ -227,6 +239,7 @@ if ! ogrinfo --formats | grep --quiet FileGDB; then
     echo "### Building GDAL w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
     cd gdal-1.10.1
+    touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
@@ -330,13 +343,6 @@ if ! grep --quiet TOMCAT8_HOME ~/.profile; then
     echo "### Adding Tomcat to profile..."
     echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.profile
     source ~/.profile
-fi
-
-# Remove gdal libs installed by libgdal-dev that interfere with
-# node-export-server using gdal libs compiled from source (fgdb support)
-if [ -f "/usr/lib/libgdal.*" ]; then
-    echo "Removing GDAL libs installed by libgdal-dev..."
-    sudo rm /usr/lib/libgdal.*
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
