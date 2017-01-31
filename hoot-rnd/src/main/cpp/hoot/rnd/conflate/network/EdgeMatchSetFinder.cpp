@@ -45,6 +45,8 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
 
 void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
+  LOG_TRACE("Adding edge matches...");
+
   // recursively explore the edges that neighbor e1 and e2. All the discovered matches will be
   // recorded
 
@@ -74,6 +76,8 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
 
 bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Adding edge matches...");
+
   _steps++;
   LOG_VART(em);
   // if both the start and end have a valid matched vertex pair then add the match
@@ -163,6 +167,8 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
 bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
   QSet<ConstNetworkEdgePtr> neighbors1Set, QSet<ConstNetworkEdgePtr> neighbors2Set)
 {
+  LOG_TRACE("Adding edge neighbors to end...");
+
   bool foundSolution = false;
   // score all the e1 neighbors.
   foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
@@ -221,6 +227,8 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
 bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   QSet<ConstNetworkEdgePtr> neighbors1Set, QSet<ConstNetworkEdgePtr> neighbors2Set)
 {
+  LOG_TRACE("Adding edge neighbors to start...");
+
   bool foundSolution = false;
   // score all the e1 neighbors.
   foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
@@ -281,6 +289,8 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
 
 bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Adding partial match...");
+
   ConstEdgeLocationPtr from1 = em->getString1()->getFrom();
   ConstEdgeLocationPtr from2 = em->getString2()->getFrom();
   ConstEdgeLocationPtr to1 = em->getString1()->getTo();
@@ -352,6 +362,8 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
 void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
   ConstNetworkEdgePtr e2) const
 {
+  LOG_TRACE("Appending match...");
+
   _details->extendEdgeMatch(em, e1, e2);
 //  // trim the beginning of the edge string as appropriate.
 //  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
@@ -453,6 +465,8 @@ bool EdgeMatchSetFinder::_isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLoc
 void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
   ConstNetworkEdgePtr e2) const
 {
+  LOG_TRACE("Prepending match...");
+
   _details->extendEdgeMatch(em, e1, e2);
 //  // trim the beginning of the edge string as appropriate.
 //  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
@@ -526,6 +540,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 
 double EdgeMatchSetFinder::_scoreMatch(ConstEdgeMatchPtr em) const
 {
+  LOG_TRACE("Scoring match...");
   return _details->getEdgeStringMatchScore(em->getString1(), em->getString2());
 }
 
@@ -557,6 +572,8 @@ ConstEdgeSublinePtr EdgeMatchSetFinder::_snapSublineToString(ConstEdgeStringPtr 
 
 EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Trimming From edge...");
+
   EdgeMatchPtr result;
 
   LOG_VART(em);
@@ -629,6 +646,8 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 
 EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Trimming To edge...");
+
   EdgeMatchPtr result;
 
   LOG_VART(em);

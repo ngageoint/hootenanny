@@ -83,8 +83,9 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Extracting network...");
   LOG_VARD(threshold);
+
+  LOG_INFO("Extracting networks...");
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -92,16 +93,16 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     _userCriterion));
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
-  LOG_TRACE("Network 1: " << n1->toString());
+  LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
   ElementCriterionPtr c2(new ChainCriterion(new StatusCriterion(Status::Unknown2),
     _userCriterion));
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
-  LOG_TRACE("Network 2: " << n2->toString());
+  LOG_TRACE("Extracted Network 2: " << n2->toString());
 
-  LOG_INFO("Matching network...");
+  LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
   NetworkMatcherPtr matcher(
     Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
@@ -132,7 +133,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_INFO("Iteration: " << i + 1 << "/" << numIterations << " complete.");
   }
 
-  LOG_INFO("Creating matches...");
+  LOG_DEBUG("Retrieving edge scores...");
 
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
@@ -151,8 +152,6 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
-
-  LOG_INFO("Network match creation complete.");
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -184,6 +184,8 @@ NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
 void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
   SearchRadiusProvider& srp)
 {
+  LOG_DEBUG("Identifying vertex matches...");
+
   _createVertexIndex(n2->getVertexMap(), srp);
 
   // go through all the vertices in n1
@@ -252,7 +254,6 @@ bool LegacyVertexMatcher::isConfidentTiePoint(ConstNetworkVertexPtr v1, ConstNet
 
 double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
-
   double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(),
     v2->getElementId().getId());
 

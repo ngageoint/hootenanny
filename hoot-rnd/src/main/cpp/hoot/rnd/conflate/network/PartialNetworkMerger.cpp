@@ -87,6 +87,8 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
+  LOG_DEBUG("Applying merger...");
+
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
 
@@ -206,7 +208,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   try
   {
     // split the ways in such a way that the mappings are updated appropriately.
-    _splitAllWays(map, replaced, _allSublineMappings);
+    WayMatchStringSplitter().applySplits(map, replaced, _allSublineMappings);
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");
@@ -301,17 +303,9 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 {
+  LOG_TRACE("Replacing " << oldEid << " with " << newEid);
   MergerBase::replace(oldEid, newEid);
   _substitions[oldEid] = newEid;
-}
-
-void PartialNetworkMerger::_splitAllWays(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
-{
-  LOG_TRACE("Applying way splits...");
-  // refactor WayMatchStringMerger split methods into a new class.
-  WayMatchStringSplitter().applySplits(map, replaced, mappings);
 }
 
 QString PartialNetworkMerger::toString() const

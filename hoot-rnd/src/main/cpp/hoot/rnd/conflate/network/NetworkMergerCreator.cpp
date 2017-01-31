@@ -162,6 +162,8 @@ vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
 
 const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& matches) const
 {
+  LOG_TRACE("Retrieving largest container...");
+
   if (matches.size() <= 1)
   {
     return 0;
@@ -221,6 +223,8 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
 // duplicate matches in the first place
 void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
 {
+  LOG_TRACE("Removing duplicates...");
+
   for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);

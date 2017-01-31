@@ -53,6 +53,7 @@ class ConflictsNetworkMatcherTest;
 class ConflictsNetworkMatcher : public NetworkMatcher
 {
 public:
+
   static string className() { return "hoot::ConflictsNetworkMatcher"; }
 
   const static double EPSILON;
@@ -69,15 +70,14 @@ public:
 
   virtual double getMatchThreshold() const { return 0.35; }
 
-  void iterate();
+  virtual void iterate();
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
-protected:
 private:
 
   // for white box testing.
@@ -90,6 +90,7 @@ private:
   class MatchRelationship
   {
   public:
+
     MatchRelationship(ConstEdgeMatchPtr e, bool conflict) : _e(e), _conflict(conflict) {}
 
     ConstEdgeMatchPtr getEdge() const { return _e; }
@@ -103,7 +104,9 @@ private:
     bool isConflict() const { return _conflict; }
 
     void setThroughStubs(QSet<ConstEdgeMatchPtr> stubs) { _throughStub = stubs; }
+
   private:
+
     ConstEdgeMatchPtr _e;
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
@@ -130,7 +133,6 @@ private:
   /// A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor. A value
   /// of 1 will give approx (1 / n * score * weight) influence to each neighbor.
   double _outboundWeighting;
-
 
   MatchRelationshipMap _matchRelationships;
 

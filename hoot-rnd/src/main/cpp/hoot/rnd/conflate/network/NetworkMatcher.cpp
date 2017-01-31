@@ -113,6 +113,4 @@ void NetworkMatcher::_createVertex2Index()
   _vertex2Index->bulkInsert(boxes, fids);
 }
 
-
-
 }

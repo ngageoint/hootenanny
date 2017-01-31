@@ -47,6 +47,7 @@ void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId> > &replaced,
   QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException)
 {
+  LOG_TRACE("Applying way splits...");
   _splitWay1(map, replaced, mappings);
   _splitWay2(map, replaced, mappings);
 }
@@ -66,8 +67,7 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
 }
 
 QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitter::_buildWayIndex2(
-  OsmMapPtr map,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+  OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> result;
 
@@ -79,10 +79,11 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
   return result;
 }
 
-void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
-  vector<pair<ElementId, ElementId> > &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+                                        QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
+  LOG_TRACE("Splitting way 1...");
+
   ElementConverter ec(map);
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
@@ -170,10 +171,11 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map,
 }
 
 
-void WayMatchStringSplitter::_splitWay2(OsmMapPtr map,
-  vector<pair<ElementId, ElementId> > &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+                                        QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
+  LOG_TRACE("Splitting way 2...");
+
   ElementConverter ec(map);
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =

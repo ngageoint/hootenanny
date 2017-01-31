@@ -69,6 +69,8 @@ void NamedOp::apply(shared_ptr<OsmMap>& map)
       }
 
       t->apply(map);
+
+      LOG_VARD(map->getElementCount());
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
@@ -88,9 +90,9 @@ void NamedOp::apply(shared_ptr<OsmMap>& map)
 
       shared_ptr<OsmMapOperation> op(new VisitorOp(t));
       op->apply(map);
-    }
 
-    LOG_VARD(map->getElementCount());
+      LOG_VARD(map->getElementCount());
+    }
   }
 }
 

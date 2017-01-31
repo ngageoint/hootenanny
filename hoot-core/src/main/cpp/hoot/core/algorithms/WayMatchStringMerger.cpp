@@ -52,6 +52,8 @@ void WayMatchStringMerger::_addSublineMapping(SublineMappingPtr sm)
 
 WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
 {
+  LOG_TRACE("Creating match string...");
+
   vector<WaySublineMatch> matches;
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
@@ -76,6 +78,8 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
 void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocation splitEnd,
   WaySubline subline2)
 {
+  LOG_TRACE("Creating way mappings...");
+
   // splitStart and splitEnd represent the locations that subline2 matches on the primary way
   // string. For this reason splitStart and splitEnd may not be on the same way. We need to go
   // through all the ways in the primary in this function and find the sublines that match up to
@@ -139,6 +143,8 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
 
 WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId nodeId)
 {
+  LOG_TRACE("Finding node location...");
+
   assert(nodeId.getType() == ElementType::Node);
 
   // if we haven't created the index, create it.
@@ -178,6 +184,8 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
 
 void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 {
+  LOG_TRACE("Merging intersection...");
+
   LOG_VART(scrapNodeId);
   ConstNodePtr scrapNode = _map->getNode(scrapNodeId);
   LOG_VART(scrapNode->getElementId());
@@ -212,6 +220,8 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
 void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 {
+  LOG_TRACE("Merging node...");
+
   LOG_VAR(scrapNode);
   LOG_VAR(_map->getNode(scrapNode));
   // find the first instance of scrapNode in way 2
@@ -229,6 +239,8 @@ void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 
 void WayMatchStringMerger::mergeTags()
 {
+  LOG_TRACE("Merging tags...");
+
   if (!_tagMerger)
   {
     throw IllegalArgumentException("You must specify the tag merger first.");
@@ -247,6 +259,8 @@ void WayMatchStringMerger::mergeTags()
 
 void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 {
+  LOG_TRACE("Moving node...");
+
   if (!_tagMerger)
   {
     throw IllegalArgumentException("You must specify the tag merger first.");
@@ -262,7 +276,6 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
   LOG_VART(_sublineMappingOrder);
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    LOG_VART(sm->getNewWay2());
     LOG_VART(sm->getNewWay2()->getId());
     LOG_VART(_map->containsElement(sm->getNewWay2()->getElementId()));
     WayPtr w = _map->getWay(sm->getNewWay2()->getId());
@@ -301,7 +314,6 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 void WayMatchStringMerger::_rebuildWayString1()
 {
   WayStringPtr ws1(new WayString());
-
 
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
@@ -346,6 +358,8 @@ void WayMatchStringMerger::_rebuildWayString2()
 
 void WayMatchStringMerger::replaceScraps()
 {
+  LOG_TRACE("Replacing scraps...");
+
   // Determine which bits in secondary will be replaced by bits in the primary. Once we have that
   // we can replace them all at once, delete them and update the _replaced structure.
 
@@ -393,6 +407,8 @@ void WayMatchStringMerger::setKeeperStatus(Status s)
 
 WayLocation WayMatchStringMerger::_snapToEnd(const WayLocation& wl) const
 {
+  LOG_TRACE("Snapping to end...");
+
   WayLocation result;
 
   if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() <= WayLocation::SLOPPY_EPSILON)
@@ -414,6 +430,8 @@ WayLocation WayMatchStringMerger::_snapToEnd(const WayLocation& wl) const
 
 void WayMatchStringMerger::_splitPrimary()
 {
+  LOG_TRACE("Splitting primary...");
+
   WayStringPtr ws2 = _mapping->getWayString2();
 
   QList<ConstWayPtr> order2;

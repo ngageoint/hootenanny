@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,6 +49,7 @@ using namespace Tgs;
 class NetworkMatcher
 {
 public:
+
   const static double EPSILON;
 
   static string className() { return "hoot::NetworkMatcher"; }
@@ -70,6 +71,7 @@ public:
   virtual QList<NetworkVertexScorePtr> getAllVertexScores() const = 0;
 
 protected:
+
   HilbertRTreePtr _edge2Index;
   HilbertRTreePtr _vertex2Index;
   deque<ConstNetworkEdgePtr> _index2Edge;

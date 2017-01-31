@@ -74,6 +74,8 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
 
 void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch)
 {
+  LOG_TRACE("Discovering way pairs...");
+
   // traverse the match and determine all the match pairs.
   ConstEdgeStringPtr string1 = edgeMatch->getString1();
   ConstEdgeStringPtr string2 = edgeMatch->getString2();
