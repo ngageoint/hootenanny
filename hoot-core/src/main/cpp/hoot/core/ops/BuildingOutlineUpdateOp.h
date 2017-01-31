@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,6 +60,7 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
+
   shared_ptr<OsmMap> _map;
 
   void _createOutline(const shared_ptr<Relation>& building);
@@ -72,6 +73,10 @@ private:
    */
   void _mergeNodes(const shared_ptr<Element>& changed,
     const shared_ptr<Relation>& reference);
+
+  void _unionOutline(const RelationPtr& building, shared_ptr<Geometry> outline,
+                     ElementPtr buildingMember);
+
 };
 
 }
