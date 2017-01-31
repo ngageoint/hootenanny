@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -66,10 +66,7 @@ namespace hoot
 using namespace geos::geom;
 
 /**
- * ElementConverter is undergoing a transition. We've moving from using the element's pointers to
- * the OsmMap to an internal pointer. Ultimately this will fix some circular errors (see #4120).
- * For new code please use the constructor that takes a map, old code should be transitioned
- * eventually.
+ * Converts elements to geometries
  */
 class ElementConverter
 {
@@ -93,11 +90,16 @@ public:
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
    * determine the geometry type.
    */
-  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Element>& e, bool throwError=true, const bool statsFlag=false) const;
+  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Element>& e,
+                                                     bool throwError=true,
+                                                     const bool statsFlag=false) const;
   shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
   shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
-  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Way>& w, bool throwError, const bool statsFlag=false) const;
-  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Relation>& r, bool throwError, const bool statsFlag=false) const;
+  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Way>& w, bool throwError,
+                                                     const bool statsFlag=false) const;
+  shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<const Relation>& r,
+                                                     bool throwError,
+                                                     const bool statsFlag=false) const;
   shared_ptr<geos::geom::Geometry> convertToGeometry(const shared_ptr<Relation>& r) const;
   shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
   shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
