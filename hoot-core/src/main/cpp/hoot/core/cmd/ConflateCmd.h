@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -168,6 +168,7 @@ public:
     size_t initialElementCount = map->getElementCount();
     stats.append(SingleStat("Initial Element Count", initialElementCount));
 
+    LOG_INFO("Applying pre conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
@@ -193,6 +194,7 @@ public:
     }
 
     // Apply any user specified operations.
+    LOG_INFO("Applying post conflation operations...");
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
     MapProjector::projectToWgs84(result);

@@ -67,7 +67,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
   if (m)
   {
     bool matchOverlap = false;
-
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
       const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
@@ -91,7 +90,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
         }
       }
     }
-
     LOG_VART(matchOverlap);
 
     // If there are only 2 matches and one completely contains the other, use the larger match.
@@ -124,7 +122,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
     else
     {
       LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
-      // go through all the matches
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
         set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
@@ -134,14 +131,14 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn,
           eids.insert(jt->first);
           eids.insert(jt->second);
         }
+        LOG_VART(eids);
 
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
         mergers.push_back(
           new MarkForReviewMerger(
             eids,
-            "A complex road situation was found with "
-            "multiple plausible solutions. Please reference input data/imagery and manually merge "
-            "or modify as needed.",
+            "A complex road situation was found with multiple plausible solutions. Please "
+            "reference input data/imagery and manually merge or modify as needed.",
             m->getMatchName(),
             m->getScore()));
       }
@@ -223,7 +220,7 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
 // duplicate matches in the first place
 void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
 {
-  LOG_TRACE("Removing duplicates...");
+  LOG_TRACE("Removing duplicate matches...");
 
   for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
   {

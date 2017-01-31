@@ -130,7 +130,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
     matcher->iterate();
 
-    LOG_INFO("Iteration: " << i + 1 << "/" << numIterations << " complete.");
+    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
   }
 
   LOG_DEBUG("Retrieving edge scores...");

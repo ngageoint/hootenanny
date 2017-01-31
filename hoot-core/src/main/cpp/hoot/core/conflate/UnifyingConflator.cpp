@@ -118,6 +118,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   Timer timer;
   _reset();
 
+  LOG_INFO("Applying pre unifying conflation operations...");
   NamedOp(ConfigOptions().getUnifyPreOps().split(";", QString::SkipEmptyParts)).apply(map);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
@@ -283,6 +284,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
+  LOG_INFO("Applying post unifying conflation operations...");
   NamedOp(ConfigOptions().getUnifyPostOps().split(";", QString::SkipEmptyParts)).apply(map);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));

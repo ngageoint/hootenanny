@@ -157,6 +157,8 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
   const QString& note, const QString &reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
     LOG_VART(e1->toString());
@@ -192,6 +194,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString& note,
    const QString& reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
@@ -230,6 +234,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
     LOG_VART(e->toString())
@@ -261,6 +267,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)
 {
+  LOG_TRACE("Removing review element: " << eid);
   RemoveElementOp::removeElement(map, eid);
 }
 
