@@ -69,9 +69,11 @@ public:
       _subline = tmp;
     }
 
+    void setSubline(ConstEdgeSublinePtr s) { _subline = s; }
+
     QString toString() const
     {
-      return _subline->toString();
+      return hoot::toString(_subline);
     }
 
   private:
@@ -93,6 +95,14 @@ public:
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
+  double calculateLineDistance(ConstEdgeLocationPtr el1, ConstEdgeLocationPtr el2) const;
+
+  /**
+   * Returns the EdgeLocation on this EdgeString that is closest to el using the
+   * calculateLineDistance definition of distance.
+   */
+  ConstEdgeLocationPtr calculateNearestLocation(ConstEdgeLocationPtr el) const;
+
   shared_ptr<EdgeString> clone() const;
 
   /**
@@ -109,6 +119,10 @@ public:
    * Returns true if the specified vertex is in this string.
    */
   bool contains(ConstNetworkVertexPtr e) const;
+
+  bool contains(const ConstEdgeSublinePtr& e) const;
+
+  bool contains(const ConstEdgeLocationPtr& el) const;
 
   bool containsInteriorVertex(ConstNetworkVertexPtr v) const;
 
@@ -136,6 +150,8 @@ public:
   ConstNetworkEdgePtr getFirstEdge() const { return _edges.front().getEdge(); }
 
   ConstNetworkEdgePtr getLastEdge() const { return _edges.back().getEdge(); }
+
+  ConstEdgeLocationPtr getLocationAtOffset(ConstElementProviderPtr map, Meters offset) const;
 
   QList<ConstElementPtr> getMembers() const;
 
@@ -166,13 +182,22 @@ public:
 
   bool isToOnVertex() const { return getTo()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
 
+  /**
+   * Returns true if EdgeString is made up of non-zero length sublines.
+   */
+  bool isValid() const;
+
   bool overlaps(shared_ptr<const EdgeString> other) const;
 
   bool overlaps(const ConstEdgeSublinePtr& es) const;
 
   bool overlaps(const ConstNetworkEdgePtr& es) const;
 
-  void prependEdge(ConstNetworkEdgePtr e);
+  void prependEdge(ConstEdgeSublinePtr subline);
+
+  void removeFirst() { _edges.removeFirst(); assert(validate()); }
+
+  void removeLast() { _edges.removeLast(); assert(validate()); }
 
   /**
    * Reverse the order of the edges in this string. The "reversed" flag on each edge is also
@@ -180,7 +205,24 @@ public:
    */
   void reverse();
 
+  /**
+   * If the ends are within epsilon of an extreme, snap the locations to the end.
+   */
+  void snapExtremes(double epsilon = EdgeLocation::SLOPPY_EPSILON);
+
   QString toString() const;
+
+  bool touches(const ConstEdgeSublinePtr& es) const;
+  bool touches(const shared_ptr<const EdgeString>& es) const;
+
+  /**
+   * Trim this String to a new start/end location.
+   * @param newStartOffset the new start relative to the current start position.
+   * @param newEndOffset the new end relative to the current start position.
+   */
+  void trim(const ConstElementProviderPtr& provider, Meters newStartOffset, Meters newEndOffset);
+
+  bool validate() const;
 
 private:
 

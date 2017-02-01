@@ -60,7 +60,7 @@ public:
     const int reviewTagCount =
       tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 
-    LOG_VART(e);
+    LOG_VART(e->getElementId());
     LOG_VART(informationCount);
     LOG_VART(_treatReviewTagsAsMetadata);
     LOG_VART(reviewTagCount);
@@ -77,7 +77,6 @@ public:
   virtual void setConfiguration(const Settings& conf)
   {
     _treatReviewTagsAsMetadata = ConfigOptions(conf).getReviewTagsTreatAsMetadata();
-    //LOG_VART(_treatReviewTagsAsMetadata);
   }
 
   virtual ElementCriterion* clone() { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }

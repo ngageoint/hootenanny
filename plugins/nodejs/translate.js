@@ -198,7 +198,7 @@ module.exports = {
                         continue;
                     }
 
-                    debug('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
             } // End col in lookup
             else
@@ -339,7 +339,7 @@ module.exports = {
                         continue;
                     }
 
-                    debug('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.

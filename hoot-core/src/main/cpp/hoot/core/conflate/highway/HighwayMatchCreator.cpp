@@ -164,14 +164,17 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
+    Meters searchRadius;
     if (_searchRadius >= 0)
     {
-      return _searchRadius;
+      searchRadius = _searchRadius;
     }
     else
     {
-      return e->getCircularError();
+      searchRadius = e->getCircularError();
     }
+    LOG_VART(searchRadius);
+    return searchRadius;
   }
 
   virtual void visit(const ConstElementPtr& e)

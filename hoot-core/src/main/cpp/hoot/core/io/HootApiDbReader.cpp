@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -46,7 +46,6 @@ HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 HootApiDbReader::HootApiDbReader() :
 _database(new HootApiDb())
 {
-  LOG_VART(_useDataSourceIds);
   setConfiguration(conf());
 }
 

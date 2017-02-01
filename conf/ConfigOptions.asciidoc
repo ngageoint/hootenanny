@@ -150,6 +150,19 @@ PostgresqlDumpFileWriter.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
+=== conflate.add.review.detail
+
+* Data Type: bool
+* Default Value: `true`
+
+Add detailed review tags to review relations during conflation.  This setting allows for
+partitioning the level of detail in the review relation tags into two groups.  Turning this setting
+off can be useful during debugging in situations where you are comparing map outputs and want to
+see reviews in the output but are not concerned with a higher level of review detail.  Disabling
+this setting will also disable AddHilbertReviewSortOrderOp, the output of which is depended upon
+by the Hootenanny user interface.  So, this setting should only be disabled in debugging
+environments.
+
 === conflate.add.score.tags
 
 * Data Type: bool
@@ -228,11 +241,11 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveInvalidReviewRelationsVisitor` - Remove review relations whose members no longer exist after conflation.
-** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
+** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
+** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
+** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
-** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
+** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
 
 List of operations to run in the conflate command after data is conflated, after the ops in
 unify.post.ops (if using Unifying Conflation), but before exporting.
@@ -241,8 +254,8 @@ unify.post.ops (if using Unifying Conflation), but before exporting.
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineRemoveOp`
-** `hoot::MapCleaner`
+** `hoot::BuildingOutlineRemoveOp` - Updates the outline of the building by taking the union of all the building parts.
+** `hoot::MapCleaner` - Performs a collection of map cleaning operations.
 
 Runs in the conflate command after data is loaded, but before the conflation and before the ops in
 unify.pre.ops (if using Unifying Conflation).
@@ -867,7 +880,7 @@ Possible values include:
 === network.conflicts.aggression
 
 * Data Type: double
-* Default Value: `4.4`
+* Default Value: `8.8`
 
 A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
 may want to consider changing this value. Reasonable range is [1, ~10].
@@ -875,11 +888,11 @@ may want to consider changing this value. Reasonable range is [1, ~10].
 === network.conflicts.outbound.weighting
 
 * Data Type: double
-* Default Value: `0`
+* Default Value: `0.25`
 
 A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor when using
-network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each neighbor.
-Reasonable range is [0, 2].
+network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each
+neighbor.  This value is generally not changed by users.  Reasonable range is [0, 2].
 
 === network.conflicts.partial.handicap
 
@@ -893,7 +906,7 @@ users. Reasonable range is (0, ~2].
 === network.conflicts.stub.handicap
 
 * Data Type: double
-* Default Value: `.86`
+* Default Value: `1.7`
 
 A larger value will increase the weight of stubs when using network conflation. This value is
 generally not changed by users. Reasonable range is (0, ~2].
@@ -901,15 +914,16 @@ generally not changed by users. Reasonable range is (0, ~2].
 === network.conflicts.stub.through.weighting
 
 * Data Type: double
-* Default Value: `0.59`
+* Default Value: `0.5`
 
 A value of 0 will cause edges that are connected by a stub to contribute directly as neighbors when
-using network conflation.  Higher values will reduce that contribution. Reasonable range is [0, ~10].
+using network conflation.  Higher values will reduce that contribution.  This value is generally
+not changed by users.  Reasonable range is [0, ~10].
 
 === network.conflicts.weight.influence
 
 * Data Type: double
-* Default Value: `0`
+* Default Value: `0.0`
 
 A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
 give matches with more support a higher weight when using network conflation. This value is
@@ -937,7 +951,7 @@ useful when debugging. The maps can be large and slow things down significantly.
 === network.matcher
 
 * Data Type: string
-* Default Value: `hoot::IterativeNetworkMatcher`
+* Default Value: `hoot::ConflictsNetworkMatcher`
 
 An internal option for manipulating the way network matching occurs. This should only be used for
 debug and test. The parameter must be a class that is registered with the factory and subclasses
@@ -946,7 +960,7 @@ debug and test. The parameter must be a class that is registered with the factor
 === network.max.stub.length
 
 * Data Type: double
-* Default Value: `20`
+* Default Value: `20.0`
 
 The maximum allowable length of a stub connection (way to node match) when using network conflation.
 Value in meters.
@@ -1195,8 +1209,8 @@ hoot --convert \
 
 * Data Type: list
 * Default Value:
-** `hoot::MergeNearbyNodes`
-** `hoot::BuildingPartMergeOp`
+** `hoot::MergeNearbyNodes` - Merges nodes within the distance defined by merge.nearby.nodes.distance.
+** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
 
 Operations that should be applied to ingested OGR data before saving the data.
 
@@ -1313,12 +1327,12 @@ The probability that a name will be modified.
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor`
-** `hoot::PertyWayGeneralizeVisitor`
-** `hoot::PertyRemoveRandomElementVisitor`
-** `hoot::PertyDuplicatePoiOp`
-** `hoot::PertyRemoveTagVisitor`
-** `hoot::PertyNameVisitor`
+** `hoot::PertyWaySplitVisitor` - Randomly splits ways.
+** `hoot::PertyWayGeneralizeVisitor` - Randomly generalizes ways.
+** `hoot::PertyRemoveRandomElementVisitor` - Randomly removes elements.
+** `hoot::PertyDuplicatePoiOp` - Randomly adds duplicated POIs.
+** `hoot::PertyRemoveTagVisitor` - Randomly removes element tags.
+** `hoot::PertyNameVisitor` - Randomly modifies element name tags.
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 

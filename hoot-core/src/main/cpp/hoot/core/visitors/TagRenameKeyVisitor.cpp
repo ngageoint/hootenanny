@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,8 +58,8 @@ void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
 
 void TagRenameKeyVisitor::visit(const shared_ptr<Element>& e)
 {
-  LOG_VARD(_oldKey);
-  LOG_VARD(_newKey);
+  LOG_VART(_oldKey);
+  LOG_VART(_newKey);
 
   if (e->getTags().contains(_oldKey))
   {

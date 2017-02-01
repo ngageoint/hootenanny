@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
@@ -69,6 +69,8 @@ void NamedOp::apply(shared_ptr<OsmMap>& map)
       }
 
       t->apply(map);
+
+      LOG_VARD(map->getElementCount());
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
@@ -88,9 +90,9 @@ void NamedOp::apply(shared_ptr<OsmMap>& map)
 
       shared_ptr<OsmMapOperation> op(new VisitorOp(t));
       op->apply(map);
-    }
 
-    LOG_VART(map->getElementCount());
+      LOG_VARD(map->getElementCount());
+    }
   }
 }
 

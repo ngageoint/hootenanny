@@ -157,6 +157,7 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
+    LOG_VART(e->getCircularError());
     return e->getCircularError();
   }
 

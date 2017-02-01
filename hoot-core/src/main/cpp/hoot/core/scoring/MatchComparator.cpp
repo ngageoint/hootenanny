@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -431,7 +431,13 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
     {
       ElementId p = *eid;
-      QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
+      ConstElementPtr element = conflated->getElement(p);
+      if (!element.get()) //TODO: need to make sure this check is a valid one
+      {
+        LOG_WARN("Missing element for " + p.toString());
+        continue;
+      }
+      QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
         LOG_WARN("Missing uuid for " + p.toString());

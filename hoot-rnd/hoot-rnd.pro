@@ -50,7 +50,6 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinderTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeMatchTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeSublineMatchTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/EdgeStringTest.cpp \
@@ -59,10 +58,12 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/OsmNetworkTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkVertexTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/NetworkEdgeTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/NetworkDetailsTest.cpp \
     src/test/cpp/hoot/rnd/conflate/polygon/AreaMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp
+    src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 HEADERS += \
     src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h

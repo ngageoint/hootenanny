@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmWriter.h"
 
@@ -184,7 +184,6 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   else
   {
     char *wkt;
-    //map->getProjection()->exportToPrettyWkt(&wkt);
     map->getProjection()->exportToWkt(&wkt);
     writer.writeAttribute("srs", wkt);
     free(wkt);
@@ -209,7 +208,8 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
 
 void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
-  LOG_VART(e->toString());
+  LOG_VART(e->getElementId());
+
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));

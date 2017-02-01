@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -171,6 +171,7 @@ public:
     size_t initialElementCount = map->getElementCount();
     stats.append(SingleStat("Initial Element Count", initialElementCount));
 
+    LOG_INFO("Applying pre conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
@@ -196,6 +197,7 @@ public:
     }
 
     // Apply any user specified operations.
+    LOG_INFO("Applying post conflation operations...");
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
     MapProjector::projectToWgs84(result);
