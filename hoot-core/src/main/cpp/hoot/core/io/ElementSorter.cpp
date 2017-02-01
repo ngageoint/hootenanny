@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,7 +37,8 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   _wayIndex(0),
   _relationIndex(0)
 {
-  LOG_INFO("Sorting element by element type...");
+  LOG_DEBUG(
+    "Sorting element by element type for map with element count: " << source->getElementCount());
 
   _source = source;
 

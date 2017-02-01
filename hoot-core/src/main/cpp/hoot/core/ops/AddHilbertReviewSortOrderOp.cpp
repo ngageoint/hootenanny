@@ -85,7 +85,7 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
-      //LOG_VARD(eids.size());
+      LOG_VART(eids.size());
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);

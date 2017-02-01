@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -91,25 +91,18 @@ void HootApiDbWriter::_countChange()
 
 void HootApiDbWriter::finalizePartial()
 {
-  //LOG_DEBUG("Inside finalize partial");
   if (_open)
   {
-    //LOG_DEBUG("Ending changeset");
     _hootdb.endChangeset();
-    //LOG_DEBUG("Calling commit");
     _hootdb.commit();
-    //LOG_DEBUG("Calling close");
     _hootdb.close();
     _open = false;
   }
-
-  //LOG_DEBUG("Leaving finalize partial");
 }
 
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-
   return _hootdb.isSupported(url);
 }
 
@@ -133,7 +126,7 @@ void HootApiDbWriter::deleteMap(QString urlStr)
   {
     LOG_INFO("Removing map with ID: " << *it);
     _hootdb.deleteMap(*it);
-    LOG_INFO("Finished removing map with ID: " << *it);
+    LOG_DEBUG("Finished removing map with ID: " << *it);
   }
 
   _hootdb.commit();
@@ -188,14 +181,14 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
       {
         LOG_INFO("Removing map with ID: " << *it);
         _hootdb.deleteMap(*it);
-        LOG_INFO("Finished removing map with ID: " << *it);
+        LOG_DEBUG("Finished removing map with ID: " << *it);
       }
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
     else
     {
-      LOG_INFO("There are one or more maps with this name. Consider using "
+      LOG_ERROR("There are one or more maps with this name. Consider using "
                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
     }
   }
@@ -275,8 +268,8 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
-            //eid.getId() << " to " << retVal);
+  LOG_TRACE("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            eid.getId() << " to " << retVal);
 
   return retVal;
 }
@@ -443,7 +436,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
                               relationMemberElementId.getId(), e.role, i);
   }
 
-  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
+  LOG_TRACE("All members added to relation " << QString::number(relationId));
 
   _countChange();
 

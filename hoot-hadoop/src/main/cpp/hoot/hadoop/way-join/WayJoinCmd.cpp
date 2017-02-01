@@ -37,7 +37,7 @@ QString WayJoinCmd::getHelp() const
 {
   return "way-bbox (input.pbf) (output.pbf) (maxWaySize)\n"
       "  Reads the data from input.pbf, calculates the bbox for each way and write the result\n"
-      "  including the optional bbox value into output.pbf. This uses Hadoop for distrubtion.\n"
+      "  including the optional bbox value into output.pbf. This uses Hadoop for distribution.\n"
       "  * input.pbf - Input .pbf directory -- must reside on HDFS.\n"
       "  * output.pbf - Output .pbf directory -- must reside on HDFS.\n"
       "  * maxWaySize - Max way size in degrees.";
