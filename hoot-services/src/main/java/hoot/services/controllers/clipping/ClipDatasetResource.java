@@ -67,16 +67,16 @@ public class ClipDatasetResource extends JobControllerBase {
     }
 
     /**
-     * This service will clip a dataset to a bounding box and create a new
-     * output dataset within those dimensions.
+     * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
      *
      * POST hoot-services/job/clipdataset/execute
      *
-     * { "BBOX" :
-     * "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
-     * //The upper left and lower right of the bounding box to clip the dataset
-     * "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
-     * "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset. }
+     * {
+     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
+     *   //The upper left and lower right of the bounding box to clip the dataset
+     *   "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
+     *   "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset.
+     * }
      *
      * @param params
      *            JSON input params; see description

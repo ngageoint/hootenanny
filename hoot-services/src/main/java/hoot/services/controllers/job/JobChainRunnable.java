@@ -60,7 +60,7 @@ class JobChainRunnable implements Runnable {
         TransactionStatus transactionStatus = null;
         try {
             transactionStatus = txManager.getTransaction(null);
-            processCommand();
+            processJob();
             txManager.commit(transactionStatus);
         }
         catch (Exception e) {
@@ -71,13 +71,13 @@ class JobChainRunnable implements Runnable {
         }
     }
 
-    private void processCommand() {
+    private void processJob() {
         logger.debug("Start processing chain Job with jobId = {}", jobId);
 
-        jobStatusManager.addJob(jobId);
-
         try {
-            int jobNumber = 0;
+            jobStatusManager.addJob(jobId);
+
+            int commandCounter = 0;
             for (Command command : commands) {
                 CommandResult result = command.execute();
 
@@ -86,13 +86,14 @@ class JobChainRunnable implements Runnable {
                     break;
                 }
                 else {
-                    jobNumber++;
-                    Double percentComplete = ((jobNumber * 100.0d) / commands.length);
-                    jobStatusManager.updateJob(jobId, null, percentComplete);
+                    commandCounter++;
+                    Double percentComplete = ((commandCounter * 100.0d) / commands.length);
+                    jobStatusManager.updateJob(jobId,
+                            commandCounter + " out of " + commands.length + " have been processed.", percentComplete);
                 }
             }
 
-            jobStatusManager.setCompleted(jobId, "PROCESSED");
+            jobStatusManager.setCompleted(jobId, "FULLY PROCESSED");
         }
         catch (Exception e) {
             jobStatusManager.setFailed(jobId,

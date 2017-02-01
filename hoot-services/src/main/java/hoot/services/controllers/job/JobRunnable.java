@@ -60,7 +60,7 @@ class JobRunnable implements Runnable {
         TransactionStatus transactionStatus = null;
         try {
             transactionStatus = txManager.getTransaction(null);
-            processCommand();
+            processJob();
             txManager.commit(transactionStatus);
         }
         catch (Exception e) {
@@ -71,19 +71,19 @@ class JobRunnable implements Runnable {
         }
     }
 
-    private void processCommand() throws Exception {
-        logger.debug("Processing job: {}", jobId);
-
-        jobStatusManager.addJob(jobId);
+    private void processJob() throws Exception {
+        logger.debug("Begin processing job with ID: {}", jobId);
 
         try {
+            jobStatusManager.addJob(jobId);
+
             CommandResult result = command.execute();
 
             if (result.failed()) {
                 jobStatusManager.setFailed(jobId, "Job FAILED due to --> " + result.getCommand());
             }
             else {
-                jobStatusManager.setCompleted(jobId, "PROCESSED");
+                jobStatusManager.setCompleted(jobId, "FULLY PROCESSED");
             }
         }
         catch (Exception e) {
@@ -91,6 +91,6 @@ class JobRunnable implements Runnable {
             throw e;
         }
 
-        logger.debug("End of processing job: {}", jobId);
+        logger.debug("End of processing job with ID: {}", jobId);
     }
 }

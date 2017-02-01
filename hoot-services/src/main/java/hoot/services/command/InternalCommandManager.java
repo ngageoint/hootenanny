@@ -30,8 +30,9 @@ package hoot.services.command;
 public interface InternalCommandManager {
 
     /**
-     * Performs execution. All required meta data should be in command parameter.
+     * Performs execution of "internal", within the same Java space, commands.
      *
+     * @param jobId ID of the job that this command is being executed in the context of
      * @param command command to execute
      */
     CommandResult exec(String jobId, Command command);

@@ -84,12 +84,9 @@ public class JobCancellationResource {
 
             this.externalCommandInterface.terminate(jobIdToCancel);
             this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
-
-            // TODO: should be trying to cleanup any files DB data already created by the cancelled job?
-            // TODO: Is this where mapId could come in handy?
         }
         catch (Exception e) {
-            String msg = "Error cancellating job with ID = " + jobIdToCancel;
+            String msg = "Error cancelling job with ID = " + jobIdToCancel;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

@@ -240,7 +240,9 @@ public class ExportJobResource extends JobControllerBase {
         else {
             bbox = getMapBounds(conflatedMap);
         }
+
         setAoi(bbox, commandArgs);
+
         //put the osm userid in the command args
         if (oParams.get("USER_ID") != null) {
             JSONObject uid = new JSONObject();
@@ -296,7 +298,7 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
     }
 
-    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
+    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
         arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
                 bounds.getMaxLon() + "," + bounds.getMaxLat());
@@ -434,8 +436,8 @@ public class ExportJobResource extends JobControllerBase {
     @Path("/resources")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getExportResources() {
-        String transExtPath = HOME_FOLDER + "/" + "/plugins-local/script/utp";
-        if ((TRANSLATION_EXT_PATH != null) && (!TRANSLATION_EXT_PATH.isEmpty())) {
+        String transExtPath = HOME_FOLDER + "/plugins-local/script/utp";
+        if (!StringUtils.isBlank(TRANSLATION_EXT_PATH)) {
             transExtPath = TRANSLATION_EXT_PATH;
         }
 

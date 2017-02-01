@@ -27,7 +27,7 @@
 package hoot.services.command;
 
 
-// Functional interface
+@FunctionalInterface
 public interface Command {
     CommandResult execute();
 }

@@ -50,7 +50,7 @@ import hoot.services.command.InternalCommandManager;
 public class JobControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(JobControllerBase.class);
 
-    // Thread pool for job processing
+    // Shared thread pool for job processing
     private static final ExecutorService jobThreadExecutor =
             Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
 
