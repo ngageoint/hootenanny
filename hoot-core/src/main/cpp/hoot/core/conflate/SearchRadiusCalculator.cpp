@@ -52,27 +52,14 @@ SearchRadiusCalculator::SearchRadiusCalculator()
 void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
-  QString unifyPreOpsStr = config.getUnifyPreOps();
-  if (unifyPreOpsStr.contains(";"))
-  {
-    setUnifyPreOps(unifyPreOpsStr.split(";"));
-  }
-  else
-  {
-    setUnifyPreOps(QStringList(unifyPreOpsStr));
-  }
-  setCircularError(config.getCircularErrorDefaultValue());
-  setRubberSheetRef(config.getRubberSheetRef());
-  setRubberSheetMinTies(config.getRubberSheetMinimumTies());
-}
-
-void SearchRadiusCalculator::setUnifyPreOps(QStringList ops)
-{
-  if (ops.contains("hoot::RubberSheet"))
+  if (config.getUnifyPreOps().contains("hoot::RubberSheet"))
   {
     throw HootException(
       "Rubber sheeting cannot be used when automatically calculating search radius.");
   }
+  setCircularError(config.getCircularErrorDefaultValue());
+  setRubberSheetRef(config.getRubberSheetRef());
+  setRubberSheetMinTies(config.getRubberSheetMinimumTies());
 }
 
 void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
