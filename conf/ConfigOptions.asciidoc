@@ -1958,8 +1958,8 @@ valid values.
 * Data Type: bool
 * Default Value: `false`
 
-If true, any element with a value populated for the key defined by set.tag.visitor.key will have
-the value specified in set.tag.visitor.value appended to it.
+If true, any element with a value populated for the key defined by the set.tag.visitor.key option
+will have the value specified in the set.tag.visitor.value option appended to it.
 
 === set.tag.visitor.key
 
