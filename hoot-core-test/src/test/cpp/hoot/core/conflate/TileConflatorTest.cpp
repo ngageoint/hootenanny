@@ -59,7 +59,7 @@ namespace hoot
 class TileConflatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(TileConflatorTest);
-  //CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
