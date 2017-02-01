@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,13 +57,13 @@ void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
     throw HootException("No map passed to way generalizer.");
   }
 
-  LOG_VARD(way->getNodeIds().size());
-  LOG_VARD(QVector<long>::fromStdVector(way->getNodeIds()).toList());
+  LOG_VART(way->getNodeIds().size());
+  LOG_VART(QVector<long>::fromStdVector(way->getNodeIds()).toList());
 
   const QList<long> wayNodeIdsBeforeFiltering =
     QVector<long>::fromStdVector(way->getNodeIds()).toList();
-  LOG_VARD(wayNodeIdsBeforeFiltering.size());
-  LOG_VARD(wayNodeIdsBeforeFiltering);
+  LOG_VART(wayNodeIdsBeforeFiltering.size());
+  LOG_VART(wayNodeIdsBeforeFiltering);
 
   //filter the nodes to be generalized to those in this way and those with no information tags;
   //tried using hoot filters here at first, but it didn't end up making sense
@@ -76,36 +76,36 @@ void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
       wayNodeIdsAfterFiltering.append(*it);
     }
   }
-  LOG_VARD(wayNodeIdsAfterFiltering.size());
-  LOG_VARD(wayNodeIdsAfterFiltering);
+  LOG_VART(wayNodeIdsAfterFiltering.size());
+  LOG_VART(wayNodeIdsAfterFiltering);
 
   //get the generalized points
   const QList<shared_ptr<const Node> >& generalizedPoints =
     getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
-  LOG_VARD(generalizedPoints.size());
+  LOG_VART(generalizedPoints.size());
   OsmUtils::printNodes("generalizedPoints", generalizedPoints);
 
   //replace the current nodes on the way with the reduced collection
   way->setNodes(OsmUtils::nodesToNodeIds(generalizedPoints).toVector().toStdVector());
-  LOG_VARD(way->getNodeIds().size());
-  LOG_VARD(QVector<long>::fromStdVector(way->getNodeIds()).toList());
-  LOG_VARD(_map->getWay(way->getId())->getNodeIds().size());
-  LOG_VARD(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
+  LOG_VART(way->getNodeIds().size());
+  LOG_VART(QVector<long>::fromStdVector(way->getNodeIds()).toList());
+  LOG_VART(_map->getWay(way->getId())->getNodeIds().size());
+  LOG_VART(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
 }
 
 QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
   const QList<shared_ptr<const Node> >& wayPoints)
 {
-  LOG_VARD(wayPoints.size());
+  LOG_VART(wayPoints.size());
   if (wayPoints.size() < 3)
   {
     return wayPoints;
   }
 
   shared_ptr<const Node> firstPoint = wayPoints.at(0);
-  LOG_VARD(firstPoint->toString());
+  LOG_VART(firstPoint->toString());
   shared_ptr<const Node> lastPoint = wayPoints.at(wayPoints.size() - 1);
-  LOG_VARD(lastPoint->toString());
+  LOG_VART(lastPoint->toString());
 
   int indexOfLargestPerpendicularDistance = -1;
   double largestPerpendicularDistance = 0;
@@ -120,9 +120,9 @@ QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
       indexOfLargestPerpendicularDistance = i;
     }
   }
-  LOG_VARD(largestPerpendicularDistance);
-  LOG_VARD(indexOfLargestPerpendicularDistance);
-  LOG_VARD(_epsilon);
+  LOG_VART(largestPerpendicularDistance);
+  LOG_VART(indexOfLargestPerpendicularDistance);
+  LOG_VART(_epsilon);
 
   if (largestPerpendicularDistance > _epsilon)
   {
@@ -163,8 +163,8 @@ double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryL
   const shared_ptr<const Node> splitPoint, const shared_ptr<const Node> lineToBeReducedStartPoint,
   const shared_ptr<const Node> lineToBeReducedEndPoint) const
 {
-  LOG_VARD(lineToBeReducedStartPoint->getX());
-  LOG_VARD(lineToBeReducedEndPoint->getX());
+  LOG_VART(lineToBeReducedStartPoint->getX());
+  LOG_VART(lineToBeReducedEndPoint->getX());
   double perpendicularDistance;
   if (lineToBeReducedStartPoint->getX() == lineToBeReducedEndPoint->getX())
   {
@@ -175,14 +175,14 @@ double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryL
     const double slope =
       (lineToBeReducedEndPoint->getY() - lineToBeReducedStartPoint->getY()) /
       (lineToBeReducedEndPoint->getX() - lineToBeReducedStartPoint->getX());
-    LOG_VARD(slope);
+    LOG_VART(slope);
     const double intercept =
       lineToBeReducedStartPoint->getY() - (slope * lineToBeReducedStartPoint->getX());
-    LOG_VARD(intercept);
+    LOG_VART(intercept);
     perpendicularDistance =
       abs(slope * splitPoint->getX() - splitPoint->getY() + intercept) / sqrt(pow(slope, 2) + 1);
   }
-  LOG_VARD(perpendicularDistance);
+  LOG_VART(perpendicularDistance);
   return perpendicularDistance;
 }
 

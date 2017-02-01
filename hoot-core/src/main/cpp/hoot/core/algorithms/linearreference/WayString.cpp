@@ -78,11 +78,11 @@ void WayString::append(const WaySubline& subline)
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
         subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        LOG_VARD(back());
-        LOG_VARD(back().getWay());
-        LOG_VARD(subline);
-        LOG_VARD(subline.getWay());
-        LOG_DEBUG("Nodes don't match: "
+        LOG_VART(back());
+        LOG_VART(back().getWay());
+        LOG_VART(subline);
+        LOG_VART(subline.getWay());
+        LOG_TRACE("Nodes don't match: "
           << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
           << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
         //TODO: Possibly change this back to an exception as part of the work to be done in #1312.

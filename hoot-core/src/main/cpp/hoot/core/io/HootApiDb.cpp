@@ -165,7 +165,7 @@ void HootApiDb::endChangeset()
   // If we're already closed, nothing to do
   if ( _currChangesetId == -1 )
   {
-    //LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently");
+    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently");
     return;
   }
 
@@ -250,8 +250,7 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
       "INCLUDING INDEXES)").arg(to).arg(from);
   QSqlQuery q(_db);
 
-  //LOG_VARD(sql);
-
+  LOG_VART(sql);
   if (q.exec(sql) == false)
   {
     QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
@@ -1173,15 +1172,17 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     const QString memberType = _selectMembersForRelation->value(0).toString();
     if (ElementType::isValidTypeString(memberType))
     {
-      result.push_back(
+      RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong())));
+                    _selectMembersForRelation->value(1).toLongLong()));
+      LOG_VART(member);
+      result.push_back(member);
     }
     else
     {
-        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
     }
   }
 
@@ -1342,7 +1343,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
-  //LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
+  LOG_TRACE("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -113,7 +113,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   {
     splits[i] = (double)(ranges.at<int>(i, 1) + ranges.at<int>(i + 1, 0)) / 2.0;
   }
-  //LOG_DEBUG(splits);
+  LOG_TRACE(splits);
 
   int iteration = 0;
   bool done = false;
