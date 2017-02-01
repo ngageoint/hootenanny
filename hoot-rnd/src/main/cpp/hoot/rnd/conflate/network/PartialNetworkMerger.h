@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,7 @@ namespace hoot
 class PartialNetworkMerger : public MergerBase, public EidMapper
 {
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -66,10 +67,12 @@ public:
   virtual QString toString() const;
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
+
   PairsSet _pairs;
   QSet<ConstEdgeMatchPtr> _edgeMatches;
   ConstNetworkDetailsPtr _details;
@@ -89,9 +92,6 @@ private:
 
   void _processStubMatch(const OsmMapPtr& map, vector<pair<ElementId, ElementId> > &replaced,
     ConstEdgeMatchPtr edgeMatch) const;
-
-  void _splitAllWays(const OsmMapPtr& map, vector<pair<ElementId, ElementId> > &replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 };
 
 }

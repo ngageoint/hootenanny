@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -82,7 +82,7 @@ QString PertyWaySplitVisitor::toString()
 
 void PertyWaySplitVisitor::visit(const shared_ptr<Element>& e)
 {
-  //LOG_DEBUG(e->getElementType());
+  LOG_TRACE(e->getElementType());
   if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
   {
     _split(e);
@@ -96,17 +96,17 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
   const double randomSplitNum = randomSplitDistribution(*_rng);
   if (randomSplitNum <= _waySplitProbability)
   {
-    LOG_DEBUG("element " << element->getElementId() << " *will* be split based on a split " <<
+    LOG_TRACE("element " << element->getElementId() << " *will* be split based on a split " <<
       "probability of: " <<  _waySplitProbability << " and a randomly generated number: " <<
       randomSplitNum << "\n");
 
     _splitRecursionLevel++;
-    LOG_VARD(_splitRecursionLevel);
+    LOG_VART(_splitRecursionLevel);
 
     const int numNodesBeforeSplit = _map->getNodeMap().size();
-    LOG_VARD(numNodesBeforeSplit);
+    LOG_VART(numNodesBeforeSplit);
     const int numWaysBeforeSplit = _map->getWays().size();
-    LOG_VARD(numWaysBeforeSplit);
+    LOG_VART(numWaysBeforeSplit);
 
     WayLocation waySplitPoint;
     MultiLineStringLocation multiLineSplitPoint;
@@ -117,9 +117,9 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       WayPtr way = dynamic_pointer_cast<Way>(element);
-      LOG_VARD(way->getNodeCount());
+      LOG_VART(way->getNodeCount());
       nodeIdsBeforeSplit = QVector<long>::fromStdVector(way->getNodeIds()).toList();
-      LOG_VARD(nodeIdsBeforeSplit);
+      LOG_VART(nodeIdsBeforeSplit);
       waySplitPoint = _calcSplitPoint(way);
     }
     else
@@ -135,18 +135,18 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (!waySplitPoint.isValid())
     {
       _splitRecursionLevel--;
-      LOG_VARD(_splitRecursionLevel);
+      LOG_VART(_splitRecursionLevel);
 
-      LOG_DEBUG("split point *will not* be used because *it violates* " << distanceMsgStrEnd);
+      LOG_TRACE("split point *will not* be used because *it violates* " << distanceMsgStrEnd);
       //if it violates the min node spacing, return an empty element collection, which will end the
       //recursive splitting on the current way
       return vector<ElementPtr>();
     }
     else
     {
-      LOG_DEBUG("split point *will* be used because it *does not* violate " << distanceMsgStrEnd);
+      LOG_TRACE("split point *will* be used because it *does not* violate " << distanceMsgStrEnd);
       segmentIndex = waySplitPoint.getSegmentIndex();
-      LOG_VARD(segmentIndex);
+      LOG_VART(segmentIndex);
     }
 
     //split the element
@@ -168,10 +168,10 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     }
 
     const int numNodesAfterSplit = _map->getNodeMap().size();
-    LOG_VARD(numNodesAfterSplit);
+    LOG_VART(numNodesAfterSplit);
     const int numNewNodesCreatedBySplit = numNodesAfterSplit - numNodesBeforeSplit;
-    LOG_VARD(numNewNodesCreatedBySplit);
-    LOG_VARD(_map->getWays().size());
+    LOG_VART(numNewNodesCreatedBySplit);
+    LOG_VART(_map->getWays().size());
 
     if (numNewNodesCreatedBySplit > 0)
     {
@@ -203,7 +203,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
   }
   else
   {
-    LOG_DEBUG("element " << element->getElementId() << " *will not* be split based on a split " <<
+    LOG_TRACE("element " << element->getElementId() << " *will not* be split based on a split " <<
       "probability of: " << _waySplitProbability << " and a randomly generated number: " <<
       randomSplitNum << "\n");
   }
@@ -223,12 +223,12 @@ WayLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const Way> way) con
   //selected that doesn't violate the min node spacing
   const double splitWayLength =
     splitWayEnd.calculateDistanceOnWay() - splitWayStart.calculateDistanceOnWay();
-  LOG_VARD(splitWayLength);
+  LOG_VART(splitWayLength);
   if (splitWayLength > 0)
   {
     boost::uniform_real<> randomSplitPointDistribution(0.0, splitWayLength);
     const double splitPoint = randomSplitPointDistribution(*_rng);
-    LOG_VARD(splitPoint);
+    LOG_VART(splitPoint);
     return splitWayStart.move(splitPoint);
   }
   //otherwise, return an empty location
@@ -242,14 +242,14 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const R
                                                               ElementId& wayId) const
 {
   const vector<RelationData::Entry>& members = relation->getMembers();
-  LOG_VARD(members.size());
+  LOG_VART(members.size());
 
   //find the way to split on
   boost::uniform_int<> randomWayIndexDistribution(0, members.size() - 1);
   int wayIndex = randomWayIndexDistribution(*_rng);
   wayId = members.at(wayIndex).getElementId();
-  LOG_VARD(wayIndex);
-  LOG_VARD(wayId);
+  LOG_VART(wayIndex);
+  LOG_VART(wayId);
   ElementPtr element = _map->getElement(wayId);
   if (element->getElementType() != ElementType::Way)
   {
@@ -257,7 +257,7 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const R
       "PERTY feature splitting for multi-line string relations may only occur on relations which contain only ways.");
   }
   WayPtr way = dynamic_pointer_cast<Way>(element);
-  LOG_VARD(way->getNodeCount());
+  LOG_VART(way->getNodeCount());
 
   //calculate the split point
   WayLocation wayLocation = _calcSplitPoint(way);
@@ -286,13 +286,13 @@ shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& n
   //last way
   shared_ptr<const Way> firstWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
   const long lastNodeIdInFirstWay = firstWay->getNodeIds().at(firstWay->getNodeCount() - 1);
-  LOG_VARD(lastNodeIdInFirstWay);
+  LOG_VART(lastNodeIdInFirstWay);
   shared_ptr<const Way> lastWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
   const long firstNodeIdInLastWay = lastWay->getNodeIds().at(0);
-  LOG_VARD(firstNodeIdInLastWay);
+  LOG_VART(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
   assert(!nodeIdsBeforeSplit.contains(lastNodeIdInFirstWay));
-  LOG_VARD(nodeIdsBeforeSplit);
+  LOG_VART(nodeIdsBeforeSplit);
   return _map->getNode(firstNodeIdInLastWay);
 }
 
@@ -306,7 +306,7 @@ void PertyWaySplitVisitor::_updateNewNodeProperties(shared_ptr<Node> newNode,
   //two split between nodes
   newNode->setCircularError(
     (firstSplitBetweenNode->getCircularError() + lastSplitBetweenNode->getCircularError()) / 2);
-  LOG_DEBUG(
+  LOG_TRACE(
     "Updated the properties of a node created as a result of a way split: " << newNode->toString());
 }
 

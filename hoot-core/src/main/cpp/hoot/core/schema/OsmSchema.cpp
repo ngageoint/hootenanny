@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -950,7 +950,7 @@ private:
     double bestScore = -1.0;
     VertexId bestVid = vid1;
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    // LOG_DEBUG("from " << _graph[vid1].name << " to " << _graph[vid2].name);
+    LOG_TRACE("from " << _graph[vid1].name << " to " << _graph[vid2].name);
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       // The best minimum score is generally the average.
@@ -958,9 +958,9 @@ private:
       // give a very slight advantage to the first input.
       double s = std::min(d1[*vi], d2[*vi] + 1e-6) +
         std::max(d1[*vi], d2[*vi]) / 1e6;
-      //if (s > 0)
-      // LOG_DEBUG("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
-      // " (" << s << ")");
+      if (s > 0)
+       LOG_TRACE("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
+       " (" << s << ")");
 
       if (s > bestScore)
       {
@@ -969,7 +969,7 @@ private:
       }
     }
 
-//    LOG_DEBUG("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
+    LOG_TRACE("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
 
     score = bestScore;
     return bestVid;
@@ -990,12 +990,12 @@ private:
                             distance_compare(comparer));
 
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    //LOG_DEBUG("Scores for: " << _graph[vd].name.toStdString());
+    LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       pair<VertexId, VertexId> key = pair<VertexId, VertexId>(vd, *vi);
       _cachedScores[key] = d[*vi];
-      //LOG_DEBUG("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
+      LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
 
       // cache the score between vd and vi in another structure that is more efficient for other
       // query types.
@@ -1531,7 +1531,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   }
 
   // Print out tags
-  //LOG_DEBUG("Tags: " << t.toString() );
+  LOG_TRACE("Tags: " << t.toString() );
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1682,10 +1682,10 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
     result = !isArea(t, type);
   }
 
-  /*if (result)
+  if (result)
   {
-    LOG_DEBUG("isLinearHighway; key: " << it.key());
-  }*/
+    LOG_TRACE("isLinearHighway; key: " << it.key());
+  }
 
   return result;
 }

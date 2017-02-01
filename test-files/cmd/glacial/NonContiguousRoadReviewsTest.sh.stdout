@@ -1,0 +1,35 @@
+14:26:14.331 WARN  ...etwork/OsmNetworkExtractor.cpp( 176) Found a non-contiguous relation when extracting a network. Ignoring: relation(-1)
+type: multilinestring
+members:   Entry: role: , eid: Way:-52
+  Entry: role: , eid: Way:-51
+
+tags: source:ingest:datetime = 2016-04-11T17:50:37.775Z
+source:name = very_high_resolution_commercial_monoscopic_imagery
+width:minimum_traveled_way = 2
+source:accuracy:horizontal:evaluation = emc_product_specification
+seasonal = fair
+source:copyright = Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.
+source:commercial_distribution_restriction = Unrestricted.  For Public Release.
+uuid = {340B01E5-488E-4365-87B4-5685B9ADFC49}
+source = mgcp
+source:description = Very High Resolution Commercial Monoscopic Imagery
+source:accuracy:horizontal = 25
+source:accuracy:horizontal:category = accurate
+source:datetime = 2010-01-01T00:00:00Z
+highway = track
+status: unknown1
+version: 1
+visible: 1
+circular error: 28.65
+14:26:33.817 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:33.821 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:33.869 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:33.872 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:33.915 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:33.919 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:34.033 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:34.036 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:38.451 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:38.462 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
+14:26:38.847 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/NonContiguousRoadReviewsTest/output.osm ...
+14:26:39.040 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/NonContiguousRoadReviewsTest/output.osm ...

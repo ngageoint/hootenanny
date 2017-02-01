@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,6 +58,7 @@ class BuildingOutlineUpdateOpTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingOutlineUpdateOpTest);
   CPPUNIT_TEST(runSelfIntersectingRelationTest);
+  CPPUNIT_TEST(runUncleanableToplogyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -85,6 +86,34 @@ public:
     writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm",
                      "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
+  }
+
+  //see https://github.com/ngageoint/hootenanny/issues/442
+  //
+  //This test is only testing the uncleanable relations right now.  If the issue mentioned about
+  //BuildingOutlineUpdateOp::_unionOutline is fixed, then this will also be testing ways (see
+  //BuildingOutlineUpdateOp::_createOutline).
+  void runUncleanableToplogyTest()
+  {
+    DisableLog dl;
+
+    OsmReader reader;
+
+    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesIn.osm", map);
+
+    BuildingOutlineUpdateOp uut;
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    QDir().mkpath("test-output/ops/BuildingOutlineUpdateOp/");
+    OsmWriter writer;
+    writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm");
+    HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm",
+                     "test-output/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm");
   }
 
 };

@@ -51,8 +51,6 @@ SuperfluousNodeRemover::SuperfluousNodeRemover()
 
 void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("Removing superfluous nodes...");
-
   _usedNodes.clear();
 
   const WayMap& ways = map->getWays();
@@ -94,12 +92,12 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
-        LOG_TRACE("Removing node. " << n->toString());
+        LOG_TRACE("Removing node. " << n->getElementId());
         RemoveNodeOp::removeNodeNoCheck(map, n->getId());
       }
       else
       {
-        LOG_TRACE("node not in bounds. " << n->toString());
+        LOG_TRACE("node not in bounds. " << n->getElementId());
         LOG_VART(_bounds);
       }
     }

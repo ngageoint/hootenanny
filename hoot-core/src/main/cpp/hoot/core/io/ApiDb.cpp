@@ -161,9 +161,6 @@ void ApiDb::open(const QUrl& url)
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
-  //LOG_DEBUG("debug email = " + email);
-  //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
-
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -204,7 +201,6 @@ long ApiDb::insertUser(const QString email, const QString displayName)
 {
   long id = -1;
 
-  LOG_DEBUG("Inside insert user");
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
@@ -232,7 +228,7 @@ long ApiDb::insertUser(const QString email, const QString displayName)
     }
     else
     {
-      LOG_DEBUG("Did not insert user, queryied a previously created user.")
+      LOG_DEBUG("Did not insert user, queried a previously created user.")
     }
   }
   // if the insert succeeded

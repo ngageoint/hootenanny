@@ -356,14 +356,14 @@ public:
     int ctr = 0;
     while (nodeResultIterator->next())
     {
-      for(int j=0;j<10;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+      for(int j=0;j<10;j++) { LOG_TRACE("VALUE = "+nodeResultIterator->value(j).toString()); }
 
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
       HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toDouble());
       HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toDouble());
       stringstream s;
       s << ApiDb::unescapeTags(nodeResultIterator->value(8));
-      LOG_DEBUG("unescapeTag :"+s.str());
+      LOG_TRACE("unescapeTag :"+s.str());
       HOOT_STR_EQUALS("foo = bar\n", ApiDb::unescapeTags(nodeResultIterator->value(8)));
 
       ctr++;

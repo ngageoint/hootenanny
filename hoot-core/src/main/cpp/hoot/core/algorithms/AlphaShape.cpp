@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -386,13 +386,13 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
   // while there is more than one geometry.
   while (tmp.size() > 1)
   {
-    LOG_DEBUG("Sorting size: " << tmp.size());
+    LOG_TRACE("Sorting size: " << tmp.size());
     // sort polygons using the hilbert value. This increases the chances that nearby polygons will
     // be merged early and speed up the union process.
     ComparePolygon compare(e);
     sort(tmp.begin(), tmp.end(), compare);
 
-    LOG_DEBUG("Remaining pieces: " << tmp.size());
+    LOG_TRACE("Remaining pieces: " << tmp.size());
     tmp2.resize(0);
     tmp2.reserve(tmp.size() / 2 + 1);
     // merge pairs at a time. This makes the join faster.
@@ -413,7 +413,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
       }
       catch (geos::util::GEOSException& e)
       {
-        LOG_DEBUG("Topology error. Attempting to fix it: " << e.what());
+        LOG_TRACE("Topology error. Attempting to fix it: " << e.what());
         cleanAndRetry = true;
       }
 

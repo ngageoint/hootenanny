@@ -1,0 +1,11 @@
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-5529 in Relation:-2143.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-6368 in Relation:-2138.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-5890 in Relation:-2137.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-3903 in Relation:-2134.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-753 in Relation:-2133.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-5134 in Relation:-2124.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-744 in Relation:-2111.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-7427 in Relation:-2108.
+16:00:01.919 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-6979 in Relation:-2096.
+16:00:02.200 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/NetworkConflateCmdInputReverseTest/output.osm ...
+16:00:02.280 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/NetworkConflateCmdInputReverseTest/output.osm ...

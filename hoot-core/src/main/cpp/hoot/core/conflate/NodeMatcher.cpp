@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,7 +62,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
         OsmSchema::getInstance().isLinearWaterway(*w) == false)
     {
       // if this isn't a highway or waterway, then don't consider it.
-      //LOG_DEBUG("calculateAngles skipping feature");
+      LOG_TRACE("calculateAngles skipping feature...");
     }
     else if (w->getNodeId(0) == nid)
     {

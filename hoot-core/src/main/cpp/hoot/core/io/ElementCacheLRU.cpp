@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -98,7 +98,7 @@ unsigned long ElementCacheLRU::size() const
 
 void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 {
-  //LOG_DEBUG("Adding element: " + newElement->toString() + " to cache...");
+  LOG_TRACE("Adding element: " + newElement->toString() + " to cache...");
 
   ConstNodePtr newNode;
   ConstWayPtr newWay;
@@ -300,7 +300,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _nodes.erase(oldestId);
-    //LOG_DEBUG("Removed node: " << oldestId << " from cache.");
+    LOG_TRACE("Removed node: " << oldestId << " from cache.");
 
     break;
 
@@ -316,7 +316,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _ways.erase(oldestId);
-    //LOG_DEBUG("Removed way: " << oldestId << " from cache.");
+    LOG_TRACE("Removed way: " << oldestId << " from cache.");
 
     break;
 
@@ -332,7 +332,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _relations.erase(oldestId);
-    //LOG_DEBUG("Removed relation: " << oldestId << " from cache.");
+    LOG_TRACE("Removed relation: " << oldestId << " from cache.");
 
     break;
 

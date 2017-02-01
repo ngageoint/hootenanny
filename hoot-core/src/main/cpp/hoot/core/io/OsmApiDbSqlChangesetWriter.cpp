@@ -61,7 +61,7 @@ void OsmApiDbSqlChangesetWriter::_initChangesetStats()
 
 void OsmApiDbSqlChangesetWriter::write(const QString sql)
 {
-  LOG_INFO("Executing changeset SQL queries against OSM API database...");
+  LOG_DEBUG("Executing changeset SQL queries against OSM API database...");
 
   _db.transaction();
 
@@ -79,7 +79,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
   for (int i = 0; i < sqlParts.size(); i++)
   {
     const QString sqlStatement = sqlParts[i];
-    //LOG_VARD(sqlStatement);
+    LOG_VART(sqlStatement);
     QString changesetStatType;
     if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
     {
@@ -115,7 +115,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
         changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
-        //LOG_VARD(changesetStatType);
+        LOG_VART(changesetStatType);
       }
       else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
       {
@@ -169,7 +169,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
 
   _db.commit();
 
-  LOG_INFO("Changeset SQL queries execute finished against OSM API database.");
+  LOG_DEBUG("Changeset SQL queries execute finished against OSM API database.");
 }
 
 void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
@@ -206,11 +206,11 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
     "Relation(s) Deleted: " + QString::number(_changesetStats["relation-delete"]) + "\n";
 }
 
-//TODO: This needs to be updated to use tile ids...but it possibly goes away completely after #716.
+//This method may go away after #716.
 bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
                                                         const QString timeStr)
 {
-  LOG_INFO("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
+  LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
            " within " << boundsStr << " and created after " << timeStr << "...");
 
   const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
@@ -247,7 +247,7 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
       return true;
     }
   }
-  LOG_INFO("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
+  LOG_DEBUG("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
   return false;
 }
 

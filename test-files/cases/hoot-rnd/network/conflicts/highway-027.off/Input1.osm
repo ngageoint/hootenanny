@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-93935' visible='true' version='1' lat='38.89046452469' lon='-77.0281' />
+  <node id='-93937' visible='true' version='1' lat='38.89208543159' lon='-77.0281' />
+  <node id='-93939' visible='true' version='1' lat='38.89200476375' lon='-77.0281' />
+  <node id='-93941' visible='true' version='1' lat='38.89476852555' lon='-77.0281' />
+  <node id='-93963' visible='true' version='1' lat='38.89042049025' lon='-77.03178564617' />
+  <node id='-93965' visible='true' version='1' lat='38.89042184275' lon='-77.03174588921' />
+  <node id='-93967' visible='true' version='1' lat='38.89042503068' lon='-77.03165216962' />
+  <node id='-93969' visible='true' version='1' lat='38.8904290646' lon='-77.03139189972' />
+  <node id='-93971' visible='true' version='1' lat='38.89043121162' lon='-77.03111122681' />
+  <node id='-93973' visible='true' version='1' lat='38.89043672822' lon='-77.03068946915' />
+  <node id='-93975' visible='true' version='1' lat='38.89044175584' lon='-77.03041029588' />
+  <node id='-93977' visible='true' version='1' lat='38.89044489535' lon='-77.03011440812' />
+  <node id='-93979' visible='true' version='1' lat='38.89044685765' lon='-77.02996928843' />
+  <node id='-93981' visible='true' version='1' lat='38.89044994567' lon='-77.02974083152' />
+  <node id='-93983' visible='true' version='1' lat='38.89045343977' lon='-77.02946096589' />
+  <node id='-93985' visible='true' version='1' lat='38.89045921977' lon='-77.02904278135' />
+  <node id='-93987' visible='true' version='1' lat='38.89046454599' lon='-77.02863220415' />
+  <node id='-93989' visible='true' version='1' lat='38.89046172273' lon='-77.02831455514' />
+  <node id='-93991' visible='true' version='1' lat='38.89208960919' lon='-77.03174731285' />
+  <node id='-93993' visible='true' version='1' lat='38.89208895162' lon='-77.03170985081' />
+  <node id='-93995' visible='true' version='1' lat='38.89208724331' lon='-77.0313640426' />
+  <node id='-93997' visible='true' version='1' lat='38.89208814719' lon='-77.03101523855' />
+  <node id='-93999' visible='true' version='1' lat='38.89208841957' lon='-77.03066597314' />
+  <node id='-94001' visible='true' version='1' lat='38.89208863137' lon='-77.03041796661' />
+  <node id='-94003' visible='true' version='1' lat='38.8920886792' lon='-77.03036177796' />
+  <node id='-94005' visible='true' version='1' lat='38.89208777404' lon='-77.03003003296' />
+  <node id='-94007' visible='true' version='1' lat='38.89208742857' lon='-77.02996997759' />
+  <node id='-94009' visible='true' version='1' lat='38.89208596276' lon='-77.02971534743' />
+  <node id='-94011' visible='true' version='1' lat='38.89208599992' lon='-77.02966882986' />
+  <node id='-94013' visible='true' version='1' lat='38.89208622586' lon='-77.02938752209' />
+  <node id='-94015' visible='true' version='1' lat='38.89208648394' lon='-77.02907618023' />
+  <node id='-94017' visible='true' version='1' lat='38.89208466887' lon='-77.0287664513' />
+  <node id='-94019' visible='true' version='1' lat='38.89208455552' lon='-77.02849383973' />
+  <node id='-94021' visible='true' version='1' lat='38.89208495497' lon='-77.02833303943' />
+  <node id='-94023' visible='true' version='1' lat='38.89208535253' lon='-77.02817915528' />
+  <node id='-94025' visible='true' version='1' lat='38.89208543118' lon='-77.02810041856' />
+  <node id='-94027' visible='true' version='1' lat='38.89466230421' lon='-77.02810651353' />
+  <node id='-94029' visible='true' version='1' lat='38.89418909239' lon='-77.02811589472' />
+  <node id='-94031' visible='true' version='1' lat='38.89373578966' lon='-77.02812263238' />
+  <node id='-94033' visible='true' version='1' lat='38.89364300175' lon='-77.02812974408' />
+  <node id='-94035' visible='true' version='1' lat='38.89208539468' lon='-77.02813741346' />
+  <node id='-94037' visible='true' version='1' lat='38.8919111288' lon='-77.02818669421' />
+  <node id='-94039' visible='true' version='1' lat='38.89170015244' lon='-77.02818787881' />
+  <node id='-94041' visible='true' version='1' lat='38.89167264934' lon='-77.02818777357' />
+  <node id='-94043' visible='true' version='1' lat='38.89153259687' lon='-77.02818723627' />
+  <node id='-94045' visible='true' version='1' lat='38.89133855657' lon='-77.02818704434' />
+  <node id='-94047' visible='true' version='1' lat='38.89114217409' lon='-77.02818685148' />
+  <node id='-94049' visible='true' version='1' lat='38.89097425755' lon='-77.02818874469' />
+  <node id='-94051' visible='true' version='1' lat='38.89078787438' lon='-77.02818844051' />
+  <node id='-94053' visible='true' version='1' lat='38.89062626392' lon='-77.02818941406' />
+  <node id='-94055' visible='true' version='1' lat='38.89059436821' lon='-77.02818886835' />
+  <node id='-94057' visible='true' version='1' lat='38.89046067718' lon='-77.02818658224' />
+  <node id='-94059' visible='true' version='1' lat='38.89209320923' lon='-77.03196383892' />
+  <node id='-94075' visible='true' version='1' lat='38.89041260484' lon='-77.03196200103' />
+  <way id='-94083' visible='true' version='1'>
+    <nd ref='-93935' />
+    <nd ref='-94057' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='MADISON DR NW' />
+  </way>
+  <way id='-94085' visible='true' version='1'>
+    <nd ref='-93937' />
+    <nd ref='-94025' />
+    <nd ref='-94035' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='CONSTITUTION AVE NW' />
+  </way>
+  <way id='-94087' visible='true' version='1'>
+    <nd ref='-93939' />
+    <nd ref='-94035' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='12TH ST EXPY NW' />
+  </way>
+  <way id='-94089' visible='true' version='1'>
+    <nd ref='-94035' />
+    <nd ref='-94033' />
+    <nd ref='-94031' />
+    <nd ref='-94029' />
+    <nd ref='-94027' />
+    <nd ref='-93941' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='12TH ST NW' />
+  </way>
+  <way id='-94093' visible='true' version='1'>
+    <nd ref='-94057' />
+    <nd ref='-94055' />
+    <nd ref='-94053' />
+    <nd ref='-94051' />
+    <nd ref='-94049' />
+    <nd ref='-94047' />
+    <nd ref='-94045' />
+    <nd ref='-94043' />
+    <nd ref='-94041' />
+    <nd ref='-94039' />
+    <nd ref='-94037' />
+    <nd ref='-94037' />
+    <nd ref='-94035' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='12TH ST NW' />
+  </way>
+  <way id='-94095' visible='true' version='1'>
+    <nd ref='-94035' />
+    <nd ref='-94023' />
+    <nd ref='-94023' />
+    <nd ref='-94021' />
+    <nd ref='-94021' />
+    <nd ref='-94019' />
+    <nd ref='-94017' />
+    <nd ref='-94015' />
+    <nd ref='-94013' />
+    <nd ref='-94011' />
+    <nd ref='-94009' />
+    <nd ref='-94007' />
+    <nd ref='-94005' />
+    <nd ref='-94003' />
+    <nd ref='-94001' />
+    <nd ref='-93999' />
+    <nd ref='-93997' />
+    <nd ref='-93995' />
+    <nd ref='-93993' />
+    <nd ref='-93991' />
+    <nd ref='-94059' />
+    <nd ref='-94059' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='CONSTITUTION AVE NW' />
+  </way>
+  <way id='-94097' visible='true' version='1'>
+    <nd ref='-94057' />
+    <nd ref='-94057' />
+    <nd ref='-93989' />
+    <nd ref='-93987' />
+    <nd ref='-93985' />
+    <nd ref='-93983' />
+    <nd ref='-93981' />
+    <nd ref='-93979' />
+    <nd ref='-93977' />
+    <nd ref='-93975' />
+    <nd ref='-93973' />
+    <nd ref='-93971' />
+    <nd ref='-93969' />
+    <nd ref='-93967' />
+    <nd ref='-93965' />
+    <nd ref='-93963' />
+    <nd ref='-94075' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='MADISON DR NW' />
+  </way>
+</osm>

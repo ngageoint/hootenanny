@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -130,9 +130,9 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
         // if this is a candidate for de-duping
         if (_isCandidateWay(w2))
         {
-          //LOG_DEBUG("candidate way tags:");
-          //LOG_VARD(w->getTags());
-          //LOG_VARD(w2->getTags());
+          LOG_TRACE("candidate way tags:");
+          LOG_VART(w->getTags());
+          LOG_VART(w2->getTags());
 
           bool nonNameTagsIdentical = false;
           if (_strictTagMatching)
@@ -143,7 +143,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
 
           if (nonNameTagsIdentical || !_strictTagMatching)
           {
-            //LOG_DEBUG("Ways have exact non-name tag match or strict tag matching is disabled.");
+            LOG_TRACE("Ways have exact non-name tag match or strict tag matching is disabled.");
 
             if (w->getNodeCount() > w2->getNodeCount())
             {
@@ -240,7 +240,7 @@ void DuplicateWayRemover::removeDuplicates(shared_ptr<OsmMap> map)
 
 void DuplicateWayRemover::_removeNodes(shared_ptr<const Way> w, int start, int length)
 {
-  //LOG_DEBUG("Ways have common node(s)");
+  LOG_TRACE("Ways have common node(s)");
 
   const std::vector<long>& nodes = w->getNodeIds();
 

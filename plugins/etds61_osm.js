@@ -147,7 +147,7 @@ etds61_osm = {
                 {
                     if (ftag[1] !== tags[ftag[0]])
                     {
-                        hoot.logVerbose('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                        hoot.logTrace('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
                     }
                 }
             }
