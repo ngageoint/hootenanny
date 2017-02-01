@@ -228,11 +228,11 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveMissingElementsVisitor` - Remove non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveInvalidReviewRelationsVisitor` - Remove review relations whose members no longer exist after conflation.
-** `hoot::RemoveDuplicateReviewsOp` - Checks if there are any duplicate reviews
+** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
+** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
+** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
-** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews. By processing reviews in sorted order the results are a little more logically ordered.
+** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
 
 List of operations to run in the conflate command after data is conflated, after the ops in
 unify.post.ops (if using Unifying Conflation), but before exporting.
@@ -241,8 +241,8 @@ unify.post.ops (if using Unifying Conflation), but before exporting.
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingOutlineRemoveOp`
-** `hoot::MapCleaner`
+** `hoot::BuildingOutlineRemoveOp` - Updates the outline of the building by taking the union of all the building parts.
+** `hoot::MapCleaner` - Performs a collection of map cleaning operations.
 
 Runs in the conflate command after data is loaded, but before the conflation and before the ops in
 unify.pre.ops (if using Unifying Conflation).
@@ -1195,8 +1195,8 @@ hoot --convert \
 
 * Data Type: list
 * Default Value:
-** `hoot::MergeNearbyNodes`
-** `hoot::BuildingPartMergeOp`
+** `hoot::MergeNearbyNodes` - Merges nodes within the distance defined by merge.nearby.nodes.distance.
+** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
 
 Operations that should be applied to ingested OGR data before saving the data.
 
@@ -1313,12 +1313,12 @@ The probability that a name will be modified.
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor`
-** `hoot::PertyWayGeneralizeVisitor`
-** `hoot::PertyRemoveRandomElementVisitor`
-** `hoot::PertyDuplicatePoiOp`
-** `hoot::PertyRemoveTagVisitor`
-** `hoot::PertyNameVisitor`
+** `hoot::PertyWaySplitVisitor` - Randomly splits ways.
+** `hoot::PertyWayGeneralizeVisitor` - Randomly generalizes ways.
+** `hoot::PertyRemoveRandomElementVisitor` - Randomly removes elements.
+** `hoot::PertyDuplicatePoiOp` - Randomly adds duplicated POIs.
+** `hoot::PertyRemoveTagVisitor` - Randomly removes element tags.
+** `hoot::PertyNameVisitor` - Randomly modifies element name tags.
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 
