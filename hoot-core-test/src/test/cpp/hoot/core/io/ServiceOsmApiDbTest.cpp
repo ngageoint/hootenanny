@@ -151,20 +151,20 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     int elementCtr = ids.size()-1;
-    LOG_VARD(elementCtr);
+    LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
     int tagIndx = -1;
     int ctr = 0;
     while( nodeResultIterator->next() )
     {
       long long id = nodeResultIterator->value(0).toLongLong();
-      LOG_VARD(id);
+      LOG_VART(id);
       if( lastId != id )
       {
         if (elementCtr < 0) break;
 
         // perform the comparison tests
-        LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
+        LOG_TRACE(QString("Processing element ")+QString::number(elementCtr+1));
         // test the first line's data which is the current_nodes (main data): id, lat, lon, tag1
         HOOT_STR_EQUALS(ids[elementCtr], id);
         HOOT_STR_EQUALS(lats[elementCtr], nodeResultIterator->value(1).toLongLong() /
@@ -179,18 +179,18 @@ public:
       // verify the values written to the DB upon their read-back
       for (int j = 0; j < numNodeFields; j++)
       {
-        LOG_DEBUG("VALUE = " + nodeResultIterator->value(j).toString());
+        LOG_TRACE("VALUE = " + nodeResultIterator->value(j).toString());
       }
 
       // read the tag for as many rows as there are tags
       QString key = nodeResultIterator->value(8).toString();
-      LOG_VARD(key);
-      LOG_DEBUG(QString("Processing tag ") + key);
+      LOG_VART(key);
+      LOG_TRACE(QString("Processing tag ") + key);
       tagIndx = ServicesDbTestUtils::findIndex(keys, key);
       HOOT_STR_EQUALS(QString(keys[tagIndx]+" = "+values[tagIndx]+"\n").toStdString().c_str(),
         ApiDb::unescapeTags(database.extractTagFromRow(nodeResultIterator, ElementType::Node)));
     }
-    LOG_VARD(ctr);
+    LOG_VART(ctr);
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
     ids.clear();
@@ -215,7 +215,7 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
-    LOG_VARD(elementCtr);
+    LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
     ctr = 0;
@@ -227,10 +227,10 @@ public:
         if(elementCtr < 0) break;
 
         // perform the comparison tests
-        LOG_DEBUG(QString("Processing element ")+QString::number(elementCtr+1));
+        LOG_TRACE(QString("Processing element ")+QString::number(elementCtr+1));
         // test the first line's data which is the current_ways (main data): id
-        LOG_DEBUG("ids = "+QString::number(ids[elementCtr]));
-        LOG_DEBUG("wayId = "+QString::number(wayId));
+        LOG_TRACE("ids = "+QString::number(ids[elementCtr]));
+        LOG_TRACE("wayId = "+QString::number(wayId));
 
         HOOT_STR_EQUALS(ids[elementCtr], wayId);
 
@@ -249,16 +249,16 @@ public:
       // verify the values written to the DB upon their read-back
       for (int j = 0; j < numWayFields; j++)
       {
-        LOG_DEBUG("VALUE = " + wayResultIterator->value(j).toString());
+        LOG_TRACE("VALUE = " + wayResultIterator->value(j).toString());
       }
 
       // read the tag for as many rows as there are tags
       QString key = wayResultIterator->value(ApiDb::WAYS_TAGS).toString();
-      LOG_DEBUG(QString("Processing tag ")+key);
+      LOG_TRACE(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("highway = primary\n", ApiDb::unescapeTags(
         database.extractTagFromRow(wayResultIterator, ElementType::Way)));
     }
-    LOG_VARD(ctr);
+    LOG_VART(ctr);
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
 
     const long nodeId3 = nodeIds.at(0);
@@ -282,7 +282,7 @@ public:
     // read through the elements until the number inserted for this test is reached
     // - the number inserted is determined by ids.size()
     elementCtr = ids.size()-1;
-    LOG_VARD(elementCtr);
+    LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
     tagIndx = -1;
     ctr = 0;
@@ -294,10 +294,10 @@ public:
         if(elementCtr < 0) break;
 
         // perform the comparison tests
-        LOG_DEBUG(QString("Processing element ") + QString::number(elementCtr+1));
+        LOG_TRACE(QString("Processing element ") + QString::number(elementCtr+1));
         // test the first line's data which is the current_nodes (main data): id
-        LOG_DEBUG("ids = "+ QString::number(ids[elementCtr]));
-        LOG_DEBUG("relId = "+ QString::number(relId));
+        LOG_TRACE("ids = "+ QString::number(ids[elementCtr]));
+        LOG_TRACE("relId = "+ QString::number(relId));
         HOOT_STR_EQUALS(ids[elementCtr], relId);
 
         // get the relation nodes and do some minimal testing
@@ -316,16 +316,16 @@ public:
       // verify the values written to the DB upon their read-back
       for(int j = 0; j < numRelationFields; j++)
       {
-        LOG_DEBUG("VALUE = " + relationResultIterator->value(j).toString());
+        LOG_TRACE("VALUE = " + relationResultIterator->value(j).toString());
       }
 
       // read the tag for as many rows as there are tags
       QString key = relationResultIterator->value(ApiDb::WAYS_TAGS).toString();
-      LOG_DEBUG(QString("Processing tag ")+key);
+      LOG_TRACE(QString("Processing tag ")+key);
       HOOT_STR_EQUALS("type = multistuff\n", ApiDb::unescapeTags(
         database.extractTagFromRow(relationResultIterator, ElementType::Relation)));
     }
-    LOG_VARD(ctr);
+    LOG_VART(ctr);
     CPPUNIT_ASSERT_EQUAL(ids.size(), ctr);
   }
 

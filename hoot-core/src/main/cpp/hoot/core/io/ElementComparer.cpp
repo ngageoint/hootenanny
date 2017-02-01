@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,24 +50,24 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
   {
     /*if (!(e1->getTags() == e2->getTags()))
     {
-      LOG_DEBUG("compare failed on tags:");
+      LOG_TRACE("compare failed on tags:");
     }
     else if (e1->getStatus() != e2->getStatus())
     {
-      LOG_DEBUG("compare failed on status:");
+      LOG_TRACE("compare failed on status:");
     }
     else if (e1->getVersion() != e2->getVersion())
     {
-      LOG_DEBUG("compare failed on version:");
+      LOG_TRACE("compare failed on version:");
     }
     else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
     {
-      LOG_DEBUG("compare failed on circular error:");
-      LOG_VARD(fabs(e1->getCircularError() - e2->getCircularError()));
-      LOG_VARD(_threshold);
-    }
-    LOG_VARD(e1);
-    LOG_VARD(e2);*/
+      LOG_TRACE("compare failed on circular error:");
+      LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
+      LOG_VART(_threshold);
+    }*/
+    LOG_VART(e1);
+    LOG_VART(e2);
     return false;
   }
   switch (e1->getElementType().getEnum())
@@ -89,7 +89,7 @@ bool ElementComparer::_compareNode(const shared_ptr<const Element>& re,
   shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
   shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
 
-  //LOG_VARD(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
+  LOG_VART(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
 }
 

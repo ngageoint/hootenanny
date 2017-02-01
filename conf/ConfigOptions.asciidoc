@@ -2236,19 +2236,22 @@ problematic if you're doing testing or expecting repeatable output for other.
 
 === unify.post.ops
 
-* Data Type: string
-* Default Value: `hoot::SuperfluousNodeRemover;hoot::SmallWayMerger`
+* Data Type: list
+* Default Value:
+** `hoot::SuperfluousNodeRemover` - Removes all the nodes from a map that aren't part of a way.
+** `hoot::SmallWayMerger` - Merges small ways using the threshold determined by the small.way.merger.threshold setting along with other criteria.
 
-Semi-colon delimited list of operations to apply immediately after conflation when using
-Unifying Conflation only.  Runs before the operations in `conflate.post.ops`.
+List of operations to apply immediately after conflation when using Unifying Conflation only.  Runs
+before the operations in `conflate.post.ops`.
 
 === unify.pre.ops
 
-* Data Type: string
-* Default Value: ``
+* Data Type: list
+* Default Value:
+** ``
 
-Semi-colon delimited list of operations to apply immediately before conflating when using
-Unifying Conflation only.  Runs after the operations in `conflate.pre.ops`.
+List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
 

@@ -303,7 +303,7 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // subline.
   Sparse2dMatrix::CellId endMatch;
   _populateTotalScores(scores, sublineMatrix, endMatch, score);
-  //LOG_DEBUG(scores.toString());
+  LOG_TRACE(scores.toString());
 
   vector<WaySublineMatch> rawSublines;
 
@@ -320,12 +320,12 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // match.
   if (rawSublines.size() == 1 && snapIntersections)
   {
-    //LOG_DEBUG("Snapping intersections.");
+    LOG_DEBUG("Snapping intersections.");
     result = _snapIntersections(map, w1, w2, rawSublines);
   }
   else
   {
-    //LOG_DEBUG("Not snapping intersections.");
+    LOG_DEBUG("Not snapping intersections.");
     result = rawSublines;
   }
 
@@ -339,7 +339,7 @@ vector<WaySublineMatch> MaximalSubline::_findBestMatches(const ConstOsmMapPtr &m
 
   vector<WaySublineMatch> sublines = _extractAllMatches(map, w1, w2, sublineMatrix);
 
-  //LOG_DEBUG("all sublines count: " << sublines.size());
+  LOG_TRACE("all sublines count: " << sublines.size());
   // use a exhaustive approach to find the best sublines. The number of matching sublines is
   // typically quite small.
 
@@ -348,14 +348,14 @@ vector<WaySublineMatch> MaximalSubline::_findBestMatches(const ConstOsmMapPtr &m
 
   for (size_t i = 0; i < keepers.size(); i++)
   {
-    //LOG_DEBUG("a subline: \n" << sublines[i].toString());
+    LOG_TRACE("a subline: \n" << sublines[i].toString());
     if (keepers[i])
     {
       result.push_back(sublines[i]);
     }
   }
 
-  //LOG_DEBUG("best sublines count: " << result.size());
+  LOG_TRACE("best sublines count: " << result.size());
 
   return result;
 }
@@ -373,7 +373,7 @@ double MaximalSubline::_findBestMatchesRecursive(
   {
     if (candidates[offset].overlaps(candidates[i]))
     {
-      //LOG_DEBUG("Found conflict.");
+      LOG_TRACE("Found conflict.");
       conflict = true;
     }
   }
@@ -637,8 +637,8 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
     finalEnds.push_back(pairs.size() - 1);
   }
 
-  //LOG_DEBUG("finalStarts: " << finalStarts);
-  //LOG_DEBUG("finalEnds: " << finalEnds);
+  LOG_TRACE("finalStarts: " << finalStarts);
+  LOG_TRACE("finalEnds: " << finalEnds);
 
   Mat ranges(finalStarts.size(), 2, CV_32S);
   for (size_t i = 0; i < finalStarts.size(); i++)
@@ -666,7 +666,7 @@ void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch
   else
   {
     int wi = (int)splits[matchIndex - 1];
-    //LOG_DEBUG("start split: " << wi);
+    LOG_TRACE("start split: " << wi);
     double r = splits[matchIndex - 1] - wi;
     Meters offset1 =
       pairs[wi].first.calculateDistanceOnWay() * r +
@@ -675,14 +675,14 @@ void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch
       pairs[wi].second.calculateDistanceOnWay() * r +
       pairs[wi + 1].second.calculateDistanceOnWay() * (1 - r);
 
-    //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
-    //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
+    LOG_TRACE("offset1: " << offset1 << " r: " << r);
+    LOG_TRACE("offset2: " << offset2 << " r: " << r);
     w1Start = WayLocation(map, w1, offset1);
     w2Start = WayLocation(map, w2, offset2);
   }
 
-  //LOG_DEBUG_VAR(w1Start);
-  //LOG_DEBUG_VAR(w2Start);
+  LOG_VART(w1Start);
+  LOG_VART(w2Start);
 
   // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
   if (w1Start < pairs.front().first.move(-_spacing))
@@ -694,8 +694,8 @@ void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch
     w2Start = pairs.front().second;
   }
 
-  //LOG_DEBUG_VAR(w1Start);
-  //LOG_DEBUG_VAR(w2Start);
+  LOG_VART(w1Start);
+  LOG_VART(w2Start);
 }
 
 void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<double>& splits,
@@ -708,7 +708,6 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
   if (matchIndex < (int)splits.size())
   {
     int wi = (int)splits[matchIndex];
-    //LOG_DEBUG("end split: " << wi << " matchIndexes[" << i << "]: " << mi);
     double r = splits[matchIndex] - wi;
     Meters offset1 =
       pairs[wi].first.calculateDistanceOnWay() * r +
@@ -720,13 +719,13 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
     w1End = WayLocation(map, w1, offset1);
     w2End = WayLocation(map, w2, offset2);
 
-    //LOG_DEBUG("offset1: " << offset1 << " r: " << r);
-    //LOG_DEBUG("offset2: " << offset2 << " r: " << r);
+    LOG_TRACE("offset1: " << offset1 << " r: " << r);
+    LOG_TRACE("offset2: " << offset2 << " r: " << r);
   }
 
   // if we are passed the point where we have a node pairing, then snap it back to a legit pair.
-  //LOG_DEBUG_VAR(w1End);
-  //LOG_DEBUG_VAR(pairs.back().first.move(_spacing));
+  LOG_VART(w1End);
+  LOG_VART(pairs.back().first.move(_spacing));
   if (w1End > pairs.back().first.move(_spacing))
   {
     w1End = pairs.back().first;
@@ -735,8 +734,8 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
   {
     w2End = pairs.back().second;
   }
-  //LOG_DEBUG("w1End: " << w1End.toString());
-  //LOG_DEBUG("w2End: " << w2End.toString());
+  LOG_TRACE("w1End: " << w1End.toString());
+  LOG_TRACE("w2End: " << w2End.toString());
 }
 
 void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
@@ -790,8 +789,8 @@ void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
       m.at<double>(i, 1) = angleDiff;
     }
 
-    //LOG_DEBUG("starts: " << starts);
-    //LOG_DEBUG("ends: " << ends);
+    LOG_TRACE("starts: " << starts);
+    LOG_TRACE("ends: " << ends);
 }
 
 vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
@@ -823,7 +822,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   vector< pair<WayLocation, WayLocation> > pairs;
   pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
   assert(pairs.size() > 0);
-  //LOG_DEBUG_VAR(pairs);
+  LOG_VART(pairs);
 
   vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
   vector<int> ends(rawSublineMatches.size(), 0);
@@ -849,13 +848,13 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   ExpectationIntersection ei;
   vector<double> splits = ei.snapMatches(m, ranges);
 
-  //LOG_DEBUG_VAR(splits);
+  LOG_VART(splits);
 
   vector<WaySublineMatch> result = rawSublineMatches;
 
   for (size_t i = 0; i < matchIndexes.size(); i++)
   {
-    //LOG_DEBUG(rawSublineMatches[i]);
+    LOG_VART(rawSublineMatches[i]);
 
     const int mi = matchIndexes[i];
 
@@ -878,7 +877,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
         w1Start > w1End ||
         w2Start > w2End)
     {
-      LOG_DEBUG("Point pair matching failed, skipping intersection snapping.");
+      LOG_TRACE("Point pair matching failed, skipping intersection snapping.");
       return rawSublineMatches;
     }
 
@@ -890,8 +889,8 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
     _snapToEnd(w1End, max(_minSplitSize, _spacing));
     _snapToEnd(w2End, max(_minSplitSize, _spacing));
 
-    //LOG_DEBUG_VAR(w1End);
-    //LOG_DEBUG_VAR(w2End);
+    LOG_VART(w1End);
+    LOG_VART(w2End);
 
     WaySubline ws1(w1Start, w1End);
     WaySubline ws2(w2Start, w2End);
