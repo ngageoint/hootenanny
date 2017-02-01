@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -303,8 +303,8 @@ vector<long> OsmMapIndex::findWayNeighbors(const shared_ptr<const Way> &way, Met
     }
   }
 
-  //LOG_DEBUG("findWayNeighbors result size: " << result.size());
-  //LOG_DEBUG("distance count: " << it.getDistanceCount());
+  LOG_TRACE("findWayNeighbors result size: " << result.size());
+  LOG_TRACE("distance count: " << it.getDistanceCount());
 
   return result;
 }
