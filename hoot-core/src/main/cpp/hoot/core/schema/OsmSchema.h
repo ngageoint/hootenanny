@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -252,9 +252,6 @@ class OsmSchema
 {
 public:
 
-  static QString errorCircularKey() { return "error:circular"; }
-  static const QString& layerNameKey() { return _layerNameKey; }
-
   OsmSchema();
 
   virtual ~OsmSchema();
@@ -452,7 +449,6 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
-  static QString _layerNameKey;
 };
 
 }

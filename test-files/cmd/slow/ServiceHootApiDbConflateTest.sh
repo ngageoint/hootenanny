@@ -3,7 +3,7 @@ set -e
 
 source $HOOT_HOME/conf/DatabaseConfig.sh
 
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D writer.include.debug=true --warn"
+export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D writer.include.debug=true --warn"
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 

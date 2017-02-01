@@ -245,7 +245,8 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     tags.clear();
   }
 
-  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() <<
+            " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
@@ -404,7 +405,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
 void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setUserEmail(configOptions.getOsmapiDbReaderEmail());
+  setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxOsmApiDatabase());
 }

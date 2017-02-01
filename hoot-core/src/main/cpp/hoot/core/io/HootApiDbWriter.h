@@ -44,8 +44,6 @@ class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
 public:
 
   static std::string className() { return "hoot::HootApiDbWriter"; }
-  static QString emailKey() { return "hootapi.db.writer.email"; }
-  static QString overwriteMapKey() { return "hootapi.db.writer.overwrite.map"; }
 
   HootApiDbWriter();
 

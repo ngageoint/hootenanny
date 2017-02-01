@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RefRemoveOp.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
@@ -48,9 +49,9 @@ public:
 
   virtual void visit(const shared_ptr<const Element>& e)
   {
-    if (e->getTags().contains("REF1") && _criterion->isSatisfied(e))
+    if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(e))
     {
-      _refs.insert(e->getTags().get("REF1"));
+      _refs.insert(e->getTags().get(MetadataTags::Ref1()));
     }
   }
 
@@ -100,16 +101,16 @@ public:
 
   virtual void visit(const shared_ptr<Element>& e)
   {
-    if (e->getTags().contains("REF2"))
+    if (e->getTags().contains(MetadataTags::Ref2()))
     {
-      QStringList ref2 = _removeRef1(e->getTags().getList("REF2"));
+      QStringList ref2 = _removeRef1(e->getTags().getList(MetadataTags::Ref2()));
       if (ref2.size() == 0)
       {
-        e->getTags().set("REF2", "none");
+        e->getTags().set(MetadataTags::Ref2(), "none");
       }
       else
       {
-        e->getTags().setList("REF2", ref2);
+        e->getTags().setList(MetadataTags::Ref2(), ref2);
       }
     }
     e->getTags().setList("REVIEW", _removeRef1(e->getTags().getList("REVIEW")));

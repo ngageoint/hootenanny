@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PostgresqlDumpfileWriter.h"
@@ -374,7 +374,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 
   _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
   _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
-  _configData.changesetUserId     = confOptions.getPostgresqlDumpfileWriterChangesetUserId();
+  _configData.changesetUserId     = confOptions.getChangesetUserId();
   if (!confOptions.getPostgresqlDumpfileWriterAutoCalcIds())
   {
     _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
@@ -384,7 +384,7 @@ void PostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
   }
   else
   {
-    _db.open(ConfigOptions().getPostgresqlDumpfileWriterIdAwareUrl());
+    _db.open(confOptions.getOsmapidbIdAwareUrl());
     _configData.startingChangesetId = _db.getNextId(ApiDb::getChangesetsTableName());
     _configData.startingNodeId      = _db.getNextId(ElementType::Node);
     _configData.startingWayId       = _db.getNextId(ElementType::Way);
@@ -487,10 +487,9 @@ PostgresqlDumpfileWriter::ElementIdDatatype PostgresqlDumpfileWriter::_establish
   return dbIdentifier;
 }
 
-/// @todo This should use ApiDb::COORDINATE_SCALE instead.
 unsigned int PostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const double degrees) const
 {
-  return ( round(degrees * 10000000.0) );
+  return (round(degrees * ApiDb::COORDINATE_SCALE));
 }
 
 void PostgresqlDumpfileWriter::_writeNodeToTables(

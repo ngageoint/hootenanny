@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmChangesetSqlFileWriter.h"
 
@@ -38,8 +38,11 @@
 namespace hoot
 {
 
-OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
-_changesetId(0)
+OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url)
+  : _changesetId(0),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+    _changesetUserId(ConfigOptions().getChangesetUserId()),
+    _changesetGenerateNewIds(ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
 {
   _db.open(url);
 }
@@ -90,7 +93,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 
     changes++;
 
-    if (changes > ConfigOptions().getChangesetMaxSize())
+    if (changes > _changesetMaxSize)
     {
       _updateChangeset(changes);
       _createChangeSet();
@@ -131,7 +134,7 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
             "(%2, %3, %4, %4);\n")
       .arg(ApiDb::getChangesetsTableName())
       .arg(_changesetId)
-      .arg(ConfigOptions().getChangesetUserId())
+      .arg(_changesetUserId)
       .arg(OsmApiDb::TIMESTAMP_FUNCTION)
     .toUtf8());
   _outputSql.write(
@@ -175,14 +178,10 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   ElementPtr changeElement = _getChangeElement(element);
 
   long id;
-  if (ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
-  {
+  if (_changesetGenerateNewIds)
     id = _db.getNextId(element->getElementType().getEnum());
-  }
   else
-  {
     id = changeElement->getId();
-  }
 
   changeElement->setId(id);
   changeElement->setVersion(1);
@@ -190,6 +189,10 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   changeElement->setChangeset(_changesetId);
   LOG_TRACE("Creating: " << changeElement);
 
+  QString note = "";
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
@@ -270,6 +273,10 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   changeElement->setVisible(true);
   LOG_TRACE("Updating: " << changeElement);
 
+  QString note = "";
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
@@ -318,6 +325,10 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   changeElement->setChangeset(_changesetId);
   LOG_TRACE("Deleting: " << changeElement);
 
+  QString note = "";
+  LOG_VART(changeElement->getId());
+  LOG_VART(note);
+  LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
@@ -475,6 +486,7 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
 void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 {
   LOG_TRACE("Creating way nodes for: " << way);
+
   const std::vector<long> nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -500,6 +512,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
 {
   LOG_TRACE("Creating relation members for: " << relation);
+
   const vector<RelationData::Entry> members = relation->getMembers();
   for (size_t i = 0; i < members.size(); i++)
   {
@@ -552,6 +565,12 @@ void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QStrin
       .arg(idFieldName)
       .arg(id))
     .toUtf8());
+}
+
+void OsmChangesetSqlFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _changesetMaxSize = co.getChangesetMaxSize();
 }
 
 }

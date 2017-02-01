@@ -35,11 +35,8 @@
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
 #include <hoot/core/algorithms/Translator.h>
 
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 
@@ -81,87 +78,6 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   {
     throw geos::util::TopologyException();
   }
-  //shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-
-  //bool poiContainedInAnotherParkPoly = false;
-  //bool polyContainedInAnotherParkPoly = false;
-  //the name translations are very expensive here, so are disabled
-//  QString polyName = PoiPolygonNameScoreExtractor::getElementName(poly);
-//  if (!polyName.isEmpty())
-//  {
-//    polyName = Translator::getInstance().toEnglish(polyName);
-//  }
-  //  QString poiName = PoiPolygonNameScoreExtractor::getElementName(poi);
-  //  if (!poiName.isEmpty())
-  //  {
-  //    poiName = Translator::getInstance().toEnglish(poiName);
-  //  }
-//  const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
-//  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
-//  bool polyHasSpecificType = polyHasType;
-//  if ((poly->getTags().get("building") == "yes" || poly->getTags().get("poi") == "yes") &&
-//      !polyHasMoreThanOneType)
-//  {
-//    polyHasSpecificType = false;
-//  }
-
-//  set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
-//  while (polyNeighborItr != _polyNeighborIds.end())
-//  {
-//    ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
-//    if (polyNeighbor->getElementId() != poly->getElementId())
-//    {
-//      shared_ptr<Geometry> polyNeighborGeom;
-//      try
-//      {
-//        polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
-
-//        if (polyNeighborGeom.get() &&
-//            QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
-//        {
-//          if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-//          {
-//            LOG_TRACE(
-//              "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-//              polyNeighborGeom->toString());
-//            _badGeomCount++;
-//          }
-//        }
-//        else if (polyNeighborGeom.get())
-//        {
-//          if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
-//          {
-//            if (polyNeighborGeom->contains(poiGeom.get()))
-//            {
-//              poiContainedInAnotherParkPoly = true;
-
-//              LOG_TRACE(
-//                    "poi examined and found to be contained within a park poly outside of this match " <<
-//                    "comparison: " << poi->toString());
-//              LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
-//            }
-
-//            if (polyNeighborGeom->contains(polyGeom.get()))
-//            {
-//              //TODO: probably need to be specific that the poi and the poly are in the same park...
-//              polyContainedInAnotherParkPoly = true;
-//            }
-//          }
-//        }
-//      }
-//      catch (const geos::util::TopologyException& e)
-//      {
-//        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-//        {
-//          LOG_TRACE(
-//            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-//            "geometry: " << polyNeighbor->toString() << "\n" << e.what());
-//          _badGeomCount++;
-//        }
-//      }
-//    }
-//    polyNeighborItr++;
-//  }
 
   const QString poiAddress =
     poi->getTags().get(PoiPolygonAddressScoreExtractor::FULL_ADDRESS_TAG_NAME).toLower().trimmed();
@@ -186,14 +102,14 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
           //POI being examined, increase the evidence.
           if (polyGeom->contains(poiNeighborGeom.get()))
           {
-            LOG_TRACE("Found evidence per rule #2...");
+            LOG_TRACE("Found evidence per rule #1...");
             return true;
           }
         }
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<

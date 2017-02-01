@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapScoringStatusAndRefTagValidator.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/HasTagCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/CountVisitor.h>
@@ -48,7 +49,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
   FilteredVisitor unknown1Visitor(
     new ChainCriterion(
       new StatusCriterion(Status::Unknown1),
-      new HasTagCriterion("REF2")),
+      new HasTagCriterion(MetadataTags::Ref2())),
     new CountVisitor());
   FilteredVisitor& filteredRefVisitor = const_cast<FilteredVisitor&>(unknown1Visitor);
   SingleStatistic* singleStat = dynamic_cast<SingleStatistic*>(&unknown1Visitor.getChildVisitor());
@@ -61,7 +62,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
   FilteredVisitor unknown2Visitor(
     new ChainCriterion(
       new StatusCriterion(Status::Unknown2),
-      new HasTagCriterion("REF1")),
+      new HasTagCriterion(MetadataTags::Ref1())),
     new CountVisitor());
   filteredRefVisitor = const_cast<FilteredVisitor&>(unknown2Visitor);
   singleStat = dynamic_cast<SingleStatistic*>(&unknown2Visitor.getChildVisitor());

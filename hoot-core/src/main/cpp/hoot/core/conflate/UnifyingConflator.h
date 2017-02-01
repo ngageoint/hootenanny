@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
@@ -70,10 +70,9 @@ class UnifyingConflator : public OsmMapOperation, public Serializable, public Bo
 public:
   static string className() { return "hoot::UnifyingConflator"; }
 
-  static QString reviewScoreKey() { return QString("hoot:score:review"); }
-  static QString matchScoreKey() { return QString("hoot:score:match"); }
-  static QString missScoreKey() { return QString("hoot:score:miss"); }
-  static QString scoreUuidKey() { return QString("hoot:score:uuid"); }
+//  static QString reviewScoreKey() { return QString("hoot:score:review"); }
+//  static QString missScoreKey() { return QString("hoot:score:miss"); }
+//  static QString scoreUuidKey() { return QString("hoot:score:uuid"); }
 
   UnifyingConflator();
 

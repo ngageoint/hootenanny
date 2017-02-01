@@ -236,7 +236,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/MatchFactory.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatch.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatchCreator.cpp \
-    src/main/cpp/hoot/core/cmd/UnifyCmd.cpp \
     src/main/cpp/hoot/core/ops/RecursiveElementRemover.cpp \
     src/main/cpp/hoot/core/visitors/SetVisitor.cpp \
     src/main/cpp/hoot/core/scoring/MatchComparator.cpp \
@@ -909,7 +908,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/MatchMembers.h \
     src/main/cpp/hoot/core/scoring/AttributeCoOccurence.h \
     src/main/cpp/hoot/core/visitors/TagCountVisitor.h \
-    src/main/cpp/hoot/core/cmd/UnifyCmd.h \
     src/main/cpp/hoot/core/scoring/TextTable.h \
     src/main/cpp/hoot/core/algorithms/linearreference/MultiLineStringLocation.h \
     src/main/cpp/hoot/core/perty/PertyWaySplitVisitor.h \
@@ -1086,5 +1084,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h \
     src/main/cpp/hoot/core/io/TableType.h \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.h \
-    src/main/cpp/hoot/core/elements/ElementAttributeType.h
+    src/main/cpp/hoot/core/elements/ElementAttributeType.h \
+    src/main/cpp/hoot/core/util/MetadataTags.h
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -35,6 +35,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
@@ -354,11 +355,11 @@ void RubberSheet::_findTies()
 
       if (_debug)
       {
-        n1->getTags()["hoot:match:score"] = QString("%1").arg(_finalPairs[i].score);
-        n1->getTags()["hoot:match:p"] = QString("%1").arg(_finalPairs[i].p);
-        n1->getTags()["hoot:match:order"] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
-        n2->getTags()["hoot:match:p"] = QString("%1").arg(_finalPairs[i].p);
-        n2->getTags()["hoot:match:order"] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n1->getTags()[MetadataTags::HootMatchScore()] = QString("%1").arg(_finalPairs[i].score);
+        n1->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
+        n1->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
+        n2->getTags()[MetadataTags::HootMatchP()] = QString("%1").arg(_finalPairs[i].p);
+        n2->getTags()[MetadataTags::HootMatchOrder()] = QString("%1 of %2").arg(i).arg(_finalPairs.size());
       }
     }
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ShapefileWriter.h"
@@ -43,6 +43,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Qt
@@ -217,7 +218,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
     OGRFieldDefn oField("error_circ", OFTReal);
     if( poLayer->CreateField( &oField ) != OGRERR_NONE )
     {
-      throw HootException(QString("Error creating field (error:circular)."));
+      throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }
@@ -327,7 +328,7 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
     OGRFieldDefn oField("error_circ", OFTReal);
     if( poLayer->CreateField( &oField ) != OGRERR_NONE )
     {
-      throw HootException(QString("Error creating field (error:circular)."));
+      throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }
@@ -432,7 +433,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
     OGRFieldDefn oField("error_circ", OFTReal);
     if( poLayer->CreateField( &oField ) != OGRERR_NONE )
     {
-      throw HootException(QString("Error creating field (error:circular)."));
+      throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }

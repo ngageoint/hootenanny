@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -187,7 +187,7 @@ void TileConflator::_determineTileBounds(const cv::Mat& r1, const cv::Mat& r2)
 
   _tiles = tbc.calculateTiles();
   double end = Tgs::Time::getTime();
-  LOG_INFO("Determine tile bounds took " << end - start << " seconds.");
+  LOG_DEBUG("Determine tile bounds took " << end - start << " seconds.");
 }
 
 void TileConflator::setSources(QString input1, QString input2)

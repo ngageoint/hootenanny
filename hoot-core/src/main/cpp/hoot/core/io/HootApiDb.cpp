@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDb.h"
 
@@ -165,7 +165,7 @@ void HootApiDb::endChangeset()
   // If we're already closed, nothing to do
   if ( _currChangesetId == -1 )
   {
-    //LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently");
+    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently");
     return;
   }
 
@@ -250,8 +250,7 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
       "INCLUDING INDEXES)").arg(to).arg(from);
   QSqlQuery q(_db);
 
-  //LOG_VARD(sql);
-
+  LOG_VART(sql);
   if (q.exec(sql) == false)
   {
     QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
@@ -1343,7 +1342,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
-  //LOG_DEBUG("Inserting nodes into way " << QString::number(wayId));
+  LOG_TRACE("Inserting nodes into way " << QString::number(wayId));
 
   _checkLastMapId(mapId);
 

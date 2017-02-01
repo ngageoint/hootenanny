@@ -101,7 +101,7 @@ shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* 
       circularError);
   default:\
     _logCount++;
-    int logLimit = ConfigOptions().getOgrLogLimit();
+    int logLimit = ConfigOptions().getLogIdenticalMessageLimit();
     if (_logCount <= logLimit)
     {
       LOG_WARN("Unsupported geometry type. Element will be removed from the map. " + g->toString());

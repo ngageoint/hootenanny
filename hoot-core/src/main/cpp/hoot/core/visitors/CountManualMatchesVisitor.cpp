@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CountManualMatchesVisitor.h"
 
 #include <hoot/core/Factory.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -42,9 +43,9 @@ void CountManualMatchesVisitor::visit(const ConstElementPtr& e)
 {
   const Tags& tags = e->getTags();
   QStringList refIds;
-  if (tags.contains("REF2"))
+  if (tags.contains(MetadataTags::Ref2()))
   {
-    refIds += tags.get("REF2").split(";");
+    refIds += tags.get(MetadataTags::Ref2()).split(";");
   }
   if (tags.contains("REVIEW"))
   {

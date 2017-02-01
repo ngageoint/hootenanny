@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <vector>
 
@@ -38,7 +38,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-
+#include <hoot/core/util/MetadataTags.h>
 
 #include "TranslationVisitor.h"
 
@@ -48,9 +48,6 @@ namespace hoot
 TranslationVisitor::TranslationVisitor(ScriptTranslator& t, bool toOgr, OsmMap* map) : _t(t),
   _map(map), _toOgr(toOgr)
 {
-  _circularErrorKey = "error:circular";
-  _accuracyKey = "accuracy";
-
   if (toOgr)
   {
     _togr = dynamic_cast<ScriptToOgrTranslator*>(&t);
@@ -97,9 +94,9 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
     else
     {
       QByteArray layerName;
-      if (tags.contains(OsmSchema::layerNameKey()))
+      if (tags.contains(MetadataTags::HootLayername()))
       {
-        layerName = tags[OsmSchema::layerNameKey()].toUtf8();
+        layerName = tags[MetadataTags::HootLayername()].toUtf8();
       }
 
       QByteArray geomType;
@@ -127,17 +124,17 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
 
       _t.translateToOsm(tags, layerName.data(), geomType);
 
-      if (tags.contains(_circularErrorKey))
+      if (tags.contains(MetadataTags::ErrorCircular()))
       {
-        e->setCircularError(tags.getDouble(_circularErrorKey));
-        tags.remove(_circularErrorKey);
-        tags.remove(_accuracyKey);
+        e->setCircularError(tags.getDouble(MetadataTags::ErrorCircular()));
+        tags.remove(MetadataTags::ErrorCircular());
+        tags.remove(MetadataTags::Accuracy());
       }
-      else if (tags.contains(_accuracyKey))
+      else if (tags.contains(MetadataTags::Accuracy()))
       {
-        e->setCircularError(tags.getDouble(_accuracyKey));
-        tags.remove(_circularErrorKey);
-        tags.remove(_accuracyKey);
+        e->setCircularError(tags.getDouble(MetadataTags::Accuracy()));
+        tags.remove(MetadataTags::ErrorCircular());
+        tags.remove(MetadataTags::Accuracy());
       }
     }
   }

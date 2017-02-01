@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslatedTagCountVisitor.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -93,8 +94,8 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, false);
 
     Tags t = e->getTags();
-    t["error:circular"] = QString::number(e->getCircularError());
-    t["hoot:status"] = e->getStatusString();
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    t[MetadataTags::HootStatus()] = e->getStatusString();
 
     // remove all the empty tags.
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
@@ -105,7 +106,6 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
       }
     }
 
-    QString layerName;
     vector<ScriptToOgrTranslator::TranslatedFeature> f = _translator->translateToOgr(t,
       e->getElementType(), g->getGeometryTypeId());
 

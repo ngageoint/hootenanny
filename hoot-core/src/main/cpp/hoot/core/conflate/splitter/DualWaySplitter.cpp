@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DualWaySplitter.h"
@@ -39,22 +39,23 @@ using namespace geos::geom;
 using namespace geos::operation::buffer;
 
 // Hoot
+#include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/DistanceNodeCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 
 // Qt
@@ -78,12 +79,12 @@ DualWaySplitter::DualWaySplitter()
   if (ConfigOptions().getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
     _drivingSide = DualWaySplitter::Left;
-    LOG_INFO("Assuming drives on left.");
+    LOG_DEBUG("Assuming drives on left.");
   }
   else
   {
     _drivingSide = DualWaySplitter::Right;
-    LOG_INFO("Assuming drives on right.");
+    LOG_DEBUG("Assuming drives on right.");
   }
   _defaultSplitSize = ConfigOptions().getDualWaySplitterSplitSizeDefaultValue();
 }
@@ -246,16 +247,11 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll(shared_ptr<const OsmMap> map, Drivi
 
 shared_ptr<OsmMap> DualWaySplitter::splitAll()
 {
-  LOG_INFO("Splitting divided ways...");
-
   shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
   TagCriterion tagCrit("divider", "yes");
-  LOG_DEBUG("  filtering...");
-
   vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
-  LOG_DEBUG("  filtered.");
 
   for (size_t i = 0; i < wayIds.size(); i++)
   {
@@ -274,97 +270,6 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
 
   _result.reset();
   return result;
-}
-
-void DualWaySplitter::_addConnector(long /*nodeId*/)
-{
-//  vector<long> intersectingWays = _result->findWayByNode(nodeId);
-//
-//  // If this isn't the only way connected to the endpoint.
-//  if (intersectingWays.size() > 1)
-//  {
-//    // get the index of nodeId in _working
-//    long workingNodeIndex = _working->getNodeId(0) == nodeId ? 0 : _working->getNodeCount() - 1;
-//
-//    for (size_t i = 0; i < intersectingWays.size(); i++)
-//    {
-//      // if this is not the input way
-//      if (intersectingWays[i] != _working->getId())
-//      {
-//        shared_ptr<Way> other = _result->getWay(intersectingWays[i]);
-//
-//        if (other->getStatus() == _working->getStatus())
-//        {
-//          Radians heading1 = WayHeading::calculateHeading(WayLocation(_working, midNodeIndex, 0), 5.0);
-//          Radians heading2 = WayHeading::calculateHeading(LocationOfPoint::locate(other,
-//            _result->getNode(nodeId)->toCoordinate()), 5.0);
-//
-//          Radians angle = fabs(heading1 - heading2);
-//          if (angle > M_PI)
-//          {
-//            angle = toRadians(360) - angle;
-//          }
-//
-//          if (other->getTags()["hoot:stub"] == "true")
-//          {
-//            map->removeWay(other);
-//          }
-//          // if the angle is less than 45
-//          else if (angle < toRadians(45))
-//          {
-//            // create two stub connectors
-//            _createStub(map, map->getWay(_left), nodeId);
-//            _createStub(map, map->getWay(_right), nodeId);
-//          }
-//          // if the angle is 45 or greater
-//          else
-//          {
-//            _mergeInbound(map, other, nodeId);
-//          }
-//        }
-//      }
-//    }
-//  }
-}
-
-void DualWaySplitter::_createStub(shared_ptr<Way> /*dividedWay*/, long /*centerNodeId*/,
-                                  long /*edgeNodeId*/)
-{
-//  shared_ptr<Node> node = map->getNode(nodeId);
-//  Coordinate c = node->toCoordinate();
-//
-//  shared_ptr<Way> mid = map->getWay(_mid);
-//
-//  shared_ptr<const Node> endNode;
-//  double d0 = oneway->getNodeN(0)->toCoordinate().distance(c);
-//  double d1 = oneway->getLastNode()->toCoordinate().distance(c);
-//
-//  if (d0 < d1)
-//  {
-//    endNode = oneway->getNodeN(0);
-//  }
-//  else
-//  {
-//    endNode = oneway->getLastNode();
-//  }
-//
-//  Status otherUnknown;
-//  if (oneway->getStatus() == Unknown1)
-//  {
-//    otherUnknown = Unknown2;
-//  }
-//  else
-//  {
-//    otherUnknown = Unknown1;
-//  }
-//
-//  shared_ptr<Way> stub(new Way(otherUnknown, OsmMap::createNextWayId(),
-//                               oneway->getAccuracy()));
-//  stub->addNode(endNode->getId());
-//  stub->addNode(nodeId);
-//  stub->setTags(_way->getTags());
-//  stub->setTag("hoot:stub", "true");
-//  map->addWay(stub);
 }
 
 void DualWaySplitter::_fixLanes(shared_ptr<Way> w)

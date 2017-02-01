@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -44,6 +44,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -434,7 +435,7 @@ void OgrReader::setLimit(long limit)
 }
 
 void OgrReader::setTranslationFile(QString translate)
-{ 
+{
   _d->setTranslationFile(translate);
 }
 
@@ -577,10 +578,9 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      /*
-      LOG_DEBUG("Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+      LOG_TRACE(
+        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
         " since the value field is empty");
-      */
       continue;
     }
 
@@ -608,26 +608,26 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       switch (wkbFlatten(g->getGeometryType()))
       {
         case wkbLineString:
-          //LOG_DEBUG("Adding line string");
+          LOG_TRACE("Adding line string");
           _addLineString((OGRLineString*)g, t);
           break;
         case wkbPoint:
-          //LOG_DEBUG("Adding point");
+          LOG_TRACE("Adding point");
           _addPoint((OGRPoint*)g, t);
           break;
         case wkbPolygon:
-          //LOG_DEBUG("Adding polygon");
+          LOG_TRACE("Adding polygon");
           _addPolygon((OGRPolygon*)g, t);
           break;
         case wkbMultiPolygon:
-          //LOG_DEBUG("Adding multi-polygon");
+          LOG_TRACE("Adding multi-polygon");
           _addMultiPolygon((OGRMultiPolygon*)g, t);
           break;
         case wkbMultiPoint:
         case wkbMultiLineString:
         case wkbGeometryCollection:
         {
-          LOG_DEBUG("Adding geometry collection (multipoint, multiline, etc.)");
+          LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.)");
           OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
           int nParts = gc->getNumGeometries();
           for (int i = 0; i < nParts; i++)
@@ -979,15 +979,15 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   Meters circularError = _circularError;
 
   // parse the circularError out of the tags.
-  if (t.contains("error:circular"))
+  if (t.contains(MetadataTags::ErrorCircular()))
   {
     bool ok;
-    double a = t["error:circular"].toDouble(&ok);
+    double a = t[MetadataTags::ErrorCircular()].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength("error:circular").value();
+        a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
       catch (const HootException& e)
@@ -998,18 +998,18 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove("error:circular");
+      t.remove(MetadataTags::ErrorCircular());
     }
   }
-  else if (t.contains("accuracy"))
+  else if (t.contains(MetadataTags::Accuracy()))
   {
     bool ok;
-    double a = t["accuracy"].toDouble(&ok);
+    double a = t[MetadataTags::Accuracy()].toDouble(&ok);
     if (!ok)
     {
       try
       {
-        a = t.getLength("accuracy").value();
+        a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
       catch (const HootException& e)
@@ -1020,7 +1020,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
     if (ok)
     {
       circularError = a;
-      t.remove("accuracy");
+      t.remove(MetadataTags::Accuracy());
     }
   }
 
@@ -1171,7 +1171,7 @@ void OgrReaderInternal::_translate(Tags& t)
   }
   else
   {
-    t[OsmSchema::layerNameKey()] = _layer->GetLayerDefn()->GetName();
+    t[MetadataTags::HootLayername()] = _layer->GetLayerDefn()->GetName();
   }
 }
 
@@ -1219,8 +1219,6 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  //LOG_DEBUG("Inside OGR::readNextElement");
-
   if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
       && (_relationsItr == _map->getRelationMap().end()) )
   {
@@ -1280,7 +1278,6 @@ Progress OgrReaderInternal::streamGetProgress() const
   const float floatCount = _streamFeatureCount;
   const float percentComplete = floatCount / _featureCount * 100;
   streamProgress.setPercentComplete( percentComplete );
-  //LOG_DEBUG("Percent complete set to " << percentComplete );
 
   return streamProgress;
 }

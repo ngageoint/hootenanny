@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
@@ -74,7 +74,7 @@ class PermuteGridCalculator
    */
    void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-   void setCsmParameters(double beta, double D) { _beta = beta; _D = D; }
+   void setCsmParameters(double D) { _D = D; }
 
     /**
    * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
@@ -90,7 +90,6 @@ class PermuteGridCalculator
 
     protected:
 
-      double _beta;
       Meters _sigmaRx, _sigmaRy;
 
       Meters _D;

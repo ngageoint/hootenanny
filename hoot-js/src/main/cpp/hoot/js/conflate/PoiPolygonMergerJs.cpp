@@ -22,16 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PoiPolygonMergerJs.h"
 
-#include <hoot/js/OsmMapJs.h>
+#include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 namespace hoot
 {
@@ -64,13 +67,31 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
       return
         v8::ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException("Expected on argument for 'poiPolyMerge'.")));
+            IllegalArgumentException("Expected one argument for 'poiPolyMerge'.")));
     }
 
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
     OsmMapPtr map(mapJs->getMap());
+    LOG_VARD(map->getElementCount());
 
-    PoiPolygonMerger::merge(map);
+    const ElementId polyId = PoiPolygonMerger::merge(map);
+    LOG_VARD(map->getElementCount());
+
+    //set the poly to have a conflated status (what the poi was merged into); status expected by
+    //the client
+    ElementPtr polyElement = map->getElement(polyId);
+    polyElement->setStatus(Status(Status::Conflated));
+    polyElement->getTags()[MetadataTags::HootStatus()] = "3";
+
+    if (Log::getInstance().isDebugEnabled())
+    {
+      LOG_DEBUG("Writing debug map...");
+      OsmMapPtr debug(new OsmMap(map));
+      MapProjector::projectToWgs84(debug);
+      //if you're testing this from the mocha test, you may need to put an absolute path here for
+      //the output instead
+      //OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+    }
 
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);

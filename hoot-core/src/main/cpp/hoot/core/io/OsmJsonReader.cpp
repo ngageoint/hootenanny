@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -31,6 +31,7 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/Factory.h>
 
 // Boost
@@ -400,18 +401,18 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
     pt::ptree::const_iterator tagIt = tags.begin();
     while (tagIt != tags.end())
     {
-      string k = tagIt->first;
-      string v = tagIt->second.get_value<string>();
+      QString k = QString::fromStdString(tagIt->first);
+      QString v = QString::fromStdString(tagIt->second.get_value<string>());
 
       // If we are "error:circular", need to set it on the element object,
       // rather than add it as a tag
-      if (k == "error:circular")
+      if (k == MetadataTags::ErrorCircular())
       {
-        pElement->setCircularError(Meters(QString::fromStdString(v).toInt()));
+        pElement->setCircularError(Meters(v.toInt()));
       }
       else
       {
-        pElement->setTag(QString::fromStdString(k), QString::fromStdString(v));
+        pElement->setTag(k, v);
       }
       ++tagIt;
     }

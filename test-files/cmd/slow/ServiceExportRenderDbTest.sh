@@ -8,7 +8,7 @@ export INPUT="Ex Ren Db"
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
 export DB_URL=hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=test@test.com -D writer.include.debug=true --warn"
+export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D writer.include.debug=true --warn"
 
 # Ingest the data
 hoot --convert $HOOT_OPTS test-files/ExRenDb.osm "$DB_URL/$INPUT"

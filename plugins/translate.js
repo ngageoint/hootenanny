@@ -198,7 +198,7 @@ translate = {
                         continue;
                     }
 
-                    hoot.logVerbose('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
                 }
             } // End col in lookup
             else
@@ -236,7 +236,7 @@ translate = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logVerbose('Column not found:: (' + col + '=' + value + ')');
+                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
                 }
             } // End !col in lookup
         } // End for col in inList
@@ -339,7 +339,7 @@ translate = {
                         continue;
                     }
                         
-                    hoot.logVerbose('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
@@ -351,7 +351,7 @@ translate = {
                         othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
-                        hoot.logVerbose('Adding to OTH field:: ' + othVal);
+                        hoot.logTrace('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
                         outList[otherVal[0] + endChar] = otherVal[1];
@@ -363,7 +363,7 @@ translate = {
                     } // End if otherVal
                     else
                     {
-                        hoot.logVerbose('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
+                        hoot.logTrace('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
                     }
                 } // End value != ''
             } // End tAttrib in lookup
@@ -378,7 +378,7 @@ translate = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logVerbose('Column not found:: (' + col + '=' + value + ')');
+                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
                 }
             } // End !col in lookup
         } // End for col in inList
@@ -479,7 +479,7 @@ translate = {
             }
             else
             {
-                hoot.logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
+                hoot.logTrace('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is not set. Skipping it.');
                 continue
             } // End !attrsi[]
 
@@ -489,7 +489,7 @@ translate = {
 
             if (tValue !== '999')
             {
-                hoot.logVerbose('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
+                hoot.logTrace('OTH:: Attribute :' + i + ': is supposed to be 999/Other. It is :' + tValue + ':. Skipping it.');
                 continue;
             }
 
@@ -841,7 +841,7 @@ translate = {
                     }
                     else
                     {
-                        hoot.logVerbose('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
+                        hoot.logTrace('Expected a number for:: ' + i + '. Got ' + attrs[i] + ' instead. Skipping ' + i);
                     }
                 }
             }
@@ -867,7 +867,7 @@ translate = {
                                 // Back to a string for a comparison
                                 if ((tInt + '') !== tNum)
                                 {
-                                    hoot.logVerbose('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
+                                    hoot.logTrace('Converting ' + i + ' from ' + tNum + ' to ' + tInt);
                                 }
                                 tNum = tInt;
                         } // End in intList
@@ -879,7 +879,7 @@ translate = {
                     }
                     else
                     {
-                        hoot.logVerbose('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
+                        hoot.logTrace('Expected a number for:: ' + rules[i] + '. Got ' + tags[rules[i]] + ' instead. Skipping ' + i);
                     }
                 }
             }

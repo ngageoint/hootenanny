@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -46,7 +46,6 @@ HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 HootApiDbReader::HootApiDbReader() :
 _database(new HootApiDb())
 {
-  LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
 }
 
@@ -89,7 +88,7 @@ void HootApiDbReader::open(QString urlStr)
     if (_email == "")
     {
       throw HootException("If a map name is specified then the user email must also be specified "
-                          "via: " + emailKey());
+                          "via: " + ConfigOptions::getApiDbEmailKey());
     }
 
     QString mapName = pList[pList.size() - 1];
@@ -331,8 +330,11 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
-  //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { node->setStatus(_status); }
+
+  // We want the reader's status to always override any existing status
+  // Unless, we really want to keep the status.
+//    if (_status != Status::Invalid) { node->setStatus(_status); }
+  if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
 
   return node;
 }
@@ -407,7 +409,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
-  setUserEmail(configOptions.getHootapiDbReaderEmail());
+  setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxHootApiDatabase());
 }

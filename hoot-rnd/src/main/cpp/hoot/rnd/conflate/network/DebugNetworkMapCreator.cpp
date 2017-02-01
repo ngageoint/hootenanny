@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DebugNetworkMapCreator.h"
 
 // hoot
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
 
 namespace hoot
@@ -63,11 +64,11 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     w->addNode(n1->getId());
     w->addNode(n2->getId());
     Tags tags;
-    tags.set("hoot:edge:score12", edgeScore->getScore12());
-    tags.set("hoot:edge:score21", edgeScore->getScore21());
-    tags.set("hoot:edge:score", edgeScore->getScore());
-    tags.set("hoot:edge:id", edgeScore->getUid());
-    tags.set("hoot:edge", edgeScore->toString());
+    tags.set(MetadataTags::HootEdgeScore12(), edgeScore->getScore12());
+    tags.set(MetadataTags::HootEdgeScore21(), edgeScore->getScore21());
+    tags.set(MetadataTags::HootEdgeScore(), edgeScore->getScore());
+    tags.set(MetadataTags::HootEdgeId(), edgeScore->getUid());
+    tags.set(MetadataTags::HootEdge(), edgeScore->toString());
 
     RelationPtr r(new Relation(Status::Invalid, map->createNextRelationId(), -1, "match"));
     r->setTags(tags);
@@ -118,10 +119,10 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
     WayPtr w(new Way(Status::Invalid, map->createNextWayId(), -1));
     w->addNode(n1->getId());
     w->addNode(n2->getId());
-    w->getTags().set("hoot:vertex:score12", vertexScore->getScore12());
-    w->getTags().set("hoot:vertex:score21", vertexScore->getScore21());
-    w->getTags().set("hoot:vertex:score", vertexScore->getScore());
-    w->getTags().set("hoot:vertex", vertexScore->toString());
+    w->getTags().set(MetadataTags::HootVertexScore12(), vertexScore->getScore12());
+    w->getTags().set(MetadataTags::HootVertexScore21(), vertexScore->getScore21());
+    w->getTags().set(MetadataTags::HootVertexScore(), vertexScore->getScore());
+    w->getTags().set(MetadataTags::HootVertex(), vertexScore->toString());
     if (vertexScore->getScore() >= 0.15)
     {
       w->getTags().set("highway", "footway");

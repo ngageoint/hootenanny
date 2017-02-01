@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DividedHighwayManipulation.h"
@@ -43,6 +43,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // Qt
@@ -104,7 +105,7 @@ void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
             angle = toRadians(360) - angle;
           }
 
-          if (other->getTags()["hoot:stub"] == "true")
+          if (other->getTags()[MetadataTags::HootStub()] == "true")
           {
             RemoveWayOp::removeWay(map, other->getId());
           }
@@ -225,7 +226,7 @@ void DividedHighwayManipulation::_createStub(shared_ptr<OsmMap> map, shared_ptr<
   stub->addNode(endNode->getId());
   stub->addNode(nodeId);
   stub->setTags(mid->getTags());
-  stub->setTag("hoot:stub", "true");
+  stub->setTag(MetadataTags::HootStub(), "true");
   map->addWay(stub);
   _newWays.insert(ElementId::way(stub->getId()));
 }

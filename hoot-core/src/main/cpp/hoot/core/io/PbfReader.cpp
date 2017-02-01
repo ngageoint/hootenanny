@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PbfReader.h"
@@ -37,6 +37,8 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
+
 using namespace hoot::pb;
 
 // Standard Includes
@@ -134,7 +136,7 @@ void PbfReader::setConfiguration(const Settings &conf)
 
 void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
 {
-  if (key == "hoot:status")
+  if (key == MetadataTags::HootStatus())
   {
     if (_useFileStatus)
     {
@@ -145,7 +147,7 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
       e->setStatus(_status);
     }
   }
-  else if (key == "accuracy" || key == "error:circular")
+  else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
   {
     bool ok;
     Meters circularError = value.toDouble(&ok);
@@ -190,7 +192,7 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
       }
     }
   }
-  else if (key == "hoot:id")
+  else if (key == MetadataTags::HootId())
   {
     // pass
   }
@@ -435,7 +437,7 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
         {
           // QT 4.6 does not have fromMSecsSinceEpoch
           //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-	  // same time, but friendly to earlier Qt version
+    // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           nodes[i]->setTag("source:datetime", dts);
@@ -1145,7 +1147,6 @@ shared_ptr<Element> PbfReader::readNextElement()
   shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodeMap().size()))
   {
-    //LOG_DEBUG("node key: " + nodesItr.key());
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.

@@ -27,11 +27,11 @@
 
 // Hoot
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmReader.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -110,7 +110,7 @@ public:
       "    <node visible=\"true\" id=\"-3\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"4.0\" lon=\"-3.0\">\n"
       "        <tag k=\"name\" v=\"Micah's Street\"/>\n"
       "        <tag k=\"highway\" v=\"bus_stop\"/>\n"
-      "        <tag k=\"error:circular\" v=\"15\"/>\n"
+      "        <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"15\"/>\n"
       "    </node>\n"
       "    <node visible=\"true\" id=\"-2\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"3.0\" lon=\"-3.0\"/>\n"
       "    <node visible=\"true\" id=\"-1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"2.0\" lon=\"-3.0\"/>\n"
@@ -133,7 +133,7 @@ public:
                           "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":21},\n"
                           "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
                           "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                          "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"error:circular\":\"5\"}}]\n"
+                          "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
                           "}\n";
     OsmJsonReader uut;
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
@@ -154,7 +154,7 @@ public:
       "        <nd ref=\"-4\"/>\n"
       "        <nd ref=\"-5\"/>\n"
       "        <tag k=\"note\" v=\"w1\"/>\n"
-      "        <tag k=\"error:circular\" v=\"5\"/>\n"
+      "        <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"5\"/>\n"
       "        <tag k=\"alt_name\" v=\"bar\"/>\n"
       "        <tag k=\"name\" v=\"foo\"/>\n"
       "        <tag k=\"area\" v=\"yes\"/>\n"
@@ -221,7 +221,7 @@ public:
       "     'name': 'foo',                     \n"
       "     'area': 'yes',                     \n"
       "     'amenity': 'bar',                  \n"
-      "     'error:circular': '5'              \n"
+      "     '" + MetadataTags::ErrorCircular() + "': '5'\n"
       "   }                                    \n"
       " },                                     \n"
       " {                                      \n"
@@ -296,7 +296,7 @@ public:
       "      <tag k=\"name\" v=\"foo\"/>                                                                                \n"
       "      <tag k=\"area\" v=\"yes\"/>                                                                                \n"
       "      <tag k=\"amenity\" v=\"bar\"/>                                                                             \n"
-      "      <tag k=\"error:circular\" v=\"5\"/>                                                                        \n"
+      "      <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"5\"/>                                                 \n"
       "  </way>                                                                                                         \n"
       "  <relation visible=\"true\" id=\"1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                          \n"
       "      <member type=\"relation\" ref=\"1745069\" role=\"\"/>                                                      \n"
@@ -309,14 +309,14 @@ public:
       "      <tag k=\"to\" v=\"Gielgen\"/>                                                                              \n"
       "      <tag k=\"name\" v=\"VRS 636\"/>                                                                            \n"
       "      <tag k=\"ref\" v=\"636\"/>                                                                                 \n"
-      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "      <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"15\"/>                                                \n"
       "  </relation>                                                                                                    \n"
       "  <relation visible=\"true\" id=\"172789\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                     \n"
-      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "      <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"15\"/>                                                \n"
       "  </relation>                                                                                                    \n"
       "  <relation visible=\"true\" id=\"1745069\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\">                    \n"
       "      <member type=\"way\" ref=\"-1\" role=\"\"/>                                                                \n"
-      "      <tag k=\"error:circular\" v=\"15\"/>                                                                       \n"
+      "      <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"15\"/>                                                \n"
       "  </relation>                                                                                                    \n"
       "</osm>                                                                                                           \n";
 

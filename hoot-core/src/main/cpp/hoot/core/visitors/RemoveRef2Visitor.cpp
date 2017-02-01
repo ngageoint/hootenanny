@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRef2Visitor.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -56,9 +57,9 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getTags().contains("REF1"))
+    if (e->getTags().contains(MetadataTags::Ref1()))
     {
-      QString ref1 = e->getTags().get("REF1");
+      QString ref1 = e->getTags().get(MetadataTags::Ref1());
       _ref1ToEid[ref1] = e->getElementId();
     }
   }
@@ -76,7 +77,7 @@ _errorOnMissingRef1(false)
 
   if (_ref2Keys.size() == 0)
   {
-    _ref2Keys << "REF2";
+    _ref2Keys << MetadataTags::Ref2();
     _ref2Keys << "REVIEW";
     _ref2Keys << "CONFLICT";
     _ref2Keys << "DIVIDED1";
@@ -113,7 +114,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      const QString errMsg = "Found a REF2 that references a non-existing REF1: " + r;
+      const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
       //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
       //if (_errorOnMissingRef1)
       //{
@@ -123,7 +124,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       //{
         LOG_WARN(errMsg);
         refs.removeAll(r);
-        if (refs.size() == 0 && key == "REF2")
+        if (refs.size() == 0 && key == MetadataTags::Ref2())
         {
           refs.append("none");
         }
@@ -137,7 +138,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       {
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);
-        if (refs.size() == 0 && key == "REF2")
+        if (refs.size() == 0 && key == MetadataTags::Ref2())
         {
           refs.append("none");
         }

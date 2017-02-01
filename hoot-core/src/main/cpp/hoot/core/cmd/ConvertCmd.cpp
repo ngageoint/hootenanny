@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -85,6 +85,10 @@ public:
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
 
+    // This keeps the status and the tags.
+    conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+    conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+
     if (readerFactory.hasElementInputStream(args[0]) &&
         writerFactory.hasElementOutputStream(args[1]) &&
         ConfigOptions().getConvertOps().size() == 0)
@@ -94,6 +98,11 @@ public:
     else
     {
       shared_ptr<OsmMap> map(new OsmMap());
+
+      // This keeps the status and the tags.
+      conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
+      conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+
       loadMap(map, args[0], true, Status::Unknown1);
 
       // Apply any user specified operations.
@@ -104,7 +113,7 @@ public:
       saveMap(map, args[1]);
     }
 
-    //LOG_DEBUG(_timer->elapsed());
+    LOG_INFO("Convert operation complete.");
     QString msg = "Convert operation took ";
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
@@ -122,7 +131,7 @@ public:
 
   void streamElements(QString in, QString out)
   {
-    LOG_DEBUG("Streaming data conversion (element input/output streams)");
+    LOG_DEBUG("Streaming data conversion...");
 
     shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);

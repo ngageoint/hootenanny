@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
@@ -250,14 +251,14 @@ public:
     database.beginChangeset();
 
     Tags t;
-    t["hoot:status"] = "Unknown1";
-    t["accuracy"] = "20.0";
+    t[MetadataTags::HootStatus()] = MetadataTags::Unknown1();
+    t[MetadataTags::Accuracy()] = "20.0";
     long nodeId;
     database.insertNode(38, -104, t, nodeId);
     ids.append(nodeId);
 
     t.clear();
-    t["error:circular"] = "20.0";
+    t[MetadataTags::ErrorCircular()] = "20.0";
     database.insertNode(38, -105, t, nodeId);
     ids.append(nodeId);
 
@@ -355,14 +356,14 @@ public:
     int ctr = 0;
     while (nodeResultIterator->next())
     {
-      for(int j=0;j<10;j++) { LOG_DEBUG("VALUE = "+nodeResultIterator->value(j).toString()); }
+      for(int j=0;j<10;j++) { LOG_TRACE("VALUE = "+nodeResultIterator->value(j).toString()); }
 
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
       HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toDouble());
       HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(2).toDouble());
       stringstream s;
       s << ApiDb::unescapeTags(nodeResultIterator->value(8));
-      LOG_DEBUG("unescapeTag :"+s.str());
+      LOG_TRACE("unescapeTag :"+s.str());
       HOOT_STR_EQUALS("foo = bar\n", ApiDb::unescapeTags(nodeResultIterator->value(8)));
 
       ctr++;
@@ -462,8 +463,8 @@ public:
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ApiDb::NODES_LATITUDE).toDouble());
           HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(ApiDb::NODES_LONGITUDE).toDouble());
-          HOOT_STR_EQUALS("accuracy = 20.0\n"
-                          "hoot:status = Unknown1\n",
+          HOOT_STR_EQUALS(MetadataTags::Accuracy() + " = 20.0\n" +
+                          MetadataTags::HootStatus() + " = " + MetadataTags::Unknown1() + "\n",
                           ApiDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -473,7 +474,7 @@ public:
           HOOT_STR_EQUALS(nodeId2, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ApiDb::NODES_LATITUDE).toDouble());
           HOOT_STR_EQUALS(-105.0, nodeResultIterator->value(ApiDb::NODES_LONGITUDE).toDouble());
-          HOOT_STR_EQUALS("error:circular = 20.0\n",
+          HOOT_STR_EQUALS(MetadataTags::ErrorCircular() + " = 20.0\n",
                           ApiDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;

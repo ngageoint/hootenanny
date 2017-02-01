@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbWriter.h"
 
@@ -31,6 +31,7 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -64,9 +65,11 @@ void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& 
 {
   if (e->getCircularError() >= 0.0)
   {
-    t["error:circular"] = QString::number(e->getCircularError());
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
   }
-  t["hoot:status"] = QString::number(e->getStatus().getEnum());
+  t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
+
+  //LOG_VART(t[MetadataTags::HootStatus()]);
 }
 
 void HootApiDbWriter::close()
@@ -100,7 +103,6 @@ void HootApiDbWriter::finalizePartial()
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-
   return _hootdb.isSupported(url);
 }
 
@@ -140,8 +142,8 @@ set<long> HootApiDbWriter::_openDb(QString& urlStr)
   }
   if (_userEmail.isEmpty())
   {
-    throw HootException("Please set the user's email address via the '" + emailKey() + "' "
-                        "configuration setting.");
+    throw HootException("Please set the user's email address via the '" +
+                        ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
   }
 
   QUrl url(urlStr);
@@ -173,7 +175,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 {
   if (mapIds.size() > 0)
   {
-    if (_overwriteMap) // delete mape and overwrite it
+    if (_overwriteMap) // delete map and overwrite it
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
@@ -266,8 +268,8 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
-            //eid.getId() << " to " << retVal);
+  LOG_TRACE("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            eid.getId() << " to " << retVal);
 
   return retVal;
 }
@@ -298,7 +300,7 @@ vector<long> HootApiDbWriter::_remapNodes(const vector<long>& nids)
 void HootApiDbWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions configOptions(conf);
-  setUserEmail(configOptions.getHootapiDbWriterEmail());
+  setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
 }
@@ -434,7 +436,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
                               relationMemberElementId.getId(), e.role, i);
   }
 
-  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
+  LOG_TRACE("All members added to relation " << QString::number(relationId));
 
   _countChange();
 

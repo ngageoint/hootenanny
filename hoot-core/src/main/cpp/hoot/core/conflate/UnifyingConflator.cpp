@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -40,6 +40,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // standard
 #include <algorithm>
@@ -80,9 +81,9 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 {
   Tags& tags = e->getTags();
 
-  tags.appendValue(reviewScoreKey(), mc.getReviewP());
-  tags.appendValue(matchScoreKey(), mc.getMatchP());
-  tags.appendValue(missScoreKey(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
 void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
@@ -104,8 +105,8 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
 
           _addScoreTags(e1, mc);
           _addScoreTags(e2, mc);
-          e1->getTags().appendValue(scoreUuidKey(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(scoreUuidKey(), e1->getTags().getCreateUuid());
+          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
         }
       }
     }
@@ -117,7 +118,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   Timer timer;
   _reset();
 
-  NamedOp(ConfigOptions().getUnifyPreOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying pre unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -128,7 +130,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   if (Log::getInstance().isDebugEnabled())
   {
-    LOG_DEBUG("Writing debug map.");
+    LOG_DEBUG("Writing debug map...");
     OsmMapPtr debug(new OsmMap(map));
     MapProjector::projectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
@@ -150,7 +152,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _matchFactory.createMatches(map, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -187,16 +189,16 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
       double cmStart = Time::getTime();
       cmMatches = cm.calculateSubset();
-      LOG_DEBUG("CM took: " << Time::getTime() - cmStart << "s.");
+      LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
       LOG_DEBUG("CM Score: " << cm.getScore());
-      LOG_DEBUG(SystemInfo::getMemoryUsageString());
+      LOG_TRACE(SystemInfo::getMemoryUsageString());
     }
 
     GreedyConstrainedMatches gm(map);
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
     vector<const Match*> gmMatches = gm.calculateSubset();
-    LOG_DEBUG("GM took: " << Time::getTime() - gmStart << "s.");
+    LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
     LOG_DEBUG("GM Score: " << gm.getScore());
 
     if (gm.getScore() > cm.getScore())
@@ -215,11 +217,12 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
+  //TODO: this isn't right for network
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_INFO("Match count: " << _matches.size());
 
@@ -230,11 +233,11 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     mg.addMatches(_matches.begin(), _matches.end());
     vector< set<const Match*, MatchPtrComparator> > tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-    LOG_DEBUG(SystemInfo::getMemoryUsageString());
+    LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
 
   LOG_DEBUG("Match sets count: " << matchSets.size());
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
   // convert all the match sets into mergers.
@@ -243,14 +246,14 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   // don't need the matches any more
   _deleteAll(allMatches);
   _matches.clear();
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   _mapElementIdsToMergers();
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
@@ -271,17 +274,18 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   {
     cout << endl;
   }
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();
   // free up any used resources.
   _reset();
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
-  NamedOp(ConfigOptions().getUnifyPostOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying post unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }

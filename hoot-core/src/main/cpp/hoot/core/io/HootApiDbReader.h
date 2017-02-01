@@ -45,8 +45,6 @@ class HootApiDbReader : public ApiDbReader, public PartialOsmMapReader, public C
 public:
 
   static std::string className() { return "hoot::HootApiDbReader"; }
-  static QString maxElementsPerMapKey() { return "hootapi.db.reader.max.elements.per.partial.map"; }
-  static QString emailKey() { return "hootapi.db.reader.email"; }
 
   HootApiDbReader();
 
@@ -56,7 +54,7 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) { _status = status; LOG_VARD(_status); }
+  virtual void setDefaultStatus(Status status) { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read

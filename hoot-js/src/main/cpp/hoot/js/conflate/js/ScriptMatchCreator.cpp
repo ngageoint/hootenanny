@@ -246,6 +246,7 @@ public:
       result = toCpp<Meters>(f) * _candidateDistanceSigma;
     }
 
+    LOG_VART(result);
     return result;
   }
 

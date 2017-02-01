@@ -156,7 +156,7 @@ public class ExportJobResourceTest {
             String mapBoundsStr = mapBounds.toServicesString();
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            String commandArgs = spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
 
             assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
             assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
@@ -195,7 +195,7 @@ public class ExportJobResourceTest {
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -229,7 +229,7 @@ public class ExportJobResourceTest {
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
@@ -265,7 +265,7 @@ public class ExportJobResourceTest {
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -304,7 +304,7 @@ public class ExportJobResourceTest {
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -341,7 +341,7 @@ public class ExportJobResourceTest {
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams)).toString();
+            spy.getExportToOsmApiDbCommandArgs(ExportJobResource.parseParams(inputParams), (JSONObject) new JSONParser().parse(inputParams)).toString();
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());

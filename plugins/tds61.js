@@ -342,7 +342,7 @@ tds61 = {
         }
         else
         {
-            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         } // End Drop attrs
 
         // Repack the OTH field
@@ -394,7 +394,7 @@ tds61 = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -403,7 +403,7 @@ tds61 = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -998,7 +998,7 @@ tds61 = {
         }
 
         // Fix up landuse tags
-        if (attrs.FCODE == 'AL020')
+        if (attrs.F_CODE == 'AL020')
         {
             switch (tags.use) // Fixup the landuse tags
             {
@@ -1023,10 +1023,10 @@ tds61 = {
         }
 
         // Fix oil/gas/petroleum fields
-        if (attrs.FCODE == 'AA052')
+        if (attrs.F_CODE == 'AA052')
         {
             tags.landuse = 'industrial';
-            
+
             switch (tags.product)
             {
                 case undefined:
@@ -1920,7 +1920,7 @@ tds61 = {
             }
             else
             {
-                hoot.logVerbose('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+                hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -2088,7 +2088,7 @@ tds61 = {
                 }
             }
 
-            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
@@ -2112,7 +2112,7 @@ tds61 = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 

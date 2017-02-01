@@ -222,7 +222,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
   catch (const geos::util::TopologyException& e)
   {
-    if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+    if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
     {
       LOG_TRACE(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
@@ -288,7 +288,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         if (polyNeighborGeom.get() &&
             QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
         {
-          if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+          if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
           {
             LOG_TRACE(
               "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
@@ -429,7 +429,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+        if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
@@ -440,38 +440,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     }
     polyNeighborItr++;
   }
-
-  //logic for parsing through surrounding POIs
-//  set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
-//  while (poiNeighborItr != _poiNeighborIds.end())
-//  {
-//    ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-//    if (poiNeighbor->getElementId() != poi->getElementId())
-//    {
-//      shared_ptr<Geometry> poiNeighborGeom ;
-//      try
-//      {
-//        poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
-//        if (polyGeom->contains(poiNeighborGeom.get()))
-//        {
-//
-//
-//        }
-//      }
-//      catch (const geos::util::TopologyException& e)
-//      {
-//        if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
-//        {
-//          LOG_TRACE(
-//            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-//            "geometry: " << poiNeighbor->toString() << "\n" << e.what());
-//          _badGeomCount++;
-//        }
-//      }
-//    }
-//    poiNeighborItr++;
-//  }
 
   return false;
 }

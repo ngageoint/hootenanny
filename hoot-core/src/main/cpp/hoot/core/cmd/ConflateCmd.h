@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -128,7 +128,7 @@ public:
     LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
-    LOG_VAR(bytesRead);
+    LOG_VART(bytesRead);
     QList< QList<SingleStat> > allStats;
 
     // read input 1
@@ -140,14 +140,11 @@ public:
       loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
     }
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
-    LOG_VAR(inputBytes);
+    LOG_VART(inputBytes);
     double elapsed = t.getElapsedAndRestart();
     stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
     stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
-
-    NamedOp(ConfigOptions().getConflateLoadPostOps()).apply(map);
-    //stats.append(SingleStat("Apply Load Post Ops Time (sec)", t.getElapsedAndRestart()));
 
     CalculateStatsOp input1Cso(
       ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
@@ -171,6 +168,7 @@ public:
     size_t initialElementCount = map->getElementCount();
     stats.append(SingleStat("Initial Element Count", initialElementCount));
 
+    LOG_INFO("Applying pre conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
@@ -196,6 +194,7 @@ public:
     }
 
     // Apply any user specified operations.
+    LOG_INFO("Applying post conflation operations...");
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
     MapProjector::projectToWgs84(result);

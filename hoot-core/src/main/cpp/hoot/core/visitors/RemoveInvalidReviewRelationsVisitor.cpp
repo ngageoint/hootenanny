@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidReviewRelationsVisitor.h"
@@ -32,6 +32,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -49,13 +50,13 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     Relation* r = dynamic_cast<Relation*>(e.get());
     assert(r != 0);
 
-    //LOG_VARD(r->getId());
+    LOG_VART(r->getId());
     bool invalidRelation = false;
     if (r->getType() == Relation::REVIEW)
     {
-      const bool hasMemberCountTag = r->getTags().contains(ReviewMarker::reviewMemberCountKey);
+      const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
       if (hasMemberCountTag &&
-          (int)r->getMembers().size() != r->getTags().get(ReviewMarker::reviewMemberCountKey).toInt())
+          (int)r->getMembers().size() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())
       {
         invalidRelation = true;
       }
@@ -68,7 +69,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
 
       if (invalidRelation)
       {
-        //LOG_DEBUG("Removing review relation with ID: " << r->getId());
+        LOG_TRACE("Removing review relation with ID: " << r->getId());
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
       }
     }

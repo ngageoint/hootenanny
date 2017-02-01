@@ -27,8 +27,8 @@ avoided.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
-include::add-pbf-header.asciidoc[]
 include::accuracy-dist.asciidoc[]
+include::add-pbf-header.asciidoc[]
 include::alpha-shape.asciidoc[]
 include::apply-rubber-sheet.asciidoc[]
 include::attr-co-occurence.asciidoc[]
@@ -67,7 +67,6 @@ include::rubber-sheet.asciidoc[]
 include::score.asciidoc[]
 include::score-matches.asciidoc[]
 include::stats.asciidoc[]
-include::unify.asciidoc[]
 include::union-polygons.asciidoc[]
 include::version.asciidoc[]
 include::way-bbox.asciidoc[]

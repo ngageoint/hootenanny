@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingPartMergeOp.h"
 
@@ -267,9 +267,15 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const shared_ptr<Way>& w, con
 shared_ptr<Relation> BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< shared_ptr<Element> >& parts)
 {
+  LOG_VART(parts.size());
   assert(parts.size() > 0);
-  shared_ptr<Relation> building(new Relation(parts[0]->getStatus(),
-    map->createNextRelationId(), -1, "building"));
+
+  shared_ptr<Relation> building(
+    new Relation(
+      parts[0]->getStatus(),
+      map->createNextRelationId(),
+      -1,
+      "building"));
 
   OsmSchema& schema = OsmSchema::getInstance();
   Tags& t = building->getTags();

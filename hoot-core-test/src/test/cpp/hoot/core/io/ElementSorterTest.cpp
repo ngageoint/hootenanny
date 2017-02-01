@@ -61,8 +61,8 @@ public:
     while (elementSorter.hasMoreElements())
     {
       ElementPtr element = elementSorter.readNextElement();
-      //LOG_DEBUG(element->toString());
-      //LOG_VARD(index);
+      LOG_TRACE(element->toString());
+      LOG_VART(index);
       //elements should be returned in the order nodes, ways, then relations
       if (index >= 0 && index <=15)
       {

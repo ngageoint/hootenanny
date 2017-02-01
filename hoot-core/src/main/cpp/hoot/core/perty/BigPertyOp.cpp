@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BigPertyOp.h"
 
@@ -35,6 +35,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot
@@ -58,7 +59,7 @@ void BigPertyOp::apply(shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToWgs84(map);
 
-  const QString pertiedStr("hoot:pertied");
+  const QString pertiedStr(MetadataTags::HootPertied());
   const QString trueStr("true");
 
   const NodeMap& nm = map->getNodeMap();

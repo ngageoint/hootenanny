@@ -22,25 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyMatchScorer.h"
 
 // hoot
+#include <hoot/core/Conflator.h>
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/visitors/AddRef1Visitor.h>
+#include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/visitors/TagRenameKeyVisitor.h>
-#include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/RubberSheet.h>
-#include <hoot/core/Conflator.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/visitors/AddRef1Visitor.h>
+#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
+#include <hoot/core/visitors/TagRenameKeyVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -106,8 +107,8 @@ shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString referen
 shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMapInputPath,
                                                        const QString referenceMapOutputPath)
 {
-  LOG_DEBUG("Loading the reference data with status Unknown1 and adding REF1 tags to it; Saving " <<
-            "a copy to " << referenceMapOutputPath << "...");
+  LOG_DEBUG("Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " << MetadataTags::Ref1() <<
+            " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
 
   shared_ptr<OsmMap> referenceMap(new OsmMap());
   OsmUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
@@ -116,7 +117,7 @@ shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMa
   shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
   shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor("error:circular", QString::number(_searchDistance)));
+    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodeMap().size());
   LOG_VARD(referenceMap->getWays().size());
@@ -138,8 +139,8 @@ shared_ptr<OsmMap> PertyMatchScorer::_loadReferenceMap(const QString referenceMa
 void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
                                          const QString perturbedMapOutputPath)
 {
-  LOG_DEBUG("Loading the reference data to be used by the data to be perturbed; " <<
-            "renaming REF1 tags to REF2...");
+  LOG_DEBUG("Loading the reference data to be used by the data to be perturbed; renaming " <<
+            MetadataTags::Ref1() << " tags to " << MetadataTags::Ref2() << "...");
 
   //load from the modified reference data output to get the added ref1 tags; don't copy the map,
   //since updates to the names of the ref tags on this map will propagate to the map copied from
@@ -147,12 +148,12 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   OsmUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   MapCleaner().apply(perturbedMap);
 
-  shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(new TagRenameKeyVisitor("REF1", "REF2"));
+  shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
   // This could be replaced with a SetTagVisitor passed in from the command line
   // instead.
   shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor("error:circular", QString::number(_searchDistance)));
+    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodeMap().size());
   LOG_VARD(perturbedMap->getWays().size());  

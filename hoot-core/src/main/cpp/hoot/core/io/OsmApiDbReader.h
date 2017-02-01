@@ -42,7 +42,6 @@ class OsmApiDbReader : public ApiDbReader, public OsmMapReader, public Configura
 public:
 
   static std::string className() { return "hoot::OsmApiDbReader"; }
-  static QString emailKey() { return "osmapi.db.reader.email"; }
 
   OsmApiDbReader();
 

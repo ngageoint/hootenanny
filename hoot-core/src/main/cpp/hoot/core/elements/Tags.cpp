@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -390,9 +390,9 @@ int Tags::getNonDebugCount() const
   for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
   {
     QString key = it.key();
-    if (!key.startsWith("hoot:") && key != "created_by" && it.value() != "")
+    if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
     {
-      //LOG_DEBUG("non-debug key: " + key);
+      LOG_TRACE("non-debug key: " + key);
       count++;
     }
   }

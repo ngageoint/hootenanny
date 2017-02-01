@@ -22,11 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PermuteGridCalculator.h"
-
-// hoot
 
 
 namespace hoot
@@ -34,7 +32,7 @@ namespace hoot
 
 QString PermuteGridCalculator::toString()
 {
-  return "_beta: " + QString::number(_beta) + ", _D: " + QString::number(_D) + ", _gridSpacing: " +
+  return "_D: " + QString::number(_D) + ", _gridSpacing: " +
     QString::number(_gridSpacing) + ", _seed: " + QString::number(_seed) +
     ", _sigmaRx: " + QString::number(_sigmaRx) + ", _sigmaRy: " + QString::number(_sigmaRy) +
     ", _sigmaSx: " + QString::number(_sigmaSx) + ", _sigmaSy: " + QString::number(_sigmaSy);

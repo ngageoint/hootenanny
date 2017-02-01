@@ -282,7 +282,7 @@ QString MapStatsWriter::statsToString(QList< QList<SingleStat> >& stats, QString
     _appendUnique(stats[i], allStatNames);
   }
 
-  int precision = ConfigOptions().getStatsPrecision();
+  int precision = ConfigOptions().getWriterPrecision();
   QString result;
   // reserve a ballpark size to limit reallocs
   result.reserve(20 + 10 * allStatNames.size() * stats.size());

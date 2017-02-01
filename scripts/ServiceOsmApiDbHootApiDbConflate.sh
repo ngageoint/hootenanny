@@ -36,7 +36,7 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D hootapi.db.writer.email=OsmApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D hootapi.db.reader.email=OsmApiDbConflate@hoottestcpp.org -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true"
+export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true"
 #-D writer.include.debug=true
 #-D conflate.add.score.tags=true
 

@@ -94,7 +94,7 @@
         "hoot_key": "writer.include.debug",
 		"required":"true"
       },
- 
+
 	  {
         "id": "reference_override_small_way_merger_threshold",
         "minvalue": "0",
@@ -130,15 +130,6 @@
 				"name":"Cookie Cutter Alpha Shape Buffer",
 				"defaultvalue":"0",
 				"hoot_key":"cookie.cutter.alpha.shape.buffer",
-			},
-			{
-				"id":"horizontal_cookie_cutter_output_buffer",
-				"elem_type":"double",
-				"description":"Cookie Cutter Output Buffer",
-				"name":"Cookie Cutter Output Buffer",
-				"defaultvalue":"-1000",
-				"hoot_key":"cookie.cutter.output.buffer",
-				"required":"true"
 			},
 			{
 				"id":"horizontal_cookie_cutter_output_crop",
