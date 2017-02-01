@@ -189,26 +189,31 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   {
     QList<long> ways = _nodeToWays.values(nodeId);
     int concurrent_count = 0;
-    int other_ways = ways.count() - 1;
+    int otherWays_count = ways.count() - 1;
     for (QList<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       //  Don't compare it against itself
       if (wayId == *it)
         continue;
+
       //  Get the way info to make the comparison
       WayPtr comp = _map->getWay(*it);
       const std::vector<long>& compIds = comp->getNodeIds();
       long idx = comp->getNodeIndex(nodeId);
+
       //  Endpoints of the other way should be split
       if (idx < 1 || idx > (long)compIds.size() - 1)
         continue;
+
       //  Check both in forward and reverse for shared nodes in the way
       if ((nodeIds[firstIndex - 1] == compIds[idx - 1] && nodeIds[firstIndex + 1] == compIds[idx + 1]) ||
           (nodeIds[firstIndex - 1] == compIds[idx + 1] && nodeIds[firstIndex + 1] == compIds[idx - 1]))
         concurrent_count++;
     }
+
+    // TODO: Need to figure out why this doesn't play nice with network conflation
     //  A split point is found when there is at least one non-concurrent way at this node
-    if (concurrent_count < other_ways)
+    if (concurrent_count < otherWays_count)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);

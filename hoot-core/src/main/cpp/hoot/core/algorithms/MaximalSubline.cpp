@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -101,8 +101,8 @@ double MaximalSubline::ThresholdMatchCriteria::match(int index1, int index2) con
   // Treat this as a variation of Frechet's Distance. This means that we're looking for the longest
   // subline that is within _maxDistance of the other linestring.
 
-  // find the subline that is within _maxDistance. Ultimately we'll need a proper implementation of
-  // Frechet's distance, but that'll have to wait till later. See #3213
+  // find the subline that is within _maxDistance. Ultimately we'll need to integrate a proper
+  // implementation of Frechet's distance.
   matchingSubline(ls1, ls2);
 
   // previously I found the maximalNearest subline, but that causes issues when there is a large
