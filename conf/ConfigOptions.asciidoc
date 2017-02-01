@@ -1951,9 +1951,9 @@ valid values.
 * Default Value: `-1`
 
 For script test debugging only.  Sets a maximum allowed time, in seconds, for a script test to run.
-If the script run longer than the specified time, it is forcefully stopped.  If the value is set to
--1, then there is no time limit.  This is useful when debugging tests which may hang on a remote
-build server.
+If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
+the value is set to -1, then there is no time limit for script tests.  This is useful when
+debugging tests which may hang on a remote build server.
 
 === set.tag.visitor.key
 
