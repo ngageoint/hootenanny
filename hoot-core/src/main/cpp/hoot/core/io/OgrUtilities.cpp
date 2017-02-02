@@ -27,7 +27,6 @@
 #include "OgrUtilities.h"
 
 // gdal
-#include <gdal.h>
 #include <gdal_frmts.h>
 #include <gdal_priv.h>
 
@@ -43,47 +42,49 @@
 namespace hoot
 {
 
-static const char* extensions[][2] = { { "shp"    , "ESRI Shapefile" },
-                                       { "dbf"    , "ESRI Shapefile" },
-                                       { "sqlite" , "SQLite" },
-                                       { "db"     , "SQLite" },
-                                       { "mif"    , "MapInfo File" },
-                                       { "tab"    , "MapInfo File" },
-                                       { "s57"    , "S57" },
-                                       { "bna"    , "BNA" },
-                                       { "csv"    , "CSV" },
-                                       { "gml"    , "GML" },
-                                       { "gpx"    , "GPX" },
-                                       { "kml"    , "KML/LIBKML" },
-                                       { "kmz"    , "LIBKML" },
-                                       { "json"   , "GeoJSON" },
-                                       { "geojson", "GeoJSON" },
-                                       { "dxf"    , "DXF" },
-                                       { "gdb"    , "FileGDB" },
-                                       { "pix"    , "PCIDSK" },
-                                       { "sql"    , "PGDump" },
-                                       { "gtm"    , "GPSTrackMaker" },
-                                       { "gmt"    , "GMT" },
-                                       { "vrt"    , "VRT" },
-                                       { NULL, NULL }
-                                      };
-static const char* beginName[][2] =  { { "PG:"      , "PostgreSQL" },
-                                       { "MySQL:"   , "MySQL" },
-                                       { "CouchDB:" , "CouchDB" },
-                                       { "GFT:"     , "GFT" },
-                                       { "MSSQL:"   , "MSSQLSpatial" },
-                                       { "ODBC:"    , "ODBC" },
-                                       { "OCI:"     , "OCI" },
-                                       { "SDE:"     , "SDE" },
-                                       { "WFS:"     , "WFS" },
-                                       { NULL, NULL }
-                                     };
-
 shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
+
+void OgrUtilities::loadDriverInfo()
+{
+  //  Load the extension-based driver info
+  _drivers.push_back(OgrDriverInfo(".shp",      "ESRI Shapefile", true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".dbf",      "ESRI Shapefile", true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".sqlite",   "SQLite",         true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".db",       "SQLite",         true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".mif",      "MapInfo File",   true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".tab",      "MapInfo File",   true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".s57",      "S57",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".bna",      "BNA",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".csv",      "CSV",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gml",      "GML",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gpx",      "GPX",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".kml",      "KML/LIBKML",     true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".kmz",      "LIBKML",         true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".json",     "GeoJSON",        true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".geojson",  "GeoJSON",        true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".dxf",      "DXF",            true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gdb",      "FileGDB",        true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".pix",      "PCIDSK",         true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".sql",      "PGDump",         true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gtm",      "GPSTrackMaker",  true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".gmt",      "GMT",            true,   GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo(".vrt",      "VRT",            true,   GDAL_OF_ALL));
+  //  Load the prefix-based driver info
+  _drivers.push_back(OgrDriverInfo("PG:",       "PostgreSQL",     false,  GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("MySQL:",    "MySQL",          false,  GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo("CouchDB:",  "CouchDB",        false,  GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("GFT:",      "GFT",            false,  GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("MSSQL:",    "MSSQLSpatial",   false,  GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("ODBC:",     "ODBC",           false,  GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("OCI:",      "OCI",            false,  GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo("SDE:",      "SDE",            false,  GDAL_OF_ALL));
+  _drivers.push_back(OgrDriverInfo("WFS:",      "WFS",            false,  GDAL_OF_ALL));
+}
 
 OgrUtilities::OgrUtilities()
 {
   GDALAllRegister();
+  loadDriverInfo();
 }
 
 OgrUtilities& OgrUtilities::getInstance()
@@ -93,34 +94,26 @@ OgrUtilities& OgrUtilities::getInstance()
   return *_theInstance;
 }
 
-const char* OgrUtilities::getDriverName(const QString& url)
+OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url)
 {
-  const char* driverName = NULL;
-  int i = 0;
-  while (extensions[i][0] != NULL)
+  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); it++)
   {
-    if (url.endsWith(extensions[i][0]))
-      driverName = extensions[i][1];
-    i++;
+    if ((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator)))
+        return *it;
   }
-  i = 0;
-  while (beginName[i][0] != NULL)
-  {
-    if (url.startsWith(beginName[i][0]))
-      driverName = beginName[i][1];
-    i++;
-  }
-  return driverName;
+  return OgrDriverInfo();
 }
 
 
 shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
-  const char *driverName = getDriverName(url);
-  GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverName);
+  OgrDriverInfo driverInfo = getDriverInfo(url);
+  if (driverInfo._driverName == NULL)
+    throw HootException("Error getting driver info for: " + url);
+  GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverInfo._driverName);
   if (driver == 0)
-    throw HootException("Error getting driver by name: " + QString(driverName));
+    throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
 
   // if the user specifies a shapefile then crop off the .shp and create a directory.
   if (url.toLower().endsWith(".shp"))
@@ -133,24 +126,12 @@ shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
                         " (" + QString(CPLGetLastErrorMsg()) + ")");
   }
 
-  if (QString(driverName) == "FileGDB")
-  {
-    long v = GDAL_VERSION_MAJOR * 1000000 + GDAL_VERSION_MINOR * 1000 + GDAL_VERSION_REV;
-    long lowest = 1 * 1000000 + 10 * 1000 + 1;
-    if (v < lowest)
-    {
-      LOG_WARN("Writing to FileGDB with GDAL v" << GDAL_RELEASE_NAME << ". FileGDB with a GDAL "
-               "v1.9.0 is known to create files that can't be read by ArcMap 10.2. "
-               "GDAL v1.10.1 is known to work.");
-    }
-  }
-
   return result;
 }
 
 bool OgrUtilities::isReasonableUrl(const QString& url)
 {
-  return getDriverName(url) != NULL;
+  return getDriverInfo(url)._driverName != NULL;
 }
 
 shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
@@ -159,10 +140,10 @@ shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
    * This can be an issue because drivers are tried in the order that they are
    * loaded which has been known to cause issues.
    */
-  const char* driver = getDriverName(url);
-  const char* drivers[2] = { driver, NULL };
-  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(), GDAL_OF_ALL,
-    (driver != NULL ? drivers : NULL), NULL, NULL));
+  OgrDriverInfo driverInfo = getDriverInfo(url);
+  const char* drivers[2] = { driverInfo._driverName, NULL };
+  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
+    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL));
 
   if (!result)
     throw HootException("Unable to open: " + url);

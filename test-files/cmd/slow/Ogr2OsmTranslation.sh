@@ -9,7 +9,7 @@ hoot --ogr2osm translations/Identity.js $OUT/OnePointTranslated.osm $OUT/OnePoin
 hoot --is-match test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
 
 # Make sure we can read all layers from a shapefile
-rm -rf test-output/AllDataTypes.shp test-output/AllDataTypesA.zip
+rm -rf test-output/AllDataTypesA.shp test-output/AllDataTypesA.zip
 hoot --convert test-files/conflate/unified/AllDataTypesA.osm test-output/AllDataTypesA.shp
 cd test-output/AllDataTypesA.shp
 zip -q ../AllDataTypesA.zip *

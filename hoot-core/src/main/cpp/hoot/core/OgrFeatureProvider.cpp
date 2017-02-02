@@ -82,11 +82,10 @@ shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString&
    * This can be an issue because drivers are tried in the order that they are
    * loaded which has been known to cause issues.
    */
-  const char* driver = OgrUtilities::getInstance().getDriverName(ds);
-  const char* drivers[2] = { driver, NULL };
-  GDALDataset* dataSource = (GDALDataset*)GDALOpenEx(ds.toAscii(), GDAL_OF_ALL,
-    (driver != NULL ? drivers : NULL), NULL, NULL);
-
+  OgrDriverInfo driverInfo = OgrUtilities::getInstance().getDriverInfo(ds);
+  const char* drivers[2] = { driverInfo._driverName, NULL };
+  GDALDataset* dataSource = (GDALDataset*)GDALOpenEx(ds.toAscii(), driverInfo._driverType,
+    (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL);
 
   QString errorMsg = CPLGetLastErrorMsg();
   qDebug() << errorMsg;

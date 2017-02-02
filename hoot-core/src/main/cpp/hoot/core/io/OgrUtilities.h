@@ -28,6 +28,8 @@
 #define OGRUTILITIES_H
 
 // GDAL
+#include <gdal.h>
+// Forward declaration
 class GDALDataset;
 
 // Qt
@@ -36,8 +38,22 @@ class GDALDataset;
 // Tgs
 #include <tgs/SharedPtr.h>
 
+#include <vector>
+
 namespace hoot
 {
+
+class OgrDriverInfo
+{
+public:
+  OgrDriverInfo(const char* indicator = NULL, const char* driverName = NULL, bool is_ext = false, unsigned int driverType = GDAL_OF_ALL)
+   : _indicator(indicator), _driverName(driverName), _is_ext(is_ext), _driverType(driverType)
+  {}
+  const char* _indicator;
+  const char* _driverName;
+  bool _is_ext;
+  unsigned int _driverType;
+};
 
 class OgrUtilities
 {
@@ -56,10 +72,13 @@ public:
 
   shared_ptr<GDALDataset> openDataSource(const QString& url);
 
-  const char* getDriverName(const QString& url);
+  OgrDriverInfo getDriverInfo(const QString& url);
 
 private:
+  void loadDriverInfo();
+
   static shared_ptr<OgrUtilities> _theInstance;
+  std::vector<OgrDriverInfo> _drivers;
 };
 
 }
