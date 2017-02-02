@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -79,14 +79,14 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
 
   if ( way == emptyWay )
   {
-    //LOG_DEBUG("SplitLongLinearWaysVisitor::visit: element is not a way, ignoring");
+    LOG_TRACE("SplitLongLinearWaysVisitor::visit: element is not a way, ignoring");
     return;
   }
 
   bool printInfo = false;
   if ( way->getNodeCount() > getMaxNumberOfNodes() )
   {
-    LOG_DEBUG("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
+    LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
     printInfo = true;
   }
 
@@ -95,7 +95,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
 
   if ( myTags.contains("road") )
   {
-    LOG_DEBUG("Way has road tag with value " << myTags.get("road")  );
+    LOG_TRACE("Way has road tag with value " << myTags.get("road")  );
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
@@ -103,7 +103,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   {
     if ( printInfo == true )
     {
-      LOG_DEBUG("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+      LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
         " is not linear, ignoring");
     }
     return;
@@ -112,16 +112,13 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   // Does way exceed max number of nodes?
   if ( way->getNodeCount() <= getMaxNumberOfNodes() )
   {
-    /*
-    LOG_DEBUG("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+    LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
       " has " << way->getNodeCount() << " nodes which is <= than"
       " max of " << getMaxNumberOfNodes() << ", ignoring");
-    */
-
     return;
   }
 
-  LOG_DEBUG("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
+  LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
     " has " << way->getNodeCount() << " nodes which is greater thank"
     " max of " << getMaxNumberOfNodes() << ", splitting this way!");
 
@@ -137,23 +134,23 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     // If there's only one node, this is a no-op as it's last node in previous way, don't add
     if ( nodesThisTime == 1 )
     {
-      LOG_DEBUG("No need to add new way, there's only one node left over and it's stored in previous way");
+      LOG_TRACE("No need to add new way, there's only one node left over and it's stored in previous way");
       break;
     }
 
     // Create a new way
     boost::shared_ptr<Way> newWay( new Way(Status::Unknown1, _map->createNextWayId(),
       way->getRawCircularError() ) );
-    LOG_DEBUG("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
+    LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
     for ( unsigned int i = 0; i < nodesThisTime; ++i )
     {
       if ( i == 0 )
       {
-        LOG_DEBUG("Adding first node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
+        LOG_TRACE("Adding first node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
       }
       else if ( i == nodesThisTime - 1)
       {
-        LOG_DEBUG("Adding last node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
+        LOG_TRACE("Adding last node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
       }
 
       newWay->addNode(way->getNodeId(masterNodeIndex + i));

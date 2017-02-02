@@ -147,7 +147,6 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
 
   if (gid == GEOS_MULTIPOLYGON)
   {
-    LOG_DEBUG("test");
     return MultiPolygonCreator(_constProvider, e).createMultipolygon();
   }
   else if (gid == GEOS_MULTILINESTRING)

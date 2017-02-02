@@ -70,6 +70,11 @@ public:
 
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
+  /**
+   * Returns the number of terminals that do not fall on a vertex. Possible count is 0 to 4.
+   */
+  int countPartialMatches() const;
+
   EdgeStringPtr getString1() { return _edges1; _resetHash(); }
 
   EdgeStringPtr getString2() { return _edges2; _resetHash(); }
@@ -88,6 +93,11 @@ public:
    * are ignored.
    */
   bool overlaps(const shared_ptr<const EdgeMatch>& other) const;
+
+  /**
+   * Returns true if the matches have the same EdgeStrings, but possibly with different portions
+   */
+  bool isVerySimilarTo(const shared_ptr<const EdgeMatch>& other) const;
 
   /**
    * Reverse both edge strings that make up this EdgeMatch.

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,27 +52,14 @@ SearchRadiusCalculator::SearchRadiusCalculator()
 void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
-  QString unifyPreOpsStr = config.getUnifyPreOps();
-  if (unifyPreOpsStr.contains(";"))
-  {
-    setUnifyPreOps(unifyPreOpsStr.split(";"));
-  }
-  else
-  {
-    setUnifyPreOps(QStringList(unifyPreOpsStr));
-  }
-  setCircularError(config.getCircularErrorDefaultValue());
-  setRubberSheetRef(config.getRubberSheetRef());
-  setRubberSheetMinTies(config.getRubberSheetMinimumTies());
-}
-
-void SearchRadiusCalculator::setUnifyPreOps(QStringList ops)
-{
-  if (ops.contains("hoot::RubberSheet"))
+  if (config.getUnifyPreOps().contains("hoot::RubberSheet"))
   {
     throw HootException(
       "Rubber sheeting cannot be used when automatically calculating search radius.");
   }
+  setCircularError(config.getCircularErrorDefaultValue());
+  setRubberSheetRef(config.getRubberSheetRef());
+  setRubberSheetMinTies(config.getRubberSheetMinimumTies());
 }
 
 void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
@@ -88,16 +75,19 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
   {
-    LOG_INFO(
+    //should this be a warning?
+    LOG_DEBUG(
       "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
-      " conflated or invalid features out of " << map->getElementCount() << " total features.");
+      " features with conflated or invalid status out of " << map->getElementCount() <<
+      " total features.");
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
     _result = _circularError;
     LOG_INFO(
       "Unable to automatically calculate search radius.  All features have already been " <<
-      "conflated or are invalid.\n Using default search radius value = " << QString::number(_result));
+      "conflated or have an invalid status.\n Using default search radius value = " <<
+      QString::number(_result));
     return;
   }
 
@@ -110,12 +100,12 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
   }
   catch (const HootException& e)
   {
-    //In many cases, the input map will have already been cleaned by this point...but possibly not.
-    //Try to clean it to get around this error (call to the stats command, for example).
+    //In many cases, the input map will have already been cleaned by this point...but possibly not
+    //(direct call to the stats command, for example).  Try to clean it to get around this error.
+    LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
     LOG_DEBUG(
       "An error occurred calculating the rubber sheet transform during automatic search radius " <<
       "calculation.  Cleaning the data and attempting to calculate the transform again...");
-    LOG_DEBUG(e.getWhat());
     try
     {
       MapCleaner().apply(mapWithOnlyUnknown1And2);
@@ -127,8 +117,9 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     catch (const HootException& e)
     {
       _result = _circularError;
-      LOG_DEBUG(
-        QString("Unable to automatically calculate search radius: ") + e.getWhat() + QString("\n") +
+      LOG_DEBUG(e.getWhat());
+      LOG_INFO(
+        QString("Unable to automatically calculate search radius: \n") +
         QString("Using default search radius value = ") + QString::number(_result));
       return;
     }
@@ -152,14 +143,14 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   if (tiePointDistances.size() < 2)
   {
     _result = _circularError;
-    LOG_DEBUG(
+    LOG_INFO(
       QString("Unable to automatically calculate search radius.  Not enough tie points.  ") +
       QString("Using default search radius value = ") + QString::number(_result));
   }
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_DEBUG("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
   }
 }
 

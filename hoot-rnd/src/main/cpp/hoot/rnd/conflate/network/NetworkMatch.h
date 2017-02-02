@@ -102,6 +102,8 @@ public:
 
   virtual MatchType getType() const { return _threshold->getType(getClassification()); }
 
+  bool isVerySimilarTo(const NetworkMatch* other) const;
+
 protected:
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -85,7 +85,9 @@ void WayString::append(const WaySubline& subline)
         LOG_TRACE("Nodes don't match: "
           << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
           << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
-        throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+        //TODO: Possibly change this back to an exception as part of the work to be done in #1312.
+        //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+        LOG_WARN("Ways must connect at a node in the WayString.");
       }
     }
   }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -86,6 +86,9 @@ public:
 
     matchSet.reset(new IndexedEdgeMatchSet());
     NetworkDetailsPtr details(new NetworkDetails(map, network1, network2));
+    conf().set(ConfigOptions().getWaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
+    conf().set(ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
+    details->setConfiguration(conf());
     EdgeMatchSetFinderPtr uut(new EdgeMatchSetFinder(details, matchSet, network1, network2));
 
     return uut;
@@ -103,7 +106,9 @@ public:
     uut->addEdgeMatches(network1->getEdgeMap().begin().value(),
       network2->getEdgeMap().begin().value());
 
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.681189 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.157195)}",
+    //HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.681189 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.157195)}",
+    //               [1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.156872)}
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-9, _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 0 }, _end: { _e: (2) Node:-10 -- Way:-2 -- (3) Node:-17, _portion: 1 } }}, 0.156872)}",
       matchSet);
   }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -558,8 +558,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
-    /*LOG_DEBUG("After conversion to geometry, element is now a " <<
-             g->getGeometryType() );*/
+    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
 
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
@@ -603,7 +602,7 @@ void OgrWriter::finalizePartial()
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
 {
-  LOG_DEBUG("Writing node " << newNode->getId());
+  LOG_TRACE("Writing node " << newNode->getId());
 
   // Add to the element cache
   ConstElementPtr myNode(newNode);
@@ -616,7 +615,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
 {
-  LOG_DEBUG("Writing way " << newWay->getId() );
+  LOG_TRACE("Writing way " << newWay->getId() );
 
   /*
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
@@ -645,7 +644,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
           "memory to support this number of nodes, you can increase the element.cache.size.node " +
           "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
     }
-    LOG_DEBUG("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+    LOG_TRACE("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
                  ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
                 _elementCache->getNode(*nodeIdIterator)->getY() );
   }
@@ -660,11 +659,11 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newRelation)
 {
-  LOG_DEBUG("Writing relation " << newRelation->getId());
+  LOG_TRACE("Writing relation " << newRelation->getId());
 
   // Make sure all the elements in the relation are in the cache
   const std::vector<RelationData::Entry>& relationEntries = newRelation->getMembers();
-  LOG_VARD(relationEntries.size());
+  LOG_VART(relationEntries.size());
 
   unsigned long nodeCount = 0;
   unsigned long wayCount = 0;
@@ -717,7 +716,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
         break;
     }
 
-    LOG_DEBUG("Checking to see if element with ID: " << relationElementIter->getElementId().getId() <<
+    LOG_TRACE("Checking to see if element with ID: " << relationElementIter->getElementId().getId() <<
               " and type: " << relationElementIter->getElementId().getType() <<
               " contained by relation " << newRelation->getId() << " is in the element cache...");
     if ( _elementCache->containsElement(relationElementIter->getElementId()) == false )
@@ -750,7 +749,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
       }
       else
       {
-        LOG_DEBUG(msg << "   Will attempt to write relation with ID: " + newRelation->getId() <<
+        LOG_TRACE(msg << "   Will attempt to write relation with ID: " + newRelation->getId() <<
                  " on a subsequent pass.");
         _unwrittenFirstPassRelationIds.append(newRelation->getId());
         return;
@@ -800,9 +799,9 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   // Now that all the empties are gone, update our element
   element->setTags(destTags);
 
-  if ( debug == true )
+  if (debug == true)
   {
-    LOG_DEBUG(element->toString());
+    LOG_TRACE(element->toString());
   }
 
   PartialOsmMapWriter::writePartial(element);

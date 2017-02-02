@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -118,7 +118,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   Timer timer;
   _reset();
 
-  NamedOp(ConfigOptions().getUnifyPreOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying pre unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -129,7 +130,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   if (Log::getInstance().isDebugEnabled())
   {
-    LOG_DEBUG("Writing debug map.");
+    LOG_DEBUG("Writing debug map...");
     OsmMapPtr debug(new OsmMap(map));
     MapProjector::projectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
@@ -221,6 +222,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
+  //TODO: this isn't right for network
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_INFO("Match count: " << _matches.size());
 
@@ -282,7 +284,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
-  NamedOp(ConfigOptions().getUnifyPostOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying post unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }

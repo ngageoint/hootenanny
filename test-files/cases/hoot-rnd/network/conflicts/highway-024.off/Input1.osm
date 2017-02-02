@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-112242' visible='true' version='1' lat='38.9011885' lon='-77.02962359899' />
+  <node id='-112244' visible='true' version='1' lat='38.90133262136' lon='-77.0299044' />
+  <node id='-112248' visible='true' version='1' lat='38.90251820762' lon='-77.0281' />
+  <node id='-112250' visible='true' version='1' lat='38.90133106316' lon='-77.0281' />
+  <node id='-112252' visible='true' version='1' lat='38.9031' lon='-77.02962487189' />
+  <node id='-112256' visible='true' version='1' lat='38.90252272476' lon='-77.02922880731' />
+  <node id='-112258' visible='true' version='1' lat='38.90252457131' lon='-77.02868431222' />
+  <node id='-112260' visible='true' version='1' lat='38.90252293774' lon='-77.02836473874' />
+  <node id='-112262' visible='true' version='1' lat='38.90133264993' lon='-77.02986584069' />
+  <node id='-112264' visible='true' version='1' lat='38.90132980971' lon='-77.02934279561' />
+  <node id='-112266' visible='true' version='1' lat='38.90132847593' lon='-77.02891140203' />
+  <node id='-112268' visible='true' version='1' lat='38.90132581256' lon='-77.02838443744' />
+  <node id='-112270' visible='true' version='1' lat='38.90272900581' lon='-77.02962720616' />
+  <node id='-112272' visible='true' version='1' lat='38.9026388323' lon='-77.02962673566' />
+  <node id='-112274' visible='true' version='1' lat='38.90252239497' lon='-77.02962612889' />
+  <node id='-112276' visible='true' version='1' lat='38.90240017315' lon='-77.02962549161' />
+  <node id='-112278' visible='true' version='1' lat='38.90217634397' lon='-77.02962432505' />
+  <node id='-112280' visible='true' version='1' lat='38.90183718655' lon='-77.02962268334' />
+  <node id='-112282' visible='true' version='1' lat='38.90168133542' lon='-77.02962192907' />
+  <node id='-112284' visible='true' version='1' lat='38.90132577585' lon='-77.02962313384' />
+  <way id='-112286' visible='true' version='1'>
+    <nd ref='-112242' />
+    <nd ref='-112284' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='13TH ST NW' />
+  </way>
+  <way id='-112288' visible='true' version='1'>
+    <nd ref='-112284' />
+    <nd ref='-112262' />
+    <nd ref='-112244' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='I ST NW' />
+  </way>
+  <way id='-112292' visible='true' version='1'>
+    <nd ref='-112248' />
+    <nd ref='-112260' />
+    <nd ref='-112258' />
+    <nd ref='-112256' />
+    <nd ref='-112274' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='K ST NW' />
+  </way>
+  <way id='-112294' visible='true' version='1'>
+    <nd ref='-112250' />
+    <nd ref='-112268' />
+    <nd ref='-112266' />
+    <nd ref='-112264' />
+    <nd ref='-112284' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='I ST NW' />
+  </way>
+  <way id='-112296' visible='true' version='1'>
+    <nd ref='-112274' />
+    <nd ref='-112272' />
+    <nd ref='-112270' />
+    <nd ref='-112252' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='13TH ST NW' />
+  </way>
+  <way id='-112298' visible='true' version='1'>
+    <nd ref='-112284' />
+    <nd ref='-112282' />
+    <nd ref='-112280' />
+    <nd ref='-112278' />
+    <nd ref='-112276' />
+    <nd ref='-112274' />
+    <tag k='error:circular' v='5' />
+    <tag k='highway' v='road' />
+    <tag k='name' v='13TH ST NW' />
+  </way>
+</osm>

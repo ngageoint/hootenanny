@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,7 +43,7 @@ public:
 
   FindNodesInWayFactory() {}
 
-  FindNodesInWayFactory(const ConstWayPtr& w) //: _way(w)
+  FindNodesInWayFactory(const ConstWayPtr& w)
   {
     addWay(w);
   }
@@ -69,6 +69,7 @@ public:
         if (result != std::numeric_limits<long>::max() && result != nid)
         {
           LOG_ERROR("" << "Internal Error: Two nodes were found with the same coordinate.");
+          LOG_VART(n);
         }
         result = nid;
       }
@@ -85,8 +86,6 @@ public:
 
     return map->getNode(result);
   }
-
-  //const ConstWayPtr& getWay() const { return _way; }
 
 private:
   const ConstWayPtr _way;
