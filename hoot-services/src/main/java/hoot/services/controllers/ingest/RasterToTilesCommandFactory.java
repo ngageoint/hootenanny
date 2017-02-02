@@ -51,7 +51,6 @@ public class RasterToTilesCommandFactory {
     public ExternalCommand createExternalCommand(String name, String userEmail) {
         long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
-
         BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
 
         Map currentMap = new Map(mapId);
