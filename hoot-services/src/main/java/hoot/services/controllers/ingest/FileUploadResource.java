@@ -119,6 +119,7 @@ public class FileUploadResource extends JobControllerBase {
         try {
             // Save multipart data into file
             logger.debug("Starting ETL Process for:{}", inputName);
+
             Map<String, String> uploadedFiles = new HashMap<>();
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
@@ -235,15 +236,21 @@ public class FileUploadResource extends JobControllerBase {
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
                     noneTranslation, fgdbFeatureClasses);
 
-            ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
+
+            String mapDisplayName = etlName;
 
             Command[] chainJob = {
                     // Clip to a bounding box
                     () -> {
                         return externalCommandManager.exec(jobId, etlCommand);
                     },
+
                     // Ingest
                     () -> {
+                        // rasterToTilesCommand needs to be created after etlCommand has been executed.  During
+                        // execution of etlCommand, the command inserts some information into the database that's
+                        // required needed by rasterToTilesCommand.
+                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(mapDisplayName, userEmail);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };
