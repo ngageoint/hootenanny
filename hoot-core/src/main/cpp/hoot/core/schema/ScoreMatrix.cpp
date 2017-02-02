@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -90,7 +90,7 @@ double ScoreMatrix::meanScore(double portion) const
     heap.pop();
     if (used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_DEBUG("  " << e.i << ", " << e.j << " " << e.score);
+      LOG_TRACE("  " << e.i << ", " << e.j << " " << e.score);
       score += e.score;
       used1.insert(e.i);
       used2.insert(e.j);

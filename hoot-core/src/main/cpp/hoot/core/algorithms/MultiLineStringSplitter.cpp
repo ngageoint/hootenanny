@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -103,6 +103,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // if there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
+    LOG_TRACE("multilinestring: multiple matches get relation");
     RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
       matches[0]->getCircularError(), Relation::MULTILINESTRING));
 
