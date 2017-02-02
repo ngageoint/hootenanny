@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -299,7 +299,6 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   QString sql =  "SELECT node_id FROM " +
                   getCurrentWayNodesTableName() +
                  " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
@@ -331,21 +330,25 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     throw HootException("Error selecting members for relation with ID: " +
       QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
   }
+  LOG_VARD(_selectMembersForRelation->executedQuery());
+  LOG_VARD(_selectMembersForRelation->executedQuery());
 
   while (_selectMembersForRelation->next())
   {
     const QString memberType = _selectMembersForRelation->value(0).toString();
     if (ElementType::isValidTypeString(memberType))
     {
-      result.push_back(
+      RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong())));
+                    _selectMembersForRelation->value(1).toLongLong()));
+      LOG_VART(member);
+      result.push_back(member);
     }
     else
     {
-        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
     }
   }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -87,6 +87,8 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
+  LOG_DEBUG("Applying merger...");
+
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
 
@@ -102,9 +104,6 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   ExtractNodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
   shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
-  LOG_VAR(str2);
-  LOG_VAR(scrapNodeList);
-  LOG_VAR(n2w->getWaysByNode(-36));
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
   foreach (ConstNodePtr n, scrapNodeSet)
   {
@@ -157,24 +156,26 @@ ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
 {
   if (_substitions.contains(oldEid))
   {
-    return mapEid(_substitions[oldEid]);
+    return _substitions[oldEid];
   }
-
   return oldEid;
 }
 
 void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   vector<pair<ElementId, ElementId> > &replaced) const
 {
+  LOG_TRACE("Processing full match...");
+
   foreach (ConstEdgeMatchPtr e, _edgeMatches)
   {
     if (e->getString1()->isStub() || e->getString2()->isStub())
     {
-      LOG_VARE(_edgeMatches);
-      LOG_VARE(e);
+      LOG_VART(_edgeMatches);
+      LOG_VART(e);
       throw IllegalArgumentException("Didn't expect a stub in a full match.");
     }
   }
+  LOG_VART(_edgeMatches);
 
   ///
   /// This approach may seem a little odd at first. We need to accomodate the following problems:
@@ -194,9 +195,8 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   /// 3. Merge the matched sublines in turn.
   ///
 
-  QList<WayStringPtr> string2List;
-
   // calculate all the mappings and split points for all matches.
+  LOG_TRACE("Calculating mappings and split points for matches...");
   foreach (ConstEdgeMatchPtr em, _edgeMatches)
   {
     _mergerList.append(_createMatchStringMerger(map, replaced, em));
@@ -208,9 +208,10 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   try
   {
     // split the ways in such a way that the mappings are updated appropriately.
-    _splitAllWays(map, replaced, _allSublineMappings);
+    WayMatchStringSplitter().applySplits(map, replaced, _allSublineMappings);
 
     // apply merge operations on the split ways.
+    LOG_TRACE("Merging split ways...");
     foreach (WayMatchStringMergerPtr merger, _mergerList)
     {
       _applyMerger(map, merger);
@@ -241,6 +242,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       }
     }
 
+    LOG_TRACE("Adding review: " << e.getWhat() << "...");
     ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
@@ -248,8 +250,14 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   vector<pair<ElementId, ElementId> > &/*replaced*/, ConstEdgeMatchPtr edgeMatch) const
 {
+  LOG_TRACE("Processing stub match...");
+  LOG_VART(edgeMatch);
+
   if (edgeMatch->getString1()->isStub())
   {
+    LOG_TRACE("Removing secondary features...");
+    LOG_VART(edgeMatch->getString2()->getMembers());
+
     // If the feature we're merging into is a stub, then just delete the secondary feature.
     // Attributes may be lost, but there isn't really anywhere to put them.
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
@@ -259,6 +267,12 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   }
   else if (edgeMatch->getString2()->isStub())
   {
+    LOG_TRACE("Marking complex intersection match for review...");
+    LOG_VART(edgeMatch->getString1()->getMembers().size());
+    LOG_VART(edgeMatch->getString1()->getMembers());
+    LOG_VART(edgeMatch->getString2()->getMembers().size());
+    LOG_VART(edgeMatch->getString2()->getMembers());
+
     // if the feature we're merging is a stub, then things get a little more complicated. So far
     // our best option is to disconnect the intersection that is being merged. Then the edges should
     // be merged for us properly as long as all the ways have matches. If they don't have matches
@@ -267,18 +281,19 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     /// @todo add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
-
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
     {
+      LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
     }
     foreach (ConstElementPtr e, edgeMatch->getString1()->getMembers())
     {
+      LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
     }
-
     ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "
       "segment? Please verify merge and fix as needed.", HighwayMatch::getHighwayMatchName());
+    LOG_TRACE("Review marked.");
   }
   else
   {
@@ -288,16 +303,9 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 {
+  LOG_TRACE("Replacing " << oldEid << " with " << newEid);
   MergerBase::replace(oldEid, newEid);
   _substitions[oldEid] = newEid;
-}
-
-void PartialNetworkMerger::_splitAllWays(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
-{
-  // refactor WayMatchStringMerger split methods into a new class.
-  WayMatchStringSplitter().applySplits(map, replaced, mappings);
 }
 
 QString PartialNetworkMerger::toString() const

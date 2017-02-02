@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -76,8 +76,8 @@ public:
   QString toString() const
   {
     return
-      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
-      ", Note: " + note;
+      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +		       "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
+      ", Note: " + note;		+      ", Note: " + note + "\n" + e->toString();
   }
 
   ConstElementPtr e;

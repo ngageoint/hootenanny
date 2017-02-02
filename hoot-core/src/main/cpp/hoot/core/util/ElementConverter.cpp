@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -118,7 +118,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
   return convertToGeometry((ConstWayPtr)w);
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
@@ -137,7 +139,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 

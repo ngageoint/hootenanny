@@ -158,7 +158,7 @@ void Settings::clear()
   // this can be very handy when determining why/when settings got cleared.
   if (this == _theInstance)
   {
-    LOG_INFO("Clearing global settings.");
+    LOG_DEBUG("Clearing global settings.");
   }
   _settings.clear();
 }
@@ -414,7 +414,7 @@ void Settings::loadEnvironment()
     parseCommonArguments(args);
     if (args.size() != 0)
     {
-      LOG_WARN("Error parsing all arguments in HOOT_OPTIONS: " << args);
+      throw HootException("Error parsing all arguments in HOOT_OPTIONS: " + args.join(";"));
     }
   }
 }

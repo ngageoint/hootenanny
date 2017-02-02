@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -714,7 +714,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
     if ( currRelation->contains(oldNodeId) == true )
     {
-      LOG_DEBUG("Trying to replace node " << oldNode->getId() << " with node " <<
+      LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
                 newNode->getId() << " in relation " << currRelation->getId());
 
       currRelation->replaceElement(oldNode, newNode);

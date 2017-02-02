@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,8 +54,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setUnifyPreOps(QStringList ops);
-
   void setCircularError(double val) { _circularError = val; }
 
   void setRubberSheetRef(bool val) { _rubberSheetRef = val; }
@@ -69,7 +67,6 @@ private:
 
   double _result;
 
-  QStringList _unifyPreOps;
   double _circularError;
 
   bool _rubberSheetRef;

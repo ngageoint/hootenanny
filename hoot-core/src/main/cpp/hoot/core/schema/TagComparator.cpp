@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -353,7 +353,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
     heap.pop();
     if (used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_DEBUG("  " << n1[e.i].toStdString() << ", " << n2[e.j].toStdString() << " " << e.score);
+      LOG_TRACE("  " << n1[e.i].toStdString() << ", " << n2[e.j].toStdString() << " " << e.score);
       score += e.score;
       used1.insert(e.i);
       used2.insert(e.j);
@@ -411,7 +411,9 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
 //    }
 //    else
     {
-      //LOG_DEBUG("tag score: " << nameScore * enumScore << " name: " << nameScore << " enum: " << enumScore);
+      LOG_VART(nameScore);
+      LOG_VART(enumScore);
+      LOG_VART(textScore);
       return nameScore * enumScore * textScore;
     }
     //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);

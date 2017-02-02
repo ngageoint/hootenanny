@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,7 @@ namespace hoot
 class NetworkMerger : public MergerBase
 {
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -58,10 +59,12 @@ public:
   virtual QString toString() const;
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
+
   set< pair<ElementId, ElementId> > _pairs;
   ConstEdgeMatchPtr _edgeMatch;
   ConstNetworkDetailsPtr _details;

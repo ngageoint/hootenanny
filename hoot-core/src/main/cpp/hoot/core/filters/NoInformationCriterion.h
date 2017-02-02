@@ -48,9 +48,10 @@ public:
 
   bool isSatisfied(const shared_ptr<const Element> &e) const
   {
-    LOG_VART(e);
-    LOG_VART(e->getTags().getInformationCount());
-    return e->getTags().getInformationCount() == 0;
+    const int informationCount = e->getTags().getInformationCount();
+    LOG_VART(e->getElementId());
+    LOG_VART(informationCount);
+    return informationCount == 0;
   }
 
   virtual ElementCriterion* clone() { return new NoInformationCriterion(); }

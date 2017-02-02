@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45,38 +45,48 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
 
 void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
+  LOG_TRACE("Adding edge matches...");
+
   // recursively explore the edges that neighbor e1 and e2. All the discovered matches will be
   // recorded
 
-  EdgeMatchPtr em(new EdgeMatch());
-
-  bool reversed = _details->isReversed(e1, e2);
-  em->getString1()->addFirstEdge(e1);
-  if (reversed)
+  if (e1->isStub() || e2->isStub())
   {
-    em->getString2()->addFirstEdge(ConstEdgeSublinePtr(new EdgeSubline(e2, 1.0, 0.0)));
+    EdgeMatchPtr em(new EdgeMatch());
+    em->getString1()->addFirstEdge(e1);
+    em->getString2()->addFirstEdge(e2);
+    _recordMatch(em);
   }
   else
   {
-    em->getString2()->addFirstEdge(EdgeSubline::createFullSubline(e2));
-  }
-  LOG_VART(e1);
-  LOG_VART(e2);
+    QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
 
-  _steps = 0;
-  _addEdgeMatches(em);
+    foreach (EdgeSublineMatchPtr s, sublines)
+    {
+      EdgeMatchPtr em(new EdgeMatch());
+
+      em->getString1()->addFirstEdge(s->getSubline1());
+      em->getString2()->addFirstEdge(s->getSubline2());
+
+      _steps = 0;
+      _addEdgeMatches(em);
+    }
+  }
 }
 
 bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Adding edge matches...");
+
   _steps++;
+  LOG_VART(em);
   // if both the start and end have a valid matched vertex pair then add the match
-  ConstNetworkVertexPtr from1 = em->getString1()->getFromVertex();
-  ConstNetworkVertexPtr from2 = em->getString2()->getFromVertex();
-  ConstNetworkVertexPtr to1 = em->getString1()->getToVertex();
-  ConstNetworkVertexPtr to2 = em->getString2()->getToVertex();
-  bool fromMatch = _details->isCandidateMatch(from1, from2);
-  bool toMatch = _details->isCandidateMatch(to1, to2);
+  ConstEdgeLocationPtr from1 = em->getString1()->getFrom();
+  ConstEdgeLocationPtr from2 = em->getString2()->getFrom();
+  ConstEdgeLocationPtr to1 = em->getString1()->getTo();
+  ConstEdgeLocationPtr to2 = em->getString2()->getTo();
+  bool fromMatch = _isCandidateMatch(from1, from2);
+  bool toMatch = _isCandidateMatch(to1, to2);
   bool foundSolution = false;
 
   if (_steps > 20)
@@ -84,7 +94,6 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
     return false;
   }
 
-  LOG_VART(em);
   LOG_VART(fromMatch);
   LOG_VART(toMatch);
 
@@ -92,28 +101,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   /// the search space very large, but would avoid missing matches.
   if (fromMatch && toMatch)
   {
-    double score = _scoreMatch(em);
-    if (score > 0)
-    {
-      // if exactly one string is a stub
-      if (em->getString1()->isStub() != em->getString2()->isStub())
-      {
-        _matchSet->addEdgeMatch(em, score);
-        if (_bidirectionalStubs)
-        {
-          // add it in both directions. In some matchers we don't know which is better.
-          EdgeStringPtr rev1 = em->getString1()->clone();
-          rev1->reverse();
-          EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
-          _matchSet->addEdgeMatch(em2, score);
-        }
-      }
-      else
-      {
-        _matchSet->addEdgeMatch(em, score);
-      }
-      foundSolution = true;
-    }
+    foundSolution = _recordMatch(em);
   }
   else //if (em->getString1()->isStub() == false && em->getString2()->isStub() == false)
   {
@@ -121,12 +109,12 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
     if (!toMatch)
     {
       // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_details->hasConfidentTiePoint(to1) == false ||
-        _details->hasConfidentTiePoint(to2) == false)
+      if (_hasConfidentTiePoint(to1) == false ||
+        _hasConfidentTiePoint(to2) == false)
       {
         // get all the neighboring edges to 1 and 2
-        QSet<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(to1).toSet();
-        QSet<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(to2).toSet();
+        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(to1);
+        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(to2);
 
         // subtract all the edges that are already in the solution.
         neighbors1.subtract(em->getString1()->getEdgeSet());
@@ -145,12 +133,15 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
     if (!fromMatch && !foundSolution)
     {
       // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_details->hasConfidentTiePoint(from1) == false ||
-        _details->hasConfidentTiePoint(from2) == false)
+      if (_hasConfidentTiePoint(from1) == false ||
+        _hasConfidentTiePoint(from2) == false)
       {
         // get all the neighboring edges to 1 and 2
-        QList<ConstNetworkEdgePtr> neighbors1 = _n1->getEdgesFromVertex(from1);
-        QList<ConstNetworkEdgePtr> neighbors2 = _n2->getEdgesFromVertex(from2);
+        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(from1);
+        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(from2);
+
+        neighbors1.subtract(em->getString1()->getEdgeSet());
+        neighbors2.subtract(em->getString2()->getEdgeSet());
 
         LOG_VART(neighbors1);
         LOG_VART(neighbors2);
@@ -165,7 +156,9 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   if (foundSolution == false && _includePartialMatches)
   {
     // keep the best partial matches at each end and add it to the edge match
-    foundSolution = _addPartialMatch(em);
+    //foundSolution = _addPartialMatch(em);
+
+    foundSolution = _recordMatch(em);
   }
 
   return foundSolution;
@@ -174,6 +167,8 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
 bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
   QSet<ConstNetworkEdgePtr> neighbors1Set, QSet<ConstNetworkEdgePtr> neighbors2Set)
 {
+  LOG_TRACE("Adding edge neighbors to end...");
+
   bool foundSolution = false;
   // score all the e1 neighbors.
   foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
@@ -183,14 +178,20 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()));
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
-      /*neighbors1[i]->isStub() == false &&*/
+      _details->isStringCandidate(em->getString1()->getLastEdge(), neighbor1) &&
+      /*neighbors1[i]->isbb() == false &&*/
       _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()) > 0)
     {
-      // create and evaluate a new match
-      EdgeMatchPtr next = em->clone();
-      next->getString1()->appendEdge(neighbor1);
-      LOG_VART(next);
-      foundSolution = _addEdgeMatches(next) || foundSolution;
+    //#warning review
+      EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getLastEdge());
+      if (next)
+      {
+        foundSolution = _addEdgeMatches(next) || foundSolution;
+      }
+//      // create and evaluate a new match
+//      EdgeMatchPtr next = em->clone();
+//      _appendMatch(next, neighbor1, em->getString2()->getLastEdge());
+//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -199,16 +200,24 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
   {
     LOG_VART(neighbor2);
     LOG_VART(em->contains(neighbor2));
+    LOG_VART(_details->isStringCandidate(em->getString2()->getLastEdge(), neighbor2));
     LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()));
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&
+      _details->isStringCandidate(em->getString2()->getLastEdge(), neighbor2) &&
       /*neighbors2[i]->isStub() == false &&*/
       _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()) > 0)
     {
-      // create and evaluate a new match
-      EdgeMatchPtr next = em->clone();
-      next->getString2()->appendEdge(neighbor2);
-      foundSolution = _addEdgeMatches(next) || foundSolution;
+    //#warning review
+      EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getLastEdge(), neighbor2);
+      if (next)
+      {
+        foundSolution = _addEdgeMatches(next) || foundSolution;
+      }
+//      // create and evaluate a new match
+//      EdgeMatchPtr next = em->clone();
+//      _appendMatch(next, em->getString1()->getLastEdge(), neighbor2);
+//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -216,44 +225,62 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
 }
 
 bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
-  QList<ConstNetworkEdgePtr> neighbors1, QList<ConstNetworkEdgePtr> neighbors2)
+  QSet<ConstNetworkEdgePtr> neighbors1Set, QSet<ConstNetworkEdgePtr> neighbors2Set)
 {
+  LOG_TRACE("Adding edge neighbors to start...");
+
   bool foundSolution = false;
   // score all the e1 neighbors.
-  for (int i = 0; i < neighbors1.size(); ++i)
+  foreach (ConstNetworkEdgePtr neighbor1, neighbors1Set)
   {
-    LOG_VART(neighbors1[i]);
+    LOG_VART(neighbor1);
     LOG_VART(em->getString2()->getFirstEdge());
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbors1[i], em->getString2()->getFirstEdge()));
+    LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()));
     // if the neighbor pair score is non-zero
-    if (em->contains(neighbors1[i]) == false &&
+    if (em->contains(neighbor1) == false &&
+      _details->isStringCandidate(em->getString1()->getFirstEdge(), neighbor1) &&
     /// @todo comment me and retest
-      neighbors1[i]->isStub() == false &&
-      _details->getPartialEdgeMatchScore(neighbors1[i], em->getString2()->getFirstEdge()) > 0)
+      neighbor1->isStub() == false &&
+      _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()) > 0)
     {
       // create and evaluate a new match
-      EdgeMatchPtr next = em->clone();
-      next->getString1()->prependEdge(neighbors1[i]);
-      foundSolution = _addEdgeMatches(next) || foundSolution;
+//#warning review
+      EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1,
+        em->getString2()->getFirstEdge());
+      if (next)
+      {
+        foundSolution = _addEdgeMatches(next) || foundSolution;
+      }
+//      EdgeMatchPtr next = em->clone();
+//      _prependMatch(next, neighbor1, em->getString2()->getFirstEdge());
+//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
   // score all the e2 neighbors.
-  for (int i = 0; i < neighbors2.size(); ++i)
+  foreach (ConstNetworkEdgePtr neighbor2, neighbors2Set)
   {
-    LOG_VART(neighbors2[i]);
+    LOG_VART(neighbor2);
     LOG_VART(em->getString1()->getFirstEdge());
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbors2[i], em->getString1()->getFirstEdge()));
+    LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()));
     // if the neighbor pair score is non-zero
-    if (em->contains(neighbors2[i]) == false &&
-    /// @todo comment me and retest
-      neighbors2[i]->isStub() == false &&
-      _details->getPartialEdgeMatchScore(neighbors2[i], em->getString1()->getFirstEdge()) > 0)
+    if (em->contains(neighbor2) == false &&
+      _details->isStringCandidate(em->getString2()->getFirstEdge(), neighbor2) &&
+      /// @todo comment me and retest
+      neighbor2->isStub() == false &&
+      _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()) > 0)
     {
-      // create and evaluate a new match
-      EdgeMatchPtr next = em->clone();
-      next->getString2()->prependEdge(neighbors2[i]);
-      foundSolution = _addEdgeMatches(next) || foundSolution;
+//#warning review
+      EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getFirstEdge(),
+        neighbor2);
+      if (next)
+      {
+        foundSolution = _addEdgeMatches(next) || foundSolution;
+      }
+//      // create and evaluate a new match
+//      EdgeMatchPtr next = em->clone();
+//      _prependMatch(next, em->getString1()->getFirstEdge(), neighbor2);
+//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -262,12 +289,14 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
 
 bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
 {
-  ConstNetworkVertexPtr from1 = em->getString1()->getFromVertex();
-  ConstNetworkVertexPtr from2 = em->getString2()->getFromVertex();
-  ConstNetworkVertexPtr to1 = em->getString1()->getToVertex();
-  ConstNetworkVertexPtr to2 = em->getString2()->getToVertex();
-  bool fromMatch = _details->isCandidateMatch(from1, from2);
-  bool toMatch = _details->isCandidateMatch(to1, to2);
+  LOG_TRACE("Adding partial match...");
+
+  ConstEdgeLocationPtr from1 = em->getString1()->getFrom();
+  ConstEdgeLocationPtr from2 = em->getString2()->getFrom();
+  ConstEdgeLocationPtr to1 = em->getString1()->getTo();
+  ConstEdgeLocationPtr to2 = em->getString2()->getTo();
+  bool fromMatch = _isCandidateMatch(from1, from2);
+  bool toMatch = _isCandidateMatch(to1, to2);
 
   LOG_VART(em);
 
@@ -285,34 +314,10 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
   EdgeMatchPtr newEm;
 
   // if this is a partial match in the middle of a line.
-  if (fromMatch == false && toMatch == false
-    && em->getString1()->getMembers().size() == 1
+  if (em->getString1()->getMembers().size() == 1
     && em->getString2()->getMembers().size() == 1)
   {
-    // find all partial matches
-    QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(
-      em->getString1()->getEdge(0), em->getString2()->getEdge(0));
-
-    // create a new edge match for each of the partial matches
-    foreach (const EdgeSublineMatchPtr& m, matches)
-    {
-
-      // we won't even try to make partial matches smaller than the search radius. It just creates
-      // too much noise.
-      Meters searchRadius = _details->getSearchRadius(m->getSubline1()->getEdge(),
-        m->getSubline2()->getEdge());
-      if (_details->calculateLength(m->getSubline1()) >= searchRadius &&
-        _details->calculateLength(m->getSubline2()) >= searchRadius)
-      {
-        // create a partial match entry here
-        EdgeStringPtr s1(new EdgeString());
-        s1->addFirstEdge(m->getSubline1());
-        EdgeStringPtr s2(new EdgeString());
-        s2->addFirstEdge(m->getSubline2());
-
-        newEm.reset(new EdgeMatch(s1, s2));
-      }
-    }
+    newEm = em->clone();
   }
   else
   {
@@ -354,14 +359,224 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
   return result;
 }
 
+void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
+  ConstNetworkEdgePtr e2) const
+{
+  LOG_TRACE("Appending match...");
+
+  _details->extendEdgeMatch(em, e1, e2);
+//  // trim the beginning of the edge string as appropriate.
+//  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
+//  LOG_VART(e1);
+//  LOG_VART(e2);
+//  LOG_VART(matches);
+//  LOG_VART(em);
+
+//  bool foundOne = false;
+
+//  foreach (EdgeSublineMatchPtr m, matches)
+//  {
+//    LOG_VART(_details->isStringCandidate(em->getString1(), m->getSubline1()));
+//    LOG_VART(_details->isStringCandidate(em->getString2(), m->getSubline2()));
+//    LOG_VART(em->getString1()->touches(m->getSubline1()));
+//    LOG_VART(em->getString2()->touches(m->getSubline2()));
+//    //if (em->getString1()->touches(m->getSubline1()) && em->getString2()->touches(m->getSubline2()))
+//    if (_details->isStringCandidate(em->getString1(), m->getSubline1()) &&
+//      _details->isStringCandidate(em->getString2(), m->getSubline2()))
+//    {
+//      // There are probably some contrived edge cases that could cause this, but I can't conceive
+//      // of them right now.
+//      if (foundOne == true)
+//      {
+//        LOG_VARW(em);
+//        LOG_VARW(e1);
+//        LOG_VARW(e2);
+//        throw NotImplementedException("Found multiple overlapping matches when appending.");
+//      }
+//      em->getString1()->appendEdge(_snapSublineToString(em->getString1(), m->getSubline1()));
+//      em->getString2()->appendEdge(_snapSublineToString(em->getString2(), m->getSubline2()));
+//      LOG_VART(em->getString1());
+//      LOG_VART(em->getString2());
+//    }
+//  }
+
+//  LOG_VART(em);
+}
+
+QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLocationPtr l) const
+{
+  QSet<ConstNetworkEdgePtr> result;
+
+  LOG_VART(l);
+  LOG_VART(l->isExtreme(EdgeLocation::SLOPPY_EPSILON));
+  LOG_VART(QString("%1").arg(l->getPortion(), 0, 'g', 18));
+  if (l->isExtreme(EdgeLocation::SLOPPY_EPSILON))
+  {
+    ConstNetworkVertexPtr v = l->getVertex(EdgeLocation::SLOPPY_EPSILON);
+    if (_n1->contains(v))
+    {
+      result = _n1->getEdgesFromVertex(v).toSet();
+    }
+    else if (_n2->contains(v))
+    {
+      result = _n2->getEdgesFromVertex(v).toSet();
+    }
+    else
+    {
+      throw IllegalArgumentException();
+    }
+  }
+  LOG_VART(result);
+
+  return result;
+}
+
+bool EdgeMatchSetFinder::_hasConfidentTiePoint(ConstEdgeLocationPtr l) const
+{
+  bool result;
+
+  if (l->isExtreme(EdgeLocation::SLOPPY_EPSILON))
+  {
+    result = _details->hasConfidentTiePoint(l->getVertex(EdgeLocation::SLOPPY_EPSILON));
+  }
+  else
+  {
+    result = false;
+  }
+
+  return result;
+}
+
+bool EdgeMatchSetFinder::_isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLocationPtr l2) const
+{
+  bool result;
+  if (l1->isExtreme() && l2->isExtreme())
+  {
+    result = _details->isCandidateMatch(l1->getVertex(), l2->getVertex());
+  }
+  else
+  {
+    result = false;
+  }
+
+  return result;
+}
+
+void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
+  ConstNetworkEdgePtr e2) const
+{
+  LOG_TRACE("Prepending match...");
+
+  _details->extendEdgeMatch(em, e1, e2);
+//  // trim the beginning of the edge string as appropriate.
+//  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
+//  LOG_VART(e1);
+//  LOG_VART(e2);
+//  LOG_VART(matches);
+//  LOG_VART(em);
+
+//  bool foundOne = false;
+
+//  foreach (EdgeSublineMatchPtr m, matches)
+//  {
+//    LOG_VART(em->getString1());
+//    LOG_VART(m->getSubline1());
+//    LOG_VART(em->getString2());
+//    LOG_VART(m->getSubline2());
+//    LOG_VART(_details->isStringCandidate(em->getString1(), m->getSubline1()));
+//    LOG_VART(_details->isStringCandidate(em->getString2(), m->getSubline2()));
+//    if (_details->isStringCandidate(em->getString1(), m->getSubline1()) &&
+//      _details->isStringCandidate(em->getString2(), m->getSubline2()))
+//    {
+//      // There are probably some contrived edge cases that could cause this, but I can't conceive
+//      // of them right now.
+//      if (foundOne == true)
+//      {
+//        LOG_VARW(em);
+//        LOG_VARW(e1);
+//        LOG_VARW(e2);
+//        throw NotImplementedException("Found multiple overlapping matches when appending.");
+//      }
+//      em->getString1()->prependEdge(_snapSublineToString(em->getString1(), m->getSubline1()));
+//      em->getString2()->prependEdge(_snapSublineToString(em->getString2(), m->getSubline2()));
+//      LOG_VART(em->getString1());
+//      LOG_VART(em->getString2());
+//    }
+//  }
+
+//  LOG_VART(em);
+}
+
+bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
+{
+  bool result = false;
+  double score = _scoreMatch(em);
+  LOG_VART(score);
+  if (score > 0)
+  {
+    LOG_TRACE("Recording match: " << em);
+    // if exactly one string is a stub
+    if (em->getString1()->isStub() != em->getString2()->isStub())
+    {
+      _matchSet->addEdgeMatch(em, score);
+      if (_bidirectionalStubs)
+      {
+        // add it in both directions. In some matchers we don't know which is better.
+        EdgeStringPtr rev1 = em->getString1()->clone();
+        rev1->reverse();
+        EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
+        _matchSet->addEdgeMatch(em2, score);
+      }
+    }
+    else
+    {
+      _matchSet->addEdgeMatch(em, score);
+    }
+    result = true;
+  }
+
+  return result;
+}
+
 double EdgeMatchSetFinder::_scoreMatch(ConstEdgeMatchPtr em) const
 {
+  LOG_TRACE("Scoring match...");
   return _details->getEdgeStringMatchScore(em->getString1(), em->getString2());
+}
+
+ConstEdgeSublinePtr EdgeMatchSetFinder::_snapSublineToString(ConstEdgeStringPtr str,
+  ConstEdgeSublinePtr sub) const
+{
+  ConstEdgeSublinePtr result;
+
+  if (str->touches(sub))
+  {
+    result = sub;
+  }
+  else if (_details->calculateDistance(str, sub->getStart()) <
+    _details->calculateDistance(str, sub->getEnd()))
+  {
+    ConstEdgeLocationPtr elStr, elSub;
+    _details->calculateNearestLocation(str, sub, elStr, elSub);
+    result.reset(new EdgeSubline(elStr, sub->getEnd()));
+  }
+  else
+  {
+    ConstEdgeLocationPtr elStr, elSub;
+    _details->calculateNearestLocation(str, sub, elStr, elSub);
+    result.reset(new EdgeSubline(sub->getStart(), elStr));
+  }
+
+  return result;
 }
 
 EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Trimming From edge...");
+
   EdgeMatchPtr result;
+
+  LOG_VART(em);
 
   // trim the beginning of the edge string as appropriate.
   QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(
@@ -431,6 +646,8 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 
 EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
 {
+  LOG_TRACE("Trimming To edge...");
+
   EdgeMatchPtr result;
 
   LOG_VART(em);
@@ -442,6 +659,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
   {
     return result;
   }
+  LOG_VART(matches);
 
   // only the first match is relevant because it matches to the second to last edge in the match.
   ConstEdgeSublinePtr s1 = matches.front()->getSubline1();
@@ -471,49 +689,46 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
   LOG_VART(s1);
   LOG_VART(s2);
 
-  // at least one of the strings should start at a vertex.
-  if (s1->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-    s2->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON))
+  EdgeStringPtr str1(new EdgeString());
+  EdgeStringPtr str2(new EdgeString());
+
+  if (em->getString1()->getCount() == 1)
   {
-    EdgeStringPtr str1(new EdgeString());
-    EdgeStringPtr str2(new EdgeString());
-
-    if (em->getString1()->getCount() == 1)
-    {
-      str1->addFirstEdge(s1);
-    }
-    else
-    {
-      str1->addFirstEdge(em->getString1()->getAllEdges().first().getSubline());
-      // add all but the last edge
-      foreach (const EdgeString::EdgeEntry& ee,
-        em->getString1()->getAllEdges().mid(1, em->getString1()->getCount() - 2))
-      {
-        str1->appendEdge(ee.getSubline());
-      }
-      // add our new trimmed last edge.
-      str1->appendEdge(s1);
-    }
-
-    if (em->getString2()->getCount() == 1)
-    {
-      str2->addFirstEdge(s2);
-    }
-    else
-    {
-      str2->addFirstEdge(em->getString2()->getAllEdges().first().getSubline());
-      // add all but the last edge
-      foreach (const EdgeString::EdgeEntry& ee,
-        em->getString2()->getAllEdges().mid(1, em->getString2()->getCount() - 2))
-      {
-        str2->appendEdge(ee.getSubline());
-      }
-      // add our new trimmed last edge.
-      str2->appendEdge(s2);
-    }
-
-    result.reset(new EdgeMatch(str1, str2));
+    str1->addFirstEdge(s1);
   }
+  else
+  {
+    str1->addFirstEdge(em->getString1()->getAllEdges().first().getSubline());
+    // add all but the last edge
+    foreach (const EdgeString::EdgeEntry& ee,
+      em->getString1()->getAllEdges().mid(1, em->getString1()->getCount() - 2))
+    {
+      str1->appendEdge(ee.getSubline());
+    }
+    // add our new trimmed last edge.
+    str1->appendEdge(s1);
+  }
+
+  if (em->getString2()->getCount() == 1)
+  {
+    str2->addFirstEdge(s2);
+  }
+  else
+  {
+    str2->addFirstEdge(em->getString2()->getAllEdges().first().getSubline());
+    // add all but the last edge
+    foreach (const EdgeString::EdgeEntry& ee,
+      em->getString2()->getAllEdges().mid(1, em->getString2()->getCount() - 2))
+    {
+      str2->appendEdge(ee.getSubline());
+    }
+    // add our new trimmed last edge.
+    str2->appendEdge(s2);
+  }
+
+  result.reset(new EdgeMatch(str1, str2));
+
+  LOG_VART(result);
 
   return result;
 }
