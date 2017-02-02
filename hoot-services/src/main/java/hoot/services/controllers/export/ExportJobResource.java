@@ -81,14 +81,15 @@ public class ExportJobResource extends JobControllerBase {
      *
      * POST hoot-services/job/export/execute
      *
-     * { "translation":"MGCP.js", //Translation script name. "inputtype":"db",
-     * //[db | file] db means input from hoot db will be used. file mean a file
-     * path will be specified. "input":"ToyTestA", //Input name. for inputtype =
-     * db then specify name from hoot db. For inputtype=file, specify full path
-     * to a file. "outputtype":"gdb", //[gdb | shp | wfs | osm_api_db]. gdb will
-     * produce file gdb, shp will output shapefile. if outputtype = wfs then a
-     * wfs front end will be created. osm_api_db will derive and apply a
-     * changeset to an OSM API database "removereview" : "false" //? }
+     * {
+     *   "translation":"MGCP.js", //Translation script name.
+     *   "inputtype":"db"         //[db | file] db means input from hoot db will be used. file mean a file path will be specified.
+     *   "input":"ToyTestA",      //  Input name. for inputtype = db then specify name from hoot db. For inputtype=file, specify full path
+     *                            //  to a file. "outputtype":"gdb", //[gdb | shp | wfs | osm_api_db]. gdb will
+     *                            //  produce file gdb, shp will output shapefile. if outputtype = wfs then a
+     *                            //  wfs front end will be created. osm_api_db will derive and apply a changeset to an
+     *                            //  OSM API database "removereview" : "false" //?
+     * }
      *
      * @param params
      * @return Job ID

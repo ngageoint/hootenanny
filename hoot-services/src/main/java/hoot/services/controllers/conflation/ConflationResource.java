@@ -301,26 +301,27 @@ public class ConflationResource extends JobControllerBase {
     }
 
     private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {
-        return inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB")
-                || inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
+        return firstLayerIsOsmApiDb(inputParams) || secondLayerIsOsmApiDb(inputParams);
     }
 
     private static boolean firstLayerIsOsmApiDb(JSONObject inputParams) {
         return inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB");
     }
 
+    private static boolean secondLayerIsOsmApiDb(JSONObject inputParams) {
+        return inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB");
+    }
+
     private static void validateOsmApiDbConflateParams(JSONObject inputParams) {
         // default REFERENCE_LAYER = 1
         if (inputParams.get("REFERENCE_LAYER") != null) {
-            if ((inputParams.get("INPUT1_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-                    inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
-                    || (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB") &&
-                    inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
+            if ((firstLayerIsOsmApiDb(inputParams) && inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("2"))
+                    || ((secondLayerIsOsmApiDb(inputParams)) && inputParams.get("REFERENCE_LAYER").toString().toUpperCase().equals("1"))) {
                 String msg = "OSM_API_DB not allowed as secondary input type.";
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
         }
-        else if (inputParams.get("INPUT2_TYPE").toString().toUpperCase().equals("OSM_API_DB")) {
+        else if (secondLayerIsOsmApiDb(inputParams)) {
             String msg = "OSM_API_DB not allowed as secondary input type.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
