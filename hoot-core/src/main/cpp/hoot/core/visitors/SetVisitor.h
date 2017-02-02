@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,9 +51,10 @@ public:
    */
   const set<ElementId>& getElementSet() const { return _elements; }
 
-  virtual void visit(const ConstElementPtr& e) { _elements.insert(ElementId(e->getElementType(), e->getId())); }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   set<ElementId> _elements;
 };
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,8 +47,7 @@ public:
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false)
-  { averageTags(t1, 1.0, t2, 1.0, result, keepAllUnknownTags); }
+  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false);
 
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be

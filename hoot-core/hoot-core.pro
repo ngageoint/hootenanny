@@ -100,7 +100,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DividedHighwayManipulation.cpp \
     src/main/cpp/hoot/core/algorithms/WayHeading.cpp \
     src/main/cpp/hoot/core/filters/OneWayFilter.cpp \
-    src/main/cpp/hoot/core/filters/NeighborFilter.cpp \
     src/main/cpp/hoot/core/filters/WayFilterChain.cpp \
     src/main/cpp/hoot/core/filters/UnknownFilter.cpp \
     src/main/cpp/hoot/core/filters/WayDirectionFilter.cpp \
@@ -539,7 +538,32 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.cpp \
     src/main/cpp/hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.cpp \
     src/main/cpp/hoot/core/io/ApiDbReader.cpp \
-    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp
+    src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.cpp \
+    src/main/cpp/hoot/core/conflate/MatchCreator.cpp \
+    src/main/cpp/hoot/core/filters/AreaFilter.cpp \
+    src/main/cpp/hoot/core/filters/ContainsNodeCriterion.cpp \
+    src/main/cpp/hoot/core/filters/HasTagCriterion.cpp \
+    src/main/cpp/hoot/core/filters/HighwayFilter.cpp \
+    src/main/cpp/hoot/core/filters/IsNodeFilter.cpp \
+    src/main/cpp/hoot/core/filters/LinearFilter.cpp \
+    src/main/cpp/hoot/core/filters/OneWayCriterion.cpp \
+    src/main/cpp/hoot/core/filters/StatsAreaFilter.cpp \
+    src/main/cpp/hoot/core/filters/StatusFilter.cpp \
+    src/main/cpp/hoot/core/filters/UnknownCriterion.cpp \
+    src/main/cpp/hoot/core/manipulators/WayManipulator.cpp \
+    src/main/cpp/hoot/core/schema/ComparatorTagDifferencer.cpp \
+    src/main/cpp/hoot/core/util/FindNodesInWayFactory.cpp \
+    src/main/cpp/hoot/core/visitors/CountVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/ExtractNodesVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/FeatureCountVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/LongestTagVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/MaxIdVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/MinIdVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/UniqueNamesVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/WayVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/GetTagValuesVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -590,7 +614,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/WayHeading.h \
     src/main/cpp/hoot/core/filters/OneWayFilter.h \
     src/main/cpp/hoot/core/filters/WayFilter.h \
-    src/main/cpp/hoot/core/filters/NeighborFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
     src/main/cpp/hoot/core/NodeMap.h \
     src/main/cpp/hoot/core/filters/WayFilterChain.h \
@@ -779,14 +802,12 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/Sparse2dMatrix.h \
     src/main/cpp/hoot/core/visitors/RemoveUnknown1Visitor.h \
     src/main/cpp/hoot/core/visitors/UnionPolygonsVisitor.h \
-    src/main/cpp/hoot/core/cmd/EvalMoveCmd.h \
     src/main/cpp/hoot/core/io/GmlWriter.h \
     src/main/cpp/hoot/core/algorithms/ExpectationIntersection.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySublineMatch.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySubline.h \
     src/main/cpp/hoot/core/filters/IntersectionFilter.h \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
-    src/main/cpp/hoot/core/cmd/FindIntersectionsCmd.h \
     src/main/cpp/hoot/core/visitors/FindIntersectionsVisitor.h \
     src/main/cpp/hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h \
     src/main/cpp/hoot/core/conflate/match-graph/ConstrainedMatches.h \

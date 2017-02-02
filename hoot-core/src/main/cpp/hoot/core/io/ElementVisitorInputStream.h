@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,8 @@ public:
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input source before being returned
    */
-  ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource, const shared_ptr<ElementVisitor>& visitor);
+  ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource,
+                            const shared_ptr<ElementVisitor>& visitor);
 
   /**
    * @brief close

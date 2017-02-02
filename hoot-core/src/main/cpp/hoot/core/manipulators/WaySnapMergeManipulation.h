@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,8 +50,6 @@ public:
   virtual const set<long>& getImpactedWayIds(shared_ptr<const OsmMap> map) const;
 
 protected:
-
-  //virtual double _calculateExpertProbability(shared_ptr<const OsmMap> map) const;
 
   /**
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.

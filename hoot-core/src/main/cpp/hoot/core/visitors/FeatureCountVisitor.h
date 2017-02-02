@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 #include "SingleStatistic.h"
@@ -40,7 +39,7 @@ namespace hoot
 using namespace std;
 
 /**
- * Counts the number of elements.
+ * Counts the number of elements with an information tag count greater than zero.
  */
 class FeatureCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
@@ -54,16 +53,10 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    if (e->getTags().getInformationCount() > 0)
-    {
-      //LOG_WARN(e->toString());
-      _count++;
-    }
-  }
+  virtual void visit(const shared_ptr<const Element>& e);
 
 private:
+
   int _count;
 };
 

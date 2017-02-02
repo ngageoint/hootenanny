@@ -110,6 +110,12 @@ void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& resul
   }
 }
 
+void TagComparator::averageTags(const Tags& t1, const Tags& t2, Tags& result,
+                                bool keepAllUnknownTags)
+{
+  averageTags(t1, 1.0, t2, 1.0, result, keepAllUnknownTags);
+}
+
 void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, double w2,
                                 Tags& result, bool keepAllUnknownTags)
 {

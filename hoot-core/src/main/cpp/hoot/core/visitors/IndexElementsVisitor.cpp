@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,6 +52,17 @@ IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
   _indexToEid(indexToEid)
 {
   // This space intentionally left blank
+}
+
+void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  assert(_filter.get() == 0);
+  _filter = e;
+}
+
+void IndexElementsVisitor::finalizeIndex()
+{
+  _index->bulkInsert(_boxes, _fids);
 }
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)

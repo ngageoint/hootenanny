@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -68,14 +68,7 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
-  //virtual void setConfiguration(const Settings& conf);
-
-  //double getAddressScoreThreshold() { return _addressScoreThreshold; }
-  //void setAddressScoreThreshold(double threshold) { _addressScoreThreshold = threshold; }
-
 private:
-
-  //double _addressScoreThreshold;
 
   void _collectAddressesFromElement(ConstElementPtr element, QSet<QString>& addresses) const;
   void _collectAddressesFromWayNodes(ConstWayPtr way, QSet<QString>& addresses,

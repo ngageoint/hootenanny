@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,24 +54,13 @@ public:
 
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
     const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const
-  {
-    ConstOsmMapPtr m = map.shared_from_this();
-    auto_ptr<Envelope> env(target->getEnvelope(m));
-    auto_ptr<Envelope> candidateEnv(candidate->getEnvelope(m));
-    env->expandToInclude(candidateEnv.get());
-    return sqrt(env->getWidth() * env->getWidth() + env->getHeight() * env->getHeight());
-  }
+    const shared_ptr<const Element>& candidate) const;
 
   virtual double distance(const OsmMap& map, const shared_ptr<const Element>& target,
     const shared_ptr<const Element>& candidate) const = 0;
 
   virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const
-  {
-    return 1 - distance(map, target, candidate) /
-      combinedEnvelopeDiagonalDistance(map, target, candidate);
-  }
+    const shared_ptr<const Element>& candidate) const;
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 

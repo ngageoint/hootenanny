@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 #include "ElementCriterion.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -45,10 +45,7 @@ public:
 
   PoiCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    return OsmSchema::getInstance().isPoi(*e);
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new PoiCriterion(); }
 

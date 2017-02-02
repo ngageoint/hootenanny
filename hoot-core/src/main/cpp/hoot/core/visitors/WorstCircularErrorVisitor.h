@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,9 +40,7 @@
 namespace hoot
 {
 
-class WorstCircularErrorVisitor :
-    public ElementConstOsmMapVisitor,
-    public SingleStatistic
+class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
   static string className() { return "hoot::WorstCircularErrorVisitor"; }
@@ -55,28 +53,13 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
-  {
-    _worst = max(_worst, e->getCircularError());
-  }
+  virtual void visit(const shared_ptr<const Element>& e);
 
   // Convenient way to get worst circular error
-  static Meters getWorstCircularError(const OsmMapPtr& map)
-  {
-    WorstCircularErrorVisitor v;
-    map->visitNodesRo(v);
-    map->visitWaysRo(v);
-    return v.getWorstCircularError();
-  }
+  static Meters getWorstCircularError(const OsmMapPtr& map);
 
   // Handle const pointers to const
-  static Meters getWorstCircularError(const ConstOsmMapPtr& map)
-  {
-    WorstCircularErrorVisitor v;
-    map->visitNodesRo(v);
-    map->visitWaysRo(v);
-    return v.getWorstCircularError();
-  }
+  static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
 private:
 
@@ -84,6 +67,6 @@ private:
   Meters _worst;
 };
 
-} // end namespace hoot
+}
 
 #endif // WORSTCIRCULARERRORVISITOR_H

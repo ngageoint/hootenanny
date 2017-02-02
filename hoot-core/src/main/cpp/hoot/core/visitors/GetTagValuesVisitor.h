@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,28 +59,10 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const ConstElementPtr& e)
-  {
-    Tags::const_iterator it = e->getTags().find(_key);
-    if (it != e->getTags().end())
-    {
-      if (_split)
-      {
-        QStringList l;
-        e->getTags().readValues(_key, l);
-        for (int i = 0; i < l.size(); i++)
-        {
-          _bag.insert(l[i]);
-        }
-      }
-      else
-      {
-        _bag.insert(it.value());
-      }
-    }
-  }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   QString _key;
   set<QString>& _bag;
   const OsmMap* _map;

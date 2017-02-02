@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,11 +41,13 @@ namespace hoot
 class Feature;
 class ScriptToOgrTranslator;
 
-class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+  public SingleStatistic
 {
 public:
   static string className() { return "hoot::TranslatedTagCountVisitor"; }
 
+  TranslatedTagCountVisitor() {}
   TranslatedTagCountVisitor(shared_ptr<ScriptTranslator> t);
 
   virtual ~TranslatedTagCountVisitor() {}
