@@ -72,14 +72,19 @@ public class ClipDatasetResource extends JobControllerBase {
      * POST hoot-services/job/clipdataset/execute
      *
      * {
-     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454727],"UL":[-77.04315011486628,38.89958152667718]}",
-     *   //The upper left and lower right of the bounding box to clip the dataset
-     *   "INPUT_NAME" : "DcRoads", //The name of the dataset to be clipped
-     *   "OUTPUT_NAME" : "DcRoads_Clip" //The output name of the new dataset.
+     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
+     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
+     *
+     *   //The name of the dataset to be clipped
+     *   "INPUT_NAME" : "DcRoads",
+     *
+     *   //The output name of the new dataset.
+     *   "OUTPUT_NAME" : "DcRoads_Clip"
      * }
      *
      * @param params
-     *            JSON input params; see description
+     *            JSON input params; see description above
+
      * @return a job id
      */
     @POST
@@ -92,7 +97,7 @@ public class ClipDatasetResource extends JobControllerBase {
         try {
             JSONParser parser = new JSONParser();
             JSONObject arguments = (JSONObject) parser.parse(params);
-            String clipOutputName = arguments.get("OUTPUT_NAME").toString();
+            String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
 
             JSONArray commandArgs = JobControllerBase.parseParams(params);
 
@@ -104,7 +109,7 @@ public class ClipDatasetResource extends JobControllerBase {
                     },
                     // Ingest
                     () -> {
-                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(clipOutputName, null);
+                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(newDatasetOutputName, null);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };

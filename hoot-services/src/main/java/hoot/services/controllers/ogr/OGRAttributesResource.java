@@ -77,25 +77,20 @@ public class OGRAttributesResource extends JobControllerBase {
     }
 
     /**
-     * This rest endpoint uploads multipart data from UI and then generates
-     * attribute output Example:
-     * http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
+     * This rest endpoint uploads multipart data from UI and then generates attribute output.
+     * Example: http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
      * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb"}
      * 
-     * After getting the jobId, one can track the progress through job status
-     * rest end point Example:
-     * http://localhost:8080/hoot-services/job/status/e43feae4-0644-47fd-a23c-
-     * 6249e6e7f7fb Output:
-     * {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb","statusDetail":null,
-     * "status":"complete"}
+     * After getting the jobId, one can track the progress through job status rest end point
+     * Example: http://localhost:8080/hoot-services/job/status/e43feae4-0644-47fd-a23c-6249e6e7f7fb
+     * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb","statusDetail":null, "status":"complete"}
      * 
-     * Once status is "complete" Result attribute can be obtained through
-     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-
-     * a23c-6249e6e7f7fb output: JSON of attributes
+     * Once status is "complete", result attribute can be obtained through.
+     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6e7f7fb
+     * Output: JSON of attributes
      * 
      * @param inputType
-     *            : [FILE | DIR] where FILE type should represents zip,shp or
-     *            OMS and DIR represents FGDB
+     *            : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
      */
     @POST
     @Path("/upload")
@@ -191,17 +186,15 @@ public class OGRAttributesResource extends JobControllerBase {
     }
 
     /**
-     * This rest end point is for getting the result of get attribute upload
-     * operation
+     * This rest end point is for getting the result of get attribute upload operation
      * 
      * @param id
      *            : The jobid from upload
+     *
      * @param doDelete
-     *            : [true | false] if true then it deletes the output resource
-     *            after getting the result
-     * 
-     *            Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-
-     *            0644-47fd-a23c-6249e6 e7f7fb output: JSON of attributes
+     *            : [true | false] if true then it deletes the output resource after getting the result
+     *
+     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6 e7f7fb output: JSON of attributes
      * 
      * @return JSON object of requested attribute
      */

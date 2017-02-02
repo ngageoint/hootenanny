@@ -159,28 +159,26 @@ public class ConflationResource extends JobControllerBase {
      *
      * that is intended to be the reference dataset.
      *
-     * that is intended to be the reference dataset.
-     *
      * POST hoot-services/conflation/execute
      *
      * @param params
-     *            parameters in json format <INPUT1_TYPE> Conflation input type
-     *            [OSM] | [OGR] | [DB] | [OSM_API_DB] </INPUT1_TYPE> <INPUT1>
-     *            Conlfation input 1 </INPUT1> <INPUT2_TYPE> Conflation input
-     *            type [OSM] | [OGR] | [DB] </INPUT2_TYPE> <INPUT2> Conlfation
-     *            input 2 </INPUT2> <OUTPUT_NAME> Conflation operation output
-     *            name </OUTPUT_NAME> <CONFLATION_TYPE> [Average] | [Reference]
-     *            </CONFLATION_TYPE> <REFERENCE_LAYER> The reference layer which
-     *            will be dominant tags. Default is 1 and if 2 selected, layer 2
-     *            tags will be dominant with layer 1 as geometry snap layer.
-     *            </REFERENCE_LAYER> <AUTO_TUNNING> Not used. Always false
-     *            </AUTO_TUNNING> <COLLECT_STATS> true to collect conflation
-     *            statistics </COLLECT_STATS> <GENERATE_REPORT> true to generate
-     *            conflation report </GENERATE_REPORT> <TIME_STAMP> Time stamp
-     *            used in generated report if GENERATE_REPORT is true
-     *            </TIME_STAMP> <USER_EMAIL> Email address of the user
-     *            requesting the conflation job. </USER_EMAIL> <ADV_OPTIONS>
-     *            Advanced options list for hoot-core command </ADV_OPTIONS>
+     *            parameters in json format :
+     *            <INPUT1_TYPE>Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]</INPUT1_TYPE>
+     *            <INPUT1>Conlfation input 1</INPUT1>
+     *            <INPUT2_TYPE>Conflation input type [OSM] | [OGR] | [DB] </INPUT2_TYPE>
+     *            <INPUT2>Conlfation input 2</INPUT2>
+     *            <OUTPUT_NAME>Conflation operation output name</OUTPUT_NAME>
+     *            <CONFLATION_TYPE>[Average] | [Reference]</CONFLATION_TYPE>
+     *            <REFERENCE_LAYER>
+     *                      The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
+     *                      tags will be dominant with layer 1 as geometry snap layer.
+     *            </REFERENCE_LAYER>
+     *            <AUTO_TUNNING> Not used. Always false</AUTO_TUNNING>
+     *            <COLLECT_STATS> true to collect conflation statistics</COLLECT_STATS>
+     *            <GENERATE_REPORT> true to generate conflation report</GENERATE_REPORT>
+     *            <TIME_STAMP> Time stamp used in generated report if GENERATE_REPORT is true</TIME_STAMP>
+     *            <USER_EMAIL> Email address of the user requesting the conflation job.</USER_EMAIL>
+     *            <ADV_OPTIONS>Advanced options list for hoot-core command </ADV_OPTIONS>
      * @return Job ID
      */
     @POST

@@ -51,15 +51,8 @@ public class RasterToTilesCommandFactory {
     public ExternalCommand createExternalCommand(String name, String userEmail) {
         long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
-        BoundingBox queryBounds;
-        try {
-            queryBounds = new BoundingBox("-180,-90,180,90");
-            logger.debug("Query bounds area: {}", queryBounds.getArea());
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error parsing bounding box from bbox param: " + "-180,-90,180,90" + " ("
-                    + e.getMessage() + ")", e);
-        }
+
+        BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
 
         Map currentMap = new Map(mapId);
         JSONObject extents = currentMap.retrieveNodesMBR(queryBounds);

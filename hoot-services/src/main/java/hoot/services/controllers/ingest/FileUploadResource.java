@@ -87,23 +87,20 @@ public class FileUploadResource extends JobControllerBase {
      * service is multipart post service which accepts single or multiple files
      * sent by multipart client.
      * 
-     * POST
-     * hoot-services/ingest/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&
-     * INPUT_NAME=ToyTest
+     * POST hoot-services/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&INPUT_NAME=ToyTest
      * 
      * @param translation
      *            Translation script used during OGR ETL process.
      * @param inputType
      *            [OSM | OGR ] OSM for osm file and OGR for shapefile.
      * @param inputName
-     *            optional input name which is used in hoot db. Defaults to the
-     *            file name.
+     *            optional input name which is used in hoot db. Defaults to the file name.
      * @param userEmail
      *            mail address of the user requesting job
      * @param noneTranslation
      *            ?
      * @param multiPart
-     *            ?
+     *            uploaded files
      * @return Array of job status
      */
     @POST
@@ -234,11 +231,24 @@ public class FileUploadResource extends JobControllerBase {
                 osmCnt = 1;
             }
 
-            Command[] commands = createNativeRequest(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+            ExternalCommand etlCommand = createETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
                     noneTranslation, fgdbFeatureClasses);
 
-            super.processChainJob(jobId, commands);
+            ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
+
+            Command[] chainJob = {
+                    // Clip to a bounding box
+                    () -> {
+                        return externalCommandManager.exec(jobId, etlCommand);
+                    },
+                    // Ingest
+                    () -> {
+                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                    }
+            };
+
+            super.processChainJob(jobId, chainJob);
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();
@@ -262,7 +272,7 @@ public class FileUploadResource extends JobControllerBase {
         return Response.ok(response.toJSONString()).build();
     }
 
-    private Command[] createNativeRequest(JSONArray reqList, int zipCnt, int shpZipCnt,
+    private ExternalCommand createETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt,
             int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
             int osmCnt, int geonamesCnt, List<String> zipList, String translation,
             String jobId, String etlName, List<String> inputsList, String userEmail,
@@ -376,25 +386,13 @@ public class FileUploadResource extends JobControllerBase {
 
         JSONArray commandArgs = super.parseParams(param.toJSONString());
 
-        Command[] chainJob = {
-                // Clip to a bounding box
-                () -> {
-                    ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs);
-                    return externalCommandManager.exec(jobId, etlCommand);
-                },
-                // Ingest
-                () -> {
-                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(etlName, userEmail);
-                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
-                }
-        };
+        ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs);
 
-        return chainJob;
+        return etlCommand;
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,
             JSONArray reqList, JSONObject zipStat) throws IOException {
-        // get zip stat is not exist then create one
         int shpZipCnt = 0;
         Object oShpStat = zipStat.get("shpzipcnt");
         if (oShpStat == null) {

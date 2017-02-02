@@ -224,7 +224,6 @@ public class BasemapResource extends JobControllerBase {
     @Path("/getlist")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBasemapList() {
-        JSONArray basemapList = new JSONArray();
         JSONArray filesList;
 
         try {
@@ -243,6 +242,7 @@ public class BasemapResource extends JobControllerBase {
             sortedScripts.put(sName.toUpperCase(), cO);
         }
 
+        JSONArray basemapList = new JSONArray();
         basemapList.addAll(sortedScripts.values());
 
         return Response.ok(basemapList.toJSONString()).build();
