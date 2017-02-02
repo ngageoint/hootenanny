@@ -633,7 +633,7 @@ end
 When(/^I open the image carousel$/) do
   btn = find('div.carousel-control').find('button')
   unless btn.has_css?('active')
-    ttg.click
+    btn.click
   end
 end
 

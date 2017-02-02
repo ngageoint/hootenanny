@@ -6,6 +6,7 @@ Feature: DG G-EGD plugin
         And I click Get Started
         Given that the EGD plugin is available
         When I open the image carousel
+        And I wait 1 seconds
         Then I should see "Zoom in to display image metadata"
         When I click on "button.zoom-in"
         When I click on "button.zoom-in"
@@ -16,6 +17,7 @@ Feature: DG G-EGD plugin
         When I click on "button.zoom-in"
         When I click on "button.zoom-in"
         And I wait 1 seconds
+        When I open the image carousel
         Then I wait 10 seconds to see image thumbnails
         When I hover over the first thumbnail
         Then I should see an image footprint on the map
@@ -31,17 +33,11 @@ Feature: DG G-EGD plugin
         When I select the "dgarrow.up" div
         When I select the "dgarrow.down" div
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I click on "button.zoom-out"
-        And I wait 1 seconds
         When I open the image carousel
         And I wait 1 seconds
         Then I should see "Zoom in to display image metadata"
