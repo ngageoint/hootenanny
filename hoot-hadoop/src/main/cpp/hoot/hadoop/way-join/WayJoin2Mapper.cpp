@@ -160,7 +160,7 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
     stringstream ss(stringstream::out);
     pp::DataOutputStream dos(ss);
 
-    //LOG_INFO("Writing way: " << _key->id);
+    LOG_TRACE("Writing way: " << _key->id);
 
     dos.writeByte(PbfData);
     writer.writePb(w, &ss);
@@ -176,7 +176,7 @@ void WayJoin2Mapper::mapWayPoints(int64_t& k, WayJoin1Reducer::Value& v)
   _key->id = k;
 
   _rawValue->rawWay = v;
-  //LOG_INFO("Writing way raw: " << _key->id);
+  LOG_TRACE("Writing way raw: " << _key->id);
 
   _context->emit(_keyStr, _rawValueStr);
 }

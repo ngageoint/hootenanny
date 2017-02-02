@@ -89,14 +89,14 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     vector<PixelBox> nextLayer;
     nextLayer.resize(width * width);
 
-    //LOG_INFO("width: " << width);
+    LOG_TRACE("width: " << width);
     for (size_t i = 0; i < boxes.size(); i++)
     {
       PixelBox& b = boxes[i];
       double splitX = _calculateSplitX(b);
       int tx = i % (width / 2);
       int ty = i / (width / 2);
-      //LOG_INFO("  i: " << i << " tx: " << tx << " ty: " << ty);
+      LOG_TRACE("  i: " << i << " tx: " << tx << " ty: " << ty);
 
       double splitYLeft = _calculateSplitY(PixelBox(b.minX, splitX, b.minY, b.maxY));
       nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] = PixelBox(b.minX, splitX, b.minY,

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -106,7 +106,7 @@ public:
     x2 = solver.getColumnPrimalValue(2);
     x3 = solver.getColumnPrimalValue(3);
 
-    //LOG_INFO("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
+    LOG_TRACE("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, z, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, x1, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, x2, 1e-5);
@@ -120,7 +120,7 @@ public:
     x2 = solver.getColumnPrimalValue(2);
     x3 = solver.getColumnPrimalValue(3);
 
-    //LOG_INFO("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
+    LOG_TRACE("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, z, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, x1, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, x2, 1e-5);
@@ -178,7 +178,7 @@ public:
     x2 = solver.getColumnPrimalValue(2);
     x3 = solver.getColumnPrimalValue(3);
 
-    //LOG_INFO("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
+    LOG_TRACE("z: " << z << " x1: " << x1 << " x2: " << x2 << " x3: " << x3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, z, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, x1, 1e-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, x2, 1e-5);

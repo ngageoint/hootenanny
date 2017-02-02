@@ -1058,7 +1058,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
       progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && _count > 0)
   {
     cout << endl;
   }

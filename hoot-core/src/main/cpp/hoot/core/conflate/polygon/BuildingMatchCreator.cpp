@@ -248,7 +248,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Using match creator: " << className());
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);

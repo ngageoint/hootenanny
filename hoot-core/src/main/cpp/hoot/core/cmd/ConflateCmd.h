@@ -168,7 +168,7 @@ public:
     size_t initialElementCount = map->getElementCount();
     stats.append(SingleStat("Initial Element Count", initialElementCount));
 
-    LOG_INFO("Applying pre conflation operations...");
+    LOG_INFO("Applying pre-conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
@@ -194,7 +194,7 @@ public:
     }
 
     // Apply any user specified operations.
-    LOG_INFO("Applying post conflation operations...");
+    LOG_INFO("Applying post-conflation operations...");
     NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
     MapProjector::projectToWgs84(result);
@@ -252,6 +252,8 @@ public:
         cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
       }
     }
+
+    LOG_INFO("Conflation job completed.");
 
     return 0;
   }

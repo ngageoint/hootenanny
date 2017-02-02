@@ -94,7 +94,7 @@ public:
     uut.processMap(load("test-files/conflate/extractor/BuildingsA.osm",
       "test-files/conflate/extractor/BuildingsB.osm"));
 
-    //LOG_INFO(uut.getResults().toStdString());
+    LOG_TRACE(uut.getResults().toStdString());
 
     QDir().mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
     QFile fp("test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");

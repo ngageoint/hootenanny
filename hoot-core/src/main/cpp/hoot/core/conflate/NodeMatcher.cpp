@@ -96,20 +96,23 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
   if (result.size() > 0 && badSpots > 0)
   {
-    LOG_WARN("nid: " << nid);
-    LOG_WARN(map->getNode(nid)->toString());
-    LOG_WARN("wids: " << wids);
+    LOG_TRACE("nid: " << nid);
+    LOG_VART(map->getNode(nid)->toString());
+    LOG_TRACE("wids: " << wids);
     for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
     {
-      LOG_WARN(map->getWay(*it)->toString());
+      LOG_VART(map->getWay(*it)->toString());
     }
 
     //shared_ptr<OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
-    throw HootException("calculateAngles was called with a node that was not a start or end node"
-                        " on the specified way.");
+    const QString msg =
+      "calculateAngles was called with a node that was not a start or end node on the specified way.";
+    LOG_WARN(msg);
+    //where is this being caught?
+    throw HootException(msg);
   }
 
   return result;

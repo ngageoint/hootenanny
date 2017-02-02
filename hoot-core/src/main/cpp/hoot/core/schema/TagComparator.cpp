@@ -247,7 +247,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     {
       e.j = j;
       e.score = schema.score(n1[i], n2[j]);
-      //LOG_INFO("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
+      LOG_TRACE("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
       heap.push(e);
     }
   }
@@ -255,14 +255,13 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   set<int> used1;
   set<int> used2;
 
-  //LOG_WARN("");
   while (heap.size() > 0)
   {
     e = heap.top();
     heap.pop();
     if (e.score > 0.0 && used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_INFO("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
+      LOG_TRACE("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
       score *= e.score;
       used1.insert(e.i);
       used2.insert(e.j);
@@ -270,7 +269,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   }
 
   weight = used1.size();
-  //LOG_INFO("score: " << score);
+  LOG_TRACE("score: " << score);
 }
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight)

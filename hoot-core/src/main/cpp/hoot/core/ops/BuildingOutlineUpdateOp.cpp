@@ -272,7 +272,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
 
   if (outline->isEmpty() == false)
   {
-    LOG_DEBUG("Processing outline...");
+    LOG_TRACE("Processing outline...");
     const shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
