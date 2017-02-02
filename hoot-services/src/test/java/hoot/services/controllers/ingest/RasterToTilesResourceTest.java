@@ -37,14 +37,25 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.testsupport.HootServicesSpringTestConfig;
+import hoot.services.testsupport.MapUtils;
 
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles("test")
+@Transactional
 public class RasterToTilesResourceTest {
     private static File homeFolder;
     private static String tileServerPath;
@@ -78,11 +89,11 @@ public class RasterToTilesResourceTest {
         HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", original_TILE_SERVER_PATH);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestIngestOSMResource() throws Exception {
         String processScriptName = RASTER_TO_TILES;
+
         assertNotNull(processScriptName);
         assertTrue(!processScriptName.isEmpty());
 
@@ -107,18 +118,20 @@ public class RasterToTilesResourceTest {
         param.put("RASTER_SIZE", "500");
         params.add(param);
 
+        long userId = MapUtils.insertUser();
+        String mapId = Long.toString(MapUtils.insertMap(userId));
+
         param = new JSONObject();
-        param.put("MAP_ID", "1");
+        param.put("MAP_ID", mapId);
         params.add(param);
 
         oExpected.put("params", params);
-
         oExpected.put("exectype", "make");
         oExpected.put("erroraswarning", "true");
 
-//        JSONObject command = new RasterToTilesCommandFactory().createExternalCommand("1", "test@test");
+        //JSONObject command = new RasterToTilesCommandFactory().createExternalCommand(mapId, "test@test");
 
-//        assertEquals(oExpected, command);
+        //assertEquals(oExpected, command);
     }
 
     @Test

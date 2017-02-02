@@ -46,7 +46,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -165,7 +164,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestFgdbOgrZip() throws Exception {
@@ -210,19 +208,18 @@ public class FileUploadResourceTest {
         int zipCnt = 0;
         zipCnt++;
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         // Test zip containing fgdb + shp
         int shpCnt = 0;
         int osmCnt = 0;
         int geonamesCnt = 0;
         int fgdbCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt,
                 osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr",
                 inputsList, "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -254,7 +251,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZipAndShp() throws Exception {
@@ -323,15 +319,14 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("geonamescnt");
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         // Test zip containing fgdb + shp
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr", inputsList,
                 "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -363,7 +358,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsmZipAndOsm() throws Exception {
@@ -433,15 +427,14 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         // Test zip containing fgdb + shp
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "osm", inputsList,
                 "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -473,7 +466,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZip() throws Exception {
@@ -538,18 +530,18 @@ public class FileUploadResourceTest {
         zipList.add("zip1");
         zipCnt++;
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         // Test zip containing fgdb + shp
         int shpCnt = 0;
         int osmCnt = 0;
         int fgdbCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "ogr", inputsList,
-                "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt,
+                shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList,
+                "TDSv61.js", jobId, "ogr", inputsList, "test@test.com", "false", null);
+
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -576,7 +568,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgr() throws Exception {
@@ -636,18 +627,17 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "ogr", inputsList,
                 "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -673,7 +663,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsm() throws Exception {
@@ -732,19 +721,18 @@ public class FileUploadResourceTest {
         osmCnt += (Integer) zipStat.get("osmcnt");
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "osm", inputsList,
                 "test@test.com", "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -771,7 +759,6 @@ public class FileUploadResourceTest {
         FileUtils.forceDelete(workingDir);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void TestCreateNativeRequestFgdb() throws Exception {
@@ -813,19 +800,18 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createNativeRequestMethod = getCreateNativeRequestMethod();
+        Method createETLCommandMethod = getCreateETLCommandMethod();
 
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        JSONArray resA = (JSONArray) createNativeRequestMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                 shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb", inputsList, "test@test.com",
                 "false", null);
 
-        JSONObject req = (JSONObject) resA.get(0);
-        JSONArray params = (JSONArray) req.get("params");
+        JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
 
@@ -972,14 +958,14 @@ public class FileUploadResourceTest {
         return buildNativeRequestMethod;
     }
 
-    private static Method getCreateNativeRequestMethod() throws NoSuchMethodException {
-        Method createNativeRequestMethod = FileUploadResource.class.getDeclaredMethod("createNativeRequest",
+    private static Method getCreateETLCommandMethod() throws NoSuchMethodException {
+        Method createETLCommandMethod = FileUploadResource.class.getDeclaredMethod("createETLCommand",
                 JSONArray.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class,
                 int.class, int.class, List.class, String.class, String.class, String.class, List.class, String.class,
                 String.class, String.class);
 
-        createNativeRequestMethod.setAccessible(true);
+        createETLCommandMethod.setAccessible(true);
 
-        return createNativeRequestMethod;
+        return createETLCommandMethod;
     }
 }
