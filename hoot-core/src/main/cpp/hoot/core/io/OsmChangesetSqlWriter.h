@@ -114,7 +114,7 @@ private:
   double _changesetUserId;
   bool _changesetGenerateNewIds;
 
-  friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
+  friend class ServiceOsmApiDbChangesetSqlWriterTest;
 
 };
 

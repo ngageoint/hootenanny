@@ -308,7 +308,7 @@ public:
     OsmMap::resetCounters();
 
     OsmPbfReader uut(false);
-    fstream input("test-files/io/PbfRelationTest.osm.pbf", ios::in | ios::binary);
+    fstream input("test-files/io/OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
     shared_ptr<OsmMap> map(new OsmMap());
     uut.parse(&input, map);
 
@@ -458,9 +458,9 @@ public:
         (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
 
       QString outputFile(
-        "test-output/io/PbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
+        "test-output/io/OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
-      HOOT_FILE_EQUALS("test-files/io/PbfPartialReaderTest" + QString::number(ctr + 1) + ".osm",
+      HOOT_FILE_EQUALS("test-files/io/OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm",
         outputFile);
 
       ctr++;
@@ -504,10 +504,10 @@ public:
         chunkSize);
 
       QString outputFile(
-        "test-output/io/PbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
+        "test-output/io/OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
       HOOT_FILE_EQUALS(
-        "test-files/io/PbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm",
+        "test-files/io/OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm",
         outputFile);
 
       ctr++;
@@ -564,7 +564,7 @@ public:
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
     shared_ptr<OsmMap> map(new OsmMap());
     OsmPbfReader reader(true);
-    reader.open("test-files/PbfPartialReaderTest4_with_sorttype.osm.pbf");
+    reader.open("test-files/OsmPbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThenId());
@@ -579,7 +579,7 @@ public:
     //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
     shared_ptr<OsmMap> map1(new OsmMap());
     OsmPbfReader reader1(true);
-    reader1.open("test-files/PbfPartialReaderTest4_without_sorttype.osm.pbf");
+    reader1.open("test-files/OsmPbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
 
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
@@ -600,7 +600,7 @@ public:
     //test the pbf file that the sorted flag isn't set and values are out of order
     shared_ptr<OsmMap> map2(new OsmMap());
     OsmPbfReader reader2(true);
-    reader2.open("test-files/PbfTest_withoursoretype_unsorted.osm.pbf");
+    reader2.open("test-files/OsmPbfTest_withoursoretype_unsorted.osm.pbf");
     reader2.setPermissive(false);
 
     reader2.read(map2);
