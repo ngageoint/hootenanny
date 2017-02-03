@@ -31,7 +31,7 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/TileConflator.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
@@ -82,7 +82,7 @@ public:
     uut.conflate(QString::fromStdString(outDir) + "HadoopTileWorkerTest.pbf");
 
     shared_ptr<OsmMap> map(new OsmMap);
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorkerTest.pbf", true);
     for (size_t i = 0; i < status.size(); i++)

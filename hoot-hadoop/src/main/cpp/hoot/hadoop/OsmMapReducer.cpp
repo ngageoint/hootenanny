@@ -34,7 +34,7 @@ class OsmMapIterator : public pp::Iterator< shared_ptr<OsmMap> >
 public:
 
   OsmMapIterator(HadoopPipes::ReduceContext* context, shared_ptr<OsmMap>& map,
-                 PbfReader& reader) :
+                 OsmPbfReader& reader) :
     _context(context),
     _map(map),
     _reader(reader)
@@ -58,7 +58,7 @@ private:
   HadoopPipes::ReduceContext* _context;
   bool _hasNext;
   shared_ptr<OsmMap>& _map;
-  PbfReader& _reader;
+  OsmPbfReader& _reader;
 };
 
 OsmMapReducer::OsmMapReducer() : _reader(true)

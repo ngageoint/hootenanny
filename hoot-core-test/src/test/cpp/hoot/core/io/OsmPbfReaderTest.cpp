@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/MetadataTags.h>
 
@@ -56,9 +56,9 @@ using namespace boost;
 namespace hoot
 {
 
-class PbfReaderTest : public CppUnit::TestFixture
+class OsmPbfReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PbfReaderTest);
+  CPPUNIT_TEST_SUITE(OsmPbfReaderTest);
   CPPUNIT_TEST(runOffsetsTest);
   CPPUNIT_TEST(runReadIncrementalTest);
   CPPUNIT_TEST(runReadNodeTest);
@@ -87,11 +87,11 @@ public:
   void runOffsetsTest()
   {
     OsmMap::resetCounters();
-    PbfReader uut(false);
+    OsmPbfReader uut(false);
     fstream input("test-files/io/SmallSplits.pbf", ios::in | ios::binary);
     shared_ptr<OsmMap> map(new OsmMap());
 
-    vector<PbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
+    vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
 
 //    for (size_t i = 0; i < v.size(); i++)
 //    {
@@ -167,7 +167,7 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
 
@@ -201,7 +201,7 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
@@ -234,7 +234,7 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
@@ -268,7 +268,7 @@ public:
 
     shared_ptr<OsmMap> map(new OsmMap());
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
@@ -288,7 +288,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    PbfReader uut(false);
+    OsmPbfReader uut(false);
     fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
     shared_ptr<OsmMap> map(new OsmMap());
     uut.parse(&input, map);
@@ -297,17 +297,17 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/PbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/PbfReaderTest.osm",
-                     "test-output/io/PbfReaderTest.osm");
+    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
+                     "test-output/io/OsmPbfReaderTest.osm");
   }
 
   void runToyRelationTest()
   {
     OsmMap::resetCounters();
 
-    PbfReader uut(false);
+    OsmPbfReader uut(false);
     fstream input("test-files/io/PbfRelationTest.osm.pbf", ios::in | ios::binary);
     shared_ptr<OsmMap> map(new OsmMap());
     uut.parse(&input, map);
@@ -337,26 +337,26 @@ public:
 
   void runIsSupportedUrlExistsTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     CPPUNIT_ASSERT(reader.isSupported("test-files/ToyTestA.osm.pbf"));
   }
 
   void runIsSupportedUrlDoesntExistTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm.pbf"));
   }
 
   void runIsSupportedUrlBadExtensionTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm"));
   }
 
   //in the future might try to support dir urls with this interface, but for now we don't
   void runIsSupportedUrlIsDirTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     QString exceptionMsg("");
     try
     {
@@ -371,7 +371,7 @@ public:
 
   void runOpenUrlExistsTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     //shouldn't throw
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.close();
@@ -379,7 +379,7 @@ public:
 
   void runOpenUrlDoesntExistTest()
   {
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     QString exceptionMsg("");
     try
     {
@@ -397,7 +397,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     shared_ptr<OsmMap> map(new OsmMap());
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.read(map);
@@ -406,10 +406,10 @@ public:
     QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/PbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/PbfReaderTest.osm",
-                     "test-output/io/PbfReaderTest.osm");
+    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
+                     "test-output/io/OsmPbfReaderTest.osm");
   }
 
   void runFactoryReadMapTest()
@@ -422,17 +422,17 @@ public:
     QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/PbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/PbfReaderTest.osm",
-                     "test-output/io/PbfReaderTest.osm");
+    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
+                     "test-output/io/OsmPbfReaderTest.osm");
   }
 
   void runReadMapPartialTest()
   {
     OsmMap::resetCounters();
 
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     const int chunkSize = 10;
     reader.setMaxElementsPerMap(chunkSize);
     reader.open("test-files/ToyTestA.osm.pbf");
@@ -476,7 +476,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     const int chunkSize = 40;
     reader.setMaxElementsPerMap(chunkSize);
     reader.open("test-files/ToyTestCombined.pbf");
@@ -522,17 +522,17 @@ public:
   void runHasMoreElementsTest(
       void )
   {
-    PbfReader reader1;
+    OsmPbfReader reader1;
 
     // If we haven't opened a file, it best not be ready to read
     CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
 
     // Try to open invalid file
-    PbfReader reader2(QString("test-files/totalgarbage.osm.pbf"));
+    OsmPbfReader reader2(QString("test-files/totalgarbage.osm.pbf"));
     CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
 
     // Open valid file
-    PbfReader reader3(QString("test-files/ToyTestA.osm.pbf"));
+    OsmPbfReader reader3(QString("test-files/ToyTestA.osm.pbf"));
     CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
 
     // Close file and check again
@@ -543,7 +543,7 @@ public:
   void runReadNextElementTest(
       void )
   {
-    PbfReader reader(QString("test-files/ToyTestA.osm.pbf"));
+    OsmPbfReader reader(QString("test-files/ToyTestA.osm.pbf"));
 
     // Iterate through all items
     int numberOfElements(0);
@@ -563,7 +563,7 @@ public:
 
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.open("test-files/PbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
 
@@ -574,11 +574,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-3)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-4)->getNodeCount());
 
-    //The test is for #161 - PbfReader should be more permissive when the file is unsorted
+    //The test is for #161 - OsmPbfReader should be more permissive when the file is unsorted
     //This file doesn't have Sort.Type_then_ID in the header. Before changes, when permissive
     //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
     shared_ptr<OsmMap> map1(new OsmMap());
-    PbfReader reader1(true);
+    OsmPbfReader reader1(true);
     reader1.open("test-files/PbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
 
@@ -599,7 +599,7 @@ public:
 
     //test the pbf file that the sorted flag isn't set and values are out of order
     shared_ptr<OsmMap> map2(new OsmMap());
-    PbfReader reader2(true);
+    OsmPbfReader reader2(true);
     reader2.open("test-files/PbfTest_withoursoretype_unsorted.osm.pbf");
     reader2.setPermissive(false);
 
@@ -616,7 +616,7 @@ public:
 };
 
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PbfReaderTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PbfReaderTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPbfReaderTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPbfReaderTest, "quick");
 
 }

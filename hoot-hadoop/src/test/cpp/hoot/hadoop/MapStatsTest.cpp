@@ -22,7 +22,7 @@
 
 // hoot
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/MapStats.h>
 

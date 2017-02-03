@@ -67,7 +67,6 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/LargeWaySplitterTest.cpp \
     src/test/cpp/hoot/core/conflate/NodeReplacementsTest.cpp \
     src/test/cpp/hoot/core/conflate/TileBoundsCalculatorTest.cpp \
-    src/test/cpp/hoot/core/io/PbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/PbfWriterTest.cpp \
     src/test/cpp/hoot/core/ml/LogisticRegressionTest.cpp \
     src/test/cpp/hoot/core/conflate/NodeMatcherTest.cpp \
@@ -246,7 +245,8 @@ SOURCES += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
     src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp \
-    src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp
+    src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \

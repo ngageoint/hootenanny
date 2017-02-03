@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/conflate/UnlikelyIntersectionRemover.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -119,7 +119,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     // read the map from the given string.
     stringstream ss(context.getInputValue(), stringstream::in);
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
@@ -294,7 +294,7 @@ shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
   shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<

@@ -21,7 +21,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/WaySplitter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -143,7 +143,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
     ss.read(&type, 1);
     assert(type == WayJoin2Mapper::PbfData);
     _map->clear();
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setDefaultStatus(_newStatus);
     reader.parseElements(&ss, _map);
 
@@ -173,7 +173,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     {
       stringstream ss(value, stringstream::in);
       ss.read(&type, 1);
-      PbfReader reader(true);
+      OsmPbfReader reader(true);
       reader.parseElements(&ss, _map);
       const WayMap& wm = _map->getWays();
       WayMap::const_iterator it = wm.begin();

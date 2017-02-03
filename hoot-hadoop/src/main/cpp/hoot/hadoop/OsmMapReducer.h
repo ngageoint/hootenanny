@@ -22,7 +22,7 @@
 #pragma GCC diagnostic warning "-Wunused-parameter"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 
 // Pretty Pipes
 #include <pp/util/Iterator.h>
@@ -55,7 +55,7 @@ protected:
 private:
   PbfRecordWriter* _pbfWriter;
   PbfRecordWriter* _writer;
-  PbfReader _reader;
+  OsmPbfReader _reader;
   shared_ptr<OsmMap> _map;
 };
 

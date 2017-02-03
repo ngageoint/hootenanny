@@ -36,7 +36,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -160,7 +160,7 @@ public:
     PbfWriter writer;
     writer.setGranularity(granularity);
     writer.write(map, workingDir + fn);
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     reader.read(workingDir + fn, result);
     return result;
   }

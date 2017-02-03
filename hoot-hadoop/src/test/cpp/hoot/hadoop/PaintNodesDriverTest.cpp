@@ -28,7 +28,7 @@ using namespace pp;
 #include <stdlib.h>
 
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>

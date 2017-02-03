@@ -30,7 +30,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
@@ -60,7 +60,7 @@ public:
 
   void runPbfTest()
   {
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setUseFileStatus(true);

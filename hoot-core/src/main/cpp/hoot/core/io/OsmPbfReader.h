@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef PBFREADER_H
-#define PBFREADER_H
+#ifndef OsmPbfReader_H
+#define OsmPbfReader_H
 
 // Qt
 #include <QHash>
@@ -61,12 +61,12 @@ namespace hoot
   }
 using namespace std;
 
-class PbfReaderData;
+class OsmPbfReaderData;
 
 /**
  * A writer for http://wiki.openstreetmap.org/wiki/PBF_Format
  */
-class PbfReader : public PartialOsmMapReader, public Configurable
+class OsmPbfReader : public PartialOsmMapReader, public Configurable
 {
 public:
   class BlobLocation
@@ -81,19 +81,19 @@ public:
 
   static QString maxElementsPerMapKey() { return "pbf.reader.max.elements.per.partial.map"; }
 
-  static string className() { return "hoot::PbfReader"; }
+  static string className() { return "hoot::OsmPbfReader"; }
 
-  PbfReader();
-  PbfReader(bool useFileId);
+  OsmPbfReader();
+  OsmPbfReader(bool useFileId);
 
   /**
    * Constructor that immediately attempts to open URL
    *
    * @param urlString URL of file to immediately attempt to open
    */
-  PbfReader(const QString urlString);
+  OsmPbfReader(const QString urlString);
 
-  ~PbfReader();
+  ~OsmPbfReader();
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when
@@ -184,7 +184,7 @@ private:
 
   string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  PbfReaderData* _d;
+  OsmPbfReaderData* _d;
   vector<QString> _strings;
   /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
   /// class), which was added to PartialOsmMapReader after it was implemented on this class.
@@ -286,4 +286,4 @@ private:
 
 }
 
-#endif // PBFREADER_H
+#endif // OsmPbfReader_H

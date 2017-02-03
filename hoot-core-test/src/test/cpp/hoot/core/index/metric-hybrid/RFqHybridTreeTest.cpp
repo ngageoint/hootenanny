@@ -36,7 +36,7 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
 
@@ -474,8 +474,8 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
-//    PbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
+    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+//    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);
 
     MapProjector::projectToPlanar(map);
