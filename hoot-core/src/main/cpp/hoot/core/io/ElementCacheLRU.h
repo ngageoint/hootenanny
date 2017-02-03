@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,22 +28,15 @@
 #define ELEMENTCACHELRU_H
 
 #include <map>
-#include <utility>         // For std::pair
+#include <utility>
 #include <boost/shared_ptr.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
+
 #include "ElementCache.h"
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/ElementId.h>
 
 #include <ogr_spatialref.h>
-
 
 namespace hoot
 {
@@ -94,7 +87,7 @@ public:
   virtual ConstRelationPtr getNextRelation();
 
   // Functions for ElementInputStream
-  virtual void close();             // Also works for elementoutputstream
+  virtual void close();
   virtual bool hasMoreElements();
 
   virtual ElementPtr readNextElement();

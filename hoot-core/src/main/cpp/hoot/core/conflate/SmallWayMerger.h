@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,14 +33,19 @@
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/schema/TagDifferencer.h>
+
+// Std
+#include <set>
 
 namespace hoot
 {
   class OsmMap;
   class Way;
+  class TagDifferencer;
+  class NodeToWayMap;
+
+  using namespace std;
 
 /**
  * Searches for itty bitty ways that connect end to end. For some reason some files provide little

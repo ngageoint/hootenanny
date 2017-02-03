@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,11 +27,19 @@
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
 
-// hoot
-#include <hoot/core/schema/OsmSchema.h>
+
+// Hoot
+#include <hoot/core/schema/SchemaVertex.h>
+
+// Std
+#include <vector>
 
 namespace hoot
 {
+
+class OsmSchema;
+
+using namespace std;
 
 /**
  * The SchemaChecker checks if SchemaVertex is an unknown type or has no geometries listed.

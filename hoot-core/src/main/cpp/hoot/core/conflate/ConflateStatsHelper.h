@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,9 +27,6 @@
 #ifndef CONFLATE_STATS_HELPER_H
 #define CONFLATE_STATS_HELPER_H
 
-// hoot
-#include <hoot/core/ops/stats/SingleStat.h>
-
 // Qt
 #include <QList>
 #include <QString>
@@ -37,6 +34,8 @@
 
 namespace hoot
 {
+
+class SingleStat;
 
 /**
  * Used to calculate conflation stats that require the conflation input *and* output data

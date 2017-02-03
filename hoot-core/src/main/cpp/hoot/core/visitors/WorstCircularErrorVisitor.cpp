@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,35 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwayMergerCreator.h"
+#include "WorstCircularErrorVisitor.h"
 
-HighwayMergerCreator::HighwayMergerCreator()
+// hoot
+#include <hoot/core/Factory.h>
+
+namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ElementVisitor, WorstCircularErrorVisitor)
+
+void WorstCircularErrorVisitor::visit(const shared_ptr<const Element>& e)
+{
+  _worst = max(_worst, e->getCircularError());
+}
+
+Meters WorstCircularErrorVisitor::getWorstCircularError(const OsmMapPtr& map)
+{
+  WorstCircularErrorVisitor v;
+  map->visitNodesRo(v);
+  map->visitWaysRo(v);
+  return v.getWorstCircularError();
+}
+
+Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& map)
+{
+  WorstCircularErrorVisitor v;
+  map->visitNodesRo(v);
+  map->visitWaysRo(v);
+  return v.getWorstCircularError();
+}
+
 }

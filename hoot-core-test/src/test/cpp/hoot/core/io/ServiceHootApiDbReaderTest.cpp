@@ -43,6 +43,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributeVisitor.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 
 // Qt
 #include <QDir>

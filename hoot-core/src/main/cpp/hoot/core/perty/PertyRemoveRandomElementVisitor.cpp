@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,6 +35,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -57,7 +58,7 @@ QString PertyRemoveRandomElementVisitor::toString()
 void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyRemoveRandomP());
+  setProbability(configOptions.getPertyRemoveRandomProbability());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

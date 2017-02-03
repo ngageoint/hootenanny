@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -101,5 +101,23 @@ void RemoveNodeOp::apply(shared_ptr<OsmMap>& map)
     _removeNode(map, _nodeIdToRemove);
 }
 
-} // end namespace hoot
+void RemoveNodeOp::removeNode(OsmMapPtr map, long nId)
+{
+  RemoveNodeOp nodeRemover(nId);
+  nodeRemover.apply(map);
+}
+
+void RemoveNodeOp::removeNodeNoCheck(OsmMapPtr map, long nId)
+{
+  RemoveNodeOp nodeRemover(nId, false);
+  nodeRemover.apply(map);
+}
+
+void RemoveNodeOp::removeNodeFully(OsmMapPtr map, long nId)
+{
+  RemoveNodeOp nodeRemover(nId, true, true);
+  nodeRemover.apply(map);
+}
+
+}
 

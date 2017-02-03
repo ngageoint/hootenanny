@@ -37,6 +37,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/RdpWayGeneralizer.h>
 
 // Qt
 #include <QSet>

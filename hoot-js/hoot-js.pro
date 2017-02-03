@@ -65,7 +65,6 @@ SOURCES += \
     src/main/cpp/hoot/js/ops/OsmMapOperationJs.cpp \
     src/main/cpp/hoot/js/util/SettingsJs.cpp \
     src/main/cpp/hoot/js/filter/ElementCriterionJs.cpp \
-    src/main/cpp/hoot/js/util/PopulateConsumersJs.cpp \
     src/main/cpp/hoot/js/visitors/ElementVisitorJs.cpp \
     src/main/cpp/hoot/js/PluginContext.cpp \
     src/main/cpp/hoot/js/conflate/js/ScriptMatch.cpp \

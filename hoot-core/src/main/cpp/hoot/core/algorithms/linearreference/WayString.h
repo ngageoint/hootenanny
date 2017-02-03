@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,14 +27,18 @@
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
 
-// hoot
-#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/Hoot.h>
 
 // Qt
 #include <QList>
 
 namespace hoot
 {
+
+class WaySubline;
+class WayLocation;
 
 /**
  * Represents an ordered collection of WaySublines. Each subline must match end to start and all

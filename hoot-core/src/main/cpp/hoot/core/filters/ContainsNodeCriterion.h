@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,10 +28,7 @@
 #define CONTAINSNODECRITERION_H
 
 #include "ElementCriterion.h"
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Relation.h>
+
 
 namespace hoot
 {
@@ -41,7 +38,11 @@ namespace hoot
  */
 class ContainsNodeCriterion : public ElementCriterion
 {
+
 public:
+
+  ContainsNodeCriterion() {}
+
   static string className() { return "hoot::ContainsNodeCriterion"; }
 
   explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
@@ -49,29 +50,12 @@ public:
     // This space intentionally left blank
   }
 
-  bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    if (e->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
-      return w->hasNode(_nodeId);
-    }
-    else if (e->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
-      return r->contains(ElementId(ElementType::Node, _nodeId));
-    }
-    else if (e->getElementType() == ElementType::Node)
-    {
-      ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
-      return (n->getId() == _nodeId);
-    }
-    return false;
-  }
+  bool isSatisfied(const shared_ptr<const Element>& e) const;
 
   ContainsNodeCriterion* clone() { return new ContainsNodeCriterion(_nodeId); }
 
 private:
+
   long _nodeId;
 
 };

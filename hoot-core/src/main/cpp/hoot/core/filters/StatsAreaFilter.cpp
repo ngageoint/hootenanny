@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,13 +24,18 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYMERGECREATOR_H
-#define HIGHWAYMERGECREATOR_H
 
-class HighwayMergerCreator
+#include "StatsAreaFilter.h"
+
+// Hoot
+#include <hoot/core/schema/OsmSchema.h>
+
+namespace hoot
 {
-public:
-  HighwayMergerCreator();
-};
 
-#endif // HIGHWAYMERGECREATOR_H
+bool StatsAreaFilter::isMatch(const Element& e) const
+{
+  return OsmSchema::getInstance().isAreaForStats(e.getTags(), e.getElementType());
+}
+
+}

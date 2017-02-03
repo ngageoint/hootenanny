@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>

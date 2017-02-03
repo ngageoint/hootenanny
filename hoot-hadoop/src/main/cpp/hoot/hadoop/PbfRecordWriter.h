@@ -20,15 +20,23 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
-// Hoot
-#include <hoot/core/io/PbfWriter.h>
-
 // Pretty Pipes
 #include <pp/ReduceContextConsumer.h>
 #include <pp/mapreduce/RecordWriter.h>
 
+// Std
+#include <ostream>
+
+#include <hoot/core/io/PbfWriter.h>
+
 namespace hoot
 {
+
+class Node;
+class Way;
+class OsmMap;
+
+using namespace boost;
 
 /**
  * Wraps another record writer to enable writing of OSM data types.

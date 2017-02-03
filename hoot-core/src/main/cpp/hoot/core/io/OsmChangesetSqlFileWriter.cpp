@@ -30,6 +30,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/ElementType.h>
 
 // Qt
 #include <QSqlError>

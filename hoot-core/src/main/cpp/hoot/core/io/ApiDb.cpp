@@ -38,6 +38,10 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+#include <hoot/core/algorithms/zindex/BBox.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
