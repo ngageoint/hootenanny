@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
+#include <hoot/core/io/OsmApiDbChangesetSqlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 
@@ -47,9 +47,9 @@
 namespace hoot
 {
 
-class ServiceOsmApiDbSqlChangesetWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbChangesetSqlWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetWriterTest);
+  CPPUNIT_TEST_SUITE(ServiceOsmApiDbChangesetSqlWriterTest);
   CPPUNIT_TEST(runSqlChangesetWriteTest);
   CPPUNIT_TEST(runConflictWithConflictsTest);
   CPPUNIT_TEST(runConflictNonIntersectingBoundsTest);
@@ -59,7 +59,7 @@ class ServiceOsmApiDbSqlChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceOsmApiDbSqlChangesetWriterTest@hoottestcpp.org"; }
+  static QString userEmail() { return "ServiceOsmApiDbChangesetSqlWriterTest@hoottestcpp.org"; }
 
   long mapId;
 
@@ -166,7 +166,7 @@ public:
         .arg(nextNodeId)
         .arg(nextChangesetId);
 
-    OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl()).write(sql);
+    OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl()).write(sql);
 
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -200,7 +200,7 @@ public:
     //changeset writer should detect a conflict when passed the same aoi and the current time,
     //since a changeset was written intersecting with the aoi after the specified time
     CPPUNIT_ASSERT(
-      OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget(aoi, startTime.toString(OsmApiDb::TIME_FORMAT)));
   }
 
@@ -222,7 +222,7 @@ public:
 
     //changeset writer should not detect a conflict since the aois don't intersect
     CPPUNIT_ASSERT(
-      !OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      !OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget(aoi, startTime.toString(OsmApiDb::TIME_FORMAT)));
   }
 
@@ -245,7 +245,7 @@ public:
     //changeset writer should not detect a conflict when passed the same aoi and the current time,
     //since the changeset was written beforehand
     CPPUNIT_ASSERT(
-      !OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      !OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget(
             aoi, now().toString(OsmApiDb::TIME_FORMAT)));
   }
@@ -258,7 +258,7 @@ public:
 
     try
     {
-      OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", "2016-05-04 10:15");
     }
     catch (HootException e)
@@ -269,7 +269,7 @@ public:
 
     try
     {
-      OsmApiDbSqlChangesetWriter(ServicesDbTestUtils::getOsmApiDbUrl())
+      OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", " ");
     }
     catch (HootException e)
@@ -280,6 +280,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlWriterTest, "slow");
 
 }

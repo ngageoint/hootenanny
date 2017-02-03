@@ -479,7 +479,6 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/linearreference/WaySublineCollection.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.cpp \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
     src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp
+    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1039,7 +1039,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/ExtractNodesVisitor.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
-    src/main/cpp/hoot/core/io/OsmApiDbSqlChangesetWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
     src/main/cpp/hoot/core/io/OsmJsonReader.h \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmPbfReader.h \
     src/main/cpp/hoot/core/io/OsmPbfWriter.h \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h
+    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h
 

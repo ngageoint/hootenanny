@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmApiDbSqlChangesetWriter.h"
+#include "OsmApiDbChangesetSqlWriter.h"
 
 // hoot
 #include <hoot/core/util/GeometryUtils.h>
@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-OsmApiDbSqlChangesetWriter::OsmApiDbSqlChangesetWriter(const QUrl targetDatabaseUrl)
+OsmApiDbChangesetSqlWriter::OsmApiDbChangesetSqlWriter(const QUrl targetDatabaseUrl)
 {
   if (!_db.isSupported(targetDatabaseUrl))
   {
@@ -50,17 +50,17 @@ OsmApiDbSqlChangesetWriter::OsmApiDbSqlChangesetWriter(const QUrl targetDatabase
   _initChangesetStats();
 }
 
-OsmApiDbSqlChangesetWriter::~OsmApiDbSqlChangesetWriter()
+OsmApiDbChangesetSqlWriter::~OsmApiDbChangesetSqlWriter()
 {
   _db.close();
 }
 
-void OsmApiDbSqlChangesetWriter::_initChangesetStats()
+void OsmApiDbChangesetSqlWriter::_initChangesetStats()
 {
   _changesetStats.clear();
 }
 
-void OsmApiDbSqlChangesetWriter::write(const QString sql)
+void OsmApiDbChangesetSqlWriter::write(const QString sql)
 {
   LOG_DEBUG("Executing changeset SQL queries against OSM API database...");
 
@@ -173,7 +173,7 @@ void OsmApiDbSqlChangesetWriter::write(const QString sql)
   LOG_DEBUG("Changeset SQL queries execute finished against OSM API database.");
 }
 
-void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
+void OsmApiDbChangesetSqlWriter::write(QFile& changesetSqlFile)
 {
   if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
   {
@@ -191,7 +191,7 @@ void OsmApiDbSqlChangesetWriter::write(QFile& changesetSqlFile)
   }
 }
 
-QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
+QString OsmApiDbChangesetSqlWriter::getChangesetStats() const
 {
   LOG_VART(_changesetDetailsStr);
   return
@@ -209,7 +209,7 @@ QString OsmApiDbSqlChangesetWriter::getChangesetStats() const
 }
 
 //This method may go away after #716.
-bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
+bool OsmApiDbChangesetSqlWriter::conflictExistsInTarget(const QString boundsStr,
                                                         const QString timeStr)
 {
   LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
@@ -253,7 +253,7 @@ bool OsmApiDbSqlChangesetWriter::conflictExistsInTarget(const QString boundsStr,
   return false;
 }
 
-void OsmApiDbSqlChangesetWriter::_execNoPrepare(const QString sql)
+void OsmApiDbChangesetSqlWriter::_execNoPrepare(const QString sql)
 {
   QSqlQuery q(_db.getDB());
   LOG_VARD(sql);
