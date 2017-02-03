@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
@@ -83,7 +83,7 @@ public:
       shared_ptr<OsmMap> map2(new OsmMap(map->getProjection()));
 
       shared_ptr<OGRSpatialReference> srs =
-          MapProjector::createAeacProjection(CalculateBoundsVisitor::getBounds(map));
+          MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
       MapProjector::project(map, srs);
 
       stringstream ss;

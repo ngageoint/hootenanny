@@ -36,7 +36,7 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
@@ -125,7 +125,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   }
   LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
     map->getWays().size());
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
   delete e;
 
@@ -232,7 +232,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
 void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
 {
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
   delete e;
   // write the map out to the working directory.
@@ -241,7 +241,7 @@ void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
 
 const Envelope& ConflateReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map)));
+  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {

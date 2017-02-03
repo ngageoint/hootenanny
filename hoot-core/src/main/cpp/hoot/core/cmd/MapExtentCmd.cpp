@@ -29,7 +29,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
@@ -58,7 +58,7 @@ public:
     loadMap(map, args[0], true, Status::Invalid);
 
     cout << "Map extent (minx,miny,maxx,maxy): " <<
-      GeometryUtils::envelopeToConfigString(CalculateBoundsVisitor::getGeosBounds(map)) << endl;
+      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)) << endl;
 
     return 0;
   }

@@ -481,7 +481,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmJsonReader.cpp \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.cpp \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.cpp \
-    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/KskipBigramDistance.cpp \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/WayMatchStringSplitter.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp \
-    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp
+    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1040,7 +1040,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
-    src/main/cpp/hoot/core/visitors/CalculateBoundsVisitor.h \
     src/main/cpp/hoot/core/algorithms/KskipBigramDistance.h \
     src/main/cpp/hoot/core/filters/ArbitraryCriterion.h \
     src/main/cpp/hoot/core/visitors/IndexElementsVisitor.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.h \
-    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h
+    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h \
+    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.h
 

@@ -38,7 +38,7 @@ using namespace boost;
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -591,13 +591,13 @@ void MapProjector::project(const shared_ptr<Geometry>& g,
 void MapProjector::projectToAeac(shared_ptr<OsmMap> map)
 {
   shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
-    CalculateBoundsVisitor::getBounds(map));
+    CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
 void MapProjector::projectToOrthographic(shared_ptr<OsmMap> map)
 {
-  OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
+  OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
   return projectToOrthographic(map, env);
 }
 
@@ -618,7 +618,7 @@ void MapProjector::projectToPlanar(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
-    OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
+    OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
     projectToPlanar(map, env);
   }
 }

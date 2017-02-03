@@ -37,7 +37,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/OsmMap.h>
 
 using namespace hoot::pb;
@@ -551,7 +551,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 
   if (includeBounds)
   {
-    const OGREnvelope& env = CalculateBoundsVisitor::getBounds(_map);
+    const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
     _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
     _d->headerBlock.mutable_bbox()->set_left(env.MinX);
     _d->headerBlock.mutable_bbox()->set_right(env.MaxX);

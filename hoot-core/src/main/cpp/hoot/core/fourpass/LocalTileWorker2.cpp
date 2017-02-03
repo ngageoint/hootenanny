@@ -43,7 +43,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 
@@ -151,7 +151,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
     reader.read(_in2, map);
   }
 
-  return CalculateBoundsVisitor::getBounds(map);
+  return CalculateMapBoundsVisitor::getBounds(map);
 }
 
 void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)

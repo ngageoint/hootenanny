@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CALCULATEBOUNDSVISITOR_H
-#define CALCULATEBOUNDSVISITOR_H
+#ifndef CalculateMapBoundsVisitor_H
+#define CalculateMapBoundsVisitor_H
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
@@ -39,12 +39,12 @@
 namespace hoot
 {
 
-class CalculateBoundsVisitor : public ElementConstOsmMapVisitor
+class CalculateMapBoundsVisitor : public ElementConstOsmMapVisitor
 {
 public:
-  static string className() { return "hoot::CalculateBoundsVisitor"; }
+  static string className() { return "hoot::CalculateMapBoundsVisitor"; }
 
-  CalculateBoundsVisitor();
+  CalculateMapBoundsVisitor();
 
   OGREnvelope getBounds() { return _envelope; }
 
@@ -67,4 +67,4 @@ private:
 
 }
 
-#endif // CALCULATEBOUNDSVISITOR_H
+#endif // CalculateMapBoundsVisitor_H
