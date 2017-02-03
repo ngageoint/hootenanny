@@ -132,7 +132,7 @@ fi
 echo ""
 echo "STEP 10: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 11: Executing the changeset SQL on the osm api db..."

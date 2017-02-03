@@ -38,7 +38,7 @@
 
 // Hoot
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/WayHeading.h>
@@ -166,7 +166,7 @@ public:
       }
     }
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "tmp/ErrorMap.osm");
 
     tbs::SampleStats statsError(errors);

@@ -43,8 +43,6 @@ exports.init = function(map)
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
     hoot.log("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
-
-  hoot.log("Calculating waterway matches...");
 }
 
 /**
@@ -65,7 +63,7 @@ exports.isMatchCandidate = function(map, e)
  * If this function returns false the conflation routines will attempt to
  * pick the best subset of matches that do not conflict.
  */
-exports.isWholeGroup = function() 
+exports.isWholeGroup = function()
 {
     return false;
 };

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,9 +34,7 @@
 // Geos
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
-
-// Hoot
-#include <hoot/core/elements/Way.h>
+#include <geos/geom/Geometry.h>
 
 // Qt
 #include <QString>
@@ -63,6 +61,7 @@ using namespace std;
 
 class FaceGroup;
 class OsmMap;
+class Way;
 
 /**
  * Technically a Alpha complex, not an Alpha Shape, but the literature seems to alternate between
@@ -91,7 +90,7 @@ private:
 
   shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, shared_ptr<OsmMap> map);
 
-  shared_ptr<Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
+  shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
   // The root group represents empty space
   // first level children represent filled space
@@ -114,7 +113,7 @@ private:
 
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  shared_ptr<Geometry> _validateGeometry(const shared_ptr<Geometry>& g);
+  shared_ptr<geos::geom::Geometry> _validateGeometry(const shared_ptr<geos::geom::Geometry>& g);
 };
 
 }

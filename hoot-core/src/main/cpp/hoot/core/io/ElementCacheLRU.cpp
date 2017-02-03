@@ -51,15 +51,7 @@
  *
  */
 
-#include <map>
-#include <utility>
-#include <boost/shared_ptr.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
 
 #include "ElementCacheLRU.h"

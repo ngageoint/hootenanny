@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,8 +28,6 @@
 #define POIRFCLASSIFIER_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
 
 // tgs
@@ -37,6 +35,9 @@
 
 namespace hoot
 {
+
+class FeatureExtractor;
+class MatchClassification;
 
 class PoiRfClassifier
 {

@@ -18,11 +18,12 @@
 #define WAYJOIN1MAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 namespace hoot
 {
+class OsmMap;
+
 using namespace boost;
 
 class WayJoin1Mapper : public OsmMapMapper

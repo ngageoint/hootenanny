@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,8 +55,8 @@ public:
    * @arg2: format type (asciidoc, pdf, html)
    * @arg3: output filename
    */
-  virtual void initialize(const QString& scriptPath, const QString& format, const QString& outputPath,
-                          const QVariantMap& args) = 0;
+  virtual void initialize(const QString& scriptPath, const QString& format,
+                          const QString& outputPath, const QVariantMap& args) = 0;
 
   /**
    * Stats are passed in, and based on the initialization, are substituted into the template

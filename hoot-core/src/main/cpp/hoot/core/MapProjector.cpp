@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,13 +33,12 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -311,7 +310,7 @@ shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREn
       tr.score = numeric_limits<double>::max();
       testResults.push_back(tr);
     }
-    //LOG_INFO("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
+    LOG_TRACE("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
   }
 
   //  |<---                       80 cols                                         -->|
@@ -592,13 +591,13 @@ void MapProjector::project(const shared_ptr<Geometry>& g,
 void MapProjector::projectToAeac(shared_ptr<OsmMap> map)
 {
   shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
-    CalculateBoundsVisitor::getBounds(map));
+    CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
 void MapProjector::projectToOrthographic(shared_ptr<OsmMap> map)
 {
-  OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
+  OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
   return projectToOrthographic(map, env);
 }
 
@@ -619,7 +618,7 @@ void MapProjector::projectToPlanar(shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
-    OGREnvelope env = CalculateBoundsVisitor::getBounds(map);
+    OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
     projectToPlanar(map, env);
   }
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,14 +29,15 @@
 
 #include "TagDifferencer.h"
 
-#include <hoot/core/schema/SchemaVertex.h>
-
 namespace hoot
 {
+
+class SchemaVertex;
 
 class TagFilteredDifferencer : public TagDifferencer
 {
 public:
+
   TagFilteredDifferencer();
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,

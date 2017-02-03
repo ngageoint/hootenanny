@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,6 @@
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // Qt
@@ -52,6 +51,8 @@
 
 namespace hoot
 {
+class OsmMap;
+
   using namespace boost;
   using namespace geos::geom;
   using namespace std;
@@ -98,14 +99,12 @@ public:
 
   static MapProjector& getInstance();
 
-  //static bool isGeographic(const shared_ptr<const OsmMap>& map);
   static bool isGeographic(const ConstElementProviderPtr& provider );
 
   /**
    * Returns true if the projection is planar. This method simply assumes that if the projection
    * is not geographic it is planar.
    */
-  //static bool isPlanar(const shared_ptr<const OsmMap>& map) { return !isGeographic(map); }
   static bool isPlanar(const ConstElementProviderPtr& provider ) { return !isGeographic(provider); }
 
   /**
@@ -153,7 +152,9 @@ public:
 
   static QString toWkt(shared_ptr<OGRSpatialReference> srs) { return toWkt(srs.get()); }
   static QString toWkt(OGRSpatialReference* srs);
+
 private:
+
   struct PlanarTestResult {
     size_t i;
     Meters distanceError;

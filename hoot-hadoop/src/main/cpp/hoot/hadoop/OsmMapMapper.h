@@ -21,14 +21,15 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Mapper.h>
 
 namespace hoot
 {
+
+class OsmMap;
 
 class OsmMapMapper : public pp::Mapper
 {
@@ -42,14 +43,14 @@ public:
     const shared_ptr<const OsmMap>& m)
   {
     stringstream ss(stringstream::out);
-    _pbfWriter.writePb(m, &ss);
+    _OsmPbfWriter.writePb(m, &ss);
     context.emit(k, ss.str());
   }
 
   void emitRecord(HadoopPipes::MapContext& context, const string& k, const shared_ptr<const Way>& w)
   {
     stringstream ss(stringstream::out);
-    _pbfWriter.writePb(w, &ss);
+    _OsmPbfWriter.writePb(w, &ss);
     context.emit(k, ss.str());
   }
 
@@ -57,14 +58,14 @@ public:
     const shared_ptr<const Node>& n)
   {
     stringstream ss(stringstream::out);
-    _pbfWriter.writePb(n, &ss);
+    _OsmPbfWriter.writePb(n, &ss);
     context.emit(k, ss.str());
   }
 
 protected:
   string _path;
   long _start;
-  PbfWriter _pbfWriter;
+  OsmPbfWriter _OsmPbfWriter;
   HadoopPipes::MapContext* _context;
 
   void _loadMap(shared_ptr<OsmMap>& map);

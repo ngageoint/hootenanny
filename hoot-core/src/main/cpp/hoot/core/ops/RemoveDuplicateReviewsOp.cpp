@@ -31,6 +31,8 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {

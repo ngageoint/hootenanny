@@ -21,12 +21,15 @@
 
 // Hoot
 #include <hoot/core/algorithms/WaySplitter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -100,7 +103,7 @@ void WayJoin2Reducer::reduce(HadoopPipes::ReduceContext& context)
              << " relationIdDelta: " << _relationIdDelta);
     _newStatus = (Status::Type)c->getInt(WayJoin2Mapper::elementStatusKey());
     // add to the way/node ids to avoid conflicts w/ another map.
-    _writer->getPbfWriter().setIdDelta(_nodeIdDelta, _wayIdDelta, _relationIdDelta);
+    _writer->getOsmPbfWriter().setIdDelta(_nodeIdDelta, _wayIdDelta, _relationIdDelta);
 
     _partition = context.getJobConf()->getInt("mapred.task.partition");
     _workDir = context.getJobConf()->get("mapred.work.output.dir");
@@ -140,7 +143,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
     ss.read(&type, 1);
     assert(type == WayJoin2Mapper::PbfData);
     _map->clear();
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setDefaultStatus(_newStatus);
     reader.parseElements(&ss, _map);
 
@@ -170,7 +173,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     {
       stringstream ss(value, stringstream::in);
       ss.read(&type, 1);
-      PbfReader reader(true);
+      OsmPbfReader reader(true);
       reader.parseElements(&ss, _map);
       const WayMap& wm = _map->getWays();
       WayMap::const_iterator it = wm.begin();
@@ -194,7 +197,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
       shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
       _map->addNode(n);
       env.expandToInclude(v->rawWay.x, v->rawWay.y);
-      //LOG_INFO("Got node: " << n->toString());
+      LOG_TRACE("Got node: " << n->toString());
     }
     else
     {

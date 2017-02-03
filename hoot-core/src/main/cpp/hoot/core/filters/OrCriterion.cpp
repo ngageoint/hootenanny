@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,10 +28,24 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
+
+bool OrCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+{
+  for (size_t i = 0; i < _filters.size(); i++)
+  {
+    if (_filters[i]->isSatisfied(e))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 }
