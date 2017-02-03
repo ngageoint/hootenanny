@@ -29,7 +29,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/visitors/MapExtentVisitor.h>
+#include <hoot/core/visitors/CalculateBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
@@ -57,10 +57,8 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[0], true, Status::Invalid);
 
-    MapExtentVisitor v;
-    map->visitNodesRo(v);
     cout << "Map extent (minx,miny,maxx,maxy): " <<
-     GeometryUtils::envelopeToConfigString(v.getExtent()) << endl;
+      GeometryUtils::envelopeToConfigString(CalculateBoundsVisitor::getGeosBounds(map)) << endl;
 
     return 0;
   }
