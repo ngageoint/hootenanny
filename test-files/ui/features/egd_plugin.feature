@@ -9,12 +9,19 @@ Feature: DG G-EGD plugin
         And I wait 1 seconds
         Then I should see "Zoom in to display image metadata"
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
+        And I wait 1 seconds
         When I click on "button.zoom-in"
         And I wait 1 seconds
         When I open the image carousel
@@ -33,11 +40,17 @@ Feature: DG G-EGD plugin
         When I select the "dgarrow.up" div
         When I select the "dgarrow.down" div
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I click on "button.zoom-out"
+        And I wait 1 seconds
         When I open the image carousel
         And I wait 1 seconds
         Then I should see "Zoom in to display image metadata"
