@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,7 +33,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 
 namespace hoot
 {
@@ -50,7 +50,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
     new ChainCriterion(
       new StatusCriterion(Status::Unknown1),
       new HasTagCriterion(MetadataTags::Ref2())),
-    new CountVisitor());
+    new ElementCountVisitor());
   FilteredVisitor& filteredRefVisitor = const_cast<FilteredVisitor&>(unknown1Visitor);
   SingleStatistic* singleStat = dynamic_cast<SingleStatistic*>(&unknown1Visitor.getChildVisitor());
   assert(singleStat != 0);
@@ -63,7 +63,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
     new ChainCriterion(
       new StatusCriterion(Status::Unknown2),
       new HasTagCriterion(MetadataTags::Ref1())),
-    new CountVisitor());
+    new ElementCountVisitor());
   filteredRefVisitor = const_cast<FilteredVisitor&>(unknown2Visitor);
   singleStat = dynamic_cast<SingleStatistic*>(&unknown2Visitor.getChildVisitor());
   assert(singleStat != 0);

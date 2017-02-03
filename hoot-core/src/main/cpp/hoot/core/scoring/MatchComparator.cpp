@@ -40,7 +40,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
@@ -700,7 +700,7 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
     new ChainCriterion(
       new ElementTypeCriterion(elementType),
       new HasTagCriterion(MetadataTags::HootWrong())),
-    new CountVisitor());
+    new ElementCountVisitor());
   FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
   SingleStatistic* singleStat =
     dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());

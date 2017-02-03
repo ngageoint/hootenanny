@@ -536,7 +536,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/WayManipulator.cpp \
     src/main/cpp/hoot/core/schema/ComparatorTagDifferencer.cpp \
     src/main/cpp/hoot/core/util/FindNodesInWayFactory.cpp \
-    src/main/cpp/hoot/core/visitors/CountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ExtractNodesVisitor.cpp \
     src/main/cpp/hoot/core/visitors/FeatureCountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
+    src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -881,7 +881,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/StatsAreaFilter.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.h \
-    src/main/cpp/hoot/core/visitors/CountVisitor.h \
     src/main/cpp/hoot/core/visitors/UniqueNamesVisitor.h \
     src/main/cpp/hoot/core/io/BulkInsert.h \
     src/main/cpp/hoot/core/io/SqlBulkInsert.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmPbfWriter.h \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
-    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h
+    src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
+    src/main/cpp/hoot/core/visitors/ElementCountVisitor.h
 

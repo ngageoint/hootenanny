@@ -24,14 +24,40 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CountVisitor.h"
+#ifndef ELEMENTCOUNTVISITOR_H
+#define ELEMENTCOUNTVISITOR_H
+
+// hoot
+#include <hoot/core/elements/ElementVisitor.h>
+
+#include "SingleStatistic.h"
 
 namespace hoot
 {
+using namespace std;
 
-void CountVisitor::visit(const ConstElementPtr& /*e*/)
+/**
+ * Counts the number of elements.
+ */
+class ElementCountVisitor : public ElementVisitor, public SingleStatistic
 {
-  _count++;
-}
+public:
+
+  ElementCountVisitor() : _count(0) {}
+
+  virtual ~ElementCountVisitor() {}
+
+  int getCount() const { return _count; }
+
+  double getStat() const { return _count; }
+
+  virtual void visit(const ConstElementPtr& e);
+
+private:
+
+  int _count;
+};
 
 }
+
+#endif // ELEMENTCOUNTVISITOR_H
