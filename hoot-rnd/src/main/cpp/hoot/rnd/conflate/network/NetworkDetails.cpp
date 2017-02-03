@@ -40,6 +40,9 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/Factory.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {

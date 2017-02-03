@@ -29,19 +29,22 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
 #include <hoot/rnd/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
 #include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "EdgeSublineMatch.h"
 #include "EidMapper.h"
 
 namespace hoot
 {
+
+class SublineStringMatcher;
+class HighwayClassifier;
 
 /**
  * This abstracts the details of a network (e.g. positions, bounding boxes, etc.).
