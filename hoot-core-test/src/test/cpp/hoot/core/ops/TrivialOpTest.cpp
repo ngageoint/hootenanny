@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CookieCutterOp.h>
 #include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>

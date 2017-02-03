@@ -36,7 +36,7 @@
 // Hoot
 #include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/MapProjector.h>
 

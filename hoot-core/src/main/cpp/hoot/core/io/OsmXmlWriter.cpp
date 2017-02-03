@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmWriter.h"
+#include "OsmXmlWriter.h"
 
 // Boost
 using namespace boost;
@@ -51,9 +51,9 @@ using namespace boost;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmWriter::OsmWriter() :
+OsmXmlWriter::OsmXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
 _includeIds(false),
 _includeDebug(ConfigOptions().getWriterIncludeDebug()),
@@ -67,7 +67,7 @@ _encodingErrorCount(0)
 
 }
 
-QString OsmWriter::removeInvalidCharacters(const QString& s)
+QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
 
@@ -106,7 +106,7 @@ QString OsmWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-void OsmWriter::open(QString url)
+void OsmXmlWriter::open(QString url)
 {
   QFile* f = new QFile();
   _fp.reset(f);
@@ -117,14 +117,14 @@ void OsmWriter::open(QString url)
   }
 }
 
-void OsmWriter::setIncludeCompatibilityTags(bool includeCompatibility)
+void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
 {
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmWriter::toString(const ConstOsmMapPtr& map)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map)
 {
-  OsmWriter writer;
+  OsmXmlWriter writer;
   // this will be deleted by the _fp auto_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
@@ -136,7 +136,7 @@ QString OsmWriter::toString(const ConstOsmMapPtr& map)
   return QString::fromUtf8(buf->data(), buf->size());
 }
 
-QString OsmWriter::_typeName(ElementType e)
+QString OsmXmlWriter::_typeName(ElementType e)
 {
   switch(e.getEnum())
   {
@@ -151,13 +151,13 @@ QString OsmWriter::_typeName(ElementType e)
   }
 }
 
-void OsmWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
+void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
   {
@@ -207,7 +207,7 @@ void OsmWriter::write(boost::shared_ptr<const OsmMap> map)
   _fp->close();
 }
 
-void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
+void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
   LOG_VART(e->getElementId());
 
@@ -248,7 +248,7 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
 }
 
-void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
   NodeMap::const_iterator it = map->getNodeMap().begin();
@@ -344,7 +344,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
   }
 }
 
-void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
   WayMap::const_iterator it = map->getWays().begin();
@@ -447,7 +447,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
   }
 }
 
-void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
   RelationMap::const_iterator it = map->getRelationMap().begin();

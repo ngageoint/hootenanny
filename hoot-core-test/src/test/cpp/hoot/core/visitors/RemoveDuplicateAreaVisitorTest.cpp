@@ -39,7 +39,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -81,7 +81,7 @@ public:
 //#warning debug
 //    MapProjector::reprojectToWgs84(map);
 //    QDir().mkpath("test-output/visitors/");
-//    OsmWriter writer;
+//    OsmXmlWriter writer;
 //    writer.write(map, "test-output/visitors/RemoveDuplicateAreaVisitorTest.osm");
 
     // these "duplicates" should not be removed.

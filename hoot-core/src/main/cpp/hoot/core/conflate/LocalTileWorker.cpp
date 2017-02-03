@@ -32,7 +32,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -133,7 +133,7 @@ void LocalTileWorker::cleanup(QString mapIn, QString mapOut)
 {
   shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, mapOut);
@@ -260,7 +260,7 @@ void LocalTileWorker::rmdir(QString dir)
 void LocalTileWorker::_storeMapPart(shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);
@@ -285,7 +285,7 @@ void LocalTileWorker::_writeTheRest(QString dirIn, QString dirOut,
   SuperfluousNodeRemover::removeNodes(map);
 
   QString fn = dirOut + QString("/Dregs.osm");
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);

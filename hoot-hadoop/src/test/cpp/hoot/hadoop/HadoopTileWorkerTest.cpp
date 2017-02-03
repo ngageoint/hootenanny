@@ -30,7 +30,7 @@ using namespace pp;
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/TileConflator.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
@@ -98,7 +98,7 @@ public:
 
     QDir().mkpath(QString::fromStdString(outDir));
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, QString::fromStdString(outDir + "/result.osm"));
 

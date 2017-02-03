@@ -33,7 +33,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/perty/BigPertyOp.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
@@ -95,7 +95,7 @@ public:
     }
     QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
-//    OsmWriter writer;
+//    OsmXmlWriter writer;
 //    QDir().mkpath("test-output/perty");
 //    MapProjector::reprojectToWgs84(map);
 //    writer.write(map, "test-output/perty/BasicTest.osm");

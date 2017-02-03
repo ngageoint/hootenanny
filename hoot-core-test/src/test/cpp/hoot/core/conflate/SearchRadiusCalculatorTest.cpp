@@ -29,7 +29,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>

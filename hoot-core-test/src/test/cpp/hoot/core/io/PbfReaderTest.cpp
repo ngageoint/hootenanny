@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -295,7 +295,7 @@ public:
 
     QDir().mkpath("test-output/io/");
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/PbfReaderTest.osm");
 
@@ -404,7 +404,7 @@ public:
     reader.close();
 
     QDir().mkpath("test-output/io/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/PbfReaderTest.osm");
 
@@ -420,7 +420,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
     QDir().mkpath("test-output/io/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/PbfReaderTest.osm");
 
@@ -439,7 +439,7 @@ public:
     reader.initializePartial();
 
     QDir().mkpath("test-output/io/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
@@ -483,7 +483,7 @@ public:
     reader.initializePartial();
 
     QDir().mkpath("test-output/io/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing

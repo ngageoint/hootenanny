@@ -29,7 +29,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/CookieCutter.h>
@@ -79,7 +79,7 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/CookieCutterTest.osm",
@@ -104,7 +104,7 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/CookieCutterCropTest.osm",
@@ -129,7 +129,7 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterBufferTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/CookieCutterBufferTest.osm",
@@ -154,7 +154,7 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterNegativeBufferTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/CookieCutterNegativeBufferTest.osm",
@@ -179,7 +179,7 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropAndBufferTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/CookieCutterCropAndBufferTest.osm",

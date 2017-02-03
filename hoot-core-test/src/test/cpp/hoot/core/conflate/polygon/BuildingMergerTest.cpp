@@ -48,7 +48,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -120,7 +120,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir(".").mkpath("test-output/conflate/polygon");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/polygon/BuildingMergerTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
@@ -173,7 +173,7 @@ public:
     bm.apply(map, replaced);
 
 //    QDir(".").mkpath("test-output/conflate/polygon");
-//    OsmWriter writer;
+//    OsmXmlWriter writer;
 //    writer.write(map, "test-output/conflate/polygon/BuildingTagTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-26, Relation:-1), (Way:-25, Relation:-1), (Way:-14, Relation:-1)}",

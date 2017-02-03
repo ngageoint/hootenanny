@@ -32,7 +32,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -89,7 +89,7 @@ public:
     DuplicateWayRemover::removeDuplicates(map);
     MapProjector::projectToWgs84(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/LongestCommonNodeStringTest.osm");
 
@@ -118,7 +118,7 @@ public:
     dupeWayRemover.apply(map);
     MapProjector::projectToWgs84(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
 
@@ -147,7 +147,7 @@ public:
     dupeWayRemover.apply(map);
     MapProjector::projectToWgs84(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
 

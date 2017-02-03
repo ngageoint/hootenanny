@@ -35,7 +35,7 @@
 #include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
@@ -143,7 +143,7 @@ public:
 
   shared_ptr<OsmMap> osmTransform(shared_ptr<OsmMap> map, QString workingDir)
   {
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, workingDir + "/EvalMove.osm");
     OsmXmlReader reader;
     shared_ptr<OsmMap> result(new OsmMap());

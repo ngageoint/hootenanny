@@ -29,7 +29,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/schema/OsmSchema.h>
 
@@ -73,7 +73,7 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBasicTest.osm",
@@ -95,7 +95,7 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBufferTest.osm",
@@ -117,7 +117,7 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     QDir().mkpath("test-output/conflate");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm",

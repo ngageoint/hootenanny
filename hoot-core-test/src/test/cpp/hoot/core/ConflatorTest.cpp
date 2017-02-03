@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -75,7 +75,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorPbfTest.osm");
   }
@@ -99,7 +99,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorTest.osm");
   }
@@ -126,7 +126,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelationMap().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/RiverBuildingConflatorTest.osm");
   }

@@ -31,7 +31,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/TestUtils.h>
 

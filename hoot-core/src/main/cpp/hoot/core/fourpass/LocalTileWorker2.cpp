@@ -37,7 +37,7 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/FileUtils.h>
@@ -175,7 +175,7 @@ void LocalTileWorker2::cleanup(QString mapIn, QString mapOut)
 {
   shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, mapOut);
@@ -265,7 +265,7 @@ void LocalTileWorker2::rmdir(QString dir)
 void LocalTileWorker2::_storeMapPart(shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);
@@ -305,7 +305,7 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
   }
 
   QString fn = dirOut + QString("/Dregs.osm");
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);

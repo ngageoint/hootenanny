@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 

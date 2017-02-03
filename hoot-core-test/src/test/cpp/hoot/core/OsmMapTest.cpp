@@ -40,7 +40,7 @@
 #include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -184,7 +184,7 @@ public:
 
     MapProjector::projectToWgs84(mapA);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(mapA, "test-output/OsmMapAppendTest.osm");
     HOOT_FILE_EQUALS("test-files/OsmMapAppendTest.osm",
                      "test-output/OsmMapAppendTest.osm");

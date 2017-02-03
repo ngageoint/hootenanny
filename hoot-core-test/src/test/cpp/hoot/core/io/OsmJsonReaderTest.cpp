@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -272,7 +272,7 @@ public:
     OsmMapPtr pMap = uut.loadFromString(testJsonStr);
 
     // Useful for debug
-    //OsmWriter writer;
+    //OsmXmlWriter writer;
     //writer.setIncludeIds(true);
     //writer.write(pMap, "/tmp/test.osm");
 

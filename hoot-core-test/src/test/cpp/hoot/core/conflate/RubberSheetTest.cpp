@@ -30,7 +30,7 @@
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
 using namespace hoot;
 
@@ -118,7 +118,7 @@ public:
       MapProjector::projectToWgs84(map);
 
       QDir().mkdir("test-output/conflate/");
-      OsmWriter writer;
+      OsmXmlWriter writer;
       // for testing we don't need a high precision.
       writer.setPrecision(7);
       writer.write(map, "test-output/conflate/RubberSheetIo.osm");
@@ -148,7 +148,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir().mkdir("test-output/conflate/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/RubberSheetSimple.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/RubberSheetSimple.osm",

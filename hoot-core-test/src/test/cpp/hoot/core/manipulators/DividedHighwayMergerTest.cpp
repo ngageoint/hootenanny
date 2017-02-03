@@ -43,7 +43,7 @@
 #include <hoot/core/filters/WayFilterChain.h>
 #include <hoot/core/filters/WayDirectionFilter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
@@ -87,7 +87,7 @@ public:
     shared_ptr<OsmMap> after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayMergerTest.osm");
     writer.write(map, "test-output/DividedHighwayMergerTestPre.osm");
   }
@@ -112,7 +112,7 @@ public:
     shared_ptr<OsmMap> after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(after, "test-output/DividedHighwayMergerPreSplitTest.osm");
   }

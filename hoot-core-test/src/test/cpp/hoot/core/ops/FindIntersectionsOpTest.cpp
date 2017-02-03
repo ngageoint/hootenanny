@@ -35,7 +35,7 @@
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RefRemoveOp.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
@@ -82,7 +82,7 @@ public:
 
     MapProjector::projectToWgs84(map);
     QDir().mkpath("test-output/ops/FindIntersectionsOp/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");
     HOOT_FILE_EQUALS("test-files/ops/FindIntersectionsOp/ToyTestA_intersections.osm",
                      "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");

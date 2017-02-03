@@ -30,7 +30,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/SmallWayMerger.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
@@ -67,7 +67,7 @@ public:
       SmallWayMerger::mergeWays(map, 15.0);
       MapProjector::projectToWgs84(map);
 
-      OsmWriter writer;
+      OsmXmlWriter writer;
       writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
 
     }

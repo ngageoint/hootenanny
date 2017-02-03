@@ -30,7 +30,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
@@ -75,7 +75,7 @@ public:
     LargeWaySplitter::splitWays(map, 20.0);
     MapProjector::projectToWgs84(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/LargeWaySplitterOutput1.osm",

@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -71,7 +71,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/splitter/IntersectionSplitterTest.osm");
 
@@ -91,7 +91,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/splitter/SimpleSplitterOutput.osm");
 

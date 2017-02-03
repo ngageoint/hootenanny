@@ -31,7 +31,7 @@
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -80,7 +80,7 @@ public:
       MapProjector::projectToWgs84(map);
 
       QDir().mkpath("test-output/conflate");
-      OsmWriter writer;
+      OsmXmlWriter writer;
       writer.write(map, "test-output/conflate/MapCleaner.osm");
 
       HOOT_FILE_EQUALS("test-files/conflate/MapCleaner.osm",

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -60,7 +60,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeMap().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 
@@ -95,7 +95,7 @@ public:
         CPPUNIT_ASSERT(map->containsWay(-1669797));
         CPPUNIT_ASSERT(map->containsWay(-1669795));
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 
@@ -118,7 +118,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
         CPPUNIT_ASSERT_EQUAL(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 };

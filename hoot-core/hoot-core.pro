@@ -75,7 +75,6 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
     src/main/cpp/hoot/core/MapProjector.cpp \
-    src/main/cpp/hoot/core/io/OsmWriter.cpp \
     src/main/cpp/hoot/core/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/WayVisitor.cpp \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.cpp \
     src/main/cpp/hoot/core/visitors/GetTagValuesVisitor.cpp \
-    src/main/cpp/hoot/core/io/OsmXmlReader.cpp
+    src/main/cpp/hoot/core/io/OsmXmlReader.cpp \
+    src/main/cpp/hoot/core/io/OsmXmlWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -575,7 +575,6 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
     src/main/cpp/hoot/core/MapProjector.h \
-    src/main/cpp/hoot/core/io/OsmWriter.h \
     src/main/cpp/hoot/core/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.h \
     src/main/cpp/hoot/core/elements/ElementAttributeType.h \
     src/main/cpp/hoot/core/util/MetadataTags.h \
-    src/main/cpp/hoot/core/io/OsmXmlReader.h
+    src/main/cpp/hoot/core/io/OsmXmlReader.h \
+    src/main/cpp/hoot/core/io/OsmXmlWriter.h
 

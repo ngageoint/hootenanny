@@ -39,7 +39,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/MaximalSubline.h>
 #include <hoot/core/algorithms/WaySplitter.h>
@@ -183,7 +183,7 @@ public:
 
     QDir().mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
-    OsmWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
+    OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
   }
 
   void runDiagonalOffsetTest()
