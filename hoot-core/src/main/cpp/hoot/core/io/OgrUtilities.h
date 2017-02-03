@@ -46,6 +46,14 @@ namespace hoot
 class OgrDriverInfo
 {
 public:
+  /**
+   * @brief OgrDriverInfo Builds an object to hold driver information for loading GDAL
+   * @param indicator Text prefix (i.e. PG: for PostgreSQL) or file extension
+   *        (i.e. .shp for ESRI Shapefile)
+   * @param driverName Text name of the driver
+   * @param is_ext Value is true if the indcator is a file extension, false for prefix
+   * @param driverType GDAL_OF_VECTOR or GDAL_OF_ALL open flags
+   */
   OgrDriverInfo(const char* indicator = NULL, const char* driverName = NULL, bool is_ext = false, unsigned int driverType = GDAL_OF_ALL)
    : _indicator(indicator), _driverName(driverName), _is_ext(is_ext), _driverType(driverType)
   {}
@@ -75,6 +83,10 @@ public:
   OgrDriverInfo getDriverInfo(const QString& url);
 
 private:
+  /**
+   * @brief loadDriverInfo Loads a hard-coded set of GDAL driver information with file
+   *    extensions, prefixes, and open flags used by getDriverInfo() function
+   */
   void loadDriverInfo();
 
   static shared_ptr<OgrUtilities> _theInstance;
