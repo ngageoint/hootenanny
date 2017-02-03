@@ -30,8 +30,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
@@ -57,7 +57,7 @@ public:
 
   void runTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

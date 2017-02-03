@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmChangesetXmlWriter.h>
+#include <hoot/core/io/OsmChangesetSqlWriter.h>
 
 // Qt
 #include <QUrl>
@@ -72,7 +72,7 @@ public:
 
     if (args[2].endsWith(".osc"))
     {
-      OsmChangesetXmlFileWriter().write(args[2], delta);
+      OsmChangesetXmlWriter().write(args[2], delta);
     }
     else if (args[2].endsWith(".osc.sql"))
     {
@@ -82,7 +82,7 @@ public:
           QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangesetSqlFileWriter(QUrl(args[3])).write(args[2], delta);
+      OsmChangesetSqlWriter(QUrl(args[3])).write(args[2], delta);
     }
     else
     {

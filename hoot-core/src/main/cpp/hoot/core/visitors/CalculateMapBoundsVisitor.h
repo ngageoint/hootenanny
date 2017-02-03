@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,35 +24,47 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MapExtentVisitor.h"
 
-// geos
-#include <geos/geom/LineString.h>
+#ifndef CALCULATEMAPBOUNDSVISITOR_H
+#define CALCULATEMAPBOUNDSVISITOR_H
 
-// hoot
-#include <hoot/core/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
-//using namespace boost;
-
+/**
+ * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds
+ * method. As with the original function, this uses map nodes to generate
+ * the envelope.
+ */
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, MapExtentVisitor)
-
-MapExtentVisitor::MapExtentVisitor()
+class CalculateMapBoundsVisitor : public ElementConstOsmMapVisitor
 {
-  _bounds.init();
+public:
+  static string className() { return "hoot::CalculateMapBoundsVisitor"; }
+
+  CalculateMapBoundsVisitor();
+
+  OGREnvelope getBounds() { return _envelope; }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+  // Note: should only visit nodes when calculating bounds
+  virtual void visit(const shared_ptr<const Element>& e);
+
+  // Convenient way to get bounds
+  static OGREnvelope getBounds(const OsmMapPtr& map);
+  static OGREnvelope getBounds(const ConstOsmMapPtr& map);
+  static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
+  static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
+
+private:
+
+  const OsmMap* _map;
+  OGREnvelope _envelope;
+};
+
 }
 
-void MapExtentVisitor::visit(const ConstElementPtr& e)
-{
-  if (e->getElementType() == ElementType::Node)
-  {
-    ConstNodePtr node = dynamic_pointer_cast<const Node>(e);
-    _bounds.expandToInclude(node->getX(), node->getY());
-  }
-}
-
-}
+#endif // CALCULATEMAPBOUNDSVISITOR_H

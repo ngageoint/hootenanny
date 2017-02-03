@@ -45,7 +45,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 #include "../TestUtils.h"
 
@@ -138,7 +138,7 @@ public:
   QString writeMap(shared_ptr<OsmMap> map, const QString outDir, const QString outFileName)
   {
     QDir().mkpath(outDir);
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     const QString outFile = outDir + "/" + outFileName;
     writer.write(map, outFile);

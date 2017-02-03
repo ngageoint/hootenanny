@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PbfReader.h"
+#include "OsmPbfReader.h"
 
 #include <arpa/inet.h>
 
@@ -68,9 +68,9 @@ using namespace hoot::pb;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapReader, PbfReader)
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 
-class PbfReaderData
+class OsmPbfReaderData
 {
 public:
   Blob blob;
@@ -79,17 +79,17 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-PbfReader::PbfReader()
+OsmPbfReader::OsmPbfReader()
 {
   _init(false);
 }
 
-PbfReader::PbfReader(bool useFileId)
+OsmPbfReader::OsmPbfReader(bool useFileId)
 {
   _init(useFileId);
 }
 
-PbfReader::PbfReader(
+OsmPbfReader::OsmPbfReader(
   const QString urlString )
 {
   _init(false);
@@ -100,9 +100,9 @@ PbfReader::PbfReader(
   }
 }
 
-void PbfReader::_init(bool useFileId)
+void OsmPbfReader::_init(bool useFileId)
 {
-  _d = new PbfReaderData();
+  _d = new OsmPbfReaderData();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _circularError = 15.0;
@@ -121,7 +121,7 @@ void PbfReader::_init(bool useFileId)
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 }
 
-PbfReader::~PbfReader()
+OsmPbfReader::~OsmPbfReader()
 {
   delete _d;
   if ( _needToCloseInput == true )
@@ -130,14 +130,14 @@ PbfReader::~PbfReader()
   }
 }
 
-void PbfReader::setConfiguration(const Settings &conf)
+void OsmPbfReader::setConfiguration(const Settings &conf)
 {
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
-void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
+void OsmPbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
 {
   if (key == MetadataTags::HootStatus())
   {
@@ -205,17 +205,17 @@ void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
   }
 }
 
-double PbfReader::_convertLon(long lon)
+double OsmPbfReader::_convertLon(long lon)
 {
   return .000000001 * (_lonOffset + (_granularity * lon));
 }
 
-double PbfReader::_convertLat(long lat)
+double OsmPbfReader::_convertLat(long lat)
 {
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId PbfReader::_convertToElementId(long id, int memberType)
+ElementId OsmPbfReader::_convertToElementId(long id, int memberType)
 {
   ElementType t;
   switch (memberType)
@@ -236,7 +236,7 @@ ElementId PbfReader::_convertToElementId(long id, int memberType)
   return ElementId(t, id);
 }
 
-long PbfReader::_createRelationId(long fromFile)
+long OsmPbfReader::_createRelationId(long fromFile)
 {
   long id = fromFile;
   long newId;
@@ -260,7 +260,7 @@ long PbfReader::_createRelationId(long fromFile)
   return newId;
 }
 
-long PbfReader::_createWayId(long fromFile)
+long OsmPbfReader::_createWayId(long fromFile)
 {
   long id = fromFile;
   long newId;
@@ -284,7 +284,7 @@ long PbfReader::_createWayId(long fromFile)
   return newId;
 }
 
-char* PbfReader::_getBuffer(size_t size)
+char* OsmPbfReader::_getBuffer(size_t size)
 {
   if (_buffer.size() < size)
   {
@@ -294,7 +294,7 @@ char* PbfReader::_getBuffer(size_t size)
   return (char*)_buffer.data();
 }
 
-long PbfReader::_getNodeId(long fromFile)
+long OsmPbfReader::_getNodeId(long fromFile)
 {
   long newId;
   if (_useFileId)
@@ -332,7 +332,7 @@ long PbfReader::_getNodeId(long fromFile)
   return newId;
 }
 
-const char* PbfReader::_inflate(const string& compressed, size_t rawSize)
+const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
 {
   if (_inflated.size() < rawSize)
   {
@@ -359,7 +359,7 @@ const char* PbfReader::_inflate(const string& compressed, size_t rawSize)
   return _inflated.data();
 }
 
-void PbfReader::_loadDenseNodes(const DenseNodes& dn)
+void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
 {
   int size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
   if (dn.id_size() != dn.lat_size() || dn.id_size() != dn.lon_size())
@@ -451,7 +451,7 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
 
 }
 
-void PbfReader::_loadDenseNodes()
+void OsmPbfReader::_loadDenseNodes()
 {
   const PrimitiveBlock& pb = _d->primitiveBlock;
 
@@ -462,7 +462,7 @@ void PbfReader::_loadDenseNodes()
   }
 }
 
-void PbfReader::_loadNode(const hoot::pb::Node& n)
+void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
 {
   // The standard style node parsing code has only been tested with internal data. I haven't
   // looked for external data sets that use this encoding.
@@ -500,7 +500,7 @@ void PbfReader::_loadNode(const hoot::pb::Node& n)
   _map->addNode(newNode);
 }
 
-void PbfReader::_loadNodes()
+void OsmPbfReader::_loadNodes()
 {
   const PrimitiveBlock& pb = _d->primitiveBlock;
 
@@ -514,7 +514,7 @@ void PbfReader::_loadNodes()
   }
 }
 
-void PbfReader::_loadOsmData()
+void OsmPbfReader::_loadOsmData()
 {
   _loadStrings();
 
@@ -531,7 +531,7 @@ void PbfReader::_loadOsmData()
   // _loadChangeSets();
 }
 
-vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
+vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream& strm)
 {
   vector<BlobLocation> result;
 
@@ -586,7 +586,7 @@ vector<PbfReader::BlobLocation> PbfReader::loadOsmDataBlobOffsets(istream& strm)
   return result;
 }
 
-void PbfReader::_loadRelation(const hoot::pb::Relation& r)
+void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
@@ -661,7 +661,7 @@ void PbfReader::_loadRelation(const hoot::pb::Relation& r)
   _map->addRelation(newRelation);
 }
 
-void PbfReader::_loadRelations()
+void OsmPbfReader::_loadRelations()
 {
   const PrimitiveBlock& pb = _d->primitiveBlock;
 
@@ -675,7 +675,7 @@ void PbfReader::_loadRelations()
   }
 }
 
-void PbfReader::_loadStrings()
+void OsmPbfReader::_loadStrings()
 {
   _strings.clear();
 
@@ -688,7 +688,7 @@ void PbfReader::_loadStrings()
   }
 }
 
-void PbfReader::_loadWay(const hoot::pb::Way& w)
+void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
@@ -765,7 +765,7 @@ void PbfReader::_loadWay(const hoot::pb::Way& w)
   _map->addWay(newWay);
 }
 
-void PbfReader::_loadWays()
+void OsmPbfReader::_loadWays()
 {
   const PrimitiveBlock& pb = _d->primitiveBlock;
 
@@ -779,12 +779,12 @@ void PbfReader::_loadWays()
   }
 }
 
-void PbfReader::parseBlob(BlobLocation& bl, istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, shared_ptr<OsmMap> map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void PbfReader::parseBlob(long headerOffset, istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(long headerOffset, istream* strm, shared_ptr<OsmMap> map)
 {
   _in = strm;
   _map = map;
@@ -805,7 +805,7 @@ void PbfReader::parseBlob(long headerOffset, istream* strm, shared_ptr<OsmMap> m
   }
 }
 
-void PbfReader::_parseBlob()
+void OsmPbfReader::_parseBlob()
 {
   int size = _d->blobHeader.datasize();
   _in->read(_getBuffer(size), size);
@@ -818,7 +818,7 @@ void PbfReader::_parseBlob()
   _d->blob.ParseFromArray(_buffer.data(), size);
 }
 
-void PbfReader::_parseBlobHeader()
+void OsmPbfReader::_parseBlobHeader()
 {
   uint32_t size = _readUInt32();
   if (_in->eof())
@@ -836,7 +836,7 @@ void PbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void PbfReader::parseElements(istream* strm, const shared_ptr<OsmMap>& map)
+void OsmPbfReader::parseElements(istream* strm, const shared_ptr<OsmMap>& map)
 {
   _map = map;
   _in = strm;
@@ -853,7 +853,7 @@ void PbfReader::parseElements(istream* strm, const shared_ptr<OsmMap>& map)
   _loadOsmData();
 }
 
-int PbfReader::_parseInt(QString s)
+int OsmPbfReader::_parseInt(QString s)
 {
   bool ok;
   int result = s.toInt(&ok);
@@ -866,7 +866,7 @@ int PbfReader::_parseInt(QString s)
   return result;
 }
 
-void PbfReader::_parseOsmData()
+void OsmPbfReader::_parseOsmData()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
@@ -875,7 +875,7 @@ void PbfReader::_parseOsmData()
   _loadOsmData();
 }
 
-void PbfReader::_parseOsmHeader()
+void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
@@ -894,7 +894,7 @@ void PbfReader::_parseOsmHeader()
   _osmHeaderRead = true;
 }
 
-uint32_t PbfReader::_readUInt32()
+uint32_t OsmPbfReader::_readUInt32()
 {
   uint32_t buf = 0xFFFFFFFF;
   _in->read((char*)&buf, 4);
@@ -910,7 +910,7 @@ uint32_t PbfReader::_readUInt32()
   return ntohl(buf);
 }
 
-Status PbfReader::_parseStatus(QString s)
+Status OsmPbfReader::_parseStatus(QString s)
 {
   Status result;
 
@@ -923,7 +923,7 @@ Status PbfReader::_parseStatus(QString s)
   return result;
 }
 
-void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
 {
   _in = strm;
   _map = map;
@@ -961,7 +961,7 @@ void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
 }
 
 /// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
-void PbfReader::read(QString path, shared_ptr<OsmMap> map)
+void OsmPbfReader::read(QString path, shared_ptr<OsmMap> map)
 {
   if (_status == Status::Invalid)
   {
@@ -989,7 +989,7 @@ void PbfReader::read(QString path, shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
+void OsmPbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -1001,7 +1001,7 @@ void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
   parse(&input, map);
 }
 
-void PbfReader::read(shared_ptr<OsmMap> map)
+void OsmPbfReader::read(shared_ptr<OsmMap> map)
 {
   assert(map.get());
   if (_status == Status::Invalid)
@@ -1016,7 +1016,7 @@ void PbfReader::read(shared_ptr<OsmMap> map)
 }
 
 /// @todo make the partial reader handle dir inputs?
-bool PbfReader::isSupported(QString urlStr)
+bool OsmPbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
@@ -1031,7 +1031,7 @@ bool PbfReader::isSupported(QString urlStr)
     input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
 }
 
-void PbfReader::open(QString urlStr)
+void OsmPbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
   fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
@@ -1047,7 +1047,7 @@ void PbfReader::open(QString urlStr)
   initializePartial();
 }
 
-void PbfReader::initializePartial()
+void OsmPbfReader::initializePartial()
 {
   _permissive = true;
 
@@ -1068,7 +1068,7 @@ void PbfReader::initializePartial()
   }
 }
 
-bool PbfReader::hasMoreElements()
+bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
   if ( _in == NULL )
@@ -1093,7 +1093,7 @@ bool PbfReader::hasMoreElements()
   return false;
 }
 
-shared_ptr<Element> PbfReader::readNextElement()
+shared_ptr<Element> OsmPbfReader::readNextElement()
 {
   if (!hasMoreElements())
   {
@@ -1175,7 +1175,7 @@ shared_ptr<Element> PbfReader::readNextElement()
   return element;
 }
 
-void PbfReader::finalizePartial()
+void OsmPbfReader::finalizePartial()
 {
   _blobIndex = 0;
 
@@ -1185,7 +1185,7 @@ void PbfReader::finalizePartial()
   _partialRelationsRead = 0;
 }
 
-void PbfReader::close()
+void OsmPbfReader::close()
 {
   finalizePartial();
 
@@ -1200,13 +1200,13 @@ void PbfReader::close()
   _in = NULL;
 }
 
-void PbfReader::closeStream(
+void OsmPbfReader::closeStream(
   void )
 {
   close();
 }
 
-void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
+void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 {
   if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
   {
@@ -1227,7 +1227,7 @@ void PbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> PbfReader::getProjection() const
+boost::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
   boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)

@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -313,7 +313,7 @@ private:
 
   shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

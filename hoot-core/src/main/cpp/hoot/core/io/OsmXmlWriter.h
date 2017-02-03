@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMWRITER_H
-#define OSMWRITER_H
+#ifndef OSMXMLWRITER_H
+#define OSMXMLWRITER_H
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
@@ -51,12 +51,12 @@ using namespace boost;
 /**
  * Writes an OsmMap to a .osm (XML) file format.
  */
-class OsmWriter : public QXmlDefaultHandler, public OsmMapWriter
+class OsmXmlWriter : public QXmlDefaultHandler, public OsmMapWriter
 {
 public:
-  static std::string className() { return "hoot::OsmWriter"; }
+  static std::string className() { return "hoot::OsmXmlWriter"; }
 
-  OsmWriter();
+  OsmXmlWriter();
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".osm"); }
 
@@ -123,4 +123,4 @@ private:
 
 } // hoot
 
-#endif // OSMWRITER_H
+#endif // OSMXMLWRITER_H

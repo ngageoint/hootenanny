@@ -27,7 +27,7 @@
 // Std
 #include <ostream>
 
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 
 namespace hoot
 {
@@ -61,11 +61,11 @@ public:
 
   void emitRecord(const shared_ptr<const Way>& w);
 
-  PbfWriter& getPbfWriter() { return *_pbfWriter; }
+  OsmPbfWriter& getOsmPbfWriter() { return *_OsmPbfWriter; }
 
-  void includeVersion(bool iv) { _pbfWriter->includVersion(iv); }
+  void includeVersion(bool iv) { _OsmPbfWriter->includVersion(iv); }
 
-  void setCompressionLevel(int z) { _pbfWriter->setCompressionLevel(z); }
+  void setCompressionLevel(int z) { _OsmPbfWriter->setCompressionLevel(z); }
 
   virtual void setMapContext(int part, string workDir);
 
@@ -74,7 +74,7 @@ public:
   virtual void setReduceContext(int part, string workDir);
 
 private:
-  PbfWriter* _pbfWriter;
+  OsmPbfWriter* _OsmPbfWriter;
   string _path;
   shared_ptr<ostream> _out;
 };

@@ -17,7 +17,7 @@
 #include "WayJoin2InputFormat.h"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/hadoop/PbfInputFormat.h>

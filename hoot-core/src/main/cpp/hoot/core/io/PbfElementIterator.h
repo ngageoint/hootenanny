@@ -29,12 +29,12 @@
 
 // hoot
 #include <hoot/core/elements/ElementIterator.h>
-#include "PbfReader.h"
+#include "OsmPbfReader.h"
 
 namespace hoot
 {
 
-class PbfReader;
+class OsmPbfReader;
 
 class PbfElementIterator : public ElementIterator
 {
@@ -51,8 +51,8 @@ public:
 
 private:
   auto_ptr<istream> _in;
-  auto_ptr<PbfReader> _reader;
-  vector<PbfReader::BlobLocation> _blobs;
+  auto_ptr<OsmPbfReader> _reader;
+  vector<OsmPbfReader::BlobLocation> _blobs;
   shared_ptr<OsmMap> _map;
   int _blobIndex;
 

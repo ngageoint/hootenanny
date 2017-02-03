@@ -24,14 +24,15 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CountVisitor.h"
+#include "ElementIdSetVisitor.h"
+
 
 namespace hoot
 {
 
-void CountVisitor::visit(const ConstElementPtr& /*e*/)
+void ElementIdSetVisitor::visit(const ConstElementPtr& e)
 {
-  _count++;
+  _elements.insert(ElementId(e->getElementType(), e->getId()));
 }
 
 }

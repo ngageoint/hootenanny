@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/IsNodeFilter.h>
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -81,7 +81,7 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   map->visitRw(remover);
 
   // add a uuid to all elements with a REF tag.
-  HasTagCriterion criterion(MetadataTags::Ref1(), MetadataTags::Ref2(), "REVIEW");
+  TagKeyCriterion criterion(MetadataTags::Ref1(), MetadataTags::Ref2(), "REVIEW");
   AddUuidVisitor uuid("uuid");
   FilteredVisitor v(criterion, uuid);
   map->visitRw(v);

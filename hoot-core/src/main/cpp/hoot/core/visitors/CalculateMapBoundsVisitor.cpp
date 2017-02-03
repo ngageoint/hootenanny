@@ -25,24 +25,24 @@
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
 
-CalculateBoundsVisitor::CalculateBoundsVisitor():
+CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
   _envelope()
 {
 }
 
-void CalculateBoundsVisitor::visit(const shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)
   {
-    throw HootException("CalculateBoundsVisitor attempted to visit "
+    throw HootException("CalculateMapBoundsVisitor attempted to visit "
                         "element that is not a node!");
   }
 
@@ -52,28 +52,28 @@ void CalculateBoundsVisitor::visit(const shared_ptr<const Element>& e)
 }
 
 // Convenient way to get bounds
-OGREnvelope CalculateBoundsVisitor::getBounds(const OsmMapPtr& map)
+OGREnvelope CalculateMapBoundsVisitor::getBounds(const OsmMapPtr& map)
 {
-  CalculateBoundsVisitor v;
+  CalculateMapBoundsVisitor v;
   map->visitNodesRo(v);
   return v.getBounds();
 }
 
-OGREnvelope CalculateBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
+OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
 {
-  CalculateBoundsVisitor v;
+  CalculateMapBoundsVisitor v;
   map->visitNodesRo(v);
   return v.getBounds();
 }
 
-geos::geom::Envelope CalculateBoundsVisitor::getGeosBounds(const OsmMapPtr& map)
+geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const OsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
   auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 
-geos::geom::Envelope CalculateBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
+geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
   auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));

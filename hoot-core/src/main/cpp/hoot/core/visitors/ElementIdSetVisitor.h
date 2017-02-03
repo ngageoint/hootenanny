@@ -24,15 +24,40 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "SetVisitor.h"
+#ifndef ELEMENT_ID_SET_VISITOR_H
+#define ELEMENT_ID_SET_VISITOR_H
 
+// hoot
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-void SetVisitor::visit(const ConstElementPtr& e)
+using namespace std;
+
+/**
+ * Returns a set of the element ids visited.
+ */
+class ElementIdSetVisitor : public ElementVisitor
 {
-  _elements.insert(ElementId(e->getElementType(), e->getId()));
-}
+public:
+
+  ElementIdSetVisitor() {}
+
+  virtual ~ElementIdSetVisitor() {}
+
+  /**
+   * Returns a set containing all the ElementIds visited.
+   */
+  const set<ElementId>& getElementSet() const { return _elements; }
+
+  virtual void visit(const ConstElementPtr& e);
+
+private:
+
+  set<ElementId> _elements;
+};
 
 }
+
+#endif // ELEMENT_ID_SET_VISITOR_H
