@@ -470,7 +470,6 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/DeriveChangesetCmd.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
-    src/main/cpp/hoot/core/schema/OsmSchemaLoader.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.cpp \
