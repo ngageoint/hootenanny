@@ -254,7 +254,6 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/WaySnapMerger.cpp \
     src/main/cpp/hoot/core/manipulators/WaySnapMergeManipulation.cpp \
     src/main/cpp/hoot/core/visitors/MultiLineStringVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/IsCompleteVisitor.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalSubline.cpp \
     src/main/cpp/hoot/core/algorithms/Sparse2dMatrix.cpp \
     src/main/cpp/hoot/core/visitors/RemoveUnknown1Visitor.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp \
-    src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp
+    src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -780,7 +780,6 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/WaySnapMerger.h \
     src/main/cpp/hoot/core/manipulators/WaySnapMergeManipulation.h \
     src/main/cpp/hoot/core/visitors/MultiLineStringVisitor.h \
-    src/main/cpp/hoot/core/visitors/IsCompleteVisitor.h \
     src/main/cpp/hoot/core/algorithms/MaximalSubline.h \
     src/main/cpp/hoot/core/algorithms/Sparse2dMatrix.h \
     src/main/cpp/hoot/core/visitors/RemoveUnknown1Visitor.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h \
-    src/main/cpp/hoot/core/filters/TagKeyCriterion.h
+    src/main/cpp/hoot/core/filters/TagKeyCriterion.h \
+    src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h
 

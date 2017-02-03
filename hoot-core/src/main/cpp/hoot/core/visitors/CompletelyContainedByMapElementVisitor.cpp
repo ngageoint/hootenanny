@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "IsCompleteVisitor.h"
+#include "CompletelyContainedByMapElementVisitor.h"
 
 // geos
 #include <geos/geom/GeometryFactory.h>
@@ -39,18 +39,18 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, IsCompleteVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CompletelyContainedByMapElementVisitor)
 
-IsCompleteVisitor::IsCompleteVisitor()
+CompletelyContainedByMapElementVisitor::CompletelyContainedByMapElementVisitor()
 {
   _map = 0;
   _complete = true;
 }
 
-bool IsCompleteVisitor::isComplete(const OsmMap* map, ElementId eid)
+bool CompletelyContainedByMapElementVisitor::isComplete(const OsmMap* map, ElementId eid)
 {
   bool result;
-  IsCompleteVisitor v;
+  CompletelyContainedByMapElementVisitor v;
   v.setOsmMap(map);
   if (map->containsElement(eid))
   {
@@ -65,7 +65,7 @@ bool IsCompleteVisitor::isComplete(const OsmMap* map, ElementId eid)
   return result;
 }
 
-void IsCompleteVisitor::visit(const ConstElementPtr& e)
+void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 {
   if (!_complete)
   {
@@ -97,7 +97,7 @@ void IsCompleteVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void IsCompleteVisitor::_visit(const shared_ptr<const Way>& w)
+void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Way>& w)
 {
   const std::vector<long>& nids = w->getNodeIds();
   for (size_t i = 0; i < nids.size(); i++)
@@ -110,7 +110,7 @@ void IsCompleteVisitor::_visit(const shared_ptr<const Way>& w)
   }
 }
 
-void IsCompleteVisitor::_visit(const shared_ptr<const Relation>& r)
+void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Relation>& r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
 
