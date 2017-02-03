@@ -24,7 +24,6 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/hadoop/Driver.h>
 
 // Qt
@@ -35,6 +34,8 @@
 
 namespace hoot
 {
+class OsmMapOperation;
+
 using namespace boost;
 using namespace geos::geom;
 using namespace std;

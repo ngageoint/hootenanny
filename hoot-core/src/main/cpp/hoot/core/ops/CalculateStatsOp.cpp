@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,6 +62,7 @@
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/DataProducer.h>
+#include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
 using namespace std;
@@ -365,7 +366,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     logMsg += " for " + _mapName;
   }
   logMsg += ".";
-  LOG_INFO(logMsg);
+  LOG_DEBUG(logMsg);
 }
 
 bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& m1,

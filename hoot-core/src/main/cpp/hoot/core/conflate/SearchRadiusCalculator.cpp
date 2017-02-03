@@ -36,6 +36,7 @@
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/MapProjector.h>
+#include <hoot/core/OsmMap.h>
 
 //TODO: a lot of the logging levels in this class need changed, as they've revealed issues
 //with the element status reading...will handle that in #1262

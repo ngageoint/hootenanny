@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,13 +30,12 @@
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/conflate/MatchCreator.h>
+#include "ConstOsmMapOperation.h"
+#include "stats/SingleStat.h"
 
 // Qt
 #include <QList>
 #include <QString>
-
-#include "ConstOsmMapOperation.h"
-#include "stats/SingleStat.h"
 
 namespace hoot
 {
@@ -48,7 +47,8 @@ class CalculateStatsOp : public ConstOsmMapOperation
 public:
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
-  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
+  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
+                   bool inputIsConflatedMapOutput = false);
 
   virtual void apply(const shared_ptr<OsmMap>& map);
 
@@ -106,7 +106,9 @@ private:
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description, float conflatableCount, MatchCreator::FeatureCalcType type, ElementCriterion* criterion);
+  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description,
+                             float conflatableCount, MatchCreator::FeatureCalcType type,
+                             ElementCriterion* criterion);
 };
 
 }

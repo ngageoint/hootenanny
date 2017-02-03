@@ -21,8 +21,8 @@
 #include <pp/io/RecordWriter.h>
 #include <pp/mapreduce/Reducer.h>
 
-#include "MapStats.h"
-#include "NodeDensity.h"
+// Qt
+#include <QString>
 
 namespace hoot
 {

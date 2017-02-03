@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -55,6 +56,12 @@ void TagCriterion::setConfiguration(const Settings &s)
     _k = l[0];
     _v = l[1];
   }
+}
+
+bool TagCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  assert(!_k.isEmpty());
+  return e->getTags().get(_k) == _v;
 }
 
 }

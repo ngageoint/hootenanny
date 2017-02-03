@@ -34,6 +34,7 @@
 // Qt
 #include <QImage>
 #include <QString>
+#include <QStringList>
 
 #include "PaintNodesDriver.h"
 

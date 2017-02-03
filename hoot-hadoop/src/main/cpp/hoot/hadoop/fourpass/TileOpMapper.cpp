@@ -26,6 +26,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/OsmMap.h>
 
 #include "TileOpDriver.h"
 

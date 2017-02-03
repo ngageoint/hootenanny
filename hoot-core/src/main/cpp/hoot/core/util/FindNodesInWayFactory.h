@@ -43,51 +43,15 @@ public:
 
   FindNodesInWayFactory() {}
 
-  FindNodesInWayFactory(const ConstWayPtr& w)
-  {
-    addWay(w);
-  }
+  FindNodesInWayFactory(const ConstWayPtr& w);
 
-  void addWay(const ConstWayPtr& w)
-  {
-    const std::vector<long>& nids = w->getNodeIds();
-    _nodesToSearch.insert(nids.begin(), nids.end());
-  }
+  void addWay(const ConstWayPtr& w);
 
   virtual shared_ptr<Node> createNode(const shared_ptr<OsmMap>& map, const Coordinate& c,
-    Status s, double circularError)
-  {
-    long result = std::numeric_limits<long>::max();
-
-    for (set<long>::const_iterator it = _nodesToSearch.begin(); it != _nodesToSearch.end(); ++it)
-    {
-      long nid = *it;
-      shared_ptr<const Node> n = map->getNode(nid);
-      if (n->toCoordinate() == c)
-      {
-        // if there are multiple corresponding nodes, throw an exception.
-        if (result != std::numeric_limits<long>::max() && result != nid)
-        {
-          LOG_ERROR("" << "Internal Error: Two nodes were found with the same coordinate.");
-          LOG_VART(n);
-        }
-        result = nid;
-      }
-    }
-
-    if (result == std::numeric_limits<long>::max())
-    {
-      shared_ptr<Node> n = shared_ptr<Node>(new Node(s, map->createNextNodeId(), c,
-        circularError));
-      map->addNode(n);
-      result = n->getId();
-      _nodesToSearch.insert(n->getId());
-    }
-
-    return map->getNode(result);
-  }
+    Status s, double circularError);
 
 private:
+
   const ConstWayPtr _way;
   set<long> _nodesToSearch;
 };

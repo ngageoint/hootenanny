@@ -20,9 +20,6 @@
 // GEOS
 #include <geos/geom/Envelope.h>
 
-// Hoot
-#include <hoot/core/elements/Node.h>
-
 // Pretty Pipes
 #include <pp/conf/Configuration.h>
 
@@ -30,8 +27,13 @@
 #include <istream>
 #include <ostream>
 
+// Boost
+#include <boost/shared_ptr.hpp>
+
 namespace hoot
 {
+class Node;
+
 using namespace boost;
 using namespace geos::geom;
 using namespace std;

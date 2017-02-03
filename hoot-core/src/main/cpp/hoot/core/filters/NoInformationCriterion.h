@@ -27,8 +27,6 @@
 #ifndef NOINFORMATIONCRITERION_H
 #define NOINFORMATIONCRITERION_H
 
-// hoot
-#include <hoot/core/schema/OsmSchema.h>
 
 #include "ElementCriterion.h"
 
@@ -46,13 +44,7 @@ public:
 
   NoInformationCriterion() {}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    const int informationCount = e->getTags().getInformationCount();
-    LOG_VART(e->getElementId());
-    LOG_VART(informationCount);
-    return informationCount == 0;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new NoInformationCriterion(); }
 

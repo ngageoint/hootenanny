@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,12 +28,15 @@
 #define REMOVEDUPLICATEAREAVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+
+// geos
+#include <geos/geom/Geometry.h>
 
 namespace hoot
 {
+
+class TagDifferencer;
 
 /**
  * Locates area elements that are duplicates and removes one of the duplicates. An area is

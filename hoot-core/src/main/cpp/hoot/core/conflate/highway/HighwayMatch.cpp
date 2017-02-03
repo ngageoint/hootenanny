@@ -43,6 +43,8 @@
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 #include "HighwayClassifier.h"
 

@@ -33,6 +33,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/OsmMap.h>
 
 // Qt
 #include <QDebug>
@@ -132,16 +134,18 @@ void IntersectionSplitter::splitIntersections()
   _mapNodesToWays();
 
   // go through all the nodes
+  bool todoLogged = false;
   while (_todoNodes.isEmpty() == false)
   {
     long nodeId = *_todoNodes.begin();
     //  Remove the node first in case it needs to be reprocessed later
     _todoNodes.remove(nodeId);
 
-    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0)
+    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
     {
       cout << "  Intersection splitter todo: " << _todoNodes.size() << "       \r";
       cout.flush();
+      todoLogged = true;
     }
     // if the node is part of two or more ways
     if (_nodeToWays.count(nodeId) >= 2)
@@ -155,7 +159,7 @@ void IntersectionSplitter::splitIntersections()
     }
   }
 
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && todoLogged)
   {
     cout << endl;
   }

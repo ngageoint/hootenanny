@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,9 +28,6 @@
 #ifndef __GEOMETRY_PAINTER_H__
 #define __GEOMETRY_PAINTER_H__
 
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-
 //OGR Includes
 class OGREnvelope;
 class OGRGeometry;
@@ -49,6 +46,11 @@ class QRect;
 
 namespace hoot
 {
+
+class OsmMap;
+class Way;
+class Element;
+class Node;
 
 /**
  * A class for consolidating all the spots that we draw OGR geometries.
@@ -105,6 +107,6 @@ protected:
     const QMatrix& m = QMatrix());
 };
 
-} // hoot
+}
 
 #endif

@@ -49,6 +49,8 @@ using namespace boost;
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/OsmSchemaLoader.h>
 
 // Qt
 #include <QDomDocument>
@@ -1449,7 +1451,7 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    //LOG_INFO(_theInstance->toGraphvizString());
+    LOG_TRACE(_theInstance->toGraphvizString());
   }
   return *_theInstance;
 }

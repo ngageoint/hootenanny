@@ -48,6 +48,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 // Standard
 #include <sstream>

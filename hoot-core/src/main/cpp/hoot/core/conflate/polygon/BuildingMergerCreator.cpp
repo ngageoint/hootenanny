@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -42,9 +42,10 @@ BuildingMergerCreator::BuildingMergerCreator()
 {
 }
 
-bool BuildingMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers...");
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -81,9 +82,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches,
 vector<MergerCreator::Description> BuildingMergerCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Building Merge Creator", false));
-
   return result;
 }
 

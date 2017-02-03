@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "RngConsumer.h"
@@ -39,6 +38,7 @@ namespace hoot
 {
   class Way;
   class Node;
+  class RdpWayGeneralizer;
 
 /**
  * Performs random generalization of a map's ways in accordance with [1].  Uses the
@@ -51,7 +51,8 @@ namespace hoot
  *
  * The input map data should be projected to an orthographic coordinate system.
  */
-class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable
+class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer,
+  public Configurable
 {
 
 public:
