@@ -69,7 +69,7 @@ private:
   const pp::FileInputSplit* _csqSplit;
   const PbfInputSplit* _pbfSplit;
   shared_ptr<pp::CppSeqFileRecordReader> _csqReader;
-  shared_ptr<PbfRecordReader> _pbfReader;
+  shared_ptr<PbfRecordReader> _OsmPbfReader;
 };
 
 

@@ -27,8 +27,8 @@ using namespace pp;
 #include <iostream>
 #include <stdlib.h>
 
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
@@ -90,7 +90,7 @@ public:
                  QString::fromStdString(outDir) + "result.pbf");
 
     shared_ptr<OsmMap> map(new OsmMap);
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "result.pbf");
     for (size_t i = 0; i < status.size(); i++)
@@ -106,7 +106,7 @@ public:
 
     QDir().mkpath(QString::fromStdString(outDir));
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, QString::fromStdString(outDir + "/result.osm"));
 

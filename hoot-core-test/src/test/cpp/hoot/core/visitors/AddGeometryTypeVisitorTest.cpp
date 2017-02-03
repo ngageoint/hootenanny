@@ -33,7 +33,7 @@
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/visitors/AddGeometryTypeVisitor.h>
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
 #include <QDir>

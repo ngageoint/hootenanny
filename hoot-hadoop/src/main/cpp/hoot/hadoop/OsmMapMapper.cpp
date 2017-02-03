@@ -21,7 +21,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
@@ -51,14 +51,14 @@ void OsmMapMapper::map(HadoopPipes::MapContext& context)
 
 void OsmMapMapper::_loadMap(shared_ptr<OsmMap>& m)
 {
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
 
   pp::Hdfs fs("default", 0);
   auto_ptr<istream> is(fs.open(_path));
 
   // parse blob only needs the start location.
-  PbfReader::BlobLocation bl;
+  OsmPbfReader::BlobLocation bl;
   bl.headerOffset = _start;
   reader.parseBlob(bl, is.get(), m);
 }

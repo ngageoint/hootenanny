@@ -41,7 +41,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/IsCompleteVisitor.h>
+#include <hoot/core/visitors/CompletelyContainedByMapElementVisitor.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
 
@@ -163,7 +163,7 @@ void RemoveDuplicateAreaVisitor::visit(const shared_ptr<Element>& e1)
   auto_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
-      IsCompleteVisitor::isComplete(_map, e1->getElementId()) == false ||
+      CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
       schema.isArea(e1) == false)
   {
     return;

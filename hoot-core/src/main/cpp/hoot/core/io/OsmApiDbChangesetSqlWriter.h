@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBSQLCHANGESETWRITER_H
-#define OSMAPIDBSQLCHANGESETWRITER_H
+#ifndef OSMAPIDBCHANGESETSQLWRITER_H
+#define OSMAPIDBCHANGESETSQLWRITER_H
 
 // hoot
 #include "OsmApiDb.h"
@@ -36,17 +36,17 @@ namespace hoot
 /**
  * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database.
  *
- * This class expects incoming changesets to have been written by the OsmChangesetSqlFileWriter
+ * This class expects incoming changesets to have been written by the OsmChangesetSqlWriter
  * and is coupled to its output format in certain parts of the SQL parsing logic.
  */
-class OsmApiDbSqlChangesetWriter
+class OsmApiDbChangesetSqlWriter
 {
 
 public:
 
-  OsmApiDbSqlChangesetWriter(const QUrl targetDatabaseUrl);
+  OsmApiDbChangesetSqlWriter(const QUrl targetDatabaseUrl);
 
-  ~OsmApiDbSqlChangesetWriter();
+  ~OsmApiDbChangesetSqlWriter();
 
   /**
    * Executes changeset SQL against an OSM API database.
@@ -96,4 +96,4 @@ private:
 
 }
 
-#endif // OSMAPIDBSQLCHANGESETWRITER_H
+#endif // OSMAPIDBCHANGESETSQLWRITER_H

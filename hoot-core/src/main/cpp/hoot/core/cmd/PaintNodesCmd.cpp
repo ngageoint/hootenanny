@@ -34,7 +34,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QImage>
@@ -98,7 +98,7 @@ class PaintNodesCmd : public BaseCommand
         OsmMapPtr map(new OsmMap());
         reader->setUseDataSourceIds(true);
         reader->read(map);
-        return CalculateBoundsVisitor::getGeosBounds(map);
+        return CalculateMapBoundsVisitor::getGeosBounds(map);
       }
     }
 

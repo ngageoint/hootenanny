@@ -29,8 +29,8 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
 using namespace hoot;
 
@@ -67,7 +67,7 @@ public:
     QByteArray arr1;
     QByteArray arr2;
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -93,7 +93,7 @@ public:
     }
 
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -118,7 +118,7 @@ public:
       MapProjector::projectToWgs84(map);
 
       QDir().mkdir("test-output/conflate/");
-      OsmWriter writer;
+      OsmXmlWriter writer;
       // for testing we don't need a high precision.
       writer.setPrecision(7);
       writer.write(map, "test-output/conflate/RubberSheetIo.osm");
@@ -130,7 +130,7 @@ public:
 
   void runSimpleTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -148,7 +148,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir().mkdir("test-output/conflate/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/RubberSheetSimple.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/RubberSheetSimple.osm",

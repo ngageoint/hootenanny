@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -102,7 +102,7 @@ public:
       status = (Status::Type)args[3]->ToInteger()->Value();
     }
 
-    OsmReader reader;
+    OsmXmlReader reader;
     bool useDataSourceIds = false;
     if (args.Length() >= 5)
     {

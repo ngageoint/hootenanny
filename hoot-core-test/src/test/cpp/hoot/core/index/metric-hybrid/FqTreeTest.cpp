@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/FqTree.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 
 // Qt
@@ -231,7 +231,7 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;
     GetTagValuesVisitor v1("name", bag, true);
