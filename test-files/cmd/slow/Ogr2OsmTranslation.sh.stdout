@@ -1,56 +1,60 @@
-12:26:56.437 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/OnePoint.osm
-12:26:56.438 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/OnePoint.osm
-12:26:56.584 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-output/cmd/Ogr2OsmTranslation/OnePointPoints.shp OnePointPoints
+11:04:37.849 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/OnePoint.osm ...
+11:04:38.014 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: test-output/cmd/Ogr2OsmTranslation/OnePointPoints.shp OnePointPoints
 Loading test-output/cmd/Ogr2OsmTranslation/OnePointPoints.shp OnePointPoints 0 / 1   
 Reprojecting 0 / 1         
-12:26:56.588 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-12:26:56.588 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:04:38.023 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+11:04:38.023 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 1 elapsed: 0ms        
-12:26:56.588 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:04:38.023 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
+11:04:38.024 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
 Ways: 0 / 0        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 1         
-12:26:56.771 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm
-12:26:56.771 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm
-12:26:56.771 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/OnePoint.osm
-12:26:56.771 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/OnePoint.osm
-12:26:56.896 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/conflate/unified/AllDataTypesA.osm
-12:26:56.896 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/conflate/unified/AllDataTypesA.osm
-12:26:56.896 INFO  ...cpp/hoot/core/io/OgrReader.cpp( 308) path: test-files/conflate/unified/AllDataTypesA.osm
-12:26:57.120 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Lines
+11:04:38.085 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm
+11:04:38.220 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm ...
+11:04:38.221 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/OnePoint.osm ...
+11:04:38.363 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting test-files/conflate/unified/AllDataTypesA.osm to test-output/AllDataTypes.shp...
+11:04:38.364 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+11:04:38.366 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/AllDataTypes.shp
+11:04:38.372 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+11:04:38.436 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 116) Convert operation complete.
+11:04:38.603 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Lines
 Loading /vsizip/./test-output/AllDataTypesA.zip/ Lines 0 / 4   
-12:26:57.122 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Points
+11:04:38.612 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Points
 Loading /vsizip/./test-output/AllDataTypesA.zip/ Points 0 / 11   
-12:26:57.123 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Polygons
+11:04:38.614 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Polygons
+11:04:38.617 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
 Loading /vsizip/./test-output/AllDataTypesA.zip/ Polygons 0 / 10   
 Reprojecting 0 / 122         
-12:26:57.148 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-12:26:57.148 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:04:38.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+11:04:38.712 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 0 1    MergeNearbyNodes 116 elapsed: 0ms        
-12:26:57.148 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:04:38.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 14        Ways: 14 / 14        
 Relations: 0 / 0        
 Combining Parts: 0 / 10        Combining Parts: 10 / 10        
 Reprojecting 0 / 116         
+11:04:38.715 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/AllDataTypesA.osm
 Node Count	116
 Way Count	14
 Relation Count	0
-12:27:00.516 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Lines
+11:04:40.324 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Lines
 Loading /vsizip/./test-output/AllDataTypesA.zip/ Lines 0 / 4   
-12:27:00.517 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Points
+11:04:40.333 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Points
 Loading /vsizip/./test-output/AllDataTypesA.zip/ Points 0 / 4   
-12:27:00.519 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Polygons
-
+11:04:40.335 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 159) Reading: /vsizip/./test-output/AllDataTypesA.zip/ Polygons
 Reprojecting 0 / 44         
-12:27:00.545 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-12:27:00.545 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
+11:04:40.372 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+11:04:40.372 INFO  .../core/ops/MergeNearbyNodes.cpp(  72) MergeNearbyNodes start
 MergeNearbyNodes 0 1    MergeNearbyNodes 40 elapsed: 0ms        
-12:27:00.545 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+11:04:40.372 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
+11:04:40.373 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
 Ways: 0 / 4        Ways: 4 / 4        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
 Reprojecting 0 / 40         
+11:04:40.433 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/AllDataTypesABBox.osm
 Node Count	40
 Way Count	4
 Relation Count	0

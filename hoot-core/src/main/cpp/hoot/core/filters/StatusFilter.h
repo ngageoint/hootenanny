@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,13 +28,14 @@
 #ifndef STATUSFILTER_H
 #define STATUSFILTER_H
 
-#include "BaseFilter.h"
 #include "WayFilter.h"
 
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Status.h>
 
 namespace hoot
 {
+
+class Way;
 
 /**
  * Matches when an element's status matches the status provided.
@@ -45,9 +46,10 @@ public:
 
   StatusFilter(Status s) : _status(s) { }
 
-  virtual bool isFiltered(const Way &w) const { return w.getStatus() != _status; }
+  virtual bool isFiltered(const Way &w) const;
 
 private:
+
   Status _status;
   FilterType _type;
 };

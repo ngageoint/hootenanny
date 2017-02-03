@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/manipulators/Manipulator.h>
 using namespace hoot;
 
 
@@ -106,8 +107,7 @@ void Conflator::_applyManipulations()
   int noImprovement = 0;
 
   double lastPrint = Time::getTime();
-  LOG_INFO("Conflating map. Node count: " <<
-           _bestMap->getMap()->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodeMap().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   shared_ptr<const WorkingMap> map = start;
@@ -115,7 +115,7 @@ void Conflator::_applyManipulations()
   QTime t;
   t.start();
 
-  LOG_INFO("Manipulation heap " << _manipulationHeap.size());
+  LOG_DEBUG("Manipulation heap " << _manipulationHeap.size());
 
   // go through all the manipulators
   while (_manipulationHeap.size() > 0)
@@ -181,16 +181,14 @@ void Conflator::_applyManipulations()
     cout << endl;
   }
 
-  LOG_INFO("Conflating map. Node count: " <<
-           _bestMap->getMap()->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodeMap().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   // remove unnecessary fluff before exporting.
   shared_ptr<OsmMap> tmp = _bestMap->takeMap();
   SuperfluousWayRemover::removeWays(tmp);
 
-  LOG_INFO("Conflating map. Node count: " <<
-           tmp->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << tmp->getNodeMap().size() <<
            " way count: " <<  tmp->getWays().size());
 
   _bestMap.reset(new WorkingMap(tmp));
@@ -201,7 +199,7 @@ void Conflator::_applyManipulations()
  */
 void Conflator::loadSource(shared_ptr<OsmMap> map)
 {
-  LOG_INFO("Preprocessing inputs...");
+  LOG_DEBUG("Preprocessing inputs...");
 
   _map = map;
 
@@ -225,9 +223,9 @@ void Conflator::loadSource(shared_ptr<OsmMap> map)
  */
 void Conflator::conflate()
 {
-  LOG_INFO("Looking for manipulations...");
+  LOG_DEBUG("Looking for manipulations...");
   _createManipulations();
-  LOG_INFO("Initial manipulation count: " << _manipulations.size());
+  LOG_DEBUG("Initial manipulation count: " << _manipulations.size());
 
   _applyManipulations();
 }
@@ -319,7 +317,7 @@ void Conflator::_createManipulations()
 
 void Conflator::_saveMap(QString path)
 {
-  LOG_INFO("Writing debug .osm file..." << path.toStdString());
+  LOG_DEBUG("Writing debug .osm file..." << path.toStdString());
 
   shared_ptr<OsmMap> wgs84(new OsmMap(_map));
   MapProjector::projectToWgs84(wgs84);

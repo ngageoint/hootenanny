@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/algorithms/SublineMatcher.h>
 
 // Standard
 #include <algorithm>
@@ -112,7 +114,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // this likely shouldn't be necessary. See #4593
+    // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
     return result;
   }

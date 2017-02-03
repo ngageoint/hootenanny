@@ -46,6 +46,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QString>
@@ -147,7 +148,6 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
 
   if (gid == GEOS_MULTIPOLYGON)
   {
-    LOG_DEBUG("test");
     return MultiPolygonCreator(_constProvider, e).createMultipolygon();
   }
   else if (gid == GEOS_MULTILINESTRING)

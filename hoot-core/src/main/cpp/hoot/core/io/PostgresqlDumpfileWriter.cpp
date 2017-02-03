@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,17 +40,14 @@
 #include <QTextStream>
 #include <QDateTime>
 
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/OsmMapWriter.h>
 
 namespace hoot
 {
@@ -134,12 +131,12 @@ void PostgresqlDumpfileWriter::close()
   if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
        (_writeStats.relationsWritten > 0) )
   {
-    LOG_INFO("Write stats:");
-    LOG_INFO("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
-    LOG_INFO("\tWays written: " + QString::number(_writeStats.waysWritten) );
-    LOG_INFO("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
-    LOG_INFO("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
-    LOG_INFO("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_DEBUG("Write stats:");
+    LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_DEBUG("\tWays written: " + QString::number(_writeStats.waysWritten) );
+    LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_DEBUG("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_DEBUG("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
   }
 
   _zeroWriteStats();
@@ -282,7 +279,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   if (_writeStats.nodesWritten %
       ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
   {
-    LOG_INFO("Parsed " << _writeStats.nodesWritten << " nodes.");
+    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
   }
 }
 
@@ -323,7 +320,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   if (_writeStats.waysWritten %
       ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
   {
-    LOG_INFO("Parsed " << _writeStats.waysWritten << " ways.");
+    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
   }
 }
 
@@ -364,7 +361,7 @@ void PostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
   if (_writeStats.relationsWritten %
       ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
   {
-    LOG_INFO("Parsed " << _writeStats.relationsWritten << " relations.");
+    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
   }
 }
 
@@ -630,7 +627,7 @@ void PostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype d
     }
     else
     {
-      LOG_WARN( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
+      LOG_ERROR( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
       throw NotImplementedException("Unresolved waynodes are not supported");
     }
 
@@ -818,7 +815,7 @@ void PostgresqlDumpfileWriter::_incrementChangesInChangeset()
   if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
   {
     _writeChangesetToTable();
-    LOG_INFO("Parsed changeset with ID: " + QString::number(_changesetData.changesetId));
+    LOG_DEBUG("Parsed changeset with ID: " + QString::number(_changesetData.changesetId));
     _changesetData.changesetId++;
     _changesetData.changesInChangeset = 0;
     _changesetData.changesetBounds.init();
@@ -860,7 +857,7 @@ void PostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr&
         std::pair<ElementIdDatatype, unsigned long> > > >()) &&
         ( _unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
     {
-      LOG_DEBUG("Found unresolved waynode ref!");
+      LOG_ERROR("Found unresolved waynode ref!");
       throw NotImplementedException("Need to insert waynode ref that is now resolved");
     }
   }

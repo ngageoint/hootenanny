@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,6 +33,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/Tags.h>
 
 // Standard
 #include <assert.h>
@@ -108,6 +109,12 @@ void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& resul
       t1.erase(it1++);
     }
   }
+}
+
+void TagComparator::averageTags(const Tags& t1, const Tags& t2, Tags& result,
+                                bool keepAllUnknownTags)
+{
+  averageTags(t1, 1.0, t2, 1.0, result, keepAllUnknownTags);
 }
 
 void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, double w2,
@@ -247,7 +254,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     {
       e.j = j;
       e.score = schema.score(n1[i], n2[j]);
-      //LOG_INFO("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
+      LOG_TRACE("n1: " << n1[i] << " n2: " << n2[j] << " " << e.score);
       heap.push(e);
     }
   }
@@ -255,14 +262,13 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   set<int> used1;
   set<int> used2;
 
-  //LOG_WARN("");
   while (heap.size() > 0)
   {
     e = heap.top();
     heap.pop();
     if (e.score > 0.0 && used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_INFO("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
+      LOG_TRACE("  " << n1[e.i] << ", " << n2[e.j] << ": " << e.score);
       score *= e.score;
       used1.insert(e.i);
       used2.insert(e.j);
@@ -270,7 +276,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   }
 
   weight = used1.size();
-  //LOG_INFO("score: " << score);
+  LOG_TRACE("score: " << score);
 }
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight)
@@ -353,7 +359,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
     heap.pop();
     if (used1.find(e.i) == used1.end() && used2.find(e.j) == used2.end())
     {
-      //LOG_DEBUG("  " << n1[e.i].toStdString() << ", " << n2[e.j].toStdString() << " " << e.score);
+      LOG_TRACE("  " << n1[e.i].toStdString() << ", " << n2[e.j].toStdString() << " " << e.score);
       score += e.score;
       used1.insert(e.i);
       used2.insert(e.j);
@@ -411,7 +417,9 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
 //    }
 //    else
     {
-      //LOG_DEBUG("tag score: " << nameScore * enumScore << " name: " << nameScore << " enum: " << enumScore);
+      LOG_VART(nameScore);
+      LOG_VART(enumScore);
+      LOG_VART(textScore);
       return nameScore * enumScore * textScore;
     }
     //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);

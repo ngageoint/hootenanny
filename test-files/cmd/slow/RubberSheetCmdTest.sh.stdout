@@ -1,31 +1,21 @@
-16:30:09.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+10:53:58.878 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/DcGisRoads.osm ...
+10:53:58.974 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/DcTigerRoads.osm ...
+10:53:59.044 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
-16:30:09.762 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-16:30:09.762 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
-16:30:10.014 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-16:30:10.014 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-16:30:10.015 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-16:30:10.015 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
-  Intersection splitter todo: 0       
-16:30:10.071 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-16:30:10.092 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-16:30:10.092 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-16:30:10.092 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
-
-16:30:10.106 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-16:30:10.123 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-16:30:10.129 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-16:30:10.155 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-16:30:10.170 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-16:30:10.194 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
-16:30:10.403 INFO  .../core/conflate/RubberSheet.cpp( 325) Found 237 potential ties.
-16:30:10.404 INFO  .../core/conflate/RubberSheet.cpp( 363) Found 173 confident ties.
-16:30:10.420 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: DelaunayInterpolator 
-16:30:10.974 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: IDW, p: 0 
-16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3176.88 
-16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3176.88
-16:30:11.347 INFO  .../core/conflate/RubberSheet.cpp( 372) Kernel estimation, sigma: 3176.88
-16:30:11.756 INFO  .../core/conflate/RubberSheet.cpp( 245) candidate: Kernel estimation, sigma: 3177.26 
-16:30:11.756 INFO  .../core/conflate/RubberSheet.cpp( 258) Best candidate: Kernel estimation, sigma: 3177.26
-16:30:11.757 INFO  .../core/conflate/RubberSheet.cpp( 376) Kernel estimation, sigma: 3177.26
+10:53:59.104 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+10:53:59.109 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+10:53:59.181 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+10:53:59.181 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+  Intersection splitter todo: 0       10:53:59.197 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+10:53:59.205 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+10:53:59.211 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+10:53:59.218 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+10:53:59.223 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+10:53:59.238 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+10:53:59.250 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+10:53:59.263 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+10:53:59.276 INFO  .../core/conflate/RubberSheet.cpp( 126) Rubbersheeting the map...
 Reprojecting 0 / 7500         Reprojecting 1000 / 7500         Reprojecting 2000 / 7500         Reprojecting 3000 / 7500         Reprojecting 4000 / 7500         Reprojecting 5000 / 7500         Reprojecting 6000 / 7500         Reprojecting 7000 / 7500         
+10:54:05.280 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to /home/bwitham/hoot/test-output/cmd/slow/RubberSheetCmdTest/out.osm
+10:54:05.530 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/cmd/slow/RubberSheetCmdTest/out.osm ...
+10:54:05.674 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-output/cmd/slow/RubberSheetCmdTest/out.osm ...

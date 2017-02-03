@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,6 @@
 #define COMPARATORTAGDIFFERENCER_H
 
 #include "TagDifferencer.h"
-#include "TagComparator.h"
 
 namespace hoot
 {
@@ -39,10 +38,11 @@ namespace hoot
 class ComparatorTagDifferencer : public TagDifferencer
 {
 public:
-  virtual double diff(const Tags& t1, const Tags& t2) const
-  {
-    return 1 - TagComparator::getInstance().compareTags(t1, t2);
-  }
+
+  static string className() { return "hoot::ComparatorTagDifferencer"; }
+
+  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+    const ConstElementPtr& e2) const;
 };
 
 }

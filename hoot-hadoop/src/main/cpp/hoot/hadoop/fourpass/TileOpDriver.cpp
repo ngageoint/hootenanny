@@ -25,6 +25,8 @@
 #include <hoot/hadoop/MapStats.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>

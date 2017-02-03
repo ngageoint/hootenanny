@@ -18,7 +18,6 @@
 #define FOURPASSMAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 // Standard
@@ -26,6 +25,8 @@
 
 namespace hoot
 {
+
+class OsmMap;
 
 class TileOpMapper : public OsmMapMapper
 {

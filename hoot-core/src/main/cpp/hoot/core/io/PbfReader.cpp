@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/Element.h>
+#include "ElementInputStream.h"
+#include <hoot/core/OsmMap.h>
 
 using namespace hoot::pb;
 
@@ -437,7 +440,7 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
         {
           // QT 4.6 does not have fromMSecsSinceEpoch
           //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-	  // same time, but friendly to earlier Qt version
+    // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           nodes[i]->setTag("source:datetime", dts);
@@ -1147,7 +1150,6 @@ shared_ptr<Element> PbfReader::readNextElement()
   shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodeMap().size()))
   {
-    //LOG_DEBUG("node key: " + nodesItr.key());
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.

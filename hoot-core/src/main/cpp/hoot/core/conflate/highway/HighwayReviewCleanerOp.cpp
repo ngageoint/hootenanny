@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,6 +30,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -49,10 +50,10 @@ void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
     ElementId r = ElementId::relation(it->first);
     if (ReviewMarker().isReviewUid(map, r))
     {
-      LOG_INFO("Looking at review");
+      LOG_TRACE("Looking at review");
       if (_isBadHighwayReview(map, r) == true)
       {
-        LOG_INFO("Found bad review");
+        LOG_TRACE("Found bad review");
         // this relation shouldn't be part of any other relations so removing is safe. If by chance
         // it is in another relation it will simply be removed from that relation before being
         // removed from the map.
@@ -81,7 +82,7 @@ bool HighwayReviewCleanerOp::_isBadHighwayReview(shared_ptr<OsmMap>& map,
       // if we failed to find a match of any kind
       if (!m.get())
       {
-        LOG_INFO("Found bad review");
+        LOG_TRACE("Found bad review");
         // this is a bad highway review
         return true;
       }

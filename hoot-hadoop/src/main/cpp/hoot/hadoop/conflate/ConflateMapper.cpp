@@ -25,6 +25,7 @@
 // Hoot
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -198,7 +199,7 @@ void ConflateMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
     // add node to appropriate map
     _addNode(n);
   }
-  
+
   _flush();
 }
 

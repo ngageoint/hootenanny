@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,10 +27,11 @@
 #ifndef HASTAGFILTER_H
 #define HASTAGFILTER_H
 
+// Hoot
 #include "ElementCriterion.h"
-#include "WayFilter.h"
 
-#include <hoot/core/elements/Way.h>
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
@@ -42,50 +43,25 @@ class HasTagCriterion : public ElementCriterion
 {
 public:
 
-  HasTagCriterion(QString key)
-  {
-    addKey(key);
-  }
+  static string className() { return "hoot::HasTagCriterion"; }
 
-  HasTagCriterion(QString key1, QString key2)
-  {
-    addKey(key1);
-    addKey(key2);
-  }
+  HasTagCriterion() {}
+  HasTagCriterion(QString key);
+  HasTagCriterion(QString key1, QString key2);
+  HasTagCriterion(QString key1, QString key2, QString key3);
 
-  HasTagCriterion(QString key1, QString key2, QString key3)
-  {
-    addKey(key1);
-    addKey(key2);
-    addKey(key3);
-  }
+  void addKey(QString key);
 
-  void addKey(QString key)
-  {
-    _keys.append(key);
-  }
-
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    for (int i = 0; i < _keys.size(); i++)
-    {
-      if (e->getTags().contains(_keys[i]))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new HasTagCriterion(_keys); }
 
 protected:
-  HasTagCriterion(QStringList keys)
-  {
-    _keys = keys;
-  }
+
+  HasTagCriterion(QStringList keys);
 
 private:
+
   QStringList _keys;
 };
 

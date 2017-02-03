@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,6 +49,8 @@ using namespace boost;
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/ElementId.h>
 using namespace hoot::elements;
 
 // Qt
@@ -714,7 +716,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
     if ( currRelation->contains(oldNodeId) == true )
     {
-      LOG_DEBUG("Trying to replace node " << oldNode->getId() << " with node " <<
+      LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
                 newNode->getId() << " in relation " << currRelation->getId());
 
       currRelation->replaceElement(oldNode, newNode);

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,14 +24,12 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGFILTER_H
-#define BUILDINGFILTER_H
+#ifndef BUILDINGCRITERION_H
+#define BUILDINGCRITERION_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 #include "ElementCriterion.h"
 
@@ -50,51 +48,9 @@ public:
   BuildingCriterion() {}
   BuildingCriterion(ConstOsmMapPtr map) : _map(map) {}
 
-  bool isParentABuilding(ElementId eid) const
-  {
-    bool result = false;
+  bool isParentABuilding(ElementId eid) const;
 
-    const shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
-    const set<long>& parents = e2r->getRelationByElement(eid);
-    for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
-      it++)
-    {
-      ConstElementPtr e = _map->getRelation(*it);
-      if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
-      {
-        result = true;
-      }
-      else
-      {
-        result = isParentABuilding(e->getElementId());
-      }
-    }
-
-    return result;
-  }
-
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    bool result = false;
-
-    if (!_map)
-    {
-      throw HootException("You must set the map before calling BuildingCriterion");
-    }
-
-    // if it is a building
-    if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
-    {
-      // see ticket #5952. If the building has a parent relation that is also a building then this
-      // is really a building part, not a building.
-      if (isParentABuilding(e->getElementId()) == false)
-      {
-        result = true;
-      }
-    }
-
-    return result;
-  }
+  bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
@@ -107,4 +63,4 @@ private:
 
 }
 
-#endif // BUILDINGFILTER_H
+#endif // BUILDINGCRITERION_H

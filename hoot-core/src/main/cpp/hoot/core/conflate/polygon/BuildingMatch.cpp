@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,6 +48,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 // Standard
 #include <sstream>
@@ -114,7 +115,7 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
     _explainText = description.join(" ");
   else
     _explainText = mt->getTypeDetail(_p);
-  //LOG_DEBUG(toString());
+  LOG_VART(toString());
 }
 
 map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const

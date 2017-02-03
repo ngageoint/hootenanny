@@ -1,15 +1,18 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-// Hoot
-#include <hoot/core/OsmMap.h>
+// Boost
+#include <boost/shared_ptr.hpp>
 
 // Standard
 #include <set>
 
 namespace hoot
 {
+class OsmMap;
+
 using namespace std;
+using namespace boost;
 
 class Debug
 {

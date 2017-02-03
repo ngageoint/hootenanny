@@ -1,55 +1,53 @@
-11:44:44.867 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/conflate/unified/AllDataTypesA.osm with test-files/conflate/unified/AllDataTypesB.osm and writing the output to test-output/cmd/ConflateCmdTest/output.osm
-11:44:44.867 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 583569
-11:44:44.867 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
-11:44:44.870 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
-11:44:44.872 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 110339
-11:44:44.872 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
-11:44:44.872 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
-11:44:44.872 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+11:03:23.950 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 128) Conflating test-files/conflate/unified/AllDataTypesA.osm with test-files/conflate/unified/AllDataTypesB.osm and writing the output to test-output/cmd/ConflateCmdTest/output.osm
+11:03:23.951 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
+11:03:23.954 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
+11:03:23.956 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 171) Applying pre-conflation operations...
+11:03:23.956 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+11:03:23.956 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+11:03:23.956 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 233         
-11:44:44.906 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-11:44:44.906 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
-11:44:44.958 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-11:44:44.958 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
-11:44:44.958 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-11:44:44.958 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
-  Intersection splitter todo: 0         Intersection splitter todo: 0       
-11:44:44.959 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-11:44:44.959 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-11:44:44.959 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
-11:44:44.959 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
-
-11:44:44.959 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-11:44:44.959 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-11:44:44.960 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-11:44:44.960 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
-11:44:44.960 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-11:44:44.962 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
-11:44:44.998 INFO  ...lygon/BuildingMatchCreator.cpp( 250) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-11:44:44.998 INFO  ...lygon/BuildingMatchCreator.cpp( 269) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
-11:44:45.556 INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /home/bwitham/hoot/conf/HighwayModel.rf
-11:44:47.352 INFO  ...ighway/HighwayRfClassifier.cpp( 305) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:44:47.356 INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:44:47.356 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
-11:44:47.356 INFO  ...ighway/HighwayRfClassifier.cpp( 326) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-11:44:47.387 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: 2 mean: 1.125
-11:44:47.425 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
-11:44:47.429 INFO  .../core/conflate/RubberSheet.cpp( 326) Found 6 potential ties.
-11:44:47.429 INFO  .../core/conflate/RubberSheet.cpp( 364) Found 2 confident ties.
-11:44:47.429 INFO  ...ate/SearchRadiusCalculator.cpp( 158) Calculated search radius = 15.97912392920059
-11:44:47.440 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
-11:44:47.449 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-11:44:47.449 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
-11:44:47.449 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-11:44:47.458 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
-11:44:47.458 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
+11:03:23.990 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+11:03:23.991 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+11:03:24.053 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+11:03:24.053 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+  Intersection splitter todo: 0         Intersection splitter todo: 0       11:03:24.053 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+11:03:24.053 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+11:03:24.054 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+11:03:24.054 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+11:03:24.054 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+11:03:24.054 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+11:03:24.055 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+11:03:24.056 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+11:03:24.093 INFO  ...conflate/UnifyingConflator.cpp( 121) Applying pre-unifying conflation operations...
+11:03:24.093 INFO  ...conflate/UnifyingConflator.cpp( 141) Creating matches...
+11:03:24.093 INFO  ...lygon/BuildingMatchCreator.cpp( 251) Using match creator: hoot::BuildingMatchCreator
+11:03:24.093 INFO  ...lygon/BuildingMatchCreator.cpp( 271) Loading model from: /home/bwitham/hoot/conf/BuildingModel.rf
+11:03:24.593 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Using match creator: hoot::ScriptMatchCreator - rules: PoiGeneric.js
+11:03:24.666 INFO  ...ighway/HighwayMatchCreator.cpp( 270) Using match creator: hoot::HighwayMatchCreator
+11:03:24.668 INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /home/bwitham/hoot/conf/HighwayModel.rf
+11:03:26.497 INFO  ...late/js/ScriptMatchCreator.cpp( 435) Using match creator: hoot::ScriptMatchCreator - rules: LinearWaterway.js
+11:03:26.517 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+11:03:26.521 INFO  ...ate/SearchRadiusCalculator.cpp( 153) Calculated search radius = 15.97912392920059
+11:03:26.531 INFO  ...gon/PoiPolygonMatchCreator.cpp( 341) Using match creator: hoot::PoiPolygonMatchCreator
+11:03:26.534 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating optimal match conflicts...
+11:03:26.543 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating greedy match conflicts...
+11:03:26.543 INFO  ...conflate/UnifyingConflator.cpp( 227) Match count: 15
+11:03:26.543 INFO  ...conflate/UnifyingConflator.cpp( 244) Creating mergers...
+11:03:26.543 INFO  ...conflate/UnifyingConflator.cpp( 261) Applying 17 mergers...
+11:03:26.552 INFO  ...conflate/UnifyingConflator.cpp( 288) Applying post-unifying conflation operations...
+11:03:26.552 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
 Reprojecting 0 / 153         
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
-11:44:47.459 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+11:03:26.552 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+11:03:26.552 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 197) Applying post-conflation operations...
+11:03:26.553 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
+11:03:26.553 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+11:03:26.553 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+11:03:26.553 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+11:03:26.553 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
 Reprojecting 0 / 144         
-11:44:47.620 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ConflateCmdTest/output.osm ...
-11:44:47.624 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ConflateCmdTest/output.osm ...
+11:03:26.553 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/cmd/ConflateCmdTest/output.osm
+11:03:26.557 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 256) Conflation job completed.
+11:03:26.713 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-output/cmd/ConflateCmdTest/output.osm ...
+11:03:26.718 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/cmd/slow/ConflateCmdTest/output.osm ...
+11:03:27.605 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/Empty.osm ...
+11:03:27.606 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from tmp/dum.osm ...

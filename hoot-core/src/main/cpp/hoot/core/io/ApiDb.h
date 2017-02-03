@@ -31,12 +31,8 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/io/ElementCache.h>
-#include <hoot/core/algorithms/zindex/Range.h>
-#include <hoot/core/io/TableType.h>
+#include <hoot/core/elements/RelationData.h>
+#include <hoot/core/elements/Status.h>
 
 // Qt
 #include <QUrl>
@@ -69,6 +65,10 @@ class OsmMap;
 class Node;
 class Way;
 class Relation;
+class ElementType;
+class ElementCache;
+class Range;
+class TableType;
 
 /**
  * This class abstracts out all SQL calls to interact with an API DB (either hoot or OSM). It also

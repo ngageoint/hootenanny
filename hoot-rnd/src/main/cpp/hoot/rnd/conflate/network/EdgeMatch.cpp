@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -90,19 +90,67 @@ bool EdgeMatch::contains(ConstNetworkVertexPtr v) const
   return getString1()->contains(v) || getString2()->contains(v);
 }
 
+int EdgeMatch::countPartialMatches() const
+{
+  int count = 0;
+
+  if (getString1()->isFromOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString1()->isToOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString2()->isFromOnVertex() == false)
+  {
+    count++;
+  }
+  if (getString2()->isToOnVertex() == false)
+  {
+    count++;
+  }
+
+  return count;
+}
+
 bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
 {
   if (other->getString1()->overlaps(getString1()))
   {
-    LOG_INFO("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps; this edge: " << toString() << " other edge: " << other);
     return true;
   }
 
   if (other->getString2()->overlaps(getString2()))
   {
-    LOG_INFO("Overlaps: " << toString() << " " << other);
+    LOG_TRACE("Overlaps; this edge: " << toString() << " other edge: " << other);
     return true;
   }
+
+  return false;
+}
+
+bool EdgeMatch::isVerySimilarTo(const shared_ptr<const EdgeMatch>& other) const
+{
+  QString this1 = getString1()->toString();
+  QString other1 = other->getString1()->toString();
+  QString this2 = getString2()->toString();
+  QString other2 = other->getString2()->toString();
+
+  // Portions can be slightly different sometimes
+  this1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+  other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+
+  //LOG_INFO(this1);
+  //LOG_INFO(other1);
+  //LOG_INFO(this2);
+  //LOG_INFO(other2);
+
+  if (0 == this1.compare(other1) && 0 == this2.compare(other2))
+    return true;
 
   return false;
 }

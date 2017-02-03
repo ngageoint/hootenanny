@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,6 +40,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include "BuildingRfClassifier.h"
 
 // Standard
 #include <fstream>
@@ -157,6 +158,7 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
+    LOG_VART(e->getCircularError());
     return e->getCircularError();
   }
 
@@ -247,7 +249,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Using match creator: " << className());
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,6 +48,10 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Progress.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -435,7 +439,7 @@ void OgrReader::setLimit(long limit)
 }
 
 void OgrReader::setTranslationFile(QString translate)
-{ 
+{
   _d->setTranslationFile(translate);
 }
 
@@ -578,10 +582,9 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      /*
-      LOG_DEBUG("Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+      LOG_TRACE(
+        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
         " since the value field is empty");
-      */
       continue;
     }
 
@@ -609,26 +612,26 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       switch (wkbFlatten(g->getGeometryType()))
       {
         case wkbLineString:
-          //LOG_DEBUG("Adding line string");
+          LOG_TRACE("Adding line string");
           _addLineString((OGRLineString*)g, t);
           break;
         case wkbPoint:
-          //LOG_DEBUG("Adding point");
+          LOG_TRACE("Adding point");
           _addPoint((OGRPoint*)g, t);
           break;
         case wkbPolygon:
-          //LOG_DEBUG("Adding polygon");
+          LOG_TRACE("Adding polygon");
           _addPolygon((OGRPolygon*)g, t);
           break;
         case wkbMultiPolygon:
-          //LOG_DEBUG("Adding multi-polygon");
+          LOG_TRACE("Adding multi-polygon");
           _addMultiPolygon((OGRMultiPolygon*)g, t);
           break;
         case wkbMultiPoint:
         case wkbMultiLineString:
         case wkbGeometryCollection:
         {
-          LOG_DEBUG("Adding geometry collection (multipoint, multiline, etc.)");
+          LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.)");
           OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
           int nParts = gc->getNumGeometries();
           for (int i = 0; i < nParts; i++)
@@ -1059,7 +1062,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
       progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && _count > 0)
   {
     cout << endl;
   }
@@ -1220,8 +1223,6 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  //LOG_DEBUG("Inside OGR::readNextElement");
-
   if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
       && (_relationsItr == _map->getRelationMap().end()) )
   {
@@ -1281,7 +1282,6 @@ Progress OgrReaderInternal::streamGetProgress() const
   const float floatCount = _streamFeatureCount;
   const float percentComplete = floatCount / _featureCount * 100;
   streamProgress.setPercentComplete( percentComplete );
-  //LOG_DEBUG("Percent complete set to " << percentComplete );
 
   return streamProgress;
 }

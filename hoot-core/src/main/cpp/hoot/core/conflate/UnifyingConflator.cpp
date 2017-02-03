@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,6 +41,9 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/elements/ElementId.h>
 
 // standard
 #include <algorithm>
@@ -118,7 +121,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   Timer timer;
   _reset();
 
-  NamedOp(ConfigOptions().getUnifyPreOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying pre-unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -129,7 +133,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   if (Log::getInstance().isDebugEnabled())
   {
-    LOG_DEBUG("Writing debug map.");
+    LOG_DEBUG("Writing debug map...");
     OsmMapPtr debug(new OsmMap(map));
     MapProjector::projectToWgs84(debug);
     OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
@@ -221,6 +225,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
 
+  //TODO: this isn't right for network
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_INFO("Match count: " << _matches.size());
 
@@ -239,6 +244,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
   // convert all the match sets into mergers.
+  LOG_INFO("Creating mergers...");
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
@@ -255,11 +261,11 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_INFO("Applying mergers...");
+  LOG_INFO("Applying " << _mergers.size() << " mergers...");
   vector< pair<ElementId, ElementId> > replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    LOG_DEBUG(
+    LOG_TRACE(
       "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " << _mergers[i]->toString());
 
     _mergers[i]->apply(map, replaced);
@@ -282,7 +288,8 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
-  NamedOp(ConfigOptions().getUnifyPostOps().split(";", QString::SkipEmptyParts)).apply(map);
+  LOG_INFO("Applying post-unifying conflation operations...");
+  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }

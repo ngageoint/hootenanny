@@ -18,18 +18,20 @@
 #define FOURPASSREDUCER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeReplacements.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/MapStats.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Reducer.h>
 
 namespace hoot
 {
+
+class HadoopIdGenerator;
+class PbfRecordWriter;
+class OsmMapOperation;
+class Way;
+class OsmMap;
 
 class TileOpReducer : public pp::Reducer
 {

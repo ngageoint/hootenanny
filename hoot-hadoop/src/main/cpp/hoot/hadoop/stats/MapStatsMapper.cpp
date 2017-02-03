@@ -19,6 +19,7 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/io/PbfReader.h>
+#include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

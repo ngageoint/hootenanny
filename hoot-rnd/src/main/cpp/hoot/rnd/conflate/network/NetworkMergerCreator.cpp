@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,28 +49,25 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 NetworkMergerCreator::NetworkMergerCreator()
 {
   _map = 0;
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-
-  _minSplitSize = ConfigOptions(conf()).getWayMergerMinSplitSize();
 }
 
-bool NetworkMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
+  LOG_DEBUG("Creating mergers...");
+
+  MatchSet matches = matchesIn;
+  _removeDuplicates(matches);
+
   bool result = false;
   assert(matches.size() > 0);
 
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
 
-  LOG_VAR(matches);
+  LOG_VART(matches);
 
   if (m)
   {
-    set< pair<ElementId, ElementId> > eids;
     bool matchOverlap = false;
-
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
       const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
@@ -84,8 +81,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
         {
           LOG_VARE(*it);
           LOG_VARE(*jt);
-          throw UnsupportedException("If one match is a network match they should all be network "
-            "matches.");
+          throw UnsupportedException(
+            "If one match is a network match they should all be network matches.");
         }
 
         if (nmi->getEdgeMatch()->overlaps(nmj->getEdgeMatch()))
@@ -94,24 +91,24 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
         }
       }
     }
+    LOG_VART(matchOverlap);
 
-    LOG_VAR(matchOverlap);
-
-    // if there are only 2 matches and one completely contains the other, use the larger match.
+    // If there are only 2 matches and one completely contains the other, use the larger match.
     // This may need to be reverted as we play with more data, but at this point it seems like a
     // reasonable heuristic.
     if (const NetworkMatch* larger = _getLargestContainer(matches))
     {
-      mergers.push_back(new PartialNetworkMerger(larger->getMatchPairs(),
-        QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-        larger->getNetworkDetails()));
+      mergers.push_back(
+        new PartialNetworkMerger(
+          larger->getMatchPairs(),
+          QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+          larger->getNetworkDetails()));
     }
+    // create a merger that can merge multiple partial matches
     else if (!matchOverlap)
     {
       QSet<ConstEdgeMatchPtr> edgeMatches;
       set< pair<ElementId, ElementId> > pairs;
-      // create a merger that can merge multiple partial matches. If any of the partial matches
-      // overlap then mark them all for review.
       foreach (const Match* itm, matches)
       {
         const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(itm);
@@ -122,12 +119,10 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
 
       mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
     }
+    // If any of the partial matches overlap, then mark them all for review.
     else
     {
-      double sum = 0.0;
-      QStringList scores;
-      LOG_VAR(matches.size());
-      // go through all the matches
+      LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
         set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
@@ -137,15 +132,16 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
           eids.insert(jt->first);
           eids.insert(jt->second);
         }
+        LOG_VART(eids);
 
         const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*it);
-        scores << QString::number(m->getProbability());
-        sum += m->getScore();
-
-        mergers.push_back(new MarkForReviewMerger(eids, "A complex road situation was found with "
-          "multiple plausible solutions. Please reference input data/imagery and manually merge "
-          "or modify as needed.",
-          m->getMatchName(), m->getScore()));
+        mergers.push_back(
+          new MarkForReviewMerger(
+            eids,
+            "A complex road situation was found with multiple plausible solutions. Please "
+            "reference input data/imagery and manually merge or modify as needed.",
+            m->getMatchName(),
+            m->getScore()));
       }
     }
 
@@ -158,14 +154,14 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matches,
 vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
 {
   vector<Description> result;
-
-  result.push_back(Description(className(), "Network Merge Creator", true));
-
+  result.push_back(Description(className(), "Network Merger Creator", true));
   return result;
 }
 
 const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& matches) const
 {
+  LOG_TRACE("Retrieving largest container...");
+
   if (matches.size() <= 1)
   {
     return 0;
@@ -185,7 +181,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     }
   }
 
-  LOG_VAR(largest);
+  LOG_VART(largest);
 
   foreach (const Match* m, matches)
   {
@@ -197,7 +193,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     }
   }
 
-  LOG_INFO("Found largest");
+  LOG_TRACE("Found largest");
 
   return largest;
 }
@@ -206,12 +202,10 @@ bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match*
   const Match* m2) const
 {
   bool result = false;
-
   if (dynamic_cast<const NetworkMatch*>(m1) || dynamic_cast<const NetworkMatch*>(m2))
   {
     result = m1->isConflicting(*m2, map);
   }
-
   return result;
 }
 
@@ -220,8 +214,33 @@ bool NetworkMergerCreator::_isConflictingSet(const MatchSet& matches) const
   // _map must be set using setOsmMap()
   assert(_map != 0);
   bool conflicting = matches.size() > 1;
-
   return conflicting;
+}
+
+// I dislike the nested for loop here - but whatcha gonna do? Maybe not create
+// duplicate matches in the first place
+void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
+{
+  LOG_TRACE("Removing duplicate matches...");
+
+  for (MatchSet::iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+    MatchSet::iterator jt = it;
+
+    for (++jt; jt != matches.end(); ++jt)
+    {
+      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
+
+      if (nmi->isVerySimilarTo(nmj))
+      {
+        MatchSet::iterator tmp = it;
+        ++tmp;
+        matches.erase(it);
+        it = jt = tmp;
+      }
+    }
+  }
 }
 
 }

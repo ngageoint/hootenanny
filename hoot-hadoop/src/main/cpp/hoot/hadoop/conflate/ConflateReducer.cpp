@@ -38,6 +38,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

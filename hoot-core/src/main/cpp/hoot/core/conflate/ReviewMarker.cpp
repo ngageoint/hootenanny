@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -157,27 +157,31 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
   const QString& note, const QString &reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
-    //LOG_VARD(e1->toString());
-    //LOG_VARD(e2->toString());
+    LOG_VART(e1->toString());
+    LOG_VART(e2->toString());
     throw IllegalArgumentException("You must specify a review note.");
   }
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  r->getTags().set(MetadataTags::HootReviewScore(), score);
+  if (ConfigOptions().getConflateAddReviewDetail())
+  {
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().set(MetadataTags::HootReviewScore(), score);
+  }
   r->addElement(_revieweeKey, e1->getElementId());
   r->addElement(_revieweeKey, e2->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
-
-  //LOG_VARD(r->getId());
-  //LOG_VARD(e1->getElementId());
-  //LOG_VARD(e2->getElementId());
+  LOG_VART(r->getId());
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
@@ -190,6 +194,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString& note,
    const QString& reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
@@ -197,9 +203,12 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  r->getTags().set(MetadataTags::HootReviewScore(), score);
+  if (ConfigOptions().getConflateAddReviewDetail())
+  {
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().set(MetadataTags::HootReviewScore(), score);
+  }
   set<ElementId>::iterator it = ids.begin();
   while (it != ids.end())
   {
@@ -210,8 +219,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
-  //LOG_VARD(r->getId());
-  //LOG_VARD(ids);
+  LOG_VART(r->getId());
+  LOG_VART(ids);
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
@@ -225,23 +234,28 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {
+  LOG_TRACE("Marking review...");
+
   if (note.isEmpty())
   {
-    //LOG_VARD(e->toString())
+    LOG_VART(e->toString())
     throw IllegalArgumentException("You must specify a review note.");
   }
 
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  r->getTags().set(MetadataTags::HootReviewScore(), score);
+  if (ConfigOptions().getConflateAddReviewDetail())
+  {
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().set(MetadataTags::HootReviewScore(), score);
+  }
   r->addElement(_revieweeKey, e->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
-  //LOG_VARD(r->getId());
-  //LOG_VARD(e->getElementId());
+  LOG_VART(r->getId());
+  LOG_VART(e->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
@@ -253,6 +267,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)
 {
+  LOG_TRACE("Removing review element: " << eid);
   RemoveElementOp::removeElement(map, eid);
 }
 

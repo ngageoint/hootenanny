@@ -21,7 +21,8 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/OsmMap.h>
+#include "PbfRecordWriter.h"
 
 #include <pp/HadoopPipesUtils.h>
 

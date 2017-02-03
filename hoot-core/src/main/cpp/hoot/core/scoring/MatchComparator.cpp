@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,7 @@
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/SetVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -418,7 +419,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   set<QString> cUuids;
   GetTagValuesVisitor vc("uuid", cUuids);
   conflated->visitRo(vc);
-  //LOG_DEBUG("cUuids size: " << cUuids.size());
+  LOG_TRACE("cUuids size: " << cUuids.size());
 
   // go through all the reviews in the conflated map
   set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
@@ -431,7 +432,13 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
     {
       ElementId p = *eid;
-      QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
+      ConstElementPtr element = conflated->getElement(p);
+      if (!element.get()) //TODO: need to make sure this check is a valid one
+      {
+        LOG_WARN("Missing element for " + p.toString());
+        continue;
+      }
+      QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
         LOG_WARN("Missing uuid for " + p.toString());
@@ -476,14 +483,14 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   StatusCriterion sf1(Status::Unknown1);
   FilteredVisitor fvIn1(sf1, gtv1);
   in->visitRo(fvIn1);
-  //LOG_DEBUG("in1Uuids size: " << in1Uuids.size());
+  LOG_TRACE("in1Uuids size: " << in1Uuids.size());
 
   set<QString> in2Uuids;
   GetTagValuesVisitor gtv2("uuid", in2Uuids);
   StatusCriterion sf2(Status::Unknown2);
   FilteredVisitor fvIn2(sf2, gtv2);
   in->visitRo(fvIn2);
-  //LOG_DEBUG("in2Uuids size: " << in2Uuids.size());
+  LOG_TRACE("in2Uuids size: " << in2Uuids.size());
 
   for (set<QString>::const_iterator it = cUuids.begin(); it != cUuids.end(); ++it)
   {
@@ -497,12 +504,12 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       if (in1Uuids.find(cList[i]) != in1Uuids.end())
       {
         u1.insert(cList[i]);
-        //LOG_DEBUG("Inserted " << cList[i] << " into u1.");
+        LOG_TRACE("Inserted " << cList[i] << " into u1.");
       }
       else if (in2Uuids.find(cList[i]) != in2Uuids.end())
       {
         u2.insert(cList[i]);
-        //LOG_DEBUG("Inserted " << cList[i] << " into u2.");
+        LOG_TRACE("Inserted " << cList[i] << " into u2.");
       }
       else
       {

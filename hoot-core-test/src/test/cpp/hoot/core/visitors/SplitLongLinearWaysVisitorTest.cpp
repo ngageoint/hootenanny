@@ -71,7 +71,7 @@ private:
     }
     else
     {
-      LOG_DEBUG("Adding way to map, but could not add any nodes due to start ID of " << startNodeId
+      LOG_TRACE("Adding way to map, but could not add any nodes due to start ID of " << startNodeId
         << " and end node ID " << endNodeId );
     }
 
@@ -80,7 +80,7 @@ private:
 
     // Add the way to the map
     _map->addWay(newWay);
-    LOG_DEBUG("Way added to map with ID " << newWay->getId());
+    LOG_TRACE("Way added to map with ID " << newWay->getId());
   }
 
   void _noOpTests(SplitLongLinearWaysVisitor& splitVisitor)
@@ -368,7 +368,7 @@ private:
     unsigned int searchId = startNode;
     while ( nodesLeftToFind > 0 )
     {
-      LOG_DEBUG("Looking for node ID " << searchId);
+      LOG_TRACE("Looking for node ID " << searchId);
       bool madeProgress = false;
       bool hitError = false;
       for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
@@ -379,7 +379,7 @@ private:
         if ( currWay->getFirstNodeId() == searchId )
         {
           nodesLeftToFind--;
-          LOG_DEBUG("Found node ID " << searchId << " at start of way " <<
+          LOG_TRACE("Found node ID " << searchId << " at start of way " <<
                      currWay->getId());
           madeProgress = true;
           // Make sure rest of nodes we want exist and are in correct order
@@ -407,15 +407,15 @@ private:
             nodesLeftToFind++;
           }
 
-          LOG_DEBUG("Found remainder of IDs up to " << searchId << " inside way");
-          LOG_DEBUG("Nodes left to find: " << nodesLeftToFind);
+          LOG_TRACE("Found remainder of IDs up to " << searchId << " inside way");
+          LOG_TRACE("Nodes left to find: " << nodesLeftToFind);
 
           // We found what we needed, bail out of looking for more ways
           break;
         }
         else
         {
-          LOG_DEBUG("Way started with ID " << currWay->getFirstNodeId() << ", skipping");
+          LOG_TRACE("Way started with ID " << currWay->getFirstNodeId() << ", skipping");
         }
       }
 

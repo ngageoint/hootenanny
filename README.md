@@ -15,7 +15,7 @@ Hootenanny is an open source conflation tool developed to facilitate automated a
 of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps of geodata into a 
 single seamless map.
 
-Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
+Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
 
 # Project Goals
 * Create up-to-date routable transportation networks from multiple sources
@@ -27,29 +27,25 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 Hootenanny can conflate:
 * POIs
 * Building polygons
-* Transportation polylines (highways, cart tracks, trails, bridges, and tunnels)
-* Waterway polylines (hydrologic features such as rivers, streams, drainage, and ditches).
+* Transportation polylines
+* Waterway polylines
 
 # Supported Data Formats
 Hootenanny can import from:
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
-* .zip files containing shapefiles and/or .gdb files
+* Zip files containing shapefiles and/or ESRI File Geodatabase files
 * geonames.org (.geonames)
-* OSM API database via bounding box query
+* OSM API database
 
 Hootenanny can export to: 
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
-* Web Feature Service (WFS)
-* OSM XML changeset file
-* Directly to an OSM API database via SQL changeset
-
-Note:
-* .gdb, Shapefile, and OSM formats are exported as a zip file containing all of the associated files
-* WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application
+* Web Feature Service
+* OSM changeset file (.osc)
+* OSM API database
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 

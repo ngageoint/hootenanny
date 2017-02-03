@@ -198,7 +198,7 @@ public:
 //      uut.permute(tmp);
 //    }
     //tbs::SampleStats ss(uut._x);
-    //LOG_INFO("sd: " << ss.calculateUnbiasedStandardDeviation());
+    //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation());
     shared_ptr<OsmMap> debug = uut.generateDebugMap(map);
     //    for (int i = 0; i < 100; i++)
     //    {
@@ -206,7 +206,7 @@ public:
     //      uut.permute(tmp);
     //    }
         //tbs::SampleStats ss(uut._x);
-        //LOG_INFO("sd: " << ss.calculateUnbiasedStandardDeviation
+        //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation
 
 
     MapProjector::projectToWgs84(debug);

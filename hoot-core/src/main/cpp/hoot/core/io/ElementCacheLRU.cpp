@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,15 +51,7 @@
  *
  */
 
-#include <map>
-#include <utility>
-#include <boost/shared_ptr.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
 
 #include "ElementCacheLRU.h"
@@ -98,7 +90,7 @@ unsigned long ElementCacheLRU::size() const
 
 void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 {
-  //LOG_DEBUG("Adding element: " + newElement->toString() + " to cache...");
+  LOG_TRACE("Adding element: " + newElement->toString() + " to cache...");
 
   ConstNodePtr newNode;
   ConstWayPtr newWay;
@@ -300,7 +292,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _nodes.erase(oldestId);
-    //LOG_DEBUG("Removed node: " << oldestId << " from cache.");
+    LOG_TRACE("Removed node: " << oldestId << " from cache.");
 
     break;
 
@@ -316,7 +308,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _ways.erase(oldestId);
-    //LOG_DEBUG("Removed way: " << oldestId << " from cache.");
+    LOG_TRACE("Removed way: " << oldestId << " from cache.");
 
     break;
 
@@ -332,7 +324,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
 
     // Remove oldest entry
     _relations.erase(oldestId);
-    //LOG_DEBUG("Removed relation: " << oldestId << " from cache.");
+    LOG_TRACE("Removed relation: " << oldestId << " from cache.");
 
     break;
 

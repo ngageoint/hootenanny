@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,6 +37,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/RdpWayGeneralizer.h>
 
 // Qt
 #include <QSet>
@@ -100,13 +101,13 @@ void PertyWayGeneralizeVisitor::visit(const shared_ptr<Element>& element)
         .arg(QString::number(randomNum));
     if (randomNum <= _wayGeneralizeProbability)
     {
-      LOG_DEBUG(logMsg);
+      LOG_TRACE(logMsg);
       _generalizer->generalize(dynamic_pointer_cast<Way>(element));
     }
     else
     {
       logMsg = logMsg.replace("will", "will not");
-      LOG_DEBUG(logMsg);
+      LOG_TRACE(logMsg);
     }
   }
 }

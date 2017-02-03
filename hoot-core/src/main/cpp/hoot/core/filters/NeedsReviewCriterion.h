@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,11 +28,9 @@
 #define NEEDSREVIEWCRITERION_H
 
 #include "ElementCriterion.h"
-#include "WayFilter.h"
 
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -40,22 +38,25 @@ namespace hoot
 /**
  * Filters out everything except the specified status.
  */
-class NeedsReviewCriterion : public ElementCriterion
+class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
+  static string className() { return "hoot::NeedsReviewCriterion"; }
+
+  NeedsReviewCriterion() {}
+
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    bool review = ReviewMarker().isNeedsReview(_map, e);
-    return review;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new NeedsReviewCriterion(_map); }
 
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
 private:
-  ConstOsmMapPtr& _map;
+
+  ConstOsmMapPtr _map;
 };
 
 }

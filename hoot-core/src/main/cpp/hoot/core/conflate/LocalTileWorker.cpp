@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,6 +50,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/NodeReplacements.h>
 
 #include "TileBoundsCalculator.h"
 
@@ -74,7 +76,6 @@ protected:
 
 LocalTileWorker::LocalTileWorker()
 {
-  //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
   LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
 
   _mapPart = 0;
@@ -218,8 +219,8 @@ shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
   QDir d(dir);
   Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
-    LOG_INFO(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " << d.absolutePath() <<
-             " " << info.absoluteFilePath());
+    LOG_DEBUG(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " <<
+              d.absolutePath() << " " << info.absoluteFilePath());
     reader.read(d.absoluteFilePath(info.filePath()), map);
   }
 

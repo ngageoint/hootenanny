@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,6 +41,8 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>
@@ -75,7 +77,6 @@ QString BaseCommand::_getHelpPath() const
 void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
                           Status defaultStatus)
 {
-  LOG_INFO("Loading map data from " << path << " ...");
   OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
 }
 

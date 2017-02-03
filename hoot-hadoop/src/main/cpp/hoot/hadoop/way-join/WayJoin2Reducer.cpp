@@ -27,6 +27,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -194,7 +197,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
       shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
       _map->addNode(n);
       env.expandToInclude(v->rawWay.x, v->rawWay.y);
-      //LOG_INFO("Got node: " << n->toString());
+      LOG_TRACE("Got node: " << n->toString());
     }
     else
     {

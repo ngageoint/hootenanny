@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,10 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+#include <hoot/core/algorithms/zindex/BBox.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
@@ -161,9 +165,6 @@ void ApiDb::open(const QUrl& url)
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
-  //LOG_DEBUG("debug email = " + email);
-  //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
-
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -204,7 +205,6 @@ long ApiDb::insertUser(const QString email, const QString displayName)
 {
   long id = -1;
 
-  LOG_DEBUG("Inside insert user");
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
@@ -232,7 +232,7 @@ long ApiDb::insertUser(const QString email, const QString displayName)
     }
     else
     {
-      LOG_DEBUG("Did not insert user, queryied a previously created user.")
+      LOG_DEBUG("Did not insert user, queried a previously created user.")
     }
   }
   // if the insert succeeded

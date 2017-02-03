@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,6 +35,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -62,7 +65,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
         OsmSchema::getInstance().isLinearWaterway(*w) == false)
     {
       // if this isn't a highway or waterway, then don't consider it.
-      //LOG_DEBUG("calculateAngles skipping feature");
+      LOG_TRACE("calculateAngles skipping feature...");
     }
     else if (w->getNodeId(0) == nid)
     {
@@ -96,20 +99,23 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
   if (result.size() > 0 && badSpots > 0)
   {
-    LOG_WARN("nid: " << nid);
-    LOG_WARN(map->getNode(nid)->toString());
-    LOG_WARN("wids: " << wids);
+    LOG_TRACE("nid: " << nid);
+    LOG_VART(map->getNode(nid)->toString());
+    LOG_TRACE("wids: " << wids);
     for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
     {
-      LOG_WARN(map->getWay(*it)->toString());
+      LOG_VART(map->getWay(*it)->toString());
     }
 
     //shared_ptr<OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
-    throw HootException("calculateAngles was called with a node that was not a start or end node"
-                        " on the specified way.");
+    const QString msg =
+      "calculateAngles was called with a node that was not a start or end node on the specified way.";
+    LOG_WARN(msg);
+    //where is this being caught?
+    throw HootException(msg);
   }
 
   return result;
