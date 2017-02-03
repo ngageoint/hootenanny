@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CalculateMapBoundsVisitor_H
-#define CalculateMapBoundsVisitor_H
+#ifndef CALCULATEMAPBOUNDSVISITOR_H
+#define CALCULATEMAPBOUNDSVISITOR_H
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
@@ -67,4 +67,4 @@ private:
 
 }
 
-#endif // CalculateMapBoundsVisitor_H
+#endif // CALCULATEMAPBOUNDSVISITOR_H

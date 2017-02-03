@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HASTAGFILTER_H
-#define HASTAGFILTER_H
+#ifndef TAGKEYCRITERION_H
+#define TAGKEYCRITERION_H
 
 // Hoot
 #include "ElementCriterion.h"
@@ -67,4 +67,4 @@ private:
 
 }
 
-#endif // HASTAGFILTER_H
+#endif // TAGKEYCRITERION_H

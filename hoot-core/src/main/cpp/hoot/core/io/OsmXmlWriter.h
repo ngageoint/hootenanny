@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OsmXmlWriter_H
-#define OsmXmlWriter_H
+#ifndef OSMXMLWRITER_H
+#define OSMXMLWRITER_H
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
@@ -123,4 +123,4 @@ private:
 
 } // hoot
 
-#endif // OsmXmlWriter_H
+#endif // OSMXMLWRITER_H

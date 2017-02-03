@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OsmPbfWriter_H
-#define OsmPbfWriter_H
+#ifndef OSMPBFWRITER_H
+#define OSMPBFWRITER_H
 
 // Qt
 #include <QHash>
@@ -260,4 +260,4 @@ private:
 
 }
 
-#endif // OsmPbfWriter_H
+#endif // OSMPBFWRITER_H

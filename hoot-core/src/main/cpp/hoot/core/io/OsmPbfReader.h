@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OsmPbfReader_H
-#define OsmPbfReader_H
+#ifndef OSMPBFREADER_H
+#define OSMPBFREADER_H
 
 // Qt
 #include <QHash>
@@ -286,4 +286,4 @@ private:
 
 }
 
-#endif // OsmPbfReader_H
+#endif // OSMPBFREADER_H

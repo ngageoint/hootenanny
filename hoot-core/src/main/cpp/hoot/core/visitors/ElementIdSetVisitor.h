@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SET_VISITOR_H
-#define SET_VISITOR_H
+#ifndef ELEMENT_ID_SET_VISITOR_H
+#define ELEMENT_ID_SET_VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
@@ -60,4 +60,4 @@ private:
 
 }
 
-#endif // SET_VISITOR_H
+#endif // ELEMENT_ID_SET_VISITOR_H

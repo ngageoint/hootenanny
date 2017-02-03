@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CompletelyContainedByMapElementVisitor_H
-#define CompletelyContainedByMapElementVisitor_H
+#ifndef COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
+#define COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
 
 // geos
 #include <geos/geom/MultiLineString.h>
@@ -83,4 +83,4 @@ protected:
 
 }
 
-#endif // CompletelyContainedByMapElementVisitor_H
+#endif // COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OsmChangesetXmlWriter_H
-#define OsmChangesetXmlWriter_H
+#ifndef OSMCHANGESETXMLWRITER_H
+#define OSMCHANGESETXMLWRITER_H
 
 // Hoot
 #include <hoot/core/elements/Node.h>
@@ -92,4 +92,4 @@ private:
 
 }
 
-#endif // OsmChangesetXmlWriter_H
+#endif // OSMCHANGESETXMLWRITER_H

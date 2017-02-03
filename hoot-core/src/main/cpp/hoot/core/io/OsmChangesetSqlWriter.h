@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OsmChangesetSqlWriter_H
-#define OsmChangesetSqlWriter_H
+#ifndef OSMCHANGESETSQLWRITER_H
+#define OSMCHANGESETSQLWRITER_H
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
@@ -120,4 +120,4 @@ private:
 
 }
 
-#endif // OsmChangesetSqlWriter_H
+#endif // OSMCHANGESETSQLWRITER_H
