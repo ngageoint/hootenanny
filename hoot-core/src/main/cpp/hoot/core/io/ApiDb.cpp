@@ -317,29 +317,40 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
+  /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
+   *  classes that should enable the regex below that has both greedy matching
+   *  and lazy matching in the same regex.  The QRegExp class doesn't allow this
+   *  that is why there are two regex objects in this function.
+   *
+   *  Replace it with this:
+   *    QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
+   */
   assert(v.type() == QVariant::String);
-  QString s = v.toString();
+  QString str = v.toString();
 
   Tags result;
-
-  QStringList list = s.split("=>");
-  while (list.size() > 1)
+  QRegExp rxKey("\"(.*)\"=>\"");
+  QRegExp rxValue("((?:(?!\",).)*)\"(?:, )?");
+  //  The key regex needs to be minimal should be (.*?) but that doesn't work
+  //  while the value regex needs to be maximal to consume quotes within the value
+  rxKey.setMinimal(true);
+  rxValue.setMinimal(false);
+  int pos = 0;
+  //  Match the key first
+  while ((pos = rxKey.indexIn(str, pos)) != -1)
   {
-    QString key = list.first();
-    list.pop_front();
-    QString value = list.first();
-    list.pop_front();
-    //  Split the value/key that wasn't split at the beginning
-    if (list.size() > 0)
+    pos += rxKey.matchedLength();
+    //  Then match the value, ignoring any key/value pairs that don't match
+    if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
-      QStringList vk = value.split("\", \"");
-      value = vk[0];
-      list.push_front(vk[1]);
+      QString key = rxKey.cap(1);
+      QString value = rxValue.cap(1);
+      //  Unescape the actual key/value pairs
+      _unescapeString(key);
+      _unescapeString(value);
+      result.insert(key, value);
+      pos += rxValue.matchedLength();
     }
-    //  Unescape the rest
-    _unescapeString(key);
-    _unescapeString(value);
-    result.insert(key, value);
   }
 
   return result;
