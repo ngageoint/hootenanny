@@ -21,6 +21,7 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/hadoop/PbfRecordWriter.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

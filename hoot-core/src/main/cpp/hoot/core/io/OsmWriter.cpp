@@ -40,6 +40,7 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/elements/Tags.h>
 
 // Qt
 #include <QBuffer>

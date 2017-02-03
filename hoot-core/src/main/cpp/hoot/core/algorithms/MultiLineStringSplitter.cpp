@@ -34,6 +34,10 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -65,8 +69,8 @@ auto_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
 }
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineCollection& string, const vector<bool> &reverse, GeometryConverter::NodeFactory *nf)
-  const
+  const WaySublineCollection& string, const vector<bool> &reverse,
+  GeometryConverter::NodeFactory *nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   // if there were no matches then the result will be null

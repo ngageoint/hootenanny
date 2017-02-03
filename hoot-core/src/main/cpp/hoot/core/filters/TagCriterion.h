@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,6 @@
 #define TAGCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -45,22 +44,20 @@ using namespace boost;
 class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
+
   static string className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    assert(!_k.isEmpty());
-    return e->getTags().get(_k) == _v;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   void setConfiguration(const Settings& s);
 
   virtual ElementCriterion* clone() { return new TagCriterion(_k, _v); }
 
 private:
+
   QString _k, _v;
 };
 

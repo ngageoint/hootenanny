@@ -113,7 +113,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   QStringList sl1 = _tokenizer.tokenize(s1);
   QStringList sl2 = _tokenizer.tokenize(s2);
 
-  //LOG_INFO(std::setprecision(8));
+  LOG_TRACE(std::setprecision(8));
   // calculate the relative weight of each word term.
   vector<double> w1 = _calculateWeights(sl1);
   vector<double> w2 = _calculateWeights(sl2);
@@ -159,7 +159,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
 
 void WeightedWordDistance::setConfiguration(const Settings& conf)
 {
-  _p = ConfigOptions(conf).getWeightedWordDistanceP();
+  _p = ConfigOptions(conf).getWeightedWordDistanceProbability();
   _tokenizer.setConfiguration(conf);
 }
 

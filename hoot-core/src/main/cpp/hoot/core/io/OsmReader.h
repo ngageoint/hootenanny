@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,12 +28,12 @@
 #define __IO_OSM_READER_H__
 
 // Local
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
 namespace hoot
 {
     class OsmMap;
     class ElementData;
+    class Element;
 }
 
 // Boost
@@ -52,7 +52,8 @@ class QString;
 
 #include "OsmMapReader.h"
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Reads in a .osm file into an OsmMap data structure. During this process all IDs are mapped from

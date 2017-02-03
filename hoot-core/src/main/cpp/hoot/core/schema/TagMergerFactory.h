@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,14 +27,19 @@
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
 
-#include "TagMerger.h"
-#include "AverageTagMerger.h"
-
 // Tgs
 #include <tgs/SharedPtr.h>
 
+// Qt
+#include <QString>
+#include <QHash>
+
 namespace hoot
 {
+
+class TagMerger;
+class Tags;
+class ElementType;
 
 class TagMergerFactory
 {

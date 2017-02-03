@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,6 @@
 #define COUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -52,9 +51,10 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const ConstElementPtr& /*e*/) { _count++; }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   int _count;
 };
 

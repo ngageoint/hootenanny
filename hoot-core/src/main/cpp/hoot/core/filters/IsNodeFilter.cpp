@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,13 +24,30 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDINTERSECTIONSCMD_H
-#define FINDINTERSECTIONSCMD_H
 
-//class FindIntersectionsCmd
-//{
-//public:
-//  FindIntersectionsCmd();
-//};
+#include "IsNodeFilter.h"
 
-#endif // FINDINTERSECTIONSCMD_H
+#include <hoot/core/elements/Element.h>
+
+namespace hoot
+{
+
+bool IsNodeFilter::isFiltered(const Element& e) const
+{
+  bool match = false;
+  if (e.getElementType() == ElementType::Node)
+  {
+    match = true;
+  }
+
+  if (_type == KeepMatches)
+  {
+    return !match;
+  }
+  else
+  {
+    return match;
+  }
+}
+
+}

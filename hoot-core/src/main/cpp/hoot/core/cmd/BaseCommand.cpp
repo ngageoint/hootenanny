@@ -41,6 +41,8 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>

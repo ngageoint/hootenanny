@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,18 +24,22 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "OneWayCriterion.h"
 
-#include "OsmSchemaLoader.h"
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-OsmSchemaLoader::OsmSchemaLoader()
+HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
+
+bool OneWayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
+  return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
 }
 
-OsmSchemaLoader::~OsmSchemaLoader()
-{
-}
 
 }

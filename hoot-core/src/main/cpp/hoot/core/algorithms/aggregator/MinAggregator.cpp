@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,6 +35,16 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MinAggregator)
 
 MinAggregator::MinAggregator()
 {
+}
+
+double MinAggregator::aggregate(vector<double>& d) const
+{
+  double result = d[0];
+  for (size_t i = 1; i < d.size(); i++)
+  {
+    result = min(d[i], result);
+  }
+  return result;
 }
 
 }

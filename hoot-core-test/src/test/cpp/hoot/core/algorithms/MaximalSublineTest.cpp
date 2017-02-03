@@ -47,6 +47,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 using namespace hoot;
 
 // Qt

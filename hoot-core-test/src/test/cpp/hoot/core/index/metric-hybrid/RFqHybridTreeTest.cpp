@@ -145,7 +145,7 @@ public:
       RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, -1, -1);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"
@@ -181,7 +181,7 @@ public:
       RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, 3, 5);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"

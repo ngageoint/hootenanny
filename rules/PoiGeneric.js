@@ -39,7 +39,7 @@ var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
                 {"levenshtein.distance.alpha": 1.15}))));
 var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
-        {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
+        {"token.separator": "[\\s-,';]+", "weighted.word.distance.probability": 0.5},
         new hoot.TranslateStringDistance(
             // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},

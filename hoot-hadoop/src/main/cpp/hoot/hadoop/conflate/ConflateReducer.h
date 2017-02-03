@@ -18,17 +18,19 @@
 #define CONFLATEREDUCER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/NodeReplacements.h>
-#include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/MapStats.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/core/conflate/NodeReplacements.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Reducer.h>
 
 namespace hoot
 {
+
+class PbfRecordWriter;
+class HadoopIdGenerator;
+class Way;
+class OsmMap;
 
 class ConflateReducer : public pp::Reducer
 {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,7 +33,6 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/HootException.h>
@@ -311,7 +310,7 @@ shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREn
       tr.score = numeric_limits<double>::max();
       testResults.push_back(tr);
     }
-    //LOG_INFO("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
+    LOG_TRACE("dis: " << tr.distanceError << "m angle: " << toDegrees(tr.angleError) << deg);
   }
 
   //  |<---                       80 cols                                         -->|

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,12 +28,8 @@
 #define LONGESTTAGVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
-
-// Qt
-#include <QSet>
 
 #include "SingleStatistic.h"
 
@@ -45,7 +41,7 @@ using namespace std;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class LongestTagVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class LongestTagVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
@@ -59,26 +55,12 @@ public:
 
   QString getLongestTag() const { return _tag; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
-  virtual void visit(const ConstElementPtr& e)
-  {
-    const Tags& t = e->getTags();
-
-    for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
-    {
-      if (it.value().size() > _longestTag)
-      {
-        _longestTag = it.value().size();
-        _tag = it.key() + "=" + it.value();
-      }
-    }
-  }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   int _longestTag;
   QString _tag;
-  const OsmMap* _map;
 };
 
 }

@@ -27,13 +27,13 @@
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
 
-// hoot
-#include <hoot/core/util/Settings.h>
-
 // Qt
 #include <QHash>
 #include <QUrl>
 #include <QVariant>
+
+// Hoot
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {

@@ -30,10 +30,6 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
 
 #include "ElementCriterion.h"
 
@@ -53,26 +49,7 @@ public:
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
     _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    const Tags tags = e->getTags();
-    const int informationCount = tags.getInformationCount();
-    const int reviewTagCount =
-      tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
-
-    LOG_VART(e->getElementId());
-    LOG_VART(informationCount);
-    LOG_VART(_treatReviewTagsAsMetadata);
-    LOG_VART(reviewTagCount);
-
-    bool isSatisified = informationCount == 0;
-    if (!_treatReviewTagsAsMetadata)
-    {
-      isSatisified &= reviewTagCount == 0;
-    }
-    LOG_VART(isSatisified);
-    return isSatisified;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   virtual void setConfiguration(const Settings& conf)
   {

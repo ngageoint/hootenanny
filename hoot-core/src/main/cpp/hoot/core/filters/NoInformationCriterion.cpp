@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,11 +28,23 @@
 
 // hoot
 #include <hoot/core/Factory.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
+
+bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  const int informationCount = e->getTags().getInformationCount();
+  LOG_VART(e->getElementId());
+  LOG_VART(informationCount);
+  return informationCount == 0;
+}
 
 }
 

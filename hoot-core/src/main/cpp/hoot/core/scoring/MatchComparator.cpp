@@ -46,6 +46,7 @@
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/SetVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>

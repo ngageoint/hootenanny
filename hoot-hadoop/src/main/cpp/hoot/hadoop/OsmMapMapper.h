@@ -21,7 +21,6 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/io/PbfWriter.h>
 
 // Pretty Pipes
@@ -29,6 +28,8 @@
 
 namespace hoot
 {
+
+class OsmMap;
 
 class OsmMapMapper : public pp::Mapper
 {

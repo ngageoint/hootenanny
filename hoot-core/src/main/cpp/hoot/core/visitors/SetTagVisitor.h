@@ -28,9 +28,6 @@
 #define SETTAGVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "ElementOsmMapVisitor.h"
@@ -41,9 +38,7 @@ namespace hoot
 /**
  * Sets any tags on any elements with the specified key to the specified value
  */
-class SetTagVisitor :
-    public ElementOsmMapVisitor,
-    public Configurable
+class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 

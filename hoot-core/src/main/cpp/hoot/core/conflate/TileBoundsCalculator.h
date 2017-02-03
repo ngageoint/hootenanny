@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,13 +28,34 @@
 #ifndef TILEBOUNDSCALCULATOR_H
 #define TILEBOUNDSCALCULATOR_H
 
-// hoot
-#include <hoot/core/OsmMap.h>
+
+// Hoot
 #include <hoot/core/util/OpenCv.h>
+
+// Boost
+#include <boost/shared_ptr.hpp>
+
+// Qt
+#include <QString>
+
+// Std
+#include <vector>
+
+// geos
+#include <geos/geom/Envelope.h>
+
+// GDAL
+#include <ogr_geometry.h>
 
 namespace hoot
 {
 class TileBoundsCalculatorTest;
+class OsmMap;
+class Node;
+
+using namespace std;
+using namespace boost;
+using namespace geos::geom;
 
 /**
  * Caculates divisions as the center of pixels.

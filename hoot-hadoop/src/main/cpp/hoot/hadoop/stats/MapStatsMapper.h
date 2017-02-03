@@ -18,12 +18,13 @@
 #define MAP_STATS_MAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/MapStats.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 namespace hoot
 {
+class OsmMap;
+
 using namespace boost;
 
 class MapStatsMapper : public OsmMapMapper

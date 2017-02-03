@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,9 +40,8 @@ class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngC
     public Configurable
 {
 public:
-  static std::string className() { return "hoot::PertyRemoveRandomElementVisitor"; }
 
-  static QString pKey() { return "perty.remove.random.p"; }
+  static std::string className() { return "hoot::PertyRemoveRandomElementVisitor"; }
 
   /**
    * @arg p Probability that any given feature will be removed.

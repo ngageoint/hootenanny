@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -166,7 +166,6 @@ public:
 
   virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const = 0;
 
-
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
    * at least once for each element in the tree. For instance if the Element is a Way it may be
@@ -184,7 +183,6 @@ public:
    * "this" is guaranteed to be visited last.
    */
   virtual void visitRw(ElementProvider& map, ElementVisitor& visitor) = 0;
-
 
 protected:
 

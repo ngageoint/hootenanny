@@ -131,8 +131,7 @@ bool OsmMapWriterFactory::hasWriter(QString url)
 
 void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
 {
-  LOG_INFO("Writing map data to " << url << " ...");
-
+  LOG_INFO("Writing map to " << url);
   shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
   writer->open(url);
   writer->write(map);

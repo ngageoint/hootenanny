@@ -28,16 +28,16 @@
 #define BUILDINGOUTLINEUPDATEOP_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/elements/Relation.h>
 
 // Standard
 #include <set>
 
 namespace hoot
 {
-using namespace Tgs;
+class OsmMap;
 
 /**
  * Goes through all building relations and updates the outline of the building by taking the union

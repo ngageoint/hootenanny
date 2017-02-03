@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/visitors/CountVisitor.h>
 

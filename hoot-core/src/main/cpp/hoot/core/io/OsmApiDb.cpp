@@ -37,6 +37,7 @@
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
