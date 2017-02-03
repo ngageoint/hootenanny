@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>
@@ -87,7 +87,7 @@ public:
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.
-    HasTagCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
+    TagKeyCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
     AddUuidVisitor uuid("uuid");
     FilteredVisitor v(filter, uuid);
     map->visitRw(v);

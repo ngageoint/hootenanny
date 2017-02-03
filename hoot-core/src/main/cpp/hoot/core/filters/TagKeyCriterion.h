@@ -39,26 +39,26 @@ namespace hoot
 /**
  * Filters out everything except the specified status.
  */
-class HasTagCriterion : public ElementCriterion
+class TagKeyCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::HasTagCriterion"; }
+  static string className() { return "hoot::TagKeyCriterion"; }
 
-  HasTagCriterion() {}
-  HasTagCriterion(QString key);
-  HasTagCriterion(QString key1, QString key2);
-  HasTagCriterion(QString key1, QString key2, QString key3);
+  TagKeyCriterion() {}
+  TagKeyCriterion(QString key);
+  TagKeyCriterion(QString key1, QString key2);
+  TagKeyCriterion(QString key1, QString key2, QString key3);
 
   void addKey(QString key);
 
   virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new HasTagCriterion(_keys); }
+  virtual ElementCriterion* clone() { return new TagKeyCriterion(_keys); }
 
 protected:
 
-  HasTagCriterion(QStringList keys);
+  TagKeyCriterion(QStringList keys);
 
 private:
 

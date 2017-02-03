@@ -524,7 +524,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/MatchCreator.cpp \
     src/main/cpp/hoot/core/filters/AreaFilter.cpp \
     src/main/cpp/hoot/core/filters/ContainsNodeCriterion.cpp \
-    src/main/cpp/hoot/core/filters/HasTagCriterion.cpp \
     src/main/cpp/hoot/core/filters/HighwayFilter.cpp \
     src/main/cpp/hoot/core/filters/IsNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/LinearFilter.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp
+    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp \
+    src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -927,7 +927,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/PoiCriterion.h \
     src/main/cpp/hoot/core/filters/ElementTypeCriterion.h \
     src/main/cpp/hoot/core/filters/TagCriterion.h \
-    src/main/cpp/hoot/core/filters/HasTagCriterion.h \
     src/main/cpp/hoot/core/perty/PertyWayGeneralizeVisitor.h \
     src/main/cpp/hoot/core/util/RandomNumberUtils.h \
     src/main/cpp/hoot/core/algorithms/RdpWayGeneralizer.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
-    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h
+    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h \
+    src/main/cpp/hoot/core/filters/TagKeyCriterion.h
 

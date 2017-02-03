@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
@@ -699,7 +699,7 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
   FilteredVisitor elementWrongVisitor(
     new ChainCriterion(
       new ElementTypeCriterion(elementType),
-      new HasTagCriterion(MetadataTags::HootWrong())),
+      new TagKeyCriterion(MetadataTags::HootWrong())),
     new ElementCountVisitor());
   FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
   SingleStatistic* singleStat =

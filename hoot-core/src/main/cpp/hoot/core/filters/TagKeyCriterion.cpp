@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HasTagCriterion.h"
+#include "TagKeyCriterion.h"
 
 // hoot
 #include <hoot/core/Factory.h>
@@ -33,37 +33,37 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, HasTagCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, TagKeyCriterion)
 
-HasTagCriterion::HasTagCriterion(QString key)
+TagKeyCriterion::TagKeyCriterion(QString key)
 {
   addKey(key);
 }
 
-HasTagCriterion::HasTagCriterion(QString key1, QString key2)
+TagKeyCriterion::TagKeyCriterion(QString key1, QString key2)
 {
   addKey(key1);
   addKey(key2);
 }
 
-HasTagCriterion::HasTagCriterion(QString key1, QString key2, QString key3)
+TagKeyCriterion::TagKeyCriterion(QString key1, QString key2, QString key3)
 {
   addKey(key1);
   addKey(key2);
   addKey(key3);
 }
 
-HasTagCriterion::HasTagCriterion(QStringList keys)
+TagKeyCriterion::TagKeyCriterion(QStringList keys)
 {
   _keys = keys;
 }
 
-void HasTagCriterion::addKey(QString key)
+void TagKeyCriterion::addKey(QString key)
 {
   _keys.append(key);
 }
 
-bool HasTagCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool TagKeyCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 {
   for (int i = 0; i < _keys.size(); i++)
   {

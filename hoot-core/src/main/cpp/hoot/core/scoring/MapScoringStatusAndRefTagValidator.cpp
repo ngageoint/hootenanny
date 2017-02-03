@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/SingleStatistic.h>
@@ -49,7 +49,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
   FilteredVisitor unknown1Visitor(
     new ChainCriterion(
       new StatusCriterion(Status::Unknown1),
-      new HasTagCriterion(MetadataTags::Ref2())),
+      new TagKeyCriterion(MetadataTags::Ref2())),
     new ElementCountVisitor());
   FilteredVisitor& filteredRefVisitor = const_cast<FilteredVisitor&>(unknown1Visitor);
   SingleStatistic* singleStat = dynamic_cast<SingleStatistic*>(&unknown1Visitor.getChildVisitor());
@@ -62,7 +62,7 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
   FilteredVisitor unknown2Visitor(
     new ChainCriterion(
       new StatusCriterion(Status::Unknown2),
-      new HasTagCriterion(MetadataTags::Ref1())),
+      new TagKeyCriterion(MetadataTags::Ref1())),
     new ElementCountVisitor());
   filteredRefVisitor = const_cast<FilteredVisitor&>(unknown2Visitor);
   singleStat = dynamic_cast<SingleStatistic*>(&unknown2Visitor.getChildVisitor());
