@@ -29,7 +29,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/MapCropper.h>
 using namespace hoot;
@@ -67,7 +67,7 @@ public:
     QByteArray arr1;
     QByteArray arr2;
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -93,7 +93,7 @@ public:
     }
 
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -130,7 +130,7 @@ public:
 
   void runSimpleTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

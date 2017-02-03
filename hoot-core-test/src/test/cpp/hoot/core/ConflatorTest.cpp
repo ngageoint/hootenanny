@@ -31,7 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/PbfReader.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 using namespace hoot;
 
@@ -82,7 +82,7 @@ public:
 
   void runTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -108,7 +108,7 @@ public:
   //Now the river/building never get mergeed together.
   void runMergeTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

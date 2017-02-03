@@ -39,7 +39,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -125,7 +125,7 @@ public:
   OsmMapPtr createMapForCopyTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
@@ -169,7 +169,7 @@ public:
 
   void runAppendTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -192,7 +192,7 @@ public:
 
   void runAppendDuplicateNodeTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -220,7 +220,7 @@ public:
 
   void runAppendDuplicateWayTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -259,7 +259,7 @@ public:
 
   void runAppendDuplicateRelationTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -291,7 +291,7 @@ public:
 
   void runAppendSameMapTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -312,7 +312,7 @@ public:
 
   void runAppendDifferentCoordinateSystemsTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
@@ -339,7 +339,7 @@ public:
 
   void runFindWayNeighbors()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     QTime t;
     t.start();
@@ -403,7 +403,7 @@ public:
 
   void runNnTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -432,7 +432,7 @@ public:
 
   void runRemoveTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -566,7 +566,7 @@ public:
 
   void runReplaceNodeTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     // Turns out when you're counting on IDs not changing depending on what tests are run
     //    before yours? Reset the IDs back to the beginning. :)

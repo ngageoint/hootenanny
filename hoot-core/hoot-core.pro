@@ -68,7 +68,6 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/Node.cpp \
     src/main/cpp/hoot/core/index/OsmMapIndex.cpp \
     src/main/cpp/hoot/core/io/OgrReader.cpp \
-    src/main/cpp/hoot/core/io/OsmReader.cpp \
     src/main/cpp/hoot/core/OsmMap.cpp \
     src/main/cpp/hoot/core/elements/Way.cpp \
     src/main/cpp/hoot/core/elements/Element.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/UniqueNamesVisitor.cpp \
     src/main/cpp/hoot/core/visitors/WayVisitor.cpp \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/GetTagValuesVisitor.cpp
+    src/main/cpp/hoot/core/visitors/GetTagValuesVisitor.cpp \
+    src/main/cpp/hoot/core/io/OsmXmlReader.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -567,7 +567,6 @@ HEADERS += \
     src/main/cpp/hoot/core/WorkingMap.h \
     src/main/cpp/hoot/core/elements/Node.h \
     src/main/cpp/hoot/core/io/OgrReader.h \
-    src/main/cpp/hoot/core/io/OsmReader.h \
     src/main/cpp/hoot/core/OsmMap.h \
     src/main/cpp/hoot/core/elements/Tags.h \
     src/main/cpp/hoot/core/elements/Way.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/TableType.h \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.h \
     src/main/cpp/hoot/core/elements/ElementAttributeType.h \
-    src/main/cpp/hoot/core/util/MetadataTags.h
+    src/main/cpp/hoot/core/util/MetadataTags.h \
+    src/main/cpp/hoot/core/io/OsmXmlReader.h
 

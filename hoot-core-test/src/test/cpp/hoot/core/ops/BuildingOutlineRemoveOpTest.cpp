@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>
 #include <hoot/core/util/Log.h>
@@ -66,7 +66,7 @@ public:
   {
     DisableLog dl;
 
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();

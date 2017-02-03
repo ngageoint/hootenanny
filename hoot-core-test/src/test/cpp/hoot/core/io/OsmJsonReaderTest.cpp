@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
@@ -117,7 +117,7 @@ public:
       "</osm>\n";
 
     OsmMapPtr pTestMap(new OsmMap());
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
 
@@ -163,7 +163,7 @@ public:
       "</osm>\n";
 
     OsmMapPtr pTestMap(new OsmMap());
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
 
@@ -321,7 +321,7 @@ public:
       "</osm>                                                                                                           \n";
 
     OsmMapPtr pTestMap(new OsmMap());
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
 

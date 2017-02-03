@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
@@ -88,7 +88,7 @@ public:
 
   void runToyTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());

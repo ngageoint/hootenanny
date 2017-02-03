@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
@@ -64,7 +64,7 @@ public:
   void runTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> doughMap(new OsmMap());
@@ -89,7 +89,7 @@ public:
   void runCropTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> doughMap(new OsmMap());
@@ -114,7 +114,7 @@ public:
   void runBufferTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> doughMap(new OsmMap());
@@ -139,7 +139,7 @@ public:
   void runNegativeBufferTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> doughMap(new OsmMap());
@@ -164,7 +164,7 @@ public:
   void runCropAndBufferTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> doughMap(new OsmMap());

@@ -34,7 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RefRemoveOp.h>
@@ -64,7 +64,7 @@ public:
 
   void runToyTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();

@@ -35,7 +35,7 @@
 #include <hoot/core/Exception.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/perty/PertyOp.h>
 #include <hoot/core/util/Log.h>
@@ -70,7 +70,7 @@ public:
     env.MaxX = 1;
     env.MaxY = 1;
     map->setProjection(MapProjector::createAeacProjection(env));
-    //OsmReader reader;
+    //OsmXmlReader reader;
     //reader.read("test-files/ToyTestA.osm", map);
     // force the map bounds.
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
@@ -158,7 +158,7 @@ public:
     env.MaxX = 1;
     env.MaxY = 1;
     map->setProjection(MapProjector::createAeacProjection(env));
-    //OsmReader reader;
+    //OsmXmlReader reader;
     //reader.read("test-files/ToyTestA.osm", map);
     // force the map bounds.
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));

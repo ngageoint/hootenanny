@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/aggregator/MinAggregator.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -75,7 +75,7 @@ public:
 
   void runBuildingsTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -110,7 +110,7 @@ public:
 
   void runRoadsTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());

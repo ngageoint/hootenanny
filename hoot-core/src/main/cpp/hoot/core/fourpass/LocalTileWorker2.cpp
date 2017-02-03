@@ -36,7 +36,7 @@
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
@@ -122,7 +122,7 @@ void LocalTileWorker2::breakWays(QString out)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -142,7 +142,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -158,7 +158,7 @@ void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -207,7 +207,7 @@ shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 

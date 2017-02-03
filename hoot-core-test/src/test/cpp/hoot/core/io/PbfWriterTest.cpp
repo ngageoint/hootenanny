@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/PbfWriter.h>
 
 // Tgs
@@ -65,7 +65,7 @@ public:
 
   void runToyTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);

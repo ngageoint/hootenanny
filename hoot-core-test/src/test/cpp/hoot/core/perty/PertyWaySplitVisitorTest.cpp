@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/perty/PertyWaySplitVisitor.h>
 
@@ -71,7 +71,7 @@ public:
     //Log::getInstance().setLevel(Log::Debug);
 
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
@@ -114,7 +114,7 @@ public:
     //Log::getInstance().setLevel(Log::Debug);
 
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);

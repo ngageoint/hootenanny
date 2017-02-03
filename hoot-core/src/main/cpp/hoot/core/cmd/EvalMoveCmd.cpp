@@ -34,7 +34,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/io/PbfWriter.h>
@@ -145,7 +145,7 @@ public:
   {
     OsmWriter writer;
     writer.write(map, workingDir + "/EvalMove.osm");
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> result(new OsmMap());
     reader.read(workingDir + "/EvalMove.osm", result);
     return result;

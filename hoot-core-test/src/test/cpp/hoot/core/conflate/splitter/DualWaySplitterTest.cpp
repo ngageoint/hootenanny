@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
 using namespace hoot;
@@ -60,7 +60,7 @@ public:
 
   void allTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();

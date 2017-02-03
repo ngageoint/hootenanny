@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 using namespace hoot;
 
@@ -40,9 +40,9 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
-class OsmReaderTest : public CppUnit::TestFixture
+class OsmXmlReaderTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmReaderTest);
+    CPPUNIT_TEST_SUITE(OsmXmlReaderTest);
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST(runUseIdTest);
     CPPUNIT_TEST(runUseStatusTest);
@@ -52,7 +52,7 @@ public:
 
     void runTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         shared_ptr<OsmMap> map(new OsmMap());
         uut.read("test-files/ToyTestA.osm", map);
@@ -66,7 +66,7 @@ public:
 
     void runUseIdTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         OsmMap::resetCounters();
 
@@ -101,7 +101,7 @@ public:
 
     void runUseStatusTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         OsmMap::resetCounters();
 
@@ -109,7 +109,7 @@ public:
         uut.setUseDataSourceIds(true);
         uut.setUseStatusFromFile(true);
         uut.setDefaultStatus(Status::Invalid);
-        uut.read("test-files/io/OsmReaderUseStatusTest.osm", map);
+        uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
 
         CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodeMap().size());
         CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
@@ -123,5 +123,5 @@ public:
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OsmReaderTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(OsmXmlReaderTest);
 

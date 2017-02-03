@@ -38,7 +38,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/MaximalSubline.h>
@@ -123,7 +123,7 @@ public:
    */
   void runCircleTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -161,7 +161,7 @@ public:
 
   void runJoinTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -410,7 +410,7 @@ public:
   {
     {
       shared_ptr<OsmMap> map(new OsmMap());
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);

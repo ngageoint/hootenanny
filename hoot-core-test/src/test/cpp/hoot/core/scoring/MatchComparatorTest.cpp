@@ -29,7 +29,7 @@
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/HasTagCriterion.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -69,7 +69,7 @@ public:
   {
     DisableLog dl;
 
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();

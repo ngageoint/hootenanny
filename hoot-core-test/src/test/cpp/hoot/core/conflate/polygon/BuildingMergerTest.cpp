@@ -47,7 +47,7 @@
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -92,7 +92,7 @@ public:
 
   void runMatchTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -146,7 +146,7 @@ public:
 
   void runTagTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());

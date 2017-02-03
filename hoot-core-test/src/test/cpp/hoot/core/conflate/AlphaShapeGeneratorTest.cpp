@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -61,7 +61,7 @@ public:
   void runBasicTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -83,7 +83,7 @@ public:
   void runBufferTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -105,7 +105,7 @@ public:
   void runNegativeBufferTest()
   {
     Settings::getInstance().clear();
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
     shared_ptr<OsmMap> map(new OsmMap());

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OsmReader.h"
+#include "OsmXmlReader.h"
 
 #include <cstdlib> // std::system()
 #include <cstdio> // for std::remove()
@@ -61,9 +61,9 @@ namespace hoot
 {
 using namespace elements;
 
-HOOT_FACTORY_REGISTER(OsmMapReader, OsmReader)
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
-OsmReader::OsmReader()
+OsmXmlReader::OsmXmlReader()
 {
   _status = hoot::Status::Invalid;
   _circularError = -1;
@@ -73,7 +73,7 @@ OsmReader::OsmReader()
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
 }
 
-void OsmReader::_parseTimeStamp(const QXmlAttributes &attributes)
+void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
   if ( (attributes.value("timestamp") != "") &&
        (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
@@ -84,7 +84,7 @@ void OsmReader::_parseTimeStamp(const QXmlAttributes &attributes)
 
 }
 
-void OsmReader::_createNode(const QXmlAttributes &attributes)
+void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
   long newId;
@@ -137,7 +137,7 @@ void OsmReader::_createNode(const QXmlAttributes &attributes)
   }
 }
 
-void OsmReader::_createRelation(const QXmlAttributes &attributes)
+void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
   long newId = _getRelationId(_relationId);
@@ -176,7 +176,7 @@ void OsmReader::_createRelation(const QXmlAttributes &attributes)
   _parseTimeStamp(attributes);
 }
 
-void OsmReader::_createWay(const QXmlAttributes &attributes)
+void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
 
@@ -225,7 +225,7 @@ void OsmReader::_createWay(const QXmlAttributes &attributes)
   _parseTimeStamp(attributes);
 }
 
-bool OsmReader::fatalError(const QXmlParseException &exception)
+bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 {
   _errorString = QObject::tr("Parse error at line %1, column %2:\n%3")
       .arg(exception.lineNumber())
@@ -234,7 +234,7 @@ bool OsmReader::fatalError(const QXmlParseException &exception)
   return false;
 }
 
-bool OsmReader::isSupported(QString url)
+bool OsmXmlReader::isSupported(QString url)
 {
   const int numExtensions = 3;
   const QString validExtensions[numExtensions] = { ".osm", ".osm.bz2", ".osm.gz" };
@@ -253,7 +253,7 @@ bool OsmReader::isSupported(QString url)
   return false;
 }
 
-double OsmReader::_parseDouble(QString s)
+double OsmXmlReader::_parseDouble(QString s)
 {
   bool ok;
   double result = s.toDouble(&ok);
@@ -266,7 +266,7 @@ double OsmReader::_parseDouble(QString s)
   return result;
 }
 
-long OsmReader::_parseLong(QString s)
+long OsmXmlReader::_parseLong(QString s)
 {
   bool ok;
   long result = s.toLong(&ok);
@@ -279,7 +279,7 @@ long OsmReader::_parseLong(QString s)
   return result;
 }
 
-int OsmReader::_parseInt(QString s)
+int OsmXmlReader::_parseInt(QString s)
 {
   bool ok;
   int result = s.toInt(&ok);
@@ -292,7 +292,7 @@ int OsmReader::_parseInt(QString s)
   return result;
 }
 
-Status OsmReader::_parseStatus(QString s)
+Status OsmXmlReader::_parseStatus(QString s)
 {
   Status result;
 
@@ -314,12 +314,12 @@ Status OsmReader::_parseStatus(QString s)
   return result;
 }
 
-void OsmReader::open(QString url)
+void OsmXmlReader::open(QString url)
 {
   _path = url;
 }
 
-void OsmReader::read(shared_ptr<OsmMap> map)
+void OsmXmlReader::read(shared_ptr<OsmMap> map)
 {
   _osmFound = false;
 
@@ -406,7 +406,7 @@ void OsmReader::read(shared_ptr<OsmMap> map)
   _map.reset();
 }
 
-void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
+void OsmXmlReader::readFromString(QString xml, shared_ptr<OsmMap> map)
 {
   _osmFound = false;
 
@@ -435,13 +435,13 @@ void OsmReader::readFromString(QString xml, shared_ptr<OsmMap> map)
   _map.reset();
 }
 
-void OsmReader::read(const QString& path, shared_ptr<OsmMap> map)
+void OsmXmlReader::read(const QString& path, shared_ptr<OsmMap> map)
 {
   open(path);
   read(map);
 }
 
-const QString& OsmReader::_saveMemory(const QString& s)
+const QString& OsmXmlReader::_saveMemory(const QString& s)
 {
   if (!_strings.contains(s))
   {
@@ -450,7 +450,7 @@ const QString& OsmReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmReader::startElement(const QString & /* namespaceURI */,
+bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
                              const QString & /* localName */,
                              const QString &qName,
                              const QXmlAttributes &attributes)
@@ -673,7 +673,7 @@ bool OsmReader::startElement(const QString & /* namespaceURI */,
   return true;
 }
 
-bool OsmReader::endElement(const QString & /* namespaceURI */,
+bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
                              const QString & /* localName */,
                              const QString &qName)
 {
@@ -699,7 +699,7 @@ bool OsmReader::endElement(const QString & /* namespaceURI */,
   return true;
 }
 
-long OsmReader::_getRelationId(long fileId)
+long OsmXmlReader::_getRelationId(long fileId)
 {
   long newId;
   if (_useDataSourceId)

@@ -34,7 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
@@ -73,7 +73,7 @@ public:
 
     void runTest()
     {
-      OsmReader reader;
+      OsmXmlReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -132,7 +132,7 @@ public:
     {
       TestUtils::resetEnvironment();
 
-      OsmReader reader;
+      OsmXmlReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -186,7 +186,7 @@ public:
 
     void oneShortTest()
     {
-      OsmReader reader;
+      OsmXmlReader reader;
 
       OsmMap::resetCounters();
 

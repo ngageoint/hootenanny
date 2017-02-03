@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>

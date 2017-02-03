@@ -42,7 +42,7 @@
 #include <hoot/core/filters/UnknownFilter.h>
 #include <hoot/core/filters/WayFilterChain.h>
 #include <hoot/core/filters/WayDirectionFilter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -71,7 +71,7 @@ public:
 
   void allManipulationsTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -94,7 +94,7 @@ public:
 
   void preSplitTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
 
@@ -119,7 +119,7 @@ public:
 
   void parallelFilterTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();

@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/perty/PertyWayGeneralizeVisitor.h>
 
@@ -85,7 +85,7 @@ public:
     }
     else
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       reader.setDefaultStatus(Status::Unknown1);
       reader.setUseDataSourceIds(true);
       reader.read(inputFile, map);

@@ -32,7 +32,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/io/PbfReader.h>

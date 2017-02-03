@@ -61,12 +61,12 @@ namespace hoot
  *
  * @todo This could use a nice overhaul for readability and possibly performance.
  */
-class OsmReader : public QXmlDefaultHandler, public OsmMapReader
+class OsmXmlReader : public QXmlDefaultHandler, public OsmMapReader
 {
 public:
-  static std::string className() { return "hoot::OsmReader"; }
+  static std::string className() { return "hoot::OsmXmlReader"; }
 
-  OsmReader();
+  OsmXmlReader();
 
   virtual QString errorString() const { return _errorString; }
 

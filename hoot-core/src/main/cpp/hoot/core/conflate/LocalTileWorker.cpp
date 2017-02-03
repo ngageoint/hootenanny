@@ -31,7 +31,7 @@
 #include <hoot/core/Conflator.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmWriter.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
@@ -89,7 +89,7 @@ void LocalTileWorker::breakWays(QString out)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
@@ -106,7 +106,7 @@ OGREnvelope LocalTileWorker::calculateEnvelope()
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
@@ -119,7 +119,7 @@ void LocalTileWorker::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
@@ -204,7 +204,7 @@ shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 

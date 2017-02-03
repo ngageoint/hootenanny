@@ -442,7 +442,7 @@ public:
     OsmWriter writer;
     writer.setIncludeHootInfo(false);
 
-    //Suppress the warning from the OsmReader about missing nodes for ways by temporarily changing
+    //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel loglLevel = Log::getInstance().getLevel();
@@ -486,7 +486,7 @@ public:
     OsmWriter writer;
     writer.setIncludeHootInfo(false);
 
-    //Suppress the warning from the OsmReader about missing nodes for ways by temporarily changing
+    //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel loglLevel = Log::getInstance().getLevel();
@@ -582,7 +582,7 @@ public:
     reader1.open("test-files/PbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
 
-    //Suppress the warning from the OsmReader about missing nodes for ways by temporarily changing
+    //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel loglLevel = Log::getInstance().getLevel();
