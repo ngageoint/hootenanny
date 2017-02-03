@@ -27,14 +27,13 @@
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
 
-#include <boost/shared_ptr.hpp>
-
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
+
+class ElementVisitor;
 
 class ElementVisitorInputStream : public ElementInputStream
 {

@@ -27,6 +27,7 @@
 #include "CountUniqueReviewsVisitor.h"
 
 #include <hoot/core/Factory.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {

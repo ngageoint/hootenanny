@@ -48,6 +48,10 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Progress.h>
 
 #include <boost/shared_ptr.hpp>
 

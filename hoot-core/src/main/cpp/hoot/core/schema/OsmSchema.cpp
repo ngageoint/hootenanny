@@ -49,6 +49,8 @@ using namespace boost;
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/OsmSchemaLoader.h>
 
 // Qt
 #include <QDomDocument>

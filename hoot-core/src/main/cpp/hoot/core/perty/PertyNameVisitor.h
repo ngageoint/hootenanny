@@ -39,8 +39,7 @@ namespace hoot
 /**
  * A simple random name changer. This is not part of the original perty paper.
  */
-class PertyNameVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+class PertyNameVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable
 {
 public:
 

@@ -18,7 +18,6 @@
 #define CONFLATEMAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 // Standard
@@ -26,6 +25,8 @@
 
 namespace hoot
 {
+
+class OsmMap;
 
 class ConflateMapper : public OsmMapMapper
 {

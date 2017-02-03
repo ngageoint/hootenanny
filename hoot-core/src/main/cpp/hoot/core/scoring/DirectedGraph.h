@@ -28,8 +28,8 @@
 #ifndef DIRECTEDGRAPH_H
 #define DIRECTEDGRAPH_H
 
-// Hoot
-#include <hoot/core/OsmMap.h>
+// Boost
+#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QMultiHash>
@@ -38,6 +38,9 @@ namespace hoot
 {
 
   class Way;
+  class OsmMap;
+
+  using namespace boost;
 
 class DirectedGraph
 {

@@ -34,7 +34,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, TagCountVisitor)
 
 TagCountVisitor::TagCountVisitor() :
-  _map(),
   _totalCount(0),
   _informationCount(0)
 {

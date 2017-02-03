@@ -28,14 +28,16 @@
 #define LENGTHOFWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/OsmMap.h>
 
 #include "SingleStatistic.h"
 
 namespace hoot
 {
+class OsmMap;
+
 using namespace std;
 
 /**

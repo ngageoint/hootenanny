@@ -28,12 +28,9 @@
 #define WAYVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {

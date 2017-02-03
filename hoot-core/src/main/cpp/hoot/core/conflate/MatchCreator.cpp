@@ -33,7 +33,6 @@
 #include <hoot/core/filters/WaterwayCriterion.h>
 #include <hoot/core/filters/HighwayFilter.h>
 
-
 namespace hoot
 {
 

@@ -32,13 +32,13 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/elements/Way.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 using namespace geos::geom;
 

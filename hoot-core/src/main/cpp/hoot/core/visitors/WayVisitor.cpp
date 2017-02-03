@@ -26,6 +26,7 @@
  */
 #include "WayVisitor.h"
 
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {

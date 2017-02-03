@@ -41,7 +41,6 @@
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // Qt
@@ -52,6 +51,8 @@
 
 namespace hoot
 {
+class OsmMap;
+
   using namespace boost;
   using namespace geos::geom;
   using namespace std;

@@ -29,8 +29,6 @@
 
 #include "ChainCriterion.h"
 
-#include <hoot/core/elements/Element.h>
-
 namespace hoot
 {
 

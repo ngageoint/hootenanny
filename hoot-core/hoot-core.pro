@@ -65,7 +65,6 @@ SOURCES += \
     src/main/cpp/hoot/core/OgrFeatureProvider.cpp \
     src/main/cpp/hoot/core/Conflator.cpp \
     src/main/cpp/hoot/core/VectorFeatureProvider.cpp \
-    src/main/cpp/hoot/core/manipulators/Manipulator.cpp \
     src/main/cpp/hoot/core/elements/Node.cpp \
     src/main/cpp/hoot/core/index/OsmMapIndex.cpp \
     src/main/cpp/hoot/core/io/OgrReader.cpp \
@@ -253,7 +252,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.cpp \
     src/main/cpp/hoot/core/algorithms/aggregator/QuantileAggregator.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatch.cpp \
-    src/main/cpp/hoot/core/conflate/highway/HighwayMergerCreator.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatchCreator.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayMerger.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMerger.cpp \
@@ -293,8 +291,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/HootApiDbWriter.cpp \
     src/main/cpp/hoot/core/perty/BigPertyOp.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapReader.cpp \
-    src/main/cpp/hoot/core/io/OsmMapWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmMapReader.cpp \
     src/main/cpp/hoot/core/io/ApiDb.cpp \
     src/main/cpp/hoot/core/io/OsmApiDb.cpp \
     src/main/cpp/hoot/core/io/HootApiDb.cpp \
@@ -323,10 +319,8 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/KeepHighwaysVisitor.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayExpertClassifier.cpp \
     src/main/cpp/hoot/core/conflate/MatchClassification.cpp \
-    src/main/cpp/hoot/core/algorithms/SublineMatcher.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalNearestSublineMatcher.cpp \
     src/main/cpp/hoot/core/util/UuidHelper.cpp \
-    src/main/cpp/hoot/core/algorithms/SublineStringMatcher.cpp \
     src/main/cpp/hoot/core/algorithms/MaximalSublineStringMatcher.cpp \
     src/main/cpp/hoot/core/ops/CopySubsetOp.cpp \
     src/main/cpp/hoot/core/visitors/KeepNodesVisitor.cpp \
@@ -439,7 +433,6 @@ SOURCES += \
     src/main/cpp/hoot/core/scoring/AttributeCount.cpp \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.cpp \
     src/main/cpp/hoot/core/io/ElementOutputStream.cpp \
-    src/main/cpp/hoot/core/io/ElementInputStream.cpp \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.cpp \
     src/main/cpp/hoot/core/io/ElementVisitorInputStream.cpp \
     src/main/cpp/hoot/core/io/ElementCacheLRU.cpp \
@@ -484,8 +477,6 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveMissingElementsVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ProjectToGeographicVisitor.cpp \
     src/main/cpp/hoot/core/filters/WaterwayCriterion.cpp \
-    src/main/cpp/hoot/core/algorithms/linearreference/WayMapping.cpp \
-    src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMapping.cpp \
     src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.cpp \
     src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.cpp \
     src/main/cpp/hoot/core/io/ElementComparer.cpp \
@@ -789,7 +780,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/zindex/ZCurveRanger.h \
     src/main/cpp/hoot/core/algorithms/zindex/ZValue.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatch.h \
-    src/main/cpp/hoot/core/conflate/highway/HighwayMergerCreator.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatchCreator.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMerger.h \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMerger.h \

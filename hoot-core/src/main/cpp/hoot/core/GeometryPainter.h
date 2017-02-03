@@ -28,9 +28,6 @@
 #ifndef __GEOMETRY_PAINTER_H__
 #define __GEOMETRY_PAINTER_H__
 
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-
 //OGR Includes
 class OGREnvelope;
 class OGRGeometry;
@@ -49,6 +46,11 @@ class QRect;
 
 namespace hoot
 {
+
+class OsmMap;
+class Way;
+class Element;
+class Node;
 
 /**
  * A class for consolidating all the spots that we draw OGR geometries.

@@ -28,10 +28,7 @@
 #define GETTAGVALUESVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -41,7 +38,7 @@ using namespace std;
  * Puts all values for the given key into a bag. If you want to filter based on type see
  * FilteredVisitor. If the values are a list then they're split before they're put in the bag.
  */
-class GetTagValuesVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class GetTagValuesVisitor : public ElementVisitor
 {
 public:
 
@@ -57,15 +54,12 @@ public:
 
   virtual ~GetTagValuesVisitor() {}
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
   QString _key;
   set<QString>& _bag;
-  const OsmMap* _map;
   bool _split;
 };
 

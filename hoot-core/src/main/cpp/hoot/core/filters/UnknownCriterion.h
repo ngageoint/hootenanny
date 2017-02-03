@@ -29,7 +29,6 @@
 #define UNKNOWNCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot

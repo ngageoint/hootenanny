@@ -29,10 +29,10 @@
 
 #include "TagDifferencer.h"
 
-#include <hoot/core/schema/SchemaVertex.h>
-
 namespace hoot
 {
+
+class SchemaVertex;
 
 class TagFilteredDifferencer : public TagDifferencer
 {

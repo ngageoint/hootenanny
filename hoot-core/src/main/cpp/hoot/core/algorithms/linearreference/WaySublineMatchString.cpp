@@ -26,6 +26,9 @@
  */
 #include "WaySublineMatchString.h"
 
+#include <hoot/core/util/Log.h>
+#include "WaySublineCollection.h"
+
 namespace hoot
 {
 

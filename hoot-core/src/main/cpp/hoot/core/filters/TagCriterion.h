@@ -28,7 +28,6 @@
 #define TAGCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 

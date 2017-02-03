@@ -27,6 +27,7 @@
 
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -79,4 +80,4 @@ geos::geom::Envelope CalculateBoundsVisitor::getGeosBounds(const ConstOsmMapPtr&
   return *e;
 }
 
-} // end namespace hoot
+}

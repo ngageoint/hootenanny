@@ -28,7 +28,6 @@
 #ifndef WAYFILTER_H
 #define WAYFILTER_H
 
-#include <hoot/core/WayMap.h>
 #include <hoot/core/util/NotImplementedException.h>
 
 #include "Filter.h"

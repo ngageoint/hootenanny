@@ -43,6 +43,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/Units.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
 
 // Standard
 #include <fstream>

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {

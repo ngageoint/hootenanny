@@ -24,10 +24,13 @@
 // Qt
 #include <QString>
 
-#include "MapStats.h"
+// geos
+#include <geos/geom/Envelope.h>
 
 namespace hoot
 {
+
+using namespace geos::geom;
 
 class PaintNodesDriver : public Driver
 {

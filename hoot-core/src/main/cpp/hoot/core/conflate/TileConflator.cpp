@@ -41,6 +41,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <set>

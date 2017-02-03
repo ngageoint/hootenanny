@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,15 +29,15 @@
 
 // hoot
 #include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/schema/TagAncestorDifferencer.h>
 
 namespace hoot
 {
 
 class HighwayMatchVisitor;
+class HighwayClassifier;
+class SublineStringMatcher;
+class NotImplementedException;
+class TagAncestorDifferencer;
 
 using namespace Tgs;
 

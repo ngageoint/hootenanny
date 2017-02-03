@@ -50,6 +50,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/NodeReplacements.h>
 
 #include "TileBoundsCalculator.h"
 

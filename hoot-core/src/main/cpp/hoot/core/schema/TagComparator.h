@@ -28,14 +28,18 @@
 #ifndef TAGCOMPARATOR_H
 #define TAGCOMPARATOR_H
 
-#include <hoot/core/elements/Tags.h>
-
 // Standard
 #include <set>
 #include <vector>
 
+// Qt
+#include <QString>
+#include <QSet>
+
 namespace hoot
 {
+
+class Tags;
 
 class TagComparator
 {

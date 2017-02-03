@@ -27,10 +27,21 @@
 #ifndef OSMSCHEMALOADERFACTORY_H
 #define OSMSCHEMALOADERFACTORY_H
 
-#include "OsmSchemaLoader.h"
+// Boost
+#include <boost/shared_ptr.hpp>
+
+// Qt
+#include <QString>
+
+#include <memory>
 
 namespace hoot
 {
+
+class OsmSchemaLoader;
+
+using namespace boost;
+using namespace std;
 
 class OsmSchemaLoaderFactory
 {

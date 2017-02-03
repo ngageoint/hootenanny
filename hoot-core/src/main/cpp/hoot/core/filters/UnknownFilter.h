@@ -30,11 +30,11 @@
 
 #include "WayFilter.h"
 
-// Hoot
-#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
+
+class Way;
 
 /**
  * Keeps all the unknown ways and filters everything else.

@@ -30,7 +30,6 @@
 #include "WayFeatureExtractor.h"
 
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/TagComparator.h>
 
 namespace hoot
 {

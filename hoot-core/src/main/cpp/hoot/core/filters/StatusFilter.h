@@ -30,10 +30,12 @@
 
 #include "WayFilter.h"
 
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Status.h>
 
 namespace hoot
 {
+
+class Way;
 
 /**
  * Matches when an element's status matches the status provided.

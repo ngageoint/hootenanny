@@ -27,6 +27,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

@@ -32,10 +32,11 @@
 
 // hoot
 #include "ElementCriterion.h"
-#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
+
+class Element;
 
 class IsNodeFilter : public BaseElementFilter
 {

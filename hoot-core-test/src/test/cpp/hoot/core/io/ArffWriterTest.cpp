@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
+#include <hoot/core/conflate/MatchType.h>
 
 // Qt
 #include <QDir>

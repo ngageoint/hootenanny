@@ -33,12 +33,14 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/elements/Element.h>
+
 
 namespace hoot
 {
+
+class Element;
+class OsmMap;
 
 /**
  * @author RoadMatcher

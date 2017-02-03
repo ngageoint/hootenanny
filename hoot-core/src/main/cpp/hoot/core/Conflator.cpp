@@ -44,6 +44,7 @@ using namespace boost;
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/manipulators/Manipulator.h>
 using namespace hoot;
 
 

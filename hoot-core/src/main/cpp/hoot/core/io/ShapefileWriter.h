@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,9 +29,6 @@
 #define SHAPEFILEWRITER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriter.h>
 
 // Qt
@@ -45,7 +42,12 @@ class QString;
 // Standard
 #include <vector>
 
-namespace hoot {
+namespace hoot
+{
+
+class OsmMap;
+class Way;
+class Relation;
 
 /**
  * Reads in a .osm file into an OsmMap data structure. During this process all IDs are mapped from

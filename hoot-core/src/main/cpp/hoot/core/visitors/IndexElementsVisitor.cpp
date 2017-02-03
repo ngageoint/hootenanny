@@ -28,11 +28,11 @@
 
 // Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>

@@ -28,7 +28,6 @@
 #define LONGESTTAGVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
@@ -42,7 +41,7 @@ using namespace std;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class LongestTagVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class LongestTagVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
@@ -56,15 +55,12 @@ public:
 
   QString getLongestTag() const { return _tag; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
   int _longestTag;
   QString _tag;
-  const OsmMap* _map;
 };
 
 }

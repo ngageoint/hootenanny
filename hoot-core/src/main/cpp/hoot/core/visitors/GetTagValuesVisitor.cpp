@@ -26,7 +26,6 @@
  */
 #include "GetTagValuesVisitor.h"
 
-
 namespace hoot
 {
 

@@ -30,7 +30,6 @@
 
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
 
 /**
  * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds

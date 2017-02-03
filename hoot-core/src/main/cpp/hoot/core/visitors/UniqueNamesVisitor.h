@@ -28,8 +28,6 @@
 #define UNIQUENAMESVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // Qt
@@ -44,7 +42,7 @@ using namespace std;
 /**
  * Counts all the unique names.
  */
-class UniqueNamesVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class UniqueNamesVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
@@ -58,13 +56,10 @@ public:
 
   double getStat() const { return _names.size(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  const OsmMap* _map;
   QSet<QString> _names;
 };
 

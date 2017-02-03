@@ -38,6 +38,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/Element.h>
+#include "ElementInputStream.h"
+#include <hoot/core/OsmMap.h>
 
 using namespace hoot::pb;
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,8 +28,6 @@
 #define MAPEXTENTVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // GEOS
@@ -42,7 +40,7 @@ using namespace std;
 /**
  * Determines the extent of a map
  */
-class MapExtentVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class MapExtentVisitor : public ElementVisitor
 {
 
 public:
@@ -55,13 +53,10 @@ public:
 
   Envelope getExtent() const { return _bounds; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  const OsmMap* _map;
   Envelope _bounds;
 
 };

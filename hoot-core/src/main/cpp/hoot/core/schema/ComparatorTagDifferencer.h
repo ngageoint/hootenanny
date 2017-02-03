@@ -28,7 +28,6 @@
 #define COMPARATORTAGDIFFERENCER_H
 
 #include "TagDifferencer.h"
-#include <hoot/core/elements/Tags.h>
 
 namespace hoot
 {

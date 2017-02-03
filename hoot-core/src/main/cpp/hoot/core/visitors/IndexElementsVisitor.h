@@ -29,11 +29,8 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
-#include <hoot/core/util/Configurable.h>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -53,6 +50,8 @@
 
 namespace hoot
 {
+
+class ElementCriterion;
 
 class IndexElementsVisitor :
     public ElementVisitor,

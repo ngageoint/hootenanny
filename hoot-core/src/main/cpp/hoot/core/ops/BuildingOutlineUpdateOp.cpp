@@ -45,6 +45,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {

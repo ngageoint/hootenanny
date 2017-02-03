@@ -28,8 +28,8 @@
 #define REMOVEELEMENTOP_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {

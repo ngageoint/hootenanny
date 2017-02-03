@@ -27,6 +27,9 @@
  */
 #include "AbstractDistanceExtractor.h"
 
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

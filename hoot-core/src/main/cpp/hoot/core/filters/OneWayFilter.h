@@ -28,13 +28,12 @@
 #ifndef ONEWAYFILTER_H
 #define ONEWAYFILTER_H
 
-// Hoot
-#include <hoot/core/elements/Way.h>
-
 #include "WayFilter.h"
 
 namespace hoot
 {
+
+class Way;
 
 class OneWayFilter : public WayFilter
 {

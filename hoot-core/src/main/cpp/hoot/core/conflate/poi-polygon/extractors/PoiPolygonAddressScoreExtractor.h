@@ -39,7 +39,7 @@ namespace hoot
  * Calculates the address similarity score of two features.  Only exact string matches yield a
  * positive score.  This translates addresses, but doesn't handle abbreviations.
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase//, public Configurable
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
 {
 public:
 

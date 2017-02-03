@@ -33,12 +33,14 @@
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
-  using namespace geos::geom;
+
+class Element;
+
+using namespace geos::geom;
 
 /**
  * isSatisfied returns true if an element is

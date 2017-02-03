@@ -29,7 +29,6 @@
 #define MAXIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 // Standard

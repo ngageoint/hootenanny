@@ -30,13 +30,12 @@
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/conflate/MatchCreator.h>
+#include "ConstOsmMapOperation.h"
+#include "stats/SingleStat.h"
 
 // Qt
 #include <QList>
 #include <QString>
-
-#include "ConstOsmMapOperation.h"
-#include "stats/SingleStat.h"
 
 namespace hoot
 {

@@ -27,6 +27,8 @@
 
 #include "StatusFilter.h"
 
+#include <hoot/core/elements/Way.h>
+
 namespace hoot
 {
 

@@ -29,14 +29,12 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/match-graph/MatchGraph.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
-#include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/conflate/match-graph/MatchGraph.h>
+#include <hoot/core/ops/stats/SingleStat.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -49,6 +47,8 @@ class MatchFactory;
 class MatchThreshold;
 class Merger;
 class MergerFactory;
+class Settings;
+class ElementId;
 
 using namespace geos::geom;
 

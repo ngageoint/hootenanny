@@ -27,8 +27,7 @@
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
 
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
+// Hoot
 #include <hoot/core/conflate/MatchThreshold.h>
 
 // Standard
@@ -43,6 +42,7 @@ namespace hoot
 
 using namespace std;
 class Match;
+class ElementCriterion;
 
 class MatchCreator
 {

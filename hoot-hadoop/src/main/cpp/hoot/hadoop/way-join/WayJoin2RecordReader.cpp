@@ -20,6 +20,9 @@
 #include <hoot/core/io/PbfReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/hadoop/PbfInputSplit.h>
+#include <hoot/hadoop/PbfRecordReader.h>
 
 // Pretty Pipes
 #include <pp/DataInputStream.h>

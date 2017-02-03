@@ -29,7 +29,6 @@
 #define FEATURECOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 #include "SingleStatistic.h"

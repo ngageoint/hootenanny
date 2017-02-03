@@ -28,7 +28,7 @@
 #define ELEMENTTYPECRITERION_H
 
 #include "ElementCriterion.h"
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementType.h>
 
 namespace hoot
 {

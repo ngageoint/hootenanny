@@ -62,6 +62,7 @@
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/Factory.h>
 #include <hoot/core/util/DataProducer.h>
+#include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
 using namespace std;

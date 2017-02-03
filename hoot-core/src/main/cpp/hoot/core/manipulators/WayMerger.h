@@ -30,7 +30,6 @@
 
 #include "../Conflator.h"
 #include "WayManipulator.h"
-#include "WayMatchSet.h"
 
 // GEOS
 namespace geos {

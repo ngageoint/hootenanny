@@ -28,11 +28,8 @@
 #define TRANSLATEDTAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/schema/Schema.h>
 
 #include "SingleStatistic.h"
 
@@ -40,6 +37,8 @@ namespace hoot
 {
 class Feature;
 class ScriptToOgrTranslator;
+class ScriptTranslator;
+class Schema;
 
 class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic

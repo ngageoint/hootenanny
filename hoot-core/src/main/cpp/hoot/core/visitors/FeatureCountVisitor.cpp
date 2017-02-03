@@ -26,6 +26,8 @@
  */
 #include "FeatureCountVisitor.h"
 
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 

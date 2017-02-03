@@ -28,9 +28,6 @@
 #define SETTAGVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "ElementOsmMapVisitor.h"

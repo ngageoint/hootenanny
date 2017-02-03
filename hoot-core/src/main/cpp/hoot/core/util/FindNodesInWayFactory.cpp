@@ -27,7 +27,7 @@
 
 #include "FindNodesInWayFactory.h"
 
-
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

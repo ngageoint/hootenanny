@@ -29,18 +29,17 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/conflate/MatchType.h>
+#include "MatchMembers.h"
 
 // Standard
 #include <set>
 
-#include "MatchClassification.h"
-#include "MatchMembers.h"
-
 namespace hoot
 {
 class MatchThreshold;
+class ElementId;
+class MatchType;
+class MatchClassification;
 
 using namespace std;
 

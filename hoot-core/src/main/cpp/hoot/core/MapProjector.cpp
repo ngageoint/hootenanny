@@ -33,7 +33,6 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/HootException.h>

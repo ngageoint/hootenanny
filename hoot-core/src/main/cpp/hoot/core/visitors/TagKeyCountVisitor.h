@@ -28,8 +28,6 @@
 #define TAGKEYCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 #include "SingleStatistic.h"
@@ -40,7 +38,7 @@ namespace hoot
 /**
  * Counts the number of tags in all elements with the given key
  */
-class TagKeyCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class TagKeyCountVisitor : public ElementVisitor, public SingleStatistic
 {
   public:
 
@@ -51,15 +49,11 @@ class TagKeyCountVisitor : public ElementVisitor, public ConstOsmMapConsumer, pu
 
     virtual ~TagKeyCountVisitor() {}
 
-    virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
     virtual void visit(const ConstElementPtr& e);
 
     virtual double getStat() const { return _keyCount; }
 
   private:
-
-    const OsmMap* _map;
 
     QString _key;
     long _keyCount;

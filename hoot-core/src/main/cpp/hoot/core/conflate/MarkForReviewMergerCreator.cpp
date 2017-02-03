@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 #include "MarkForReviewMerger.h"
 
