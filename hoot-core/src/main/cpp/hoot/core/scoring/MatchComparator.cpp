@@ -44,7 +44,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
-#include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/util/Log.h>
 
@@ -207,7 +207,7 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
 {
   TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid1);
   tcf.addPair("uuid", uuid2);
-  SetVisitor sv;
+  ElementIdSetVisitor sv;
   FilteredVisitor fv2(tcf, sv);
   in->visitRo(fv2);
   const set<ElementId>& s = sv.getElementSet();

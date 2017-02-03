@@ -231,7 +231,6 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatch.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatchCreator.cpp \
     src/main/cpp/hoot/core/ops/RecursiveElementRemover.cpp \
-    src/main/cpp/hoot/core/visitors/SetVisitor.cpp \
     src/main/cpp/hoot/core/scoring/MatchComparator.cpp \
     src/main/cpp/hoot/core/visitors/AddUuidVisitor.cpp \
     src/main/cpp/hoot/core/visitors/FilteredVisitor.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
-    src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp
+    src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -742,7 +742,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/UnifyingConflator.h \
     src/main/cpp/hoot/core/conflate/MatchFactory.h \
     src/main/cpp/hoot/core/ops/RecursiveElementRemover.h \
-    src/main/cpp/hoot/core/visitors/SetVisitor.h \
     src/main/cpp/hoot/core/ops/ConstOsmMapOperation.h \
     src/main/cpp/hoot/core/scoring/MatchComparator.h \
     src/main/cpp/hoot/core/visitors/AddUuidVisitor.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
-    src/main/cpp/hoot/core/visitors/ElementCountVisitor.h
+    src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
+    src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h
 
