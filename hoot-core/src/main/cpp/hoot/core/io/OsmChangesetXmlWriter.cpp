@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmChangesetXmlFileWriter.h"
+#include "OsmChangesetXmlWriter.h"
 
 // hoot
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -41,13 +41,13 @@
 namespace hoot
 {
 
-OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
+OsmChangesetXmlWriter::OsmChangesetXmlWriter()
   : _precision(ConfigOptions().getWriterPrecision()),
     _changesetMaxSize(ConfigOptions().getChangesetMaxSize())
 {
 }
 
-void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
+void OsmChangesetXmlWriter::write(QString path, ChangeSetProviderPtr cs)
 {
   QFileInfo info(path);
   info.setCaching(false);
@@ -144,7 +144,7 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
   }
 }
 
-void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmChangesetXmlWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   writer.writeStartElement("node");
   writer.writeAttribute("id", QString::number(n->getId()));
@@ -189,7 +189,7 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmChangesetXmlWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
 {
   writer.writeStartElement("way");
   writer.writeAttribute("id", QString::number(w->getId()));
@@ -235,7 +235,7 @@ void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmChangesetXmlWriter::writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
 {
   writer.writeStartElement("relation");
   writer.writeAttribute("id", QString::number(r->getId()));
@@ -293,7 +293,7 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::setConfiguration(const Settings &conf)
+void OsmChangesetXmlWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();

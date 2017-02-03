@@ -462,7 +462,6 @@ SOURCES += \
     src/main/cpp/hoot/core/schema/TagFilteredDifferencer.cpp \
     src/main/cpp/hoot/core/io/ElementSorter.cpp \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.cpp \
     src/main/cpp/hoot/core/cmd/DeriveChangesetCmd.cpp \
     src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmXmlReader.cpp \
     src/main/cpp/hoot/core/io/OsmXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
-    src/main/cpp/hoot/core/io/OsmPbfWriter.cpp
+    src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1019,7 +1019,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ElementSorter.h \
     src/main/cpp/hoot/core/io/ChangesetDeriver.h \
     src/main/cpp/hoot/core/io/ChangesetProvider.h \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoader.h \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.h \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmXmlReader.h \
     src/main/cpp/hoot/core/io/OsmXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmPbfReader.h \
-    src/main/cpp/hoot/core/io/OsmPbfWriter.h
+    src/main/cpp/hoot/core/io/OsmPbfWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h
 

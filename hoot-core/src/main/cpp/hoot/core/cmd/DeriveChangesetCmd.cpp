@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmChangesetXmlWriter.h>
 #include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 
 // Qt
@@ -72,7 +72,7 @@ public:
 
     if (args[2].endsWith(".osc"))
     {
-      OsmChangesetXmlFileWriter().write(args[2], delta);
+      OsmChangesetXmlWriter().write(args[2], delta);
     }
     else if (args[2].endsWith(".osc.sql"))
     {

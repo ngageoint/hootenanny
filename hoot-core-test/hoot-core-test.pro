@@ -167,7 +167,6 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/AddGeometryTypeVisitorTest.cpp \
     src/test/cpp/hoot/core/visitors/TransliterateNameVisitorTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitorTest.cpp \
@@ -246,7 +245,8 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
-    src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp
+    src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetXmlWriterTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
