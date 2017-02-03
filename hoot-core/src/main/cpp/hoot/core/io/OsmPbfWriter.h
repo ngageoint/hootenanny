@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef PBFWRITER_H
-#define PBFWRITER_H
+#ifndef OsmPbfWriter_H
+#define OsmPbfWriter_H
 
 // Qt
 #include <QHash>
@@ -54,16 +54,16 @@ namespace hoot
 
 using namespace std;
 
-class PbfWriterData;
+class OsmPbfWriterData;
 
 /**
  * A writer for http://wiki.openstreetmap.org/wiki/PBF_Format
  */
-class PbfWriter : public OsmMapWriter
+class OsmPbfWriter : public OsmMapWriter
 {
 public:
 
-  static std::string className() { return "hoot::PbfWriter"; }
+  static std::string className() { return "hoot::OsmPbfWriter"; }
 
   class BlobLocation
   {
@@ -75,9 +75,9 @@ public:
   static const char* const OSM_DATA;
   static const char* const OSM_HEADER;
 
-  PbfWriter();
+  OsmPbfWriter();
 
-  ~PbfWriter();
+  ~OsmPbfWriter();
 
   /**
    * Used to finalize a call to writePartial.
@@ -192,7 +192,7 @@ private:
   bool _includeInfo;
   bool _includeVersion;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  PbfWriterData* _d;
+  OsmPbfWriterData* _d;
   QHash<QString, int> _strings;
   shared_ptr<const OsmMap> _map;
   int _rawSize;
@@ -260,4 +260,4 @@ private:
 
 }
 
-#endif // PBFWRITER_H
+#endif // OsmPbfWriter_H

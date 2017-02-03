@@ -31,7 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementIterator.h>
 
@@ -67,7 +67,7 @@ public:
       throw HootException("The output must be .osm.pbf.");
     }
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
     ofstream fp;
     fp.open(output.toUtf8().data(), ios::out | ios::binary);
     if (fp.is_open() == false)

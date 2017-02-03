@@ -65,16 +65,16 @@ OsmMapReducer::OsmMapReducer() : _reader(true)
 {
   _map.reset(new OsmMap());
   _context = NULL;
-  _pbfWriter = NULL;
+  _OsmPbfWriter = NULL;
 }
 
 PbfRecordWriter* OsmMapReducer::getPbfRecordWriter()
 {
-  if (_pbfWriter == NULL)
+  if (_OsmPbfWriter == NULL)
   {
     HadoopPipes::RecordWriter* writer = pp::HadoopPipesUtils::getRecordWriter(_context);
-    _pbfWriter = dynamic_cast<PbfRecordWriter*>(writer);
-    if (_pbfWriter == NULL)
+    _OsmPbfWriter = dynamic_cast<PbfRecordWriter*>(writer);
+    if (_OsmPbfWriter == NULL)
     {
       throw HootException("Unable to convert to PbfRecordWriter. Did you set the right record "
                             "writer in the Job?");
@@ -83,9 +83,9 @@ PbfRecordWriter* OsmMapReducer::getPbfRecordWriter()
     {
       throw HootException("Unexpected error: _context is NULL");
     }
-    _pbfWriter->setReduceContext(*_context);
+    _OsmPbfWriter->setReduceContext(*_context);
   }
-  return _pbfWriter;
+  return _OsmPbfWriter;
 }
 
 void OsmMapReducer::reduce(HadoopPipes::ReduceContext& context)

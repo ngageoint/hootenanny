@@ -36,7 +36,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>

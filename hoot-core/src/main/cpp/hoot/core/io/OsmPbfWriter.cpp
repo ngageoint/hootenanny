@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PbfWriter.h"
+#include "OsmPbfWriter.h"
 
 #include <arpa/inet.h>
 
@@ -56,12 +56,12 @@ using namespace hoot::pb;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, PbfWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmPbfWriter)
 
-const char* const PbfWriter::OSM_DATA = "OSMData";
-const char* const PbfWriter::OSM_HEADER = "OSMHeader";
+const char* const OsmPbfWriter::OSM_DATA = "OSMData";
+const char* const OsmPbfWriter::OSM_HEADER = "OSMHeader";
 
-class PbfWriterData
+class OsmPbfWriterData
 {
 public:
   Blob blob;
@@ -71,9 +71,9 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-PbfWriter::PbfWriter()
+OsmPbfWriter::OsmPbfWriter()
 {
-  _d = new PbfWriterData();
+  _d = new OsmPbfWriterData();
   _dn = 0;
   _lonOffset = 0.0;
   _latOffset = 0.0;
@@ -93,22 +93,22 @@ PbfWriter::PbfWriter()
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 }
 
-PbfWriter::~PbfWriter()
+OsmPbfWriter::~OsmPbfWriter()
 {
   delete _d;
 }
 
-long PbfWriter::_convertLon(double lon)
+long OsmPbfWriter::_convertLon(double lon)
 {
   return (1000000000 * lon - _lonOffset) / _granularity;
 }
 
-long PbfWriter::_convertLat(double lat)
+long OsmPbfWriter::_convertLat(double lat)
 {
   return (1000000000 * lat - _latOffset) / _granularity;
 }
 
-int PbfWriter::_convertString(const QString& s)
+int OsmPbfWriter::_convertString(const QString& s)
 {
   int id;
   QHash<QString, int>::const_iterator sit = _strings.find(s);
@@ -126,7 +126,7 @@ int PbfWriter::_convertString(const QString& s)
   return id;
 }
 
-char* PbfWriter::_getBuffer(size_t size)
+char* OsmPbfWriter::_getBuffer(size_t size)
 {
   if (_buffer.size() < size)
   {
@@ -136,7 +136,7 @@ char* PbfWriter::_getBuffer(size_t size)
   return (char*)_buffer.data();
 }
 
-void PbfWriter::_deflate(const char* raw, size_t rawSize)
+void OsmPbfWriter::_deflate(const char* raw, size_t rawSize)
 {
   // make sure we have enough room for deflation plus a little head room.
   if (_deflateBuffer.size() < rawSize + 1024)
@@ -169,13 +169,13 @@ void PbfWriter::_deflate(const char* raw, size_t rawSize)
   _deflateSize = strm.total_out;
 }
 
-void PbfWriter::finalizePartial()
+void OsmPbfWriter::finalizePartial()
 {
   // finalize the current blob.
   _writePrimitiveBlock();
 }
 
-void PbfWriter::_initBlob()
+void OsmPbfWriter::_initBlob()
 {
   _d->blob.Clear();
   _d->blobHeader.Clear();
@@ -196,7 +196,7 @@ void PbfWriter::_initBlob()
   _strings.clear();
 }
 
-void PbfWriter::intializePartial(ostream* strm)
+void OsmPbfWriter::intializePartial(ostream* strm)
 {
   _out = strm;
 
@@ -205,7 +205,7 @@ void PbfWriter::intializePartial(ostream* strm)
   _initBlob();
 }
 
-void PbfWriter::open(QString url)
+void OsmPbfWriter::open(QString url)
 {
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
 
@@ -215,14 +215,14 @@ void PbfWriter::open(QString url)
   }
 }
 
-void PbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
+void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
 {
   _nodeIdDelta = nodeIdDelta;
   _wayIdDelta = wayIdDelta;
   _relationIdDelta = relationIdDelta;
 }
 
-int PbfWriter::_toRelationMemberType(ElementType t)
+int OsmPbfWriter::_toRelationMemberType(ElementType t)
 {
   // This is actually a 1 to 1 translation, but I don't want to rely on the element type
   // enumerations staying static.
@@ -239,13 +239,13 @@ int PbfWriter::_toRelationMemberType(ElementType t)
   }
 }
 
-void PbfWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmPbfWriter::write(boost::shared_ptr<const OsmMap> map)
 {
   write(map, _openStream.get());
   _openStream.reset();
 }
 
-void PbfWriter::write(shared_ptr<const OsmMap> map, ostream* strm)
+void OsmPbfWriter::write(shared_ptr<const OsmMap> map, ostream* strm)
 {
   _out = strm;
   _map = map;
@@ -264,7 +264,7 @@ void PbfWriter::write(shared_ptr<const OsmMap> map, ostream* strm)
   _writePrimitiveBlock();
 }
 
-void PbfWriter::write(shared_ptr<const OsmMap> map, const QString& path)
+void OsmPbfWriter::write(shared_ptr<const OsmMap> map, const QString& path)
 {
   fstream output(path.toUtf8().constData(), ios::out | ios::binary);
 
@@ -276,7 +276,7 @@ void PbfWriter::write(shared_ptr<const OsmMap> map, const QString& path)
   write(map, &output);
 }
 
-void PbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
+void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
 {
   _out = strm;
 
@@ -286,7 +286,7 @@ void PbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
   _writeOsmHeader(includeBounds, sorted);
 }
 
-void PbfWriter::writePb(const shared_ptr<const OsmMap>& m, ostream* strm)
+void OsmPbfWriter::writePb(const shared_ptr<const OsmMap>& m, ostream* strm)
 {
   _initBlob();
 
@@ -301,7 +301,7 @@ void PbfWriter::writePb(const shared_ptr<const OsmMap>& m, ostream* strm)
   _enablePbFlushing = oldSetting;
 }
 
-void PbfWriter::writePb(const shared_ptr<const Node>& n, ostream* strm)
+void OsmPbfWriter::writePb(const shared_ptr<const Node>& n, ostream* strm)
 {
   _initBlob();
 
@@ -311,7 +311,7 @@ void PbfWriter::writePb(const shared_ptr<const Node>& n, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void PbfWriter::writePb(const shared_ptr<const Way>& w, ostream* strm)
+void OsmPbfWriter::writePb(const shared_ptr<const Way>& w, ostream* strm)
 {
   _initBlob();
 
@@ -321,7 +321,7 @@ void PbfWriter::writePb(const shared_ptr<const Way>& w, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void PbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
+void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
 {
   _initBlob();
 
@@ -331,7 +331,7 @@ void PbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void PbfWriter::_writeBlob(const char* buffer, int size, string type)
+void OsmPbfWriter::_writeBlob(const char* buffer, int size, string type)
 {
   // compress the buffer
   _deflate(buffer, size);
@@ -358,7 +358,7 @@ void PbfWriter::_writeBlob(const char* buffer, int size, string type)
   _initBlob();
 }
 
-void PbfWriter::_writeMap()
+void OsmPbfWriter::_writeMap()
 {
   // Add the nodes and ways to the blob one at a time. When the blob gets sufficiently large it is
   // written to the output stream and a new blob is started.
@@ -428,7 +428,7 @@ void PbfWriter::_writeMap()
   }
 }
 
-void PbfWriter::_writeNode(const shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNode(const shared_ptr<const hoot::Node>& n)
 {
   _elementsWritten++;
   if (_pg == 0)
@@ -481,7 +481,7 @@ void PbfWriter::_writeNode(const shared_ptr<const hoot::Node>& n)
 
 }
 
-void PbfWriter::_writeNodeDense(const shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNodeDense(const shared_ptr<const hoot::Node>& n)
 {
   _elementsWritten++;
   if (_dn == 0)
@@ -544,7 +544,7 @@ void PbfWriter::_writeNodeDense(const shared_ptr<const hoot::Node>& n)
   _dn->add_keys_vals(0);
 }
 
-void PbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
+void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 {
   // create the header block
   _d->headerBlock.Clear();
@@ -579,14 +579,14 @@ void PbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
 }
 
-void PbfWriter::writePartial(const shared_ptr<const OsmMap>& map)
+void OsmPbfWriter::writePartial(const shared_ptr<const OsmMap>& map)
 {
   _map = map;
   _writeMap();
   _map.reset();
 }
 
-void PbfWriter::writePartial(const shared_ptr<const Node>& n)
+void OsmPbfWriter::writePartial(const shared_ptr<const Node>& n)
 {
   _writeNodeDense(n);
 
@@ -596,7 +596,7 @@ void PbfWriter::writePartial(const shared_ptr<const Node>& n)
   }
 }
 
-void PbfWriter::writePartial(const shared_ptr<const Way>& w)
+void OsmPbfWriter::writePartial(const shared_ptr<const Way>& w)
 {
   _writeWay(w);
 
@@ -606,7 +606,7 @@ void PbfWriter::writePartial(const shared_ptr<const Way>& w)
   }
 }
 
-void PbfWriter::writePartial(const shared_ptr<const Relation>& r)
+void OsmPbfWriter::writePartial(const shared_ptr<const Relation>& r)
 {
   _writeRelation(r);
 
@@ -616,7 +616,7 @@ void PbfWriter::writePartial(const shared_ptr<const Relation>& r)
   }
 }
 
-void PbfWriter::_writePrimitiveBlock()
+void OsmPbfWriter::_writePrimitiveBlock()
 {
   if (_dirty)
   {
@@ -627,7 +627,7 @@ void PbfWriter::_writePrimitiveBlock()
   }
 }
 
-void PbfWriter::_writeRelation(const shared_ptr<const hoot::Relation>& r)
+void OsmPbfWriter::_writeRelation(const shared_ptr<const hoot::Relation>& r)
 {
   _elementsWritten++;
 
@@ -687,7 +687,7 @@ void PbfWriter::_writeRelation(const shared_ptr<const hoot::Relation>& r)
   _dirty = true;
 }
 
-void PbfWriter::_writeWay(const shared_ptr<const hoot::Way>& w)
+void OsmPbfWriter::_writeWay(const shared_ptr<const hoot::Way>& w)
 {
   _elementsWritten++;
 

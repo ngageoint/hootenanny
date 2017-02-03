@@ -133,7 +133,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
 //      "-conflate-input.osm.pbf";
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
-//  PbfWriter writer;
+//  OsmPbfWriter writer;
 //  pp::Hdfs fs;
 //  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());

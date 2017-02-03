@@ -34,12 +34,12 @@ PP_FACTORY_REGISTER(pp::RecordWriter, PbfRecordWriter)
 
 PbfRecordWriter::PbfRecordWriter()
 {
-  _pbfWriter = new PbfWriter();
+  _OsmPbfWriter = new OsmPbfWriter();
 }
 
 PbfRecordWriter::~PbfRecordWriter()
 {
-  delete _pbfWriter;
+  delete _OsmPbfWriter;
 }
 
 void PbfRecordWriter::close()
@@ -47,7 +47,7 @@ void PbfRecordWriter::close()
   try
   {
     LOG_INFO("Finalizing map.");
-    _pbfWriter->finalizePartial();
+    _OsmPbfWriter->finalizePartial();
     _out->flush();
     _out.reset();
   }
@@ -64,7 +64,7 @@ void PbfRecordWriter::emit(const string&, const string&)
 
 void PbfRecordWriter::emitRecord(const shared_ptr<const Node>& n)
 {
-  _pbfWriter->writePartial(n);
+  _OsmPbfWriter->writePartial(n);
 }
 
 void PbfRecordWriter::emitRecord(shared_ptr<OsmMap> map)
@@ -81,7 +81,7 @@ void PbfRecordWriter::emitRecord(shared_ptr<OsmMap> map)
   {
     // RHEL complains about this being ambiguous
     const shared_ptr<const OsmMap>& co = map;
-    _pbfWriter->writePartial(co);
+    _OsmPbfWriter->writePartial(co);
   }
 }
 
@@ -93,7 +93,7 @@ void PbfRecordWriter::setMapContext(int part, string workDir)
   _path = path.toStdString();
   Hdfs fs;
   _out.reset(fs.create(_path));
-  _pbfWriter->intializePartial(_out.get());
+  _OsmPbfWriter->intializePartial(_out.get());
 }
 
 void PbfRecordWriter::setReduceContext(HadoopPipes::ReduceContext& context)
@@ -112,7 +112,7 @@ void PbfRecordWriter::setReduceContext(int part, string workDir)
   _path = path.toStdString();
   Hdfs fs;
   _out.reset(fs.create(_path));
-  _pbfWriter->intializePartial(_out.get());
+  _OsmPbfWriter->intializePartial(_out.get());
 }
 
 

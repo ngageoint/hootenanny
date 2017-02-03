@@ -103,7 +103,7 @@ void WayJoin2Reducer::reduce(HadoopPipes::ReduceContext& context)
              << " relationIdDelta: " << _relationIdDelta);
     _newStatus = (Status::Type)c->getInt(WayJoin2Mapper::elementStatusKey());
     // add to the way/node ids to avoid conflicts w/ another map.
-    _writer->getPbfWriter().setIdDelta(_nodeIdDelta, _wayIdDelta, _relationIdDelta);
+    _writer->getOsmPbfWriter().setIdDelta(_nodeIdDelta, _wayIdDelta, _relationIdDelta);
 
     _partition = context.getJobConf()->getInt("mapred.task.partition");
     _workDir = context.getJobConf()->get("mapred.work.output.dir");

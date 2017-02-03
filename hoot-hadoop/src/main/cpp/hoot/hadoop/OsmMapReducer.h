@@ -53,7 +53,7 @@ protected:
   HadoopPipes::ReduceContext* _context;
 
 private:
-  PbfRecordWriter* _pbfWriter;
+  PbfRecordWriter* _OsmPbfWriter;
   PbfRecordWriter* _writer;
   OsmPbfReader _reader;
   shared_ptr<OsmMap> _map;

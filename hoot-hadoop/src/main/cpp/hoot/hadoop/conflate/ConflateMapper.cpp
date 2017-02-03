@@ -120,7 +120,7 @@ void ConflateMapper::_flush()
   key.resize(sizeof(int64_t));
   int64_t* k = (int64_t*)key.data();
   // emit all maps
-  for (QHash< int, shared_ptr<PbfWriter> >::iterator it = _writers.begin();
+  for (QHash< int, shared_ptr<OsmPbfWriter> >::iterator it = _writers.begin();
     it != _writers.end(); ++it)
   {
     *k = it.key();
@@ -151,7 +151,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   // create all the necessary OsmMaps for holding our results.
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
-    _writers[i] = shared_ptr<PbfWriter>(new PbfWriter());
+    _writers[i] = shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
     _buffers[i] = shared_ptr<stringstream>(new stringstream(stringstream::out));
     _writers[i]->intializePartial(_buffers[i].get());
     LOG_INFO("key: " << i << " envelope: " << _envelopes[i].toString());
@@ -159,7 +159,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   _reduceTaskCount = context.getJobConf()->getInt("mapred.reduce.tasks");
   for (int i = 0; i < _reduceTaskCount; i++)
   {
-    _writers[-1 - i] = shared_ptr<PbfWriter>(new PbfWriter());
+    _writers[-1 - i] = shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
     _buffers[-1 - i] = shared_ptr<stringstream>(new stringstream(stringstream::out));
     _writers[-1 - i]->intializePartial(_buffers[-1 - i].get());
     LOG_INFO("key: " << -1 - i << " dregs");

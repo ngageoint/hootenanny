@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
@@ -157,7 +157,7 @@ public:
 
     QString fn = QString("/EvalMove%1.osm.pbf").arg(granularity);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
     writer.setGranularity(granularity);
     writer.write(map, workingDir + fn);
     OsmPbfReader reader(false);

@@ -52,7 +52,7 @@ public:
 
 protected:
 
-  QHash< int, shared_ptr<PbfWriter> > _writers;
+  QHash< int, shared_ptr<OsmPbfWriter> > _writers;
   QHash< int, shared_ptr<stringstream> > _buffers;
   double _tileBufferSize;
 

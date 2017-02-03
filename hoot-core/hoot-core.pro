@@ -139,7 +139,6 @@ SOURCES += \
     src/main/cpp/hoot/core/util/FileUtils.cpp \
     src/main/cpp/hoot/core/conflate/NodeReplacements.cpp \
     src/main/cpp/hoot/core/conflate/TileBoundsCalculator.cpp \
-    src/main/cpp/hoot/core/io/PbfWriter.cpp \
     src/main/cpp/hoot/core/io/PbfConstants.cpp \
     src/main/cpp/hoot/core/cmd/Command.cpp \
     src/main/cpp/hoot/core/Factory.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/GetTagValuesVisitor.cpp \
     src/main/cpp/hoot/core/io/OsmXmlReader.cpp \
     src/main/cpp/hoot/core/io/OsmXmlWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmPbfReader.cpp
+    src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
+    src/main/cpp/hoot/core/io/OsmPbfWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -651,7 +651,6 @@ HEADERS += \
     src/main/cpp/hoot/core/util/FileUtils.h \
     src/main/cpp/hoot/core/conflate/NodeReplacements.h \
     src/main/cpp/hoot/core/conflate/TileBoundsCalculator.h \
-    src/main/cpp/hoot/core/io/PbfWriter.h \
     src/main/cpp/hoot/core/io/PbfConstants.h \
     src/main/cpp/hoot/core/Version.h \
     src/main/cpp/hoot/core/cmd/Command.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/util/MetadataTags.h \
     src/main/cpp/hoot/core/io/OsmXmlReader.h \
     src/main/cpp/hoot/core/io/OsmXmlWriter.h \
-    src/main/cpp/hoot/core/io/OsmPbfReader.h
+    src/main/cpp/hoot/core/io/OsmPbfReader.h \
+    src/main/cpp/hoot/core/io/OsmPbfWriter.h
 
