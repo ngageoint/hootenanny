@@ -31,7 +31,7 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmChangesetXmlWriter.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlWriter.h>
 
 // Qt
 #include <QUrl>
@@ -82,7 +82,7 @@ public:
           QString("SQL changeset writing requires a target database URL for configuration purposes."));
       }
 
-      OsmChangesetSqlFileWriter(QUrl(args[3])).write(args[2], delta);
+      OsmChangesetSqlWriter(QUrl(args[3])).write(args[2], delta);
     }
     else
     {

@@ -463,7 +463,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/ElementSorter.cpp \
     src/main/cpp/hoot/core/io/ChangesetDeriver.cpp \
     src/main/cpp/hoot/core/cmd/DeriveChangesetCmd.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/schema/OsmSchemaLoaderFactory.cpp \
     src/main/cpp/hoot/core/algorithms/string/MostEnglishName.cpp \
     src/main/cpp/hoot/core/visitors/MedianNodeVisitor.cpp \
@@ -552,7 +551,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
     src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp
+    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1032,7 +1032,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/WayMatchStringMerger.h \
     src/main/cpp/hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h \
     src/main/cpp/hoot/core/io/ElementComparer.h \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
     src/main/cpp/hoot/core/ops/FindIntersectionsOp.h \
     src/main/cpp/hoot/core/filters/IntersectionCriterion.h \
     src/main/cpp/hoot/core/algorithms/linearreference/WayString.h \
@@ -1093,5 +1092,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmPbfReader.h \
     src/main/cpp/hoot/core/io/OsmPbfWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h
+    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h
 

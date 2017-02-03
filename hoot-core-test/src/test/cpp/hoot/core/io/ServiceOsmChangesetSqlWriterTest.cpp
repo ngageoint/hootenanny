@@ -29,7 +29,7 @@
 #include "TestOsmChangesetProvider.h"
 #include "ServicesDbTestUtils.h"
 
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlWriter.h>
 
 // Boost
 using namespace boost;
@@ -73,7 +73,7 @@ public:
     database.deleteData();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
-    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmChangesetSqlWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     writer
       .write(
         "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
@@ -93,7 +93,7 @@ public:
     database.deleteData();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
-    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmChangesetSqlWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     //  Set the changeset max size to 5 (half of the changes) for this test only
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
