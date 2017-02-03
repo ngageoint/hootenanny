@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
 
@@ -88,7 +88,7 @@ public:
 
   void runToyTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -115,7 +115,7 @@ public:
       }
     }
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(bounds, "test-output/conflate/TileBounds.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/TileBounds.osm",

@@ -30,6 +30,7 @@
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

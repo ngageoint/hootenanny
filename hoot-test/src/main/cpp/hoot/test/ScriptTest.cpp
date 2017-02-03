@@ -79,7 +79,7 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   QStringList outLines;
   QStringList inLines = output.split("\n");
 
-  // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/PbfReader.cpp(455) - "
+  // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/OsmPbfReader.cpp(455) - "
   QRegExp reWarn("[0-9:\\.]+ WARN  .*\\( *-?[0-9]+\\) ");
   QRegExp reError("[0-9:\\.]+ ERROR .*\\( *-?[0-9]+\\) ");
 

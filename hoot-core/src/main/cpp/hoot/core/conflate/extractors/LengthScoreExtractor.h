@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,8 +29,6 @@
 
 #include "WayFeatureExtractor.h"
 
-#include <hoot/core/algorithms/ProbabilityOfMatch.h>
-
 namespace hoot
 {
 
@@ -40,6 +38,7 @@ namespace hoot
 class LengthScoreExtractor : public WayFeatureExtractor
 {
 public:
+
   static string className() { return "hoot::LengthScoreExtractor"; }
 
   LengthScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
@@ -47,10 +46,8 @@ public:
   virtual string getClassName() const { return className(); }
 
 protected:
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const
-  {
-    return ProbabilityOfMatch::getInstance().lengthScore(map.shared_from_this(), w1, w2);
-  }
+
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 };
 
 }

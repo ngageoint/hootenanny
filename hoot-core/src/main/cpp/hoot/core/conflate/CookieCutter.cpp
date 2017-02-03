@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,7 +35,8 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -48,8 +49,8 @@ _outputBuffer(outputBuffer)
 
 void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 {
-  OGREnvelope env = CalculateBoundsVisitor::getBounds(cutterShapeMap);
-  env.Merge(CalculateBoundsVisitor::getBounds(doughMap));
+  OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeMap);
+  env.Merge(CalculateMapBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.
   MapProjector::projectToPlanar(doughMap, env);

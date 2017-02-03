@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,7 +61,8 @@ public:
   void set(float percentComplete, QString state, bool jobFinished, QString userMessage);
 
   // really cool method to do the absolute percent complete from the relative percent
-  void setFromRelative(float relativePercentComplete, QString state, bool jobFinished, QString userMessage);
+  void setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
+                       QString userMessage);
 
 protected:
   // source command
@@ -93,8 +94,6 @@ protected:
 
   // processing for getMessage() to send messages when a metric met (for now every 0.1 units)
   bool _readyToSend();
-
-
 };
 
 } // end namespace hoot

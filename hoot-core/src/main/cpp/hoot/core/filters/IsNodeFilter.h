@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,39 +31,25 @@
 #include <QString>
 
 // hoot
-#include <hoot/core/elements/Element.h>
-
 #include "ElementCriterion.h"
 
 namespace hoot
 {
 
+class Element;
+
 class IsNodeFilter : public BaseElementFilter
 {
 public:
+
   IsNodeFilter(FilterType type) { _type = type; }
 
-  virtual bool isFiltered(const Element& e) const
-  {
-    bool match = false;
-    if (e.getElementType() == ElementType::Node)
-    {
-      match = true;
-    }
-
-    if (_type == KeepMatches)
-    {
-      return !match;
-    }
-    else
-    {
-      return match;
-    }
-  }
+  virtual bool isFiltered(const Element& e) const;
 
   virtual ElementCriterion* clone() { return new IsNodeFilter(_type); }
 
 private:
+
   FilterType _type;
 };
 

@@ -28,6 +28,8 @@
 #define HOOTAPIDB_H
 
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {

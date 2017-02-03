@@ -29,9 +29,10 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-
+#include <hoot/core/OsmMap.h>
 #include "MultiLineStringLocation.h"
-
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

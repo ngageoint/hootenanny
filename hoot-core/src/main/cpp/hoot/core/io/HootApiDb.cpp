@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
@@ -970,7 +971,6 @@ set<long> HootApiDb::selectMapIds(QString name)
   LOG_DEBUG("userId = "+QString::number(userId));
   if (_selectMapIds == 0)
   {
-      LOG_DEBUG("inside first test inside selectMapIds");
     _selectMapIds.reset(new QSqlQuery(_db));
     _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
                            " WHERE display_name LIKE :name AND user_id=:userId");

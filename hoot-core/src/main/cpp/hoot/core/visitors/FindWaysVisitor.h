@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,14 +28,11 @@
 #define FINDWAYSVISITOR_H
 
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/filters/ElementCriterion.h>
-
-// For convenience functions
-#include <hoot/core/filters/ContainsNodeCriterion.h>
-#include <hoot/core/filters/TagCriterion.h>
 
 namespace hoot
 {
+
+class ElementCriterion;
 
 // Used to get a vector of IDs for the ways that satisfy
 // the specified criterion

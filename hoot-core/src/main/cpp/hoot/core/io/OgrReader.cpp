@@ -48,6 +48,10 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Progress.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -1058,7 +1062,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
       progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && _count > 0)
   {
     cout << endl;
   }

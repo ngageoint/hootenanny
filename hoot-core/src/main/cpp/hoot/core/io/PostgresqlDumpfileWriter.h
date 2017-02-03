@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -68,15 +68,11 @@
 #include <Q_INT64>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/RelationData.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/OsmApiDb.h>
 
 #include <tgs/BigContainers/BigMap.h>
 

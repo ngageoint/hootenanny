@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmChangesetXmlWriter.h>
+#include <hoot/core/io/OsmChangesetSqlWriter.h>
 #include <hoot/core/io/HootApiDb.h>
 
 // Qt
@@ -124,7 +124,7 @@ public:
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
-    OsmChangesetXmlFileWriter xmlWriter;
+    OsmChangesetXmlWriter xmlWriter;
     if (isXmlOutput)
     {
       xmlWriter.write(output, delta);
@@ -133,7 +133,7 @@ public:
     {
       assert(!osmApiDbUrl.isEmpty());
       LOG_DEBUG(osmApiDbUrl);
-      OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
+      OsmChangesetSqlWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
 
     //There technically is no use case for recording the changeset file output in the db for sql

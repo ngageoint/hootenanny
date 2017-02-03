@@ -49,6 +49,8 @@ using namespace boost;
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/ElementId.h>
 using namespace hoot::elements;
 
 // Qt

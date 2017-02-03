@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -76,11 +76,7 @@ public:
    * @param map Map to operate on
    * @param rId ID of relation to remove
    */
-  static void removeRelation(OsmMapPtr map, long rId)
-  {
-    RemoveRelationOp relationRemover(rId);
-    relationRemover.apply(map);
-  }
+  static void removeRelation(OsmMapPtr map, long rId);
 
 private:
   long _rIdToRemove;

@@ -31,8 +31,8 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/fourpass/TileWorker2.h>
 #include <hoot/core/fourpass/FourPassManager.h>
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
@@ -84,7 +84,7 @@ public:
     uut.apply(QString::fromStdString(outDir) + "HadoopTileWorker2Test.pbf");
 
     shared_ptr<OsmMap> map(new OsmMap);
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorker2Test.pbf");
     for (size_t i = 0; i < status.size(); i++)
@@ -100,7 +100,7 @@ public:
 
     QDir().mkpath(QString::fromStdString(outDir));
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, QString::fromStdString(outDir + "/result.osm"));
 
