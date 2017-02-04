@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,11 +30,11 @@
 
 #include "WayFilter.h"
 
-// Hoot
-#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
+
+class Way;
 
 /**
  * Keeps all the unknown ways and filters everything else.
@@ -42,7 +42,8 @@ namespace hoot
 class UnknownFilter : public WayFilter
 {
 public:
-  virtual bool isFiltered(const Way &w) const { return w.isUnknown() == false; }
+
+  virtual bool isFiltered(const Way &w) const;
 };
 
 }

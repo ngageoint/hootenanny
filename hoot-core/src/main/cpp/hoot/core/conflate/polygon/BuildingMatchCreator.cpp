@@ -40,6 +40,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include "BuildingRfClassifier.h"
 
 // Standard
 #include <fstream>
@@ -248,7 +249,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Using match creator: " << className());
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);

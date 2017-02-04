@@ -253,17 +253,19 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
   TagCriterion tagCrit("divider", "yes");
   vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
 
+  bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled())
+    if (Log::getInstance().isInfoEnabled() && wayIds.size() % 1000 == 0 && wayIds.size() > 0)
     {
       cout << "  splitting " << i << " / " << wayIds.size() << "\r";
       cout.flush();
+      todoLogged = true;
     }
     _splitWay(wayIds[i]);
   }
 
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && todoLogged)
   {
     cout << endl;
   }

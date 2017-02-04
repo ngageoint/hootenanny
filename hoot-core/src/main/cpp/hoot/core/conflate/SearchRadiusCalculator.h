@@ -29,12 +29,18 @@
 #define SEARCH_RADIUS_CALCULATOR_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
+// Std
+#include <vector>
+
 namespace hoot
 {
+
+class OsmMap;
+
+using namespace std;
 
 /**
  * Calculates a conflation search radius using tie points from rubbersheeting.  If there

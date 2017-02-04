@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@
 
 // Local Includes
 #include "WorkingMap.h"
+#include <hoot/core/manipulators/Manipulation.h>
 
 // Boost Includes
 #include <boost/shared_ptr.hpp>
@@ -43,15 +44,16 @@ class OGRSpatialReference;
 #include <set>
 #include <vector>
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
   using namespace boost;
   using namespace std;
 
-  class Manipulation;
-  class Manipulator;
   class OsmMap;
-
+  class Manipulator;
 
 /**
  * Conflates a map made up of Unknown1, Unknown2 and Conflated elements into a new map. An attempt
@@ -84,8 +86,8 @@ public:
               boost::shared_ptr<const WorkingMap>, bool>
   {
   public:
-    
-    
+
+
     bool operator()(boost::shared_ptr<const WorkingMap>& left,
                     boost::shared_ptr<const WorkingMap>& right) const
     {

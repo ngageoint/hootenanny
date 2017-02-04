@@ -40,17 +40,14 @@
 #include <QTextStream>
 #include <QDateTime>
 
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/Factory.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/OsmMapWriter.h>
 
 namespace hoot
 {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/RTree.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 
 // Qt
@@ -101,7 +101,7 @@ public:
       RTree<DummyData, int> uut(2, 1, -1);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  RNode: \n"
@@ -140,7 +140,7 @@ public:
       RTree<DummyData, int> uut(2, 1, 3);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  RNode: \n"
@@ -181,7 +181,7 @@ public:
       RTree<DummyData, int> uut(4, 2, -1);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:0,0:0]\n"
                       "  Leaf: \n"
