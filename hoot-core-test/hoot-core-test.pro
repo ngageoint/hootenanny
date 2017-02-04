@@ -44,7 +44,6 @@ cppunit {
 SOURCES += \
     src/test/cpp/hoot/core/ConflatorTest.cpp \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.cpp \
-    src/test/cpp/hoot/core/io/OsmReaderTest.cpp \
     src/test/cpp/hoot/core/scoring/RasterComparatorTest.cpp \
     src/test/cpp/hoot/core/conflate/splitter/IntersectionSplitterTest.cpp \
     src/test/cpp/hoot/core/scoring/GraphComparatorTest.cpp \
@@ -68,8 +67,6 @@ SOURCES += \
     src/test/cpp/hoot/core/conflate/LargeWaySplitterTest.cpp \
     src/test/cpp/hoot/core/conflate/NodeReplacementsTest.cpp \
     src/test/cpp/hoot/core/conflate/TileBoundsCalculatorTest.cpp \
-    src/test/cpp/hoot/core/io/PbfReaderTest.cpp \
-    src/test/cpp/hoot/core/io/PbfWriterTest.cpp \
     src/test/cpp/hoot/core/ml/LogisticRegressionTest.cpp \
     src/test/cpp/hoot/core/conflate/NodeMatcherTest.cpp \
     src/test/cpp/hoot/core/util/SettingsTest.cpp \
@@ -170,7 +167,6 @@ SOURCES += \
     src/test/cpp/hoot/core/visitors/AddGeometryTypeVisitorTest.cpp \
     src/test/cpp/hoot/core/visitors/TransliterateNameVisitorTest.cpp \
     src/test/cpp/hoot/core/io/ElementSorterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ChangesetDeriverTest.cpp \
     src/test/cpp/hoot/core/io/ElementComparerTest.cpp \
     src/test/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitorTest.cpp \
@@ -198,10 +194,10 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
     src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlWriterTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
@@ -246,7 +242,11 @@ SOURCES += \
     src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp 
+    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp \
+    src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetXmlWriterTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \

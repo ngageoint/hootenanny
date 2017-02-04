@@ -37,12 +37,13 @@
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributeVisitor.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 
 // Qt
 #include <QDir>
@@ -704,7 +705,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(
       map, "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");

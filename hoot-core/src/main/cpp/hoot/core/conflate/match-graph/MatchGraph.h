@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,8 +27,7 @@
 #ifndef MATCHGRAPH_H
 #define MATCHGRAPH_H
 
-// hoot
-#include <hoot/core/conflate/Match.h>
+// Hoot
 #include <hoot/core/conflate/MatchSet.h>
 
 // Standard
@@ -40,6 +39,7 @@ namespace hoot
 {
 using namespace std;
 
+class Match;
 class MatchGraphInternal;
 class MatchThreshold;
 

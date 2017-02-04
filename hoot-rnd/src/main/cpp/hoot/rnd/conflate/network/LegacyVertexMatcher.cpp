@@ -256,7 +256,6 @@ double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetw
 {
   double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(),
     v2->getElementId().getId());
-
   return score;
 }
 

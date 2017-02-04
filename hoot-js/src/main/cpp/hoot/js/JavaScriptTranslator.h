@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,6 @@
 #define JAVASCRIPTTRANSLATOR_H
 
 // hoot
-#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/util/Configurable.h>
@@ -42,9 +41,6 @@
 
 // NodeJs
 #include <hoot/js/SystemNodeJs.h>
-
-// v8
-// #include <v8.h>
 
 // Standard
 #include <memory>
@@ -59,6 +55,7 @@ class Layer;
 class DoubleFieldDefinition;
 class IntegerFieldDefinition;
 class Schema;
+class ElementType;
 
 /**
  * Script functions available:

@@ -376,7 +376,7 @@ const QStringList& Tags::getNameKeys()
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      //LOG_INFO("key : " << (tags[i].key.toStdString()));
+      LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _nameKeys.append(tags[i].key);
     }
   }
@@ -409,7 +409,7 @@ const QStringList& Tags::getPseudoNameKeys() const
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      //LOG_INFO("key : " << (tags[i].key.toStdString()));
+      LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _pseudoNameKeys.append(tags[i].key);
     }
   }

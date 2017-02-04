@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -94,8 +94,8 @@ QString PertyNameVisitor::permuteName(const QString& s)
 void PertyNameVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyNameP());
-  setChangeProbability(configOptions.getPertyNameChangeP());
+  setProbability(configOptions.getPertyNameProbability());
+  setChangeProbability(configOptions.getPertyNameChangeProbability());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

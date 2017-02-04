@@ -1,21 +1,19 @@
-16:19:08.012 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ReprojectToPlanarOp
+10:50:26.031 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/DcGisRoads.osm ...
+10:50:26.129 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
 Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
-16:19:08.058 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateWayRemover
-16:19:08.058 INFO  ...nflate/DuplicateWayRemover.cpp(  64) Removing duplicate ways...
-16:19:08.303 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SuperfluousWayRemover
-16:19:08.303 INFO  ...late/SuperfluousWayRemover.cpp(  59) Removing superfluous ways...
-16:19:08.304 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
-16:19:08.304 INFO  ...itter/IntersectionSplitter.cpp( 109) Splitting intersections...
-  Intersection splitter todo: 0       
-16:19:08.317 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
-16:19:08.327 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
-16:19:08.327 INFO  ...e/splitter/DualWaySplitter.cpp(  83) Assuming drives on right.
-16:19:08.327 INFO  ...e/splitter/DualWaySplitter.cpp( 246) Splitting divided ways...
-
-16:19:08.333 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::ImpliedDividedMarker
-16:19:08.343 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DuplicateNameRemover
-16:19:08.345 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::SmallWayMerger
-16:19:08.357 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveEmptyAreasVisitor
-16:19:08.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  74) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-16:19:08.374 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::NoInformationElementRemover
+10:50:26.189 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+10:50:26.192 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
+10:50:26.261 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+10:50:26.261 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+  Intersection splitter todo: 0       10:50:26.266 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+10:50:26.269 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+10:50:26.272 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+10:50:26.276 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+10:50:26.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+10:50:26.285 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+10:50:26.290 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+10:50:26.296 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
 Reprojecting 0 / 4337         Reprojecting 1000 / 4337         Reprojecting 2000 / 4337         Reprojecting 3000 / 4337         Reprojecting 4000 / 4337         
+10:50:26.304 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to /home/bwitham/hoot/test-output/cmd/quick/CleanupCmdTest/cleaned.osm
+10:50:26.503 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/cmd/quick/CleanupCmdTest/cleaned.osm ...
+10:50:26.580 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-output/cmd/quick/CleanupCmdTest/cleaned.osm ...

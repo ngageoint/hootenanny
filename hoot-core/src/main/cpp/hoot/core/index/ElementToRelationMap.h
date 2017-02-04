@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,18 +30,21 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Relation.h>
-
 // Standard
 #include <set>
 
 // Tgs
 #include <tgs/HashMap.h>
 
+// Hoot
+#include <hoot/core/elements/ElementId.h>
+
 namespace hoot
 {
+class OsmMap;
+class Relation;
+class Element;
+
 using namespace boost;
 using namespace std;
 

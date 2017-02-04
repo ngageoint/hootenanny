@@ -31,7 +31,8 @@ public:
 
   NodeDensity(int width, int height);
 
-  int getPixel(int px, int py) { return _count.contains(py * _width + px) ?_count[py * _width + px] : 0; }
+  int getPixel(int px, int py)
+  { return _count.contains(py * _width + px) ?_count[py * _width + px] : 0; }
 
   int getWidth() const { return _width; }
 

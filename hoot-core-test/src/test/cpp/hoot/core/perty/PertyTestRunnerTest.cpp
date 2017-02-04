@@ -29,7 +29,7 @@
 #include <hoot/core/perty/PertyTestRunner.h>
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/perty/PertyTestRunResult.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,14 +36,16 @@
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/NodeReplacements.h>
 
 namespace hoot
 {
@@ -120,7 +122,7 @@ void LocalTileWorker2::breakWays(QString out)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -140,7 +142,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -149,14 +151,14 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
     reader.read(_in2, map);
   }
 
-  return CalculateBoundsVisitor::getBounds(map);
+  return CalculateMapBoundsVisitor::getBounds(map);
 }
 
 void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   if (_in2.isEmpty() == false)
@@ -173,7 +175,7 @@ void LocalTileWorker2::cleanup(QString mapIn, QString mapOut)
 {
   shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, mapOut);
@@ -205,7 +207,7 @@ shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
@@ -263,7 +265,7 @@ void LocalTileWorker2::rmdir(QString dir)
 void LocalTileWorker2::_storeMapPart(shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);
@@ -303,7 +305,7 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
   }
 
   QString fn = dirOut + QString("/Dregs.osm");
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);

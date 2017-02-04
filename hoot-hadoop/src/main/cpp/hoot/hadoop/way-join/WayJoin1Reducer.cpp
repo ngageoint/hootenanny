@@ -93,7 +93,7 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
       point.x = node->x;
       point.y = node->y;
       _stats.expandEnvelope(point.x, point.y);
-      //LOG_INFO("Got node: " << " x: " << point.x << " y: " << point.y);
+      LOG_TRACE("Got node: " << " x: " << point.x << " y: " << point.y);
       foundNode = true;
     }
     else if (value.size() == sizeof(WayJoin1Mapper::ValueWay))
@@ -102,7 +102,7 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
       _wayIds.push_back(way->id);
 
       _stats.expandWayRange(way->id);
-      //LOG_INFO("Got way: " << way->id);
+      LOG_TRACE("Got way: " << way->id);
     }
     else
     {
@@ -153,8 +153,8 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
   {
     for (size_t i = 0; i < _wayIds.size(); i++)
     {
-      //LOG_INFO("emitting: " << _wayIds[i] << " nodeId: " << point.nodeId << " x: " << point.x <<
-      //         " y: " << point.y);
+      LOG_TRACE("emitting: " << _wayIds[i] << " nodeId: " << point.nodeId << " x: " << point.x <<
+                " y: " << point.y);
       _writer->emitRaw<int64_t, Value>(_wayIds[i], point);
     }
   }

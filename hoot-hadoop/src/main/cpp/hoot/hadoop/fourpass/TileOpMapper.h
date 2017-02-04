@@ -18,7 +18,6 @@
 #define FOURPASSMAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 // Standard
@@ -26,6 +25,8 @@
 
 namespace hoot
 {
+
+class OsmMap;
 
 class TileOpMapper : public OsmMapMapper
 {
@@ -51,7 +52,7 @@ public:
 
 protected:
 
-  QHash< int, shared_ptr<PbfWriter> > _writers;
+  QHash< int, shared_ptr<OsmPbfWriter> > _writers;
   QHash< int, shared_ptr<stringstream> > _buffers;
   Degrees _tileBufferSize;
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,9 +47,6 @@ class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
     static std::string className() { return "hoot::PertyRemoveTagVisitor"; }
 
     PertyRemoveTagVisitor();
-
-    /// @sa setProbability
-    static QString pKey() { return "perty.remove.tag.p"; }
 
     QString permuteName(const QString& s);
 

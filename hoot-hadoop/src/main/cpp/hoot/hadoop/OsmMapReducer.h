@@ -22,17 +22,16 @@
 #pragma GCC diagnostic warning "-Wunused-parameter"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 
 // Pretty Pipes
 #include <pp/util/Iterator.h>
 
-#include "PbfRecordWriter.h"
-
-
 namespace hoot
 {
+
+class OsmMap;
+class PbfRecordWriter;
 
 /**
  * This class is useful for reducers that take OsmMap elements as input and produce a OsmMap as
@@ -54,9 +53,9 @@ protected:
   HadoopPipes::ReduceContext* _context;
 
 private:
-  PbfRecordWriter* _pbfWriter;
+  PbfRecordWriter* _OsmPbfWriter;
   PbfRecordWriter* _writer;
-  PbfReader _reader;
+  OsmPbfReader _reader;
   shared_ptr<OsmMap> _map;
 };
 

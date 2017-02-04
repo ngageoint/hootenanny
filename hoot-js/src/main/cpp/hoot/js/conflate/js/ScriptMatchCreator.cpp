@@ -282,6 +282,9 @@ public:
 
     //this is meant to have been set externally in a js rules file
     _searchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+
+    LOG_DEBUG("Custom script init complete.");
+
   }
 
   shared_ptr<HilbertRTree>& getIndex()
@@ -397,11 +400,11 @@ void ScriptMatchCreator::setArguments(QStringList args)
     throw HootException("The ScriptMatchCreator takes exactly one argument (script path).");
   }
 
-  QString path = ConfPath::search(args[0], "rules");
+  _scriptPath = ConfPath::search(args[0], "rules");
   _script.reset(new PluginContext());
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
-  _script->loadScript(path, "plugin");
+  _script->loadScript(_scriptPath, "plugin");
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _matchCandidateChecker.reset();
@@ -427,7 +430,11 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
-  LOG_VAR(className());
+
+  QFileInfo scriptFileInfo(_scriptPath);
+  LOG_INFO("Using match creator: " << className() << " - rules: " << scriptFileInfo.fileName());
+  LOG_VARD(*threshold);
+
   ScriptMatchVisitor v(map, matches, threshold, _script);
   v.customScriptInit();
   map->visitRo(v);
@@ -511,7 +518,8 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   }
   if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
   {
-    vector<const Match *> emptyMatches;
+    LOG_DEBUG("Resetting the match candidate checker...");
+    vector<const Match*> emptyMatches;
     _matchCandidateChecker.reset(
       new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
     _matchCandidateChecker->customScriptInit();

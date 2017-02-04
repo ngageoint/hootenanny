@@ -82,7 +82,7 @@ void WayJoin2InputSplit::readFields(char* byteArray, long len)
   }
 
   int size = dis.readInt();
-  //LOG_INFO("read length: " << len);
+  LOG_TRACE("read length: " << len);
   vector<char> childData(size);
   dis.read(childData.data(), size);
   _childSplit->readFields(childData.data(), size);
@@ -124,7 +124,7 @@ signed char* WayJoin2InputSplit::writeFields(size_t* len) const
   *len = ss.str().length();
   signed char* result = new signed char[ss.str().length()];
   memcpy(result, ss.str().data(), ss.str().length());
-  //LOG_INFO("write length: " << ss.str().length());
+  LOG_TRACE("write length: " << ss.str().length());
 
   return result;
 }

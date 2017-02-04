@@ -26,6 +26,8 @@
  */
 #include "ElementSorter.h"
 
+#include <hoot/core/util/Log.h>
+
 // Standard
 #include <algorithm>
 

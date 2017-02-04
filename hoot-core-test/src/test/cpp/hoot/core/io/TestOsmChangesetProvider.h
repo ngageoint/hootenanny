@@ -32,10 +32,8 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/io/ApiDb.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
