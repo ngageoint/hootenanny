@@ -24,28 +24,21 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.nonblocking.osm.map;
 
-import java.util.logging.Logger;
+/**
+ * Model class for a set of Hootenanny map layers
+ */
+public class LinkRecords {
+    private LinkRecord[] links;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
+    public LinkRecords() {}
 
-import hoot.services.CorsResponseFilter;
+    public LinkRecord[] getLinks() {
+        return links;
+    }
 
-
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
-
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
-
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
-
-        super.property("contextConfig", applicationContext);
+    public void setLinks(LinkRecord[] links) {
+        this.links = links;
     }
 }

@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import hoot.services.controllers.osm.ChangesetDbWriter;
+import hoot.services.controllers.blocking.osm.changeset.ChangesetDbWriter;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;

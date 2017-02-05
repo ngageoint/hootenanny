@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.HootServicesSpringConfig;
-import hoot.services.controllers.info.ExternalCommandInterfaceStubImpl;
+import hoot.services.controllers.blocking.info.ExternalCommandInterfaceStubImpl;
 import hoot.services.command.ExternalCommandManager;
 
 

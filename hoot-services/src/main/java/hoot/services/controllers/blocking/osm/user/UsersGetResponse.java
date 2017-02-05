@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,28 +24,27 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.blocking.osm.user;
 
-import java.util.logging.Logger;
+import java.util.List;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+import hoot.services.models.db.Users;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+public class UsersGetResponse {
+    private List<Users> users;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public UsersGetResponse() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public UsersGetResponse(List<Users> users) {
+        this.users = users;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public List<Users> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(List<Users> users) {
+        this.users = users;
     }
 }

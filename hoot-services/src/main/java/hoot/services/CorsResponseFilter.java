@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,28 +24,31 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services;
 
-import java.util.logging.Logger;
+import java.io.IOException;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MultivaluedMap;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
-
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
-
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
-
-        super.property("contextConfig", applicationContext);
+/**
+ * Jersey filter for supporting CORS:
+ * http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+ */
+public class CorsResponseFilter implements ContainerResponseFilter {
+    /**
+     * Returns a CORS aware filter
+     */
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+            throws IOException {
+        MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+        headers.add("Access-Control-Allow-Credentials", "true");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     }
 }

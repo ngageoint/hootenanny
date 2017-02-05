@@ -24,28 +24,19 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.review;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+abstract class ReviewableQueryAbstract {
+    private long mapId = -1;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
-
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
-
-        super.property("contextConfig", applicationContext);
+    protected long getMapId() {
+        return mapId;
     }
+
+    ReviewableQueryAbstract(long mapId) {
+        this.mapId = mapId;
+    }
+
+    abstract ReviewQueryMapper execQuery();
 }

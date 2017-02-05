@@ -24,28 +24,45 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.ingest;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+public class Script {
+    private String name;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    private String description;
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    private String content;
 
-        super.property("contextConfig", applicationContext);
+    public Script() {}
+
+    public Script(String name, String description, String content) {
+        this.name = name;
+        this.description = description;
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

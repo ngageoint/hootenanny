@@ -24,28 +24,35 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.blocking.review;
 
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+import org.json.simple.JSONObject;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+public class ReviewableStatistics implements ReviewQueryMapper {
+    private long totalCount;
+    private long unreviewedCount;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewableStatistics() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public ReviewableStatistics(long totalCount, long unreviewedCount) {
+        this.totalCount = totalCount;
+        this.unreviewedCount = unreviewedCount;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public long getTotalCount() {
+        return totalCount;
+    }
+
+    public long getUnreviewedCount() {
+        return unreviewedCount;
+    }
+
+    @Override
+    public String toString() {
+        JSONObject o = new JSONObject();
+        o.put("totalCount", totalCount);
+        o.put("unreviewedCount", unreviewedCount);
+        return o.toJSONString();
     }
 }

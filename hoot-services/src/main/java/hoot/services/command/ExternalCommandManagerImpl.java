@@ -42,7 +42,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.controllers.job.JobFieldsValidator;
 import hoot.services.utils.JsonUtils;
 
 
@@ -216,7 +215,7 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
 
     private void validate(JSONObject command) {
         String resourceName = command.get("caller").toString();
-        JobFieldsValidator validator = new JobFieldsValidator(resourceName);
+        CommandFieldsValidator validator = new CommandFieldsValidator(resourceName);
 
         Map<String, String> paramsMap = JsonUtils.paramsToMap(command);
 

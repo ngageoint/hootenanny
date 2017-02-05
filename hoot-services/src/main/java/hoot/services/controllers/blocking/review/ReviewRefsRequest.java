@@ -24,28 +24,37 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.review;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+/**
+ * A request for review references
+ */
+public class ReviewRefsRequest {
+    private ElementInfo[] queryElements;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewRefsRequest() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public ReviewRefsRequest(ElementInfo[] elementInfos) {
+        this.queryElements = elementInfos;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public ElementInfo[] getQueryElements() {
+        return queryElements;
+    }
+
+    public void setQueryElements(ElementInfo[] infos) {
+        this.queryElements = infos;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (queryElements != null) {
+            for (ElementInfo queryElement : queryElements) {
+                stringBuilder.append(queryElement);
+            }
+        }
+        return stringBuilder.toString();
     }
 }

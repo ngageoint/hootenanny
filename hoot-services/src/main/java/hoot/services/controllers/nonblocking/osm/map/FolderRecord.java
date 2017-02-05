@@ -24,28 +24,40 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.nonblocking.osm.map;
 
-import java.util.logging.Logger;
+/**
+ * Model class for the Hootenanny folder record
+ */
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
+public class FolderRecord {
+    private long id;
+    private long parentId;
+    private String name;
 
-import hoot.services.CorsResponseFilter;
+    public FolderRecord() {}
 
+    public long getId() {
+        return id;
+    }
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public long getParentId() {
+        return parentId;
+    }
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

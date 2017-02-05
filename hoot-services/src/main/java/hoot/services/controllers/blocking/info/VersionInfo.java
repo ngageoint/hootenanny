@@ -24,28 +24,48 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.info;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+/**
+ * Information about the hoot version
+ */
+public class VersionInfo {
+    private String name;
+    private String version;
+    private String builtBy;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public VersionInfo() {
+    }
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public String getName() {
+        return name;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getBuiltBy() {
+        return builtBy;
+    }
+
+    public void setBuiltBy(String builtBy) {
+        this.builtBy = builtBy;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + System.lineSeparator() +
+               "Version: " + version + System.lineSeparator() +
+               "Built By: " + builtBy;
     }
 }

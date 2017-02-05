@@ -33,8 +33,6 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 
-import hoot.services.controllers.filters.CorsResponseFilter;
-
 
 public class HootServicesJerseyApplication extends ResourceConfig {
     private static final Logger logger = Logger.getLogger(HootServicesJerseyApplication.class.getName());

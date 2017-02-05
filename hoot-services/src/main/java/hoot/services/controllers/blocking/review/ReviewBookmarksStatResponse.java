@@ -24,28 +24,23 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.review;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+public class ReviewBookmarksStatResponse {
+    private long totalCount;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewBookmarksStatResponse() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public ReviewBookmarksStatResponse(long totalCount) {
+        this.totalCount = totalCount;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public long getTotalCount() {
+        return this.totalCount;
     }
 }

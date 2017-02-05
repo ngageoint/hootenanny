@@ -24,28 +24,32 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.review;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+/**
+ * Element information
+ */
+public class ReviewRef extends ElementInfo {
+    private long reviewRelationId = -1;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewRef() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public ReviewRef(String mapId, long elementId, String elementType, long reviewRelationId) {
+        super(mapId, elementId, elementType);
+        this.reviewRelationId = reviewRelationId;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public long getReviewRelationId() {
+        return reviewRelationId;
+    }
+
+    public void setReviewRelationId(long id) {
+        this.reviewRelationId = id;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", review relation id: " + reviewRelationId;
     }
 }

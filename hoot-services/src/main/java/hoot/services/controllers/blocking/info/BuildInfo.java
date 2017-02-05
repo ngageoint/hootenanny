@@ -24,28 +24,39 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.blocking.info;
 
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+/**
+ * Services build info file
+ */
+final class BuildInfo {
+    private static final Properties info;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    static {
+        info = new Properties();
+        try {
+            try (InputStream buildInfoStrm = BuildInfo.class.getClassLoader().getResourceAsStream("build.info")) {
+                info.load(buildInfoStrm);
+            }
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error reading build.info as resource stream!", ioe);
+        }
+    }
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    private BuildInfo() {}
 
-        super.property("contextConfig", applicationContext);
+    /**
+     * Returns the build info for the services
+     *
+     * @return a set of build info properties
+     */
+    public static Properties getInfo() {
+        return info;
     }
 }

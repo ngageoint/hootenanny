@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,28 +24,32 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.command;
 
-import java.util.logging.Logger;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
+import hoot.services.job.JobStatusManager;
+import hoot.services.models.db.JobStatus;
 
-import hoot.services.CorsResponseFilter;
+@Component
+@Profile("test")
+public class JobStatusManagerStub extends JobStatusManager {
 
+    @Override
+    public void addJob(String jobId) {}
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+    @Override
+    public void updateJob(String jobId, String statusDetail, Double percentComplete) {}
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    @Override
+    public void setCompleted(String jobId, String statusDetail) {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    @Override
+    public void setFailed(String jobId, String statusDetail) {}
 
-        super.property("contextConfig", applicationContext);
+    @Override
+    public JobStatus getJobStatusObj(String jobId) {
+        return null;
     }
 }

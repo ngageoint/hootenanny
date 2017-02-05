@@ -24,28 +24,36 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
+package hoot.services.controllers.blocking.review;
 
-import java.util.logging.Logger;
+import org.json.simple.JSONObject;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+import hoot.services.geo.BoundingBox;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+public class ReviewableItemBboxInfo extends ReviewableItemBbox {
+    private String needReview;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewableItemBboxInfo(BoundingBox bbox, long mapId, long relationId, String needReview) {
+        super(bbox, mapId, relationId);
+        this.needReview = needReview;
+    }
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public String getNeedReview() {
+        return needReview;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public void setNeedReview(String needReview) {
+        this.needReview = needReview;
+    }
+
+    @Override
+    public String toString() {
+        JSONObject o = new JSONObject();
+        o.put("bbox", this.getBbox());
+        o.put("mapid", this.getMapId());
+        o.put("relationid", this.getRelationId());
+        o.put("needreview", needReview);
+        return o.toJSONString();
     }
 }

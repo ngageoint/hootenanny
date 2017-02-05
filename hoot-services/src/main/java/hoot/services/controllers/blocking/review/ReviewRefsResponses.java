@@ -24,28 +24,35 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.testsupport;
-
-import java.util.logging.Logger;
-
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-import org.springframework.context.ApplicationContext;
-
-import hoot.services.CorsResponseFilter;
+package hoot.services.controllers.blocking.review;
 
 
-public class HootServicesJerseyTestApplication extends ResourceConfig {
-    private static final Logger logger = Logger.getLogger(HootServicesJerseyTestApplication.class.getName());
+/**
+ * Collection of review references
+ */
+public class ReviewRefsResponses {
+    private ReviewRefsResponse[] reviewRefsResponses;
 
-    public HootServicesJerseyTestApplication(ApplicationContext applicationContext) {
-        super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
+    public ReviewRefsResponses() {}
 
-        super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
-        super.register(RequestContextFilter.class);
+    public ReviewRefsResponses(ReviewRefsResponse[] reviewRefsResponses) {
+        this.reviewRefsResponses = reviewRefsResponses;
+    }
 
-        super.property("contextConfig", applicationContext);
+    public ReviewRefsResponse[] getReviewRefsResponses() {
+        return reviewRefsResponses;
+    }
+
+    public void setReviewRefsResponses(ReviewRefsResponse[] responses) {
+        this.reviewRefsResponses = responses;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ReviewRefsResponse refs : reviewRefsResponses) {
+            stringBuilder.append(refs);
+        }
+        return stringBuilder.toString();
     }
 }
