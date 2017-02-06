@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
 
@@ -403,7 +403,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   renderImage(map, _r1, _r2);
 
@@ -416,7 +416,7 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;

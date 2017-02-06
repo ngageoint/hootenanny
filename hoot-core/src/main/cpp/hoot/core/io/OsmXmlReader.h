@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __IO_OSM_READER_H__
-#define __IO_OSM_READER_H__
+#ifndef OSMXMLREADER_H
+#define OSMXMLREADER_H
 
 // Local
 #include <hoot/core/elements/Tags.h>
@@ -61,12 +61,12 @@ namespace hoot
  *
  * @todo This could use a nice overhaul for readability and possibly performance.
  */
-class OsmReader : public QXmlDefaultHandler, public OsmMapReader
+class OsmXmlReader : public QXmlDefaultHandler, public OsmMapReader
 {
 public:
-  static std::string className() { return "hoot::OsmReader"; }
+  static std::string className() { return "hoot::OsmXmlReader"; }
 
-  OsmReader();
+  OsmXmlReader();
 
   virtual QString errorString() const { return _errorString; }
 
@@ -152,6 +152,6 @@ protected:
   const QString& _saveMemory(const QString& s);
 };
 
-} // hoot
+}
 
-#endif
+#endif // OSMXMLREADER_H

@@ -30,8 +30,8 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/TestUtils.h>
 
@@ -68,7 +68,7 @@ public:
 
   void runMatchCandidateCountTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

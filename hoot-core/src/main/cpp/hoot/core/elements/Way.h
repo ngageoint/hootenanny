@@ -108,7 +108,7 @@ public:
    * doesn't change. E.g. a node that was not originally in RAM appears and changes the bounding
    * box between calls. Unlikely, but possible.
    *
-   * The cached BBOX value will be serialized out to PBF. See PbfWriter for details. This is most
+   * The cached BBOX value will be serialized out to PBF. See OsmPbfWriter for details. This is most
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */

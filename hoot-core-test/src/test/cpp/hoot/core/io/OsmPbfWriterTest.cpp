@@ -33,8 +33,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -51,9 +51,9 @@ using namespace std;
 namespace hoot
 {
 
-class PbfWriterTest : public CppUnit::TestFixture
+class OsmPbfWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PbfWriterTest);
+  CPPUNIT_TEST_SUITE(OsmPbfWriterTest);
   CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST(runWriteNodeTest);
   CPPUNIT_TEST(runWriteRelationTest);
@@ -65,16 +65,16 @@ public:
 
   void runToyTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);
 
-    PbfWriter writer;
-    writer.write(map, "test-output/io/PbfWriterTest.pbf");
+    OsmPbfWriter writer;
+    writer.write(map, "test-output/io/OsmPbfWriterTest.pbf");
 
-    HOOT_FILE_EQUALS("test-files/io/PbfWriterTest.pbf",
-                     "test-output/io/PbfWriterTest.pbf");
+    HOOT_FILE_EQUALS("test-files/io/OsmPbfWriterTest.pbf",
+                     "test-output/io/OsmPbfWriterTest.pbf");
 
   }
 
@@ -103,7 +103,7 @@ public:
   {
     stringstream ss(stringstream::out);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
 
     shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
@@ -132,7 +132,7 @@ public:
   {
     stringstream ss(stringstream::out);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
 
     shared_ptr<OsmMap> map(new OsmMap());
     shared_ptr<Relation> r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
@@ -170,7 +170,7 @@ public:
   {
     stringstream ss(stringstream::out);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
 
     shared_ptr<OsmMap> map(new OsmMap());
     shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
@@ -209,7 +209,7 @@ public:
   {
     stringstream ss(stringstream::out);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
     // makes for a consistent output.
     writer.setCompressionLevel(0);
     writer.includVersion(false);
@@ -283,7 +283,7 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PbfWriterTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PbfWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPbfWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPbfWriterTest, "quick");
 
 }

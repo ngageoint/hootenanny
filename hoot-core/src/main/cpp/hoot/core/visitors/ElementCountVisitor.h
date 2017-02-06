@@ -22,45 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MAPEXTENTVISITOR_H
-#define MAPEXTENTVISITOR_H
+#ifndef ELEMENTCOUNTVISITOR_H
+#define ELEMENTCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 
-// GEOS
-#include <geos/geom/Envelope.h>
+#include "SingleStatistic.h"
 
 namespace hoot
 {
 using namespace std;
 
 /**
- * Determines the extent of a map
+ * Counts the number of elements.
  */
-class MapExtentVisitor : public ElementVisitor
+class ElementCountVisitor : public ElementVisitor, public SingleStatistic
 {
-
 public:
 
-  static string className() { return "hoot::MapExtentVisitor"; }
+  ElementCountVisitor() : _count(0) {}
 
-  MapExtentVisitor();
+  virtual ~ElementCountVisitor() {}
 
-  virtual ~MapExtentVisitor() {}
+  int getCount() const { return _count; }
 
-  Envelope getExtent() const { return _bounds; }
+  double getStat() const { return _count; }
 
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  Envelope _bounds;
-
+  int _count;
 };
 
 }
 
-#endif // MAPEXTENTVISITOR_H
+#endif // ELEMENTCOUNTVISITOR_H

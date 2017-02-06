@@ -17,7 +17,7 @@
 #include "PbfRecordReader.h"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Log.h>
 
 // Pretty Pipes
@@ -40,7 +40,7 @@ shared_ptr<OsmMap> PbfRecordReader::getMap()
   Hdfs fs;
   auto_ptr<istream> is(fs.open(_path));
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
 
 
   reader.parseBlob(_headers[_currentHeader - 1], is.get(), result);

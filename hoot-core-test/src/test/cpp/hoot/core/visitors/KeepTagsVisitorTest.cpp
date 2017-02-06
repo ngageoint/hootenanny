@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 #include <hoot/core/visitors/KeepTagsVisitor.h>
 
@@ -77,7 +77,7 @@ private:
 
   shared_ptr<OsmMap> _loadMap()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

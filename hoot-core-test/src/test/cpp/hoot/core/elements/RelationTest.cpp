@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/util/MetadataTags.h>
 
 #include "../TestUtils.h"
@@ -63,7 +63,7 @@ public:
     r1->addElement("", r2->getElementId());
     r2->addElement("", r1->getElementId());
 
-    CountVisitor v;
+    ElementCountVisitor v;
     r1->visitRo(*map, v);
 
     LOG_VAR(v.getCount());
@@ -81,7 +81,7 @@ public:
 
     r1->addElement("", r1->getElementId());
 
-    CountVisitor v;
+    ElementCountVisitor v;
     r1->visitRo(*map, v);
     r2->visitRo(*map, v);
 
@@ -101,7 +101,7 @@ public:
     r1->addElement("", r2->getElementId());
     r2->addElement("", r1->getElementId());
 
-    CountVisitor v;
+    ElementCountVisitor v;
     r1->visitRw(*map, v);
 
     LOG_VAR(v.getCount());
@@ -119,7 +119,7 @@ public:
 
     r1->addElement("", r1->getElementId());
 
-    CountVisitor v;
+    ElementCountVisitor v;
     r1->visitRw(*map, v);
     r2->visitRw(*map, v);
 

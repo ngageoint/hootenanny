@@ -32,7 +32,7 @@
 #include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ElementConverter.h>
 using namespace hoot;

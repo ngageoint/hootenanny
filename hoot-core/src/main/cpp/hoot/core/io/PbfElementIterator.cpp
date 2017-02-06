@@ -65,7 +65,7 @@ PbfElementIterator::PbfElementIterator(istream* in)
 void PbfElementIterator::_init(istream* in)
 {
   _in.reset(in);
-  _reader.reset(new PbfReader(false));
+  _reader.reset(new OsmPbfReader(false));
   _reader->setPermissive(true);
   _reader->setUseDataSourceIds(true);
   _reader->setUseFileStatus(false);
