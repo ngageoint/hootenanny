@@ -28,8 +28,6 @@ package hoot.services.controllers.nonblocking.conflation;
 
 import static hoot.services.HootProperties.*;
 
-import java.io.File;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -42,7 +40,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -51,19 +48,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.command.RasterToTilesCommandFactory;
-import hoot.services.job.ChainJob;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.controllers.nonblocking.JobId;
 import hoot.services.geo.BoundingBox;
+import hoot.services.job.ChainJob;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
@@ -74,76 +69,6 @@ import hoot.services.utils.JsonUtils;
 @Transactional
 public class ConflationResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
-
-    @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
-
-    private static class UpdateTagsCommand implements InternalCommand {
-        private final java.util.Map<String, String> tags;
-        private final String mapName;
-        private final String jobId;
-
-        UpdateTagsCommand(java.util.Map<String, String> tags, String mapName, String jobId) {
-            this.tags = tags;
-            this.mapName = mapName;
-            this.jobId = jobId;
-        }
-
-        @Override
-        public CommandResult execute() {
-            CommandResult commandResult = new CommandResult();
-            commandResult.setJobId(jobId);
-            commandResult.setCommand("updateTagsDirect()");
-            commandResult.setStart(LocalDateTime.now());
-
-            updateTagsDirect();
-
-            commandResult.setFinish(LocalDateTime.now());
-            commandResult.setExitCode(CommandResult.SUCCESS);
-
-            return commandResult;
-        }
-
-        private void updateTagsDirect() {
-            try {
-                // Currently we do not have any way to get map id directly from hoot
-                // core command when it runs so for now we need get the all the map ids matching name and pick
-                // first one..
-                // THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
-
-                Long mapId = DbUtils.getMapIdByName(mapName);
-                if (mapId != null) {
-                    // Hack alert!
-                    // Add special handling of stats tag key
-                    // We need to read the file in here, because the file doesn't
-                    // exist at the time the updateMapsTagsCommand job is created in ConflationResource.java
-                    String statsKey = "stats";
-                    if (tags.containsKey(statsKey)) {
-                        String statsName = tags.get(statsKey);
-                        File statsFile = new File(statsName);
-                        if (statsFile.exists()) {
-                            String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                            tags.put(statsKey, stats);
-
-                            if (!statsFile.delete()) {
-                                logger.error("Error deleting {} file", statsFile.getAbsolutePath());
-                            }
-                        }
-                        else {
-                            logger.error("Can't find {}", statsName);
-                            tags.remove(statsKey);
-                        }
-                    }
-
-                    DbUtils.updateMapsTableTags(tags, mapId);
-                }
-            }
-            catch (Exception ex) {
-                String msg = "Failure update map tags resource" + ex.getMessage();
-                throw new RuntimeException(msg, ex);
-            }
-        }
-    }
 
 
     public ConflationResource() {
@@ -289,7 +214,7 @@ public class ConflationResource extends AsynchronousJobResource {
                         return internalCommandManager.exec(jobId, updateTagsCommand);
                     },
                     () -> {
-                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(confOutputName, userEmail);
+                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(confOutputName, userEmail);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };

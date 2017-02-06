@@ -27,11 +27,7 @@
 package hoot.services.controllers.nonblocking.hgis;
 
 import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-import static hoot.services.models.db.QMaps.maps;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -48,12 +44,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 import hoot.services.job.ChainJob;
-import hoot.services.models.osm.ModelDaoUtils;
-import hoot.services.utils.DbUtils;
 
 
 @Controller
@@ -62,47 +55,8 @@ import hoot.services.utils.DbUtils;
 public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
-
     public HGISReviewResource() {
         super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
-    }
-
-    private static final class UpdateMapTagsCommand implements InternalCommand {
-
-        private final String jobId;
-        private final String mapName;
-
-        private UpdateMapTagsCommand(String jobId, String mapName) {
-            this.jobId = jobId;
-            this.mapName = mapName;
-        }
-
-        @Override
-        public CommandResult execute() {
-            CommandResult commandResult = new CommandResult();
-            commandResult.setCommand("updateMapTags");
-            commandResult.setJobId(this.jobId);
-            commandResult.setStart(LocalDateTime.now());
-
-            this.updateMapTags();
-
-            commandResult.setExitCode(CommandResult.SUCCESS);
-            commandResult.setFinish(LocalDateTime.now());
-
-            return commandResult;
-        }
-
-        private void updateMapTags() {
-            long mapId = ModelDaoUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
-            Map<String, String> tags = new HashMap<>();
-            tags.put("reviewtype", "hgisvalidation");
-
-            long count = DbUtils.updateMapsTableTags(tags, mapId);
-
-            if (count < 1) {
-                throw new RuntimeException("Error updating map " + mapId + "'s tags!");
-            }
-        }
     }
 
     /**

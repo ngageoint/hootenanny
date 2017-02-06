@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.command;
+package hoot.services.controllers.nonblocking;
 
 import static hoot.services.HootProperties.RASTER_TO_TILES;
 import static hoot.services.HootProperties.TILE_SERVER_PATH;
@@ -33,21 +33,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.ModelDaoUtils;
 
 
-@Component
-@Transactional
-public class RasterToTilesCommandFactory {
-    private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommandFactory.class);
+public class RasterToTilesCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommand.class);
 
-    public ExternalCommand createExternalCommand(String name, String userEmail) {
+    public RasterToTilesCommand(String name, String userEmail) {
         long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
         BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
@@ -84,20 +81,20 @@ public class RasterToTilesCommandFactory {
             String zoomList = zoomInfo.get("zoomlist").toString();
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
-            return createCommandObj(name, zoomList, rasterSize, userEmail, mapId);
+            JSONArray commandArgs = createCommandParams(name, zoomList, rasterSize, userEmail, mapId);
+            createMakeScriptCommandReq(commandArgs);
         }
     }
 
-    private static ExternalCommand createMakeScriptJobReq(JSONArray args) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "make");
-        command.put("exec", RASTER_TO_TILES);
-        command.put("caller", RasterToTilesCommandFactory.class.getSimpleName());
-        command.put("params", args);
-        return command;
+    private void createMakeScriptCommandReq(JSONArray args) {
+        super.put("exectype", "make");
+        super.put("exec", RASTER_TO_TILES);
+        super.put("caller", RasterToTilesCommand.class.getSimpleName());
+        super.put("params", args);
+        super.put("erroraswarning", "true");
     }
 
-    private static ExternalCommand createCommandObj(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
+    private static JSONArray createCommandParams(String name, String zoomList, int rasterSize, String userEmail, long mapId) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject argument = new JSONObject();
@@ -126,10 +123,7 @@ public class RasterToTilesCommandFactory {
             commandArgs.add(argument);
         }
 
-        ExternalCommand jsonArgs = createMakeScriptJobReq(commandArgs);
-        jsonArgs.put("erroraswarning", "true");
-
-        return jsonArgs;
+        return commandArgs;
     }
 
     private static JSONObject getZoomInfo(double maxDelta) {

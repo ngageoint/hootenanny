@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.command;
+package hoot.services.controllers.nonblocking;
 
 import static hoot.services.HootProperties.*;
 import static org.junit.Assert.*;
@@ -56,7 +56,7 @@ import hoot.services.testsupport.MapUtils;
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @ActiveProfiles("test")
 @Transactional
-public class RasterToTilesResourceTest {
+public class RasterToTilesCommandTest {
     private static File homeFolder;
     private static String tileServerPath;
     private static String original_HOME_FOLDER;
@@ -137,11 +137,10 @@ public class RasterToTilesResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestGetZoomInfo() throws Exception {
-        RasterToTilesCommandFactory rts = new RasterToTilesCommandFactory();
-        Method getZoomInfoMethod = RasterToTilesCommandFactory.class.getDeclaredMethod("getZoomInfo", double.class);
+        Method getZoomInfoMethod = RasterToTilesCommand.class.getDeclaredMethod("getZoomInfo", double.class);
         getZoomInfoMethod.setAccessible(true);
 
-        JSONObject oActual = (JSONObject) getZoomInfoMethod.invoke(rts, 0.025);
+        JSONObject oActual = (JSONObject) getZoomInfoMethod.invoke(null, 0.025);
 
         assertEquals("0-1 2-3 4-5 6-7 8-9 10-11 12-13 14-15 16-17", oActual.get("zoomlist").toString());
         assertEquals(500, oActual.get("rastersize"));

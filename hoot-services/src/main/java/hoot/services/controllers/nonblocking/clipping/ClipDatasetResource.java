@@ -44,12 +44,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.RasterToTilesCommandFactory;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.controllers.nonblocking.JobId;
 import hoot.services.job.ChainJob;
@@ -59,9 +58,6 @@ import hoot.services.job.ChainJob;
 @Path("/clipdataset")
 public class ClipDatasetResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
-
-    @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
 
     public ClipDatasetResource() {
@@ -115,7 +111,7 @@ public class ClipDatasetResource extends AsynchronousJobResource {
                     },
                     // Ingest
                     () -> {
-                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(newDatasetOutputName, null);
+                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(newDatasetOutputName, null);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };

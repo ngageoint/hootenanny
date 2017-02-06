@@ -26,9 +26,7 @@
  */
 package hoot.services.controllers.nonblocking.ingest;
 
-import static hoot.services.HootProperties.ETL_MAKEFILE;
-import static hoot.services.HootProperties.HOME_FOLDER;
-import static hoot.services.HootProperties.HOOT_APIDB_URL;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,15 +56,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.RasterToTilesCommandFactory;
-import hoot.services.job.ChainJob;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.job.ChainJob;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -75,10 +72,6 @@ import hoot.services.utils.MultipartSerializer;
 @Transactional
 public class FileUploadResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
-
-    @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
-
 
     public FileUploadResource() {
         super(ETL_MAKEFILE);
@@ -253,7 +246,7 @@ public class FileUploadResource extends AsynchronousJobResource {
                         // rasterToTilesCommand needs to be created after etlCommand has been executed.  During
                         // execution of etlCommand, the command inserts some information into the database that's
                         // required needed by rasterToTilesCommand.
-                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.createExternalCommand(mapDisplayName, userEmail);
+                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(mapDisplayName, userEmail);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };
