@@ -24,40 +24,55 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SET_VISITOR_H
-#define SET_VISITOR_H
+#include "TagKeyCriterion.h"
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-using namespace std;
+HOOT_FACTORY_REGISTER(ElementCriterion, TagKeyCriterion)
 
-/**
- * Returns a set of the element ids visited.
- */
-class SetVisitor : public ElementVisitor
+TagKeyCriterion::TagKeyCriterion(QString key)
 {
-public:
-
-  SetVisitor() {}
-
-  virtual ~SetVisitor() {}
-
-  /**
-   * Returns a set containing all the ElementIds visited.
-   */
-  const set<ElementId>& getElementSet() const { return _elements; }
-
-  virtual void visit(const ConstElementPtr& e);
-
-private:
-
-  set<ElementId> _elements;
-};
-
+  addKey(key);
 }
 
-#endif // SET_VISITOR_H
+TagKeyCriterion::TagKeyCriterion(QString key1, QString key2)
+{
+  addKey(key1);
+  addKey(key2);
+}
+
+TagKeyCriterion::TagKeyCriterion(QString key1, QString key2, QString key3)
+{
+  addKey(key1);
+  addKey(key2);
+  addKey(key3);
+}
+
+TagKeyCriterion::TagKeyCriterion(QStringList keys)
+{
+  _keys = keys;
+}
+
+void TagKeyCriterion::addKey(QString key)
+{
+  _keys.append(key);
+}
+
+bool TagKeyCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+{
+  for (int i = 0; i < _keys.size(); i++)
+  {
+    if (e->getTags().contains(_keys[i]))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+}

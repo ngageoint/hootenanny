@@ -37,7 +37,7 @@ using namespace boost;
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DanglerRemover.h>
 #include <hoot/core/manipulators/DividedHighwayMerger.h>
 #include <hoot/core/manipulators/WayMerger.h>
@@ -321,7 +321,7 @@ void Conflator::_saveMap(QString path)
 
   shared_ptr<OsmMap> wgs84(new OsmMap(_map));
   MapProjector::projectToWgs84(wgs84);
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludeHootInfo(true);
   writer.setIncludeIds(true);
   writer.write(wgs84, path);

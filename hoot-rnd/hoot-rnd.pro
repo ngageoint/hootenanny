@@ -106,7 +106,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/cmd/ConflateCumulativeCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
-    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp \
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \

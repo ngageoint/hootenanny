@@ -22,12 +22,12 @@
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/io/ObjectInputStream.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
@@ -118,7 +118,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
 //      "-conflate-input.pbf";
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
-//  PbfWriter writer;
+//  OsmPbfWriter writer;
 //  pp::Hdfs fs;
 //  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());
@@ -130,13 +130,13 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     // read the map from the given string.
     stringstream ss(context.getInputValue(), stringstream::in);
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
   LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
     map->getWays().size());
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
   delete e;
 
@@ -212,7 +212,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
 void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 {
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
   delete e;
   // write the map out to the working directory.
@@ -222,7 +222,7 @@ void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 
 const Envelope& TileOpReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map)));
+  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -285,7 +285,7 @@ shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
   shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<

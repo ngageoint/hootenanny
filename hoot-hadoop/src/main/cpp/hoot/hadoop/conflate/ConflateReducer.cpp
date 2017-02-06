@@ -32,11 +32,11 @@
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/conflate/UnlikelyIntersectionRemover.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
@@ -119,13 +119,13 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     // read the map from the given string.
     stringstream ss(context.getInputValue(), stringstream::in);
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
   LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
     map->getWays().size());
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
   delete e;
 
@@ -133,7 +133,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
 //      "-conflate-input.osm.pbf";
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
-//  PbfWriter writer;
+//  OsmPbfWriter writer;
 //  pp::Hdfs fs;
 //  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());
@@ -232,7 +232,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
 void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
 {
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
   delete e;
   // write the map out to the working directory.
@@ -241,7 +241,7 @@ void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
 
 const Envelope& ConflateReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map)));
+  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -294,7 +294,7 @@ shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
   shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<

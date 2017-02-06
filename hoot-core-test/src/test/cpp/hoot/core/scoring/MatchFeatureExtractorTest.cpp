@@ -37,7 +37,7 @@
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/filters/TagElementFilter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 
@@ -68,7 +68,7 @@ public:
 
   shared_ptr<OsmMap> load(QString s1, QString s2)
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();

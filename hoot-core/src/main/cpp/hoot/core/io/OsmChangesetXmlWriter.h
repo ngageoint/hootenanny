@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGESETXMLFILEWRITER_H
-#define OSMCHANGESETXMLFILEWRITER_H
+#ifndef OSMCHANGESETXMLWRITER_H
+#define OSMCHANGESETXMLWRITER_H
 
 // Hoot
 #include <hoot/core/elements/Node.h>
@@ -47,12 +47,12 @@ namespace hoot
  * would have to be created using the API.  Optionally, after writing this the changeset
  * can be closed via the API.
  */
-class OsmChangesetXmlFileWriter : public Configurable
+class OsmChangesetXmlWriter : public Configurable
 {
 
 public:
 
-  OsmChangesetXmlFileWriter();
+  OsmChangesetXmlWriter();
 
   /**
    * Write the changeset out to the specified file and any changes over changeset.max.size
@@ -92,4 +92,4 @@ private:
 
 }
 
-#endif // OSMCHANGESETXMLFILEWRITER_H
+#endif // OSMCHANGESETXMLWRITER_H

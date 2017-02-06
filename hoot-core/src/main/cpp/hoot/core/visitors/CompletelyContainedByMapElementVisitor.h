@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ISCOMPLETEVISITOR_H
-#define ISCOMPLETEVISITOR_H
+#ifndef COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
+#define COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
 
 // geos
 #include <geos/geom/MultiLineString.h>
@@ -52,12 +52,12 @@ using namespace std;
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class IsCompleteVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  static string className() { return "hoot::IsCompleteVisitor"; }
+  static string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
-  IsCompleteVisitor();
+  CompletelyContainedByMapElementVisitor();
 
   /**
    * Returns true if all the children of this element are available within the specified map.
@@ -83,4 +83,4 @@ protected:
 
 }
 
-#endif // ISCOMPLETEVISITOR_H
+#endif // COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H

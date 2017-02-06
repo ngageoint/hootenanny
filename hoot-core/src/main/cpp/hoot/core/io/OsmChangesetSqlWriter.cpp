@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmChangesetSqlFileWriter.h"
+#include "OsmChangesetSqlWriter.h"
 
 // hoot
 #include <hoot/core/io/ApiDb.h>
@@ -39,21 +39,21 @@
 namespace hoot
 {
 
-OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url)
+OsmChangesetSqlWriter::OsmChangesetSqlWriter(QUrl url)
   : _changesetId(0),
     _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
     _changesetUserId(ConfigOptions().getChangesetUserId()),
-    _changesetGenerateNewIds(ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+    _changesetGenerateNewIds(ConfigOptions().getOsmChangesetSqlWriterGenerateNewIds())
 {
   _db.open(url);
 }
 
-OsmChangesetSqlFileWriter::~OsmChangesetSqlFileWriter()
+OsmChangesetSqlWriter::~OsmChangesetSqlWriter()
 {
   _db.close();
 }
 
-void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
+void OsmChangesetSqlWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
 
@@ -107,7 +107,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
   _outputSql.close();
 }
 
-void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
+void OsmChangesetSqlWriter::_updateChangeset(const int numChanges)
 {
   //update the changeset's bounds
   LOG_DEBUG("Updating changeset: " << _changesetBounds.toString());
@@ -126,7 +126,7 @@ void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
    _changesetBounds.init();
 }
 
-void OsmChangesetSqlFileWriter::_createChangeSet()
+void OsmChangesetSqlWriter::_createChangeSet()
 {
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
   LOG_DEBUG("Creating changeset: " << _changesetId);
@@ -148,7 +148,7 @@ void OsmChangesetSqlFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
+ElementPtr OsmChangesetSqlWriter::_getChangeElement(ConstElementPtr element)
 {
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())
@@ -173,7 +173,7 @@ ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
 // you've already set the ID correctly in terms of the OSM API target db for the element to be
 // created.
 
-void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
+void OsmChangesetSqlWriter::_createNewElement(ConstElementPtr element)
 {
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -223,7 +223,7 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   }
 }
 
-QString OsmChangesetSqlFileWriter::_getUpdateValuesStr(ConstElementPtr element) const
+QString OsmChangesetSqlWriter::_getUpdateValuesStr(ConstElementPtr element) const
 {
   switch (element->getElementType().getEnum())
   {
@@ -238,7 +238,7 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesStr(ConstElementPtr element) 
   }
 }
 
-QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) const
+QString OsmChangesetSqlWriter::_getUpdateValuesNodeStr(ConstNodePtr node) const
 {
   return
     QString("latitude=%2, longitude=%3, changeset_id=%4, visible=%5, \"timestamp\"=%8, tile=%6, version=%7 WHERE id=%1;\n")
@@ -252,7 +252,7 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesNodeStr(ConstNodePtr node) co
       .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
-QString OsmChangesetSqlFileWriter::_getUpdateValuesWayOrRelationStr(ConstElementPtr element) const
+QString OsmChangesetSqlWriter::_getUpdateValuesWayOrRelationStr(ConstElementPtr element) const
 {
   return
     QString("changeset_id=%2, visible=%3, \"timestamp\"=%5, version=%4 WHERE id=%1;\n")
@@ -263,7 +263,7 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesWayOrRelationStr(ConstElement
       .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
-void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
+void OsmChangesetSqlWriter::_updateExistingElement(ConstElementPtr element)
 {
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -320,7 +320,7 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   }
 }
 
-void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
+void OsmChangesetSqlWriter::_deleteExistingElement(ConstElementPtr element)
 {
   const QString elementIdStr = QString::number(element->getId());
   const QString elementTypeStr = element->getElementType().toString().toLower();
@@ -406,7 +406,7 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   _outputSql.write(("UPDATE current_" + elementTypeStr + "s SET " + values).toUtf8());
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) const
+QString OsmChangesetSqlWriter::_getInsertValuesStr(ConstElementPtr element) const
 {
   switch (element->getElementType().getEnum())
   {
@@ -421,7 +421,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
   }
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
+QString OsmChangesetSqlWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
 {
   LOG_VART(node->getChangeset());
   return
@@ -437,7 +437,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesNodeStr(ConstNodePtr node) co
       .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
-QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElementPtr element) const
+QString OsmChangesetSqlWriter::_getInsertValuesWayOrRelationStr(ConstElementPtr element) const
 {
   return
     QString("changeset_id, visible, \"timestamp\", "
@@ -449,7 +449,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElement
       .arg(OsmApiDb::TIMESTAMP_FUNCTION);
 }
 
-void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
+void OsmChangesetSqlWriter::_createTags(ConstElementPtr element)
 {
   LOG_TRACE("Creating tags for: " << element);
 
@@ -488,7 +488,7 @@ void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
   }
 }
 
-QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId& eid) const
+QStringList OsmChangesetSqlWriter::_tagTableNamesForElement(const ElementId& eid) const
 {
   QStringList tableNames;
   const QString tableName1 = "current_" + eid.getType().toString().toLower() + "_tags";
@@ -498,7 +498,7 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
   return tableNames;
 }
 
-void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
+void OsmChangesetSqlWriter::_createWayNodes(ConstWayPtr way)
 {
   LOG_TRACE("Creating way nodes for: " << way);
 
@@ -524,7 +524,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
   }
 }
 
-void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
+void OsmChangesetSqlWriter::_createRelationMembers(ConstRelationPtr relation)
 {
   LOG_TRACE("Creating relation members for: " << relation);
 
@@ -557,7 +557,7 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation
   }
 }
 
-void OsmChangesetSqlFileWriter::_deleteCurrentTags(const ElementId& eid)
+void OsmChangesetSqlWriter::_deleteCurrentTags(const ElementId& eid)
 {
   QStringList tableNames = _tagTableNamesForElement(eid);
   foreach (QString tableName, tableNames)
@@ -569,7 +569,7 @@ void OsmChangesetSqlFileWriter::_deleteCurrentTags(const ElementId& eid)
   }
 }
 
-void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
+void OsmChangesetSqlWriter::_deleteAll(const QString tableName, const QString idFieldName,
                                            const long id)
 {
   LOG_TRACE("Deleting all from: " << tableName << "...");
@@ -581,7 +581,7 @@ void OsmChangesetSqlFileWriter::_deleteAll(const QString tableName, const QStrin
     .toUtf8());
 }
 
-void OsmChangesetSqlFileWriter::setConfiguration(const Settings &conf)
+void OsmChangesetSqlWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _changesetMaxSize = co.getChangesetMaxSize();

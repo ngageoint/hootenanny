@@ -45,7 +45,7 @@
 #include <hoot/core/ops/stats/IoSingleStat.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // Standard
 #include <fstream>

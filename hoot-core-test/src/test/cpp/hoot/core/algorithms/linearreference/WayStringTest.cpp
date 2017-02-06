@@ -30,7 +30,7 @@
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 
 #include "../../TestUtils.h"
 
@@ -138,7 +138,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(3, sz);
 
     // WayString::visitRo
-    CountVisitor counter;
+    ElementCountVisitor counter;
     wstring->visitRo(*map, counter);
     CPPUNIT_ASSERT_EQUAL(14, counter.getCount());
   }

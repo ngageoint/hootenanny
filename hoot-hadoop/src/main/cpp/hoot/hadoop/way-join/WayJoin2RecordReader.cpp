@@ -17,7 +17,7 @@
 #include "WayJoin2RecordReader.h"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/OsmMap.h>
@@ -39,7 +39,7 @@ PP_FACTORY_REGISTER(pp::RecordReader, WayJoin2RecordReader)
 
 shared_ptr<OsmMap> WayJoin2RecordReader::getMap()
 {
-  return _pbfReader->getMap();
+  return _OsmPbfReader->getMap();
 }
 
 /**
@@ -87,9 +87,9 @@ void WayJoin2RecordReader::initialize(InputSplit* split, HadoopPipes::MapContext
   _csqSplit = dynamic_cast<const FileInputSplit*>(is->getChildSplit().get());
   if (_pbfSplit != NULL)
   {
-    _pbfReader.reset(new PbfRecordReader());
-    _pbfReader->initialize(_pbfSplit->copy(), context);
-    _reader = _pbfReader;
+    _OsmPbfReader.reset(new PbfRecordReader());
+    _OsmPbfReader->initialize(_pbfSplit->copy(), context);
+    _reader = _OsmPbfReader;
   }
   else if (_csqSplit != NULL)
   {

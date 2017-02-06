@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -40,9 +40,9 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
-class OsmReaderTest : public CppUnit::TestFixture
+class OsmXmlReaderTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmReaderTest);
+    CPPUNIT_TEST_SUITE(OsmXmlReaderTest);
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST(runUseIdTest);
     CPPUNIT_TEST(runUseStatusTest);
@@ -52,7 +52,7 @@ public:
 
     void runTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         shared_ptr<OsmMap> map(new OsmMap());
         uut.read("test-files/ToyTestA.osm", map);
@@ -60,13 +60,13 @@ public:
         CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeMap().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 
     void runUseIdTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         OsmMap::resetCounters();
 
@@ -95,13 +95,13 @@ public:
         CPPUNIT_ASSERT(map->containsWay(-1669797));
         CPPUNIT_ASSERT(map->containsWay(-1669795));
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 
     void runUseStatusTest()
     {
-        OsmReader uut;
+        OsmXmlReader uut;
 
         OsmMap::resetCounters();
 
@@ -109,7 +109,7 @@ public:
         uut.setUseDataSourceIds(true);
         uut.setUseStatusFromFile(true);
         uut.setDefaultStatus(Status::Invalid);
-        uut.read("test-files/io/OsmReaderUseStatusTest.osm", map);
+        uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
 
         CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodeMap().size());
         CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
@@ -118,10 +118,10 @@ public:
         CPPUNIT_ASSERT_EQUAL(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
         CPPUNIT_ASSERT_EQUAL(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
 
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.write(map, "output.osm");
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OsmReaderTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(OsmXmlReaderTest);
 

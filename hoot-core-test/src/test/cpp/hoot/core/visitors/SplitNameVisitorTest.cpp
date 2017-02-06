@@ -27,7 +27,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/SplitNameVisitor.h>
 
 // Qt
