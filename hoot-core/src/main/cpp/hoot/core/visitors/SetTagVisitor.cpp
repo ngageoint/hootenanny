@@ -74,7 +74,7 @@ void SetTagVisitor::visit(const shared_ptr<Element>& e)
   }
   else
   {
-    if (e->getTags().keys().contains(_k) && _appendToExistingValue)
+    if (_appendToExistingValue && e->getTags().keys().contains(_k))
     {
       e->getTags()[_k] = e->getTags()[_k] + "," + _v;
     }
