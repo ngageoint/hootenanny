@@ -24,27 +24,41 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
+#include "ProvenanceAwareOverwriteTagMerger.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
+HOOT_FACTORY_REGISTER(TagMerger, ProvenanceAwareOverwriteTagMerger)
 
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+ProvenanceAwareOverwriteTagMerger::ProvenanceAwareOverwriteTagMerger(bool swap) :
+OverwriteTagMerger(swap)
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  return informationCount == 0;
+}
+
+Tags ProvenanceAwareOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2,
+                                                  ElementType et) const
+{
+  Tags tags = OverwriteTagMerger::mergeTags(t1, t2, et);
+  QString sourceVal = "";
+  if (t1.contains(MetadataTags::HootSource()) && t2.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t1.get(MetadataTags::HootSource()) + "," + t2.get(MetadataTags::HootSource());
+  }
+  else if (t1.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t1.get(MetadataTags::HootSource());
+  }
+  else if (t2.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t2.get(MetadataTags::HootSource());
+  }
+  tags.set(MetadataTags::HootSource(), sourceVal);
+  return tags;
 }
 
 }
-
