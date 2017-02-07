@@ -1,13 +1,57 @@
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-791.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4736 in Relation:-764.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-664 in Relation:-552.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-665 in Relation:-551.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-682 in Relation:-547.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1288 in Relation:-286.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-268.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-267.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-266.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-265.
-15:25:43.744 WARN  ...portMissingElementsVisitor.cpp(  64) Reached maximum number of missing reports. No longer reporting.
-15:25:44.031 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm ...
-15:25:44.181 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/PoiPolygonConflateCombinedTest/output1.osm ...
+11:08:57.773 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 120) Conflating test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm with test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm and writing the output to test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm
+11:08:57.774 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm ...
+11:08:57.881 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm ...
+11:08:57.886 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 163) Applying pre-conflation operations...
+11:08:57.886 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+11:08:57.886 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+11:08:57.886 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 4760         Reprojecting 1000 / 4760         Reprojecting 2000 / 4760         Reprojecting 3000 / 4760         Reprojecting 4000 / 4760         
+11:08:57.918 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+11:08:57.920 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
+11:08:57.985 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+11:08:57.985 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+11:08:57.987 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+11:08:57.993 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+11:08:57.997 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+11:08:58.001 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+11:08:58.004 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+11:08:58.006 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+11:08:58.022 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+11:08:58.084 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+11:08:58.131 INFO  ...conflate/UnifyingConflator.cpp( 124) Applying pre-unifying conflation operations...
+11:08:58.131 INFO  ...lygon/BuildingMatchCreator.cpp( 252) Creating matches with: hoot::BuildingMatchCreator...
+11:08:59.019 INFO  ...late/js/ScriptMatchCreator.cpp( 457) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
+11:09:01.587 INFO  ...ighway/HighwayMatchCreator.cpp( 274) Creating matches with: hoot::HighwayMatchCreator...
+11:09:01.993 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+11:09:02.008 INFO  ...ate/SearchRadiusCalculator.cpp( 149) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+11:09:02.010 INFO  ...late/js/ScriptMatchCreator.cpp( 457) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
+11:09:02.424 INFO  ...gon/PoiPolygonMatchCreator.cpp( 341) Creating matches with: hoot::PoiPolygonMatchCreator...
+11:09:19.392 INFO  ...conflate/UnifyingConflator.cpp( 229) Match count: 0
+11:09:19.392 INFO  ...conflate/UnifyingConflator.cpp( 246) Creating mergers...
+11:09:20.238 INFO  ...conflate/UnifyingConflator.cpp( 263) Applying 824 mergers...
+11:09:20.249 INFO  ...conflate/UnifyingConflator.cpp( 289) Applying post-unifying conflation operations...
+11:09:20.249 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+Reprojecting 0 / 4745         Reprojecting 1000 / 4745         Reprojecting 2000 / 4745         Reprojecting 3000 / 4745         Reprojecting 4000 / 4745         
+11:09:20.256 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+11:09:20.257 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Applying post-conflation operations...
+11:09:20.257 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4675 in Relation:-791.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-4736 in Relation:-764.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-664 in Relation:-552.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-665 in Relation:-551.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-682 in Relation:-547.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1288 in Relation:-286.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-268.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-267.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-266.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  53) Removing missing Node:-1290 in Relation:-265.
+11:09:20.258 WARN  ...portMissingElementsVisitor.cpp(  64) Reached maximum number of missing reports. No longer reporting.
+11:09:20.259 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+11:09:20.261 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+11:09:20.275 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+11:09:20.292 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 4735         Reprojecting 1000 / 4735         Reprojecting 2000 / 4735         Reprojecting 3000 / 4735         Reprojecting 4000 / 4735         
+11:09:20.297 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm
+11:09:20.413 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 248) Conflation job completed.
+11:09:20.560 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-output/cmd/PoiPolygonConflateCombinedTest/output1.osm ...
+11:09:20.713 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/cmd/slow/PoiPolygonConflateCombinedTest/output1.osm ...

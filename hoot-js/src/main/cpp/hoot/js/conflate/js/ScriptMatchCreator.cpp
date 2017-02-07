@@ -538,8 +538,6 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
 
   if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
   {
-    LOG_DEBUG("Resetting the match candidate checker...");
-
     LOG_VART(_matchCandidateChecker.get());
     QString scriptPath = _scriptPath;
     if (_matchCandidateChecker.get())
@@ -548,6 +546,9 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
       scriptPath = _matchCandidateChecker->getScriptPath();
     }
     LOG_VART(scriptPath);
+
+    QFileInfo scriptFileInfo(_scriptPath);
+    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
 
     vector<const Match*> emptyMatches;
     _matchCandidateChecker.reset(
