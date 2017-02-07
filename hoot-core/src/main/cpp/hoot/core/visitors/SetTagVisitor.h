@@ -45,7 +45,7 @@ public:
   static std::string className() { return "hoot::SetTagVisitor"; }
 
   SetTagVisitor();
-  SetTagVisitor(QString key, QString value);
+  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -53,6 +53,7 @@ public:
 
 private:
   QString _k, _v;
+  bool _appendToExistingValue;
 };
 
 }

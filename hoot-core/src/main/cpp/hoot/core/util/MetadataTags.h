@@ -43,7 +43,6 @@ public:
   inline static const QString HootTagPrefix()         { return "hoot:"; }
 
   inline static const QString Accuracy()              { return "accuracy"; }
-
   inline static const QString ErrorCircular()         { return "error:circular"; }
 
   inline static const QString HootBuildingMatch()     { return "hoot:building:match"; }
@@ -74,6 +73,7 @@ public:
 
   inline static const QString HootPertied()           { return "hoot:pertied"; }
 
+  inline static const QString HootReviewTagPrefix()   { return "hoot:review:"; }
   inline static const QString HootReviewChoices()     { return "hoot:review:choices"; }
   inline static const QString HootReviewMembers()     { return "hoot:review:members"; }
   inline static const QString HootReviewNeeds()       { return "hoot:review:needs"; }
@@ -89,6 +89,7 @@ public:
   inline static const QString HootScoreUuid()         { return "hoot:score:uuid"; }
 
   inline static const QString HootStatus()            { return "hoot:status"; }
+  inline static const QString HootSource()            { return "hoot:source"; }
 
   inline static const QString HootStub()              { return "hoot:stub"; }
 
