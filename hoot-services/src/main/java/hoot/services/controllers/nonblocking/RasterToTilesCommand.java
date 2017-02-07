@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.nonblocking;
 
+import static hoot.services.HootProperties.HOOT_APIDB_URL;
 import static hoot.services.HootProperties.RASTER_TO_TILES;
 import static hoot.services.HootProperties.TILE_SERVER_PATH;
 
@@ -122,6 +123,10 @@ public class RasterToTilesCommand extends ExternalCommand {
             argument.put("USER_EMAIL", userEmail);
             commandArgs.add(argument);
         }
+
+        argument = new JSONObject();
+        argument.put("DB_URL", HOOT_APIDB_URL);
+        commandArgs.add(argument);
 
         return commandArgs;
     }
