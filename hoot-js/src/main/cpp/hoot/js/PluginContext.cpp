@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -160,13 +160,6 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 
   // Run the script to get the result.
   HootExceptionJs::checkV8Exception(script->Run(), try_catch);
-
-  // Matt, this may conflict w/ your branch. Please fix appropriately. I think you have better error
-  // handling. -JRS
-  // if (result.IsEmpty())
-  // {
-  //   throw HootException(toString(try_catch));
-  // }
 
   if (loadInto != "")
   {

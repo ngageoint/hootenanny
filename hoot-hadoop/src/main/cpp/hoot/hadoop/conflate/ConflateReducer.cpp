@@ -333,7 +333,6 @@ void ConflateReducer::reduce(HadoopPipes::ReduceContext& context)
 void ConflateReducer::_validate(const shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
-  LOG_DEBUG("Testing debug.");
   Debug::printTroubled(map);
   map->validate(true);
 }

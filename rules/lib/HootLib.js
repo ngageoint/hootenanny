@@ -330,7 +330,7 @@ function snapWays(sublineMatcher, map, pairs, replaced)
  * @param rubberSheetMinTies The minimum number of tie points that need to be found during rubber
  * sheeting for the automatic search radius calculation to occur.
  */
-function calculateSearchRadius(map, rubberSheetRef, rubberSheetMinTies)
+function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies)
 {
   return new hoot.SearchRadiusCalculator(
       { "rubber.sheet.ref" : rubberSheetRef },
