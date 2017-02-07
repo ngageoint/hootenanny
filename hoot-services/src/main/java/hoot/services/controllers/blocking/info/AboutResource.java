@@ -37,15 +37,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 
 
@@ -201,22 +198,9 @@ public class AboutResource {
     }
 
     private String getCoreInfo(boolean withDetails) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "hoot");
-        command.put("exec", "version");
+        HootVersionCommand hootVersionCommand = new HootVersionCommand(withDetails, this.getClass());
 
-        JSONArray params = new JSONArray();
-
-        if (withDetails) {
-            JSONObject param = new JSONObject();
-            param.put("", "--debug");
-            params.add(param);
-        }
-
-        command.put("params", params);
-        command.put("caller", AboutResource.class.getSimpleName());
-
-        CommandResult commandResult = this.externalCommandInterface.exec(null, command);
+        CommandResult commandResult = this.externalCommandInterface.exec(null, hootVersionCommand);
         String output = commandResult.getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);

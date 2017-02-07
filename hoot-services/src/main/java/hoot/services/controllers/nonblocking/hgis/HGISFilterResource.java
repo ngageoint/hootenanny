@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.nonblocking.hgis;
 
-import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
-
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -44,7 +42,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
 import hoot.services.job.Job;
 
 
@@ -54,9 +51,7 @@ import hoot.services.job.Job;
 public class HGISFilterResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
 
-    public HGISFilterResource() {
-        super(HGIS_FILTER_SCRIPT);
-    }
+    public HGISFilterResource() {}
 
     /**
      * This resource produces layer that filters Non HGIS POIs.
@@ -81,15 +76,12 @@ public class HGISFilterResource extends HGISResource {
             String jobId = UUID.randomUUID().toString();
 
             Command command = () -> {
-                ExternalCommand filterNonHgisPoisCommand = super.createHGISCommand(request.getSource(), request.getOutput());
+                FilterNonHGISPOIsCommand filterNonHgisPoisCommand = new FilterNonHGISPOIsCommand(
+                        request.getSource(), request.getOutput(), this.getClass());
                 return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
             };
 
-            Job job = new Job();
-            job.setJobId(jobId);
-            job.setCommand(command);
-
-            super.processJob(job);
+            super.processJob(new Job(jobId, command));
 
             response.setJobId(jobId);
         }

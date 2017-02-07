@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.nonblocking.hgis;
 
-import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -44,7 +42,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 import hoot.services.job.ChainJob;
 
@@ -55,9 +52,7 @@ import hoot.services.job.ChainJob;
 public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
 
-    public HGISReviewResource() {
-        super(HGIS_PREPARE_FOR_VALIDATION_SCRIPT);
-    }
+    public HGISReviewResource() {}
 
     /**
      * This resource prepares existing map for 30% of random HGIS specific validation.
@@ -86,7 +81,8 @@ public class HGISReviewResource extends HGISResource {
 
             Command[] commands = {
                     () -> {
-                        ExternalCommand validationCommand = super.createHGISCommand(request.getSourceMap(), request.getOutputMap());
+                        HGISPrepareForValidationCommand validationCommand = new HGISPrepareForValidationCommand(
+                                request.getSourceMap(), request.getOutputMap(), this.getClass());
                         return super.externalCommandManager.exec(jobId, validationCommand);
                     },
                     () -> {
@@ -95,11 +91,7 @@ public class HGISReviewResource extends HGISResource {
                     }
             };
 
-            ChainJob chainJob = new ChainJob();
-            chainJob.setJobId(jobId);
-            chainJob.setCommands(commands);
-
-            super.processChainJob(chainJob);
+            super.processChainJob(new ChainJob(jobId, commands));
 
             response.setJobId(jobId);
         }

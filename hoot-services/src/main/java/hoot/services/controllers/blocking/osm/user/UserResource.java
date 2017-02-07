@@ -54,8 +54,8 @@ import org.w3c.dom.Element;
 
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.models.osm.User;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -94,7 +94,7 @@ public class UserResource {
             long userIdNum;
             try {
                 // input mapId may be a map ID or a map name
-                userIdNum = ModelDaoUtils.getRecordIdForInputString(userId, users, users.id, users.displayName);
+                userIdNum = DbUtils.getRecordIdForInputString(userId, users, users.id, users.displayName);
             }
             catch (Exception e) {
                 if (e.getMessage().startsWith("Multiple records exist") ||

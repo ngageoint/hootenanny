@@ -59,7 +59,7 @@ import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
-import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -165,7 +165,7 @@ public class ElementResource {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist")
@@ -260,7 +260,7 @@ public class ElementResource {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist") ||

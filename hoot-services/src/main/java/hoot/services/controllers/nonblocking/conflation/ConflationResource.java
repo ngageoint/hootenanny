@@ -219,11 +219,7 @@ public class ConflationResource extends AsynchronousJobResource {
                     }
             };
 
-            ChainJob chainJob = new ChainJob();
-            chainJob.setJobId(jobId);
-            chainJob.setCommands(commands);
-
-            super.processChainJob(chainJob);
+            super.processChainJob(new ChainJob(jobId, commands));
         }
         catch (WebApplicationException wae) {
             throw wae;

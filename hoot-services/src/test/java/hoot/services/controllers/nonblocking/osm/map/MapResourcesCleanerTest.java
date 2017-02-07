@@ -37,7 +37,6 @@ import java.sql.ResultSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -54,9 +53,6 @@ import hoot.services.testsupport.MapUtils;
 @ActiveProfiles("test")
 @Transactional
 public class MapResourcesCleanerTest {
-
-    @Autowired
-    private MapResourcesCleaner mapResourcesCleaner;
 
     @Test
     @Category(UnitTest.class)
@@ -91,7 +87,8 @@ public class MapResourcesCleanerTest {
                 int count = stmt.executeUpdate();
             }
 
-            mapResourcesCleaner.exec("map-with-id-" + mapId);
+            DeleteMapResourcesCommand deleteMapResourcesCommand = new DeleteMapResourcesCommand("map-with-id-" + mapId);
+            deleteMapResourcesCommand.execute();
 
             sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {

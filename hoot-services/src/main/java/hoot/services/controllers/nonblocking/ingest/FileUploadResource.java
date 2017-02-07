@@ -251,11 +251,7 @@ public class FileUploadResource extends AsynchronousJobResource {
                     }
             };
 
-            ChainJob chainJob = new ChainJob();
-            chainJob.setJobId(jobId);
-            chainJob.setCommands(commands);
-
-            super.processChainJob(chainJob);
+            super.processChainJob(new ChainJob(jobId, commands));
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();

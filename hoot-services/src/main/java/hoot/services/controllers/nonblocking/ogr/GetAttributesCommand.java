@@ -24,34 +24,39 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.nonblocking.ogr;
+
+import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
+
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import hoot.services.command.ExternalCommand;
 
 
-import hoot.services.command.Command;
+public class GetAttributesCommand extends ExternalCommand {
 
+    public GetAttributesCommand(String jobId, List<String> fileList, List<String> zipList, Class<?> callerClass) {
+        JSONArray commandArgs = new JSONArray();
 
-public class Job {
-    private String jobId;
-    private Command command;
+        JSONObject arg = new JSONObject();
+        arg.put("INPUT_FILES", StringUtils.join(fileList.toArray(), ' '));
+        commandArgs.add(arg);
 
-    public Job(String jobId, Command command) {
-        this.jobId = jobId;
-        this.command = command;
+        arg = new JSONObject();
+        arg.put("INPUT_ZIPS", StringUtils.join(zipList.toArray(), ';'));
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("jobid", jobId);
+        commandArgs.add(arg);
+
+        this.put("exectype", "make");
+        this.put("exec", GET_OGR_ATTRIBUTE_SCRIPT);
+        this.put("caller", callerClass.getName());
+        this.put("params", commandArgs);
     }
-
-    public String getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
-
-    public Command getCommand() {
-        return command;
-    }
-
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-}
+ }

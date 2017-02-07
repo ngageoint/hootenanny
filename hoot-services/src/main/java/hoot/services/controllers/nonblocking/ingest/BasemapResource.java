@@ -70,9 +70,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
-import hoot.services.job.Job;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.job.Job;
 
 @Controller
 @Path("/basemap")
@@ -153,63 +152,25 @@ public class BasemapResource extends AsynchronousJobResource {
             }
 
             for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String fName = pairs.getKey();
+                String fileName = pairs.getKey();
 
-                logger.debug("Preparing Basemap Ingest for :{}", fName);
-                String bmName = inputName;
+                logger.debug("Preparing Basemap Ingest for :{}", fileName);
 
-                if ((bmName == null) || (bmName.isEmpty())) {
-                    bmName = fName;
-                }
-
-                String inputFileName = uploadedFilesPaths.get(fName);
-
-                JSONArray commandArgs = new JSONArray();
-                JSONObject arg = new JSONObject();
-                arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("INPUT_NAME", bmName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                if ((projection != null) && (!projection.isEmpty())) {
-                    arg.put("PROJECTION", projection);
-                }
-                else {
-                    arg.put("PROJECTION", "auto");
-                }
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
+                String basemapName = ((inputName == null) || (inputName.isEmpty())) ? fileName : inputName;
+                String inputFileName = uploadedFilesPaths.get(fileName);
                 String jobId = UUID.randomUUID().toString();
 
-                arg = new JSONObject();
-                arg.put("jobid", jobId);
-                commandArgs.add(arg);
-
                 Command command = () -> {
-                    ExternalCommand externalCommand = super.createBashScriptJobReq(commandArgs);
-                    return externalCommandManager.exec(jobId, externalCommand);
+                    IngestBasemapCommand ingestBasemapCommand = new IngestBasemapCommand(jobId, groupId,
+                            inputFileName, projection, basemapName, this.getClass());
+                    return externalCommandManager.exec(jobId, ingestBasemapCommand);
                 };
 
-                Job job = new Job();
-                job.setJobId(jobId);
-                job.setCommand(command);
-
-                super.processJob(job);
+                super.processJob(new Job(jobId, command));
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);
-                response.put("name", bmName);
+                response.put("name", basemapName);
 
                 jobsArr.add(response);
             }

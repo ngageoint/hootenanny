@@ -24,34 +24,30 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.blocking.info;
 
 
-import hoot.services.command.Command;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import hoot.services.command.ExternalCommand;
 
 
-public class Job {
-    private String jobId;
-    private Command command;
+public class HootVersionCommand extends ExternalCommand {
 
-    public Job(String jobId, Command command) {
-        this.jobId = jobId;
-        this.command = command;
-    }
+    public HootVersionCommand(boolean withDetails, Class clazz) {
+        super.put("exectype", "hoot");
+        super.put("exec", "version");
 
-    public String getJobId() {
-        return jobId;
-    }
+        JSONArray params = new JSONArray();
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
+        if (withDetails) {
+            JSONObject param = new JSONObject();
+            param.put("", "--debug");
+            params.add(param);
+        }
 
-    public Command getCommand() {
-        return command;
-    }
-
-    public void setCommand(Command command) {
-        this.command = command;
+        super.put("params", params);
+        super.put("caller", clazz.getSimpleName());
     }
 }

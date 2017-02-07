@@ -19,7 +19,7 @@
         </Logger>
 
         <!-- By default logs only exceptions. Set to 'debug' to reveal more detailed logging -->
-        <Logger name="hoot.services.JerseyEventLogger" level="INFO" additivity="false">
+        <Logger name="hoot.services.JerseyEventLogger" level="OFF" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 

@@ -31,8 +31,12 @@ import hoot.services.command.Command;
 
 public class ChainJob {
     private String jobId;
-
     private Command[] commands;
+
+    public ChainJob(String jobId, Command[] commands) {
+        this.jobId = jobId;
+        this.commands = commands;
+    }
 
     public String getJobId() {
         return jobId;

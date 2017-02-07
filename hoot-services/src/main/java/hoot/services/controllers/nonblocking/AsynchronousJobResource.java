@@ -104,24 +104,6 @@ public class AsynchronousJobResource {
         return commandArgs;
     }
 
-    protected ExternalCommand createMakeScriptJobReq(JSONArray args) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "make");
-        command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass().getName());
-        command.put("params", args);
-        return command;
-    }
-
-    protected ExternalCommand createBashScriptJobReq(JSONArray args) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "bash");
-        command.put("exec", this.processScriptName);
-        command.put("caller", this.getClass().getName());
-        command.put("params", args);
-        return command;
-    }
-
     protected String getParameterValue(String key, JSONArray args) {
         for (Object arg : args) {
             JSONObject jsonObject = (JSONObject) arg;
@@ -131,5 +113,14 @@ public class AsynchronousJobResource {
         }
 
         return null;
+    }
+
+    protected ExternalCommand createMakeScriptJobReq(JSONArray args) {
+        ExternalCommand command = new ExternalCommand();
+        command.put("exectype", "make");
+        command.put("exec", this.processScriptName);
+        command.put("caller", this.getClass().getName());
+        command.put("params", args);
+        return command;
     }
 }

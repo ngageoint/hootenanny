@@ -26,9 +26,6 @@
  */
 package hoot.services.controllers.nonblocking.clipping;
 
-import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
-import static hoot.services.HootProperties.HOOT_APIDB_URL;
-
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -39,7 +36,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -48,9 +44,9 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.job.ChainJob;
 
 
@@ -61,7 +57,7 @@ public class ClipDatasetResource extends AsynchronousJobResource {
 
 
     public ClipDatasetResource() {
-        super(CLIP_DATASET_MAKEFILE_PATH);
+        super(null);
     }
 
     /**
@@ -97,16 +93,10 @@ public class ClipDatasetResource extends AsynchronousJobResource {
             JSONObject arguments = (JSONObject) parser.parse(params);
             String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
 
-            JSONArray commandArgs = AsynchronousJobResource.parseParams(params);
-
-            JSONObject hootDBURL = new JSONObject();
-            hootDBURL.put("DB_URL", HOOT_APIDB_URL);
-            commandArgs.add(hootDBURL);
-
             Command[] commands = {
                     // Clip to a bounding box
                     () -> {
-                        ExternalCommand clipCommand = super.createMakeScriptJobReq(commandArgs);
+                        ClipDatasetCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
                         return externalCommandManager.exec(jobId, clipCommand);
                     },
                     // Ingest
@@ -116,11 +106,7 @@ public class ClipDatasetResource extends AsynchronousJobResource {
                     }
             };
 
-            ChainJob chainJob = new ChainJob();
-            chainJob.setJobId(jobId);
-            chainJob.setCommands(commands);
-
-            super.processChainJob(chainJob);
+            super.processChainJob(new ChainJob(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;

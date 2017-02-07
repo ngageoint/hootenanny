@@ -68,7 +68,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -79,7 +78,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
-import hoot.services.utils.OsmResponseHeaderGenerator;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.controllers.nonblocking.JobId;
 import hoot.services.geo.BoundingBox;
@@ -93,8 +91,8 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -106,10 +104,6 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class MapResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
-
-    @Autowired
-    private MapResourcesCleaner mapResourcesCleaner;
-
 
     public MapResource() {
         super(null);
@@ -134,13 +128,6 @@ public class MapResource extends AsynchronousJobResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-
-        String message = "Returning map layers response";
-        if ((mapLayers != null) && (mapLayers.getLayers() != null)) {
-            message += " of size: " + mapLayers.getLayers().length;
-        }
-
-        logger.debug(message);
 
         return mapLayers;
     }
@@ -176,13 +163,6 @@ public class MapResource extends AsynchronousJobResource {
         catch (Exception e) {
             handleError(e, null, null);
         }
-
-        String message = "Returning map layers response";
-        if ((folderRecords != null) && (folderRecords.getFolders() != null)) {
-            message += " of size: " + folderRecords.getFolders().length;
-        }
-
-        logger.debug(message);
 
         return folderRecords;
     }
@@ -432,7 +412,7 @@ public class MapResource extends AsynchronousJobResource {
                     bbox = minX + "," + minY + "," + maxX + "," + maxY;
                 }
 
-                mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
 
                 BoundingBox queryBounds;
                 try {
@@ -533,7 +513,7 @@ public class MapResource extends AsynchronousJobResource {
                         bbox = minX + "," + minY + "," + maxX + "," + maxY;
                     }
 
-                    mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+                    mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
 
                     BoundingBox queryBounds;
                     try {
@@ -588,7 +568,7 @@ public class MapResource extends AsynchronousJobResource {
                 ret.put("nodescount", 0);
             }
             else {
-                mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+                mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
 
                 BoundingBox queryBounds;
                 try {
@@ -693,13 +673,12 @@ public class MapResource extends AsynchronousJobResource {
         try {
             String jobId = UUID.randomUUID().toString();
 
-            Command command = () -> { return mapResourcesCleaner.exec(mapId); };
+            Command command = () -> {
+                DeleteMapResourcesCommand mapResourcesCleaner = new DeleteMapResourcesCommand(mapId);
+                return mapResourcesCleaner.execute();
+            };
 
-            Job job = new Job();
-            job.setJobId(jobId);
-            job.setCommand(command);
-
-            super.processJob(job);
+            super.processJob(new Job(jobId, command));
 
             return new JobId(jobId);
         }
@@ -879,10 +858,7 @@ public class MapResource extends AsynchronousJobResource {
                                    @QueryParam("newRecord") Boolean newRecord) {
 
         try {
-            createQuery().update(folders)
-                    .where(folders.id.eq(folderId))
-                    .set(folders.parentId, parentId)
-                    .execute();
+            createQuery().update(folders).where(folders.id.eq(folderId)).set(folders.parentId, parentId).execute();
         }
         catch (Exception e) {
             handleError(e, null, null);
@@ -957,7 +933,7 @@ public class MapResource extends AsynchronousJobResource {
 
                 if (mapIdNum != -1) // not OSM API db
                 {
-                    mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+                    mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
                     logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
 
                     try {
@@ -996,7 +972,7 @@ public class MapResource extends AsynchronousJobResource {
 
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {

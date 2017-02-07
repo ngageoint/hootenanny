@@ -152,11 +152,7 @@ public class ExportJobResource extends AsynchronousJobResource {
                         }
                 };
 
-                ChainJob chainJob = new ChainJob();
-                chainJob.setJobId(jobId);
-                chainJob.setCommands(commands);
-
-                super.processChainJob(chainJob);
+                super.processChainJob(new ChainJob(jobId, commands));
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
@@ -166,9 +162,7 @@ public class ExportJobResource extends AsynchronousJobResource {
                     return externalCommandManager.exec(jobId, exportToOSMCommand);
                 };
 
-                Job job = new Job();
-                job.setJobId(jobId);
-                job.setCommand(command);
+                Job job = new Job(jobId, command);
 
                 super.processJob(job);
             }
@@ -198,11 +192,7 @@ public class ExportJobResource extends AsynchronousJobResource {
                     return externalCommandManager.exec(jobId, exportCommand);
                 };
 
-                Job job = new Job();
-                job.setJobId(jobId);
-                job.setCommand(command);
-
-                super.processJob(job);
+                super.processJob(new Job(jobId, command));
             }
         }
         catch (WebApplicationException wae) {

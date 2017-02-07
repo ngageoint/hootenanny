@@ -30,4 +30,5 @@ package hoot.services.command;
 import org.json.simple.JSONObject;
 
 
-public class ExternalCommand extends JSONObject {}
+public class ExternalCommand extends JSONObject {
+}

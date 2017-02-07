@@ -26,21 +26,16 @@
  */
 package hoot.services.controllers.nonblocking.hgis;
 
-import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.mapExists;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.HootProperties;
-import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
-import hoot.services.models.osm.ModelDaoUtils;
 
 
 /**
@@ -50,22 +45,8 @@ abstract class HGISResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
 
-    public HGISResource(String processName) {
-        super(processName);
-    }
-
-    ExternalCommand createHGISCommand(String sourceMap, String outputMap) {
-        JSONArray commandArgs = new JSONArray();
-
-        JSONObject arg = new JSONObject();
-        arg.put("SOURCE", generateDbMapParam(sourceMap));
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("OUTPUT", generateDbMapParam(outputMap));
-        commandArgs.add(arg);
-
-        return super.createBashScriptJobReq(commandArgs);
+    public HGISResource() {
+        super(null);
     }
 
     static void checkHGISCommandParams(String sourceMap, String outputMap) {
@@ -83,39 +64,5 @@ abstract class HGISResource extends AsynchronousJobResource {
             String msg = "sourceMap [" + sourceMap + "] does not exist.";
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
         }
-    }
-
-    /**
-     * Checks for the existence of map
-     *
-     * @param mapName
-     * @return returns true when exists else false
-     */
-    private static boolean mapExists(String mapName) {
-        return (verifyMapExists(mapName) > -1);
-    }
-
-    /**
-     * Determines whether a maps data has been prepared for review; more or less
-     * a wrapper with a more identifiable name around ModelDaoUtils map functionality
-     *
-     * @param mapIdStr
-     *            map ID; may be a map ID or unique map name
-     * @return the map's numeric ID
-     */
-    private static long verifyMapExists(String mapIdStr) {
-        // this will throw if it doesn't find the map
-        return ModelDaoUtils.getRecordIdForInputString(mapIdStr, maps, maps.id, maps.displayName);
-    }
-
-    /**
-     * Creates db conection string based on config settings in
-     * hoot-services.conf
-     *
-     * @param mapName
-     * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-     */
-    private static String generateDbMapParam(String mapName) {
-        return HootProperties.HOOT_APIDB_URL + "/" + mapName;
     }
 }

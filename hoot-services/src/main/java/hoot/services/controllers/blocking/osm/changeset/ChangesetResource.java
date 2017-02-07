@@ -53,7 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 
 import hoot.services.models.osm.Changeset;
-import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -119,7 +119,7 @@ public class ChangesetResource {
         long mapIdNum;
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = ModelDaoUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist")

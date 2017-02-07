@@ -24,34 +24,15 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.nonblocking.hgis;
 
 
-import hoot.services.command.Command;
+import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
 
 
-public class Job {
-    private String jobId;
-    private Command command;
+public class HGISPrepareForValidationCommand extends HGISCommand {
 
-    public Job(String jobId, Command command) {
-        this.jobId = jobId;
-        this.command = command;
-    }
-
-    public String getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
-
-    public Command getCommand() {
-        return command;
-    }
-
-    public void setCommand(Command command) {
-        this.command = command;
+    public HGISPrepareForValidationCommand(String sourceMap, String outputMap, Class<?> caller) {
+        super(sourceMap, outputMap, HGIS_PREPARE_FOR_VALIDATION_SCRIPT, caller);
     }
 }

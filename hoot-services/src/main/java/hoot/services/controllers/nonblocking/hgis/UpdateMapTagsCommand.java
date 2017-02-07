@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
-import hoot.services.models.osm.ModelDaoUtils;
 import hoot.services.utils.DbUtils;
 
 
@@ -55,7 +54,7 @@ final class UpdateMapTagsCommand implements InternalCommand {
     @Override
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
-        commandResult.setCommand("updateMapTags");
+        commandResult.setCommand("[Update Map Tags] of map with name = " + mapName);
         commandResult.setJobId(this.jobId);
         commandResult.setStart(LocalDateTime.now());
 
@@ -68,7 +67,7 @@ final class UpdateMapTagsCommand implements InternalCommand {
     }
 
     private void updateMapTags() {
-        long mapId = ModelDaoUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
+        long mapId = DbUtils.getRecordIdForInputString(this.mapName, maps, maps.id, maps.displayName);
         Map<String, String> tags = new HashMap<>();
         tags.put("reviewtype", "hgisvalidation");
 

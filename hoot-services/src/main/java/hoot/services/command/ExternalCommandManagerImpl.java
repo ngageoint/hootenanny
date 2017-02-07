@@ -29,7 +29,6 @@ package hoot.services.command;
 import static hoot.services.HootProperties.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,19 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.utils.JsonUtils;
 
 
-/**
- * @author Jong Choi
- *         <p>
- *         The purpose of this class is to run command line execution in a
- *         separate process. It inherit from INativeInterface so it can be
- *         switched out with any other class implementing INativeInterface if
- *         needed. It is called by nativeInterface and it gets associated
- *         through spring entry located in applicationContext.xml. This class
- *         handles 2 types of execution format. 1. direct exec call like hoot
- *         --ogr2osm target input output if the "exectype" is "hoot" 2. make
- *         file script based execution where format is make -f [some makefile]
- *         [any argument make file uses] when "exectype" is "make"
- */
 @Transactional
 @Component
 @Profile("production")
@@ -147,9 +133,7 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
             }
         }
 
-        Object[] objectArray = execCmd.toArray();
-
-        return Arrays.copyOf(objectArray, objectArray.length, String[].class);
+        return execCmd.toArray(new String[execCmd.size()]);
     }
 
     /**
@@ -174,17 +158,7 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
             }
         }
 
-        if (cmd.get("jobId") != null) {
-            String jobid = cmd.get("jobId").toString();
-            execCmd.add("jobid=" + jobid);
-        }
-
-        execCmd.add("DB_URL=" + HOOT_APIDB_URL);
-        execCmd.add("OSM_API_DB_URL=" + OSM_APIDB_URL);
-
-        Object[] objectArray = execCmd.toArray();
-
-        return Arrays.copyOf(objectArray, objectArray.length, String[].class);
+        return execCmd.toArray(new String[execCmd.size()]);
     }
 
     private static String[] createBashScriptCmdArray(JSONObject cmd) {
@@ -203,17 +177,10 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
             }
         }
 
-        if (cmd.get("jobId") != null) {
-            String jobid = cmd.get("jobId").toString();
-            execCmd.add(jobid);
-        }
-
-        Object[] objectArray = execCmd.toArray();
-
-        return Arrays.copyOf(objectArray, objectArray.length, String[].class);
+        return execCmd.toArray(new String[execCmd.size()]);
     }
 
-    private void validate(JSONObject command) {
+    private static void validate(JSONObject command) {
         String resourceName = command.get("caller").toString();
         CommandFieldsValidator validator = new CommandFieldsValidator(resourceName);
 

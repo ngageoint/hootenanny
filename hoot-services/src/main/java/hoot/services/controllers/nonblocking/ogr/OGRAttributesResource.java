@@ -30,6 +30,7 @@ import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,18 +52,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
-import hoot.services.job.Job;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.job.Job;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -72,7 +70,7 @@ public class OGRAttributesResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
 
     public OGRAttributesResource() {
-        super(GET_OGR_ATTRIBUTE_SCRIPT);
+        super(null);
     }
 
     /**
@@ -99,83 +97,17 @@ public class OGRAttributesResource extends AsynchronousJobResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            Map<String, String> uploadedFiles = new HashMap<>();
-            Map<String, String> uploadedFilesPaths = new HashMap<>();
-
-            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
-
             List<String> filesList = new ArrayList<>();
             List<String> zipList = new ArrayList<>();
 
-            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String fName = pairs.getKey();
-                String ext = pairs.getValue();
-
-                String inputFileName = uploadedFilesPaths.get(fName);
-
-                // If it is zip file then we crack open to see if it contains
-                // FGDB. If so then we add the folder location and desired output name
-                // which is fgdb name in the zip
-                if (ext.equalsIgnoreCase("ZIP")) {
-                    zipList.add(fName);
-                    String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
-                    try (FileInputStream in = new FileInputStream(zipFilePath)) {
-                        try (ZipInputStream zis = new ZipInputStream(in)) {
-                            ZipEntry ze = zis.getNextEntry();
-                            while (ze != null) {
-                                String zipName = ze.getName();
-                                if (ze.isDirectory()) {
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
-                                            || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                        String fgdbZipName = zipName;
-                                        if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                            fgdbZipName = zipName.substring(0, zipName.length() - 1);
-                                        }
-                                        filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
-                                    }
-                                }
-                                else {
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                        filesList.add("\"" + fName + "/" + zipName + "\"");
-                                    }
-                                }
-                                ze = zis.getNextEntry();
-                            }
-                        }
-                    }
-                }
-                else {
-                    filesList.add("\"" + inputFileName + "\"");
-                }
-            }
-
-            String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');
-            String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-
-            JSONArray params = new JSONArray();
-
-            JSONObject param = new JSONObject();
-            param.put("INPUT_FILES", mergeFilesList);
-            params.add(param);
-
-            param = new JSONObject();
-            param.put("INPUT_ZIPS", mergedZipList);
-            params.add(param);
-
-            param = new JSONObject();
-            param.put("jobid", jobId);
-            params.add(param);
+            processFormDataMultiPart(filesList, zipList, jobId, inputType, multiPart);
 
             Command command = () -> {
-                ExternalCommand externalCommand = super.createMakeScriptJobReq(params);
+                GetAttributesCommand externalCommand = new GetAttributesCommand(jobId, filesList, zipList, this.getClass());
                 return externalCommandManager.exec(jobId, externalCommand);
             };
 
-            Job job = new Job();
-            job.setJobId(jobId);
-            job.setCommand(command);
-
-            super.processJob(job);
+            super.processJob(new Job(jobId, command));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
@@ -220,5 +152,55 @@ public class OGRAttributesResource extends AsynchronousJobResource {
         }
 
         return Response.ok(script).build();
+    }
+
+    private void processFormDataMultiPart(List<String> filesList, List<String> zipList, String jobId, String inputType, FormDataMultiPart multiPart)
+            throws IOException {
+        Map<String, String> uploadedFiles = new HashMap<>();
+        Map<String, String> uploadedFilesPaths = new HashMap<>();
+
+        MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
+
+        for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+            String fName = pairs.getKey();
+            String ext = pairs.getValue();
+
+            String inputFileName = uploadedFilesPaths.get(fName);
+
+            // If it is zip file then we crack open to see if it contains
+            // FGDB. If so then we add the folder location and desired output name
+            // which is fgdb name in the zip
+            if (ext.equalsIgnoreCase("ZIP")) {
+                zipList.add(fName);
+                String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
+                try (FileInputStream in = new FileInputStream(zipFilePath)) {
+                    try (ZipInputStream zis = new ZipInputStream(in)) {
+                        ZipEntry ze = zis.getNextEntry();
+                        while (ze != null) {
+                            String zipName = ze.getName();
+                            if (ze.isDirectory()) {
+                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
+                                        || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
+                                    String fgdbZipName = zipName;
+                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
+                                        fgdbZipName = zipName.substring(0, zipName.length() - 1);
+                                    }
+                                    filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
+                                }
+                            }
+                            else {
+                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
+                                    filesList.add("\"" + fName + "/" + zipName + "\"");
+                                }
+                            }
+                            ze = zis.getNextEntry();
+                        }
+                    }
+                }
+            }
+            else {
+                filesList.add("\"" + inputFileName + "\"");
+            }
+        }
     }
 }

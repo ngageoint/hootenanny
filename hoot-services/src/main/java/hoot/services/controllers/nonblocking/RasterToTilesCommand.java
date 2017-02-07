@@ -38,14 +38,14 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QMaps;
 import hoot.services.models.osm.Map;
-import hoot.services.models.osm.ModelDaoUtils;
+import hoot.services.utils.DbUtils;
 
 
 public class RasterToTilesCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommand.class);
 
     public RasterToTilesCommand(String name, String userEmail) {
-        long mapId = ModelDaoUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+        long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
         BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
 

@@ -40,22 +40,24 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.CommandResult;
+import hoot.services.command.InternalCommand;
 
 
-@Service
-@Transactional
-public class MapResourcesCleaner {
-    private static final Logger logger = LoggerFactory.getLogger(MapResourcesCleaner.class);
+public class DeleteMapResourcesCommand implements InternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(DeleteMapResourcesCommand.class);
 
-    public MapResourcesCleaner() {}
+    private final String mapName;
 
-    public CommandResult exec(String mapName) {
+    public DeleteMapResourcesCommand(String mapName) {
+        this.mapName = mapName;
+    }
+
+    @Override
+    public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
-        commandResult.setCommand("deleteLayerBy(mapName)");
+        commandResult.setCommand("[Delete Map Resources] of map with ID = " + this.mapName);
         commandResult.setStart(LocalDateTime.now());
 
         try {
