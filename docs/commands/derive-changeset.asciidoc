@@ -11,18 +11,11 @@ between two input OSM files.  The changeset can later be applied to an OSM API d
 * +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
                         element ID continuity with the target database when generating SQL changesets only.  
                         Required only if the changeset output format is .osc.sql.
-* +jobId+ - Optional numeric job ID of the Hootenanny web services job which invoked this command.  This 
-            is used only when web service clients may later need to retrieve the contents of the changeset 
-            output file directly.
-* +hootApiDatabaseUrl+ - Optional Hootenanny API database containing the job status table that 
-                         contains the job with ID=jobId.  Required if jobId is passed in.
 
 === Usage
 
 --------------------------------------
 derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
-
-derive-changeset (input1) (input2) (output.osc.sql) (osmApiDatabaseUrl) [jobId] [hootApiDatabaseUrl]
 --------------------------------------
 
 ==== Examples
@@ -31,13 +24,7 @@ derive-changeset (input1) (input2) (output.osc.sql) (osmApiDatabaseUrl) [jobId] 
 # xml changeset output
 hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
 
-# xml changeset output; associate changeset file with services job record for web client changeset file retrieval
-hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc 1 hootapidb://username:password@localhost:5432/hootApiDatabaseName
-
 # sql changeset output
 hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
-
-# sql changeset output; associate changeset file with services job record for web client changeset file retrieval
-hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName 1 hootapidb://username:password@localhost:5432/hootApiDatabaseName
 --------------------------------------
 

@@ -58,17 +58,12 @@ public:
   virtual int runSimple(QStringList args)
   {
     bool isXmlOutput = false;
-
     QString osmApiDbUrl = "";
-
-    bool writeJobStatus = false;
-    QString jobId = "";
-    QString hootApiDbUrl = "";
 
     if (args.size() == 0)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 with takes three to six parameters.").arg(getName()));
+      throw HootException(QString("%1 with takes three to four parameters.").arg(getName()));
     }
     else if (args[2].endsWith(".osc"))
     {
@@ -77,13 +72,7 @@ public:
       {
         cout << getHelp() << endl << endl;
         throw HootException(
-          QString("%1 with XML output takes three or five parameters.").arg(getName()));
-      }
-      if (args.size() == 5)
-      {
-        writeJobStatus = true;
-        jobId = args[3];
-        hootApiDbUrl = args[4];
+          QString("%1 with XML output takes three parameters.").arg(getName()));
       }
     }
     else if (args[2].endsWith(".osc.sql"))
@@ -92,15 +81,9 @@ public:
       {
         cout << getHelp() << endl << endl;
         throw HootException(
-          QString("%1 with SQL output takes four or six parameters.").arg(getName()));
+          QString("%1 with SQL output takes four or parameters.").arg(getName()));
       }
       osmApiDbUrl = args[3];
-      if (args.size() == 6)
-      {
-        writeJobStatus = true;
-        jobId = args[4];
-        hootApiDbUrl = args[5];
-      }
     }
     else
     {
@@ -124,47 +107,15 @@ public:
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
-    OsmChangesetXmlWriter xmlWriter;
     if (isXmlOutput)
     {
-      xmlWriter.write(output, delta);
+      OsmChangesetXmlWriter().write(output, delta);
     }
     else
     {
       assert(!osmApiDbUrl.isEmpty());
       LOG_DEBUG(osmApiDbUrl);
       OsmChangesetSqlWriter(QUrl(osmApiDbUrl)).write(output, delta);
-    }
-
-    //There technically is no use case for recording the changeset file output in the db for sql
-    //changesets in addition to xml changesets, but the behavior is being made identical to that
-    //of xml changeset derivation for consistency's sake.
-
-    //write the output file name to the job status detail col for later retrieval
-    if (writeJobStatus)
-    {
-      assert(!hootApiDbUrl.isEmpty() && !jobId.isEmpty());
-      LOG_DEBUG(
-        "Associating changeset file: " << output << " with services job ID: " << jobId << "...");
-      LOG_VARD(hootApiDbUrl);
-      _hootApiDb.open(QUrl(hootApiDbUrl));
-      QString outputPath = output;
-      if (isXmlOutput && xmlWriter.getMultipleChangesetsWritten())
-      {
-        //The xml writer will break up changesets into multiple files if they exceed the maximum
-        //changeset size.  Thus, the path will be changed.  The sql writer does not break up the
-        //output into seperate files.
-
-        //We're just going to punt on multiple changeset files for now and make sure the services
-        //handle the situation appropriately.  We don't want to have to deal with the potentially
-        //large size of multiple changesets worth of data when returning changeset data from the
-        //services.
-        outputPath = "<multiple files>";
-      }
-
-      //The job record with the specified ID should always exist and have previously been inserted
-      //by the web services.  So, we'll fail here if it doesn't.
-      _hootApiDb.updateJobStatus(jobId, outputPath);
     }
 
     return 0;
