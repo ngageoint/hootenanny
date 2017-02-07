@@ -24,27 +24,53 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
 
-// hoot
+// Hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/rnd/conflate/CumulativeConflator.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
-
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+class ConflateCumulativeCmd : public BaseCommand
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  return informationCount == 0;
-}
+public:
+
+  static string className() { return "hoot::ConflateCumulativeCmd"; }
+
+  ConflateCumulativeCmd() { }
+
+  virtual QString getName() const { return "conflate-cumulative"; }
+
+  virtual int runSimple(QStringList args)
+  {
+    //TODO: make this work with stats
+    if (args.contains("--stats"))
+    {
+      throw HootException("Multi-conflation does not work with the --stats option.");
+    }
+
+    if (args.size() < 4)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(
+        QString("%1 takes four or more parameters with at least three input paths and exactly") +
+        QString("one output path. ").arg(getName()));
+    }
+
+    QStringList inputsTemp = args;
+    inputsTemp.removeLast();
+    const QStringList inputs = inputsTemp;
+    const QString output = args.last();
+
+    CumulativeConflator::conflate(inputs, output);
+
+    return 0;
+  }
+};
+
+HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 

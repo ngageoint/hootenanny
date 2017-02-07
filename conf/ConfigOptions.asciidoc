@@ -1822,6 +1822,14 @@ Should the element remover remove the elements recursively?
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
 
+=== review.tags.treat.as.metadata
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
+
 === rubber.sheet.debug
 
 * Data Type: bool
@@ -1945,6 +1953,14 @@ sequencing of element ID's.
 List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
 valid values.
 
+=== set.tag.visitor.append.to.existing.value
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any element with a value populated for the key defined by the set.tag.visitor.key option
+will have the value specified in the set.tag.visitor.value option appended to it.
+
 === set.tag.visitor.key
 
 * Data Type: string
@@ -2062,6 +2078,9 @@ Possible options include:
 * `hoot::OverwriteTagMerger` - Aliased to `hoot::OverwriteTag2Merger`
 * <<Overwrite-Tag-1,`hoot::OverwriteTag1Merger`>> - Overwrite the tags in the first input.
 * <<Overwrite-Tag-2,`hoot::OverwriteTag2Merger`>> - Overwrite the tags in the second input.
+* <<Provenance-Aware-Overwrite-Tag-Merger,`hoot::ProvenanceAwareOverwriteTagMerger`>> - Overwrite
+the tags in the first input except the provenance tag, hoot:source, which will be merged using
+values from both features.
 
 === tag.printing.format
 

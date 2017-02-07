@@ -22,29 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
+#include "KeepReviewsVisitor.h"
 
 // hoot
 #include <hoot/core/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/filters/NeedsReviewCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepReviewsVisitor)
 
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+void KeepReviewsVisitor::visit(const ConstElementPtr& e)
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  return informationCount == 0;
+  ConstOsmMapPtr map(_map->shared_from_this());
+  NeedsReviewCriterion crit(map);
+  if (!crit.isSatisfied(e))
+  {
+    /// This could do bad things if the element is in use.
+    RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());
+  }
 }
 
 }
-
