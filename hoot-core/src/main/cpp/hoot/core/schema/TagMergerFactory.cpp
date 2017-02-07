@@ -49,7 +49,7 @@ TagMergerFactory& TagMergerFactory::getInstance()
 {
   if (!_theInstance.get())
   {
-      _theInstance.reset(new TagMergerFactory());
+    _theInstance.reset(new TagMergerFactory());
   }
   return *_theInstance;
 }

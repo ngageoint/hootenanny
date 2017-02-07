@@ -62,6 +62,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/polygon/AreaMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
     src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 HEADERS += \
@@ -101,7 +102,11 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.cpp \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.cpp \
-    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.cpp
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.cpp \
+    src/main/cpp/hoot/rnd/cmd/ConflateCumulativeCmd.cpp \
+    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
+    src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
@@ -140,7 +145,10 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EidMapper.h \
     src/main/cpp/hoot/rnd/conflate/polygon/AreaMerger.h \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.h \
-    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.h
+    src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.h \
+    src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h \
+    src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h
 
 FORMS +=
 

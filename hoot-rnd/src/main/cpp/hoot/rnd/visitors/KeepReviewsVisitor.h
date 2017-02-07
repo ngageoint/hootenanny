@@ -22,29 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
+#ifndef KEEPREVIEWSVISITOR_H
+#define KEEPREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
+using namespace std;
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
-
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+/**
+ * Remove all elements that are not review relations.
+ *
+ * This could do bad things if the element is in use.
+ */
+class KeepReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  return informationCount == 0;
-}
+public:
+
+  static string className() { return "hoot::KeepReviewsVisitor"; }
+
+  KeepReviewsVisitor() {}
+
+  virtual ~KeepReviewsVisitor() {}
+
+  virtual void setOsmMap(OsmMap* map) { _map = map; }
+
+  /**
+   * KeepReviewsVisitor requires a read/write map.
+   */
+  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+
+  virtual void visit(const ConstElementPtr& e);
+
+private:
+  OsmMap* _map;
+};
 
 }
 
+#endif // KEEPREVIEWSVISITOR_H

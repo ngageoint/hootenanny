@@ -24,27 +24,32 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "NoInformationCriterion.h"
+#ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
+#define PROVENANCEAWAREOVERWRITETAGMERGER_H
 
-// hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
-
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+/**
+ * Same as OverwriteTag2Merger except the provenance tag, hoot:source, which will be merged using
+ * values from both features.
+ */
+class ProvenanceAwareOverwriteTagMerger : public OverwriteTagMerger
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
-  LOG_VART(informationCount);
-  return informationCount == 0;
-}
+
+public:
+
+  static string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
+
+  ProvenanceAwareOverwriteTagMerger(bool swap = false);
+
+  virtual ~ProvenanceAwareOverwriteTagMerger() {}
+
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+};
 
 }
 
+#endif // PROVENANCEAWAREOVERWRITETAGMERGER_H
