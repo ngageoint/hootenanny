@@ -41,12 +41,16 @@ import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.xpath.XPathAPI;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,16 +59,22 @@ import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
+import hoot.services.nativeinterfaces.NativeInterfaceException;
+import hoot.services.nativeinterfaces.ProcessStreamInterface;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.XmlDocumentBuilder;
 
 
 public class ExportJobResourceTest {
 
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResourceTest.class);
 
     @Test
@@ -392,10 +402,64 @@ public class ExportJobResourceTest {
         // which is only controllable
         // if you mock postJobRequest. That's already being done in testProcess,
         // so won't redo it here.
-        assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
+        assertTrue(commandArgs.contains("{\"input1\":\"" + OSM_API_DB_URL.replace("/", "\\/") + "\"}"));
+        assertTrue(commandArgs.contains("{\"input2\":\"" + DB_URL.replace("/", "\\/") + "\\/MyTestMap\"}"));
         assertTrue(commandArgs.contains("{\"outputtype\":\"osc\"}"));
         assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
         assertTrue(commandArgs.contains("{\"aoi\":\"0.0,0.0,0.0,0.0\"}"));
+    }
+    
+    /*
+     * This tests the export make script that the changeset derivation export uses.  This technically doesn't
+     * test ExportJobResource at all but will leave it in this test class for lack of a better
+     * place to put it.
+     */
+    @Test
+    @Category(UnitTest.class)
+    public void testExportToChangesetScript() throws IOException, NativeInterfaceException, SAXException, ParserConfigurationException, TransformerException {
+        File outputFile = null;
+        try {
+            //mock the command sent by DeriveChangesetResource to ProcessStreamInterface
+            JSONArray commandArgs = new JSONArray();
+            JSONObject hootCommand = new JSONObject();
+            JSONObject command = new JSONObject();
+            
+            String jobId = UUID.randomUUID().toString();
+            hootCommand.put("jobid", jobId);
+            //don't want an integration with the database here, so just testing file inputs instead
+            hootCommand.put("input1", HootProperties.HOME_FOLDER + "/test-files/conflate/unified/AllDataTypesA.osm");
+            hootCommand.put("input2", HootProperties.HOME_FOLDER + "/hoot-services/src/test/resources/hoot.services.controllers.job/ExportJobResourceTestAdtConflated.osm");
+            hootCommand.put("aoi", "-104.8192,38.8162,-104.6926,38.9181");
+            //mimic the way ExportJobResource sets up the output path
+            hootCommand.put("outputfolder", HootProperties.TEMP_OUTPUT_PATH + "/" + jobId);
+            hootCommand.put("outputname", jobId);
+            hootCommand.put("outputtype", "osc");
+            outputFile = 
+              new File(hootCommand.get("outputfolder").toString() + "/" + hootCommand.get("outputname").toString() + "." + hootCommand.get("outputtype").toString());
+            commandArgs.add (hootCommand);
+            
+            command.put("exectype", "make");
+            command.put("exec", HootProperties.EXPORT_SCRIPT);
+            command.put("caller", this.getClass().getSimpleName());
+            command.put("params", commandArgs);
+            
+            (new ProcessStreamInterface()).exec(command);
+            
+            //verify output file - we're not going to do an exact diff on it to avoid a dependency on 
+            //core changeset generation logic which may change in the future.  just going to check for 
+            //non-zero element counts on create/delete, which is good enough indication that the 
+            //changeset generated without a failure
+            Document actualChangesetDoc = XmlDocumentBuilder.parse(FileUtils.readFileToString(outputFile, "UTF-8"));
+            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange").getLength() == 1);
+            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange/create").getLength() > 0);
+            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange/delete").getLength() > 0);
+        }
+        finally {
+            FileUtils.deleteQuietly(outputFile);
+            if (outputFile != null) {
+                assertTrue(!outputFile.exists());
+            }
+        }
     }
 
     @Test(expected = WebApplicationException.class)
@@ -501,9 +565,11 @@ public class ExportJobResourceTest {
         catch (WebApplicationException e) {
             assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
             assertTrue(e.getResponse().getEntity().toString().contains("Missing output file"));
+            throw e;
+        }
+        finally {
             FileUtils.deleteQuietly(changesetDir);
             assertTrue(!changesetDir.exists());
-            throw e;
         }
     }
 }

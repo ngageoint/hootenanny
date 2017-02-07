@@ -203,6 +203,17 @@ public class ExportJobResource extends JobControllerBase {
     JSONArray getExportToChangesetCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
+        
+        //handling these inputs a little differently than the rest of ExportJobResource as makes it
+        //it possible to test osm2ogrscript with file inputs
+        
+        JSONObject commandArg = new JSONObject();
+        commandArg.put("input1", OSM_API_DB_URL);
+        commandArgs.add(commandArg);
+        
+        commandArg = new JSONObject();
+        commandArg.put("input2", DB_URL + "/" + oParams.get("input"));
+        commandArgs.add(commandArg);
 
         if (oParams.get("TASK_BBOX") == null) {
             String msg = "When exporting to a changeset, TASK_BBOX must be specified.";
@@ -391,9 +402,10 @@ public class ExportJobResource extends JobControllerBase {
     public Response exportFile(@PathParam("id") String id, @QueryParam("outputname") String outputname,
             @QueryParam("removeCache") Boolean removeCache, @QueryParam("ext") String ext) {
         Response response = null;
+        File out = null;
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-            File out = getExportFile(id, outputname, fileExt);
+            out = getExportFile(id, outputname, fileExt);
 
             String outFileName = id;
             if ((outputname != null) && (!outputname.isEmpty())) {
@@ -404,16 +416,17 @@ public class ExportJobResource extends JobControllerBase {
             rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
             response = rBuild.build();
-
-            if (removeCache) {
-                FileUtils.deleteQuietly(out);
-            }
         }
         catch (WebApplicationException e) {
             throw e;
         }
         catch (Exception e) {
             throw new WebApplicationException(e);
+        }
+        finally {
+            if (removeCache) {
+                FileUtils.deleteQuietly(out);
+            }
         }
 
         return response;
@@ -450,15 +463,17 @@ public class ExportJobResource extends JobControllerBase {
             out = getExportFile(id, id, StringUtils.isEmpty(ext) ? "xml" : ext);
             response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8"))))
                     .build();
-            if (removeCache) {
-                FileUtils.deleteQuietly(out);
-            }
         }
         catch (WebApplicationException e) {
             throw e;
         }
         catch (Exception e) {
             throw new WebApplicationException(e);
+        }
+        finally {
+            if (removeCache) {
+                FileUtils.deleteQuietly(out);
+            }
         }
         return response;
     }
