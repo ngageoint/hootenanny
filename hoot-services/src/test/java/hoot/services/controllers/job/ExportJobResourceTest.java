@@ -498,6 +498,7 @@ public class ExportJobResourceTest {
         // ExportJobResource::process would write it
         String jobId = UUID.randomUUID().toString();
         File changesetFile = new File(HootProperties.TEMP_OUTPUT_PATH + "/" + jobId + "/" + jobId + ".osc");
+        changesetFile.deleteOnExit(); //remove this if removeCache is enabled
         FileUtils.writeStringToFile(changesetFile, changesetText, "UTF-8");
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -514,7 +515,7 @@ public class ExportJobResourceTest {
         }
 
         assertEquals(changesetText, changesetXml);
-        assertTrue(!changesetFile.exists());
+        //assertTrue(!changesetFile.exists()); //enable this if removeCache is enabled
     }
 
     @Test(expected = WebApplicationException.class)
