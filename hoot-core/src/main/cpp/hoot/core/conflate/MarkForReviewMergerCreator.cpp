@@ -45,7 +45,7 @@ MarkForReviewMergerCreator::MarkForReviewMergerCreator()
 bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
                                                vector<Merger*>& mergers) const
 {
-  LOG_TRACE("Creating mergers...");
+  LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
 
@@ -59,14 +59,16 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* match = (*it);
+    const Match* match = *it;
+    LOG_VART(match->toString());
     MatchType type = match->getType();
+    LOG_VART(type);
     if (type == MatchType::Review)
     {
-      set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+      set< pair<ElementId, ElementId> > s = match->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      matchStrings.append((*it)->explain());
-      score = max<double>((*it)->getClassification().getReviewP(), score);
+      matchStrings.append(match->explain());
+      score = max<double>(match->getClassification().getReviewP(), score);
       reviewCount++;
       if (reviewType.contains(match->getMatchName()) == false)
       {

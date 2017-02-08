@@ -283,7 +283,7 @@ void HighwayRfClassifier::_init() const
     _createTestExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
-    LOG_INFO("Loading highway model from: " << path);
+    LOG_DEBUG("Loading highway model from: " << path);
 
     QFile file(path.toAscii().data());
     if (!file.open(QIODevice::ReadOnly))

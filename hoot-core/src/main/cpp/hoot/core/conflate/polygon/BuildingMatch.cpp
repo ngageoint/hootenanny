@@ -152,10 +152,6 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
-  //if (getType() == MatchType::Review)
-  //{
-    //ss << " note: " << _explainText;
-  //}
   return QString::fromStdString(ss.str());
 }
 
