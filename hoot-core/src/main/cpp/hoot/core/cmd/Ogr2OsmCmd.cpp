@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45,7 +45,10 @@ public:
 
   static string className() { return "hoot::Ogr2OsmCmd"; }
 
-  Ogr2OsmCmd() { }
+  Ogr2OsmCmd():
+  _logWarnCount(0)
+  {
+  }
 
   virtual QString getName() const { return "ogr2osm"; }
 
@@ -112,7 +115,15 @@ public:
 
       if (layers.size() == 0)
       {
-        LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+        }
+        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        _logWarnCount++;
       }
 
       // process the completion status report information first
@@ -181,6 +192,12 @@ public:
 
     return 0;
   }
+
+private:
+
+  //this should be static, but there's no header file
+  unsigned int _logWarnCount;
+
 };
 
 HOOT_FACTORY_REGISTER(Command, Ogr2OsmCmd)

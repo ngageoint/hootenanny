@@ -86,7 +86,8 @@ cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordina
   if (wl.isNode() == false)
   {
     // I haven't been able to recreate the case when this happens.
-    LOG_WARN("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+    LOG_ERROR("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+    //throw here?
   }
   assert(wl.isNode() == true);
 
@@ -277,7 +278,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
-  LOG_WARN("Running cost");
+  LOG_DEBUG("Running cost");
   ShortestPath sp(graph);
 
   for (size_t i = 0; i < c.size(); i++)
@@ -294,7 +295,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
 
   // calculate cost
   sp.calculateCost();
-  LOG_WARN("Cost done");
+  LOG_DEBUG("Cost done");
 
   cv::Mat mat = _paintGraph(map, *graph, sp);
 

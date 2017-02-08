@@ -35,6 +35,8 @@
 namespace hoot
 {
 
+unsigned int WayString::logWarnCount = 0;
+
 // if the difference is smaller than this we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
 
@@ -81,16 +83,26 @@ void WayString::append(const WaySubline& subline)
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
         subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        LOG_VART(back());
-        LOG_VART(back().getWay());
-        LOG_VART(subline);
-        LOG_VART(subline.getWay());
-        LOG_TRACE("Nodes don't match: "
-          << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
-          << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
-        //TODO: Possibly change this back to an exception as part of the work to be done in #1312.
+        //TODO: The intent of this class is being violated.  So either change this back to an
+        //exception as part of the work to be done in #1312, or create a new class for the new
+        //behavior.
         //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
-        LOG_WARN("Ways must connect at a node in the WayString.");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Ways must connect at a node in the WayString.");
+          LOG_VART(back());
+          LOG_VART(back().getWay());
+          LOG_VART(subline);
+          LOG_VART(subline.getWay());
+          LOG_TRACE("Nodes don't match: "
+            << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
+            << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }

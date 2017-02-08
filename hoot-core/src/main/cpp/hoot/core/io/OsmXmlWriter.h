@@ -54,7 +54,10 @@ using namespace boost;
 class OsmXmlWriter : public QXmlDefaultHandler, public OsmMapWriter
 {
 public:
+
   static std::string className() { return "hoot::OsmXmlWriter"; }
+
+  static unsigned int logWarnCount;
 
   OsmXmlWriter();
 

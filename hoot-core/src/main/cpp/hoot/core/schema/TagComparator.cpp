@@ -120,7 +120,7 @@ void TagComparator::averageTags(const Tags& t1, const Tags& t2, Tags& result,
 void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, double w2,
                                 Tags& result, bool keepAllUnknownTags)
 {
-  //LOG_WARN("score: " << OsmSchema::getInstance().score("highway=road", "highway=unclassified"));
+  LOG_TRACE("score: " << OsmSchema::getInstance().score("highway=road", "highway=unclassified"));
   result.clear();
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -387,16 +387,16 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   // compare and get a score for name comparison
   double nameScore, nameWeight;
   compareNames(t1, t2, nameScore, nameWeight, strict);
-  //LOG_WARN("Name score: " << nameScore << "(" << nameWeight << ")");
+  LOG_TRACE("Name score: " << nameScore << "(" << nameWeight << ")");
 
   double textScore, textWeight;
   compareTextTags(t1, t2, textScore, textWeight);
-  //LOG_WARN("Text score: " << textScore << " (" << textWeight << ")");
+  LOG_TRACE("Text score: " << textScore << " (" << textWeight << ")");
 
   // compare the enumerated tags
   double enumScore, enumWeight;
   compareEnumeratedTags(t1, t2, enumScore, enumWeight);
-  //LOG_WARN("enumScore: " << enumScore << "(" << enumWeight << ")");
+  LOG_TRACE("enumScore: " << enumScore << "(" << enumWeight << ")");
 
   // comparing numerical tags is difficult without some concept of the distribution. For that
   // reason I'm avoiding it for now.

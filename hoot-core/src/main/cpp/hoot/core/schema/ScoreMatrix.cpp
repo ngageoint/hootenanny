@@ -59,7 +59,6 @@ double ScoreMatrix::meanScore(double portion) const
   if (_v.size() == 0)
   {
     QString msg("Attempting to calculate the mean score on an empty matrix.");
-    LOG_WARN(msg);
     throw HootException(msg);
   }
 

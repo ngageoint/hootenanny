@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,6 +43,11 @@ class OsmNetworkExtractorVisitor;
 class OsmNetworkExtractor
 {
 public:
+
+  static std::string className() { return "hoot::OsmNetworkExtractor"; }
+
+  static unsigned int logWarnCount;
+
   OsmNetworkExtractor();
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
@@ -56,6 +61,7 @@ public:
   void setCriterion(ElementCriterionPtr criterion) { _criterion = criterion; }
 
 private:
+
   friend class OsmNetworkExtractorVisitor;
 
   ElementCriterionPtr _criterion;

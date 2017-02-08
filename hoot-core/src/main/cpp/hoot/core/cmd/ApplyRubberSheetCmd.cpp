@@ -64,8 +64,6 @@ public:
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
 
-    LOG_WARN("has way -1108: " << map->containsWay(-1108));
-
     // make sure rubber sheeting isn't applied during cleaning.
     QStringList l = ConfigOptions().getMapCleanerTransforms();
     l.removeAll(QString::fromStdString(RubberSheet::className()));

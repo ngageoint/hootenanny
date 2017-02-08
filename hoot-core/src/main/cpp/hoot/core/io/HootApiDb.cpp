@@ -57,6 +57,8 @@
 namespace hoot
 {
 
+unsigned int HootApiDb::logWarnCount = 0;
+
 HootApiDb::HootApiDb()
 {
   _init();
@@ -121,9 +123,7 @@ Envelope HootApiDb::calculateEnvelope() const
   }
   else
   {
-    //QString error = "Error retrieving bounds of map with ID: " + mapId;
     QString error = QString("Error calculating bounds: %1").arg(boundsQuery.lastError().text());
-    LOG_WARN(error);
     throw HootException(error);
   }
 
@@ -226,7 +226,6 @@ void HootApiDb::commit()
   _resetQueries();
   if (!_db.commit())
   {
-    LOG_WARN("Error committing transaction.");
     throw HootException("Error committing transaction: " + _db.lastError().text());
   }
 
@@ -256,7 +255,6 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
   {
     QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
         arg(sql);
-    LOG_WARN(error);
     throw HootException(error);
   }
 }
@@ -369,7 +367,6 @@ void HootApiDb::dropTable(const QString& tableName)
   {
     QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
         arg(sql);
-    LOG_WARN(error);
     throw HootException(error);
   }
 }
@@ -797,7 +794,6 @@ long HootApiDb::_insertRecord(QSqlQuery& query)
   {
     QString err = QString("Error executing query: %1 (%2)").arg(query.executedQuery()).
         arg(query.lastError().text());
-    LOG_WARN(err)
     throw HootException(err);
   }
   bool ok = false;
@@ -907,9 +903,10 @@ void HootApiDb::open(const QUrl& url)
 
   if (isCorrectDbVersion() == false)
   {
-    LOG_WARN("Running against an unexpected DB version.");
-    LOG_WARN("Expected: " << expectedDbVersion());
-    LOG_WARN("Actual: " << getDbVersion());
+    const QString msg = "Running against an unexpected DB version.";
+    LOG_DEBUG("Expected: " << expectedDbVersion());
+    LOG_DEBUG("Actual: " << getDbVersion());
+    throw HootException(msg);
   }
 }
 
@@ -954,7 +951,6 @@ void HootApiDb::rollback()
 
   if (!_db.rollback())
   {
-    LOG_WARN("Error rolling back transaction.");
     throw HootException("Error rolling back transaction: " + _db.lastError().text());
   }
 
@@ -1113,7 +1109,6 @@ shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
   if (_selectElementsForMap->exec() == false)
   {
     QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " for map ID: " + QString::number(mapId) + " Error: " + err);
   }
@@ -1182,7 +1177,15 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -1219,7 +1222,6 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_updateNode->executedQuery()).
         arg(_updateNode->lastError().text());
-    LOG_WARN(err)
     throw HootException(err);
   }
 
@@ -1252,7 +1254,6 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_updateWay->executedQuery()).
         arg(_updateRelation->lastError().text());
-    LOG_WARN(err)
     throw HootException(err);
   }
 
@@ -1285,7 +1286,6 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_updateWay->executedQuery()).
         arg(_updateWay->lastError().text());
-    LOG_WARN(err)
     throw HootException(err);
   }
 

@@ -47,6 +47,11 @@ using namespace std;
 class SchemaChecker
 {
 public:
+
+  static std::string className() { return "hoot::SchemaChecker"; }
+
+  static unsigned int logWarnCount;
+
   SchemaChecker(OsmSchema& osmSchema);
 
   ~SchemaChecker() {}
@@ -79,6 +84,7 @@ public:
   static bool isEmptyGeometry(const SchemaVertex& schemaVertex) { return schemaVertex.geometries > 0; }
 
 private:
+
   vector<SchemaVertex> _schemaVertexList;
 };
 

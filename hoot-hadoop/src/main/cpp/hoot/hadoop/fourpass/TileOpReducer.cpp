@@ -39,9 +39,6 @@
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
 
-// Qt
-//#include <QUuid>
-
 // Tgs
 #include <tgs/System/SystemInfo.h>
 
@@ -50,6 +47,8 @@
 
 namespace hoot
 {
+
+unsigned int TileOpReducer::logWarnCount = 0;
 
 PP_FACTORY_REGISTER(pp::Reducer, TileOpReducer)
 
@@ -166,8 +165,15 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   {
     if (map->containsNode(it->first))
     {
-      LOG_WARN("Strange, a replaced node is still in the map.");
-      LOG_WARN("nid: " << it->first);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Strange, a replaced node is still in the map.  nid: " << it->first);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 

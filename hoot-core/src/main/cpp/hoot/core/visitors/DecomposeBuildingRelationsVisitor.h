@@ -49,6 +49,8 @@ public:
 
   static std::string className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
 
+  static unsigned int logWarnCount;
+
   DecomposeBuildingRelationsVisitor();
 
   virtual void visit(const ConstElementPtr& e);

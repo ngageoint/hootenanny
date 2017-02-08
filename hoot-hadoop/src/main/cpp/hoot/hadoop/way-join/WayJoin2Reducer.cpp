@@ -41,6 +41,8 @@
 namespace hoot
 {
 
+unsigned int WayJoin2Reducer::logWarnCount = 0;
+
 PP_FACTORY_REGISTER(pp::Reducer, WayJoin2Reducer)
 
 WayJoin2Reducer::WayJoin2Reducer()
@@ -285,8 +287,17 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     {
       missing.erase(*it);
     }
-    LOG_WARN("Dropping invalid way due to missing nodes. " << w->toString());
-    LOG_WARN("  Missing nodes: " << missing);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Dropping invalid way due to missing nodes. " << w->toString());
+      LOG_WARN("  Missing nodes: " << missing);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+
     if (_strict)
     {
       throw HootException("Shouldn't be here with good data.");
