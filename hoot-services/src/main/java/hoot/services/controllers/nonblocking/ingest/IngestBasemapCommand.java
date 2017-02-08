@@ -34,9 +34,9 @@ import org.json.simple.JSONObject;
 import hoot.services.command.ExternalCommand;
 
 
-public class IngestBasemapCommand extends ExternalCommand {
+class IngestBasemapCommand extends ExternalCommand {
 
-    public IngestBasemapCommand(String jobId, String groupId, String inputFileName, String projection, String basemapName, Class<?> caller) {
+    IngestBasemapCommand(String jobId, String groupId, String inputFileName, String projection, String basemapName, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
         // from scripts/makebasemaprastertotiles.sh:

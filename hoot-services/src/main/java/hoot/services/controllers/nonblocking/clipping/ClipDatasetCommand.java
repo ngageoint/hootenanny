@@ -37,9 +37,9 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 
 
-public class ClipDatasetCommand extends ExternalCommand {
+class ClipDatasetCommand extends ExternalCommand {
 
-    public ClipDatasetCommand(String params, Class<?> caller) {
+    ClipDatasetCommand(String params, Class<?> caller) {
         JSONArray commandArgs;
 
         try {

@@ -43,7 +43,6 @@ import javax.ws.rs.core.Response.Status;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -54,9 +53,9 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.ChainJob;
 import hoot.services.models.osm.Map;
@@ -72,7 +71,7 @@ public class ConflationResource extends AsynchronousJobResource {
 
 
     public ConflationResource() {
-        super(CONFLATE_MAKEFILE_PATH);
+        super(null);
     }
 
     /**
@@ -120,23 +119,21 @@ public class ConflationResource extends AsynchronousJobResource {
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
-            boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
             boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
 
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
-            if (conflatingOsmApiDbData && !osmApiDbEnabled) {
+            if (conflatingOsmApiDbData && !OSM_API_DB_ENABLED) {
                 String msg = "Attempted to conflate an OSM API database data source but OSM " +
                         "API database support is disabled.";
                 throw new WebApplicationException(Response.serverError().entity(msg).build());
             }
 
             oParams.put("IS_BIG", "false");
+
             String confOutputName = oParams.get("OUTPUT_NAME").toString();
             String input1Name = oParams.get("INPUT1").toString();
             String input2Name = oParams.get("INPUT2").toString();
-
-            JSONArray commandArgs = parseParams(oParams.toJSONString());
 
             // add map tags
             // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
@@ -156,22 +153,23 @@ public class ConflationResource extends AsynchronousJobResource {
                 tags.put("stats", statsName);
             }
 
+            BoundingBox bbox;
+
             // osm api db related input params have already been validated by
             // this point, so just check to see if any osm api db input is present
-            if (conflatingOsmApiDbData && osmApiDbEnabled) {
+            if (conflatingOsmApiDbData && OSM_API_DB_ENABLED) {
                 validateOsmApiDbConflateParams(oParams);
 
                 String secondaryParameterKey = (firstLayerIsOsmApiDb(oParams)) ? "INPUT2" : "INPUT1";
 
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
-                long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, commandArgs));
+                long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, oParams));
                 if (!mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
-                BoundingBox bbox;
                 if (oParams.get("TASK_BBOX") != null) {
                     bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
                 }
@@ -179,7 +177,6 @@ public class ConflationResource extends AsynchronousJobResource {
                     Map secondaryMap = new Map(secondaryMapId);
                     bbox = getMapBounds(secondaryMap);
                 }
-                setAoi(bbox, commandArgs);
 
                 // write a timestamp representing the time the osm api db data was queried out
                 // from the source; to be used conflict detection during export of conflated
@@ -192,22 +189,17 @@ public class ConflationResource extends AsynchronousJobResource {
 
                 tags.put("osm_api_db_export_time", now);
             }
+            else {
+                bbox = null;
+            }
 
             Object oUserEmail = oParams.get("USER_EMAIL");
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
 
-            JSONObject hootDBURL = new JSONObject();
-            hootDBURL.put("DB_URL", HOOT_APIDB_URL);
-            commandArgs.add(hootDBURL);
-
-            JSONObject osmAPIDBURL = new JSONObject();
-            osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
-            commandArgs.add(osmAPIDBURL);
-
             Command[] commands = {
                     () -> {
-                        ExternalCommand conflationCommand = super.createMakeScriptJobReq(commandArgs);
-                        return externalCommandManager.exec(jobId, conflationCommand);
+                        ConflateCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
+                        return externalCommandManager.exec(jobId, conflateCommand);
                     },
                     () -> {
                         InternalCommand updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
@@ -267,11 +259,5 @@ public class ConflationResource extends AsynchronousJobResource {
     // adding this to satisfy the mock
     boolean mapExists(long id) {
         return Map.mapExists(id);
-    }
-
-    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
-        JSONObject arg = new JSONObject();
-        arg.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
-        commandArgs.add(arg);
     }
 }

@@ -33,7 +33,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 import org.springframework.context.ApplicationContext;
 
-import hoot.services.CorsResponseFilter;
+import hoot.services.CORSResponseFilter;
 
 
 public class HootServicesJerseyTestApplication extends ResourceConfig {
@@ -43,7 +43,7 @@ public class HootServicesJerseyTestApplication extends ResourceConfig {
         super.packages(true, "hoot.services", "org.glassfish.jersey.examples.multipart");
 
         super.register(MultiPartFeature.class);
-        super.register(CorsResponseFilter.class);
+        super.register(CORSResponseFilter.class);
         super.register(RequestContextFilter.class);
 
         super.property("contextConfig", applicationContext);

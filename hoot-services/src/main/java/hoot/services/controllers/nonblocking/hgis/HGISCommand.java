@@ -33,9 +33,9 @@ import hoot.services.HootProperties;
 import hoot.services.command.ExternalCommand;
 
 
-public class HGISCommand extends ExternalCommand {
+class HGISCommand extends ExternalCommand {
 
-    public HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
+    HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
         // $1

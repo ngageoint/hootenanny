@@ -621,10 +621,8 @@ public class Map extends Maps {
     public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
-        
-        boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
 
-        if (osmApiDbEnabled) {
+        if (OSM_API_DB_ENABLED) {
             // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
@@ -639,7 +637,7 @@ public class Map extends Maps {
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
 
-            if (osmApiDbEnabled) {
+            if (OSM_API_DB_ENABLED) {
                 java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
                 //This tag, set during conflation, is what indicates whether a conflated dataset
                 //had any osm api db source data in it.  That is the requirement to export back

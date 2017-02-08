@@ -30,8 +30,9 @@ package hoot.services.controllers.nonblocking.hgis;
 import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
 
 
-public class FilterNonHGISPOIsCommand extends HGISCommand {
-    public FilterNonHGISPOIsCommand(String sourceMap, String outputMap, Class<?> caller) {
+class FilterNonHGISPOIsCommand extends HGISCommand {
+
+    FilterNonHGISPOIsCommand(String sourceMap, String outputMap, Class<?> caller) {
         super(sourceMap, outputMap, HGIS_FILTER_SCRIPT, caller);
     }
 }

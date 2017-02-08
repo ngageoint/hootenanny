@@ -88,7 +88,7 @@ public final class HootProperties {
     public static final String ETL_MAKEFILE;
     public static final String OSM_API_DB_NAME;
     public static final String EXPORT_SCRIPT;
-    public static final String OSM_API_DB_ENABLED;
+    public static final Boolean OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
     public static final String MAX_QUERY_NODES;
@@ -187,7 +187,7 @@ public final class HootProperties {
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         ETL_MAKEFILE = getProperty("ETLMakefile");
         EXPORT_SCRIPT = getProperty("ExportScript");
-        OSM_API_DB_ENABLED = getProperty("osmApiDbEnabled");
+        OSM_API_DB_ENABLED = Boolean.parseBoolean(getProperty("osmApiDbEnabled"));
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");

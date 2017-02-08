@@ -105,6 +105,7 @@ public class ExportJobResource extends AsynchronousJobResource {
 
         try {
             JSONArray commandArgs = AsynchronousJobResource.parseParams(params);
+
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -124,7 +125,7 @@ public class ExportJobResource extends AsynchronousJobResource {
             osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
             commandArgs.add(osmAPIDBURL);
 
-            String type = getParameterValue("outputtype", commandArgs);
+            String type = getParameterValue("outputtype", oParams);
             if ("wfs".equalsIgnoreCase(type)) {
                 arg = new JSONObject();
                 arg.put("outputname", jobId);
@@ -207,7 +208,7 @@ public class ExportJobResource extends AsynchronousJobResource {
     }
 
     JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {
-        if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
+        if (!OSM_API_DB_ENABLED) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
         }
@@ -215,12 +216,12 @@ public class ExportJobResource extends AsynchronousJobResource {
         JSONArray commandArgs = new JSONArray();
         commandArgs.addAll(inputCommandArgs);
 
-        if (!"db".equalsIgnoreCase(getParameterValue("inputtype", commandArgs))) {
+        if (!"db".equalsIgnoreCase(getParameterValue("inputtype", oParams))) {
             String msg = "When exporting to an OSM API database, the input type must be a Hootenanny API database.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
-        String translation = getParameterValue("translation", commandArgs);
+        String translation = getParameterValue("translation", oParams);
         if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
             String msg = "Custom translation not allowed when exporting to OSM API database.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
@@ -238,7 +239,7 @@ public class ExportJobResource extends AsynchronousJobResource {
         arg.put("writeStdOutToStatusDetail", "true");
         commandArgs.add(arg);
 
-        Map conflatedMap = getConflatedMap(commandArgs);
+        Map conflatedMap = getConflatedMap(oParams);
 
         //pass the export timestamp to the export bash script
         addMapForExportTag(conflatedMap, commandArgs);
@@ -266,8 +267,8 @@ public class ExportJobResource extends AsynchronousJobResource {
         return commandArgs;
     }
 
-    private Map getConflatedMap(JSONArray commandArgs) {
-        String mapName = getParameterValue("input", commandArgs);
+    private Map getConflatedMap(JSONObject jsonObject) {
+        String mapName = getParameterValue("input", jsonObject);
         Long mapId = getMapIdByName(mapName);
 
         // this may be checked somewhere else down the line...not sure

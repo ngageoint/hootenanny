@@ -141,7 +141,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDb() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
@@ -170,7 +170,7 @@ public class ExportJobResourceTest {
             assertTrue(commandArgs.contains("{\"changesetaoi\":\"" + mapBoundsStr + "\"}"));
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -178,7 +178,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbWithTranslation() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils
                     .readFileToString(new File(
                             Thread.currentThread()
@@ -207,7 +207,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -215,7 +215,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbNoTimestampTag() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
@@ -240,7 +240,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -248,7 +248,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbBadInputType() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
@@ -280,7 +280,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -288,7 +288,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportToOsmApiDbMissingMap() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
@@ -315,7 +315,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -323,7 +323,7 @@ public class ExportJobResourceTest {
     @Category(UnitTest.class)
     public void testExportOsmApiDbNotEnabled() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
@@ -353,7 +353,7 @@ public class ExportJobResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
         }
     }
 }

@@ -24,39 +24,47 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.nonblocking.ogr;
+package hoot.services.controllers.nonblocking.conflation;
 
-import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
+import static hoot.services.HootProperties.*;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.geo.BoundingBox;
 
 
-class GetAttributesCommand extends ExternalCommand {
+class ConflateCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<String> fileList, List<String> zipList, Class<?> callerClass) {
-        JSONArray commandArgs = new JSONArray();
+    ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
+        JSONArray commandArgs = null;
+        try {
+            commandArgs = AsynchronousJobResource.parseParams(params);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing 'params'!", pe);
+        }
 
-        JSONObject arg = new JSONObject();
-        arg.put("INPUT_FILES", StringUtils.join(fileList.toArray(), ' '));
-        commandArgs.add(arg);
+        if (bounds != null) {
+            JSONObject conflateAOI = new JSONObject();
+            conflateAOI.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
+            commandArgs.add(conflateAOI);
+        }
 
-        arg = new JSONObject();
-        arg.put("INPUT_ZIPS", StringUtils.join(zipList.toArray(), ';'));
-        commandArgs.add(arg);
+        JSONObject hootDBURL = new JSONObject();
+        hootDBURL.put("DB_URL", HOOT_APIDB_URL);
+        commandArgs.add(hootDBURL);
 
-        arg = new JSONObject();
-        arg.put("jobid", jobId);
-        commandArgs.add(arg);
+        JSONObject osmAPIDBURL = new JSONObject();
+        osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
+        commandArgs.add(osmAPIDBURL);
 
         this.put("exectype", "make");
-        this.put("exec", GET_OGR_ATTRIBUTE_SCRIPT);
-        this.put("caller", callerClass.getName());
+        this.put("exec", CONFLATE_MAKEFILE_PATH);
+        this.put("caller", caller.getName());
         this.put("params", commandArgs);
     }
- }
+}

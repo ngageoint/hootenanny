@@ -104,15 +104,8 @@ public class AsynchronousJobResource {
         return commandArgs;
     }
 
-    protected String getParameterValue(String key, JSONArray args) {
-        for (Object arg : args) {
-            JSONObject jsonObject = (JSONObject) arg;
-            if (jsonObject.containsKey(key)) {
-                return jsonObject.get(key).toString();
-            }
-        }
-
-        return null;
+    protected String getParameterValue(String key, JSONObject jsonObject) {
+        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
     }
 
     protected ExternalCommand createMakeScriptJobReq(JSONArray args) {

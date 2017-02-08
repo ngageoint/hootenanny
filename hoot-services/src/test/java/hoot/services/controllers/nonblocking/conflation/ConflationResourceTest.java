@@ -82,7 +82,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testProcessOsmApiDbInput() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
@@ -115,7 +115,7 @@ public class ConflationResourceTest {
             //        Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
 
     }
@@ -127,7 +127,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
@@ -144,7 +144,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -152,7 +152,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
@@ -169,7 +169,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -177,7 +177,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread
                 .currentThread()
                 .getContextClassLoader()
@@ -198,7 +198,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
 
@@ -206,7 +206,7 @@ public class ConflationResourceTest {
     @Category(UnitTest.class)
     public void testConflateOsmApiDbNotEnabled() throws Exception {
         try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "false");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
                     .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
@@ -229,7 +229,7 @@ public class ConflationResourceTest {
             throw e;
         }
         finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", "true");
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
         }
     }
 }

@@ -30,9 +30,9 @@ package hoot.services.controllers.nonblocking.hgis;
 import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
 
 
-public class HGISPrepareForValidationCommand extends HGISCommand {
+class HGISPrepareForValidationCommand extends HGISCommand {
 
-    public HGISPrepareForValidationCommand(String sourceMap, String outputMap, Class<?> caller) {
+    HGISPrepareForValidationCommand(String sourceMap, String outputMap, Class<?> caller) {
         super(sourceMap, outputMap, HGIS_PREPARE_FOR_VALIDATION_SCRIPT, caller);
     }
 }

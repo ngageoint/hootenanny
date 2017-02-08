@@ -38,7 +38,7 @@ import javax.ws.rs.core.MultivaluedMap;
  * Jersey filter for supporting CORS:
  * http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
  */
-public class CorsResponseFilter implements ContainerResponseFilter {
+public class CORSResponseFilter implements ContainerResponseFilter {
     /**
      * Returns a CORS aware filter
      */
