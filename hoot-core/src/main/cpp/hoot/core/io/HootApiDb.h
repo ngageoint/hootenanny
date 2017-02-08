@@ -279,29 +279,6 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
-  /**
-   * Updates an existing job status; assumes the job record already exists
-   *
-   * @param jobId ID of an existing job
-   * @param status status text to update the job status field with
-   */
-  void updateJobStatus(const QString jobId, const QString status);
-
-  /**
-   * Determines whether a job status exists
-   *
-   * @param jobId the ID of the job status to determine the existence of
-   * @return true if it exists; false otherwise
-   */
-  bool jobStatusExists(const QString jobId);
-
-  /**
-   * Inserts a new job status
-   *
-   * @param jobId the ID of the newly inserted job status
-   */
-  void insertJobStatus(const QString jobId);
-
 protected:
 
   virtual void _resetQueries();

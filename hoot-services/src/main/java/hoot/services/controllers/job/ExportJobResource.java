@@ -82,21 +82,24 @@ public class ExportJobResource extends JobControllerBase {
      * 
      * example request:
      * 
-     * { "translation":"MGCP.js", Translation script name. "inputtype":"db", [db
-     * | file] db means input from hoot db will be used. file mean a file path
-     * will be specified. "input":"ToyTestA", Input name. for inputtype = db
-     * then specify name from hoot db. For inputtype=file, specify full path to
-     * a file. "outputtype":"gdb", [gdb | shp | wfs | osm_api_db | osc]. gdb
-     * will produce file gdb, shp will output shapefile. if outputtype = wfs
-     * then a wfs front end will be created. osm_api_db will derive and apply a
-     * changeset to an OSM API database, osc will derive changeset xml computing
-     * the the difference between the configured OSM API database and the
-     * specified input layer "removereview" : "false" }
+     * { 
+     *   "translation":"MGCP.js", //Translation script name. 
+     *   "inputtype":"db",        //[db | file] db means input from hoot db will be used. file mean 
+     *                            //a file path will be specified. 
+     *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db. 
+     *                            //For inputtype=file, specify full path to a file. 
+     *   "outputtype":"gdb",      //[gdb | shp | wfs | osm_api_db | osc]. gdb will produce file gdb, 
+     *                            //shp will output shapefile. if outputtype = wfs then a wfs 
+     *                            //front end will be created. osm_api_db will derive and apply a
+     *                            //changeset to an OSM API database, osc will derive changeset 
+     *                            //xml computing the the difference between the configured 
+     *                            //OSM API database and the specified input layer 
+     *   "removereview" : "false" 
+     * }
      * 
      * @param params
      * @return Job ID
-     * @todo outputtype=osm_api_db may end up being obsolete with the addition
-     *       of osc
+     * @todo outputtype=osm_api_db may end up being obsolete with the addition of osc
      */
     @POST
     @Path("/execute")
@@ -390,7 +393,7 @@ public class ExportJobResource extends JobControllerBase {
      *            name. If not specified then defaults to job id as name.
      * @param removeCache
      *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes.
+     *            be deleted when Get request completes. - DISABLED
      * @param ext
      *            parameter overrides the file extension of the file being
      *            downloaded
@@ -424,9 +427,11 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(e);
         }
         finally {
-            if (removeCache) {
-                FileUtils.deleteQuietly(out);
-            }
+              //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were 
+              //made.  So, to keep from breaking some UI tests this will be left disabled for now.
+//            if (removeCache) {
+//                FileUtils.deleteQuietly(out);
+//            }
         }
 
         return response;
@@ -442,7 +447,7 @@ public class ExportJobResource extends JobControllerBase {
      *            job id
      * @param removeCache
      *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes.
+     *            be deleted when Get request completes. - DISABLED
      * @param ext
      *            parameter overrides the file extension of the file being
      *            downloaded
@@ -471,9 +476,11 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(e);
         }
         finally {
-            if (removeCache) {
-                FileUtils.deleteQuietly(out);
-            }
+              //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were 
+              //made.  So, to keep from breaking some UI tests this will be left disabled for now.
+//            if (removeCache) {
+//                FileUtils.deleteQuietly(out);
+//            }
         }
         return response;
     }

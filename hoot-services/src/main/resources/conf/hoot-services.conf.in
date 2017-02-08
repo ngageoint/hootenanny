@@ -251,13 +251,6 @@ ElementMergeServerThreadCount=0
 # Element merge Server Script in scripts folder
 ElementMergeServerScript=/plugins/ElementMergeServer.js
 
-# Used by DeriveChangesetResource
-deriveChangesetScript=derivechangeset
-
-# REVIEW
-
-
-
 # HGIS
 
 # HGIS review prepare for validation script name
