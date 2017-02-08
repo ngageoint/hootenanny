@@ -67,12 +67,6 @@ public class AsynchronousJobResource {
     @Autowired
     protected InternalCommandManager internalCommandManager;
 
-    private final String processScriptName;
-
-
-    public AsynchronousJobResource(String processScriptName) {
-        this.processScriptName = processScriptName;
-    }
 
     public void processChainJob(ChainJob chainJob) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
@@ -104,14 +98,14 @@ public class AsynchronousJobResource {
         return commandArgs;
     }
 
-    protected String getParameterValue(String key, JSONObject jsonObject) {
+    public static String getParameterValue(String key, JSONObject jsonObject) {
         return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
     }
 
-    protected ExternalCommand createMakeScriptJobReq(JSONArray args) {
+    protected ExternalCommand createMakeScriptJobReq(JSONArray args, String scriptName) {
         ExternalCommand command = new ExternalCommand();
         command.put("exectype", "make");
-        command.put("exec", this.processScriptName);
+        command.put("exec", scriptName);
         command.put("caller", this.getClass().getName());
         command.put("params", args);
         return command;

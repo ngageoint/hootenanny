@@ -105,10 +105,6 @@ import hoot.services.utils.XmlDocumentBuilder;
 public class MapResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
-    public MapResource() {
-        super(null);
-    }
-
     /**
      * Returns a list of all map layers in the services database
      * 

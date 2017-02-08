@@ -44,11 +44,6 @@ import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 abstract class HGISResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
-
-    public HGISResource() {
-        super(null);
-    }
-
     static void checkHGISCommandParams(String sourceMap, String outputMap) {
         if (StringUtils.isBlank(sourceMap)) {
             String msg = "Empty sourceMap!";

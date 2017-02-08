@@ -89,10 +89,6 @@ public class BasemapResource extends AsynchronousJobResource {
         }
     }
 
-    public BasemapResource() {
-        super(BASEMAP_RASTER_TO_TILES);
-    }
-
     /**
      * Upload dataset file and create TMS tiles.
      * 

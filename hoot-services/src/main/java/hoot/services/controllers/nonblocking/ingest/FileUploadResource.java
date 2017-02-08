@@ -73,10 +73,6 @@ import hoot.services.utils.MultipartSerializer;
 public class FileUploadResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
 
-    public FileUploadResource() {
-        super(ETL_MAKEFILE);
-    }
-
     /**
      * Purpose of this service is to provide ingest service for uploading shape
      * and osm file and performing ETL operation on the uploaded file(s). This
@@ -390,7 +386,7 @@ public class FileUploadResource extends AsynchronousJobResource {
 
         JSONArray commandArgs = super.parseParams(param.toJSONString());
 
-        ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs);
+        ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs, ETL_MAKEFILE);
 
         return etlCommand;
     }

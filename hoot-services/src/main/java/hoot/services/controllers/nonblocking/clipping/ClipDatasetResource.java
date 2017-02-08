@@ -55,11 +55,6 @@ import hoot.services.job.ChainJob;
 public class ClipDatasetResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
-
-    public ClipDatasetResource() {
-        super(null);
-    }
-
     /**
      * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
      *

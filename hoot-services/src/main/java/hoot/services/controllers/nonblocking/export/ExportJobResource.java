@@ -73,11 +73,6 @@ import hoot.services.wfs.WFSManager;
 public class ExportJobResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
-    public ExportJobResource() {
-        super(EXPORT_SCRIPT);
-    }
-
-
     /**
      * Asynchronous export service.
      *
@@ -140,7 +135,7 @@ public class ExportJobResource extends AsynchronousJobResource {
 
                 Command[] commands = {
                         () -> {
-                            ExternalCommand osm2orgCommand = super.createMakeScriptJobReq(commandArgs);
+                            ExternalCommand osm2orgCommand = super.createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
                             return externalCommandManager.exec(jobId, osm2orgCommand);
                         },
                         () -> {
@@ -159,7 +154,7 @@ public class ExportJobResource extends AsynchronousJobResource {
                 JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
 
                 Command command = () -> {
-                    ExternalCommand exportToOSMCommand = super.createMakeScriptJobReq(args);
+                    ExternalCommand exportToOSMCommand = super.createMakeScriptJobReq(args, EXPORT_SCRIPT);
                     return externalCommandManager.exec(jobId, exportToOSMCommand);
                 };
 
@@ -189,7 +184,7 @@ public class ExportJobResource extends AsynchronousJobResource {
                 }
 
                 Command command = () -> {
-                    ExternalCommand exportCommand = super.createMakeScriptJobReq(commandArgs);
+                    ExternalCommand exportCommand = super.createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
                     return externalCommandManager.exec(jobId, exportCommand);
                 };
 

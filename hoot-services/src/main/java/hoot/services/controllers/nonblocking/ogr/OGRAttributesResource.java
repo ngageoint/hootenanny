@@ -69,10 +69,6 @@ import hoot.services.utils.MultipartSerializer;
 public class OGRAttributesResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
 
-    public OGRAttributesResource() {
-        super(null);
-    }
-
     /**
      * This rest endpoint uploads multipart data from UI and then generates attribute output.
      * Example: http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR

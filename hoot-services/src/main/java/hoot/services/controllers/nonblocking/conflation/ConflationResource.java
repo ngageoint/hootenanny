@@ -69,11 +69,6 @@ import hoot.services.utils.JsonUtils;
 public class ConflationResource extends AsynchronousJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
 
-
-    public ConflationResource() {
-        super(null);
-    }
-
     /**
      * Conflate service operates like a standard ETL service. The conflate
      * service specifies the input files, conflation type, match threshold, miss
