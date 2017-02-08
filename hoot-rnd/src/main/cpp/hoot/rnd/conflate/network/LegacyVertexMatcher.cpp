@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/conflate/NodeMatcher.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -256,7 +257,6 @@ double LegacyVertexMatcher::_scoreSinglePair(ConstNetworkVertexPtr v1, ConstNetw
 {
   double score = _getNodeMatcher()->scorePair(v1->getElementId().getId(),
     v2->getElementId().getId());
-
   return score;
 }
 

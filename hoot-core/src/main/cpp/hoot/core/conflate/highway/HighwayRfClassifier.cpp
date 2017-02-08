@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,6 +56,7 @@
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 // Standard
 #include <fstream>
@@ -282,7 +283,7 @@ void HighwayRfClassifier::_init() const
     _createTestExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
-    LOG_INFO("Loading highway model from: " << path);
+    LOG_DEBUG("Loading highway model from: " << path);
 
     QFile file(path.toAscii().data());
     if (!file.open(QIODevice::ReadOnly))

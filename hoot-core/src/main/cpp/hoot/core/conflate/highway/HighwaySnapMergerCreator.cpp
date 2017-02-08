@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,9 +44,10 @@ HighwaySnapMergerCreator::HighwaySnapMergerCreator()
   setConfiguration(conf());
 }
 
-bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers with " << className() << "...");
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -56,8 +57,11 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(*it);
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m);
     // check to make sure all the input matches are building matches.
+    LOG_VART(hm == 0);
     if (hm == 0)
     {
       // return an empty result

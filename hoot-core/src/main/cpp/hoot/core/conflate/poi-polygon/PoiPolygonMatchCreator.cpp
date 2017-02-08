@@ -338,7 +338,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_VARD(*threshold);
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 

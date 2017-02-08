@@ -33,19 +33,20 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
-#include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -206,7 +207,7 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
 {
   TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid1);
   tcf.addPair("uuid", uuid2);
-  SetVisitor sv;
+  ElementIdSetVisitor sv;
   FilteredVisitor fv2(tcf, sv);
   in->visitRo(fv2);
   const set<ElementId>& s = sv.getElementSet();
@@ -698,8 +699,8 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
   FilteredVisitor elementWrongVisitor(
     new ChainCriterion(
       new ElementTypeCriterion(elementType),
-      new HasTagCriterion(MetadataTags::HootWrong())),
-    new CountVisitor());
+      new TagKeyCriterion(MetadataTags::HootWrong())),
+    new ElementCountVisitor());
   FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
   SingleStatistic* singleStat =
     dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());

@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
-#include <hoot/core/algorithms/linearreference/WayMatchStringMapping.h>
 #include <hoot/core/conflate/MergerBase.h>
 
 #include "EdgeMatch.h"

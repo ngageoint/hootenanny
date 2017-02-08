@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,7 @@
 
 // Local
 #include "WayData.h"
-#include "Node.h"
+#include "Element.h"
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -53,6 +53,8 @@ namespace geos {
 
 namespace hoot
 {
+
+class Node;
 
 using namespace boost;
 using namespace geos::geom;
@@ -106,7 +108,7 @@ public:
    * doesn't change. E.g. a node that was not originally in RAM appears and changes the bounding
    * box between calls. Unlikely, but possible.
    *
-   * The cached BBOX value will be serialized out to PBF. See PbfWriter for details. This is most
+   * The cached BBOX value will be serialized out to PBF. See OsmPbfWriter for details. This is most
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */

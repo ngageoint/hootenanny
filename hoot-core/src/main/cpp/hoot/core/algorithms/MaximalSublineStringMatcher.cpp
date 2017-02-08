@@ -38,6 +38,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/algorithms/SublineMatcher.h>
 
 // Standard
 #include <algorithm>

@@ -28,6 +28,8 @@
 
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
+#include "WayLocation.h"
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

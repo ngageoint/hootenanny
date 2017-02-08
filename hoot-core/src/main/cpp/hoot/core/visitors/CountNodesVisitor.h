@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@
 #define COUNT_NODES_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
@@ -48,10 +48,10 @@ public:
 
   int getCount() const { return _count; }
 
-  virtual void visit(const ConstElementPtr& e) { if (e->getElementType() == ElementType::Node) _count++; }
-  //virtual void visit(ElementType type, long /*id*/) { if (type == ElementType::Node) _count++; }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   int _count;
 };
 

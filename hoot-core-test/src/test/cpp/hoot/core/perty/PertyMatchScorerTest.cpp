@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -99,7 +99,7 @@ public:
   {
     TestUtils::resetEnvironment();
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> referenceMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
@@ -133,7 +133,7 @@ public:
     testSettings.set("conflate.enable.old.roads", "false");
 
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> combinedMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);

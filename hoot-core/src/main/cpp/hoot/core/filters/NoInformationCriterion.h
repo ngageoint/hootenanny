@@ -28,7 +28,8 @@
 #define NOINFORMATIONCRITERION_H
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include "ElementCriterion.h"
 
@@ -36,25 +37,30 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A filter that will remove elements with no non-metadata information.
  */
-class NoInformationCriterion : public ElementCriterion
+class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
   static string className() { return "hoot::NoInformationCriterion"; }
 
-  NoInformationCriterion() {}
+  NoInformationCriterion() { setConfiguration(conf()); }
+  NoInformationCriterion(bool treatReviewTagsAsMetadata) :
+    _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+
+  virtual void setConfiguration(const Settings& conf)
   {
-    const int informationCount = e->getTags().getInformationCount();
-    LOG_VART(e->getElementId());
-    LOG_VART(informationCount);
-    return informationCount == 0;
+    _treatReviewTagsAsMetadata = ConfigOptions(conf).getReviewTagsTreatAsMetadata();
   }
 
-  virtual ElementCriterion* clone() { return new NoInformationCriterion(); }
+  virtual ElementCriterion* clone() { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }
+
+private:
+
+  bool _treatReviewTagsAsMetadata;
 
 };
 

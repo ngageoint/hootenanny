@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,6 @@
 #define UNKNOWNCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
@@ -41,16 +40,16 @@ namespace hoot
 class UnknownCriterion : public ElementCriterion
 {
 public:
+
+  UnknownCriterion() {}
+
   static string className() { return "hoot::UnknownCriterion"; }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return e->isUnknown();
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   UnknownCriterion* clone() { return new UnknownCriterion(); }
 };
 
-} // namespace hoot
+}
 
 #endif // UNKNOWNCRITERION_H

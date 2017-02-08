@@ -17,7 +17,7 @@
 #include "PbfInputFormat.h"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Log.h>
 
 // Pretty Pipes
@@ -48,9 +48,9 @@ void PbfInputFormat::_addSplit(const string& path)
   FileStatus status = hdfs.getFileStatus(path);
   long blockSize = status.getBlockSize();
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
-  const vector<PbfReader::BlobLocation>& result = reader.loadOsmDataBlobOffsets(*strm);
+  const vector<OsmPbfReader::BlobLocation>& result = reader.loadOsmDataBlobOffsets(*strm);
 
   long nextBlock = blockSize;
 

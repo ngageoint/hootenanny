@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,12 +28,13 @@
 #define HIGHWAYREVIEWCLEANEROP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
+
+class OsmMap;
 
 /**
  * This class will go through all highway reviews and look for reviews that are impossible due to
@@ -54,7 +55,7 @@ public:
 
 private:
 
-  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, hoot::ReviewMarker::ReviewUid review);
+  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, ReviewMarker::ReviewUid review);
 };
 
 }

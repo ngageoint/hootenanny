@@ -20,15 +20,19 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
-// Hootenanny
-#include <hoot/core/OsmMap.h>
-
 // Pretty Pipes
 #include <pp/RecordReader.h>
 
+// Std
+#include <string>
+#include <vector>
+
 namespace hoot
 {
+class OsmMap;
+
 using namespace boost;
+using namespace std;
 
 class PbfRecordReader : public pp::RecordReader
 {

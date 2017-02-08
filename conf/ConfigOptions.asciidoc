@@ -1214,7 +1214,7 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osm.changeset.sql.file.writer.generate.new.ids
+=== osm.changeset.sql.writer.generate.new.ids
 
 * Data Type: bool
 * Default Value: `true`
@@ -1293,7 +1293,7 @@ The distance that a feature is moved is based on the circular error of the sourc
 new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
 sigma is the standard deviation associated with the source point.
 
-=== perty.duplicate.poi.p
+=== perty.duplicate.poi.probability
 
 * Data Type: double
 * Default Value: `0.10`
@@ -1308,15 +1308,15 @@ how many duplicates will be created.
 
 The size of the PERTY grid spacing in meters.
 
-=== perty.name.change.p
+=== perty.name.change.probability
 
 * Data Type: double
 * Default Value: `0.05`
 
 The probability of a change to each character in the name. The expected number of changes is
-`perty.name.change.p` * str.size().
+`perty.name.change.probability` * str.size().
 
-=== perty.name.p
+=== perty.name.probability
 
 * Data Type: double
 * Default Value: `0.05`
@@ -1352,14 +1352,14 @@ is set to FullCovariance.
 The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm
 is set to FullCovariance.
 
-=== perty.remove.random.p
+=== perty.remove.random.probability
 
 * Data Type: double
 * Default Value: `0.05`
 
 The probability that a feature will be removed.
 
-=== perty.remove.tag.p
+=== perty.remove.tag.probability
 
 * Data Type: double
 * Default Value: `0.05`
@@ -1822,6 +1822,14 @@ Should the element remover remove the elements recursively?
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
 
+=== review.tags.treat.as.metadata
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
+
 === rubber.sheet.debug
 
 * Data Type: bool
@@ -1945,6 +1953,14 @@ sequencing of element ID's.
 List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
 valid values.
 
+=== set.tag.visitor.append.to.existing.value
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any element with a value populated for the key defined by the set.tag.visitor.key option
+will have the value specified in the set.tag.visitor.value option appended to it.
+
 === set.tag.visitor.key
 
 * Data Type: string
@@ -2062,6 +2078,9 @@ Possible options include:
 * `hoot::OverwriteTagMerger` - Aliased to `hoot::OverwriteTag2Merger`
 * <<Overwrite-Tag-1,`hoot::OverwriteTag1Merger`>> - Overwrite the tags in the first input.
 * <<Overwrite-Tag-2,`hoot::OverwriteTag2Merger`>> - Overwrite the tags in the second input.
+* <<Provenance-Aware-Overwrite-Tag-Merger,`hoot::ProvenanceAwareOverwriteTagMerger`>> - Overwrite
+the tags in the first input except the provenance tag, hoot:source, which will be merged using
+values from both features.
 
 === tag.printing.format
 
@@ -2428,7 +2447,7 @@ the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 This file is typically downloaded from:
 https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 
-=== weighted.word.distance.p
+=== weighted.word.distance.probability
 
 * Data Type: double
 * Default Value: `1.0`

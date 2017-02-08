@@ -48,6 +48,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 // Standard
 #include <sstream>
@@ -151,10 +152,6 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
-  //if (getType() == MatchType::Review)
-  //{
-    //ss << " note: " << _explainText;
-  //}
   return QString::fromStdString(ss.str());
 }
 

@@ -30,7 +30,9 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QImage>
@@ -89,14 +91,14 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     vector<PixelBox> nextLayer;
     nextLayer.resize(width * width);
 
-    //LOG_INFO("width: " << width);
+    LOG_TRACE("width: " << width);
     for (size_t i = 0; i < boxes.size(); i++)
     {
       PixelBox& b = boxes[i];
       double splitX = _calculateSplitX(b);
       int tx = i % (width / 2);
       int ty = i / (width / 2);
-      //LOG_INFO("  i: " << i << " tx: " << tx << " ty: " << ty);
+      LOG_TRACE("  i: " << i << " tx: " << tx << " ty: " << ty);
 
       double splitYLeft = _calculateSplitY(PixelBox(b.minX, splitX, b.minY, b.maxY));
       nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] = PixelBox(b.minX, splitX, b.minY,
@@ -401,7 +403,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   renderImage(map, _r1, _r2);
 
@@ -414,7 +416,7 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;

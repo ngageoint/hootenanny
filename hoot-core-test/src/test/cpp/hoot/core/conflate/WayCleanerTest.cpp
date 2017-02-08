@@ -35,7 +35,7 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/conflate/WayCleaner.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
@@ -61,7 +61,7 @@ public:
 
   void runDuplicateNodesTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -98,7 +98,7 @@ public:
 
   void runDuplicateCoordsTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

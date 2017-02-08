@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CookieCutterOp.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
@@ -65,7 +65,7 @@ public:
 
   void runTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -85,7 +85,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir().mkpath("test-output/ops/CookieCutterOp");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
     HOOT_FILE_EQUALS("test-files/ops/CookieCutterOp/CookieCutterOpTest.osm",
                      "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,8 +61,7 @@ class SingleSidedNetworkMatcherTest;
  * By swapping from using the product to additive (_updateEdgeScoresAdditive()) the results look
  * a little better, but I think the iterative approach was giving a sligthly better result.
  */
-class SingleSidedNetworkMatcher :
-  public NetworkMatcher
+class SingleSidedNetworkMatcher : public NetworkMatcher
 {
 public:
   static string className() { return "hoot::SingleSidedNetworkMatcher"; }
