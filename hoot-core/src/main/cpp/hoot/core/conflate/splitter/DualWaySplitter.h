@@ -55,6 +55,8 @@ public:
 
   static string className() { return "hoot::DualWaySplitter"; }
 
+  static unsigned int logWarnCount;
+
   typedef enum DrivingSide
   {
     Left,

@@ -50,6 +50,8 @@ using namespace boost;
 namespace hoot
 {
 
+unsigned int MapProjector::logWarnCount = 0;
+
 shared_ptr<MapProjector> MapProjector::_theInstance;
 
 class DisableCplErrors
@@ -89,10 +91,19 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   {
     QString err = QString("Error projecting point. Is the point outside of the projection's "
                           "bounds?");
-    LOG_WARN("Source Point, x:" << inx << " y: " << iny);
-    LOG_WARN("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
-    LOG_WARN("Target Point, x:" << c->x << " y: " << c->y);
-    LOG_WARN("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
+    if (MapProjector::logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(err);
+      LOG_TRACE("Source Point, x:" << inx << " y: " << iny);
+      LOG_TRACE("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
+      LOG_TRACE("Target Point, x:" << c->x << " y: " << c->y);
+      LOG_TRACE("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
+      MapProjector::logWarnCount++;
+    }
+    else if (MapProjector::logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(MapProjector::className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
     throw IllegalArgumentException(err);
   }
 }
@@ -523,8 +534,7 @@ Coordinate MapProjector::project(const Coordinate& c, shared_ptr<OGRSpatialRefer
 }
 
 
-void MapProjector::project(shared_ptr<OsmMap> map,
-                                             shared_ptr<OGRSpatialReference> ref)
+void MapProjector::project(shared_ptr<OsmMap> map, shared_ptr<OGRSpatialReference> ref)
 {
   shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
@@ -548,7 +558,15 @@ void MapProjector::project(shared_ptr<OsmMap> map,
     }
     catch(IllegalArgumentException& e)
     {
-      LOG_WARN("Failure projecting node: " << n->toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Failure projecting node: " << n->toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       throw e;
     }
 

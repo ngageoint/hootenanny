@@ -51,6 +51,7 @@ using namespace boost;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QDomDocument>
@@ -221,7 +222,8 @@ class OsmSchemaData
 {
 public:
 
-  OsmSchemaData()
+  OsmSchemaData() :
+  _logWarnCount(0)
   {
     _isACost = 1.0;
   }
@@ -866,7 +868,15 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+      }
+      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      _logWarnCount++;
     }
 
     _updateVertex(vid, tv);
@@ -897,6 +907,9 @@ private:
   VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;
+
+  //this should be static, but there's no header file
+  unsigned int _logWarnCount;
 
   VertexId _addVertex(const SchemaVertex& v)
   {
@@ -1282,12 +1295,28 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        LOG_WARN("Influence for " << childTv.name << " has not been specified.");
+        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Influence for " << childTv.name << " has not been specified.");
+        }
+        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        _logWarnCount++;
         childTv.influence = 1.0;
       }
       if (childTv.valueType == Unknown)
       {
-        LOG_WARN("Value type for " << childTv.name << " has not been specified.");
+        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Value type for " << childTv.name << " has not been specified.");
+        }
+        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        _logWarnCount++;
       }
     }
   }

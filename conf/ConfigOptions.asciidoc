@@ -763,13 +763,13 @@ Foo: Pre-constraining match count: 11
 <message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
 -----
 
-=== log.identical.message.limit
+=== log.warn.message.limit
 
 * Data Type: double
 * Default Value: `3`
 
-The number of identical log messages that will be emitted before they are silenced.  Not necessarily
-utilized by all parts of the application.
+The maximum number of warn log messages that will be emittes per class before they are silenced.
+Not necessarily utilized by all parts of the application.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms

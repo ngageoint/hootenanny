@@ -53,6 +53,8 @@
 namespace hoot
 {
 
+unsigned int SublineStringMatcherJs::logWarnCount = 0;
+
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
 SublineStringMatcherJs::SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm)
@@ -113,7 +115,8 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
     {
       // this is unusual print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
-      LOG_WARN(OsmXmlWriter::toString(copiedMap));
+      LOG_TRACE(OsmXmlWriter::toString(copiedMap));
+      logWarnCount++;
       throw e;
     }
 

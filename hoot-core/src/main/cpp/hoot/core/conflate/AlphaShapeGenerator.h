@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,6 +41,10 @@ class AlphaShapeGenerator
 {
 public:
 
+  static std::string className() { return "hoot::AlphaShapeGenerator"; }
+
+  static unsigned int logWarnCount;
+
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
@@ -63,7 +67,6 @@ private:
 
   double _alpha;
   double _buffer;
-
 };
 
 }

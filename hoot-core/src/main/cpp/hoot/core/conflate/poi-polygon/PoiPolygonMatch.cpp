@@ -208,8 +208,8 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
   else
   {
-    LOG_WARN(e1->toString());
-    LOG_WARN(e2->toString());
+    LOG_VART(e1->toString());
+    LOG_VART(e2->toString());
     throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
                                    eid2.toString());
   }

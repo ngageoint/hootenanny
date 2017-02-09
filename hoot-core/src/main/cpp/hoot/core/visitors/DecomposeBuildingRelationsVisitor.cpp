@@ -35,6 +35,8 @@
 namespace hoot
 {
 
+unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
 DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
@@ -65,7 +67,15 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     r->removeElement(eid);
     if (eid.getType() == ElementType::Node)
     {
-      LOG_WARN("Unexpected node encountered in building relation. " << r->getElementId());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Unexpected node encountered in building relation. " << r->getElementId());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       continue;
     }
     // we're dropping the outline. We only care about the parts.
@@ -75,7 +85,15 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     }
     else if (members[i].getRole() != "part")
     {
-      LOG_WARN("Encountered an unexpected role in a building relation. " << r->getElementId());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Encountered an unexpected role in a building relation. " << r->getElementId());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
 
     // ok, we've got a building part. Recompose it as a building.
