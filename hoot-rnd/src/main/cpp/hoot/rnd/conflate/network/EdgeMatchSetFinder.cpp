@@ -572,10 +572,10 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
 EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
 {
   LOG_TRACE("Trimming To edge...");
+  LOG_VART(em);
 
   EdgeMatchPtr result;
 
-  LOG_VART(em);
   // trim the beginning of the edge string as appropriate.
   QList<EdgeSublineMatchPtr> matches =
     _details->calculateMatchingSublines(em->getString1()->getLastEdge(),

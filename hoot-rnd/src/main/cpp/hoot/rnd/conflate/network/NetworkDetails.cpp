@@ -415,6 +415,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
   LOG_TRACE("Extending edge match...");
 
   EdgeMatchPtr result;
+
   // Run an experiment to see if a valid match is created by adding esm onto em.
 
   if (e1->isStub() || e2->isStub())
@@ -673,44 +674,16 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
       mapCopy->addElement(r1);
       mapCopy->addElement(r2);
 
-///@todo Remove these comments
-//      WayPtr w1 = ws1->copySimplifiedWayIntoMap(*_map, mapCopy);
-//      WayPtr w2 = ws2->copySimplifiedWayIntoMap(*_map, mapCopy);
-//      LOG_VART(w1);
-//      LOG_VART(w2);
-//      WaySublineMatchString matchStr = _sublineMatcher->findMatch(mapCopy, w1, w2, sr);
-//      Meters l1 = ElementConverter(mapCopy).calculateLength(w1);
-//      Meters l2 = ElementConverter(mapCopy).calculateLength(w2);
-//      LOG_VART(matchStr);
-//      if (matchStr.getLength() + sr < (l1 + l2) / 2.0)
-//      {
-//        LOG_VART(l1);
-//        LOG_VART(l2);
-//        LOG_VART(matchStr.getLength());
-//        result = 0.0;
-//      }
-
-
-////      double hd = HausdorffDistanceExtractor().distance(*mapCopy, w1, w2);
-////      if (hd > sr)
-////      {
-////        LOG_VAR(hd);
-////        LOG_VAR(sr);
-////        result = 0.0;
-////      }
-//      else
-      {
-        WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
-        // convert from a mapping to a WaySublineMatchString
-        WaySublineMatchStringPtr matchString =
+      WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
+      // convert from a mapping to a WaySublineMatchString
+      WaySublineMatchStringPtr matchString =
           WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
-        MatchClassification c;
-        // calculate the match score
-        c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
+      MatchClassification c;
+      // calculate the match score
+      c = _classifier->classify(mapCopy, r1->getElementId(), r2->getElementId(), *matchString);
 
-        result = c.getMatchP();
-      }
+      result = c.getMatchP();
     }
   }
 
