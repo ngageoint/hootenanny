@@ -6,6 +6,14 @@ for i in $HOOT_HOME/hoot-core/ $HOOT_HOME/hoot-cmd/ $HOOT_HOME/hoot-test $HOOT_H
 do
     echo $i
     cd $i
-    $HOOT_HOME/scripts/UpdateDirCopyrightHeaders.sh
+    if [ $# -eq 0 ]; then
+        $HOOT_HOME/scripts/UpdateDirCopyrightHeaders.sh
+    else
+        if [ $1 == '--update' ] || [ $1 == '-u' ]; then
+            $HOOT_HOME/scripts/UpdateDirCopyrightHeaders.sh $1
+        else
+            echo 'Unrecognized parameter'
+        fi
+    fi
 done
 
