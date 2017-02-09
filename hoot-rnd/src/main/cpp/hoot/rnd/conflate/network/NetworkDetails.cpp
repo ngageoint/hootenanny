@@ -410,7 +410,7 @@ double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetwork
 }
 
 EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
-  ConstNetworkEdgePtr e2) const
+                                             ConstNetworkEdgePtr e2) const
 {
   LOG_TRACE("Extending edge match...");
 
@@ -422,7 +422,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
     return result;
   }
 
-  // snap e1 & e2 onto the end of em
+  // snap e1 & e2 onto the end of
   EdgeStringPtr es1 = em->getString1()->clone();
   EdgeStringPtr es2 = em->getString2()->clone();
 
@@ -438,8 +438,8 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 
   WayPtr w1 = toWayString(es1)->copySimplifiedWayIntoMap(*_map, map);
   WayPtr w2 = toWayString(es2)->copySimplifiedWayIntoMap(*_map, map);
-//  LOG_VAR(ElementConverter(map).convertToLineString(w1)->toString());
-//  LOG_VAR(ElementConverter(map).convertToLineString(w2)->toString());
+  LOG_VART(ElementConverter(map).convertToLineString(w1)->toString());
+  LOG_VART(ElementConverter(map).convertToLineString(w2)->toString());
   // - calculate the matching subline of the two ways
   SublineCache sc = _calculateSublineScore(map, w1, w2);
   LOG_VART(sc.p);
@@ -450,7 +450,6 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
   }
 
   LOG_VART(sc.matches);
-  WaySublineCollection ss1, ss2;
   const WaySublineMatchString::MatchCollection& mc = sc.matches->getMatches();
   foreach (const WaySublineMatch& wsm, mc)
   {
@@ -469,14 +468,16 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
     // if the subline match intersects e1 and e2 then this is a successful modification
     if (tmp1->isValid() && tmp2->isValid() &&
         tmp1->contains(e1) && tmp2->contains(e2) &&
-      tmp1->touches(em->getString1()) && tmp2->touches(em->getString2()))
+        tmp1->touches(em->getString1()) && tmp2->touches(em->getString2()))
     {
       result.reset(new EdgeMatch(tmp1, tmp2));
+      LOG_TRACE("Successful edge match extension: " << result);
       return result;
     }
   }
 
   // returns a null ptr
+  LOG_TRACE("Unsuccessful edge match extension for " << em->toString());
   return result;
 }
 
@@ -487,8 +488,8 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   bool foundEnd = false;
   // if e is the same as the last edge in the string
   if (es->getLastEdge() == e ||
-    (es->getAllEdges().back().isBackwards() && e->contains(es->getLastEdge()->getFrom())) ||
-    (es->getAllEdges().back().isBackwards() == false && e->contains(es->getLastEdge()->getTo())))
+      (es->getAllEdges().back().isBackwards() && e->contains(es->getLastEdge()->getFrom())) ||
+      (es->getAllEdges().back().isBackwards() == false && e->contains(es->getLastEdge()->getTo())))
   {
     // extend the last edge in the string all the way to the end.
     ConstEdgeSublinePtr sub = es->getAllEdges().back().getSubline();
@@ -510,9 +511,9 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 
   if (es->getFirstEdge() == e ||
-    (es->getAllEdges().front().isBackwards() && e->contains(es->getFirstEdge()->getTo())) ||
-    (es->getAllEdges().front().isBackwards() == false &&
-      e->contains(es->getFirstEdge()->getFrom())))
+      (es->getAllEdges().front().isBackwards() && e->contains(es->getFirstEdge()->getTo())) ||
+      (es->getAllEdges().front().isBackwards() == false &&
+       e->contains(es->getFirstEdge()->getFrom())))
   {
     // extend the first edge in the string all the way to the beginning.
     ConstEdgeSublinePtr sub = es->getAllEdges().front().getSubline();
@@ -530,7 +531,6 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     es->removeFirst();
     es->prependEdge(ConstEdgeSublinePtr(new EdgeSubline(elStart, elEnd)));
-
     foundEnd = true;
   }
 
@@ -545,12 +545,12 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   if (!es->contains(e))
   {
     if (es->getFrom()->isExtreme() &&
-      (es->getFromVertex() == e->getTo() || es->getFromVertex() == e->getFrom()))
+        (es->getFromVertex() == e->getTo() || es->getFromVertex() == e->getFrom()))
     {
       es->prependEdge(EdgeSublinePtr(new EdgeSubline(e, 0, 1)));
     }
     else if (es->getTo()->isExtreme() &&
-      (es->getToVertex() == e->getTo() || es->getToVertex() == e->getFrom()))
+             (es->getToVertex() == e->getTo() || es->getToVertex() == e->getFrom()))
     {
       es->appendEdge(e);
     }
@@ -590,11 +590,14 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   // if they're both stubs we don't need to match them
   if (e1->isStub() && e2->isStub())
   {
+    LOG_TRACE("Both edge strings are stubs.");
     result = 0.0;
   }
   // if either string is a stub, then return 1 on candidate.
   else if (e1->isStub() || e2->isStub())
   {
+    LOG_TRACE("One edge string is a stub.");
+
     ConstEdgeStringPtr stub = e1->isStub() ? e1 : e2;
     ConstEdgeStringPtr notStub = e1->isStub() ? e2 : e1;
 
@@ -615,6 +618,8 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
   // if these are typical way edges
   else
   {
+    LOG_TRACE("Neither edge strings are stubs.");
+
     WayStringPtr ws1 = toWayString(e1);
     WayStringPtr ws2 = toWayString(e2);
 
@@ -696,10 +701,9 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 //      else
       {
         WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
-
         // convert from a mapping to a WaySublineMatchString
-        WaySublineMatchStringPtr matchString = WayMatchStringMappingConverter().toWaySublineMatchString(
-          mapping);
+        WaySublineMatchStringPtr matchString =
+          WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
         MatchClassification c;
         // calculate the match score
@@ -721,14 +725,12 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
     auto_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
     env->expandToInclude(env2.get());
   }
-
   return *env;
 }
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 {
   auto_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
-
   return *env;
 }
 
@@ -1127,13 +1129,10 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
   return ws;
 }
 
-void NetworkDetails::_trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es,
-                                     WayPtr w, const WaySublineCollection& ws) const
+void NetworkDetails::_trimEdgeString(ConstElementProviderPtr /*provider*/, EdgeStringPtr es,
+                                     WayPtr /*w*/, const WaySublineCollection& ws) const
 {
   LOG_TRACE("Trimming edge string...");
-
-  (void) provider; // unused var
-  (void) w; // unused var
 
   // sanity check to make sure the lengths are about the same.
   assert(ws.getSublines().size() == 1);

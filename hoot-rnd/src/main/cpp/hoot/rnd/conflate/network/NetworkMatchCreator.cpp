@@ -112,7 +112,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   LOG_INFO("Optimizing network...");
 
-  const size_t numIterations = 10;
+  const size_t numIterations = 10; //TODO: should this be an option?
   for (size_t i = 0; i < numIterations; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())

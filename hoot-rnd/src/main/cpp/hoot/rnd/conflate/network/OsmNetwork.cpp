@@ -38,7 +38,7 @@ OsmNetwork::OsmNetwork()
 void OsmNetwork::addEdge(NetworkEdgePtr edge)
 {
   if (_eidToVertex.contains(edge->getFrom()->getElementId()) == false ||
-    _eidToVertex.contains(edge->getTo()->getElementId()) == false)
+      _eidToVertex.contains(edge->getTo()->getElementId()) == false)
   {
     throw IllegalArgumentException("Please add the vertices on an edge before adding the edge.");
   }
@@ -66,8 +66,8 @@ ConstNetworkVertexPtr OsmNetwork::getSingleVertex(ElementId eid) const
   QList<ConstNetworkVertexPtr> vertices = _eidToVertex.values(eid);
   if (vertices.size() > 1)
   {
-    LOG_VARW(eid);
-    LOG_VARW(vertices);
+    LOG_VART(eid);
+    LOG_VART(vertices);
     throw IllegalArgumentException("Expected to receive a single vertex, but got more than one.");
   }
   else if (vertices.size() == 1)
@@ -95,7 +95,7 @@ void OsmNetwork::removeVertex(ConstNetworkVertexPtr v)
 {
   if (_vertexToEdge.count(v) >= 1)
   {
-    LOG_VARW(v);
+    LOG_VART(v);
     throw IllegalArgumentException("When removing a vertex the vertex cannot be part of an edge.");
   }
 

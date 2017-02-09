@@ -220,8 +220,8 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     // first, create a vector that contains all the node IDs in ascending order.
     ConstWayPtr oldWay = subline.getWay();
 
-    newTags = TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(),
-      ElementType::Way);
+    newTags =
+      TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
     // figure out which node is the first node, if we're between nodes, then create a new node to
     // add.
@@ -230,7 +230,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     if (subline.getFormer().isNode() == false)
     {
       NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-        subline.getFormer().getCoordinate(), ce));
+                                   subline.getFormer().getCoordinate(), ce));
       destination->addNode(n);
       newNids.push_back(n->getId());
       formeri = subline.getFormer().getSegmentIndex() + 1;
@@ -251,7 +251,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
       destination->addNode(NodePtr(new Node(*map.getNode(nid))));
     }
 
-    // if the last locaiton isn't on a node, create a new node for it
+    // if the last location isn't on a node, create a new node for it
     if (subline.getLatter().isNode() == false)
     {
       NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
@@ -267,7 +267,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     }
 
     // add each node to the new way. If the node is a duplicate (could happen with adjoining
-    // sublines) then just don't add it.
+    // sublines), then just don't add it.
     foreach (long nid, newNids)
     {
       if (newWay->getNodeCount() == 0 || newWay->getLastNodeId() != nid)

@@ -494,8 +494,8 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), p, es->getEnd()->getPortion()));
-    _edges[0].setSubline(newEs);
+    EdgeSublinePtr newEs(
+      new EdgeSubline(es->getEdge(), p, es->getEnd()->getPortion())); _edges[0].setSubline(newEs);
   }
   if (getTo()->isExtreme(epsilon))
   {
@@ -509,8 +509,9 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), es->getStart()->getPortion(), p));
-    _edges.back().setSubline(newEs);
+    EdgeSublinePtr newEs(
+      new EdgeSubline(es->getEdge(), es->getStart()->getPortion(), p));
+                      _edges.back().setSubline(newEs);
   }
 }
 
@@ -564,12 +565,11 @@ bool EdgeString::touches(const shared_ptr<const EdgeString>& es) const
       return true;
     }
   }
-
   return false;
 }
 
 void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOffset,
-  Meters newEndOffset)
+                      Meters newEndOffset)
 {
   assert(newStartOffset < newEndOffset);
 
