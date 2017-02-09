@@ -47,13 +47,12 @@
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
 
-// Qt
-//#include <QUuid>
-
 #include "ConflateMapper.h"
 
 namespace hoot
 {
+
+unsigned int ConflateReducer::logWarnCount = 0;
 
 PP_FACTORY_REGISTER(pp::Reducer, ConflateReducer)
 
@@ -190,8 +189,15 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   {
     if (result->containsNode(it->first))
     {
-      LOG_WARN("Strange, a replaced node is still in the map.");
-      LOG_WARN("nid: " << it->first);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Strange, a replaced node is still in the map.  nid: " << it->first);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 

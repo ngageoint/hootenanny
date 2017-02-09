@@ -40,7 +40,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
@@ -60,7 +59,7 @@ QString BaseCommand::getHelp() const
 
   if (fp.open(QFile::ReadOnly) == false)
   {
-    LOG_WARN(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
+    LOG_ERROR(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
       arg(_getHelpPath()));
   }
 

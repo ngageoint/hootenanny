@@ -48,6 +48,8 @@ public:
 
   static string className() { return "hoot::MaximalSublineStringMatcher"; }
 
+  static unsigned int logWarnCount;
+
   MaximalSublineStringMatcher();
 
   /**

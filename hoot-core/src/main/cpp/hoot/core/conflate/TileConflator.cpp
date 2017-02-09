@@ -128,8 +128,8 @@ void TileConflator::conflate(QString outputPath)
         {
           if (e.intersects(conflatedBits[j]))
           {
-            LOG_WARN("Overlapping env 1: " << e.toString());
-            LOG_WARN("Overlapping env 2: " << conflatedBits[j].toString());
+            LOG_TRACE("Overlapping env 1: " << e.toString());
+            LOG_TRACE("Overlapping env 2: " << conflatedBits[j].toString());
             throw HootException("Two tiles overlap.");
           }
         }

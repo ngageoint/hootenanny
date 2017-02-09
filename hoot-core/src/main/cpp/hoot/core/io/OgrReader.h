@@ -134,6 +134,7 @@ public:
 
 
 protected:
+
   OgrReaderInternal* _d;
 };
 

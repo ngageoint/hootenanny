@@ -105,7 +105,7 @@ void Factory::registerCreator(ObjectCreator* oc, bool baseClass)
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())
   {
-    LOG_WARN("Base name and class name are the same. Did you forget to imlement className() in "
+    LOG_ERROR("Base name and class name are the same. Did you forget to imlement className() in "
              "your class? If this is intentional, then set baseClass to true, or use the "
              "HOOT_FACTORY_REGISTER_BASE macro.");
     throw HootException(

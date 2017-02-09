@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,6 +34,7 @@
 // Standard
 #include <map>
 #include <set>
+#include <string>
 
 namespace hoot
 {
@@ -50,6 +51,11 @@ namespace hoot
 class NodeToWayMap : public map<long, set<long> >
 {
 public:
+
+  static std::string className() { return "hoot::NodeToWayMap"; }
+
+  static unsigned int logWarnCount;
+
   NodeToWayMap(const OsmMap& map);
 
   void addWay(shared_ptr<const Way> w);
@@ -68,6 +74,7 @@ public:
   bool validate(const OsmMap& map);
 
 private:
+
   set<long> _emptySet;
 };
 

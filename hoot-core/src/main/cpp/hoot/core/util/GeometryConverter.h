@@ -68,6 +68,10 @@ class GeometryConverter
 {
 public:
 
+  static std::string className() { return "hoot::GeometryConverter"; }
+
+  static unsigned int logWarnCount;
+
   /**
    * see class description
    */

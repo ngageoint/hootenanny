@@ -49,6 +49,8 @@ public:
 
   static string className() { return "hoot::BuildingOutlineUpdateOp"; }
 
+  static unsigned int logWarnCount;
+
   BuildingOutlineUpdateOp();
 
   virtual void apply(shared_ptr<OsmMap>& map);

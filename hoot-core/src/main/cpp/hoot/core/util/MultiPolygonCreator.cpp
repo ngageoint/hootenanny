@@ -51,6 +51,8 @@
 namespace hoot
 {
 
+unsigned int MultiPolygonCreator::logWarnCount = 0;
+
 MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
   const ConstRelationPtr& r) :
   _provider(provider),
@@ -124,8 +126,16 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // if it isn't a valid inner ring then who cares.
       if (_isValidInner(inners[i]))
       {
-        LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
-          _r->toString());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
+            _r->toString());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
     else
@@ -237,9 +247,9 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
       }
       else
       {
-//        LOG_WARN("A multipolygon relation contains a way that is not a ring. While likely valid, "
-//                 "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
-//                 e.getElementId());
+        LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
+                 "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
+                 e.getElementId());
         partials.push_back(w);
       }
     }
@@ -301,7 +311,15 @@ void MultiPolygonCreator::_createSingleRing(const vector<ConstWayPtr>& partials,
 
   if (cs->getSize() <= 3)
   {
-    LOG_WARN("Unable to create ring -- fewer than 4 points.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Unable to create ring -- fewer than 4 points.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   else
   {
@@ -363,8 +381,16 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     }
     else
     {
-      LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
-               partials[i]->getElementId());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
+                 partials[i]->getElementId());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 

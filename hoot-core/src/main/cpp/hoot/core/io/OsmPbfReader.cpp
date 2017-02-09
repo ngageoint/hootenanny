@@ -59,7 +59,6 @@ using namespace hoot::pb;
 
 #include <ogr_spatialref.h>
 
-
 // ZLib Includes
 #include <zlib.h>
 
@@ -67,6 +66,8 @@ using namespace hoot::pb;
 
 namespace hoot
 {
+
+unsigned int OsmPbfReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 
@@ -106,9 +107,7 @@ void OsmPbfReader::_init(bool useFileId)
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _circularError = 15.0;
-  _badAccuracyCount = 0;
   _useFileStatus = false;
-  _missingElementCount = 0;
   _permissive = true;
   _in = NULL;
   _needToCloseInput = false;
@@ -183,15 +182,16 @@ void OsmPbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
       if (isBad)
       {
         e->setCircularError(_circularError);
-        if (_badAccuracyCount < 10)
+
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {
           LOG_WARN("Bad circular error value: " << value.toStdString());
-          _badAccuracyCount++;
-          if (_badAccuracyCount == 10)
-          {
-            LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
-          }
         }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }
@@ -364,7 +364,15 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   int size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
   if (dn.id_size() != dn.lat_size() || dn.id_size() != dn.lon_size())
   {
-    LOG_WARN("Dense node list sizes are not equal.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Dense node list sizes are not equal.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   vector< shared_ptr<hoot::Node> > nodes;
@@ -386,7 +394,15 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     nodes.push_back(n);
     if (_map->containsNode(newId))
     {
-      LOG_WARN("Map already contains node: " << newId);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Map already contains node: " << newId);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     _map->addNode(n);
   }
@@ -425,7 +441,15 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     int timestampSize = di.timestamp_size();
     if (timestampSize != size)
     {
-      LOG_WARN("Dense info timestamp size doesn't match other node counts");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Dense info timestamp size doesn't match other node counts");
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       timestampSize = std::min(size, timestampSize);
     }
 
@@ -476,11 +500,27 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   {
     if (n.keys().Get(i) >= _strings.size())
     {
-      LOG_WARN("Key was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Key was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else if (n.vals().Get(i) >= _strings.size())
     {
-      LOG_WARN("Value was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Value was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -495,7 +535,15 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
 
   if (_map->containsNode(newId))
   {
-    LOG_WARN("Map already contains node: " << newId);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Map already contains node: " << newId);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _map->addNode(newNode);
 }
@@ -595,10 +643,18 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
-    LOG_WARN("roles_sid size, memids size or types size don't match."
-             << " roles_sid size: " << r.roles_sid_size()
-             << " memids size: " << r.memids_size()
-             << " types size: " << r.types_size());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("roles_sid size, memids size or types size don't match."
+               << " roles_sid size: " << r.roles_sid_size()
+               << " memids size: " << r.memids_size()
+               << " types size: " << r.types_size());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   int membersSize = std::min(r.roles_sid_size(), std::min(r.memids_size(), r.types_size()));
 
@@ -616,7 +672,15 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     }
     else
     {
-      LOG_WARN("Relation SID was out of bounds: " << sid << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Relation SID was out of bounds: " << sid << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
 
     ElementId eid = _convertToElementId(mid, type);
@@ -629,19 +693,43 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (r.keys().size() != r.vals().size())
   {
-    LOG_WARN("Key and value arrays are not the same size. (" << r.keys().size() << " vs. " <<
-             r.vals().size() << " way id: " << r.id() << ")");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Key and value arrays are not the same size. (" << r.keys().size() << " vs. " <<
+               r.vals().size() << " way id: " << r.id() << ")");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   for (int i = 0; i < r.keys().size() && i < r.vals().size(); i++)
   {
     if (r.keys().Get(i) >= _strings.size())
     {
-      LOG_WARN("Key was out of bounds: " << r.keys().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Key was out of bounds: " << r.keys().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else if (r.vals().Get(i) >= _strings.size())
     {
-      LOG_WARN("Value was out of bounds: " << r.vals().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Value was out of bounds: " << r.vals().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -656,7 +744,15 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (_map->containsRelation(newId))
   {
-    LOG_WARN("Map already contains relation: " << newId);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Map already contains relation: " << newId);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _map->addRelation(newRelation);
 }
@@ -714,15 +810,15 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     long ref = nid;
     if (_permissive == false && _nodeIdMap.contains(ref) == false)
     {
-      _missingElementCount++;
-      if (_missingElementCount <= 10)
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
         LOG_WARN("Missing node (" << ref << ") in way (" << w.id() << ").");
       }
-      if (_missingElementCount == 10)
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
       {
-        LOG_WARN("Found 10 missing elements, no longer reporting missing elements.");
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
+      logWarnCount++;
     }
     else
     {
@@ -733,19 +829,43 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 
   if (w.keys().size() != w.vals().size())
   {
-    LOG_WARN("Key and value arrays are not the same size. (" << w.keys().size() << " vs. " <<
-             w.vals().size() << " way id: " << w.id() << ")");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Key and value arrays are not the same size. (" << w.keys().size() << " vs. " <<
+               w.vals().size() << " way id: " << w.id() << ")");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   for (int i = 0; i < w.keys().size() && i < w.vals().size(); i++)
   {
     if (w.keys().Get(i) >= _strings.size())
     {
-      LOG_WARN("Key was out of bounds: " << w.keys().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Key was out of bounds: " << w.keys().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else if (w.vals().Get(i) >= _strings.size())
     {
-      LOG_WARN("Value was out of bounds: " << w.vals().Get(i) << " size: " << _strings.size());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Value was out of bounds: " << w.vals().Get(i) << " size: " << _strings.size());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -760,7 +880,15 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 
   if (_map->containsWay(newId))
   {
-    LOG_WARN("Map already contains way: " << newId);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Map already contains way: " << newId);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _map->addWay(newWay);
 }

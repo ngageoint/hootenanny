@@ -63,7 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @Profile("production")
-class ProcessStreamInterface implements NativeInterface {
+public class ProcessStreamInterface implements NativeInterface {
     private static final Logger logger = LoggerFactory.getLogger(ProcessStreamInterface.class);
 
     // This contains the command runner objects for the executing processes. Used for job cancellation and tracking.
@@ -243,8 +243,8 @@ class ProcessStreamInterface implements NativeInterface {
             String jobid = cmd.get("jobId").toString();
             execCmd.add("jobid=" + jobid);
         }
-
-        execCmd.add("DB_URL=" + DB_URL);
+     
+        execCmd.add("DB_URL=" + DB_URL); //TODO: this should be changed to HOOT_API_DB_URL throughout to be more clear
         execCmd.add("OSM_API_DB_URL=" + OSM_API_DB_URL);
 
         Object[] objectArray = execCmd.toArray();

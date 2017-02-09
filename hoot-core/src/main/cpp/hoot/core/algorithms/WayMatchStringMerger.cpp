@@ -35,6 +35,8 @@
 namespace hoot
 {
 
+unsigned int WayMatchStringMerger::logWarnCount = 0;
+
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
   WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId> > &replaced) :
   _map(map),
@@ -201,15 +203,23 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
   if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
-    LOG_VART(_mapping->getWayString1());
-    LOG_VART(_mapping->getWayString2());
-    LOG_VART(scrapNodeId);
-    LOG_VART(wl2);
-    LOG_VART(wl1.getWay());
-    LOG_VART(wl1);
-    //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
-    //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
-    LOG_WARN("scrapNode should line up with the beginning or end of a way.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
+      //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
+      LOG_WARN("scrapNode should line up with the beginning or end of a way.");
+      LOG_VART(_mapping->getWayString1());
+      LOG_VART(_mapping->getWayString2());
+      LOG_VART(scrapNodeId);
+      LOG_VART(wl2);
+      LOG_VART(wl1.getWay());
+      LOG_VART(wl1);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   // move scrapNode to the WayLocation in way string 1

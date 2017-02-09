@@ -115,7 +115,7 @@ bool WayBufferCriterion::isSatisfied(const shared_ptr<const Element> &e) const
   }
   catch (geos::util::TopologyException& e)
   {
-    LOG_WARN(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
+    LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
     throw e;
   }
 }

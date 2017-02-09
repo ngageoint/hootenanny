@@ -696,14 +696,14 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   it = _nodes.find(oldId);
   if (it == _nodes.end())
   {
-    //LOG_WARN("Tried to replace a non-existent node " << oldId );
+    LOG_TRACE("Tried to replace a non-existent node " << oldId );
     return;
   }
 
   it = _nodes.find(newId);
   if ( it == _nodes.end() )
   {
-    //LOG_WARN("Replacement node " << newId << "does not exist");
+    LOG_TRACE("Replacement node " << newId << "does not exist");
     return;
   }
 

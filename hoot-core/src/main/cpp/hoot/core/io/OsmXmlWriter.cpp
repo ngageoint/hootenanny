@@ -51,6 +51,8 @@ using namespace boost;
 namespace hoot
 {
 
+unsigned int OsmXmlWriter::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
 OsmXmlWriter::OsmXmlWriter() :
@@ -92,15 +94,16 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   if (foundError)
   {
     _encodingErrorCount++;
-    if (_encodingErrorCount <= 10)
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
     {
       LOG_WARN("Found an invalid character in string: '" << s << "'");
       LOG_WARN("  UCS-4 version of the string: " << s.toUcs4());
     }
-    else if (_encodingErrorCount == 11)
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
     {
-      LOG_WARN("Found more than 10 strings with invalid characters. No longer reporting.");
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
+    logWarnCount++;
   }
 
   return result;

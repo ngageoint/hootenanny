@@ -1,21 +1,8 @@
-16:00:52.131 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.131 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.131 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.131 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.131 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.132 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.132 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.132 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.132 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.132 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.133 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.133 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.133 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.133 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.133 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.134 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.134 WARN  ...ithms/WayMatchStringMerger.cpp( 199) scrapNode should line up with the beginning or end of a way.
-16:00:52.512 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/NetworkConflateCmdTest/output.osm ...
-16:00:52.634 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/NetworkConflateCmdTest/output.osm ...
-16:00:53.275 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/Empty.osm ...
-16:00:53.276 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from tmp/dum.osm ...
+14:01:58.260 WARN  ...ithms/WayMatchStringMerger.cpp( 210) scrapNode should line up with the beginning or end of a way.
+14:01:58.260 WARN  ...ithms/WayMatchStringMerger.cpp( 210) scrapNode should line up with the beginning or end of a way.
+14:01:58.260 WARN  ...ithms/WayMatchStringMerger.cpp( 210) scrapNode should line up with the beginning or end of a way.
+14:01:58.260 WARN  ...ithms/WayMatchStringMerger.cpp( 220) hoot::WayMatchStringMerger: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+14:01:58.573 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-output/cmd/NetworkConflateCmdTest/output.osm ...
+14:01:58.727 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/cmd/glacial/NetworkConflateCmdTest/output.osm ...
+14:01:59.252 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/Empty.osm ...
+14:01:59.253 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from tmp/dum.osm ...

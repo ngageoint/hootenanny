@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,10 +48,8 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor :
-    public ElementVisitor,
-    public ConstOsmMapConsumer,
-    public ElementCriterionConsumer
+class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
+  public ElementCriterionConsumer
 {
 
 public:
@@ -59,6 +57,8 @@ public:
   typedef QMap<QString, ElementId> Ref1ToEid;
 
   static std::string className() { return "hoot::RemoveRef2Visitor"; }
+
+  static unsigned int logWarnCount;
 
   RemoveRef2Visitor();
   virtual ~RemoveRef2Visitor() {}

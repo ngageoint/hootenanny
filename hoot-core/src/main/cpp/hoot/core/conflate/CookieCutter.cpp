@@ -41,6 +41,8 @@
 namespace hoot
 {
 
+unsigned int CookieCutter::logWarnCount = 0;
+
 CookieCutter::CookieCutter(bool crop, double outputBuffer) :
 _crop(crop),
 _outputBuffer(outputBuffer)
@@ -68,7 +70,15 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 
   if (cutterShape->getArea() == 0.0)
   {
-    LOG_WARN("Cutter area is zero. Try increasing the buffer size or check the input.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Cutter area is zero. Try increasing the buffer size or check the input.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   // free up a little RAM

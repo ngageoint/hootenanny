@@ -75,6 +75,8 @@ public:
    */
   virtual void setConfiguration(const Settings &conf);
 
+  bool getMultipleChangesetsWritten() const { return _multipleChangesetsWritten; }
+
 private:
 
   /** Helper functions to write nodes, ways, and relations. */
@@ -87,6 +89,8 @@ private:
   long _changesetMaxSize;
 
   Change _change;
+
+  bool _multipleChangesetsWritten;
 
 };
 

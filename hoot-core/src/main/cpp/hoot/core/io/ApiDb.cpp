@@ -192,7 +192,6 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
   {
     QString error = QString("No user found with the email: %1 (maybe specify `%2=true`?)")
         .arg(email).arg(ConfigOptions::getHootapiDbWriterCreateUserKey());
-    LOG_WARN(error);
     throw HootException(error);
   }
 
@@ -227,7 +226,6 @@ long ApiDb::insertUser(const QString email, const QString displayName)
     {
       QString err = QString("Error executing query: %1 (%2)").arg(_insertUser->executedQuery()).
           arg(_insertUser->lastError().text());
-      LOG_WARN(err)
       throw HootException(err);
     }
     else

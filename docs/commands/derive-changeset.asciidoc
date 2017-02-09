@@ -3,25 +3,28 @@
 === Description
 
 The +derive-changeset+ command creates an OSM changeset file that represents the difference
-between two input OSM files.  The changeset can later be applied to an OSM API database.  The
-output changeset is not meant to be written to a Hootenanny API database.
+between two input OSM files.  The changeset can later be applied to an OSM API database.
 
-* +input1+ - Input 1 (e.g. .osm file).
-* +input2+ - Input 2 (e.g. .osm file).
+* +input1+ - OSM data input 1 (e.g. .osm file).
+* +input2+ - OSM data input 2 (e.g. .osm file).
 * +output+ - Output location (e.g. .osc or .osc.sql file).
-* +databaseUrl+ - Database the changeset will eventually be written to (but not by this command). Only applicable for .osc.sql files.
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
+                        element ID continuity with the target database when generating SQL changesets only.  
+                        Required only if the changeset output format is .osc.sql.
 
 === Usage
 
 --------------------------------------
-derive-changeset (input1) (input2) (output.osc|output.osc.sql) [databaseUrl]
+derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
 --------------------------------------
 
-==== Example
+==== Examples
 
 --------------------------------------
-hoot derive-changeset InputMap1.osm InputMap1.osm OutputChangeset.osc
+# xml changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
 
-hoot derive-changeset InputMap1.osm InputMap1.osm OutputChangeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
+# sql changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
 --------------------------------------
 

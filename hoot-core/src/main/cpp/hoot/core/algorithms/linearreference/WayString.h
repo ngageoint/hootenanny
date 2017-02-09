@@ -49,6 +49,11 @@ class WayLocation;
 class WayString
 {
 public:
+
+  static std::string className() { return "hoot::WayString"; }
+
+  static unsigned int logWarnCount;
+
   WayString();
 
   void append(const WaySubline& subline);
@@ -93,6 +98,7 @@ public:
   void visitRo(const ElementProvider& map, ElementVisitor& v) const;
 
 private:
+
   QList<WaySubline> _sublines;
   static Meters _epsilon;
 

@@ -47,11 +47,17 @@ class OsmMapOperation;
 class SublineStringMatcherJs : public node::ObjectWrap
 {
 public:
+
+  static std::string className() { return "hoot::SublineStringMatcherJs"; }
+
+  static unsigned int logWarnCount;
+
   static void Init(v8::Handle<v8::Object> target);
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
 
 private:
+
   SublineStringMatcherJs(SublineStringMatcherPtr sm);
   ~SublineStringMatcherJs();
 

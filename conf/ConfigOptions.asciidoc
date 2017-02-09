@@ -763,13 +763,13 @@ Foo: Pre-constraining match count: 11
 <message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
 -----
 
-=== log.identical.message.limit
+=== log.warn.message.limit
 
 * Data Type: double
 * Default Value: `3`
 
-The number of identical log messages that will be emitted before they are silenced.  Not necessarily
-utilized by all parts of the application.
+The maximum number of warn log messages that will be emittes per class before they are silenced.
+Not necessarily utilized by all parts of the application.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
@@ -1952,6 +1952,16 @@ sequencing of element ID's.
 
 List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
 valid values.
+
+=== script.test.max.exec.time
+
+* Data Type: int
+* Default Value: `-1`
+
+For script test debugging only.  Sets a maximum allowed time, in seconds, for a script test to run.
+If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
+the value is set to -1, then there is no time limit for script tests.  This is useful when
+debugging tests which may hang on a remote build server.
 
 === set.tag.visitor.append.to.existing.value
 

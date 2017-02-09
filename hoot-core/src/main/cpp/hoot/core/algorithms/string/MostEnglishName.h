@@ -70,6 +70,8 @@ class MostEnglishName : public Configurable
 public:
   static string className() { return "hoot::MostEnglishName"; }
 
+  static unsigned int logWarnCount;
+
   MostEnglishName();
 
   static const MostEnglishNamePtr& getInstance();
