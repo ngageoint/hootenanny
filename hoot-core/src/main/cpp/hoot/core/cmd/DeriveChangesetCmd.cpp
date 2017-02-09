@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,6 +32,7 @@
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmChangesetXmlWriter.h>
 #include <hoot/core/io/OsmChangesetSqlWriter.h>
+#include <hoot/core/io/HootApiDb.h>
 
 // Qt
 #include <QUrl>
@@ -47,50 +48,83 @@ public:
 
   DeriveChangesetCmd() { }
 
+  ~DeriveChangesetCmd()
+  {
+    _hootApiDb.close();
+  }
+
   virtual QString getName() const { return "derive-changeset"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3 && args.size() != 4)
+    bool isXmlOutput = false;
+    QString osmApiDbUrl = "";
+
+    if (args.size() == 0)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      throw HootException(QString("%1 with takes three to four parameters.").arg(getName()));
     }
-
-    LOG_INFO("Deriving changeset for inputs " << args[0] << ", " << args[1] << "...");
-
-    //use the same unknown1 status for both so they pass comparison correctly
-    OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true, Status::Unknown1);
-
-    OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true, Status::Unknown1);
-
-    ElementSorterPtr sorted1(new ElementSorter(map1));
-    ElementSorterPtr sorted2(new ElementSorter(map2));
-    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
-
-    if (args[2].endsWith(".osc"))
+    else if (args[2].endsWith(".osc"))
     {
-      OsmChangesetXmlWriter().write(args[2], delta);
+      isXmlOutput = true;
+      if (args.size() != 3 && args.size() != 5)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 with XML output takes three parameters.").arg(getName()));
+      }
     }
     else if (args[2].endsWith(".osc.sql"))
     {
-      if (args.size() != 4)
+      if (args.size() != 4 && args.size() != 6)
       {
+        cout << getHelp() << endl << endl;
         throw HootException(
-          QString("SQL changeset writing requires a target database URL for configuration purposes."));
+          QString("%1 with SQL output takes four or parameters.").arg(getName()));
       }
-
-      OsmChangesetSqlWriter(QUrl(args[3])).write(args[2], delta);
+      osmApiDbUrl = args[3];
     }
     else
     {
       throw HootException("Unsupported changeset output format: " + args[2]);
     }
 
+    const QString input1 = args[0];
+    const QString input2 = args[1];
+    const QString output = args[2];
+
+    LOG_INFO(
+      "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
+      output << "...");
+
+    //use the same unknown1 status for both so that difference doesn't influence the comparison
+    OsmMapPtr map1(new OsmMap());
+    loadMap(map1, input1, true, Status::Unknown1);
+    OsmMapPtr map2(new OsmMap());
+    loadMap(map2, input2, true, Status::Unknown1);
+    ElementSorterPtr sorted1(new ElementSorter(map1));
+    ElementSorterPtr sorted2(new ElementSorter(map2));
+    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
+
+    if (isXmlOutput)
+    {
+      OsmChangesetXmlWriter().write(output, delta);
+    }
+    else
+    {
+      assert(!osmApiDbUrl.isEmpty());
+      LOG_DEBUG(osmApiDbUrl);
+      OsmChangesetSqlWriter(QUrl(osmApiDbUrl)).write(output, delta);
+    }
+
     return 0;
   }
+
+private:
+
+  HootApiDb _hootApiDb;
+
 };
 
 HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)
