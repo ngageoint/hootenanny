@@ -126,6 +126,7 @@ public final class HootProperties {
     public static final String DB_URL;
     public static final String OSM_API_DB_URL;
     public static final String UPLOAD_FOLDER;
+    public static final String DERIVE_CHANGESET_SCRIPT;
 
     static {
         try {
@@ -235,6 +236,7 @@ public final class HootProperties {
         DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
         OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
         UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
+        DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
     }
 
     private HootProperties() {}

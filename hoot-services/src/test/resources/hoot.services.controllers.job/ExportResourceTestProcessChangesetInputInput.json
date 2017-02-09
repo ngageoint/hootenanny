@@ -1,0 +1,6 @@
+{  
+   "inputtype":"db",
+   "input":"MyTestMap",
+   "outputtype":"osc",
+   "TASK_BBOX":"0.0,0.0,0.0,0.0"
+}
