@@ -184,16 +184,11 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
         _details->isStringCandidate(em->getString1()->getLastEdge(), neighbor1) &&
         _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()) > 0)
     {
-    //#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getLastEdge());
       if (next)
       {
         foundSolution = _addEdgeMatches(next) || foundSolution;
       }
-//      // create and evaluate a new match
-//      EdgeMatchPtr next = em->clone();
-//      _appendMatch(next, neighbor1, em->getString2()->getLastEdge());
-//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -210,16 +205,11 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
         _details->isStringCandidate(em->getString2()->getLastEdge(), neighbor2) &&
         _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()) > 0)
     {
-    //#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getLastEdge(), neighbor2);
       if (next)
       {
         foundSolution = _addEdgeMatches(next) || foundSolution;
       }
-//      // create and evaluate a new match
-//      EdgeMatchPtr next = em->clone();
-//      _appendMatch(next, em->getString1()->getLastEdge(), neighbor2);
-//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -247,7 +237,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
         _details->isStringCandidate(em->getString1()->getFirstEdge(), neighbor1) &&
         _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()) > 0)
     {
-//#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getFirstEdge());
       if (next)
       {
@@ -268,7 +257,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
         _details->isStringCandidate(em->getString2()->getFirstEdge(), neighbor2) &&
         _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()) > 0)
     {
-//#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, em->getString1()->getFirstEdge(), neighbor2);
       if (next)
       {
@@ -634,7 +622,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
     str2->addFirstEdge(em->getString2()->getAllEdges().first().getSubline());
     // add all but the last edge
     foreach (const EdgeString::EdgeEntry& ee,
-      em->getString2()->getAllEdges().mid(1, em->getString2()->getCount() - 2))
+             em->getString2()->getAllEdges().mid(1, em->getString2()->getCount() - 2))
     {
       str2->appendEdge(ee.getSubline());
     }
