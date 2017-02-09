@@ -181,7 +181,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
         _details->isStringCandidate(em->getString1()->getLastEdge(), neighbor1) &&
-        /*neighbors1[i]->isbb() == false &&*/
         _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()) > 0)
     {
     //#warning review
@@ -208,7 +207,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&
         _details->isStringCandidate(em->getString2()->getLastEdge(), neighbor2) &&
-        /*neighbors2[i]->isStub() == false &&*/
         _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()) > 0)
     {
     //#warning review
@@ -246,8 +244,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
         _details->isStringCandidate(em->getString1()->getFirstEdge(), neighbor1) &&
-        /// @todo comment me and retest
-        neighbor1->isStub() == false &&
         _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()) > 0)
     {
       // create and evaluate a new match
@@ -273,8 +269,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&
         _details->isStringCandidate(em->getString2()->getFirstEdge(), neighbor2) &&
-        /// @todo comment me and retest
-        neighbor2->isStub() == false &&
         _details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()) > 0)
     {
 //#warning review
