@@ -116,4 +116,4 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   return result;
 }
 
-} // End namespace hoot
+}

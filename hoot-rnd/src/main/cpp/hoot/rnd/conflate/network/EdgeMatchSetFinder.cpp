@@ -503,8 +503,8 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   EdgeMatchPtr result;
 
   // trim the beginning of the edge string as appropriate.
-  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(
-    em->getString1()->getEdge(0), em->getString2()->getEdge(0));
+  QList<EdgeSublineMatchPtr> matches =
+    _details->calculateMatchingSublines(em->getString1()->getEdge(0), em->getString2()->getEdge(0));
 
   if (matches.size() == 0)
   {
@@ -516,7 +516,6 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   // only the last match is relevant because it matches to the second to last edge in the match.
   ConstEdgeSublinePtr s1 = matches.back()->getSubline1();
   ConstEdgeSublinePtr s2 = matches.back()->getSubline2();
-
   LOG_VART(s1);
   LOG_VART(s2);
 
@@ -533,14 +532,12 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   {
     startS2 = s2->getEnd();
   }
-
   LOG_VART(origS1);
   LOG_VART(origS2);
 
   // we don't want to trim from the back of the edges
   s1 = ConstEdgeSublinePtr(new EdgeSubline(startS1, origS1->getEnd()));
   s2 = ConstEdgeSublinePtr(new EdgeSubline(startS2, origS2->getEnd()));
-
   LOG_VART(s1);
   LOG_VART(s2);
 

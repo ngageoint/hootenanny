@@ -138,26 +138,22 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNet
 Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e) const
 {
   assert(e->getMembers().size() == 1);
-
   return ElementConverter(_map).calculateLength(e->getMembers()[0]);
 }
 
 Meters NetworkDetails::calculateLength(ConstEdgeSublinePtr e) const
 {
   Meters l = calculateLength(e->getEdge());
-
   return (e->getLatter()->getPortion() - e->getFormer()->getPortion()) * l;
 }
 
 Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
 {
   Meters l = 0.0;
-
   foreach (EdgeString::EdgeEntry ee, e->getAllEdges())
   {
     l+= calculateLength(ee.getSubline());
   }
-
   return l;
 }
 
@@ -195,8 +191,9 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetwor
 }
 
 void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
-  ConstEdgeSublinePtr subline, ConstEdgeLocationPtr& elString, ConstEdgeLocationPtr& elSubline)
-    const
+                                              ConstEdgeSublinePtr subline,
+                                              ConstEdgeLocationPtr& elString,
+                                              ConstEdgeLocationPtr& elSubline) const
 {
   LOG_DEBUG("Calculating nearest location...");
 
@@ -207,7 +204,7 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
   if (string->getFrom()->isExtreme() &&
     ((subline->getStart()->isExtreme() &&
       string->getFromVertex() == subline->getStart()->getVertex()) ||
-    (subline->getEnd()->isExtreme() &&
+     (subline->getEnd()->isExtreme() &&
       string->getFromVertex() == subline->getEnd()->getVertex())))
   {
     elString = string->getFrom();
@@ -215,10 +212,10 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
   }
   // if the subline and string terminate on the to vertex.
   else if (string->getTo()->isExtreme() &&
-    ((subline->getStart()->isExtreme() &&
-      string->getToVertex() == subline->getStart()->getVertex()) ||
-    (subline->getEnd()->isExtreme() &&
-      string->getToVertex() == subline->getEnd()->getVertex())))
+           ((subline->getStart()->isExtreme() &&
+             string->getToVertex() == subline->getStart()->getVertex()) ||
+            (subline->getEnd()->isExtreme() &&
+             string->getToVertex() == subline->getEnd()->getVertex())))
   {
     elString = string->getTo();
     elSubline = elString;
@@ -257,7 +254,7 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
 
     // if subline isn't on an edge that is part of string.
     if (sublineDFrom == numeric_limits<double>::max() ||
-      sublineDTo == numeric_limits<double>::max())
+        sublineDTo == numeric_limits<double>::max())
     {
       elString.reset();
       elSubline.reset();
@@ -285,8 +282,7 @@ void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
   }
 }
 
-double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeLocationPtr el)
-  const
+double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeLocationPtr el) const
 {
   LOG_DEBUG("Calculating string location...");
 
@@ -342,7 +338,8 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
 }
 
 NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapPtr map,
-  ConstWayPtr w1, ConstWayPtr w2) const
+                                                                    ConstWayPtr w1,
+                                                                    ConstWayPtr w2) const
 {
   LOG_TRACE("Calculating subline score...");
 
@@ -354,16 +351,16 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
   // Gonna round this up to the nearest whole
   // If this doesn't work out, consider adding some rounding or slop or whatever to
   // WayLocation::move(Meters distance) [which is, like, 7 layers deeper in the onion]
-  searchRadius = ceil(searchRadius); // fixes conflicts/highway-021
+  searchRadius = ceil(searchRadius);
   LOG_VART(searchRadiusHighway);
   LOG_VART(searchRadius);
 
   //_sublineMatcher->setMinSplitSize(sr / 2.0);
   // calculated the shared sublines
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
+  LOG_VART(sublineMatch);
 
   MatchClassification c;
-  LOG_VART(sublineMatch);
   if (sublineMatch.isValid())
   {
     // calculate the match score
@@ -747,6 +744,7 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     // this is a partial match
     if (bestScore == -1.0)
     {
+      LOG_TRACE("Scoring partial match...");
       bestScore = 1.0;
     }
 
@@ -815,7 +813,6 @@ Meters NetworkDetails::getSearchRadius(ConstNetworkVertexPtr v) const
   {
     ce = std::max(ce, getSearchRadius(e));
   }
-
   return ce;
 }
 
@@ -863,12 +860,10 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 double NetworkDetails::getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
 {
   double score = _getVertexMatcher()->scoreMatch(v1, v2);
-
   if (score == 0.0 && isCandidateMatch(v1, v2))
   {
     score = 1.0;
   }
-
   return score;
 }
 
@@ -880,7 +875,6 @@ LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
     _vertexMatcher.reset(new LegacyVertexMatcher(_map));
     _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
   }
-
   return _vertexMatcher;
 }
 
@@ -921,7 +915,7 @@ bool NetworkDetails::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVert
 }
 
 bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+                                             ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   double score = getPartialEdgeMatchScore(e1, e2);
   score *= _getEdgeAngleScore(v1, v2, e1, e2);
@@ -1019,24 +1013,6 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
   {
     return false;
   }
-
-//  Meters d = fabs(calculateStringLocation(es, elString) - calculateStringLocation(es, elSubline));
-//  LOG_VART(d);
-
-//  if (d > ConfigOptions().getWayMergerMinSplitSize())
-//  {
-//    return false;
-//  }
-
-//#warning only check this at vertices.
-//  // calculate the angle difference at the edge locations
-//  Radians rString = calculateHeading(elString);
-//  Radians rSubline = calculateHeading(elSubline);
-
-//  if (WayHeading::deltaMagnitude(rString, rSubline) < toRadians(45))
-//  {
-//    return false;
-//  }
 
   return true;
 }
