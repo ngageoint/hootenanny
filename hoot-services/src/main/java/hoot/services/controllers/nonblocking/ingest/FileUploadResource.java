@@ -26,7 +26,7 @@
  */
 package hoot.services.controllers.nonblocking.ingest;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOME_FOLDER;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +53,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -61,8 +60,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.job.ChainJob;
 import hoot.services.utils.MultipartSerializer;
 
@@ -78,9 +77,9 @@ public class FileUploadResource extends AsynchronousJobResource {
      * and osm file and performing ETL operation on the uploaded file(s). This
      * service is multipart post service which accepts single or multiple files
      * sent by multipart client.
-     * 
+     *
      * POST hoot-services/ingest/upload?TRANSLATION=NFDD.js&INPUT_TYPE=OSM&INPUT_NAME=ToyTest
-     * 
+     *
      * @param translation
      *            Translation script used during OGR ETL process.
      * @param inputType
@@ -99,13 +98,13 @@ public class FileUploadResource extends AsynchronousJobResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload2(@QueryParam("TRANSLATION") String translation,
-                                   @QueryParam("INPUT_TYPE") String inputType,
-                                   @QueryParam("INPUT_NAME") String inputName,
-                                   @QueryParam("USER_EMAIL") String userEmail,
-                                   @QueryParam("NONE_TRANSLATION") String noneTranslation,
-                                   @QueryParam("FGDB_FC") String fgdbFeatureClasses,
-                                    FormDataMultiPart multiPart) {
+    public Response processUpload(@QueryParam("TRANSLATION") String translation,
+                                  @QueryParam("INPUT_TYPE") String inputType,
+                                  @QueryParam("INPUT_NAME") String inputName,
+                                  @QueryParam("USER_EMAIL") String userEmail,
+                                  @QueryParam("NONE_TRANSLATION") String noneTranslation,
+                                  @QueryParam("FGDB_FC") String fgdbFeatureClasses,
+                                  FormDataMultiPart multiPart) {
         JSONArray response = new JSONArray();
 
         try {
@@ -154,6 +153,7 @@ public class FileUploadResource extends AsynchronousJobResource {
 
                 JSONObject zipStat = new JSONObject();
                 buildNativeRequest(jobId, fName, ext, inputFileName, reqList, zipStat);
+
                 if (ext.equalsIgnoreCase("zip")) {
                     shpZipCnt += (Integer) zipStat.get("shpzipcnt");
                     fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
@@ -177,6 +177,7 @@ public class FileUploadResource extends AsynchronousJobResource {
                     new File(directory + File.separator + inputsList.get(0)).renameTo(new File(directory + File.separator + inputFileName));
                     inputsList.set(0, inputFileName);
                     reqList = new JSONArray();
+
                     buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat);
                 }
             }
@@ -224,10 +225,9 @@ public class FileUploadResource extends AsynchronousJobResource {
                 osmCnt = 1;
             }
 
-            ExternalCommand etlCommand = createETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+            FileETLCommand etlCommand = new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
                     noneTranslation, fgdbFeatureClasses);
-
 
             String mapDisplayName = etlName;
 
@@ -269,126 +269,6 @@ public class FileUploadResource extends AsynchronousJobResource {
         }
 
         return Response.ok(response.toJSONString()).build();
-    }
-
-    private ExternalCommand createETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt,
-            int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
-            int osmCnt, int geonamesCnt, List<String> zipList, String translation,
-            String jobId, String etlName, List<String> inputsList, String userEmail,
-            String isNoneTranslation, String fgdbFeatureClasses) throws ParseException {
-
-        String inputs = "";
-        for (Object r : reqList) {
-            JSONObject rr = (JSONObject) r;
-            inputs += "\"" + rr.get("name") + "\" ";
-        }
-
-        JSONObject param = new JSONObject();
-
-        // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
-        // if fgdb zip == 0 and shp zip > then it is standard zip.
-        // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
-        String curInputType = "";
-        if (zipCnt > 0) {
-            if (fgdbZipCnt > 0) {
-                String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-                param.put("UNZIP_LIST", mergedZipList);
-                curInputType = "OGR";
-            }
-            else {
-                // Mix of shape and zip then we will unzip and treat it like OGR
-                if (shpCnt > 0) // One or more all ogr zip + shape
-                {
-                    curInputType = "OGR";
-                    String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-                    param.put("UNZIP_LIST", mergedZipList);
-                }
-                else if (osmCnt > 0) // Mix of One or more all osm zip + osm
-                {
-                    curInputType = "OSM";
-                    String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-                    param.put("UNZIP_LIST", mergedZipList);
-                }
-                else if (geonamesCnt > 0) // Mix of One or more all osm zip + osm
-                {
-                    curInputType = "GEONAMES";
-                    String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-                    param.put("UNZIP_LIST", mergedZipList);
-                }
-                else // One or more zip (all ogr) || One or more zip (all osm)
-                {
-                    // If contains zip of just shape or osm then we will etl zip
-                    // directly
-                    curInputType = "ZIP";
-                    // add zip extension
-
-                    for (int j = 0; j < zipList.size(); j++) {
-                        zipList.set(j, zipList.get(j) + ".zip");
-                    }
-                    inputs = StringUtils.join(zipList.toArray(), ';');
-                }
-            }
-        }
-        else if (shpCnt > 0) {
-            curInputType = "OGR";
-        }
-        else if (osmCnt > 0) {
-            curInputType = "OSM";
-        }
-        else if (fgdbCnt > 0) {
-            curInputType = "FGDB";
-        }
-        else if (geonamesCnt > 0) {
-            curInputType = "GEONAMES";
-        }
-
-        Boolean isNone = false;
-        if (isNoneTranslation != null) {
-            isNone = isNoneTranslation.equals("true");
-        }
-
-        String translationPath = "translations/" + translation;
-
-        if (translation.contains("/")) {
-            translationPath = translation;
-        }
-
-        logger.debug("Using Translation for ETL :{}", translationPath);
-
-        // Formulate request parameters
-
-        param.put("NONE_TRANSLATION", isNone.toString());
-        param.put("TRANSLATION", translationPath);
-        param.put("INPUT_TYPE", curInputType);
-        param.put("INPUT_PATH", "upload/" + jobId);
-        param.put("INPUT", inputs);
-        param.put("INPUT_NAME", etlName);
-        param.put("USER_EMAIL", userEmail);
-        param.put("DB_URL", HOOT_APIDB_URL);
-
-        if (curInputType.equalsIgnoreCase("FGDB") && (fgdbFeatureClasses != null) && (!fgdbFeatureClasses.isEmpty())) {
-            Object oRq = reqList.get(0);
-
-            if (oRq != null) {
-                JSONObject jsonReq = (JSONObject) oRq;
-                String rawInput = jsonReq.get("name").toString();
-                List<String> fgdbInputs = new ArrayList<>();
-                String[] cls = fgdbFeatureClasses.split(",");
-
-                for (String cl : cls) {
-                    fgdbInputs.add(rawInput + "\\;" + cl);
-                }
-
-                String fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
-                param.put("INPUT", fgdbInput);
-            }
-        }
-
-        JSONArray commandArgs = super.parseParams(param.toJSONString());
-
-        ExternalCommand etlCommand = super.createMakeScriptJobReq(commandArgs, ETL_MAKEFILE);
-
-        return etlCommand;
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,

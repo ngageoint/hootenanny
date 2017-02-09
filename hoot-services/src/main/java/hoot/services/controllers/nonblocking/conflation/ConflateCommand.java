@@ -33,8 +33,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
 import hoot.services.geo.BoundingBox;
+import hoot.services.utils.JsonUtils;
 
 
 class ConflateCommand extends ExternalCommand {
@@ -42,10 +42,10 @@ class ConflateCommand extends ExternalCommand {
     ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
         JSONArray commandArgs = null;
         try {
-            commandArgs = AsynchronousJobResource.parseParams(params);
+            commandArgs = JsonUtils.parseParams(params);
         }
         catch (ParseException pe) {
-            throw new RuntimeException("Error parsing 'params'!", pe);
+            throw new RuntimeException("Error parsing: " + params, pe);
         }
 
         if (bounds != null) {

@@ -144,4 +144,26 @@ public final class JsonUtils {
 
         return paramsMap;
     }
+
+    public static JSONArray parseParams(String params) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject command = (JSONObject) parser.parse(params);
+        JSONArray commandArgs = new JSONArray();
+
+        for (Object o : command.entrySet()) {
+            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
+            String key = (String) mEntry.getKey();
+            String val = (String) mEntry.getValue();
+
+            JSONObject arg = new JSONObject();
+            arg.put(key, val);
+            commandArgs.add(arg);
+        }
+
+        return commandArgs;
+    }
+
+    public static String getParameterValue(String key, JSONObject jsonObject) {
+        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
+    }
 }

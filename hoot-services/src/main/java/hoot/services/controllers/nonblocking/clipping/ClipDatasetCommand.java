@@ -34,7 +34,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.utils.JsonUtils;
 
 
 class ClipDatasetCommand extends ExternalCommand {
@@ -45,10 +45,10 @@ class ClipDatasetCommand extends ExternalCommand {
         try {
             // scripts/makeclipdataset
             // hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-            commandArgs = AsynchronousJobResource.parseParams(params);
+            commandArgs = JsonUtils.parseParams(params);
         }
         catch (ParseException pe) {
-            throw new RuntimeException("Error parsing 'params' string!", pe);
+            throw new RuntimeException("Error parsing: " + params, pe);
         }
 
         JSONObject hootDBURL = new JSONObject();

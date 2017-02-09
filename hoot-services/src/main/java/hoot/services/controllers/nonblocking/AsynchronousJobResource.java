@@ -28,20 +28,14 @@ package hoot.services.controllers.nonblocking;
 
 import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
 
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommandManager;
 import hoot.services.job.ChainJob;
@@ -78,36 +72,5 @@ public class AsynchronousJobResource {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
         Runnable work = new JobRunnable(job, jobStatusManager);
         jobThreadExecutor.execute(work);
-    }
-
-    public static JSONArray parseParams(String params) throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject command = (JSONObject) parser.parse(params);
-        JSONArray commandArgs = new JSONArray();
-
-        for (Object o : command.entrySet()) {
-            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
-            String key = (String) mEntry.getKey();
-            String val = (String) mEntry.getValue();
-
-            JSONObject arg = new JSONObject();
-            arg.put(key, val);
-            commandArgs.add(arg);
-        }
-
-        return commandArgs;
-    }
-
-    public static String getParameterValue(String key, JSONObject jsonObject) {
-        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
-    }
-
-    protected ExternalCommand createMakeScriptJobReq(JSONArray args, String scriptName) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "make");
-        command.put("exec", scriptName);
-        command.put("caller", this.getClass().getName());
-        command.put("params", args);
-        return command;
     }
 }

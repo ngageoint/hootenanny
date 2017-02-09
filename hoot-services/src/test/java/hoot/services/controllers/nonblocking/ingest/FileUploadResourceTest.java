@@ -208,14 +208,13 @@ public class FileUploadResourceTest {
         int zipCnt = 0;
         zipCnt++;
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         // Test zip containing fgdb + shp
         int shpCnt = 0;
         int osmCnt = 0;
         int geonamesCnt = 0;
         int fgdbCnt = 0;
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt,
+
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt,
                 osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr",
                 inputsList, "test@test.com", "false", null);
 
@@ -319,12 +318,10 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("geonamescnt");
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         // Test zip containing fgdb + shp
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr", inputsList,
-                "test@test.com", "false", null);
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
+                "fgdb_ogr", inputsList, "test@test.com", "false", null);
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -427,10 +424,8 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         // Test zip containing fgdb + shp
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
                 geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "osm", inputsList,
                 "test@test.com", "false", null);
 
@@ -530,14 +525,12 @@ public class FileUploadResourceTest {
         zipList.add("zip1");
         zipCnt++;
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         // Test zip containing fgdb + shp
         int shpCnt = 0;
         int osmCnt = 0;
         int fgdbCnt = 0;
 
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt,
+        FileETLCommand command = new FileETLCommand(results, zipCnt,
                 shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList,
                 "TDSv61.js", jobId, "ogr", inputsList, "test@test.com", "false", null);
 
@@ -627,15 +620,13 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "ogr", inputsList,
-                "test@test.com", "false", null);
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
+                "ogr", inputsList, "test@test.com", "false", null);
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -721,16 +712,14 @@ public class FileUploadResourceTest {
         osmCnt += (Integer) zipStat.get("osmcnt");
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "osm", inputsList,
-                "test@test.com", "false", null);
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
+                "osm", inputsList, "test@test.com", "false", null);
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -800,16 +789,14 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
-        Method createETLCommandMethod = getCreateETLCommandMethod();
-
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        JSONObject command = (JSONObject) createETLCommandMethod.invoke(res, results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb", inputsList, "test@test.com",
-                "false", null);
+        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+                shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb", inputsList,
+                "test@test.com", "false", null);
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -956,16 +943,5 @@ public class FileUploadResourceTest {
         buildNativeRequestMethod.setAccessible(true);
 
         return buildNativeRequestMethod;
-    }
-
-    private static Method getCreateETLCommandMethod() throws NoSuchMethodException {
-        Method createETLCommandMethod = FileUploadResource.class.getDeclaredMethod("createETLCommand",
-                JSONArray.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class,
-                int.class, int.class, List.class, String.class, String.class, String.class, List.class, String.class,
-                String.class, String.class);
-
-        createETLCommandMethod.setAccessible(true);
-
-        return createETLCommandMethod;
     }
 }

@@ -159,7 +159,7 @@ public class ConflationResource extends AsynchronousJobResource {
 
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
-                long secondaryMapId = Long.parseLong(getParameterValue(secondaryParameterKey, oParams));
+                long secondaryMapId = Long.parseLong(JsonUtils.getParameterValue(secondaryParameterKey, oParams));
                 if (!mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
