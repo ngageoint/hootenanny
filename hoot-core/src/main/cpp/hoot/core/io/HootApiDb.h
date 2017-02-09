@@ -271,6 +271,7 @@ public:
   inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
   inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
 
+  inline static QString getJobStatusTableName() { return "job_status"; }
 
   /**
    * Very handy for testing.
@@ -306,6 +307,9 @@ private:
   shared_ptr<QSqlQuery> _updateNode;
   shared_ptr<QSqlQuery> _updateRelation;
   shared_ptr<QSqlQuery> _updateWay;
+  shared_ptr<QSqlQuery> _updateJobStatus;
+  shared_ptr<QSqlQuery> _insertJobStatus;
+  shared_ptr<QSqlQuery> _jobStatusExists;
 
   shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

@@ -41,9 +41,10 @@
 namespace hoot
 {
 
-OsmChangesetXmlWriter::OsmChangesetXmlWriter()
-  : _precision(ConfigOptions().getWriterPrecision()),
-    _changesetMaxSize(ConfigOptions().getChangesetMaxSize())
+OsmChangesetXmlWriter::OsmChangesetXmlWriter() :
+_precision(ConfigOptions().getWriterPrecision()),
+_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+_multipleChangesetsWritten(false)
 {
 }
 
@@ -61,11 +62,14 @@ void OsmChangesetXmlWriter::write(QString path, ChangeSetProviderPtr cs)
   while (cs->hasMoreChanges())
   {
     long changesetProgress = 1;
-    //  Create a new filepath if the file is split in multiple files because of the changeset.max.size setting
+    //  Create a new filepath if the file is split in multiple files because of the
+    //  changeset.max.size setting
     //   i.e. <filepath>/<filename>-001.<ext>
     if (fileCount > 0)
+    {
       filepath = QString("%1/%2-%3.%4").arg(dir).arg(file).arg(fileCount, 3, 10, QChar('0')).arg(ext);
-
+      _multipleChangesetsWritten = true;
+    }
     LOG_INFO("Writing changeset to " << filepath);
 
     QFile f;

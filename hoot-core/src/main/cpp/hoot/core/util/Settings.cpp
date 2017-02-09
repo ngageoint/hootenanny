@@ -452,6 +452,19 @@ void Settings::parseCommonArguments(QStringList& args)
 {
   bool foundOne = true;
 
+  QStringList hootTestCmdsIgnore;
+  hootTestCmdsIgnore.append("--quick");
+  hootTestCmdsIgnore.append("--slow");
+  hootTestCmdsIgnore.append("--glacial");
+  hootTestCmdsIgnore.append("--all");
+  hootTestCmdsIgnore.append("--quick-only");
+  hootTestCmdsIgnore.append("--slow-only");
+  hootTestCmdsIgnore.append("--glacial-only");
+  hootTestCmdsIgnore.append("--single");
+  hootTestCmdsIgnore.append("--names");
+  hootTestCmdsIgnore.append("--all-names");
+  hootTestCmdsIgnore.append("--diff");
+
   while (args.size() > 0 && foundOne)
   {
     if (args[0] == "--conf" || args[0] == "-C")
@@ -497,6 +510,12 @@ void Settings::parseCommonArguments(QStringList& args)
     else if (args[0] == "--fatal")
     {
       Log::getInstance().setLevel(Log::Fatal);
+      args = args.mid(1);
+    }
+    //HootTest settings have already been parsed by this point
+    else if (hootTestCmdsIgnore.contains(args[0]) || args[0].contains("--include") ||
+             args[0].contains("--exclude"))
+    {
       args = args.mid(1);
     }
     else if (args[0] == "--define" || args[0] == "-D")

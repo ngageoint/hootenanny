@@ -251,10 +251,6 @@ ElementMergeServerThreadCount=0
 # Element merge Server Script in scripts folder
 ElementMergeServerScript=/plugins/ElementMergeServer.js
 
-# REVIEW
-
-
-
 # HGIS
 
 # HGIS review prepare for validation script name
