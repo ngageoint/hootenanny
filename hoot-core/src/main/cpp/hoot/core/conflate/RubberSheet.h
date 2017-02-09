@@ -59,6 +59,8 @@ public:
 
   static string className() { return "hoot::RubberSheet"; }
 
+  static unsigned int logWarnCount;
+
   /**
    * If this configuration setting is set to true then the first layer is treated as the reference
    * layer and will not be moved.

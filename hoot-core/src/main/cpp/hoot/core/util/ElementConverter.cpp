@@ -103,7 +103,7 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Relation:
     return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
-    LOG_WARN(e->toString());
+    LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }

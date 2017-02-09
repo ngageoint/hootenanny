@@ -38,7 +38,10 @@
 // Standard
 #include <iomanip>
 
-namespace hoot {
+namespace hoot
+{
+
+unsigned int WayLocation::logWarnCount = 0;
 
 Coordinate c;
 
@@ -184,7 +187,15 @@ int WayLocation::compareTo(const WayLocation& other) const
 {
   if (!(_segmentFraction < 1.0 && other._segmentFraction < 1.0))
   {
-    LOG_WARN(_segmentFraction << " other: " << other._segmentFraction);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(_segmentFraction << " other: " << other._segmentFraction);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   assert(_segmentFraction < 1.0 && other._segmentFraction < 1.0);
   // compare way ids

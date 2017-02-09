@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,7 +39,10 @@ namespace hoot
 class JsonOsmSchemaLoader : public OsmSchemaLoader
 {
 public:
+
   static string className() { return "hoot::JsonOsmSchemaLoader"; }
+
+  static unsigned int logWarnCount;
 
   JsonOsmSchemaLoader();
 
@@ -52,6 +55,7 @@ public:
   virtual set<QString> getDependencies() { return _deps; }
 
 protected:
+
   set<QString> _deps;
   QList<QString> _baseDir;
   v8::Persistent<v8::Context> _context;

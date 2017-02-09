@@ -59,7 +59,6 @@ void WordCountWriter::_exec(QSqlDatabase& db, QString sql)
   {
     QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
         arg(sql);
-    LOG_WARN(error);
     throw HootException(error);
   }
 }
@@ -92,7 +91,6 @@ void WordCountWriter::write(QString basePath, QVector<WordCount> words)
     {
       QString err = QString("Error executing query: %1 (%2)").arg(q.executedQuery()).
           arg(q.lastError().text());
-      LOG_WARN(err);
       throw HootException(err);
     }
   }
