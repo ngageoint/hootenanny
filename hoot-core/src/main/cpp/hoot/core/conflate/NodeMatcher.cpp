@@ -45,6 +45,8 @@
 namespace hoot
 {
 
+unsigned int NodeMatcher::logWarnCount = 0;
+
 NodeMatcher::NodeMatcher()
 {
   _strictness = ConfigOptions().getNodeMatcherStrictness();
@@ -113,7 +115,6 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
     const QString msg =
       "calculateAngles was called with a node that was not a start or end node on the specified way.";
-    LOG_WARN(msg);
     //where is this being caught?
     throw HootException(msg);
   }
@@ -208,7 +209,15 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   // this is very unsual and will slow things down.
   if (theta1.size() > 6 && theta2.size() > 6)
   {
-    LOG_WARN("7 intersections at one spot? Odd. Giving it a high angleScore.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Greater than seven intersections at one spot? Odd.  Giving it a high angleScore.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     LOG_VART(nid1);
     LOG_VART(nid2);
     LOG_VART(wids1);

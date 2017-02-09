@@ -39,7 +39,10 @@ using namespace std;
 class WayJoin2Reducer : public pp::Reducer
 {
 public:
+
   static string className() { return "hoot::WayJoin2Reducer"; }
+
+  static unsigned int logWarnCount;
 
   WayJoin2Reducer();
 
@@ -48,6 +51,7 @@ public:
   virtual void reduce(HadoopPipes::ReduceContext& context);
 
 private:
+
   PbfRecordWriter* _writer;
   shared_ptr<OsmMap> _map;
   MapStats _stats;

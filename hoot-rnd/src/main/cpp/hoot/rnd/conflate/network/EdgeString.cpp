@@ -31,6 +31,8 @@
 namespace hoot
 {
 
+unsigned int EdgeString::logWarnCount = 0;
+
 bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
 {
   bool result = false;
@@ -622,7 +624,15 @@ bool EdgeString::validate() const
     ConstEdgeSublinePtr esi = _edges[i].getSubline();
     if (esi->isZeroLength())
     {
-      LOG_WARN("EdgeString contains a zero length subline: " << esi);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("EdgeString contains a zero length subline: " << esi);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       result = false;
     }
     for (int j = i + 1; j < _edges.size(); ++j)
@@ -630,7 +640,15 @@ bool EdgeString::validate() const
       ConstEdgeSublinePtr esj = _edges[j].getSubline();
       if (esi->overlaps(esj))
       {
-        LOG_WARN("Two edges overlap that shouldn't: " << esi << " and " << esj);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Two edges overlap that shouldn't: " << esi << " and " << esj);
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
         result = false;
       }
     }

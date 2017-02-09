@@ -45,6 +45,8 @@ public:
 
   static std::string className() { return "hoot::PoiRfClassifier"; }
 
+  static unsigned int logWarnCount;
+
   PoiRfClassifier();
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
@@ -54,6 +56,7 @@ public:
     ElementId eid1, ElementId eid2) const;
 
 private:
+
   shared_ptr<Tgs::RandomForest> _rf;
   QStringList _rfFactorLabels;
   vector< shared_ptr<const FeatureExtractor> > _extractors;
@@ -69,4 +72,4 @@ typedef shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
 
 }
 
-#endif // HIGHWAYRFCLASSIFIER_H
+#endif // POIRFCLASSIFIER_H

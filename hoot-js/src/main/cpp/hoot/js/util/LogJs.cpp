@@ -116,7 +116,7 @@ Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
 
     QString message = QString::fromUtf8(rMessage.str().data());
 
-    int logLimit = ConfigOptions().getLogIdenticalMessageLimit();
+    int logLimit = ConfigOptions().getLogWarnMessageLimit();
     int messageCount = getLogCount(message);
 
     if (messageCount == logLimit)

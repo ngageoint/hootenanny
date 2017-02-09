@@ -61,6 +61,8 @@ namespace hoot
 {
 using namespace Tgs;
 
+unsigned int ScriptMatch::logWarnCount = 0;
+
 ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
@@ -388,7 +390,15 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
       result[it.key()] = d;
       if (isnan(result[it.key()]))
       {
-        LOG_WARN("found NaN feature value for: " << it.key());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("found NaN feature value for: " << it.key());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }

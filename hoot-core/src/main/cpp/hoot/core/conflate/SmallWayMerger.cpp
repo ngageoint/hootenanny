@@ -176,8 +176,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
     else
     {
-      LOG_WARN("w1: " << w1->toString());
-      LOG_WARN("w2: " << w2->toString());
+      LOG_TRACE("w1: " << w1->toString());
+      LOG_TRACE("w2: " << w2->toString());
       throw HootException("The ends of the ways don't touch. "
                     "Did you run the intersection splitter first?");
     }

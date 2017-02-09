@@ -61,6 +61,9 @@ class Log
 {
 
 public:
+
+  static QString LOG_WARN_LIMIT_REACHED_MESSAGE;
+
   enum WarningLevel
   {
     None = 0,

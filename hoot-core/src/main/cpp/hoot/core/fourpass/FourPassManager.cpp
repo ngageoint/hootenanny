@@ -120,8 +120,8 @@ void FourPassManager::apply(QString outputPath)
         {
           if (e.intersects(appliedBits[j]))
           {
-            LOG_WARN("Overlapping env 1: " << e.toString());
-            LOG_WARN("Overlapping env 2: " << appliedBits[j].toString());
+            LOG_TRACE("Overlapping env 1: " << e.toString());
+            LOG_TRACE("Overlapping env 2: " << appliedBits[j].toString());
             throw HootException("Two tiles overlap.");
           }
         }

@@ -72,6 +72,10 @@ class TileBoundsCalculator
 {
 public:
 
+  static std::string className() { return "hoot::TileBoundsCalculator"; }
+
+  static unsigned int logWarnCount;
+
   /**
    * Specifies the index of a pixel. When specifying a bounding box this represents the lower left
    * pixel relative to the bounding box.

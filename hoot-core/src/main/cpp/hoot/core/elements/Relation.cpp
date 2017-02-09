@@ -47,6 +47,8 @@
 namespace hoot
 {
 
+unsigned int Relation::logWarnCount = 0;
+
 QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
 QString Relation::MULTIPOLYGON = "multipolygon";
@@ -260,7 +262,15 @@ void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 
@@ -308,7 +318,15 @@ void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 
