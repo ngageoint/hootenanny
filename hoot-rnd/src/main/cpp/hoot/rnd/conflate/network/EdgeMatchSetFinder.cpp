@@ -359,47 +359,11 @@ bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
 }
 
 void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
-  ConstNetworkEdgePtr e2) const
+                                      ConstNetworkEdgePtr e2) const
 {
   LOG_TRACE("Appending match...");
-
+  LOG_VART(em);
   _details->extendEdgeMatch(em, e1, e2);
-//  // trim the beginning of the edge string as appropriate.
-//  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
-//  LOG_VART(e1);
-//  LOG_VART(e2);
-//  LOG_VART(matches);
-//  LOG_VART(em);
-
-//  bool foundOne = false;
-
-//  foreach (EdgeSublineMatchPtr m, matches)
-//  {
-//    LOG_VART(_details->isStringCandidate(em->getString1(), m->getSubline1()));
-//    LOG_VART(_details->isStringCandidate(em->getString2(), m->getSubline2()));
-//    LOG_VART(em->getString1()->touches(m->getSubline1()));
-//    LOG_VART(em->getString2()->touches(m->getSubline2()));
-//    //if (em->getString1()->touches(m->getSubline1()) && em->getString2()->touches(m->getSubline2()))
-//    if (_details->isStringCandidate(em->getString1(), m->getSubline1()) &&
-//      _details->isStringCandidate(em->getString2(), m->getSubline2()))
-//    {
-//      // There are probably some contrived edge cases that could cause this, but I can't conceive
-//      // of them right now.
-//      if (foundOne == true)
-//      {
-//        LOG_VARW(em);
-//        LOG_VARW(e1);
-//        LOG_VARW(e2);
-//        throw NotImplementedException("Found multiple overlapping matches when appending.");
-//      }
-//      em->getString1()->appendEdge(_snapSublineToString(em->getString1(), m->getSubline1()));
-//      em->getString2()->appendEdge(_snapSublineToString(em->getString2(), m->getSubline2()));
-//      LOG_VART(em->getString1());
-//      LOG_VART(em->getString2());
-//    }
-//  }
-
-//  LOG_VART(em);
 }
 
 QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLocationPtr l) const
@@ -460,48 +424,11 @@ bool EdgeMatchSetFinder::_isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLoc
 }
 
 void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
-  ConstNetworkEdgePtr e2) const
+                                       ConstNetworkEdgePtr e2) const
 {
   LOG_TRACE("Prepending match...");
-
+  LOG_VART(em);
   _details->extendEdgeMatch(em, e1, e2);
-//  // trim the beginning of the edge string as appropriate.
-//  QList<EdgeSublineMatchPtr> matches = _details->calculateMatchingSublines(e1, e2);
-//  LOG_VART(e1);
-//  LOG_VART(e2);
-//  LOG_VART(matches);
-//  LOG_VART(em);
-
-//  bool foundOne = false;
-
-//  foreach (EdgeSublineMatchPtr m, matches)
-//  {
-//    LOG_VART(em->getString1());
-//    LOG_VART(m->getSubline1());
-//    LOG_VART(em->getString2());
-//    LOG_VART(m->getSubline2());
-//    LOG_VART(_details->isStringCandidate(em->getString1(), m->getSubline1()));
-//    LOG_VART(_details->isStringCandidate(em->getString2(), m->getSubline2()));
-//    if (_details->isStringCandidate(em->getString1(), m->getSubline1()) &&
-//      _details->isStringCandidate(em->getString2(), m->getSubline2()))
-//    {
-//      // There are probably some contrived edge cases that could cause this, but I can't conceive
-//      // of them right now.
-//      if (foundOne == true)
-//      {
-//        LOG_VARW(em);
-//        LOG_VARW(e1);
-//        LOG_VARW(e2);
-//        throw NotImplementedException("Found multiple overlapping matches when appending.");
-//      }
-//      em->getString1()->prependEdge(_snapSublineToString(em->getString1(), m->getSubline1()));
-//      em->getString2()->prependEdge(_snapSublineToString(em->getString2(), m->getSubline2()));
-//      LOG_VART(em->getString1());
-//      LOG_VART(em->getString2());
-//    }
-//  }
-
-//  LOG_VART(em);
 }
 
 bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
