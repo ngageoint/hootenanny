@@ -90,7 +90,7 @@ echo "### Configuring environment..."
 
 # Configure https alternative mirror for maven isntall, this can likely be removed once
 # we are using maven 3.2.3 or higher
-sudo $HOOT_HOME/scripts/SetMavenHttps.sh
+sudo /usr/bin/perl $HOOT_HOME/scripts/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
