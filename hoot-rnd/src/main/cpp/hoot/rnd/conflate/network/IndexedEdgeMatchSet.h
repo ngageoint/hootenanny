@@ -59,8 +59,6 @@ public:
    */
   virtual bool contains(const ConstEdgeMatchPtr &em) const;
 
-  bool containsSimilar(ConstEdgeMatchPtr &other) const;
-
   const MatchHash& getAllMatches() const { return _matches; }
   MatchHash& getAllMatches() { return _matches; }
 

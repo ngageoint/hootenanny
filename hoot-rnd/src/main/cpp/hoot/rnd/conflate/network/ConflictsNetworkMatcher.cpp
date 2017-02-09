@@ -247,7 +247,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     touches -= em;
     touches -= support;
     // TODO: Removing the non-supporting, touching edges from the conflicts was done to make
-    // conflicts/highway-017 pass at the expense of no other case tests failing and no decrease
+    // a case test pass at the expense of no other case tests failing and no decrease
     // in regression performance.  However, this seems like an important piece of logic, so we need
     // to keep in mind that this change may have to be reverted if we encounter a situation where
     // having it disabled causes problems.

@@ -104,7 +104,8 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   {
     foundSolution = _recordMatch(em);
   }
-  else //if (em->getString1()->isStub() == false && em->getString2()->isStub() == false)
+  //
+  else
   {
     // if the end of the match isn't terminated.
     if (!toMatch)

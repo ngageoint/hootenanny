@@ -224,22 +224,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
   return result;
 }
 
-bool IndexedEdgeMatchSet::containsSimilar(ConstEdgeMatchPtr &other) const
-{
-  foreach (const ConstEdgeMatchPtr& em, _matches.keys())
-  {
-    if (em->isVerySimilarTo(other))
-    {
-      LOG_TRACE(em);
-      LOG_TRACE(other);
-      return true;
-    }
-  }
-  return false;
-}
-
-QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v)
-  const
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v) const
 {
   QSet<ConstEdgeMatchPtr> result;
   foreach (const ConstEdgeMatchPtr& em,
