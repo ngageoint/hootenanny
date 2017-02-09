@@ -50,6 +50,8 @@ using namespace Tgs;
 namespace hoot
 {
 
+unsigned int BuildingPartMergeOp::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
 BuildingPartMergeOp::BuildingPartMergeOp()
@@ -133,7 +135,15 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
     }
     if (members[i].getElementId().getType() == ElementType::Relation)
     {
-      LOG_WARN("Not expecting relations of relations: " << r->toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Not expecting relations of relations: " << r->toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }

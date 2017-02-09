@@ -46,6 +46,8 @@ public:
 
   static std::string className() { return "hoot::SplitLongLinearWaysVisitor"; }
 
+  static unsigned int logWarnCount;
+
   SplitLongLinearWaysVisitor();
 
   virtual ~SplitLongLinearWaysVisitor() { }
@@ -61,6 +63,7 @@ public:
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
 private:
+
   unsigned int _maxNodesPerWay;
 
   // Actual max is 2000, but in order to allow editors to insert nodes without issues,

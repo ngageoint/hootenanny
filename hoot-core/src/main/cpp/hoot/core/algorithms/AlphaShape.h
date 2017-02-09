@@ -71,6 +71,11 @@ class Way;
 class AlphaShape
 {
 public:
+
+  static std::string className() { return "hoot::AlphaShape"; }
+
+  static unsigned int logWarnCount;
+
   AlphaShape(double alpha);
 
   shared_ptr<geos::geom::Geometry> toGeometry();

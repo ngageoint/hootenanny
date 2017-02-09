@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+unsigned int ApiDbReader::logWarnCount = 0;
+
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
@@ -122,8 +124,16 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-               QString::number(element->getId()));
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                 QString::number(element->getId()));
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
@@ -159,7 +169,15 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
     //We don't need to carry this tag around once the value is set on the element...it will
@@ -185,7 +203,15 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
     //I don't think OSM non-hoot metadata tags should be removed here...

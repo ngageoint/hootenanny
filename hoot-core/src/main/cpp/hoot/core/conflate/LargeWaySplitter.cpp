@@ -43,6 +43,8 @@
 namespace hoot
 {
 
+unsigned int LargeWaySplitter::logWarnCount = 0;
+
 using namespace geos::geom;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
@@ -84,7 +86,15 @@ void LargeWaySplitter::_divideWay(shared_ptr<Way> way, int numPieces)
     if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() == 0.0)
     {
       WayLocation wl2(_map, tmp, pieceLength);
-      LOG_WARN("Invalid line piece. Odd.");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid line piece. Odd: " << wl.toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {

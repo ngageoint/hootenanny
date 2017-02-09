@@ -61,6 +61,10 @@ class MapProjector
 {
 public:
 
+  static std::string className() { return "hoot::MapProjector"; }
+
+  static unsigned int logWarnCount;
+
   /**
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The
    * units are in meters.

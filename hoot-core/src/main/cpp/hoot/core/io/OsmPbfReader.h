@@ -48,7 +48,6 @@
 
 #include <ogr_spatialref.h>
 
-
 namespace hoot
 {
   namespace pb
@@ -82,6 +81,8 @@ public:
   static QString maxElementsPerMapKey() { return "pbf.reader.max.elements.per.partial.map"; }
 
   static string className() { return "hoot::OsmPbfReader"; }
+
+  static unsigned int logWarnCount;
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);
@@ -169,7 +170,6 @@ public:
 private:
 
   Meters _circularError;
-  int _badAccuracyCount;
   string _buffer;
   istream* _in;
   bool _needToCloseInput;
@@ -189,7 +189,6 @@ private:
   /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
   /// class), which was added to PartialOsmMapReader after it was implemented on this class.
   shared_ptr<OsmMap> _map;
-  int _missingElementCount;
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;

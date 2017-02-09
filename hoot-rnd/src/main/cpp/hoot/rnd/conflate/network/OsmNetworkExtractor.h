@@ -44,6 +44,11 @@ class OsmNetworkExtractorVisitor;
 class OsmNetworkExtractor
 {
 public:
+
+  static std::string className() { return "hoot::OsmNetworkExtractor"; }
+
+  static unsigned int logWarnCount;
+
   OsmNetworkExtractor();
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
@@ -57,6 +62,7 @@ public:
   void setCriterion(ElementCriterionPtr criterion) { _criterion = criterion; }
 
 private:
+
   friend class OsmNetworkExtractorVisitor;
 
   ElementCriterionPtr _criterion;
