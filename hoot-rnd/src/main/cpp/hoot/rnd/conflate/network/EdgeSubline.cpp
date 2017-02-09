@@ -45,7 +45,6 @@ bool operator==(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)
   }
 
 //  bool strResult = es1->toString() == es2->toString();
-
 //  if (result != strResult)
 //  {
 //    LOG_VARE(result);
@@ -62,8 +61,6 @@ EdgeSubline::EdgeSubline(ConstEdgeLocationPtr start, ConstEdgeLocationPtr end) :
   _start(start),
   _end(end)
 {
-  //LOG_VARD(_start->getEdge());
-  //LOG_VARD(_end->getEdge());
   assert(_start->getEdge() == _end->getEdge());
 }
 
@@ -167,9 +164,8 @@ bool EdgeSubline::isSameDirection(shared_ptr<const EdgeSubline> other) const
     throw IllegalArgumentException("Expected 'other' to belong to the same edge as this.");
   }
 
-  // TRICKY: We could probably debate whether to use getFormer & getLatter,
-  // or if we should check isBackwards, or something. But this seems to produce
-  // the desired result.
+  // TRICKY: We could probably debate whether to use getFormer & getLatter, or if we should check
+  // isBackwards, or something. But this seems to produce the desired result.
   bool thisRight = this->getStart() < this->getEnd();
   bool thisLeft  = this->getStart() > this->getEnd();
 
@@ -219,15 +215,15 @@ shared_ptr<EdgeSubline> EdgeSubline::unionSubline(shared_ptr<const EdgeSubline> 
 {
   if (!intersects(other))
   {
-    LOG_VARW(*this);
-    LOG_VARW(other);
+    LOG_VART(*this);
+    LOG_VART(other);
     throw IllegalArgumentException("Expected 'other' to touch intersect.");
   }
 
   if (!isSameDirection(other))
   {
-    LOG_VARW(*this);
-    LOG_VARW(other);
+    LOG_VART(*this);
+    LOG_VART(other);
     throw IllegalArgumentException("Expected 'other' go in the same direction.");
   }
 

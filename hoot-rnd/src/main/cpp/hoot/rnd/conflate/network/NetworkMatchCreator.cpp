@@ -83,9 +83,8 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VARD(threshold);
-
   LOG_INFO("Extracting networks...");
+  LOG_VARD(threshold);
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -157,9 +156,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Network Match Creator", Highway, true));
-
   return result;
 }
 
