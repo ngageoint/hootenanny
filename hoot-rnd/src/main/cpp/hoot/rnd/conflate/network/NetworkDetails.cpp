@@ -1059,7 +1059,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
     {
       if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
       {
-        LOG_VARW(e);
+        LOG_VART(e);
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
       ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());

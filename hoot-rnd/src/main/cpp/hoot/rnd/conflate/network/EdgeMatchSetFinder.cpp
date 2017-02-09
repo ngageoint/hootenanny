@@ -246,16 +246,12 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
         _details->isStringCandidate(em->getString1()->getFirstEdge(), neighbor1) &&
         _details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()) > 0)
     {
-      // create and evaluate a new match
 //#warning review
       EdgeMatchPtr next = _details->extendEdgeMatch(em, neighbor1, em->getString2()->getFirstEdge());
       if (next)
       {
         foundSolution = _addEdgeMatches(next) || foundSolution;
       }
-//      EdgeMatchPtr next = em->clone();
-//      _prependMatch(next, neighbor1, em->getString2()->getFirstEdge());
-//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
@@ -277,10 +273,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
       {
         foundSolution = _addEdgeMatches(next) || foundSolution;
       }
-//      // create and evaluate a new match
-//      EdgeMatchPtr next = em->clone();
-//      _prependMatch(next, em->getString1()->getFirstEdge(), neighbor2);
-//      foundSolution = _addEdgeMatches(next) || foundSolution;
     }
   }
 
