@@ -113,7 +113,7 @@ public class ExportJobResource extends AsynchronousJobResource {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            JSONArray commandArgs = JsonUtils.parseParams(params);
+            final JSONArray commandArgs = JsonUtils.parseParams(params);
             JSONParser pars = new JSONParser();
             JSONObject oParams = (JSONObject) pars.parse(params);
 
@@ -124,6 +124,14 @@ public class ExportJobResource extends AsynchronousJobResource {
             arg = new JSONObject();
             arg.put("output", jobId);
             commandArgs.add(arg);
+
+            JSONObject hootDBURL = new JSONObject();
+            hootDBURL.put("DB_URL", HOOT_APIDB_URL);
+            commandArgs.add(hootDBURL);
+
+            JSONObject osmAPIDBURL = new JSONObject();
+            osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
+            commandArgs.add(osmAPIDBURL);
 
             String type = JsonUtils.getParameterValue("outputtype", oParams);
 
@@ -139,10 +147,9 @@ public class ExportJobResource extends AsynchronousJobResource {
                 arg.put("PG_URL", pgUrl);
                 commandArgs.add(arg);
 
-                ExternalCommand osm2orgCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
-
                 Command[] commands = {
                         () -> {
+                            ExternalCommand osm2orgCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
                             return externalCommandManager.exec(jobId, osm2orgCommand);
                         },
                         () -> {
@@ -159,19 +166,19 @@ public class ExportJobResource extends AsynchronousJobResource {
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
-                ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
 
                 Command command = () -> {
+                    ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
                     return externalCommandManager.exec(jobId, exportToOSMCommand);
                 };
 
                 super.processJob(new Job(jobId, command));
             }
             else if ("osc".equalsIgnoreCase(type)) {
-                commandArgs = getExportToChangesetCommandArgs(commandArgs, oParams);
-                ExternalCommand exportToOSMCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
+                JSONArray args = getExportToChangesetCommandArgs(commandArgs, oParams);
 
                 Command command = () -> {
+                    ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
                     return externalCommandManager.exec(jobId, exportToOSMCommand);
                 };
 
@@ -198,9 +205,8 @@ public class ExportJobResource extends AsynchronousJobResource {
                     commandArgs.add(arg);
                 }
 
-                ExternalCommand exportCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
-
                 Command command = () -> {
+                    ExternalCommand exportCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
                     return externalCommandManager.exec(jobId, exportCommand);
                 };
 
