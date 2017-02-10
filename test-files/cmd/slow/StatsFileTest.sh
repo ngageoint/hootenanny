@@ -12,7 +12,7 @@ rm -f $OUTPUT1 $OUTPUT2
 
 # Test the stats
 echo "****Quick Stats****"
-hoot stats --quick --output=$OUTPUT1 $INPUT1
+hoot stats --brief --output=$OUTPUT1 $INPUT1
 cat $OUTPUT1
 
 echo "****JSON Stats****"

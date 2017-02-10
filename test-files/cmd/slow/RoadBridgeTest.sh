@@ -11,8 +11,8 @@ rm -rf $OUTPUT
 # Make shapefiles
 hoot --osm2ogr -D ogr.tds.structure=false $HOOT_HOME/translations/HootTest.js $INPUT $OUTPUT".shp"
 
-hoot stats --quick test-output/RoadBridge/BRIDGE_C.shp | grep Count
-hoot stats --quick test-output/RoadBridge/CART_TRACK_C.shp | grep Count
-hoot stats --quick test-output/RoadBridge/RAILWAY_C.shp | grep Count
-hoot stats --quick test-output/RoadBridge/ROAD_C.shp | grep Count
+hoot stats --brief test-output/RoadBridge/BRIDGE_C.shp | grep Count
+hoot stats --brief test-output/RoadBridge/CART_TRACK_C.shp | grep Count
+hoot stats --brief test-output/RoadBridge/RAILWAY_C.shp | grep Count
+hoot stats --brief test-output/RoadBridge/ROAD_C.shp | grep Count
 

@@ -934,6 +934,9 @@ void HootApiDb::_resetQueries()
   _updateNode.reset();
   _updateRelation.reset();
   _updateWay.reset();
+  _updateJobStatus.reset();
+  _insertJobStatus.reset();
+  _jobStatusExists.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();

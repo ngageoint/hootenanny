@@ -118,6 +118,7 @@ public final class HootProperties {
     public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String UPLOAD_FOLDER;
+    public static final String DERIVE_CHANGESET_SCRIPT;
     public static final String HOOT_APIDB_URL;
     public static final String OSM_APIDB_URL;
 
@@ -217,6 +218,7 @@ public final class HootProperties {
         TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
+        DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
 
         // Adding another layer of indirection for "sensitive" properties.
         // They should be resolved just before being used to minimize any unintended exposure (f.e. logging).
