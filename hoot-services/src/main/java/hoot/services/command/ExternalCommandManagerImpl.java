@@ -47,7 +47,7 @@ import hoot.services.utils.JsonUtils;
 @Transactional
 @Component
 @Profile("production")
-class ExternalCommandManagerImpl implements ExternalCommandManager {
+public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandManagerImpl.class);
 
     // This contains the command runner objects for the executing commands. Used for job cancellation and tracking.
@@ -90,7 +90,7 @@ class ExternalCommandManagerImpl implements ExternalCommandManager {
             throw new IllegalArgumentException("Invalid exectype specified");
         }
 
-        validate(command);
+        //validate(command);
 
         ExternalCommandRunner cmdRunner = new ExternalCommandRunnerImpl();
 

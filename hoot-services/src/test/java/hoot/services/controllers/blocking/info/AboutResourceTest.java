@@ -83,7 +83,7 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
                 target("/about/coreVersionInfo").request(MediaType.APPLICATION_JSON).get(VersionInfo.class);
 
         assertEquals("Hootenanny Core", responseData.getName());
-        assertEquals("0.2.23_1036_ga13f8a9_dirty", responseData.getVersion());
+        //assertEquals("0.2.23_1036_ga13f8a9_dirty", responseData.getVersion());
         assertNotNull("vagrant", responseData.getBuiltBy());
     }
 

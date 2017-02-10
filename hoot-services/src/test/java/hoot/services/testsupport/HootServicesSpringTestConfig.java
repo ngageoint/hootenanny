@@ -44,8 +44,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.HootServicesSpringConfig;
-import hoot.services.controllers.blocking.info.ExternalCommandInterfaceStubImpl;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.ExternalCommandManagerImpl;
 
 
 @Configuration
@@ -84,8 +84,8 @@ public class HootServicesSpringTestConfig {
     }
 
     @Bean
-    public ExternalCommandManager nativeInterface() {
-        return new ExternalCommandInterfaceStubImpl();
+    public ExternalCommandManager externalCommandManager() {
+        return new ExternalCommandManagerImpl();
     }
 
     @Bean
