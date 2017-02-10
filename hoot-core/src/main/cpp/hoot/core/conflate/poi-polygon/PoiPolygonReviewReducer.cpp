@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,7 +37,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
-//#include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/util/Log.h>
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
@@ -222,7 +222,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
   catch (const geos::util::TopologyException& e)
   {
-    if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
+    if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
     {
       LOG_TRACE(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
@@ -288,7 +288,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         if (polyNeighborGeom.get() &&
             QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
         {
-          if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
+          if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
           {
             LOG_TRACE(
               "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
@@ -429,7 +429,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
+        if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<

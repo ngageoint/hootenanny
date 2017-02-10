@@ -32,8 +32,8 @@
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -97,7 +97,7 @@ public:
 
   void runMatchTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -134,7 +134,7 @@ public:
   {
     BuildingMatchCreator uut;
 
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
 
     OsmMap::resetCounters();

@@ -82,6 +82,7 @@ Feature: Review Bookmarks
         Then I click on the "Sort By" label
         And I wait 30 "seconds" to see "Created At (asc)"
         Then I choose "Created At (dsc)" radio button
+        Then I hover over "#utilReviewBookmarks"
         And I should see "Cucumber Bookmark 2" bookmark first and "Cucumber Bookmark 1" bookmark second
         Then I click on the "Filter By Creator" label
         And I wait 30 "seconds" to see "cucumber1@hootenanny.digitalglobe.com"

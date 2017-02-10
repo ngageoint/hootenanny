@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 
 // Standard
 #include <fstream>
@@ -87,7 +87,7 @@ public:
       }
     }
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
 
     writer.writeHeader(os, false, false);
     *os << is->rdbuf();

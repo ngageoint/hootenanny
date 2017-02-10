@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/AlphaShape.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -102,7 +102,7 @@ public:
     }
 
     QDir().mkdir("test-output/algorithms/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
     shared_ptr<Geometry> g = uut.toGeometry();
@@ -132,7 +132,7 @@ public:
     uut.insert(points);
 
     QDir().mkdir("test-output/algorithms/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
 
     shared_ptr<Geometry> g = uut.toGeometry();

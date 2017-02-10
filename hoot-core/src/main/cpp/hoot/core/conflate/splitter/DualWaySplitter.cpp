@@ -57,7 +57,6 @@ using namespace geos::operation::buffer;
 #include <hoot/core/visitors/FindNodesVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
-
 // Qt
 #include <QDebug>
 
@@ -71,6 +70,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+unsigned int DualWaySplitter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
@@ -116,19 +117,28 @@ shared_ptr<Way> DualWaySplitter::_createOneWay(shared_ptr<const Way> w, Meters b
   if (newLs == 0)
   {
     /// @todo MultiLineString not handled properly See r2275
-    LOG_WARN("Inappropriate handling of geometry.");
-    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
 
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(
+        "Inappropriate handling of geometry.  Adding original line back in to keep things moving...");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+
+    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
     auto_ptr<Geometry> unioned(ls->Union(p.get()));
     auto_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
     auto_ptr<Geometry> buffered(ls->buffer(0));
-    LOG_WARN("input geometry: " << ls->toString());
-    LOG_WARN("unioned geometry: " << unioned->toString());
-    LOG_WARN("cleaned geometry: " << cleaned->toString());
-    LOG_WARN("buffered geometry: " << buffered->toString());
-    LOG_WARN("output geometry: " << g->toString());
+    LOG_TRACE("input geometry: " << ls->toString());
+    LOG_TRACE("unioned geometry: " << unioned->toString());
+    LOG_TRACE("cleaned geometry: " << cleaned->toString());
+    LOG_TRACE("buffered geometry: " << buffered->toString());
+    LOG_TRACE("output geometry: " << g->toString());
 
-    LOG_WARN("Adding original line back in to keep things moving.");
     const CoordinateSequence* cs = ls->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
@@ -253,17 +263,19 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
   TagCriterion tagCrit("divider", "yes");
   vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
 
+  bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled())
+    if (Log::getInstance().isInfoEnabled() && wayIds.size() % 1000 == 0 && wayIds.size() > 0)
     {
       cout << "  splitting " << i << " / " << wayIds.size() << "\r";
       cout.flush();
+      todoLogged = true;
     }
     _splitWay(wayIds[i]);
   }
 
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && todoLogged)
   {
     cout << endl;
   }

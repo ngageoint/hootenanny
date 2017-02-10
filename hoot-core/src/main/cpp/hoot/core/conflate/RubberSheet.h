@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,20 +29,27 @@
 #define RUBBERSHEET_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
+
+// geos
+#include <geos/geom/Coordinate.h>
+
+#include <ogr_spatialref.h>
 
 #include "NodeMatcher.h"
 
 namespace hoot
 {
 using namespace Tgs;
+using namespace geos::geom;
 
 class SearchRadiusCalculatorTest;
 class RubberSheetTest;
+class OsmMap;
+class Status;
 
 /**
  */
@@ -51,6 +58,8 @@ class RubberSheet : public OsmMapOperation
 public:
 
   static string className() { return "hoot::RubberSheet"; }
+
+  static unsigned int logWarnCount;
 
   /**
    * If this configuration setting is set to true then the first layer is treated as the reference

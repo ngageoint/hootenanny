@@ -39,9 +39,12 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 
 namespace hoot
 {
+
+unsigned int MaximalSubline::logWarnCount = 0;
 
 MaximalSubline::ThresholdMatchCriteria::ThresholdMatchCriteria(Meters maxDistance,
   Radians maxAngleDiff)
@@ -803,8 +806,16 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   // there isn't much we can do.
   if (!_checkForSortedSecondSubline(rawSublineMatches))
   {
-    LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
-      "result.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
+        "result.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return rawSublineMatches;
   }
 
@@ -840,7 +851,15 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   }
   catch (const HootException& e)
   {
-    LOG_WARN(e.getWhat());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(e.getWhat());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return rawSublineMatches;
   }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -105,11 +105,11 @@ void Factory::registerCreator(ObjectCreator* oc, bool baseClass)
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())
   {
-    LOG_WARN("Base name and class name are the same. Did you forget to imlement className() in "
+    LOG_ERROR("Base name and class name are the same. Did you forget to imlement className() in "
              "your class? If this is intentional, then set baseClass to true, or use the "
              "HOOT_FACTORY_REGISTER_BASE macro.");
-    throw HootException("Base name and class name are the same. Highly unusual. (" + oc->getName() +
-                    ")");
+    throw HootException(
+      "Base name and class name are the same. Highly unusual. (" + oc->getName() + ")");
   }
   if (_creators.find(oc->getName()) == _creators.end())
   {

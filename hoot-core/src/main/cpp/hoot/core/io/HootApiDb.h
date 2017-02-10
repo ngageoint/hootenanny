@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,6 +28,8 @@
 #define HOOTAPIDB_H
 
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -35,6 +37,10 @@ namespace hoot
 class HootApiDb : public ApiDb
 {
 public:
+
+  static std::string className() { return "hoot::HootApiDb"; }
+
+  static unsigned int logWarnCount;
 
   HootApiDb();
 
@@ -265,6 +271,7 @@ public:
   inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
   inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
 
+  inline static QString getJobStatusTableName() { return "job_status"; }
 
   /**
    * Very handy for testing.
@@ -300,6 +307,9 @@ private:
   shared_ptr<QSqlQuery> _updateNode;
   shared_ptr<QSqlQuery> _updateRelation;
   shared_ptr<QSqlQuery> _updateWay;
+  shared_ptr<QSqlQuery> _updateJobStatus;
+  shared_ptr<QSqlQuery> _insertJobStatus;
+  shared_ptr<QSqlQuery> _jobStatusExists;
 
   shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

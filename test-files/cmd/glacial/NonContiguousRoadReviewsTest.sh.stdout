@@ -1,4 +1,4 @@
-14:26:14.331 WARN  ...etwork/OsmNetworkExtractor.cpp( 176) Found a non-contiguous relation when extracting a network. Ignoring: relation(-1)
+14:01:59.906 WARN  ...etwork/OsmNetworkExtractor.cpp( 196) Found a non-contiguous relation when extracting a network. Ignoring: relation(-1)
 type: multilinestring
 members:   Entry: role: , eid: Way:-52
   Entry: role: , eid: Way:-51
@@ -21,15 +21,9 @@ status: unknown1
 version: 1
 visible: 1
 circular error: 28.65
-14:26:33.817 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:33.821 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:33.869 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:33.872 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:33.915 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:33.919 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:34.033 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:34.036 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:38.451 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:38.462 WARN  .../linearreference/WayString.cpp(  90) Ways must connect at a node in the WayString.
-14:26:38.847 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/NonContiguousRoadReviewsTest/output.osm ...
-14:26:39.040 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/NonContiguousRoadReviewsTest/output.osm ...
+14:02:18.192 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.195 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.238 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.241 WARN  .../linearreference/WayString.cpp( 103) hoot::WayString: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+14:02:22.818 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-output/cmd/NonContiguousRoadReviewsTest/output.osm ...
+14:02:23.006 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/cmd/glacial/NonContiguousRoadReviewsTest/output.osm ...

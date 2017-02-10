@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Settings.h>
 
 // Qt
@@ -60,7 +60,7 @@ public:
     time.start();
 
     // open up both OSM files.
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(args[0], map);

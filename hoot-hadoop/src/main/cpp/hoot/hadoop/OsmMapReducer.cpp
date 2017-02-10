@@ -21,7 +21,8 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/OsmMap.h>
+#include "PbfRecordWriter.h"
 
 #include <pp/HadoopPipesUtils.h>
 
@@ -33,7 +34,7 @@ class OsmMapIterator : public pp::Iterator< shared_ptr<OsmMap> >
 public:
 
   OsmMapIterator(HadoopPipes::ReduceContext* context, shared_ptr<OsmMap>& map,
-                 PbfReader& reader) :
+                 OsmPbfReader& reader) :
     _context(context),
     _map(map),
     _reader(reader)
@@ -57,23 +58,23 @@ private:
   HadoopPipes::ReduceContext* _context;
   bool _hasNext;
   shared_ptr<OsmMap>& _map;
-  PbfReader& _reader;
+  OsmPbfReader& _reader;
 };
 
 OsmMapReducer::OsmMapReducer() : _reader(true)
 {
   _map.reset(new OsmMap());
   _context = NULL;
-  _pbfWriter = NULL;
+  _OsmPbfWriter = NULL;
 }
 
 PbfRecordWriter* OsmMapReducer::getPbfRecordWriter()
 {
-  if (_pbfWriter == NULL)
+  if (_OsmPbfWriter == NULL)
   {
     HadoopPipes::RecordWriter* writer = pp::HadoopPipesUtils::getRecordWriter(_context);
-    _pbfWriter = dynamic_cast<PbfRecordWriter*>(writer);
-    if (_pbfWriter == NULL)
+    _OsmPbfWriter = dynamic_cast<PbfRecordWriter*>(writer);
+    if (_OsmPbfWriter == NULL)
     {
       throw HootException("Unable to convert to PbfRecordWriter. Did you set the right record "
                             "writer in the Job?");
@@ -82,9 +83,9 @@ PbfRecordWriter* OsmMapReducer::getPbfRecordWriter()
     {
       throw HootException("Unexpected error: _context is NULL");
     }
-    _pbfWriter->setReduceContext(*_context);
+    _OsmPbfWriter->setReduceContext(*_context);
   }
-  return _pbfWriter;
+  return _OsmPbfWriter;
 }
 
 void OsmMapReducer::reduce(HadoopPipes::ReduceContext& context)

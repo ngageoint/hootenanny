@@ -32,13 +32,13 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/elements/Way.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 using namespace geos::geom;
 
@@ -59,6 +59,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+unsigned int AlphaShape::logWarnCount = 0;
 
 class FaceGroup
 {
@@ -465,8 +467,16 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
   // We still carry on with a warning even though the output may not be correct.
   if (fabs(preUnionArea - result->getArea()) > 1)
   {
-    LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
-      " post union: " << result->getArea());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
+        " post union: " << result->getArea());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return result;

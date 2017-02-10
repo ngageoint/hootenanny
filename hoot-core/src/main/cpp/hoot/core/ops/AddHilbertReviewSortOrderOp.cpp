@@ -32,7 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -131,7 +131,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
 
   if (_mapEnvelope.get() == 0)
   {
-    _mapEnvelope.reset(new Envelope(CalculateBoundsVisitor::getGeosBounds(map)));
+    _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
   }
 
   Coordinate center;

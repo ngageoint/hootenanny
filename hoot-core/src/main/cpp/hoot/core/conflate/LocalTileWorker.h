@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,17 +31,19 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/NodeReplacements.h>
-
 // Qt
 #include <QDir>
+
+// Tgs
+#include <tgs/HashMap.h>
 
 #include "TileWorker.h"
 
 namespace hoot
 {
+class OsmMap;
+class NodeReplacements;
+
 using namespace boost;
 
 /**

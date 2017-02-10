@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,11 +28,19 @@
 #ifndef LARGEWAYSPLITTER_H
 #define LARGEWAYSPLITTER_H
 
-// Hoot
-#include <hoot/core/OsmMap.h>
+// Boost
+#include <boost/shared_ptr.hpp>
+
+// Std
+#include <string>
 
 namespace hoot
 {
+
+using namespace boost;
+
+class OsmMap;
+class Way;
 
 /**
  * This class is designed for splitting ways that are too large into smaller ways. If the
@@ -42,6 +50,11 @@ namespace hoot
 class LargeWaySplitter
 {
 public:
+
+  static std::string className() { return "hoot::LargeWaySplitter"; }
+
+  static unsigned int logWarnCount;
+
   LargeWaySplitter(double threshold);
 
   void apply(shared_ptr<OsmMap> map);

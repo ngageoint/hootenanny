@@ -36,11 +36,12 @@
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <set>
@@ -127,8 +128,8 @@ void TileConflator::conflate(QString outputPath)
         {
           if (e.intersects(conflatedBits[j]))
           {
-            LOG_WARN("Overlapping env 1: " << e.toString());
-            LOG_WARN("Overlapping env 2: " << conflatedBits[j].toString());
+            LOG_TRACE("Overlapping env 1: " << e.toString());
+            LOG_TRACE("Overlapping env 2: " << conflatedBits[j].toString());
             throw HootException("Two tiles overlap.");
           }
         }

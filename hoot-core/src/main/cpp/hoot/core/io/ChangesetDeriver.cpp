@@ -29,6 +29,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

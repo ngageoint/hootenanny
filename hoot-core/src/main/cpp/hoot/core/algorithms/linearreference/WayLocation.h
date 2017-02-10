@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,20 +31,18 @@
 // GEOS
 #include <geos/geom/Coordinate.h>
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
-#include <hoot/core/elements/Way.h>
-
 // TGS
 #include <tgs/SharedPtr.h>
 
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+
 namespace hoot
 {
-  class Node;
-  class Way;
 
-  using namespace geos::geom;
+using namespace geos::geom;
 
 /**
  * The WayLocation has a segment index and segmentFraction. The segment index is
@@ -59,6 +57,11 @@ namespace hoot
 class WayLocation
 {
 public:
+
+  static std::string className() { return "hoot::WayLocation"; }
+
+  static unsigned int logWarnCount;
+
   // the suggested sloppy segment fraction distance from a node that is still considered on a node.
   static const double SLOPPY_EPSILON;
 
@@ -155,6 +158,7 @@ public:
   QString toString() const;
 
 protected:
+
   ConstOsmMapPtr _map;
   ConstWayPtr _way;
   int _segmentIndex;

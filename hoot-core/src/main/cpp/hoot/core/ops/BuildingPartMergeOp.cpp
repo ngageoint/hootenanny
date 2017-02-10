@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,6 +39,7 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // tgs
 #include <tgs/StreamUtils.h>
@@ -48,6 +49,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+unsigned int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
@@ -132,7 +135,15 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
     }
     if (members[i].getElementId().getType() == ElementType::Relation)
     {
-      LOG_WARN("Not expecting relations of relations: " << r->toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Not expecting relations of relations: " << r->toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }

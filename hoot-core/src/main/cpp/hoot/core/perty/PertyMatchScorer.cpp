@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -42,6 +42,8 @@
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>
@@ -156,7 +158,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
     new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodeMap().size());
-  LOG_VARD(perturbedMap->getWays().size());  
+  LOG_VARD(perturbedMap->getWays().size());
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     TagCountVisitor tagCountVisitor;

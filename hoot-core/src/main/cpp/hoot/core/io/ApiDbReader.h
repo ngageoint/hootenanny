@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/ApiDb.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -44,12 +43,18 @@
 namespace hoot
 {
 
+class ApiDb;
+
 /**
  * Abstract parent class for reading from an API style OSM database
  */
 class ApiDbReader
 {
 public:
+
+  static std::string className() { return "hoot::ApiDbReader"; }
+
+  static unsigned int logWarnCount;
 
   ApiDbReader();
   virtual ~ApiDbReader() {}

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,6 @@
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
@@ -52,6 +51,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/RemoveEmptyRelationsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 
 // Standard
 #include <limits>

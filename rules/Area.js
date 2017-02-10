@@ -13,50 +13,12 @@ exports.experimental = true;
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
-var soundexExtractor = new hoot.NameExtractor(
-    new hoot.Soundex());
-var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
-    new hoot.MeanWordSetDistance(
-        {"token.separator": "[\\s-,';]+"},
-        new hoot.LevenshteinDistance({"levenshtein.distance.alpha": 1.5})));
-var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
-    new hoot.MaxWordSetDistance(
-        {"token.separator": "[\\s-,';]+"},
-        new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
-            {"translate.string.distance.tokenize": "false"},
-            new hoot.LevenshteinDistance(
-                {"levenshtein.distance.alpha": 1.15}))));
-var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
-    new hoot.MinSumWordSetDistance(
-        {"token.separator": "[\\s-,';]+"},
-        new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
-            {"translate.string.distance.tokenize": "false"},
-            new hoot.LevenshteinDistance(
-                {"levenshtein.distance.alpha": 1.15}))));
-var weightedWordDistance = new hoot.NameExtractor(
-    new hoot.WeightedWordDistance(
-        {"token.separator": "[\\s-,';]+", "weighted.word.distance.p": 0.5},
-        new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
-            {"translate.string.distance.tokenize": "false"},
-            new hoot.LevenshteinDistance(
-                {"levenshtein.distance.alpha": 1.5}))));
-
 /*
 This matches areas to areas (area=yes), where an area is a non-building polygon.  
 
 Some examples are: a park polygon which encloses several other park related POI 
 nodes and polygons or a school polygon which encloses school buildings on the campus.
 */
-
-/**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
- */
-exports.init = function(map) {
-
-}
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is

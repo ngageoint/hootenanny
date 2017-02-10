@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,8 +27,6 @@
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
 
-#include <tbs/stats/SampleStats.h>
-
 #include "ValueAggregator.h"
 
 namespace hoot
@@ -45,12 +43,9 @@ public:
   /**
    * quantile - A value from 0 to 1 for the quantile.
    */
-  SigmaAggregator() {};
+  SigmaAggregator() {}
 
-  virtual double aggregate(vector<double>& d) const
-  {
-    return tbs::SampleStats(d).calculateUnbiasedStandardDeviation();
-  }
+  virtual double aggregate(vector<double>& d) const;
 
   virtual QString toString() const { return QString("Sigma Aggregator"); }
 

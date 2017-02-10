@@ -37,6 +37,7 @@
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
@@ -58,6 +59,8 @@
 
 namespace hoot
 {
+
+unsigned int OsmApiDb::logWarnCount = 0;
 
 const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
 const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";
@@ -198,7 +201,6 @@ void OsmApiDb::rollback()
 
   if (!_db.rollback())
   {
-    LOG_WARN("Error rolling back transaction.");
     throw HootException("Error rolling back transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
@@ -230,7 +232,6 @@ void OsmApiDb::commit()
   _resetQueries();
   if (!_db.commit())
   {
-    LOG_WARN("Error committing transaction.");
     throw HootException("Error committing transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
@@ -348,7 +349,15 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -369,7 +378,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   if (_selectNodeById->exec() == false)
   {
     QString err = _selectNodeById->lastError().text();
-    LOG_WARN(sql);
     throw HootException("Error selecting node by id: " + QString::number(elementId) +
       " Error: " + err);
   }
@@ -396,7 +404,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   if (_selectElementsForMap->exec() == false)
   {
     QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " Error: " + err);
   }

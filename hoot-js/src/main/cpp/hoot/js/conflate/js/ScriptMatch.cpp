@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/conflate/Merger.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/MapProjector.h>
@@ -60,6 +60,8 @@
 namespace hoot
 {
 using namespace Tgs;
+
+unsigned int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -388,7 +390,15 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
       result[it.key()] = d;
       if (isnan(result[it.key()]))
       {
-        LOG_WARN("found NaN feature value for: " << it.key());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("found NaN feature value for: " << it.key());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }

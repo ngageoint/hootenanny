@@ -17,7 +17,6 @@
 #ifndef PAINTNODESMAPPER_H
 #define PAINTNODESMAPPER_H
 
-#include "MapStats.h"
 #include "NodeDensity.h"
 #include "OsmMapMapper.h"
 

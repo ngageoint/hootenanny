@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-58" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9019184943870968" lon="-43.1762847051900991">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Dedo de Gourmet"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-57" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9017229622469038" lon="-43.1746854315022901">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Restaurante Blanco"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-56" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9009333677598974" lon="-43.1759817019686025">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Verse Cafe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-55" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9024584032063991" lon="-43.1839058975238927">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Subway"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-54" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9097022356963045" lon="-43.1834125724166000">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Restaurante Ming-ye"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-53" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9100184825584989" lon="-43.1840064723296990">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Bking"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-52" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9053417042181024" lon="-43.1746732126870967">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.991Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Lype"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-51" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.8999527334235040" lon="-43.1999898240349012">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.991Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Als"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-50" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9118824542224004" lon="-43.2020945977170001">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.991Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Dom Barcelas"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-49" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.8975612395492050" lon="-43.1805669682374003">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.991Z"/>
+        <tag k="hoot:source" v="3"/>
+        <tag k="name" v="Hamburger"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-48" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9054636574794017" lon="-43.1748239839898034">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Lype"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9031213213519003" lon="-43.1755251772900905">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Beco de Hamburger"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-45" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9016992017327077" lon="-43.1747223906424011">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Galaxy Cafe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-44" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9011633798923917" lon="-43.1761287612957858">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Cafe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-43" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9017395717855941" lon="-43.1771008701893919">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Restaurante Miletto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-41" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.8999017033004968" lon="-43.2002833707067921">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Foodie"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-38" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.8976031180629036" lon="-43.1829118318802969">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="hoot:source" v="2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Rio Porto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-36" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9098199999999999" lon="-43.1831800000000001">
+        <tag k="addr:full" v="rua do lavradio"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.518Z"/>
+        <tag k="note" v="zip=20261004"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante Ming-ye"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-35" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8973648399999981" lon="-43.1807432459999916">
+        <tag k="addr:full" v="Avenida Rio Branco, 01 loja C"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.518Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="San Benito R.B.1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-34" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9022599000000078" lon="-43.1760599999999997">
+        <tag k="addr:full" v="Rua Primeiro de Março nº 37, Loja 37-A"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Subway - Rua Primeiro de Março"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-33" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8999999999999986" lon="-43.1999999999999957">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z;2017-01-16T21:26:31.589Z"/>
+        <tag k="hoot:source" v="1,2"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Go Japa Delivery"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-32" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9024099999999997" lon="-43.1841099000000028">
+        <tag k="addr:full" v="Avenida Passos nº 120"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Subway - Avenida Passos"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-31" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9017800000000022" lon="-43.1778400000000033">
+        <tag k="addr:full" v="itinerante - Feiras de Food truck"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=20000000"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Forster Haus"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-29" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9089999999999918" lon="-43.1836899999999986">
+        <tag k="addr:full" v="Rua do Lavradio N° 50"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=20231"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Cantinho do Senado"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-28" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9055195000000005" lon="-43.1746596999999994">
+        <tag k="addr:full" v="Av. Erasmo Braga, 278, loja A"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=20020000"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Lype"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-27" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9024637706429992" lon="-43.1760230429749967">
+        <tag k="addr:full" v="Rua do Ouvidor, 52 Centro ///  Rua Bambina, 145 Botafogo"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.519Z"/>
+        <tag k="note" v="zip=20040"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Bistrô Ouvidor"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-24" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9008600000000051" lon="-43.1765800000000013">
+        <tag k="addr:full" v="CCBB - Rua Primeiro de Março 66 - Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=20010000"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Verso Café e Restaurante"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-23" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9088896730239995" lon="-43.1847203248009990">
+        <tag k="addr:full" v="Av. Gomes Freire, 226. Lapa."/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Refeitório RJ"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-22" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8976229525420081" lon="-43.1827876674789977">
+        <tag k="addr:full" v="Rua Sacadura Cabral, 59 Loja A - Saude"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=20081261"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Aldeia Do Porto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-21" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9130453000000003" lon="-43.2019191999999990">
+        <tag k="addr:full" v="Avenida Salvador de Sá, 197 cidade nova"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=20211260"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante Modivida"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9121400000000079" lon="-43.2027500000000018">
+        <tag k="addr:full" v="Rua Neri Pinheiro 331 Cidade Nova"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Conexão Filet E Folhas Cidade Nova"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-19" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9016400000000004" lon="-43.1772199999999842">
+        <tag k="addr:full" v="Rua da Alfândega, 19"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante Miletto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-18" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9016608999999924" lon="-43.1771011000000016">
+        <tag k="addr:full" v="Rua Candelária, 9 - 13º Andar | Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Espaço Candelária"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-17" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8975199073420015" lon="-43.1805248305149831">
+        <tag k="addr:full" v="Av. Rio Branco, 4, loja B"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=20090000"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="LeMax Hamburgueria"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-16" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9019493799489950" lon="-43.1748221203329976">
+        <tag k="addr:full" v="Rua do Ouvidor 16 - Praça XV"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.520Z"/>
+        <tag k="note" v="zip=20010150"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Al Khayam Restaurante"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-15" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9016700000000064" lon="-43.1746100000000013">
+        <tag k="addr:full" v="Rua do Ouvidor 10, Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante Rio Minho"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-14" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9020599999999988" lon="-43.1771400000000014">
+        <tag k="addr:full" v="Rua Buenos Aires 22"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Verde Vício"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-12" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9014664000000003" lon="-43.1754875000000027">
+        <tag k="addr:full" v="Rua do Rosário, 34, Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Brasserie Rosário Restaurante"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-11" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8970999000000006" lon="-43.1809999999999974">
+        <tag k="addr:full" v="Av Rio Branco 1 Praça Mauá"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Filet e Folhas Rio Branco 1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-10" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9119699999999895" lon="-43.2018600000000035">
+        <tag k="addr:full" v="Rua Correia Vasques,46 - Cidade Nova"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Brasserie Cidade Nova"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-9" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8983102719680005" lon="-43.1800951093180032">
+        <tag k="addr:full" v="Avenida Rio Branco, 19"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Cozinha Mironga"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-8" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9098199999999999" lon="-43.1842600000000019">
+        <tag k="addr:full" v="Gomes freire n°361"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.521Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Koni Store Gomes Freire"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9031300000000009" lon="-43.1756799999999998">
+        <tag k="addr:full" v="Beco dos Barbeiros, 6a - Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=20011010"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Beco do Hamburguer"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9109999999999978" lon="-43.1827299999999994">
+        <tag k="addr:full" v="Rua do Lavradio, 126 - LAPA"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Conexão Filet &amp; Folhas Lavradio"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.8975430563249915" lon="-43.1830676610340021">
+        <tag k="addr:full" v="rua sacadura cabral nº67"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=20081261"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante rio park"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9020834059279963" lon="-43.1751140895179972">
+        <tag k="addr:full" v="Rua do Ouvidor 23"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Samba Caffè"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-3" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9013799999999996" lon="-43.1765499999999989">
+        <tag k="addr:full" v="Rua da Alfândega n. 7 - Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=20061020"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Hamburgueria da Alfândega"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9102030878170098" lon="-43.1840252353320011">
+        <tag k="addr:full" v="Av. Gomes Freire, 379"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=0"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Cantinho do Velho"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1" timestamp="2017-01-16T21:19:47Z" version="1" changeset="6384" lat="-22.9019399999999926" lon="-43.1833499999999972">
+        <tag k="addr:full" v="Rua Teófilo Otoni, 206 Centro"/>
+        <tag k="source:ingest:datetime" v="2017-01-16T21:19:47.522Z"/>
+        <tag k="note" v="zip=20090070"/>
+        <tag k="hoot:source" v="1"/>
+        <tag k="is_in:city" v="Rio de Janeiro"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="is_in:country" v="Brazil"/>
+        <tag k="name" v="Restaurante Trattoria Sarda"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-15" role="reviewee"/>
+        <member type="node" ref="-57" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:note" v="Somewhat similar (10m) - similar names and generic type"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

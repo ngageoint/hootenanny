@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,11 +40,14 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 
 #include "Way.h"
 
 namespace hoot
 {
+
+unsigned int Relation::logWarnCount = 0;
 
 QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
@@ -259,7 +262,15 @@ void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 
@@ -307,7 +318,15 @@ void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 

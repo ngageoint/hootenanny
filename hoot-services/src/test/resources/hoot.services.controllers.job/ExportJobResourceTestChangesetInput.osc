@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><osmChange generator="hootenanny" version="0.6">
+    <modify>
+        <way id="1" timestamp="" version="0">
+            <nd ref="1"/>
+            <nd ref="2"/>
+            <tag k="key1" v="value1"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <node id="3" lat="-89.0000000000000000" lon="69.0000000000000000" timestamp="" version="0"/>
+    </modify>
+    <delete>
+        <way id="2" timestamp="" version="0">
+            <nd ref="4"/>
+            <nd ref="5"/>
+            <tag k="key1" v="value1"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </delete>
+    <create>
+        <node id="6" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp="" version="0]"/>
+    </create>
+</osmChange>

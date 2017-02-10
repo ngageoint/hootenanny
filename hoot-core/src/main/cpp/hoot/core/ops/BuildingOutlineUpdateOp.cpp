@@ -45,9 +45,12 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
+
+unsigned int BuildingOutlineUpdateOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 
@@ -156,7 +159,15 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
         QString("Element with uncleanable topology.  Error occurred during union ") +
         QString("operation of element: ") + buildingMember->getElementId().toString();
       ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-      LOG_WARN(errMsg + ": " + QString(e.what()))
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(errMsg + ": " + QString(e.what()));
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }
@@ -206,7 +217,15 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
                   "Marking parent element for review for element with uncleanable topology: " +
                   way->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                LOG_WARN(errMsg + ": " + QString(e.what()))
+                if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+                {
+                  LOG_WARN(errMsg + ": " + QString(e.what()));
+                }
+                else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+                {
+                  LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+                }
+                logWarnCount++;
               }
             }
           }
@@ -250,7 +269,15 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
                   "Marking parent element for review for element with uncleanable topology: " +
                   relation->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                LOG_WARN(errMsg + ": " + QString(e.what()))
+                if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+                {
+                  LOG_WARN(errMsg + ": " + QString(e.what()));
+                }
+                else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+                {
+                  LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+                }
+                logWarnCount++;
               }
             }
           }
@@ -262,9 +289,17 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
         }
         else
         {
-          LOG_WARN(
-            "Found a building with a non-multipolygon relation 'part'. " << relation->toString());
-          LOG_WARN("Building: " << building->toString());
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Found a building with a non-multipolygon relation 'part'. " <<
+              relation->toString() << "Building: " << building->toString());
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
       }
     }
@@ -272,7 +307,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
 
   if (outline->isEmpty() == false)
   {
-    LOG_DEBUG("Processing outline...");
+    LOG_TRACE("Processing outline...");
     const shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());

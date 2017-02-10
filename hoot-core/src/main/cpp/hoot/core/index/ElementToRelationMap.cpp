@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,8 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -153,7 +155,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   public:
     CheckVisitor(const OsmMap& map, const ElementToRelationMap& mapping) :
       _map(map),
-      _mapping(mapping)
+      _mapping(mapping),
+      _logWarnCount(0)
     {
       _good = true;
     }
@@ -182,8 +185,16 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
         {
           if (childEid != r->getElementId() && containsRecursive(r, ElementId(type, id)) == false)
           {
-            LOG_WARN("ElementToRelationMap expected relation " << *it <<
-              " to contain: " << type.toString() << " " << id << " but it does not.");
+            if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+            {
+              LOG_WARN("ElementToRelationMap expected relation " << *it <<
+                " to contain: " << type.toString() << " " << id << " but it does not.");
+            }
+            else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+            {
+              LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            _logWarnCount++;
             _good = false;
           }
         }
@@ -192,8 +203,16 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
           if (containsRecursive(r, ElementId(type, id)) == true &&
             r->getElementId() != ElementId(type, id))
           {
-            LOG_WARN("ElementToRelationMap didn't expect relation " << *it <<
-              " to contain: " << type.toString() << " " << id << " but it does.");
+            if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+            {
+              LOG_WARN("ElementToRelationMap didn't expect relation " << *it <<
+                " to contain: " << type.toString() << " " << id << " but it does.");
+            }
+            else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+            {
+              LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            _logWarnCount++;
             _good = false;
           }
         }
@@ -206,6 +225,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     const OsmMap& _map;
     const ElementToRelationMap& _mapping;
     bool _good;
+    //this should be static, but there's no header file
+    unsigned int _logWarnCount;
   };
 
   CheckVisitor visitor(map, *this);

@@ -48,6 +48,10 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Progress.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -130,6 +134,7 @@ public:
   Progress streamGetProgress() const;
 
 protected:
+
   Meters _circularError;
   Status _status;
   shared_ptr<OsmMap> _map;
@@ -146,13 +151,6 @@ protected:
   auto_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
-
-  /*
-  long _partialNodesRead;
-  long _partialWaysRead;
-  long _partialRelationsRead;
-  bool _firstPartialReadCompleted;
-  */
 
   //partial read iterators
   NodeMap::const_iterator _nodesItr;
@@ -642,8 +640,8 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
     }
     catch (IllegalArgumentException& e)
     {
-      LOG_WARN("Error projecting geometry with tags: " << t.toString());
-      throw e;
+      throw IllegalArgumentException(
+        "Error projecting geometry with tags: " + t.toString() + " " + e.what());
     }
   }
 }
@@ -1058,7 +1056,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
       progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && _count > 0)
   {
     cout << endl;
   }
@@ -1117,10 +1115,10 @@ void OgrReaderInternal::_reproject(double& x, double& y)
     double iny = y;
     if (_transform->Transform(1, &x, &y) == FALSE)
     {
-      LOG_WARN("Source x: " << inx);
-      LOG_WARN("Source y: " << iny);
-      LOG_WARN("Target x: " << x);
-      LOG_WARN("Target y: " << y);
+      LOG_TRACE("Source x: " << inx);
+      LOG_TRACE("Source y: " << iny);
+      LOG_TRACE("Target x: " << x);
+      LOG_TRACE("Target y: " << y);
       throw IllegalArgumentException("Unable to transform point. Is the point outside the "
                                      "projection bounds?");
     }

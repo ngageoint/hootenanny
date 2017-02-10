@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
+#include <hoot/core/io/OsmApiDbChangesetSqlWriter.h>
 
 // Qt
 #include <QFile>
@@ -67,7 +67,7 @@ public:
     else if (args[0].endsWith(".osc.sql"))
     {
       QUrl url(args[1]);
-      OsmApiDbSqlChangesetWriter changesetWriter(url);
+      OsmApiDbChangesetSqlWriter changesetWriter(url);
 
       if (args.size() == 4)
       {

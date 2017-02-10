@@ -35,12 +35,17 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
 
 namespace hoot
 {
+
+unsigned int NodeMatcher::logWarnCount = 0;
 
 NodeMatcher::NodeMatcher()
 {
@@ -96,20 +101,22 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
   if (result.size() > 0 && badSpots > 0)
   {
-    LOG_WARN("nid: " << nid);
-    LOG_WARN(map->getNode(nid)->toString());
-    LOG_WARN("wids: " << wids);
+    LOG_TRACE("nid: " << nid);
+    LOG_VART(map->getNode(nid)->toString());
+    LOG_TRACE("wids: " << wids);
     for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
     {
-      LOG_WARN(map->getWay(*it)->toString());
+      LOG_VART(map->getWay(*it)->toString());
     }
 
     //shared_ptr<OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
-    throw HootException("calculateAngles was called with a node that was not a start or end node"
-                        " on the specified way.");
+    const QString msg =
+      "calculateAngles was called with a node that was not a start or end node on the specified way.";
+    //where is this being caught?
+    throw HootException(msg);
   }
 
   return result;
@@ -202,7 +209,15 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   // this is very unsual and will slow things down.
   if (theta1.size() > 6 && theta2.size() > 6)
   {
-    LOG_WARN("7 intersections at one spot? Odd. Giving it a high angleScore.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Greater than seven intersections at one spot? Odd.  Giving it a high angleScore.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     LOG_VART(nid1);
     LOG_VART(nid2);
     LOG_VART(wids1);

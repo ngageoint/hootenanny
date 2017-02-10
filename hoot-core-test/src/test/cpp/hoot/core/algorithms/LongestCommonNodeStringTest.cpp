@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -63,7 +63,7 @@ public:
 
   void runTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

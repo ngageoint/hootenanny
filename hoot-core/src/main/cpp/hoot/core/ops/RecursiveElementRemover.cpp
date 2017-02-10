@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 
 namespace hoot
 {
@@ -57,7 +57,7 @@ void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
 
   const ConstElementPtr& e = map->getElement(_eid);
   LOG_TRACE("Removing: " << e->getElementId() << "...");
-  SetVisitor sv;
+  ElementIdSetVisitor sv;
   e->visitRo(*map, sv);
 
   // find all potential candidates for erasure. We'll whittle away any invalid candidates.
