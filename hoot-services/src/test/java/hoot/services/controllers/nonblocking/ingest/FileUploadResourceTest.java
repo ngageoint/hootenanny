@@ -57,7 +57,6 @@ public class FileUploadResourceTest {
     private static File homeFolder;
     private static String original_HOME_FOLDER;
 
-
     private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
         for (String resource : resources) {
             URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/nonblocking/ingest/FileUploadResourceTest/" + resource);
@@ -858,27 +857,6 @@ public class FileUploadResourceTest {
         item.write(out);
         fileItemsList.add(item);
         assertTrue(out.exists());
-
-        /*
-         * Map<String,String> uploadedFiles = new HashMap<String, String>();
-         * Map<String,String> uploadedFilesPaths = new HashMap<String,
-         * String>();
-         * 
-         * res.serializeFGDB(fileItemsList, jobId, uploadedFiles,
-         * uploadedFilesPaths );
-         * 
-         * org.junit.Assert.assertEquals("GDB", uploadedFiles.get("fgdbTest"));
-         * org.junit.Assert.assertEquals("fgdbTest.gdb",
-         * uploadedFilesPaths.get("fgdbTest"));
-         * 
-         * File fgdbpath = new File(wkdirpath + "/fgdbTest.gdb");
-         * org.junit.Assert.assertTrue(fgdbpath.exists());
-         * 
-         * File content = new File(wkdirpath + "/fgdbTest.gdb/dummy1.gdbtable");
-         * org.junit.Assert.assertTrue(content.exists());
-         * 
-         * FileUtils.forceDelete(workingDir);
-         */
     }
 
     @Test
@@ -914,26 +892,6 @@ public class FileUploadResourceTest {
         item.write(out);
         fileItemsList.add(item);
         assertTrue(out.exists());
-
-        /*
-         * Map<String,String> uploadedFiles = new HashMap<String, String>();
-         * Map<String,String> uploadedFilesPaths = new HashMap<String,
-         * String>();
-         * 
-         * res.serializeUploadedFiles(fileItemsList, jobId, uploadedFiles,
-         * uploadedFilesPaths, wkdirpath);
-         * 
-         * org.junit.Assert.assertEquals("OSM", uploadedFiles.get("dummy1"));
-         * org.junit.Assert.assertEquals("dummy1.osm",
-         * uploadedFilesPaths.get("dummy1"));
-         * 
-         * 
-         * 
-         * File content = new File(wkdirpath + "/dummy1.osm");
-         * org.junit.Assert.assertTrue(content.exists());
-         * 
-         * FileUtils.forceDelete(workingDir);
-         */
     }
 
     private static Method getBuildNativeRequestMethod() throws NoSuchMethodException {

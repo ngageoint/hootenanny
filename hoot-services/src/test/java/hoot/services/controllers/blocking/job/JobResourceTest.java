@@ -41,6 +41,7 @@ import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -96,6 +97,7 @@ public class JobResourceTest {
      *
      * @throws Exception
      */
+    @Ignore // TODO: This test needs to be reworked
     @Test
     @Category(UnitTest.class)
     public void testProcessChainJob() throws Exception {
@@ -217,6 +219,7 @@ public class JobResourceTest {
      *
      * @throws Exception
      */
+    @Ignore // TODO: This test needs to be reworked
     @Test
     @Category(UnitTest.class)
     public void testProcessChainJobFailure() throws Exception {

@@ -46,6 +46,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
@@ -1018,16 +1019,19 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         }
     }
 
-//    @Test(expected = WebApplicationException.class)
-//    @Category(UnitTest.class)
-//    public void testGetMapBoundsOutsideWorld() throws Exception {
-//        // Try to query nodes with invalid bounds.
-//        Document doc = target("api/0.6/map")
-//                    .queryParam("mapId", String.valueOf(mapId))
-//                    .queryParam("bbox", "-181,-90,180,90")
-//                    .request(MediaType.TEXT_XML)
-//                    .get(Document.class);
-//    }
+    // As of 02/10/2017 Boundary check is still disabled on the server side.
+    // There is an issue (https://github.com/ngageoint/hootenanny/issues/1199) in github that's related to this test.
+    @Ignore
+    @Test(/*expected = WebApplicationException.class*/)
+    @Category(UnitTest.class)
+    public void testGetMapBoundsOutsideWorld() throws Exception {
+        // Try to query nodes with invalid bounds.
+        Document doc = target("api/0.6/map")
+                    .queryParam("mapId", String.valueOf(mapId))
+                    .queryParam("bbox", "-181,-90,180,90")
+                    .request(MediaType.TEXT_XML)
+                    .get(Document.class);
+    }
 
     @Test
     @Category(UnitTest.class)
@@ -1099,8 +1103,6 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetDeletedLayer() throws Exception {
-        // delete the only existing map
-/*
         createQuery(mapId).delete(maps).where(maps.id.eq(mapId)).execute();
 
         assertNull(createQuery(mapId).select(maps).from(maps).where(maps.id.eq(mapId)).fetchOne());
@@ -1109,7 +1111,15 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         MapLayers mapLayers = target("api/0.6/map/layers").request(MediaType.APPLICATION_JSON).get(MapLayers.class);
 
         assertNotNull(mapLayers);
-        assertNull(mapLayers.getLayers());
-*/
+
+        MapLayer[] mLayers = mapLayers.getLayers();
+
+        if (mLayers != null) {
+            for (MapLayer layer : mLayers) {
+                if (layer.getId() == mapId) {
+                    fail("Map with ID = " + mapId + " must not be present!");
+                }
+            }
+        }
     }
 }
