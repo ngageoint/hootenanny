@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This script is meant for installing an Ubuntu Hootenanny development enviroment to bare metal 
-# for performance reasons (faster compiles, etc.).
+# for performance reasons (faster compiles than using vagrant on virtualbox with distcc).
 #
 # Pre-req:
 #
@@ -57,32 +57,12 @@ sleep 3
 HOOT_HOME=$HOME/hoot
 echo HOOT_HOME: $HOOT_HOME
 
-# Use tomcat 7 here instead of tomcat 6, since eclipse installed from repos needs tomcat 7.
-# TODO: This should go away after the upgrade to Tomcat 8.5.
-
-echo "Backing up Tomcat 6 settings..."
-mkdir -p ~/tmp
-cp /etc/default/tomcat6 ~/tmp
-cp /etc/tomcat6/server.xml ~/tmp
-cp /etc/tomcat6/context.xml ~/tmp
-
-echo "Removing Tomcat 6..."
-sudo apt-get remove tomcat6
-sudo apt-get autoremove -y
-
-echo "Installing Tomcat 7..."
-sudo apt-get install -y libtomcat7-java
-
-echo "Restoring settings to Tomcat 7..."
-sudo cp ~/tmp/tomcat6 /etc/default
-sudo cp ~/tmp/server.xml /etc/tomcat7
-sudo cp ~/tmp/context.xml /etc/tomcat7
-# TODO: Do tomcat7 group permissions need to be set on these files in a developer environment?; Do sym links have to be made for the log dirs, etc?
-sleep 3
-
 echo "Installing development environment dependencies..."
 
 echo "Installing IDEs..."
+# Unfortunately, the eclipse that ubuntu 14.04 comes with does not support tomcat 8, which hoot has now moved to.  This needs to
+# be updated to either manually install a version of eclipse that does support tomcat 8 or wait until hoot upgrades to a newer 
+# version of ubuntu which will likely install a version of eclipse that does integrate with tomcat 8.
 sudo apt-get install -y qtcreator eclipse eclipse-jdt eclipse-pde eclipse-platform*
 sleep 3
 
