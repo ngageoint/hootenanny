@@ -59,10 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
-import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.geo.BoundingBox;
-import hoot.services.job.ChainJob;
 import hoot.services.job.Job;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
@@ -74,7 +72,7 @@ import hoot.services.wfs.WFSManager;
 @Controller
 @Path("/export")
 @Transactional
-public class ExportJobResource extends AsynchronousJobResource {
+public class ExportJobResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
     public ExportJobResource() {}
@@ -109,7 +107,7 @@ public class ExportJobResource extends AsynchronousJobResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public JobId process(String params) {
+    public Response process(String params) {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
@@ -162,24 +160,28 @@ public class ExportJobResource extends AsynchronousJobResource {
                         }
                 };
 
-                super.processChainJob(new ChainJob(jobId, commands));
+                super.processJob(new Job(jobId, commands));
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
 
-                Command command = () -> {
-                    ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
-                    return externalCommandManager.exec(jobId, exportToOSMCommand);
+                Command[] commands = {
+                    () -> {
+                        ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
+                        return externalCommandManager.exec(jobId, exportToOSMCommand);
+                    }
                 };
 
-                super.processJob(new Job(jobId, command));
+                super.processJob(new Job(jobId, commands));
             }
             else if ("osc".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToChangesetCommandArgs(commandArgs, oParams);
 
-                Command command = () -> {
-                    ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
-                    return externalCommandManager.exec(jobId, exportToOSMCommand);
+                Command[] command = {
+                    () -> {
+                        ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
+                        return externalCommandManager.exec(jobId, exportToOSMCommand);
+                    }
                 };
 
                 super.processJob(new Job(jobId, command));
@@ -205,12 +207,14 @@ public class ExportJobResource extends AsynchronousJobResource {
                     commandArgs.add(arg);
                 }
 
-                Command command = () -> {
-                    ExternalCommand exportCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
-                    return externalCommandManager.exec(jobId, exportCommand);
+                Command[] commands = {
+                    () -> {
+                        ExternalCommand exportCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
+                        return externalCommandManager.exec(jobId, exportCommand);
+                    }
                 };
 
-                super.processJob(new Job(jobId, command));
+                super.processJob(new Job(jobId, commands));
             }
         }
         catch (WebApplicationException wae) {
@@ -221,7 +225,7 @@ public class ExportJobResource extends AsynchronousJobResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return new JobId(jobId);
+        return super.createJobIdResponse(jobId);
     }
 
     JSONArray getExportToChangesetCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {

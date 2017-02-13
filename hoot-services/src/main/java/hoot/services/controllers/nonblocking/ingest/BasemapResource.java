@@ -70,13 +70,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.job.Job;
 
 @Controller
 @Path("/basemap")
 @Transactional
-public class BasemapResource extends AsynchronousJobResource {
+public class BasemapResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
     private static final Map<String, String> basemapRasterExt;
 
@@ -156,13 +157,15 @@ public class BasemapResource extends AsynchronousJobResource {
                 String inputFileName = uploadedFilesPaths.get(fileName);
                 String jobId = UUID.randomUUID().toString();
 
-                Command command = () -> {
-                    IngestBasemapCommand ingestBasemapCommand = new IngestBasemapCommand(jobId, groupId,
-                            inputFileName, projection, basemapName, this.getClass());
-                    return externalCommandManager.exec(jobId, ingestBasemapCommand);
+                Command[] commands = {
+                    () -> {
+                        ExternalCommand ingestBasemapCommand = new IngestBasemapCommand(jobId, groupId,
+                                inputFileName, projection, basemapName, this.getClass());
+                        return externalCommandManager.exec(jobId, ingestBasemapCommand);
+                    }
                 };
 
-                super.processJob(new Job(jobId, command));
+                super.processJob(new Job(jobId, commands));
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);

@@ -78,8 +78,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
-import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.command.InternalCommand;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.models.db.FolderMapMappings;
@@ -102,7 +102,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Controller
 @Path("/api/0.6/map")
 @Transactional
-public class MapResource extends AsynchronousJobResource {
+public class MapResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
     /**
@@ -665,23 +665,25 @@ public class MapResource extends AsynchronousJobResource {
     @Path("/delete")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public JobId deleteLayers(@QueryParam("mapId") String mapId) {
-        try {
-            String jobId = UUID.randomUUID().toString();
+    public Response deleteLayers(@QueryParam("mapId") String mapId) {
+        String jobId = UUID.randomUUID().toString();
 
-            Command command = () -> {
-                DeleteMapResourcesCommand mapResourcesCleaner = new DeleteMapResourcesCommand(mapId);
-                return mapResourcesCleaner.execute();
+        try {
+            Command[] commands = {
+                () -> {
+                    InternalCommand mapResourcesCleaner = new DeleteMapResourcesCommand(mapId);
+                    return mapResourcesCleaner.execute();
+                }
             };
 
-            super.processJob(new Job(jobId, command));
-
-            return new JobId(jobId);
+            super.processJob(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
+
+        return super.createJobIdResponse(jobId);
     }
 
     /**

@@ -77,9 +77,6 @@ class IngestBasemapCommand extends ExternalCommand {
         arg.put("jobid", jobId);
         commandArgs.add(arg);
 
-        this.put("exectype", "bash");
-        this.put("exec", BASEMAP_RASTER_TO_TILES);
-        this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+        super.configureAsBashCommand(BASEMAP_RASTER_TO_TILES, caller, commandArgs);
     }
 }

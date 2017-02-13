@@ -53,11 +53,10 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
-import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.controllers.nonblocking.RasterToTilesCommand;
 import hoot.services.geo.BoundingBox;
-import hoot.services.job.ChainJob;
+import hoot.services.job.Job;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
@@ -66,7 +65,7 @@ import hoot.services.utils.JsonUtils;
 @Controller
 @Path("/conflation")
 @Transactional
-public class ConflationResource extends AsynchronousJobResource {
+public class ConflationResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
 
     /**
@@ -105,7 +104,7 @@ public class ConflationResource extends AsynchronousJobResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public JobId process(String params) {
+    public Response process(String params) {
         logger.debug("Conflation resource raw request: {}", params);
 
         String jobId = UUID.randomUUID().toString();
@@ -193,7 +192,7 @@ public class ConflationResource extends AsynchronousJobResource {
 
             Command[] commands = {
                     () -> {
-                        ConflateCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
+                        ExternalCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
                         return externalCommandManager.exec(jobId, conflateCommand);
                     },
                     () -> {
@@ -206,7 +205,7 @@ public class ConflationResource extends AsynchronousJobResource {
                     }
             };
 
-            super.processChainJob(new ChainJob(jobId, commands));
+            super.processJob(new Job(jobId, commands));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -216,7 +215,7 @@ public class ConflationResource extends AsynchronousJobResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return new JobId(jobId);
+        return super.createJobIdResponse(jobId);
     }
 
     private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {

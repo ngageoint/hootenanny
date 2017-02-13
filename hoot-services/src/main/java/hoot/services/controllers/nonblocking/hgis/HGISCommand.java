@@ -48,10 +48,7 @@ class HGISCommand extends ExternalCommand {
         arg.put("OUTPUT", generateDbMapParam(outputMap));
         commandArgs.add(arg);
 
-        this.put("exectype", "bash");
-        this.put("exec", scriptName);
-        this.put("caller", caller);
-        this.put("params", commandArgs);
+        super.configureAsBashCommand(scriptName, caller, commandArgs);
     }
 
     /**

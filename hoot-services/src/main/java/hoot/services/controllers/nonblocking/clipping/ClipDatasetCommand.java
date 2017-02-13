@@ -55,9 +55,6 @@ class ClipDatasetCommand extends ExternalCommand {
         hootDBURL.put("DB_URL", HOOT_APIDB_URL);
         commandArgs.add(hootDBURL);
 
-        this.put("exectype", "make");
-        this.put("exec", CLIP_DATASET_MAKEFILE_PATH);
-        this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+        super.configureAsMakeCommand(CLIP_DATASET_MAKEFILE_PATH, caller, commandArgs);
     }
 }

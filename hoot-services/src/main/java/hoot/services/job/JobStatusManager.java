@@ -143,7 +143,7 @@ public class JobStatusManager {
         return null;
     }
 
-    public List<CommandStatus> getCommandStatusUsing(String jobId) {
+    public List<CommandStatus> getCommandDetail(String jobId) {
         try {
             return createQuery().select(commandStatus).from(commandStatus).where(commandStatus.jobId.eq(jobId)).fetch();
         }

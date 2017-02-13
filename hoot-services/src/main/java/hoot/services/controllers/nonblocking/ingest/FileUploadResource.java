@@ -60,16 +60,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.controllers.nonblocking.RasterToTilesCommand;
-import hoot.services.job.ChainJob;
+import hoot.services.job.Job;
 import hoot.services.utils.MultipartSerializer;
 
 
 @Controller
 @Path("/ingest")
 @Transactional
-public class FileUploadResource extends AsynchronousJobResource {
+public class FileUploadResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
 
     /**
@@ -247,7 +247,7 @@ public class FileUploadResource extends AsynchronousJobResource {
                     }
             };
 
-            super.processChainJob(new ChainJob(jobId, commands));
+            super.processJob(new Job(jobId, commands));
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();

@@ -162,9 +162,6 @@ class FileETLCommand extends ExternalCommand {
             throw new RuntimeException("Error parsing: " + param.toJSONString(), pe);
         }
 
-        this.put("exectype", "make");
-        this.put("exec", ETL_MAKEFILE);
-        this.put("caller", this.getClass().getName());
-        this.put("params", commandArgs);
+        super.configureAsMakeCommand(ETL_MAKEFILE, this.getClass(), commandArgs);
     }
 }

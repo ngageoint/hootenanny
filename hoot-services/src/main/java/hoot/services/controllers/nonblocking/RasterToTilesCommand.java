@@ -83,16 +83,10 @@ public class RasterToTilesCommand extends ExternalCommand {
             int rasterSize = (Integer) zoomInfo.get("rastersize");
 
             JSONArray commandArgs = createCommandParams(name, zoomList, rasterSize, userEmail, mapId);
-            createMakeScriptCommandReq(commandArgs);
-        }
-    }
 
-    private void createMakeScriptCommandReq(JSONArray args) {
-        super.put("exectype", "make");
-        super.put("exec", RASTER_TO_TILES);
-        super.put("caller", RasterToTilesCommand.class.getSimpleName());
-        super.put("params", args);
-        super.put("erroraswarning", "true");
+            super.configureAsMakeCommand(RASTER_TO_TILES, RasterToTilesCommand.class, commandArgs);
+            super.put("erroraswarning", "true");
+        }
     }
 
     private static JSONArray createCommandParams(String name, String zoomList, int rasterSize, String userEmail, long mapId) {

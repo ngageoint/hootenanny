@@ -42,6 +42,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.job.Job;
 
 
@@ -75,13 +76,15 @@ public class HGISFilterResource extends HGISResource {
         try {
             String jobId = UUID.randomUUID().toString();
 
-            Command command = () -> {
-                FilterNonHGISPOIsCommand filterNonHgisPoisCommand = new FilterNonHGISPOIsCommand(
+            Command[] commands = {
+                () -> {
+                    ExternalCommand filterNonHgisPoisCommand = new FilterNonHGISPOIsCommand(
                         request.getSource(), request.getOutput(), this.getClass());
-                return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
+                    return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
+                }
             };
 
-            super.processJob(new Job(jobId, command));
+            super.processJob(new Job(jobId, commands));
 
             response.setJobId(jobId);
         }

@@ -42,8 +42,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.job.ChainJob;
+import hoot.services.job.Job;
 
 
 @Controller
@@ -81,7 +82,7 @@ public class HGISReviewResource extends HGISResource {
 
             Command[] commands = {
                     () -> {
-                        HGISPrepareForValidationCommand validationCommand = new HGISPrepareForValidationCommand(
+                        ExternalCommand validationCommand = new HGISPrepareForValidationCommand(
                                 request.getSourceMap(), request.getOutputMap(), this.getClass());
                         return super.externalCommandManager.exec(jobId, validationCommand);
                     },
@@ -91,7 +92,7 @@ public class HGISReviewResource extends HGISResource {
                     }
             };
 
-            super.processChainJob(new ChainJob(jobId, commands));
+            super.processJob(new Job(jobId, commands));
 
             response.setJobId(jobId);
         }

@@ -34,6 +34,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.ApplicationContextUtils;
+import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 
 
@@ -68,26 +69,36 @@ public class JobRunnable implements Runnable {
         }
     }
 
-    private void processJob() throws Exception {
-        logger.debug("Begin processing job with ID: {}", job.getJobId());
+    private void processJob() {
+        logger.debug("Start processing chain Job with jobId = {}", job.getJobId());
 
         try {
             jobStatusManager.addJob(job.getJobId());
 
-            CommandResult result = job.getCommand().execute();
+            int commandCounter = 0;
+            for (Command command : job.getCommands()) {
+                CommandResult result = command.execute();
 
-            if (result.failed()) {
-                jobStatusManager.setFailed(job.getJobId(), "Job FAILED due to --> " + result.getCommand());
+                if (result.failed()) {
+                    jobStatusManager.setFailed(job.getJobId(), "Chain job FAILED due to --> " + result.getCommand());
+                    break;
+                }
+                else {
+                    commandCounter++;
+                    Double percentComplete = ((commandCounter * 100.0d) / job.getCommands().length);
+                    jobStatusManager.updateJob(job.getJobId(),
+                            commandCounter + " out of " + job.getCommands().length + " have been processed.", percentComplete);
+                }
             }
-            else {
-                jobStatusManager.setCompleted(job.getJobId(), "FULLY PROCESSED");
-            }
+
+            jobStatusManager.setCompleted(job.getJobId(), "FULLY PROCESSED");
         }
         catch (Exception e) {
-            jobStatusManager.setFailed(job.getJobId(), ExceptionUtils.getStackTrace(e));
+            jobStatusManager.setFailed(job.getJobId(),
+                    "Chain job FAILED with the following error --> " + ExceptionUtils.getStackTrace(e));
             throw e;
         }
 
-        logger.debug("End of processing job with ID: {}", job.getJobId());
+        logger.debug("End processing chain Job with jobId = {}", job.getJobId());
     }
 }

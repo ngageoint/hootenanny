@@ -94,7 +94,7 @@ public class JobResource {
                 response.put("lasttext", jobStatus.getStatusDetail());
 
                 if (includeCommandDetail) {
-                    List<CommandStatus> commandDetail = this.jobStatusManager.getCommandStatusUsing(jobId);
+                    List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
                     response.put("commandDetail", commandDetail);
                 }
             }

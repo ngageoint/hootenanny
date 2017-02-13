@@ -44,15 +44,14 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
-import hoot.services.controllers.nonblocking.JobId;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.controllers.nonblocking.RasterToTilesCommand;
-import hoot.services.job.ChainJob;
+import hoot.services.job.Job;
 
 
 @Controller
 @Path("/clipdataset")
-public class ClipDatasetResource extends AsynchronousJobResource {
+public class ClipDatasetResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
 
     /**
@@ -80,7 +79,7 @@ public class ClipDatasetResource extends AsynchronousJobResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public JobId process(String params) {
+    public Response process(String params) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -91,7 +90,7 @@ public class ClipDatasetResource extends AsynchronousJobResource {
             Command[] commands = {
                     // Clip to a bounding box
                     () -> {
-                        ClipDatasetCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
+                        ExternalCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
                         return externalCommandManager.exec(jobId, clipCommand);
                     },
                     // Ingest
@@ -101,13 +100,13 @@ public class ClipDatasetResource extends AsynchronousJobResource {
                     }
             };
 
-            super.processChainJob(new ChainJob(jobId, commands));
+            super.processJob(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return new JobId(jobId);
+        return super.createJobIdResponse(jobId);
     }
 }

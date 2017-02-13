@@ -39,7 +39,7 @@ import hoot.services.command.ExternalCommand;
 
 class GetAttributesCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<String> fileList, List<String> zipList, Class<?> callerClass) {
+    GetAttributesCommand(String jobId, List<String> fileList, List<String> zipList, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject arg = new JSONObject();
@@ -54,9 +54,6 @@ class GetAttributesCommand extends ExternalCommand {
         arg.put("jobid", jobId);
         commandArgs.add(arg);
 
-        this.put("exectype", "make");
-        this.put("exec", GET_OGR_ATTRIBUTE_SCRIPT);
-        this.put("caller", callerClass.getName());
-        this.put("params", commandArgs);
+        super.configureAsMakeCommand(GET_OGR_ATTRIBUTE_SCRIPT, caller, commandArgs);
     }
  }

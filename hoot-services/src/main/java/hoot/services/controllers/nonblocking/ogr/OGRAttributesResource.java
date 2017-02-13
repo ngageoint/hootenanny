@@ -26,7 +26,8 @@
  */
 package hoot.services.controllers.nonblocking.ogr;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,20 +54,20 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
-import hoot.services.controllers.nonblocking.AsynchronousJobResource;
+import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.nonblocking.NonblockingJobResource;
 import hoot.services.job.Job;
 import hoot.services.utils.MultipartSerializer;
 
 
 @Controller
 @Path("/info")
-public class OGRAttributesResource extends AsynchronousJobResource {
+public class OGRAttributesResource extends NonblockingJobResource {
     private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
 
     /**
@@ -98,22 +99,21 @@ public class OGRAttributesResource extends AsynchronousJobResource {
 
             processFormDataMultiPart(filesList, zipList, jobId, inputType, multiPart);
 
-            Command command = () -> {
-                GetAttributesCommand externalCommand = new GetAttributesCommand(jobId, filesList, zipList, this.getClass());
-                return externalCommandManager.exec(jobId, externalCommand);
+            Command[] commands = {
+                () -> {
+                    ExternalCommand getAttributesCommand = new GetAttributesCommand(jobId, filesList, zipList, this.getClass());
+                    return externalCommandManager.exec(jobId, getAttributesCommand);
+                }
             };
 
-            super.processJob(new Job(jobId, command));
+            super.processJob(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject response = new JSONObject();
-        response.put("jobId", jobId);
-
-        return Response.ok(response.toJSONString()).build();
+        return super.createJobIdResponse(jobId);
     }
 
     /**

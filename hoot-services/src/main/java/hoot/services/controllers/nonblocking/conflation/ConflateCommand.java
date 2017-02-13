@@ -62,9 +62,6 @@ class ConflateCommand extends ExternalCommand {
         osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
         commandArgs.add(osmAPIDBURL);
 
-        this.put("exectype", "make");
-        this.put("exec", CONFLATE_MAKEFILE_PATH);
-        this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+        super.configureAsMakeCommand(CONFLATE_MAKEFILE_PATH, caller, commandArgs);
     }
 }

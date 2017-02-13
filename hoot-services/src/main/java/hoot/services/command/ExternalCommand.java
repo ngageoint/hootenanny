@@ -27,8 +27,23 @@
 package hoot.services.command;
 
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
 public class ExternalCommand extends JSONObject {
+
+    protected void configureAsBashCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
+        this.put("exectype", "bash");
+        this.put("exec", scriptName);
+        this.put("caller", caller.getName());
+        this.put("params", commandArgs);
+    }
+
+    protected void configureAsMakeCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
+        this.put("exectype", "make");
+        this.put("exec", scriptName);
+        this.put("caller", caller.getName());
+        this.put("params", commandArgs);
+    }
 }
