@@ -13,8 +13,6 @@ exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
 
-hoot.Settings.set({"log.identical.message.limit":1000});
-
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
 var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
@@ -324,18 +322,18 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-//    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-//    if (e1.getTags().get("note"))
-//    {
-//      hoot.trace("e1 note: " + e1.getTags().get("note"));
-//    }
-//    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
-//    if (e2.getTags().get("note"))
-//    {
-//      hoot.trace("e2 note: " + e2.getTags().get("note"));
-//    }
-//    hoot.trace("reason: " + reason);
-//    hoot.trace("score: " + score);
+    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    if (e1.getTags().get("note"))
+    {
+      hoot.trace("e1 note: " + e1.getTags().get("note"));
+    }
+    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+    if (e2.getTags().get("note"))
+    {
+      hoot.trace("e2 note: " + e2.getTags().get("note"));
+    }
+    hoot.trace("reason: " + reason);
+    hoot.trace("score: " + score);
 
     return result;
 }
