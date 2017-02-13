@@ -90,7 +90,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
             throw new IllegalArgumentException("Invalid exectype specified");
         }
 
-        //validate(command);
+        validate(command);
 
         ExternalCommandRunner cmdRunner = new ExternalCommandRunnerImpl();
 
