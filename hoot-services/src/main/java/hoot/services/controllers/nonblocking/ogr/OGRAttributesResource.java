@@ -54,6 +54,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -113,7 +114,10 @@ public class OGRAttributesResource extends NonblockingJobResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return super.createJobIdResponse(jobId);
+        JSONObject response = new JSONObject();
+        response.put("jobId", jobId);
+
+        return Response.ok(response.toJSONString()).build();
     }
 
     /**
