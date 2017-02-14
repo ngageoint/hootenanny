@@ -96,22 +96,15 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DividedHighwayMerger.cpp \
     src/main/cpp/hoot/core/manipulators/DividedHighwayManipulation.cpp \
     src/main/cpp/hoot/core/algorithms/WayHeading.cpp \
-    src/main/cpp/hoot/core/filters/OneWayFilter.cpp \
-    src/main/cpp/hoot/core/filters/WayFilterChain.cpp \
-    src/main/cpp/hoot/core/filters/UnknownFilter.cpp \
-    src/main/cpp/hoot/core/filters/WayDirectionFilter.cpp \
     src/main/cpp/hoot/core/algorithms/LineStringAverager.cpp \
     src/main/cpp/hoot/core/filters/ParallelWayFilter.cpp \
     src/main/cpp/hoot/core/ops/SuperfluousNodeRemover.cpp \
-    src/main/cpp/hoot/core/filters/WayBufferFilter.cpp \
     src/main/cpp/hoot/core/manipulators/WayMergeManipulation.cpp \
     src/main/cpp/hoot/core/algorithms/WayAverager.cpp \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.cpp \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.cpp \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.cpp \
     src/main/cpp/hoot/core/elements/Tags.cpp \
-    src/main/cpp/hoot/core/filters/DistanceNodeFilter.cpp \
-    src/main/cpp/hoot/core/filters/ChainNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/InWayNodeFilter.cpp \
     src/main/cpp/hoot/core/conflate/UnlikelyIntersectionRemover.cpp \
     src/main/cpp/hoot/core/conflate/NodeToWayMap.cpp \
@@ -203,7 +196,6 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/RubberSheetCmd.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.cpp \
     src/main/cpp/hoot/core/visitors/RemoveElementsVisitor.cpp \
-    src/main/cpp/hoot/core/filters/TagElementFilter.cpp \
     src/main/cpp/hoot/core/schema/Building.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/OverlapExtractor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/CompactnessExtractor.cpp \
@@ -520,14 +512,12 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/MatchCreator.cpp \
-    src/main/cpp/hoot/core/filters/AreaFilter.cpp \
     src/main/cpp/hoot/core/filters/ContainsNodeCriterion.cpp \
     src/main/cpp/hoot/core/filters/HighwayFilter.cpp \
     src/main/cpp/hoot/core/filters/IsNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/LinearFilter.cpp \
     src/main/cpp/hoot/core/filters/OneWayCriterion.cpp \
     src/main/cpp/hoot/core/filters/StatsAreaFilter.cpp \
-    src/main/cpp/hoot/core/filters/StatusFilter.cpp \
     src/main/cpp/hoot/core/filters/UnknownCriterion.cpp \
     src/main/cpp/hoot/core/manipulators/WayManipulator.cpp \
     src/main/cpp/hoot/core/schema/ComparatorTagDifferencer.cpp \
@@ -599,27 +589,19 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/Manipulation.h \
     src/main/cpp/hoot/core/manipulators/DividedHighwayManipulation.h \
     src/main/cpp/hoot/core/algorithms/WayHeading.h \
-    src/main/cpp/hoot/core/filters/OneWayFilter.h \
     src/main/cpp/hoot/core/filters/WayFilter.h \
     src/main/cpp/hoot/core/WayMap.h \
     src/main/cpp/hoot/core/NodeMap.h \
-    src/main/cpp/hoot/core/filters/WayFilterChain.h \
-    src/main/cpp/hoot/core/filters/UnknownFilter.h \
-    src/main/cpp/hoot/core/filters/StatusFilter.h \
-    src/main/cpp/hoot/core/filters/WayDirectionFilter.h \
     src/main/cpp/hoot/core/algorithms/LineStringAverager.h \
     src/main/cpp/hoot/core/filters/ParallelWayFilter.h \
     src/main/cpp/hoot/core/ops/SuperfluousNodeRemover.h \
-    src/main/cpp/hoot/core/filters/WayBufferFilter.h \
     src/main/cpp/hoot/core/manipulators/WayMergeManipulation.h \
     src/main/cpp/hoot/core/algorithms/WayAverager.h \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.h \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.h \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.h \
-    src/main/cpp/hoot/core/filters/DistanceNodeFilter.h \
     src/main/cpp/hoot/core/filters/NodeFilter.h \
     src/main/cpp/hoot/core/filters/Filter.h \
-    src/main/cpp/hoot/core/filters/ChainNodeFilter.h \
     src/main/cpp/hoot/core/filters/InWayNodeFilter.h \
     src/main/cpp/hoot/core/conflate/UnlikelyIntersectionRemover.h \
     src/main/cpp/hoot/core/conflate/NodeToWayMap.h \
@@ -712,7 +694,6 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h \
     src/main/cpp/hoot/core/visitors/RemoveElementsVisitor.h \
-    src/main/cpp/hoot/core/filters/TagElementFilter.h \
     src/main/cpp/hoot/core/schema/Building.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/OverlapExtractor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/CompactnessExtractor.h \
@@ -875,7 +856,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/HighwayFilter.h \
     src/main/cpp/hoot/core/filters/LinearFilter.h \
     src/main/cpp/hoot/core/filters/BaseFilter.h \
-    src/main/cpp/hoot/core/filters/AreaFilter.h \
     src/main/cpp/hoot/core/filters/StatsAreaFilter.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.h \
