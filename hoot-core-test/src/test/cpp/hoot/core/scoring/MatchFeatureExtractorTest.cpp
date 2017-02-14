@@ -36,7 +36,6 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
-#include <hoot/core/filters/TagElementFilter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>

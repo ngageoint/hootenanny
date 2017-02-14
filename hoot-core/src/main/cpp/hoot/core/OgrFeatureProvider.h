@@ -30,7 +30,7 @@
 #include "FeatureProvider.h"
 
 // GDAL Includes
-class OGRDataSource;
+class GDALDataset;
 class OGRLayer;
 
 // Qt Includes
@@ -62,7 +62,7 @@ protected:
 
     boost::shared_ptr<OGRFeature> _next;
 
-    OGRDataSource* _dataSource;
+    boost::shared_ptr<GDALDataset> _dataSource;
 };
 
 } // hoot
