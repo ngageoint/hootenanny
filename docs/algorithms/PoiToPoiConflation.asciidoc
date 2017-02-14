@@ -1,6 +1,6 @@
 
-[[UnifyingPoi]]
-== Unifying POI Conflation
+[[PoiToPoi]]
+== POI Conflation
 
 NOTE: This description is current as of Hootenanny v0.2.18.
 
@@ -21,17 +21,17 @@ conflation routines to data for which it was not intended. For example OSM
 inputs tend to have very dense POI information that rely heavily on the type
 tags and in some cases have no name tags at all.
 
-The following sections describe the Unifying POI to POI design, the test setup
+The following sections describe the POI to POI conflation design, the test setup
 and finally the test results.
 
-[[UnifyingPoiDesign]]
+[[PoiToPoiDesign]]
 === Design
 
-This section covers the Unifying POI to POI design by going into details about
+This section covers the POI to POI design by going into details about
 finding match candidates, labeling match candidates and merging matched
 features.
 
-The Unifying POI to POI conflation code uses the Hootenanny JavaScript
+The POI to POI conflation code uses the Hootenanny JavaScript
 interface (See _JavaScript Overview_ in <<hootuser>> for details). The script is
 only a few hundred lines of code and primarily contains the business logic for
 conflating POIs. The code can be found and modified in the Hootenanny source
@@ -96,11 +96,11 @@ there for custom use cases. Some example search radii are below:
 * `place=village` - 3000m
 * `amenity` - 200m
 
-[[UnifyingPoiSearchRadius]]
+[[PoiToPoiSearchRadius]]
 .Search Radius Example
 image::algorithms/images/SearchRadius.png[A simple example of overlapping search radii,scalewidth="50%"]
 
-In <<UnifyingPoiSearchRadius>> points A & B are points from the first input and
+In <<PoiToPoiSearchRadius>> points A & B are points from the first input and
 point C is from the second data set. For this reason A & B will never be match
 candidates. A's search radius overlaps the point C so A & C are match
 candidates. B and C have search radii that overlap, but B's search radius
@@ -132,7 +132,7 @@ one or both of the nodes have no POI type attributes then the closeness and the
 name are given double the weight when scoring. If one of the POIs is a `place`
 and the other is not, then closeness and name are given half the weight. This
 pragmatic approach helps to give better performance and reduce unnecessary
-reviews at the expense of complexity. In the <<UnifyingPoiFutureWork, Future
+reviews at the expense of complexity. In the <<PoiToPoiPoiFutureWork, Future
 Work>> section we will discuss approaches to reducing or eliminating these
 exceptions.
 
@@ -296,7 +296,7 @@ POI pair is relatively quick at about 12-20 seconds per review.
 | Total | 269 | 43 | 283 | 4053 | 12 | 0 | 2998 | 155 | 7.8% | 53.9% | 38.4%
 |======
 
-[[UnifyingPoiFutureWork]]
+[[PoiToPoiPoiFutureWork]]
 === Future Work
 
 In this section we discuss some areas of possible improvement.

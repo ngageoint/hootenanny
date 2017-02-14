@@ -68,8 +68,6 @@ void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& 
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
   }
   t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
-
-  //LOG_VART(t[MetadataTags::HootStatus()]);
 }
 
 void HootApiDbWriter::close()

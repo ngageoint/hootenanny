@@ -11,6 +11,7 @@ You may have to enable hardware virtualization extensions in your BIOS before us
 If running on Ubuntu, you may have to install a newer version of VirtualBox than what is available in the public repositories in order for it to work correctly with Vagrant.
 
 # Setting up Hootennany with Vagrant & VirtualBox
+Make sure the the umask of the terminal used to start the vagrant vm is set to `002` (see [#1332](https://github.com/ngageoint/hootenanny/issues/1382))
 
 Once Vagrant has been installed, you can start an environment by checking out the hoot code, then changing to the directory which contains the Vagrantfile by typing:
 
