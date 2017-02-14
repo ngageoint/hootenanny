@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers;
+package hoot.services.job;
 
 import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
 
@@ -32,22 +32,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import javax.ws.rs.core.Response;
-
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import hoot.services.command.ExternalCommandManager;
-import hoot.services.command.InternalCommandManager;
-import hoot.services.job.Job;
-import hoot.services.job.JobRunnable;
-import hoot.services.job.JobStatusManager;
+import org.springframework.stereotype.Component;
 
 
-public class NonblockingJobResource {
-    private static final Logger logger = LoggerFactory.getLogger(NonblockingJobResource.class);
+@Component
+public class JobProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(JobProcessor.class);
 
     // Shared thread pool for job processing
     private static final ExecutorService jobThreadExecutor =
@@ -56,23 +49,9 @@ public class NonblockingJobResource {
     @Autowired
     private JobStatusManager jobStatusManager;
 
-    @Autowired
-    protected ExternalCommandManager externalCommandManager;
-
-    @Autowired
-    protected InternalCommandManager internalCommandManager;
-
-
-    public void processJob(Job job) {
+    public void process(Job job) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
         Runnable work = new JobRunnable(job, jobStatusManager);
         jobThreadExecutor.execute(work);
-    }
-
-    protected Response createJobIdResponse(String jobId) {
-        JSONObject json = new JSONObject();
-        json.put("jobid", jobId);
-
-        return Response.ok(json.toJSONString()).build();
     }
 }

@@ -55,22 +55,31 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.controllers.RasterToTilesCommand;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
 
 
 @Controller
 @Path("/ingest")
 @Transactional
-public class FileUploadResource extends NonblockingJobResource {
+public class FileUploadResource {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -247,7 +256,7 @@ public class FileUploadResource extends NonblockingJobResource {
                     }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();

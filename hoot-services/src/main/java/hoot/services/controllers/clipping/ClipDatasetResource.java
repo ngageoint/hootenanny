@@ -40,19 +40,28 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.controllers.RasterToTilesCommand;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 
 
 @Controller
 @Path("/clipdataset")
-public class ClipDatasetResource extends NonblockingJobResource {
+public class ClipDatasetResource {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     /**
      * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
@@ -88,25 +97,28 @@ public class ClipDatasetResource extends NonblockingJobResource {
             String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
 
             Command[] commands = {
-                    // Clip to a bounding box
-                    () -> {
-                        ExternalCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
-                        return externalCommandManager.exec(jobId, clipCommand);
-                    },
-                    // Ingest
-                    () -> {
-                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(newDatasetOutputName, null);
-                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
-                    }
+                // Clip to a bounding box
+                () -> {
+                    ExternalCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
+                    return externalCommandManager.exec(jobId, clipCommand);
+                },
+                // Ingest
+                () -> {
+                    ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(newDatasetOutputName, null);
+                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Error processing cookie cutter request! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return super.createJobIdResponse(jobId);
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        return Response.ok(json.toJSONString()).build();
     }
 }

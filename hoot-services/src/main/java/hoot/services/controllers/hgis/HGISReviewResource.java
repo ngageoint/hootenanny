@@ -38,13 +38,17 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
+import hoot.services.command.InternalCommandManager;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 
 
 @Controller
@@ -52,6 +56,16 @@ import hoot.services.job.Job;
 @Transactional
 public class HGISReviewResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISReviewResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private InternalCommandManager internalCommandManager;
+
 
     public HGISReviewResource() {}
 
@@ -84,15 +98,15 @@ public class HGISReviewResource extends HGISResource {
                     () -> {
                         ExternalCommand validationCommand = new HGISPrepareForValidationCommand(
                                 request.getSourceMap(), request.getOutputMap(), this.getClass());
-                        return super.externalCommandManager.exec(jobId, validationCommand);
+                        return externalCommandManager.exec(jobId, validationCommand);
                     },
                     () -> {
                         InternalCommand updateMapTagsCommand = new UpdateMapTagsCommand(jobId, request.getOutputMap());
-                        return super.internalCommandManager.exec(jobId, updateMapTagsCommand);
+                        return internalCommandManager.exec(jobId, updateMapTagsCommand);
                     }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
 
             response.setJobId(jobId);
         }

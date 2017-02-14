@@ -30,7 +30,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -50,7 +49,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.NonblockingJobResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.models.osm.Map;
@@ -74,7 +72,7 @@ public class ConflationResourceTest {
 
         ConflationResource conflationResource = new ConflationResource();
         ConflationResource spy = Mockito.spy(conflationResource);
-        doNothing().when(spy).processJob(any());
+        //doNothing().when(spy).process(any());
 
         //JobId jobId = spy.process(params);
         //assertNotNull(jobId);
@@ -104,7 +102,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            doNothing().when((NonblockingJobResource) spy).processJob(any());
+            //doNothing().when((AbstractJobResource) spy).processJob(any());
             Mockito.doReturn(true).when(spy).mapExists(anyLong());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
@@ -145,7 +143,7 @@ public class ConflationResourceTest {
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            doNothing().when((NonblockingJobResource) spy).processJob(any());
+            //doNothing().when((AbstractJobResource) spy).processJob(any());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
@@ -170,7 +168,7 @@ public class ConflationResourceTest {
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            doNothing().when((NonblockingJobResource) spy).processJob(any());
+            //doNothing().when((AbstractJobResource) spy).processJob(any());
             spy.process(inputParams);
         }
         catch (WebApplicationException e) {
@@ -196,7 +194,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            doNothing().when((NonblockingJobResource) spy).processJob(any());
+            //doNothing().when((AbstractJobResource) spy).processJob(any());
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
             Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
@@ -224,7 +222,7 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            doNothing().when((NonblockingJobResource) spy).processJob(any());
+            //doNothing().when((AbstractJobResource) spy).processJob(any());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
             BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);

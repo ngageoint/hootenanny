@@ -47,16 +47,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.InternalCommandManager;
 import hoot.services.controllers.RasterToTilesCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
@@ -65,8 +68,18 @@ import hoot.services.utils.JsonUtils;
 @Controller
 @Path("/conflation")
 @Transactional
-public class ConflationResource extends NonblockingJobResource {
+public class ConflationResource {
     private static final Logger logger = LoggerFactory.getLogger(ConflationResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private InternalCommandManager internalCommandManager;
+
 
     /**
      * Conflate service operates like a standard ETL service. The conflate
@@ -191,21 +204,21 @@ public class ConflationResource extends NonblockingJobResource {
             String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
 
             Command[] commands = {
-                    () -> {
-                        ExternalCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
-                        return externalCommandManager.exec(jobId, conflateCommand);
-                    },
-                    () -> {
-                        InternalCommand updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
-                        return internalCommandManager.exec(jobId, updateTagsCommand);
-                    },
-                    () -> {
-                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(confOutputName, userEmail);
-                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
-                    }
+                () -> {
+                    ExternalCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
+                    return externalCommandManager.exec(jobId, conflateCommand);
+                },
+                () -> {
+                    InternalCommand updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
+                    return internalCommandManager.exec(jobId, updateTagsCommand);
+                },
+                () -> {
+                    ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(confOutputName, userEmail);
+                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -215,7 +228,10 @@ public class ConflationResource extends NonblockingJobResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return super.createJobIdResponse(jobId);
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        return Response.ok(json.toJSONString()).build();
     }
 
     private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {

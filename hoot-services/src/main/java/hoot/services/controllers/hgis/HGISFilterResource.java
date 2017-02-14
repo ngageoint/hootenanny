@@ -38,12 +38,15 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 
 
 @Controller
@@ -51,6 +54,13 @@ import hoot.services.job.Job;
 @Transactional
 public class HGISFilterResource extends HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISFilterResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     public HGISFilterResource() {}
 
@@ -84,7 +94,7 @@ public class HGISFilterResource extends HGISResource {
                 }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
 
             response.setJobId(jobId);
         }

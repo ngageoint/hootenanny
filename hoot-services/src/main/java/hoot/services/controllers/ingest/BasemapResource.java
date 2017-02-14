@@ -62,6 +62,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -71,13 +72,15 @@ import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
+
 
 @Controller
 @Path("/basemap")
 @Transactional
-public class BasemapResource extends NonblockingJobResource {
+public class BasemapResource {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
     private static final Map<String, String> basemapRasterExt;
 
@@ -89,6 +92,13 @@ public class BasemapResource extends NonblockingJobResource {
             basemapRasterExt.put(ext, ext);
         }
     }
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     /**
      * Upload dataset file and create TMS tiles.
@@ -165,7 +175,7 @@ public class BasemapResource extends NonblockingJobResource {
                     }
                 };
 
-                super.processJob(new Job(jobId, commands));
+                jobProcessor.process(new Job(jobId, commands));
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);

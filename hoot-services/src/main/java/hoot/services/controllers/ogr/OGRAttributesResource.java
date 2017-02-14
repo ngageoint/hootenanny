@@ -57,19 +57,28 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
 
 
 @Controller
 @Path("/info")
-public class OGRAttributesResource extends NonblockingJobResource {
+public class OGRAttributesResource {
     private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     /**
      * This rest endpoint uploads multipart data from UI and then generates attribute output.
@@ -107,7 +116,7 @@ public class OGRAttributesResource extends NonblockingJobResource {
                 }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();

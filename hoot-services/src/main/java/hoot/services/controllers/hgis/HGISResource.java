@@ -35,13 +35,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.controllers.NonblockingJobResource;
-
 
 /**
  * Base code for HGIS specific Rest endpoint.
  */
-abstract class HGISResource extends NonblockingJobResource {
+abstract class HGISResource {
     private static final Logger logger = LoggerFactory.getLogger(HGISResource.class);
 
     static void checkHGISCommandParams(String sourceMap, String outputMap) {

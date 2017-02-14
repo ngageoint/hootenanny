@@ -68,6 +68,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -79,9 +80,9 @@ import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Maps;
@@ -102,8 +103,12 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Controller
 @Path("/api/0.6/map")
 @Transactional
-public class MapResource extends NonblockingJobResource {
+public class MapResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
 
     /**
      * Returns a list of all map layers in the services database
@@ -676,14 +681,17 @@ public class MapResource extends NonblockingJobResource {
                 }
             };
 
-            super.processJob(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return super.createJobIdResponse(jobId);
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**

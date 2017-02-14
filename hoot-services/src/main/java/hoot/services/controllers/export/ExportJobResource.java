@@ -54,14 +54,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.NonblockingJobResource;
+import hoot.services.command.ExternalCommandManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
@@ -72,8 +74,15 @@ import hoot.services.wfs.WFSManager;
 @Controller
 @Path("/export")
 @Transactional
-public class ExportJobResource extends NonblockingJobResource {
+public class ExportJobResource {
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
+
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
 
     public ExportJobResource() {}
 
@@ -160,7 +169,7 @@ public class ExportJobResource extends NonblockingJobResource {
                         }
                 };
 
-                super.processJob(new Job(jobId, commands));
+                jobProcessor.process(new Job(jobId, commands));
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
@@ -172,7 +181,7 @@ public class ExportJobResource extends NonblockingJobResource {
                     }
                 };
 
-                super.processJob(new Job(jobId, commands));
+                jobProcessor.process(new Job(jobId, commands));
             }
             else if ("osc".equalsIgnoreCase(type)) {
                 JSONArray args = getExportToChangesetCommandArgs(commandArgs, oParams);
@@ -184,7 +193,7 @@ public class ExportJobResource extends NonblockingJobResource {
                     }
                 };
 
-                super.processJob(new Job(jobId, command));
+                jobProcessor.process(new Job(jobId, command));
             }
             else {
                 // replace with with getParameterValue
@@ -214,7 +223,7 @@ public class ExportJobResource extends NonblockingJobResource {
                     }
                 };
 
-                super.processJob(new Job(jobId, commands));
+                jobProcessor.process(new Job(jobId, commands));
             }
         }
         catch (WebApplicationException wae) {
@@ -225,7 +234,10 @@ public class ExportJobResource extends NonblockingJobResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return super.createJobIdResponse(jobId);
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        return Response.ok(json.toJSONString()).build();
     }
 
     JSONArray getExportToChangesetCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {
