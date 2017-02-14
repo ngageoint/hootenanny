@@ -167,18 +167,18 @@ void ShapefileWriter::write(shared_ptr<const OsmMap> map)
 
 void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
   const char *pszDriverName = "ESRI Shapefile";
-  OGRSFDriver *poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if( poDriver == NULL )
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  OGRDataSource* poDS = poDriver->CreateDataSource(path.toAscii(), NULL );
+  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -273,23 +273,23 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
     }
   }
 
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 }
 
 void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
   const char *pszDriverName = "ESRI Shapefile";
-  OGRSFDriver *poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if( poDriver == NULL )
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  OGRDataSource* poDS = poDriver->CreateDataSource(path.toAscii(), NULL );
+  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -377,23 +377,23 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
     }
   }
 
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 }
 
 void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
 
   _removeShapefile(path);
 
   const char *pszDriverName = "ESRI Shapefile";
-  OGRSFDriver *poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if( poDriver == NULL )
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  OGRDataSource* poDS = poDriver->CreateDataSource(path.toAscii(), NULL );
+  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -463,7 +463,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
     }
   }
 
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 }
 
 void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
