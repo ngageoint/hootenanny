@@ -32,7 +32,8 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
-using namespace hoot;
+
+#include <tgs/Statistics/Random.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -64,6 +65,7 @@ public:
 
   void runIoTest()
   {
+    TestUtils::resetEnvironment();
     QByteArray arr1;
     QByteArray arr2;
     {
@@ -130,6 +132,8 @@ public:
 
   void runSimpleTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());

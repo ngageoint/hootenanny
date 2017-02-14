@@ -166,7 +166,7 @@ void HootApiDb::endChangeset()
   // If we're already closed, nothing to do
   if ( _currChangesetId == -1 )
   {
-    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently");
+    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently.");
     return;
   }
 
@@ -213,12 +213,13 @@ void HootApiDb::commit()
 {
   if ( _db.isOpen() == false )
   {
-    throw HootException("Tried to commit a transaction on a closed database");
+    throw HootException("Tried to commit a transaction on a closed database.");
   }
 
   if ( _inTransaction == false )
   {
-    throw HootException("Tried to commit but weren't in a transaction");
+    throw HootException(QString("Tried to commit but weren't in a transaction.  You may ") +
+                        QString("need to set hootapi.db.writer.create.user=true."));
   }
 
   createPendingMapIndexes();
