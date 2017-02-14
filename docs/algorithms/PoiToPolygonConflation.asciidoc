@@ -69,47 +69,46 @@ See the User Guide Command Line Documentation section for all configuration opti
 [[PoiToPolygonTestResults]]
 === Test Results
 
-.POI Test Data Sources
+Match truth for several datasets was obtained by having a human manual match features (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx for more details on the process involved).  Then, Hootenanny conflated the same data and scored
+how many matches it correctly made.
+
+.POI to Polygon Test Data Sources
 [options="header"]
 |======
-| Test | Region | Source 1 | Source 2 | Input 1 POI Count | Input 2 POI Count |
-Approximate Area (km^2^)
-| 1 | Munich | OSM | NAVTEQ | 32414 | 2297 | 500
-| 2 | Egypt | OSM | GeoNames.org | 9017 | 6654 | 10500
-| 3 | Egypt | OSM | MGCP | 9017 | 186066 | 10500
-| 4 | Jordan | OSM | MGCP | 2691 | 59126 | 500
-| 5 | Jordan | OSM | GeoNames.org | 2691 | 1322 | 500
-| 6 | Washington DC | OSM | GeoNames.org | 15700 | 4246 | 140
-| 7 | Jordan | MGCP | GeoNames.org | 1322 | 330 | 500
+| Test | Region | Schema 1 | Schema 2 | Geospatial Accuracy | Type Attribution | Name Attribution | Address Attribution
+| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none
+| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none
+| 3 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt 
+| 4 | Munich, Germany | OSM | NAVTEQ | good in OSM; poor near intersections for NAVTEQ | average for OSM; good for NAVTEQ | good | average 
+| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
+| 6 | Alexandria, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
+| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none 
 |======
 
-.POI Aggregated Confusion Matrix
-[options="header,footer",width="50%"]
-|======
-|  | 3+^.^| *expected*
-|  | ^.^| *miss* ^.^| *match* ^.^| *review*
-| ^.^| *miss* ^.^| - >| 269 >| 43
-^.^| *outcome* ^.^| *match* >| 283 >| 4053 >| 12
-| ^.^| *review* >| 0 >| 2998 >| 155
-|======
-
-.POI Test Results
+.POI to Polygon Test Results
 [options="header,footer"]
 |======
-.2+|Test Name 2+^.^|miss outcome 3+^.^|match outcome 3+^.^|review outcome .2+| Wrong .2+| Correct .2+| Unn. Review
-| *match exp.* | *review exp.* | *miss exp.* | *match exp.* | *review exp.* | *miss exp.* | *match exp.* | *review exp.*
-| 1 | 25 | 7 | 62 | 488 | 8 | 0 | 625 | 116 | 7.7% | 45.4% | 47.0%
-| 2 | 69 | 9 | 106 | 851 | 3 | 0 | 477 | 15 | 12.2% | 56.6% | 31.2%
-| 3 | 16 | 7 | 0 | 17 | 0 | 0 | 153 | 20 | 10.8% | 17.4% | 71.8%
-| 4 | 20 | 19 | 8 | 814 | 1 | 0 | 134 | 2 | 4.8% | 81.8% | 13.4%
-| 5 | 25 | 0 | 26 | 483 | 0 | 0 | 156 | 0 | 7.4% | 70.0% | 22.6%
-| 6 | 111 | 1 | 78 | 1157 | 0 | 0 | 1371 | 2 | 7.0% | 42.6% | 50.4%
-| 7 | 3 | 0 | 3 | 243 | 0 | 0 | 82 | 0 | 1.8% | 73.4% | 24.8%
-| Total | 269 | 43 | 283 | 4053 | 12 | 0 | 2998 | 155 | 7.8% | 53.9% | 38.4%
+| Test | Total Manual Matches | Correct | Unnecessary Reviews (expected match) | Wrong  | Ratio Unnecessary Reviews to Correct Matches (expected miss) | Combined Correct
+| 1 | 58 | 25.9% | 72.4% | 1.7% | 0.9 | **98.3%**
+| 2 | 13 | 46.1% | 53.9% | 0.0% | 0.31 | **100.0%**
+| 3 | 989 | 42.4% | 46.3% | 11.3% | 1.20 | **88.7%**
+| 4 | 386 | 36.0% | 46.4% | 17.6%| 1.31 | **82.4%** 
+| 5 | 56 | 87.5% | 5.3% | 7.2% | 0.63 | **92.8%**
+| 6 | 6 | 66.7% | 0.0% | 33.3% | 0.0 | **66.7%**
+| 7 | 5 | 100.0% | 0.0% | 0.0% | 0.2 | **100.0%**
 |======
+
+Combined Correct = number of correct matches + number of unnecessary reviews
 
 [[PoiToPolygonPoiFutureWork]]
 === Future Work
 
-TODO:
+* improve tag similarity calculation
+* more intelligent POI merging
+* reduce unnecessary reviews
+* more advanced name parsing
+* model based classification
+* real world workflow application
+
+For more information on POI to polygon conflation: https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
 
