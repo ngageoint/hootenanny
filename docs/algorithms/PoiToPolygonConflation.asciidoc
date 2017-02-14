@@ -54,12 +54,23 @@ Techniques that were experimented with but proved to add no benefit to the model
 
 [[PoiToPolygonMerging]]
 === Merging
+
+The first layer selected is the reference layer and the second, the secondary layer, same as in all other hoot conflation types.  The reference layer gets priority on the tags that are kept.  Geometry merging is a little more complex as later described.
   
 Once a relationship has been established between elements a graph is created to determine any interdependencies. If a single element is involved in multiple matches then all the elements involved in that set of matches are marked as needing review. This avoids complex situations where there are multiple conflicting POI attributes.
 
 However, if a review relationship is found and a match relationship is found, the review relationship is not included in the interdependence calculation. So, you may have a POI merged with one building, but marked as needing review with another building. Modifying this business logic will require some user input on the desired functionality as well as some not so insignificant internal changes.
 
 If a merge is warranted, the geometry of the building is used and the tags are merged using the default tag merging mechanism ( +tag.merger.default+ configuration key).
+
+Detailed Merging Workflow:
+
+* Merge the tags of all matching POIs in the reference layer together with each other if there is more than one POI in the reference layer to merge
+* Merge the tags of all matching POIs in the secondary layer together with each other if there is more than one POI in the secondary layer to merge
+* Merge the building tags for matching buildings from both layers together as described in https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx slide 6; they’re averged together
+* Merge the building geometries for matching buildings from both layers together as described in that slide; pick the most complex building geometry and if both are the same complexity then pick the first geometry
+* Merge the tags of the matching POIs and buildings from both layers with each other; all first layer reference tags take priority over secondary layer tags
+* Remove the POI geometries as they’ve been “merged” with the building geometries.
 
 [[PoiToPolygonConfigurableOptions]]
 === Configurable Options
