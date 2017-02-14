@@ -50,7 +50,7 @@ Factory::~Factory()
 {
   QMutexLocker locker(&_mutex);
   for (std::map<std::string, ObjectCreator*>::const_iterator it = _creators.begin();
-    it != _creators.end(); ++it)
+       it != _creators.end(); ++it)
   {
     delete it->second;
   }
@@ -84,7 +84,7 @@ vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)
   vector<std::string> result;
 
   for (std::map<std::string, ObjectCreator*>::const_iterator it = _creators.begin();
-    it != _creators.end(); ++it)
+       it != _creators.end(); ++it)
   {
     ObjectCreator* c = it->second;
     if (c->getBaseName() == baseName)
@@ -105,20 +105,20 @@ void Factory::registerCreator(ObjectCreator* oc, bool baseClass)
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())
   {
-    LOG_WARN("Base name and class name are the same. Did you forget to imlement className() in "
-             "your class? If this is intentional, then set baseClass to true, or use the "
-             "HOOT_FACTORY_REGISTER_BASE macro.");
     throw HootException(
-      "Base name and class name are the same. Highly unusual. (" + oc->getName() + ")");
+      "Base name and class name are the same. Did you forget to imlement className() in "
+      "your class? If this is intentional, then set baseClass to true, or use the "
+      "HOOT_FACTORY_REGISTER_BASE macro.  Highly unusual. (" + oc->getName() + ")");
   }
   if (_creators.find(oc->getName()) == _creators.end())
   {
+    LOG_TRACE("Registering: " << oc->getName());
     _creators[oc->getName()] = oc;
   }
   else
   {
     throw Exception("A class got registered multiple times. " +
-      QString::fromStdString(oc->getName()));
+                    QString::fromStdString(oc->getName()));
   }
 }
 

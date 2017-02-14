@@ -46,6 +46,11 @@ class ScriptMatchTest;
 class ScriptMatch : public Match, public MatchDetails
 {
 public:
+
+  static std::string className() { return "hoot::ScriptMatch"; }
+
+  static unsigned int logWarnCount;
+
   ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
               const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
               ConstMatchThresholdPtr mt);

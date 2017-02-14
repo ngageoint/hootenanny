@@ -41,6 +41,8 @@
 namespace hoot
 {
 
+unsigned int TileBoundsCalculator::logWarnCount = 0;
+
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {
   _pixelSize = pixelSize;
@@ -173,7 +175,15 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    LOG_WARN("bestSum isn't valid. " << b.toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("bestSum isn't valid. " << b.toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return best;
@@ -211,8 +221,16 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
-             b.maxY - b.minY);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
+               b.maxY - b.minY);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return best;

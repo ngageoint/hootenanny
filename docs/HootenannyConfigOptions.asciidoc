@@ -433,6 +433,19 @@ Use the value +hoot::GeneralizeTagMerger+ . For example:
 hoot --conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
 ------
 
+[[Provenance-Aware-Overwrite-Tag-Merger]]
+===== Provenance Aware Overwrite Tag Merger
+
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key "hoot:source".  This tag merger
+will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both features 
+are concatenated together.
+
+Use the value +hoot::ProvenanceAwareOverwriteTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm output.osm
+------
+
 
 [[Road-Conflation-Configuration]]
 === Road Conflation Configuration

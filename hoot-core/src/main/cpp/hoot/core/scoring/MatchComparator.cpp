@@ -35,7 +35,6 @@
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
@@ -53,6 +52,8 @@
 
 namespace hoot
 {
+
+unsigned int MatchComparator::logWarnCount = 0;
 
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
@@ -88,8 +89,8 @@ public:
     QString uuid = e->getTags()["uuid"];
     if (refs.size() > 0 && uuid.isEmpty())
     {
-      LOG_WARN("refs: " << refs);
-      LOG_WARN("Element: " << e->toString());
+      LOG_TRACE("refs: " << refs);
+      LOG_TRACE("Element: " << e->toString());
       throw HootException("uuid must be provided on all REF* features.");
     }
 
@@ -433,15 +434,31 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     {
       ElementId p = *eid;
       ConstElementPtr element = conflated->getElement(p);
-      if (!element.get()) //TODO: need to make sure this check is a valid one
+      if (!element.get())
       {
-        LOG_WARN("Missing element for " + p.toString());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Missing element for " + p.toString());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
         continue;
       }
       QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
-        LOG_WARN("Missing uuid for " + p.toString());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Missing uuid for " + p.toString());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
         continue;
       }
 
@@ -513,7 +530,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       }
       else
       {
-        LOG_WARN("Missing UUID: " << cList[i]);
+        LOG_TRACE("Missing UUID: " << cList[i]);
         throw HootException("Conflated uuid wasn't found in either input.");
       }
     }

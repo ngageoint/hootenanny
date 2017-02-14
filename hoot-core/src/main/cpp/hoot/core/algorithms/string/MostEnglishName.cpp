@@ -41,6 +41,8 @@
 namespace hoot
 {
 
+unsigned int MostEnglishName::logWarnCount = 0;
+
 MostEnglishNamePtr MostEnglishName::_theInstance;
 
 MostEnglishName::MostEnglishName()
@@ -55,10 +57,8 @@ const MostEnglishNamePtr& MostEnglishName::getInstance()
   {
     _theInstance.reset(new MostEnglishName());
   }
-
   return _theInstance;
 }
-
 
 QString MostEnglishName::getMostEnglishName(const Tags& tags)
 {
@@ -101,9 +101,17 @@ const QSet<QString>& MostEnglishName::_getWords()
 
     if (_englishWords.size() == 0)
     {
-      LOG_WARN("Failed to load any English dictionaries. Please modify " +
-        ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
-        "dictionary. Search path: " << _wordPaths);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Failed to load any English dictionaries. Please modify " +
+          ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
+          "dictionary. Search path: " << _wordPaths);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
 
     LOG_DEBUG("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
@@ -128,12 +136,15 @@ long MostEnglishName::_loadEnglishWords(QString path)
       QByteArray ba = fp.readLine(MAX_LINE_SIZE);
       if (ba.size() == MAX_LINE_SIZE && count < 10)
       {
-        LOG_WARN("Loaded a line of max size. Is this a proper dictionary?");
-        count++;
-        if (count == 10)
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {
-          LOG_WARN("Silencing dictionary record warnings.");
+          LOG_WARN("Loaded a line of max size. Is this a proper dictionary?");
         }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
       QString s = QString::fromUtf8(ba.data());
       wordCount++;

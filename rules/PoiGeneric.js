@@ -13,8 +13,6 @@ exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
 
-hoot.Settings.set({"log.identical.message.limit":1000});
-
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
 var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
@@ -116,12 +114,6 @@ exports.getSearchRadius = function(e) {
     hoot.trace("radius final: " + radius);
 
     return radius;
-}
-
-/**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
- */
-exports.init = function(map) {
 }
 
 /**
@@ -370,13 +362,36 @@ exports.matchScore = function(map, e1, e2) {
     var reasons = additiveResult.reasons;
     var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
+    var matchScore;
+    var classification;
     if (score <= 0.5) {
-        return {miss: 1, explain: 'Not much evidence of a match ' + d};
+        matchScore = {miss: 1, explain: 'Not much evidence of a match ' + d};
+        classification = 'miss';
     } else if (score < 1.9) {
-        return {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
+        matchScore = {review: 1, explain: "Somewhat similar " + d + " - " + reasons.join(", ") };
+        classification = 'review';
     } else {
-        return {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
+        matchScore = {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
+        classification = 'match';
     }
+
+    hoot.trace("***POI MATCH DETAIL***");
+    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    if (e1.getTags().get("note"))
+    {
+      hoot.trace("e1 note: " + e1.getTags().get("note"));
+    }
+    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+    if (e2.getTags().get("note"))
+    {
+      hoot.trace("e2 note: " + e2.getTags().get("note"));
+    }
+    hoot.trace("score: " + score);
+    hoot.trace("explanation: " + matchScore.explain);
+    hoot.trace("classification: " + classification);
+    hoot.trace("***END POI MATCH DETAIL***");
+
+    return matchScore;
 };
 
 exports.mergePair = function(map, e1, e2)

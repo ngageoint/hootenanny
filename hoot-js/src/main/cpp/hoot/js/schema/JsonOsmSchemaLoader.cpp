@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,6 +31,7 @@
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/core/schema/SchemaChecker.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QByteArray>
@@ -39,6 +40,8 @@
 
 namespace hoot
 {
+
+unsigned int JsonOsmSchemaLoader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 
@@ -96,7 +99,6 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
     //check if schemavertex is unknown type or has empty geometries
     SchemaChecker(s).check();
   }
-
 }
 
 double JsonOsmSchemaLoader::_asDouble(const QVariant& v) const
@@ -222,8 +224,16 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
 
   if (copy.size() != 0)
   {
-    LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
-      arg(toJson(toV8(copy.keys()))));
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
+        arg(toJson(toV8(copy.keys()))));
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 }
 

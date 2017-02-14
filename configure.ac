@@ -36,8 +36,8 @@ fi
 if test "${GDAL_VERSION}" = "1.9.1" ; then
   AC_MSG_WARN(["GDAL v1.9.1 is known to have a bug in FileGDB export where the file can't be opened by ArcMap 10.2. GDAL v1.10.1 is known to work."]);
 fi
-if test "${GDAL_VERSION}" != "1.10.1" ; then
-  AC_MSG_WARN([Most development occurs with GDAL v1.10.1, using v$GDAL_VERSION. Please run all tests after build (make test).]);
+if test "${GDAL_VERSION}" != "2.1.3" ; then
+  AC_MSG_WARN([Most development occurs with GDAL v2.1.3, using v$GDAL_VERSION. Please run all tests after build (make test).]);
 fi
 
 # GEOS

@@ -22,38 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef KEEPREVIEWSVISITOR_H
+#define KEEPREVIEWSVISITOR_H
 
-#ifndef STATUSFILTER_H
-#define STATUSFILTER_H
-
-#include "WayFilter.h"
-
-#include <hoot/core/elements/Status.h>
+// hoot
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
-
-class Way;
+using namespace std;
 
 /**
- * Matches when an element's status matches the status provided.
+ * Remove all elements that are not review relations.
+ *
+ * This could do bad things if the element is in use.
  */
-class StatusFilter : public WayFilter
+class KeepReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  StatusFilter(Status s) : _status(s) { }
+  static string className() { return "hoot::KeepReviewsVisitor"; }
 
-  virtual bool isFiltered(const Way &w) const;
+  KeepReviewsVisitor() {}
+
+  virtual ~KeepReviewsVisitor() {}
+
+  virtual void setOsmMap(OsmMap* map) { _map = map; }
+
+  /**
+   * KeepReviewsVisitor requires a read/write map.
+   */
+  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+
+  virtual void visit(const ConstElementPtr& e);
 
 private:
-
-  Status _status;
-  FilterType _type;
+  OsmMap* _map;
 };
 
 }
 
-#endif // STATUSFILTER_H
+#endif // KEEPREVIEWSVISITOR_H

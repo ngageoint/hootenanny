@@ -4,6 +4,8 @@
  */
 var hoot = require('../lib/HootJs');
 
+hoot.Settings.set({"api.db.email":"test@test.com"});
+
 var input = process.argv[2]
 var output = process.argv[3]
 var poiCount = 0;

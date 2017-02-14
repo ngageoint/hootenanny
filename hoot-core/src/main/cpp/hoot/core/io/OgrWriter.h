@@ -69,7 +69,10 @@ class ElementProvider;
 class OgrWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::OgrWriter"; }
+
+  static unsigned int logWarnCount;
 
   /**
    * A true/false value to determine whether or not all layers are created.
@@ -140,7 +143,7 @@ protected:
   bool _appendData;
   QString _scriptPath;
   mutable shared_ptr<ScriptToOgrTranslator> _translator;
-  shared_ptr<OGRDataSource> _ds;
+  shared_ptr<GDALDataset> _ds;
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;

@@ -43,6 +43,8 @@ public:
 
   static std::string className() { return "hoot::HighwayRfClassifier"; }
 
+  static unsigned int logWarnCount;
+
   HighwayRfClassifier();
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,

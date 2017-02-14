@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,6 +47,8 @@
 
 namespace hoot
 {
+
+unsigned int RubberSheet::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RubberSheet)
 
@@ -138,7 +140,15 @@ void RubberSheet::applyTransform(shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 

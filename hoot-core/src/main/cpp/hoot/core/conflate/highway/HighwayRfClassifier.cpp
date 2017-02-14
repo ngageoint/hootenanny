@@ -67,6 +67,8 @@
 namespace hoot
 {
 
+unsigned int HighwayRfClassifier::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
 HighwayRfClassifier::HighwayRfClassifier()
@@ -249,13 +251,13 @@ map<QString, double> HighwayRfClassifier::getFeatures(const shared_ptr<const Osm
 
   if (!match1 || !match2)
   {
-    LOG_WARN("Internal Error: Found a situation where the match after copy is invalid. Marking as "
-             "needs review");
-    LOG_VAR(eid1);
-    LOG_VAR(eid2);
-    LOG_VAR(match.toString());
-    throw NeedsReviewException("Internal Error: Expected a matching subline, but got an empty "
-                               "match. Please report this to hootenanny.help@digitalglobe.com.");
+    LOG_VART(eid1);
+    LOG_VART(eid2);
+    LOG_VART(match.toString());
+    throw NeedsReviewException("Internal Error: Found a situation where the match after copy is "
+                               "invalid. Marking as needs review.  Expected a matching subline, "
+                               "but got an empty match. Please report this to "
+                               "hootenanny.help@digitalglobe.com.");
   }
   else
   {
@@ -283,7 +285,7 @@ void HighwayRfClassifier::_init() const
     _createTestExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
-    LOG_INFO("Loading highway model from: " << path);
+    LOG_DEBUG("Loading highway model from: " << path);
 
     QFile file(path.toAscii().data());
     if (!file.open(QIODevice::ReadOnly))
@@ -328,10 +330,19 @@ void HighwayRfClassifier::_init() const
 
     if (missingExtractors.size() > 0)
     {
-      LOG_WARN("An extractor used by the model is not being calculated. We will still try, but");
-      LOG_WARN("this will undoubtably result in poor quality matches. Missing extractors:");
-      LOG_WARN(missingExtractors);
-      LOG_WARN("Available extractors: " << extractorNames);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(
+          "An extractor used by the model is not being calculated. We will still try, but this " <<
+          "will undoubtably result in poor quality matches.");
+        LOG_TRACE("Missing extractors: " << missingExtractors);
+        LOG_TRACE("Available extractors: " << extractorNames);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }

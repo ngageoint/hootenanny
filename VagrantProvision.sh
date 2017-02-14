@@ -88,6 +88,10 @@ sudo apt-get -y autoremove
 
 echo "### Configuring environment..."
 
+# Configure https alternative mirror for maven isntall, this can likely be removed once
+# we are using maven 3.2.3 or higher
+sudo /usr/bin/perl $HOOT_HOME/scripts/SetMavenHttps.pl
+
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
     echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
@@ -216,14 +220,18 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
-if ! hash ogrinfo >/dev/null 2>&1 || ogrinfo --formats | grep --quiet FileGDB; then
-    if [ ! -f gdal-1.10.1.tar.gz ]; then
-        echo "### Downloading GDAL source..."
-        wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+
+# For convenience, set the version of GDAL to download and install
+GDAL_VERSION=2.1.3
+
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
+    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+        echo "### Downloading GDAL $GDAL_VERSION source..."
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
     fi
-    if [ ! -d gdal-1.10.1 ]; then
-        echo "### Extracting GDAL source..."
-        tar zxfp gdal-1.10.1.tar.gz
+    if [ ! -d gdal-$GDAL_VERSION ]; then
+        echo "### Extracting GDAL $GDAL_VERSION source..."
+        tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
     if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
@@ -236,9 +244,9 @@ if ! hash ogrinfo >/dev/null 2>&1 || ogrinfo --formats | grep --quiet FileGDB; t
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
-    echo "### Building GDAL w/ FileGDB..."
+    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-1.10.1
+    cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
@@ -380,7 +388,6 @@ if ! which hadoop > /dev/null ; then
   cd hadoop
   sudo find . -type d -exec chmod a+rwx {} \;
   sudo find . -type f -exec chmod a+rw {} \;
-  sudo chmod go-w bin
   cd ~
 
 #TODO: remove these home dir hardcodes
@@ -493,6 +500,7 @@ EOT
   sudo mkdir -p $HOME/hadoop/dfs/name/current
   # this could perhaps be more strict
   sudo chmod -R 777 $HOME/hadoop
+  sudo chmod go-w $HOME/hadoop/bin $HOME/hadoop
   echo 'Y' | hadoop namenode -format
 
   cd /lib

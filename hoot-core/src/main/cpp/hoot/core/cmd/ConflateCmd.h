@@ -43,6 +43,7 @@ using namespace std;
 
 class ConflateCmd : public BaseCommand
 {
+
 public:
 
   static string className() { return "hoot::ConflateCmd"; }

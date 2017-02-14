@@ -86,7 +86,7 @@ private:
   shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
   double _worstCircularError;
   shared_ptr<MatchThreshold> _matchThreshold;
-
+  QMap<QString, Meters> _cachedCustomSearchRadii;
 };
 
 }

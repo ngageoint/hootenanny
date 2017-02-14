@@ -44,6 +44,11 @@ class MatchClassification;
 class RfExtractorClassifier
 {
 public:
+
+  static std::string className() { return "hoot::RfExtractorClassifier"; }
+
+  static unsigned int logWarnCount;
+
   RfExtractorClassifier();
 
   /**
@@ -58,6 +63,7 @@ public:
   void import(QDomElement& docRoot);
 
 protected:
+
   mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
   QStringList _rfFactorLabels;
   auto_ptr<RandomForest> _rf;
@@ -70,7 +76,6 @@ protected:
   virtual void _createExtractors() const = 0;
 
   const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
-
 };
 
 }

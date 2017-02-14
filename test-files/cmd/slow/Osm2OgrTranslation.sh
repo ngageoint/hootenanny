@@ -18,7 +18,8 @@ function printLayerInfo() {
     for l in $layerNames
     do
         echo $l
-        ogrinfo -q -geom=SUMMARY $path $l | sed "s/  */ /g"
+        ogrinfo -q -geom=SUMMARY $path $l | sed "s/  */ /g" \
+            | sed "s/DBF_DATE_LAST_UPDATE=.*/DBF_DATE_LAST_UPDATE/"
     done
 }
 
@@ -44,5 +45,5 @@ mkdir -p test-output/cmd/slow
 export SHAPE_ENCODING=UTF-8
 hoot osm2ogr test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
 mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
-hoot stats --quick test-output/cmd/slow/delaware-tds.shp
+hoot stats --brief test-output/cmd/slow/delaware-tds.shp
 

@@ -37,6 +37,8 @@ class ConflateReducer : public pp::Reducer
 public:
   static string className() { return "hoot::ConflateReducer"; }
 
+  static unsigned int logWarnCount;
+
   ConflateReducer();
 
   virtual void close();

@@ -53,7 +53,7 @@ NetworkMergerCreator::NetworkMergerCreator()
 
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
-  LOG_DEBUG("Creating mergers...");
+  LOG_TRACE("Creating mergers with " << className() << "...");
 
   MatchSet matches = matchesIn;
   _removeDuplicates(matches);

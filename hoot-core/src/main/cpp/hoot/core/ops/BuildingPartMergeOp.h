@@ -84,6 +84,8 @@ public:
 
   static string className() { return "hoot::BuildingPartMergeOp"; }
 
+  static unsigned int logWarnCount;
+
   BuildingPartMergeOp();
 
   virtual void apply(shared_ptr<OsmMap>& map);
@@ -98,6 +100,7 @@ public:
     const vector< shared_ptr<Element> >& parts);
 
 private:
+
   /// Used to keep track of which elements make up a building.
   DisjointSetMap< shared_ptr<Element> > _ds;
   shared_ptr<OsmMap> _map;

@@ -25,32 +25,52 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ONEWAYFILTER_H
-#define ONEWAYFILTER_H
-
-#include "WayFilter.h"
+// Hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/rnd/conflate/CumulativeConflator.h>
 
 namespace hoot
 {
 
-class Way;
-
-class OneWayFilter : public WayFilter
+class ConflateCumulativeCmd : public BaseCommand
 {
 public:
 
-  /**
-   * @param oneway If true, keep all the oneway roads. If false, filter the oneway roads.
-   */
-  OneWayFilter(bool oneway = true) { _oneway = oneway; }
+  static string className() { return "hoot::ConflateCumulativeCmd"; }
 
-  virtual bool isFiltered(const Way &w) const;
+  ConflateCumulativeCmd() { }
 
-private:
+  virtual QString getName() const { return "conflate-cumulative"; }
 
-  bool _oneway;
+  virtual int runSimple(QStringList args)
+  {
+    //TODO: make this work with stats
+    if (args.contains("--stats"))
+    {
+      throw HootException("Multi-conflation does not work with the --stats option.");
+    }
+
+    if (args.size() < 4)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(
+        QString("%1 takes four or more parameters with at least three input paths and exactly") +
+        QString("one output path. ").arg(getName()));
+    }
+
+    QStringList inputsTemp = args;
+    inputsTemp.removeLast();
+    const QStringList inputs = inputsTemp;
+    const QString output = args.last();
+
+    CumulativeConflator::conflate(inputs, output);
+
+    return 0;
+  }
 };
+
+HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 
-#endif // ONEWAYFILTER_H

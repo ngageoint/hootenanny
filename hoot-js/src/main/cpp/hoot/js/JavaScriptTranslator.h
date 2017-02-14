@@ -45,9 +45,9 @@
 // Standard
 #include <memory>
 
-
 namespace hoot
 {
+
 using namespace std;
 using namespace v8;
 class FieldDefinition;
@@ -67,6 +67,8 @@ class JavaScriptTranslator : public ScriptTranslator, public ScriptToOgrTranslat
 public:
 
   static std::string className() { return "hoot::JavaScriptTranslator"; }
+
+  static unsigned int logWarnCount;
 
   JavaScriptTranslator();
 

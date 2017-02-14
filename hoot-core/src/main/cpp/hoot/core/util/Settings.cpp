@@ -397,6 +397,7 @@ QVariant Settings::getValue(const QString& value) const
 
 void Settings::loadEnvironment()
 {
+  LOG_DEBUG("Loading environment...");
   for (int n = 0; environ[n]; n++)
   {
     QString e = environ[n];
@@ -404,18 +405,6 @@ void Settings::loadEnvironment()
     QString k = e.mid(0, i);
     QString v = e.mid(i + 1);
     set(k, v);
-  }
-
-  QString env = QString::fromUtf8(getenv("HOOT_OPTIONS"));
-
-  if (!env.isEmpty())
-  {
-    QStringList args = env.split(" ", QString::SkipEmptyParts);
-    parseCommonArguments(args);
-    if (args.size() != 0)
-    {
-      throw HootException("Error parsing all arguments in HOOT_OPTIONS: " + args.join(";"));
-    }
   }
 }
 
@@ -430,7 +419,7 @@ void Settings::loadDefaults()
     QString localPath = ConfPath::search("LocalHoot.json");
     loadJson(localPath);
   }
-  catch(FileNotFoundException& e)
+  catch (FileNotFoundException& e)
   {
     // pass
   }
@@ -450,7 +439,22 @@ void Settings::loadJson(QString path)
 
 void Settings::parseCommonArguments(QStringList& args)
 {
+  LOG_DEBUG("Parsing command arguments...");
+
   bool foundOne = true;
+
+  QStringList hootTestCmdsIgnore;
+  hootTestCmdsIgnore.append("--quick");
+  hootTestCmdsIgnore.append("--slow");
+  hootTestCmdsIgnore.append("--glacial");
+  hootTestCmdsIgnore.append("--all");
+  hootTestCmdsIgnore.append("--quick-only");
+  hootTestCmdsIgnore.append("--slow-only");
+  hootTestCmdsIgnore.append("--glacial-only");
+  hootTestCmdsIgnore.append("--single");
+  hootTestCmdsIgnore.append("--names");
+  hootTestCmdsIgnore.append("--all-names");
+  hootTestCmdsIgnore.append("--diff");
 
   while (args.size() > 0 && foundOne)
   {
@@ -497,6 +501,12 @@ void Settings::parseCommonArguments(QStringList& args)
     else if (args[0] == "--fatal")
     {
       Log::getInstance().setLevel(Log::Fatal);
+      args = args.mid(1);
+    }
+    //HootTest settings have already been parsed by this point
+    else if (hootTestCmdsIgnore.contains(args[0]) || args[0].contains("--include") ||
+             args[0].contains("--exclude"))
+    {
       args = args.mid(1);
     }
     else if (args[0] == "--define" || args[0] == "-D")

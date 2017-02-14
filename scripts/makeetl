@@ -13,7 +13,8 @@ OP_INPUT_PATH=$(HOOT_HOME)/$(INPUT_PATH)
 
 # This replaces semicolon with vsizip and path
 ifeq "$(INPUT_TYPE)" "ZIP"
-	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;,/" "/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/,$(INPUT))/"
+#	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;,/" "/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/,$(INPUT))/"
+	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;," "/vsizip/$(HOOT_HOME)/$(INPUT_PATH),$(INPUT))"
 endif
 
 ifeq "$(INPUT_TYPE)" "GEONAMES"
@@ -38,19 +39,19 @@ ifneq ($(strip $(UNZIP_LIST)), )
 	bash $(HOOT_HOME)/scripts/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
 endif
   ifeq "$(INPUT_TYPE)" "OGR"
-	  cd "$(OP_INPUT_PATH)" && hoot --ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+	  cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
   endif
 
   ifeq "$(INPUT_TYPE)" "OSM"
-	  cd "$(OP_INPUT_PATH)" && hoot --convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
+	  cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
   endif
 
   ifeq "$(INPUT_TYPE)" "ZIP"
-	  cd "$(OP_INPUT_PATH)" && hoot --ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+	  cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
   endif
 
   ifeq "$(INPUT_TYPE)" "FGDB"
-	  cd "$(OP_INPUT_PATH)" && hoot --ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+	  cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
   endif
 
   ifeq "$(INPUT_TYPE)" "GEONAMES"

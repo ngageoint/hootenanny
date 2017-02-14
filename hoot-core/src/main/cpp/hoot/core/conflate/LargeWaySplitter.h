@@ -31,6 +31,9 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
+// Std
+#include <string>
+
 namespace hoot
 {
 
@@ -47,6 +50,11 @@ class Way;
 class LargeWaySplitter
 {
 public:
+
+  static std::string className() { return "hoot::LargeWaySplitter"; }
+
+  static unsigned int logWarnCount;
+
   LargeWaySplitter(double threshold);
 
   void apply(shared_ptr<OsmMap> map);

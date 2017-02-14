@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,38 +24,41 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "ProvenanceAwareOverwriteTagMerger.h"
 
-#ifndef WAYDIRECTIONFILTER_H
-#define WAYDIRECTIONFILTER_H
-
-// GEOS
-#include <geos/geom/LineString.h>
-
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
-
-#include "WayFilter.h"
+// hoot
+#include <hoot/core/Factory.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
 
-class WayDirectionFilter : public WayFilter
+HOOT_FACTORY_REGISTER(TagMerger, ProvenanceAwareOverwriteTagMerger)
+
+ProvenanceAwareOverwriteTagMerger::ProvenanceAwareOverwriteTagMerger(bool swap) :
+OverwriteTagMerger(swap)
 {
-public:
-  WayDirectionFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
-    bool similarDirection = true);
-
-  virtual bool isFiltered(const shared_ptr<const Way>& w) const;
-
-private:
-  ConstOsmMapPtr _map;
-  shared_ptr<const Way> _baseWay;
-  bool _similarDirection;
-};
-
 }
 
-#endif // WAYDIRECTIONFILTER_H
+Tags ProvenanceAwareOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2,
+                                                  ElementType et) const
+{
+  Tags tags = OverwriteTagMerger::mergeTags(t1, t2, et);
+  QString sourceVal = "";
+  if (t1.contains(MetadataTags::HootSource()) && t2.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t1.get(MetadataTags::HootSource()) + "," + t2.get(MetadataTags::HootSource());
+  }
+  else if (t1.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t1.get(MetadataTags::HootSource());
+  }
+  else if (t2.contains(MetadataTags::HootSource()))
+  {
+    sourceVal = t2.get(MetadataTags::HootSource());
+  }
+  tags.set(MetadataTags::HootSource(), sourceVal);
+  return tags;
+}
+
+}

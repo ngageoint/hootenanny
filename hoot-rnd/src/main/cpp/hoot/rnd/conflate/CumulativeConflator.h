@@ -1,4 +1,4 @@
- /*
+/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -22,21 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "UnknownFilter.h"
+#ifndef CUMULATIVECONFLATOR_H
+#define CUMULATIVECONFLATOR_H
 
-#include <hoot/core/elements/Way.h>
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
-bool UnknownFilter::isFiltered(const Way &w) const
+/**
+ * Allows for conflating more than two inputs in a cumulative fashion.
+ */
+class CumulativeConflator
 {
-  return w.isUnknown() == false;
+public:
+
+  /**
+   * Conflates three or more input files in a cumulative fashion.
+   *
+   * @param inputs input file paths to conflate
+   * @param output output file path to write conflated data
+   */
+  static void conflate(const QStringList inputs, const QString output);
+};
+
 }
 
-
-}
-
+#endif // CUMULATIVECONFLATOR_H

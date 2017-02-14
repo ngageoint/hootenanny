@@ -39,6 +39,8 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+#include <QTextCodec>
+
 namespace hoot
 {
 
@@ -534,9 +536,22 @@ public:
 
   void runUnescapeTags()
   {
-    HOOT_STR_EQUALS("key = value\n", HootApiDb::unescapeTags("\"key\"=>\"value\""));
-    HOOT_STR_EQUALS("key1 = value1\nkey2 = value2\n", HootApiDb::unescapeTags("\"key1\"=>\"value1\", \"key2\"=>\"value2\""));
-    HOOT_STR_EQUALS("fixme = check: building or just a \"paved\" place\n", HootApiDb::unescapeTags("\"fixme\"=>\"check: building or just a \"paved\" place\""));
+    //  Simple key/value pair
+    HOOT_STR_EQUALS("key = value\n",
+      HootApiDb::unescapeTags("\"key\"=>\"value\""));
+    //  A couple of key/value pairs separated by a comma
+    HOOT_STR_EQUALS("key1 = value1\nkey2 = value2\n",
+      HootApiDb::unescapeTags("\"key1\"=>\"value1\", \"key2\"=>\"value2\""));
+    //  More complicated case where the value contains double quotes
+    HOOT_STR_EQUALS("fixme = check: building or just a \"paved\" place\n",
+      HootApiDb::unescapeTags("\"fixme\"=>\"check: building or just a \"paved\" place\""));
+    //  Complicated case from a user where the value contains the key/value separator '=>',
+    //  this example isn't a Latin string but a UTF-8 string, change the codec temporarily
+    QTextCodec* oldCodec = QTextCodec::codecForCStrings();
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    HOOT_STR_EQUALS("network = DB\nroute = train\nerror:circular = 15\ninterval = 120\nservice = high_speed\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\noperator = DB Fernverkehr AG\nhoot:status = 1\nfrom = Berlin Ostbahnhof\nalt_name = ICE11 München\npublic_transport:version = 2\ntype = route\nto = München Hbf\nref = ICE11\nname = ICE 11: Berlin => Frankfurt => München\n",
+          HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\", \"public_transport:version\"=>\"2\""));
+    QTextCodec::setCodecForCStrings(oldCodec);
   }
 
   void setUp()

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,33 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGELEMENTFILTER_H
-#define TAGELEMENTFILTER_H
+#ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
+#define PROVENANCEAWAREOVERWRITETAGMERGER_H
 
-// Qt
-#include <QString>
-
-#include "ElementCriterion.h"
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 namespace hoot
 {
 
-class TagElementFilter : public BaseElementFilter
+/**
+ * Same as OverwriteTag2Merger except the provenance tag, hoot:source, which will be merged using
+ * values from both features.
+ */
+class ProvenanceAwareOverwriteTagMerger : public OverwriteTagMerger
 {
+
 public:
-  TagElementFilter(FilterType type, QString k, QString v) { _type = type; _k = k; _v = v; }
 
-  virtual ElementCriterion* clone() { return new TagElementFilter(_type, _k, _v); }
+  static string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
 
-protected:
-  virtual bool isFiltered(const Element& e) const;
+  ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
-  QString _k, _v;
-  FilterType _type;
+  virtual ~ProvenanceAwareOverwriteTagMerger() {}
+
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 };
 
 }
 
-#endif // TAGELEMENTFILTER_H
+#endif // PROVENANCEAWAREOVERWRITETAGMERGER_H

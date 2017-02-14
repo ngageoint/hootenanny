@@ -191,7 +191,7 @@ public:
   {
     LOG_TRACE("Registering: " << baseName << " " << name);
     Factory::getInstance().registerCreator(
-          new ObjectCreatorTemplate<Base, T>(baseName, name), baseClass);
+      new ObjectCreatorTemplate<Base, T>(baseName, name), baseClass);
   }
 };
 

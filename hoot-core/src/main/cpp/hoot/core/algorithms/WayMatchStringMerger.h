@@ -46,6 +46,10 @@ class WayMatchStringMerger
 
 public:
 
+  static std::string className() { return "hoot::WayMatchStringMerger"; }
+
+  static unsigned int logWarnCount;
+
   /// @todo clean me
   class SublineMapping
   {

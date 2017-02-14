@@ -70,6 +70,10 @@ class MatchFeatureExtractor
 {
 public:
 
+  static std::string className() { return "hoot::MatchFeatureExtractor"; }
+
+  static unsigned int logWarnCount;
+
   MatchFeatureExtractor(bool evenClasses=false);
 
   /**
