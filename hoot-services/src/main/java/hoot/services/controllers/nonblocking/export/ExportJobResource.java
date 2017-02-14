@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.nonblocking.export;
 
@@ -147,7 +147,7 @@ public class ExportJobResource extends NonblockingJobResource {
 
                 Command[] commands = {
                         () -> {
-                            ExternalCommand osm2orgCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
+                            ExternalCommand osm2orgCommand = new ExportCommand(this.getClass(), commandArgs);
                             return externalCommandManager.exec(jobId, osm2orgCommand);
                         },
                         () -> {
@@ -167,7 +167,7 @@ public class ExportJobResource extends NonblockingJobResource {
 
                 Command[] commands = {
                     () -> {
-                        ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
+                        ExternalCommand exportToOSMCommand = new ExportCommand(this.getClass(), args);
                         return externalCommandManager.exec(jobId, exportToOSMCommand);
                     }
                 };
@@ -179,7 +179,7 @@ public class ExportJobResource extends NonblockingJobResource {
 
                 Command[] command = {
                     () -> {
-                        ExternalCommand exportToOSMCommand = createMakeScriptJobReq(args, EXPORT_SCRIPT);
+                        ExternalCommand exportToOSMCommand = new ExportCommand(this.getClass(), args);
                         return externalCommandManager.exec(jobId, exportToOSMCommand);
                     }
                 };
@@ -209,7 +209,7 @@ public class ExportJobResource extends NonblockingJobResource {
 
                 Command[] commands = {
                     () -> {
-                        ExternalCommand exportCommand = createMakeScriptJobReq(commandArgs, EXPORT_SCRIPT);
+                        ExternalCommand exportCommand = new ExportCommand(this.getClass(), commandArgs);
                         return externalCommandManager.exec(jobId, exportCommand);
                     }
                 };
@@ -395,11 +395,11 @@ public class ExportJobResource extends NonblockingJobResource {
             out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
 
             if ((out == null) || !out.exists()) {
-                throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
             }
         }
         else {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
         }
         return out;
     }
@@ -625,14 +625,5 @@ public class ExportJobResource extends NonblockingJobResource {
         }
 
         return Response.ok(exportResources.toJSONString()).build();
-    }
-
-    private ExternalCommand createMakeScriptJobReq(JSONArray args, String scriptName) {
-        ExternalCommand command = new ExternalCommand();
-        command.put("exectype", "make");
-        command.put("exec", scriptName);
-        command.put("caller", this.getClass().getName());
-        command.put("params", args);
-        return command;
     }
 }
