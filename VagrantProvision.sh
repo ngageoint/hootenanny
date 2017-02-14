@@ -224,7 +224,7 @@ fi
 # For convenience, set the version of GDAL to download and install
 GDAL_VERSION=2.1.3
 
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
     if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
         wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz

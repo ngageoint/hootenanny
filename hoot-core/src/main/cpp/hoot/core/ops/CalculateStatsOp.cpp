@@ -28,7 +28,6 @@
 
 #include <hoot/core/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/AreaFilter.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>

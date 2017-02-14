@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -76,6 +76,8 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
+  LOG_TRACE("Hoot instance init...");
+
 # ifdef TGS_HAVE_LIBSTXXL
     // initialize the environment variable for loading STXXL configuration. If the environment
     // variable has already been set then don't overwrite it (that is the 0 at the end).
@@ -143,6 +145,8 @@ void Hoot::loadLibrary(QString name)
 
 void Hoot::reinit()
 {
+  LOG_TRACE("Hoot instance reinit...");
+
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
   {
