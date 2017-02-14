@@ -397,6 +397,7 @@ QVariant Settings::getValue(const QString& value) const
 
 void Settings::loadEnvironment()
 {
+  LOG_DEBUG("Loading environment...");
   for (int n = 0; environ[n]; n++)
   {
     QString e = environ[n];
@@ -404,18 +405,6 @@ void Settings::loadEnvironment()
     QString k = e.mid(0, i);
     QString v = e.mid(i + 1);
     set(k, v);
-  }
-
-  QString env = QString::fromUtf8(getenv("HOOT_OPTIONS"));
-
-  if (!env.isEmpty())
-  {
-    QStringList args = env.split(" ", QString::SkipEmptyParts);
-    parseCommonArguments(args);
-    if (args.size() != 0)
-    {
-      throw HootException("Error parsing all arguments in HOOT_OPTIONS: " + args.join(";"));
-    }
   }
 }
 
@@ -430,7 +419,7 @@ void Settings::loadDefaults()
     QString localPath = ConfPath::search("LocalHoot.json");
     loadJson(localPath);
   }
-  catch(FileNotFoundException& e)
+  catch (FileNotFoundException& e)
   {
     // pass
   }
@@ -450,6 +439,8 @@ void Settings::loadJson(QString path)
 
 void Settings::parseCommonArguments(QStringList& args)
 {
+  LOG_DEBUG("Parsing command arguments...");
+
   bool foundOne = true;
 
   QStringList hootTestCmdsIgnore;

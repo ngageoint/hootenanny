@@ -35,7 +35,6 @@
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
