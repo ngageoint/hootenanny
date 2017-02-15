@@ -91,13 +91,15 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   Tags finalBuildingTags = finalBuilding->getTags();
   if (poiTags1.size())
   {
-    finalBuildingTags = TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
-      finalBuilding->getElementType());
+    finalBuildingTags =
+      TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
+                                                finalBuilding->getElementType());
   }
   if (poiTags2.size())
   {
-    finalBuildingTags = TagMergerFactory::getInstance().mergeTags(finalBuildingTags,
-      poiTags2, finalBuilding->getElementType());
+    finalBuildingTags =
+      TagMergerFactory::getInstance().mergeTags(finalBuildingTags, poiTags2,
+                                                finalBuilding->getElementType());
   }
   finalBuilding->setTags(finalBuildingTags);
 

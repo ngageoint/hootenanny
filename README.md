@@ -18,10 +18,10 @@ single seamless map.
 Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
 
 # Project Goals
+* Automatically combine geospatial features for decision making
+* Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
+* Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
-* Combine attributes from different sources
-* Combine POIs and polygons for geolocation and sense making
-* Maintain geometry and attribute provenance
 
 # Supported Geodata Types
 Hootenanny can conflate:
