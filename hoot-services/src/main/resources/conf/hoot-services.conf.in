@@ -107,9 +107,6 @@ translationScriptPath=$(homeFolder)/translations
 # Temporary OSM output path
 osmTempOutputPath=$(homeFolder)/tmp
 
-# Translation osm conversion batch script
-osmConvertorScript=osmconvert.sh
-
 # osm2ogr script used in export
 ExportScript=osm2ogrscript
 
@@ -214,9 +211,6 @@ GetOgrAttributeScript=makeGetOgrAttrib
 
 # Report storage location
 reportDataPath=data/reports
-
-# Conflation advanced options node script
-confAdvOptsScript=confAdvOpts.js
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
