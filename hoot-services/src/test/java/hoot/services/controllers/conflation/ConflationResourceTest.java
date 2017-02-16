@@ -58,7 +58,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
+                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -82,7 +82,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                     .currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
+                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -106,7 +106,7 @@ public class ConflationResourceTest {
             String inputParams = FileUtils.readFileToString(new File(Thread
                 .currentThread()
                 .getContextClassLoader()
-                .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
+                .getResource("hoot/services/controllers/conflation/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
                 .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
@@ -129,7 +129,7 @@ public class ConflationResourceTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
                     .getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());

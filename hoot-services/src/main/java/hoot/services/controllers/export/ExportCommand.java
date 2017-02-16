@@ -188,7 +188,7 @@ class ExportCommand extends ExternalCommand {
             bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
         }
         else {
-            bbox = getMapBounds(conflatedMap);
+            bbox = conflatedMap.getBounds();
         }
 
         setAoi(bbox, commandArgs);
@@ -232,7 +232,7 @@ class ExportCommand extends ExternalCommand {
 
     private Map getConflatedMap(JSONObject oParams) {
         String mapName = JsonUtils.getParameterValue("input", oParams);
-        Long mapId = getMapIdByName(mapName);
+        Long mapId = DbUtils.getMapIdByName(mapName);
 
         // this may be checked somewhere else down the line...not sure
         if (mapId == null) {
@@ -246,23 +246,8 @@ class ExportCommand extends ExternalCommand {
         return conflatedMap;
     }
 
-    // adding this to satisfy the mock
-    private Long getMapIdByName(String conflatedMapName) {
-        return DbUtils.getMapIdByName(conflatedMapName);
-    }
-
-    // adding this to satisfy the mock
-    private java.util.Map<String, String> getMapTags(long mapId) {
-        return DbUtils.getMapsTableTags(mapId);
-    }
-
-    // adding this to satisfy the mock
-    private BoundingBox getMapBounds(Map map) {
-        return map.getBounds();
-    }
-
     private void addMapForExportTag(Map map, JSONArray commandArgs) {
-        java.util.Map<String, String> tags = getMapTags(map.getId());
+        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(map.getId());
 
         if (!tags.containsKey("osm_api_db_export_time")) {
             String msg = "Error exporting data.  Map with ID: " + map.getId() + " and name: " + map.getDisplayName()

@@ -27,6 +27,42 @@
 package hoot.services.controllers.hgis;
 
 
+import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
+
+
 public class HGISPrepareForValidationCommandTest {
+
+    @Test
+    @Category(UnitTest.class)
+    public void testPrepareItemsForValidationCommand() throws Exception {
+        HGISPrepareForValidationCommandFactory hgisPrepareForValidationCommandFactory = new HGISPrepareForValidationCommandFactory();
+        HGISPrepareForValidationCommand command = hgisPrepareForValidationCommandFactory.build("testSrc1", "out1", this.getClass());
+
+        String actualCaller = (String) command.get("caller");
+        String expectedCaller = this.getClass().getName();
+        assertEquals(expectedCaller, actualCaller);
+
+        String actualExec = (String) command.get("exec");
+        String expectedExec = HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+        assertEquals(expectedExec, actualExec);
+
+        String actualExectype = (String) command.get("exectype");
+        String expectedExectype = "bash";
+        assertEquals(expectedExectype, actualExectype);
+
+        String expectedCommandArgs =
+                "[{\"SOURCE\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/testSrc1\"}," +
+                        "{\"OUTPUT\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/out1\"}]";
+
+        String actualCommandArgs = command.get("params").toString();
+
+        assertEquals(expectedCommandArgs, actualCommandArgs);
+    }
 
 }

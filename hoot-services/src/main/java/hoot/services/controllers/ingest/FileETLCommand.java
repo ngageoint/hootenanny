@@ -154,7 +154,7 @@ class FileETLCommand extends ExternalCommand {
             }
         }
 
-        JSONArray commandArgs = null;
+        JSONArray commandArgs;
         try {
             commandArgs = JsonUtils.parseParams(param.toJSONString());
         }

@@ -59,7 +59,7 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        URL inputUrl = ErrorLogTest.class.getResource("/hoot/services/info/catalina.out");
+        URL inputUrl = ErrorLogTest.class.getResource("/hoot/services/controllers/info/catalina.out");
         File dest = new File(testFolder, "catalina.out");
         FileUtils.copyURLToFile(inputUrl, dest);
 

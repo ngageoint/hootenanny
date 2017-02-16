@@ -31,67 +31,14 @@ import static org.junit.Assert.assertEquals;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
-import hoot.services.controllers.hgis.HGISReviewResource;
-import hoot.services.controllers.hgis.PrepareForValidationRequest;
 
 
 public class HGISReviewResourceTest {
-
-    // TODO: This test needs to be reworked
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void TestPrepareItemsForValidationReview() throws Exception {
-/*
-        HGISReviewResource real = new HGISReviewResource();
-        HGISReviewResource spy = Mockito.spy(real);
-
-        HGISResource.mapExists(Matchers.anyString());
-
-        ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
-
-        Mockito.doNothing().when((JobControllerBase) spy).processJob(Matchers.anyString(), argCaptor.capture());
-        PrepareForValidationRequest request = new PrepareForValidationRequest();
-        request.setSourceMap("testSrc1");
-        request.setOutputMap("out1");
-
-        spy.prepareItemsForValidationReview(request);
-
-        List<String> args = argCaptor.getAllValues();
-        String param = args.get(0);
-        JSONParser parser = new JSONParser();
-        JSONArray result = (JSONArray) parser.parse(param);
-
-        JSONObject command = (JSONObject) result.get(0);
-
-        assertEquals("custom/HGIS/PrepareForValidation.sh", command.get("exec"));
-        assertEquals("bash", command.get("exectype"));
-        assertNotNull(command.get("params"));
-
-        JSONArray arr = (JSONArray) command.get("params");
-        String connStr = spy.generateDbMapParam("testSrc1");
-
-        assertEquals(((JSONObject) arr.get(0)).get("SOURCE"), connStr);
-        connStr = spy.generateDbMapParam("out1");
-        assertEquals(((JSONObject) arr.get(1)).get("OUTPUT"), connStr);
-
-        command = (JSONObject) result.get(1);
-
-        assertEquals("hoot.services.controllers.hgis.HGISReviewResource", command.get("class"));
-        assertEquals("updateMapsTag", command.get("method"));
-        assertEquals("reflection", command.get("exectype"));
-        assertNotNull(command.get("params"));
-
-        arr = (JSONArray) command.get("params");
-
-        assertEquals("out1", ((JSONObject) arr.get(0)).get("value"));
-*/
-    }
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
@@ -125,32 +72,29 @@ public class HGISReviewResourceTest {
         }
     }
 
-    // TODO: This test needs to be reworked
-    @Ignore
-    @Test(/*expected = WebApplicationException.class*/)
+    @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
-    public void TestInvalidNoMap() throws Exception {
-/*
-        try {
+    public void TestInvalidSourceMap() throws Exception {
+        HGISReviewResource real = new HGISReviewResource();
+        HGISReviewResource spy = Mockito.spy(real);
 
-            HGISReviewResource real = new HGISReviewResource();
-            HGISReviewResource spy = Mockito.spy(real);
+        PrepareForValidationRequest request = new PrepareForValidationRequest();
+        request.setSourceMap("");
+        request.setOutputMap("output");
 
-            HGISResource.mapExists(Matchers.anyString());
+        spy.prepareItemsForValidationReview(request);
+    }
 
-            ArgumentCaptor<Command> argCaptor = ArgumentCaptor.forClass(Command.class);
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void TestInvalidOutputMap() throws Exception {
+        HGISReviewResource real = new HGISReviewResource();
+        HGISReviewResource spy = Mockito.spy(real);
 
-            Mockito.doNothing().when(spy).processJob(Matchers.anyString(), argCaptor.capture());
-            PrepareForValidationRequest request = new PrepareForValidationRequest();
-            request.setSourceMap("testSrc1");
-            request.setOutputMap("out1");
+        PrepareForValidationRequest request = new PrepareForValidationRequest();
+        request.setSourceMap("source");
+        request.setOutputMap("");
 
-            spy.prepareItemsForValidationReview(request);
-        }
-        catch (WebApplicationException e) {
-            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            throw e;
-        }
-*/
+        spy.prepareItemsForValidationReview(request);
     }
 }

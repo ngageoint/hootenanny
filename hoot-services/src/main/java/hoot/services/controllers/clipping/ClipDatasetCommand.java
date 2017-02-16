@@ -43,8 +43,7 @@ class ClipDatasetCommand extends ExternalCommand {
         JSONArray commandArgs;
 
         try {
-            // scripts/makeclipdataset
-            // hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
+            // scripts/makeclipdataset: hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
             commandArgs = JsonUtils.parseParams(params);
         }
         catch (ParseException pe) {

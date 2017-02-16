@@ -215,7 +215,7 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         metaData.put("reportpath", HOME_FOLDER + "/test_report1.pdf");
 
         File dest = new File(HOME_FOLDER, "test_report1.pdf");
-        URL inputUrl = ReportsResourceTest.class.getResource("/hoot/services/controllers/blocking/info/test_report1.pdf");
+        URL inputUrl = ReportsResourceTest.class.getResource("/hoot/services/controllers/info/test_report1.pdf");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         File meta = new File(storePath + "/123_test_file/meta.data");

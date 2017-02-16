@@ -26,9 +26,42 @@
  */
 package hoot.services.controllers.hgis;
 
-/**
- * Created by dmylov on 2/15/17.
- */
+import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
+
+
 public class FilterNonHGISPOIsCommandTest {
+
+    @Test
+    @Category(UnitTest.class)
+    public void testFilterNonHgisPoisCommand() throws Exception {
+        FilterNonHGISPOIsCommandFactory filterNonHGISPOIsCommandFactory = new FilterNonHGISPOIsCommandFactory();
+        FilterNonHGISPOIsCommand command = filterNonHGISPOIsCommandFactory.build("testSrc1", "out1", this.getClass());
+
+        String actualCaller = (String) command.get("caller");
+        String expectedCaller = this.getClass().getName();
+        assertEquals(expectedCaller, actualCaller);
+
+        String actualExec = (String) command.get("exec");
+        String expectedExec = HGIS_FILTER_SCRIPT;
+        assertEquals(expectedExec, actualExec);
+
+        String actualExectype = (String) command.get("exectype");
+        String expectedExectype = "bash";
+        assertEquals(expectedExectype, actualExectype);
+
+        String expectedCommandArgs =
+                "[{\"SOURCE\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/testSrc1\"}," +
+                        "{\"OUTPUT\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/out1\"}]";
+
+        String actualCommandArgs = command.get("params").toString();
+
+        assertEquals(expectedCommandArgs, actualCommandArgs);
+    }
 
 }

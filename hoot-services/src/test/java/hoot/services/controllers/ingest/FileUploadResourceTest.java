@@ -59,7 +59,7 @@ public class FileUploadResourceTest {
 
     private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
         for (String resource : resources) {
-            URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/nonblocking/ingest/FileUploadResourceTest/" + resource);
+            URL inputUrl = FileUploadResourceTest.class.getResource("/hoot/services/controllers/ingest/FileUploadResourceTest/" + resource);
             File dest = new File(homeFolder, resource);
             FileUtils.copyURLToFile(inputUrl, dest);
         }

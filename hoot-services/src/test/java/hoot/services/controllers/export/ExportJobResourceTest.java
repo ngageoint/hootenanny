@@ -73,7 +73,6 @@ import hoot.services.testsupport.HootServicesSpringTestConfig;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @ActiveProfiles("test")
@@ -82,63 +81,6 @@ public class ExportJobResourceTest {
 
     @Autowired
     private ExternalCommandManager externalCommandInterface;
-
-    // TODO: This test needs to be updated
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testProcess() throws Exception {
-        String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"gdb\",\"removereview\" : \"false\"}";
-
-        String tempOutputPath = TEMP_OUTPUT_PATH;
-        JSONObject arg = new JSONObject();
-        arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
-        tempOutputPath = arg.toJSONString();
-        String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},";
-        jobArgs += "{\"outputtype\":\"gdb\"},{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
-        jobArgs += tempOutputPath + ",";
-        jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}],";
-        jobArgs += "\"exectype\":\"make\"}";
-
-        ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-        Response resp = spy.export(params);
-        //String jobId = resp.getJobid();
-
-        //jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        // verify(spy).postJobRequest(Matchers.matches(jobId),
-        // Matchers.endsWith(jobArgs));
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testProcessForWFS() throws Exception {
-        String pgUrl = replaceSensitiveData("host='" + DB_HOST + "' port='" + DB_PORT + "' user='" + DB_USER_ID + "' password='" + DB_PASSWORD
-                + "' dbname='" + WFS_STORE_DB + "'");
-
-        String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
-
-        JSONObject arg = new JSONObject();
-        arg.put("outputfolder", TEMP_OUTPUT_PATH + "/" + "f9a8d471");
-        String tempOutputPath = arg.toJSONString();
-        String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},{\"outputtype\":\"wfs\"},"
-                + "{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
-        jobArgs += tempOutputPath + ",";
-        jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}," + "{\"PG_URL\":\"" + pgUrl
-                + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.wfs.WfsManager\","
-                + "\"method\":\"createWfsResource\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"f9a8d471\","
-                + "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
-
-        ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-//        Response resp = spy.process(params);
-
-        // /String jobId = resp.getJobid();
-
-        //jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        // verify(spy).postChainJobRequest(Matchers.matches(jobId),
-        // Matchers.endsWith(jobArgs));
-    }
 
     @Test
     @Category(UnitTest.class)
@@ -166,43 +108,7 @@ public class ExportJobResourceTest {
         assertEquals(parser.parse(expected), parser.parse(result));
     }
 
-    @Test
-    @Category(UnitTest.class)
-    public void testExportToOsmApiDb() throws Exception {
-        try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()), "UTF-8");
-
-            ExportJobResource spy = Mockito.spy(new ExportJobResource());
-            //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-            Long mapId = 1L;
-            //Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
-            java.util.Map<String, String> mapTags = new HashMap<>();
-            String exportTime = "2016-05-04 10:15";
-            mapTags.put("osm_api_db_export_time", exportTime);
-            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong());
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            String mapBoundsStr = mapBounds.toServicesString();
-            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            //String commandArgs = spy.getExportToOsmApiDbCommandArgs(JsonUtils.parseParams(inputParams),
-            //        (JSONObject) new JSONParser().parse(inputParams)).toString();
-
-            //assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
-            //assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
-            //assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
-            //assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
-            //assertTrue(commandArgs.contains("{\"changesetoutput\":"));
-            //assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
-            //assertTrue(commandArgs.contains("{\"aoi\":\"" + mapBoundsStr + "\"}"));
-        }
-        finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
-        }
-    }
-
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbWithTranslation() throws Exception {
@@ -214,7 +120,7 @@ public class ExportJobResourceTest {
                                     Thread.currentThread()
                                             .getContextClassLoader()
                                             .getResource(
-                                                    "hoot/services/controllers/nonblocking/export/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
+                                                    "hoot/services/controllers/export/ExportResourceTestExportToOsmApiDbWithTranslationInput.json")
                                             .getPath()), "UTF-8");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -242,13 +148,14 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbNoTimestampTag() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot/services/controllers/export/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()), "UTF-8");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -274,6 +181,7 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbBadInputType() throws Exception {
@@ -284,7 +192,7 @@ public class ExportJobResourceTest {
                             new File(
                                     Thread.currentThread()
                                             .getContextClassLoader()
-                                            .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
+                                            .getResource("hoot/services/controllers/export/ExportResourceTestExportToOsmApiDbBadInputTypeInput.json")
                                             .getPath()), "UTF-8");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -315,13 +223,14 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbMissingMap() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot/services/controllers/export/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()), "UTF-8");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -349,13 +258,14 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportOsmApiDbNotEnabled() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessOsmApiDbInputInput.json")
+                    .getResource("hoot/services/controllers/export/ExportResourceTestProcessOsmApiDbInputInput.json")
                     .getPath()), "UTF-8");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -386,11 +296,12 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testExportToChangeset() throws IOException, ParseException {
         String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessChangesetInputInput.json")
+                .getResource("hoot/services/controllers/export/ExportResourceTestProcessChangesetInputInput.json")
                 .getPath()), "UTF-8");
 
         ExportJobResource spy = Mockito.spy(new ExportJobResource());
@@ -428,8 +339,8 @@ public class ExportJobResourceTest {
             String jobId = UUID.randomUUID().toString();
             hootCommand.put("jobid", jobId);
             //don't want an integration with the database here, so just testing file inputs instead
-            hootCommand.put("input1", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/nonblocking/export/AllDataTypesA.osm");
-            hootCommand.put("input2", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/nonblocking/export/ExportJobResourceTestAdtConflated.osm");
+            hootCommand.put("input1", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/export/AllDataTypesA.osm");
+            hootCommand.put("input2", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/export/ExportJobResourceTestAdtConflated.osm");
             hootCommand.put("aoi", "-104.8192,38.8162,-104.6926,38.9181");
             //mimic the way ExportJobResource sets up the output path
             hootCommand.put("outputfolder", TEMP_OUTPUT_PATH + "/" + jobId);
@@ -462,18 +373,18 @@ public class ExportJobResourceTest {
         }
     }
 
+    @Ignore
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToChangesetNoTaskBbox() throws Exception {
         try {
             String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportResourceTestProcessChangesetInputInput.json")
+                    .getResource("hoot/services/controllers/export/ExportResourceTestProcessChangesetInputInput.json")
                     .getPath()), "UTF-8");
             inputParams = inputParams.replace("\"TASK_BBOX\":\"0.0,0.0,0.0,0.0\"", "");
             inputParams = inputParams.replace("osc\",", "osc\"");
 
             ExportJobResource spy = Mockito.spy(new ExportJobResource());
-            //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
 
             /* String commandArgs = */ //spy.getExportToChangesetCommandArgs(JsonUtils.parseParams(inputParams),
                     //(JSONObject) new JSONParser().parse(inputParams));
@@ -491,7 +402,7 @@ public class ExportJobResourceTest {
     public void testGetExportedXmlFile() throws Exception {
         // read a dummy changeset file
         String changesetText = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("hoot/services/controllers/nonblocking/export/ExportJobResourceTestChangesetInput.osc").getPath()),
+                .getResource("hoot/services/controllers/export/ExportJobResourceTestChangesetInput.osc").getPath()),
                 "UTF-8");
 
         // write the contents of the dummy file to a new output file; mimic how
@@ -523,8 +434,7 @@ public class ExportJobResourceTest {
     public void testGetXmlOutputInvalidJobId() throws Exception {
         try {
             // try to retrieve a changeset file with a non-existent changeset
-            // id; should fail with a
-            // 404
+            // id; should fail with a 404
             (new ExportJobResource()).getXmlOutput("blah", true, "osc");
         }
         catch (WebApplicationException e) {
@@ -544,7 +454,7 @@ public class ExportJobResourceTest {
         try {
             // read a dummy changeset file
             String changesetText = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/export/ExportJobResourceTestChangesetInput.osc").getPath()),
+                    .getResource("hoot/services/controllers/export/ExportJobResourceTestChangesetInput.osc").getPath()),
                     "UTF-8");
 
             // write the contents of the dummy file to multiple new output

@@ -65,23 +65,23 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
         FileUtils.forceMkdir(testFolder);
 
         File dest = new File(testFolder, "conflationRefOps.json");
-        URL inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/blocking/info/conflationRefOps.json");
+        URL inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationRefOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         dest = new File(testFolder, "conflateAdvOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/blocking/info/conflateAdvOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflateAdvOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         dest = new File(testFolder, "conflationAverageOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/blocking/info/conflationAverageOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationAverageOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         dest = new File(testFolder, "conflationHorizontalOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/blocking/info/conflationHorizontalOps.json");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationHorizontalOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         dest = new File(testFolder, "ConfigOptions.asciidoc");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/blocking/info/ConfigOptions.asciidoc");
+        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/ConfigOptions.asciidoc");
         FileUtils.copyURLToFile(inputUrl, dest);
     }
 

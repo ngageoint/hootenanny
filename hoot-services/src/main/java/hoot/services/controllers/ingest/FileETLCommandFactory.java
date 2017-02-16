@@ -34,14 +34,14 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class FileETLCommandFactory {
+class FileETLCommandFactory {
 
     FileETLCommand build(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
                          int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt,
                          List<String> zipList, String translation, String jobId, String etlName,
                          List<String> inputsList, String userEmail, String isNoneTranslation, String fgdbFeatureClasses) {
         return new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
-                isNoneTranslation, fgdbFeatureClasses);
+                                  shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId,
+                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses);
     }
 }
