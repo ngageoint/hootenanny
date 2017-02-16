@@ -109,6 +109,9 @@ public class MapResource {
     @Autowired
     private JobProcessor jobProcessor;
 
+    @Autowired
+    private DeleteMapResourcesCommandFactory deleteMapResourcesCommandFactory;
+
 
     /**
      * Returns a list of all map layers in the services database
@@ -676,7 +679,7 @@ public class MapResource {
         try {
             Command[] commands = {
                 () -> {
-                    InternalCommand mapResourcesCleaner = new DeleteMapResourcesCommand(mapId);
+                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId);
                     return mapResourcesCleaner.execute();
                 }
             };
@@ -696,9 +699,7 @@ public class MapResource {
 
     /**
      * 
-     * POST
-     * hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&
-     * modName='New Dataset'
+     * POST hoot-services/osm/api/0.6/map/modify?mapId=123456&inputType='Dataset'&modName='New Dataset'
      *
      * //TODO: should be an HTTP PUT
      *
@@ -971,27 +972,6 @@ public class MapResource {
         }
 
         return Response.ok(json.toString()).build();
-    }
-
-    public static long validateMap(String mapId) {
-        long mapIdNum;
-
-        try {
-            // input mapId may be a map ID or a map name
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
-        }
-        catch (Exception ex) {
-            if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {
-                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
-            }
-            else {
-                String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-            }
-        }
-
-        return mapIdNum;
     }
 
     /**

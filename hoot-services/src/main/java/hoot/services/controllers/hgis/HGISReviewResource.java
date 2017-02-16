@@ -66,6 +66,12 @@ public class HGISReviewResource extends HGISResource {
     @Autowired
     private InternalCommandManager internalCommandManager;
 
+    @Autowired
+    private HGISPrepareForValidationCommandFactory hgisPrepareForValidationCommandFactory;
+
+    @Autowired
+    private UpdateMapTagsCommandFactory updateMapTagsCommandFactory;
+
 
     public HGISReviewResource() {}
 
@@ -96,12 +102,12 @@ public class HGISReviewResource extends HGISResource {
 
             Command[] commands = {
                     () -> {
-                        ExternalCommand validationCommand = new HGISPrepareForValidationCommand(
+                        ExternalCommand validationCommand = hgisPrepareForValidationCommandFactory.build(
                                 request.getSourceMap(), request.getOutputMap(), this.getClass());
                         return externalCommandManager.exec(jobId, validationCommand);
                     },
                     () -> {
-                        InternalCommand updateMapTagsCommand = new UpdateMapTagsCommand(jobId, request.getOutputMap());
+                        InternalCommand updateMapTagsCommand = updateMapTagsCommandFactory.build(jobId, request.getOutputMap());
                         return internalCommandManager.exec(jobId, updateMapTagsCommand);
                     }
             };

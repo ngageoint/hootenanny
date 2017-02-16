@@ -79,6 +79,9 @@ public class OGRAttributesResource {
     @Autowired
     private ExternalCommandManager externalCommandManager;
 
+    @Autowired
+    private GetAttributesCommandFactory getAttributesCommandFactory;
+
 
     /**
      * This rest endpoint uploads multipart data from UI and then generates attribute output.
@@ -111,7 +114,7 @@ public class OGRAttributesResource {
 
             Command[] commands = {
                 () -> {
-                    ExternalCommand getAttributesCommand = new GetAttributesCommand(jobId, filesList, zipList, this.getClass());
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, filesList, zipList, this.getClass());
                     return externalCommandManager.exec(jobId, getAttributesCommand);
                 }
             };

@@ -61,6 +61,9 @@ public class HGISFilterResource extends HGISResource {
     @Autowired
     private ExternalCommandManager externalCommandManager;
 
+    @Autowired
+    private FilterNonHGISPOIsCommandFactory filterNonHGISPOIsCommandFactory;
+
 
     public HGISFilterResource() {}
 
@@ -88,7 +91,7 @@ public class HGISFilterResource extends HGISResource {
 
             Command[] commands = {
                 () -> {
-                    ExternalCommand filterNonHgisPoisCommand = new FilterNonHGISPOIsCommand(
+                    ExternalCommand filterNonHgisPoisCommand = filterNonHGISPOIsCommandFactory.build(
                         request.getSource(), request.getOutput(), this.getClass());
                     return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
                 }

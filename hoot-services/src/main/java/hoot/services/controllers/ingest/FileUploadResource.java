@@ -62,7 +62,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommand;
+import hoot.services.controllers.RasterToTilesCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
@@ -80,6 +80,11 @@ public class FileUploadResource {
     @Autowired
     private ExternalCommandManager externalCommandManager;
 
+    @Autowired
+    private FileETLCommandFactory fileETLCommandFactory;
+
+    @Autowired
+    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -107,13 +112,13 @@ public class FileUploadResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload(@QueryParam("TRANSLATION") String translation,
-                                  @QueryParam("INPUT_TYPE") String inputType,
-                                  @QueryParam("INPUT_NAME") String inputName,
-                                  @QueryParam("USER_EMAIL") String userEmail,
-                                  @QueryParam("NONE_TRANSLATION") String noneTranslation,
-                                  @QueryParam("FGDB_FC") String fgdbFeatureClasses,
-                                  FormDataMultiPart multiPart) {
+    public Response processFileUpload(@QueryParam("TRANSLATION") String translation,
+                                      @QueryParam("INPUT_TYPE") String inputType,
+                                      @QueryParam("INPUT_NAME") String inputName,
+                                      @QueryParam("USER_EMAIL") String userEmail,
+                                      @QueryParam("NONE_TRANSLATION") String noneTranslation,
+                                      @QueryParam("FGDB_FC") String fgdbFeatureClasses,
+                                      FormDataMultiPart multiPart) {
         JSONArray response = new JSONArray();
 
         try {
@@ -234,7 +239,10 @@ public class FileUploadResource {
                 osmCnt = 1;
             }
 
-            FileETLCommand etlCommand = new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
+            // TODO: move creation of FileETLCommand instance inside of the lambda function below.
+            // Presently, it's not easy to do since lots of fileETLCommandFactory.build() takes lots of
+            // variables that are not final or effectively final.
+            FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
                     noneTranslation, fgdbFeatureClasses);
 
@@ -251,7 +259,7 @@ public class FileUploadResource {
                         // rasterToTilesCommand needs to be created after etlCommand has been executed.  During
                         // execution of etlCommand, the command inserts some information into the database that's
                         // required needed by rasterToTilesCommand.
-                        ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(mapDisplayName, userEmail);
+                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(mapDisplayName, userEmail);
                         return externalCommandManager.exec(jobId, rasterToTilesCommand);
                     }
             };

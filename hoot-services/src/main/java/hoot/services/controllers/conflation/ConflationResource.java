@@ -26,9 +26,8 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -40,9 +39,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -56,12 +52,11 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
 import hoot.services.command.InternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommand;
+import hoot.services.controllers.RasterToTilesCommandFactory;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.osm.Map;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
 
 
@@ -79,6 +74,15 @@ public class ConflationResource {
 
     @Autowired
     private InternalCommandManager internalCommandManager;
+
+    @Autowired
+    private ConflateCommandFactory conflateCommandFactory;
+
+    @Autowired
+    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
+
+    @Autowired
+    private UpdateTagsCommandFactory updateTagsCommandFactory;
 
 
     /**
@@ -117,16 +121,18 @@ public class ConflationResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(String params) {
-        logger.debug("Conflation resource raw request: {}", params);
-
+    public Response conflate(String params) {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            JSONParser pars = new JSONParser();
-            JSONObject oParams = (JSONObject) pars.parse(params);
+            JSONParser parser = new JSONParser();
+            JSONObject oParams = (JSONObject) parser.parse(params);
+
+            oParams.put("IS_BIG", "false");
 
             boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
+            String confOutputName = oParams.get("OUTPUT_NAME").toString();
+            String userEmail = (oParams.get("USER_EMAIL") == null) ? null : oParams.get("USER_EMAIL").toString();
 
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
@@ -134,30 +140,6 @@ public class ConflationResource {
                 String msg = "Attempted to conflate an OSM API database data source but OSM " +
                         "API database support is disabled.";
                 throw new WebApplicationException(Response.serverError().entity(msg).build());
-            }
-
-            oParams.put("IS_BIG", "false");
-
-            String confOutputName = oParams.get("OUTPUT_NAME").toString();
-            String input1Name = oParams.get("INPUT1").toString();
-            String input2Name = oParams.get("INPUT2").toString();
-
-            // add map tags
-            // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
-            java.util.Map<String, String> tags = new HashMap<>();
-            tags.put("input1", input1Name);
-            tags.put("input2", input2Name);
-
-            // Need to reformat the list of hoot command options to json properties
-            tags.put("params", JsonUtils.escapeJson(params));
-
-            // Hack alert!
-            // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
-            // file will be read and its contents placed in the stats tag.
-            if ((oParams.get("COLLECT_STATS") != null)
-                    && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
-                String statsName = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + confOutputName + "-stats.csv";
-                tags.put("stats", statsName);
             }
 
             BoundingBox bbox;
@@ -172,7 +154,7 @@ public class ConflationResource {
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
                 long secondaryMapId = Long.parseLong(JsonUtils.getParameterValue(secondaryParameterKey, oParams));
-                if (!mapExists(secondaryMapId)) {
+                if (!Map.mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
@@ -182,38 +164,24 @@ public class ConflationResource {
                 }
                 else {
                     Map secondaryMap = new Map(secondaryMapId);
-                    bbox = getMapBounds(secondaryMap);
+                    bbox = secondaryMap.getBounds();
                 }
-
-                // write a timestamp representing the time the osm api db data was queried out
-                // from the source; to be used conflict detection during export of conflated
-                // data back into the osm api db at a later time; timestamp must be 24 hour utc
-                // to match rails port
-                String now = DateTimeFormat
-                        .forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT)
-                        .withZone(DateTimeZone.UTC)
-                        .print(new DateTime());
-
-                tags.put("osm_api_db_export_time", now);
             }
             else {
                 bbox = null;
             }
 
-            Object oUserEmail = oParams.get("USER_EMAIL");
-            String userEmail = (oUserEmail == null) ? null : oUserEmail.toString();
-
             Command[] commands = {
                 () -> {
-                    ExternalCommand conflateCommand = new ConflateCommand(oParams.toJSONString(), bbox, this.getClass());
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(oParams.toJSONString(), bbox, this.getClass());
                     return externalCommandManager.exec(jobId, conflateCommand);
                 },
                 () -> {
-                    InternalCommand updateTagsCommand = new UpdateTagsCommand(tags, confOutputName, jobId);
+                    InternalCommand updateTagsCommand = updateTagsCommandFactory.build(oParams.toJSONString(), confOutputName, jobId);
                     return internalCommandManager.exec(jobId, updateTagsCommand);
                 },
                 () -> {
-                    ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(confOutputName, userEmail);
+                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(confOutputName, userEmail);
                     return externalCommandManager.exec(jobId, rasterToTilesCommand);
                 }
             };
@@ -234,7 +202,7 @@ public class ConflationResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-    private static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {
+    static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {
         return firstLayerIsOsmApiDb(inputParams) || secondLayerIsOsmApiDb(inputParams);
     }
 
@@ -259,15 +227,5 @@ public class ConflationResource {
             String msg = "OSM_API_DB not allowed as secondary input type.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
-    }
-
-    // adding this to satisfy the mock
-    BoundingBox getMapBounds(Map map) {
-        return map.getBounds();
-    }
-
-    // adding this to satisfy the mock
-    boolean mapExists(long id) {
-        return Map.mapExists(id);
     }
 }

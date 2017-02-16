@@ -52,7 +52,7 @@ import hoot.services.models.db.JobStatus;
  *
  */
 @Component
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 @Profile("production")
 public class JobStatusManager {
     private static final Logger logger = LoggerFactory.getLogger(JobStatusManager.class);

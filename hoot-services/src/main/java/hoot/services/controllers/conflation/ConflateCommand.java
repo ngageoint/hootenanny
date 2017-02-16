@@ -40,7 +40,7 @@ import hoot.services.utils.JsonUtils;
 class ConflateCommand extends ExternalCommand {
 
     ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
-        JSONArray commandArgs = null;
+        JSONArray commandArgs;
         try {
             commandArgs = JsonUtils.parseParams(params);
         }

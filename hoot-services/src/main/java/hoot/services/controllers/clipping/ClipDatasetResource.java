@@ -46,7 +46,7 @@ import org.springframework.stereotype.Controller;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommand;
+import hoot.services.controllers.RasterToTilesCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
@@ -61,6 +61,12 @@ public class ClipDatasetResource {
 
     @Autowired
     private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private ClipDatasetCommandFactory clipDatasetCommandFactory;
+
+    @Autowired
+    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
 
 
     /**
@@ -88,7 +94,7 @@ public class ClipDatasetResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(String params) {
+    public Response clipDataset(String params) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -99,12 +105,13 @@ public class ClipDatasetResource {
             Command[] commands = {
                 // Clip to a bounding box
                 () -> {
-                    ExternalCommand clipCommand = new ClipDatasetCommand(params, this.getClass());
+                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, this.getClass());
                     return externalCommandManager.exec(jobId, clipCommand);
                 },
+
                 // Ingest
                 () -> {
-                    ExternalCommand rasterToTilesCommand = new RasterToTilesCommand(newDatasetOutputName, null);
+                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(newDatasetOutputName, null);
                     return externalCommandManager.exec(jobId, rasterToTilesCommand);
                 }
             };
@@ -112,7 +119,7 @@ public class ClipDatasetResource {
             jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
-            String msg = "Error processing cookie cutter request! Params: " + params;
+            String msg = "Error processing cookie cutter request!";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

@@ -27,6 +27,7 @@
 package hoot.services.controllers.osm.element;
 
 
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QUsers.users;
 
 import java.util.HashSet;
@@ -54,7 +55,6 @@ import org.w3c.dom.Document;
 
 import com.querydsl.core.Tuple;
 
-import hoot.services.models.db.QMaps;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
@@ -160,12 +160,12 @@ public class ElementResource {
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
-    private static Document getElementXml(String mapId, long elementId, ElementType elementType,
-            boolean multiLayerUniqueElementIds, boolean addChildren) {
-        long mapIdNum;
+    private static long getMapIdUsingMapName(String mapName) {
+        long mapId;
+
         try {
             // input mapId may be a map ID or a map name
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+            mapId = DbUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
         }
         catch (Exception ex) {
             if (ex.getMessage().startsWith("Multiple records exist")
@@ -174,14 +174,21 @@ public class ElementResource {
                 throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
             }
 
-            String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+            String msg = "Error requesting map ID for map: " + mapName + " (" + ex.getMessage() + ")";
             throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
+
+        return mapId;
+    }
+
+    private static Document getElementXml(String mapName, long elementId, ElementType elementType,
+            boolean multiLayerUniqueElementIds, boolean addChildren) {
+        long mapId = getMapIdUsingMapName(mapName);
 
         Set<Long> elementIds = new HashSet<>();
         elementIds.add(elementId);
 
-        List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType,
+        List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapId, elementType,
                 elementIds);
 
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
@@ -189,7 +196,7 @@ public class ElementResource {
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
         }
 
-        Element element = ElementFactory.create(elementType, elementRecords.get(0), Long.parseLong(mapId));
+        Element element = ElementFactory.create(elementType, elementRecords.get(0), mapId);
         Users usersTable = elementRecords.get(0).get(users);
 
         Document elementDoc;
@@ -255,23 +262,9 @@ public class ElementResource {
         return Response.ok(new DOMSource(elementDoc)).build();
     }
 
-    private static Document getElementsXml(String mapId, String[] elementIdsStr, ElementType elementType,
+    private static Document getElementsXml(String mapName, String[] elementIdsStr, ElementType elementType,
             boolean multiLayerUniqueElementIds, boolean addChildren) {
-        long mapIdNum;
-        try {
-            // input mapId may be a map ID or a map name
-            mapIdNum = DbUtils.getRecordIdForInputString(mapId, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
-        }
-        catch (Exception ex) {
-            if (ex.getMessage().startsWith("Multiple records exist") ||
-                    ex.getMessage().startsWith("No record exists")) {
-                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
-                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
-            }
-
-            String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
-            throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
-        }
+        long mapId = getMapIdUsingMapName(mapName);
 
         Set<Long> elementIds = new HashSet<>();
         for (String elemId : elementIdsStr) {
@@ -279,8 +272,7 @@ public class ElementResource {
             elementIds.add(elementId);
         }
 
-        List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapIdNum, elementType,
-                elementIds);
+        List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(mapId, elementType, elementIds);
         if ((elementRecords == null) || (elementRecords.isEmpty())) {
             String msg = "Elements with IDs: " + StringUtils.join(elementIdsStr, ",")
                     + " and type: " + elementType + " does not exist.";
@@ -299,7 +291,7 @@ public class ElementResource {
         elementDoc.appendChild(elementRootXml);
 
         for (Tuple elementRecord : elementRecords) {
-            Element element = ElementFactory.create(elementType, elementRecord, Long.parseLong(mapId));
+            Element element = ElementFactory.create(elementType, elementRecord, mapId);
             Users usersTable = elementRecord.get(users);
             org.w3c.dom.Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
                     usersTable.getDisplayName(), multiLayerUniqueElementIds, addChildren);

@@ -42,10 +42,10 @@ import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 
 
-public class RasterToTilesCommand extends ExternalCommand {
+class RasterToTilesCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(RasterToTilesCommand.class);
 
-    public RasterToTilesCommand(String name, String userEmail) {
+    RasterToTilesCommand(String name, String userEmail) {
         long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
         BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");

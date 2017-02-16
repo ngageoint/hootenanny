@@ -26,11 +26,20 @@
  */
 package hoot.services.controllers.conflation;
 
+import static hoot.services.HootProperties.*;
+
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,17 +48,62 @@ import hoot.services.command.InternalCommand;
 import hoot.services.utils.DbUtils;
 
 
-final class UpdateTagsCommand implements InternalCommand {
+class UpdateTagsCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(UpdateTagsCommand.class);
 
     private final Map<String, String> tags;
     private final String mapName;
     private final String jobId;
 
-    UpdateTagsCommand(Map<String, String> tags, String mapName, String jobId) {
-        this.tags = tags;
+    UpdateTagsCommand(String params, String mapName, String jobId) {
         this.mapName = mapName;
         this.jobId = jobId;
+        this.tags = new HashMap<>();
+
+        JSONParser parser = new JSONParser();
+        JSONObject oParams;
+        try {
+            oParams = (JSONObject) parser.parse(params);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing: " + params, pe);
+        }
+
+        String confOutputName = oParams.get("OUTPUT_NAME").toString();
+        String input1Name = oParams.get("INPUT1").toString();
+        String input2Name = oParams.get("INPUT2").toString();
+
+        // add map tags
+        // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
+        tags.put("input1", input1Name);
+        tags.put("input2", input2Name);
+
+        // Need to reformat the list of hoot command options to json properties
+        tags.put("params", oParams.toJSONString()/*JsonUtils.escapeJson(params)*/);
+
+        // Hack alert!
+        // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
+        // file will be read and its contents placed in the stats tag.
+        if ((oParams.get("COLLECT_STATS") != null)
+                && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
+            String statsName = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + confOutputName + "-stats.csv";
+            tags.put("stats", statsName);
+        }
+
+        // osm api db related input params have already been validated by
+        // this point, so just check to see if any osm api db input is present
+        if (ConflationResource.oneLayerIsOsmApiDb(oParams) && OSM_API_DB_ENABLED) {
+            // write a timestamp representing the time the osm api db data was queried out
+            // from the source; to be used conflict detection during export of conflated
+            // data back into the osm api db at a later time; timestamp must be 24 hour utc
+            // to match rails port
+            String now = DateTimeFormat
+                    .forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT)
+                    .withZone(DateTimeZone.UTC)
+                    .print(new DateTime());
+
+            tags.put("osm_api_db_export_time", now);
+        }
     }
 
     @Override

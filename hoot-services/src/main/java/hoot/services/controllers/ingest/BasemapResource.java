@@ -99,6 +99,9 @@ public class BasemapResource {
     @Autowired
     private ExternalCommandManager externalCommandManager;
 
+    @Autowired
+    private IngestBasemapCommandFactory ingestBasemapCommandFactory;
+
 
     /**
      * Upload dataset file and create TMS tiles.
@@ -169,7 +172,7 @@ public class BasemapResource {
 
                 Command[] commands = {
                     () -> {
-                        ExternalCommand ingestBasemapCommand = new IngestBasemapCommand(jobId, groupId,
+                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, groupId,
                                 inputFileName, projection, basemapName, this.getClass());
                         return externalCommandManager.exec(jobId, ingestBasemapCommand);
                     }

@@ -28,9 +28,6 @@ package hoot.services.controllers.conflation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -41,93 +38,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
-import hoot.services.geo.BoundingBox;
-import hoot.services.job.Job;
-import hoot.services.models.osm.Map;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
-
-    // TODO: This test needs to be reworked
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testProcess() {
-        String params = "{\"INPUT1_TYPE\":\"DB\",\"INPUT1\":\"DcGisRoads\",\"INPUT2_TYPE\":\"DB\",\"INPUT2\":\"DcTigerRoads\",";
-        params += "\"OUTPUT_NAME\":\"Merged_Roads_e0d\",\"CONFLATION_TYPE\":\"Reference\",\"MATCH_THRESHOLD\":\"0.6\",\"MISS_THRESHOLD\":\"0.6\",\"USER_EMAIL\":\"test@test.com\",\"COLLECT_STATS\":\"false\"}";
-
-        String jobArgs = "\"exec\":\"makeconflate\",\"params\":[{\"USER_EMAIL\":\"test@test.com\"},{\"CONFLATION_TYPE\":\"Reference\"},"
-                + "{\"MATCH_THRESHOLD\":\"0.6\"},{\"INPUT1_TYPE\":\"DB\"},{\"MISS_THRESHOLD\":\"0.6\"},{\"INPUT2_TYPE\":\"DB\"},"
-                + "{\"INPUT2\":\"DcTigerRoads\"},{\"INPUT1\":\"DcGisRoads\"},{\"COLLECT_STATS\":\"false\"},{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"},"
-                + "{\"IS_BIG\":\"false\"}],\"exectype\":\"make\"}]";
-
-        ConflationResource conflationResource = new ConflationResource();
-        ConflationResource spy = Mockito.spy(conflationResource);
-        //doNothing().when(spy).process(any());
-
-        //JobId jobId = spy.process(params);
-        //assertNotNull(jobId);
-        //assertNotNull(jobId.getJobid());
-        verify(spy).process(Matchers.eq(params));
-
-        ArgumentCaptor<Job> argCaptor = ArgumentCaptor.forClass(Job.class);
-
-        //verify(spy).processChainJob(argCaptor.capture());
-
-        //assertEquals(jobId, argCaptor.getValue().getJobId());
-        //ChainJob chainJob = new ChainJob(jobId.getJobid(), null);
-
-        //verify(spy).processChainJob(Matchers.chainJob);
-        //verify(spy).processChainJob(Matchers.matches(resp.getJobid()), Matchers.endsWith(jobArgs));
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testProcessOsmApiDbInput() throws Exception {
-        try {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/nonblocking/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()), Charset.defaultCharset());
-
-            ConflationResource spy = Mockito.spy(new ConflationResource());
-
-            //doNothing().when((AbstractJobResource) spy).processJob(any());
-            Mockito.doReturn(true).when(spy).mapExists(anyLong());
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            //String jobId = spy.process(inputParams).getJobid();
-
-            // just checking that the request made it the command runner w/o
-            // error and that the map tag got added; testProcess checks the generated input at a more
-            // detailed level
-
-            //verify(spy).processChainJob(Matchers.matches(jobId),
-                    // wasn't able to get the mockito matcher to take the timestamp
-            // regex...validated the
-            // regex externally, and it looks correct
-                    /*
-                     * Matchers.matches("\"osm_api_db_export_time\":\"" +
-                     * DbUtils.TIME_STAMP_REGEX + "\"")
-                     */
-            //AdditionalMatchers.and(Matchers.contains("osm_api_db_export_time"),
-            //        Matchers.contains("\"conflateaoi\":\"0.0,0.0,0.0,0.0\"")));
-        }
-        finally {
-            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
-        }
-    }
 
     // An OSM API DB input must always be a reference layer. Default ref layer = 1.
 
@@ -143,8 +62,7 @@ public class ConflationResourceTest {
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            //doNothing().when((AbstractJobResource) spy).processJob(any());
-            spy.process(inputParams);
+            spy.conflate(inputParams);
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -168,8 +86,7 @@ public class ConflationResourceTest {
                     .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            //doNothing().when((AbstractJobResource) spy).processJob(any());
-            spy.process(inputParams);
+            spy.conflate(inputParams);
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -193,12 +110,7 @@ public class ConflationResourceTest {
                 .getPath()), Charset.defaultCharset());
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-
-            //doNothing().when((AbstractJobResource) spy).processJob(any());
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
-
-            spy.process(inputParams);
+            spy.conflate(inputParams);
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
@@ -222,13 +134,10 @@ public class ConflationResourceTest {
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 
-            //doNothing().when((AbstractJobResource) spy).processJob(any());
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
 
-            spy.process(inputParams);
+            spy.conflate(inputParams);
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
