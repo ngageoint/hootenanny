@@ -36,7 +36,7 @@ endif
 step1:
 # Unzip when semicolon separated lists are provided
 ifneq ($(strip $(UNZIP_LIST)), )
-	bash $(HOOT_HOME)/scripts/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
+	bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
 endif
   ifeq "$(INPUT_TYPE)" "OGR"
 	  cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)

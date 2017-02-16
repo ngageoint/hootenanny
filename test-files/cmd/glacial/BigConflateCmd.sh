@@ -30,5 +30,5 @@ echo "Print out some statistics. This should reveal any gross errors."
 mkdir -p test-output/cmd/glacial/
 rm -f test-output/cmd/glacial/BigConflateStats.log
 hoot --stats --warn -D stats.translate.script=$HOOT_HOME/translations/HootTest.js test-output/DcBigConflated.osm.pbf > test-output/cmd/glacial/BigConflateStats.log
-python scripts/CheckScores.py test-output/cmd/glacial/BigConflateStats.log "Node Count,7578,7580" "Way Count,755,756" "Meters of Highway,70095,70180"
+python scripts/core/CheckScores.py test-output/cmd/glacial/BigConflateStats.log "Node Count,7578,7580" "Way Count,755,756" "Meters of Highway,70095,70180"
 

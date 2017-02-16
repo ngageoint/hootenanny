@@ -203,7 +203,6 @@ fi
 
 # The grep removes some silly messages that can't be removed.
 # The SLF4J problem should probably be fixed at the source rather than filtered.
-# https://github.com/ngageoint/hootenanny/issues/348#issuecomment-185770582
 mvn $ARGS 2>&1 \
     | grep -v -F "Groovy: [scmModified"$'\n'"execute contextualize" \
     | grep -v "Outputting log4j snippets" \

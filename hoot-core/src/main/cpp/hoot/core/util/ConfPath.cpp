@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -167,7 +167,7 @@ QString ConfPath::search(QString baseName, QString searchDir)
 
   // If we can't find the file, Throw Error
   throw FileNotFoundException("Could not find specified file in any " + searchDir + " directory ("
-                              + baseName + ")");
+                              + baseName + ")  HOOT_HOME: " + hootHome);
 }
 
 }

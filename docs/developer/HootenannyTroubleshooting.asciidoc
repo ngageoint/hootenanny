@@ -53,7 +53,7 @@ dropdb 'database name'
 
 --------------------------------------
 export HOOT_HOME=/usr/local/hoot
-$HOOT_HOME/scripts/DeleteAllTables.sh
+$HOOT_HOME/scripts/database/DeleteAllTables.sh
 --------------------------------------
 
 To re-create the hoot database, recompile Hootenanny using the --with-services option.

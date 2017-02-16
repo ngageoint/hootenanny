@@ -405,7 +405,7 @@ cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
 make -sj($nproc)
-sudo -u tomcat8 scripts/CopyWebAppsToTomcat.sh
+sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
 make -sj($nproc) test-all
 -----------------------
 
@@ -416,7 +416,7 @@ cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
 make -sj($nproc)
-sudo -u tomcat8 scripts/CopyWebAppsToTomcat.sh
+sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
 make -sj($nproc) ui-test
 -----------------------
 

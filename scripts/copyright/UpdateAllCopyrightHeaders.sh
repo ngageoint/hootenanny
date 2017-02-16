@@ -6,6 +6,6 @@ for i in $HOOT_HOME/hoot-core/ $HOOT_HOME/hoot-cmd/ $HOOT_HOME/hoot-test $HOOT_H
 do
     echo $i
     cd $i
-    $HOOT_HOME/scripts/UpdateDirCopyrightHeaders.sh
+    $HOOT_HOME/scripts/license/UpdateDirCopyrightHeaders.sh
 done
 

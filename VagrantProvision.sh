@@ -90,7 +90,7 @@ echo "### Configuring environment..."
 
 # Configure https alternative mirror for maven isntall, this can likely be removed once
 # we are using maven 3.2.3 or higher
-sudo /usr/bin/perl $HOOT_HOME/scripts/SetMavenHttps.pl
+sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
@@ -344,7 +344,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-sudo $HOOT_HOME/scripts/tomcat8/ubuntu/tomcat8_install.sh
+sudo $HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then

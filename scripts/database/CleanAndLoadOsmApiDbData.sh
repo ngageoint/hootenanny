@@ -14,7 +14,7 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 DATASET_TO_LOAD=$1
 OUTPUT_SQL_SCRIPT=$HOOT_HOME/tmp/tmp.sql
 
-source scripts/SetupOsmApiDB.sh force
+source scripts/database/SetupOsmApiDB.sh force
 # load dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 

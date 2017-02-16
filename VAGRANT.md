@@ -55,7 +55,7 @@ Within this login shell, you can build the code, run the server or the tests. Fo
     vagrant ssh
     cd hoot
     source ./SetupEnv.sh
-    scripts/CopyWebAppsToTomcat.sh
+    scripts/tomcat/CopyWebAppsToTomcat.sh
     make -sj$(nproc) test-all
 
 # Using Hootenanny
@@ -75,5 +75,5 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    sudo -u tomcat8 scripts/vagrantDeployTomcat.sh 
+    sudo -u tomcat8 scripts/tomcat/vagrantDeployTomcat.sh 
 

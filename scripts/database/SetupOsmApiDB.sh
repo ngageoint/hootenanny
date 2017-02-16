@@ -41,7 +41,7 @@ if [ "$flag" = "1" ]; then
   db_date_str=${db_date_str%]*}
 
   # get sql file timestamp
-  file_date_str=`stat -c "%y" $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql`;
+  file_date_str=`stat -c "%y" $HOOT_HOME/scripts/database/blank_osmapidb.sql`;
 
   # Convert strings to seconds for comparison purposes
   db_date=`date -d "$db_date_str" "+%s"`
@@ -70,6 +70,6 @@ if [ "$do_create" = "true" ]; then
 
   mkdir -p $HOOT_HOME/tmp
 
-  psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/osmapidb/blank_osmapidb.sql >& $HOOT_HOME/tmp/osmapidb.log
+  psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& $HOOT_HOME/tmp/osmapidb.log
 fi
 

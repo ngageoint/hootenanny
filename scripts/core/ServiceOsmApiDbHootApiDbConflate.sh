@@ -47,7 +47,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   echo ""
   echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
   echo ""
-  source scripts/SetupOsmApiDB.sh force
+  source scripts/database/SetupOsmApiDB.sh force
   psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
   echo ""

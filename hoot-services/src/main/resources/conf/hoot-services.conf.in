@@ -78,7 +78,7 @@ testChangesetAutoClose=false
 # ETL
 
 # the folder location of the make file script for some endpoints
-coreScriptPath=$(homeFolder)/scripts
+coreScriptPath=$(homeFolder)/scripts/services
 
 # intermediate file output location (working folder)
 coreScriptOutputPath=$(homeFolder)/test-output/ETL_OUTPUT
@@ -96,10 +96,10 @@ CookieCutterMakefilePath=makecookiecutter
 ClipDatasetMakefilePath=makeclipdataset
 
 # Translation javascript header script path
-jsHeaderScriptPath=$(homeFolder)/scripts/rh.js
+jsHeaderScriptPath=$(homeFolder)/scripts/services/rh.js
 
 # Translation header used for just function scanning
-dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
+dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
@@ -248,7 +248,7 @@ ElementMergeServerScript=/plugins/ElementMergeServer.js
 # HGIS
 
 # HGIS review prepare for validation script name
-hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
+hgisPrepareForValidationScript=PrepareForValidation.sh
 
 # HGIS filter script name
-hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
+hgisFilterScript=RemoveNonHgisPois.sh
