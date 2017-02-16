@@ -6,7 +6,7 @@ else
     rm -rf ~/tmp/npm*
     cd $HOOT_HOME
     source SetupEnv.sh
-    source conf/DatabaseConfig.sh
+    source conf/database/DatabaseConfig.sh
     #source conf/ServerConfig.sh
     cd node-mapnik-server
     npm install -q

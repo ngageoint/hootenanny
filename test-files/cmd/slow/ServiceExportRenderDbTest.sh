@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export INPUT="Ex Ren Db"
 # setup db, user, and password to avoid password prompt

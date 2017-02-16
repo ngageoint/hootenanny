@@ -25,7 +25,7 @@ To run:
 ```
 cd hoot
 source SetupEnv.sh
-source conf/DatabaseConfig.sh
+source conf/database/DatabaseConfig.sh
 cd node-mapnik-server
 npm start
 ```

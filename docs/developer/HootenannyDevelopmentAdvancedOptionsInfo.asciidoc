@@ -3,7 +3,7 @@
 
 This description is for quick overview of conflation advanced option meta data rule rest endpoint.
 
-1. Main rule file conf/conflateAdvOps.json consists of subset of all hoot options. (see ticket 5840)
+1. Main rule file conf/services/conflateAdvOps.json consists of subset of all hoot options. (see ticket 5840)
 2. It is JSONArray with each option as JSON object
 3. Each JOSON objects consists of some or all of following
 	a. id: unique id that should represents the field in js
@@ -20,14 +20,14 @@ This description is for quick overview of conflation advanced option meta data r
 	k. required: This field forces value to be set all time when the group is enabled. On UI if required=true then the field is hidden
 	
 4. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=custom exposes modified conf/conflateAdvOps.json where the Service does following
-	a. read conf/configOptions.asciidoc
-	b. read conf/conflateAdvOps.json
-	c. for each key in conf/conflateAdvOps.json, find from conf/configOptions.asciidoc and replace description,elem_type and defaultvalue values in conf/conflateAdvOps.json with  decription, Data type and default value of corresponding object in  conf/configOptions.asciidoc
-	d. if it sees override in field object in conf/conflateAdvOps.json, replace the key value if the override object with the matching key value in parent object.
+	a. read conf/core/configOptions.asciidoc
+	b. read conf/services/conflateAdvOps.json
+	c. for each key in conf/services/conflateAdvOps.json, find from conf/core/configOptions.asciidoc and replace description,elem_type and defaultvalue values in conf/services/conflateAdvOps.json with  decription, Data type and default value of corresponding object in  conf/core/configOptions.asciidoc
+	d. if it sees override in field object in conf/services/conflateAdvOps.json, replace the key value if the override object with the matching key value in parent object.
 	e. remove override object so it does not get passed to rest enpoint caller.
-5. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=reference exposes modified conf/conflationRefOps.json where it performs same operations as item #4 before returning output.
-6. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=average exposes modified conf/conflationAverageOps.json where it performs same operations as item #4 before returning output.
-7. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=horizontal exposes modified conf/conflationHorizontalOps.json where it performs same operations as item #4 before returning output.
+5. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=reference exposes modified conf/services/conflationRefOps.json where it performs same operations as item #4 before returning output.
+6. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=average exposes modified conf/services/conflationAverageOps.json where it performs same operations as item #4 before returning output.
+7. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=horizontal exposes modified conf/services/conflationHorizontalOps.json where it performs same operations as item #4 before returning output.
 8. reference, average and horizontal rest endpoint consists of subset of options used to be in UnifyingRoads.json
 9. reference, average and horizontal rest endpoint output is meant to override corresponding fields in custom rest endpoint when corresponding conflation type is selected on UI. (For example, for reference conflation, the fields in reference rest endpoint will override the matching fields from custom rest end point output)
 

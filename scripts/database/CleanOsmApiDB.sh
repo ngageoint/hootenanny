@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # setup db, user, and password to avoid password prompt
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 # setup db, user, and password to avoid password prompt
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"

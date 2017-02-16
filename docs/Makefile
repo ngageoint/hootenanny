@@ -88,7 +88,7 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	HootJavaScriptInterfaces.asciidoc \
 	HootenannyConfigOptions.asciidoc \
 	commands/* \
-	../conf/ConfigOptions.asciidoc \
+	../conf/core/ConfigOptions.asciidoc \
 	References.asciidoc \
 	user/*.asciidoc
 	$(call buildAsciidoc)

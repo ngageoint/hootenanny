@@ -6,7 +6,7 @@ set -e
 # sql definition file. If the date on the file is newer than the date the db
 # was created, we drop it & re-create. Otherwise we leave the DB alone. 
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 # setup db, user, and password to avoid password prompt
 export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"

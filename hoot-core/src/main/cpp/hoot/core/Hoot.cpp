@@ -81,7 +81,7 @@ void Hoot::_init()
 # ifdef TGS_HAVE_LIBSTXXL
     // initialize the environment variable for loading STXXL configuration. If the environment
     // variable has already been set then don't overwrite it (that is the 0 at the end).
-    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/stxxl.conf";
+    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
     Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 

@@ -99,7 +99,7 @@ command similar to the following may be issued:
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in +conf/ConfigOptions.asciidoc++ and are read in by 
+All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc++ and are read in by 
 +rules/LinearWaterway.js+  Tweaking the settings can result in better conflation performance depending on the datasets being conflated.  
 See the configuration options for details on the settings that may be modified (search for "waterway").
 

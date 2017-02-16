@@ -2,7 +2,7 @@
 set -e
 
 # This script recreates the problem in https://github.com/ngageoint/hootenanny/issues/168
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export PGPASSWORD=$DB_PASSWORD
 

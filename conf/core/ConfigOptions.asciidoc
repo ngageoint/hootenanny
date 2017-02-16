@@ -186,7 +186,7 @@ algorithm has road conflation enable then the results could get interesting.
 === conflate.match.building.model
 
 * Data Type: string
-* Default Value: `BuildingModel.rf`
+* Default Value: `models/BuildingModel.rf`
 
 Path to the RF building model. A new model can be created with `build-model`. Searches local path
 and then `$HOOT_HOME/conf/`.
@@ -201,7 +201,7 @@ The highway match classifier to use. This should only be used for testing and de
 === conflate.match.highway.model
 
 * Data Type: string
-* Default Value: `HighwayModel.rf`
+* Default Value: `models/HighwayModel.rf`
 
 Path to the RF highway model. A new model can be created with `build-model`. Searches local path
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
@@ -210,7 +210,7 @@ set to `hoot::HighwayRfClassifier`.
 === conflate.match.poi.model
 
 * Data Type: string
-* Default Value: `PoiModel.rf`
+* Default Value: `models/PoiModel.rf`
 
 Path to the POI match classifier model. A new model can be created with `build-model`. Searches
 local path and then `$HOOT_HOME/conf/`.
@@ -2441,7 +2441,7 @@ value computed from the circular error for each way being examined.
 === weighted.word.distance.abridged.dictionary
 
 * Data Type: string
-* Default Value: `WordsAbridged.sqlite`
+* Default Value: `dictionary/WordsAbridged.sqlite`
 
 Location of the abridged word frequency dictionary. This is not ideal and you'll get repeated
 warnings if you use it, but at least you won't need to download a 400MB+ file.
@@ -2449,7 +2449,7 @@ warnings if you use it, but at least you won't need to download a 400MB+ file.
 === weighted.word.distance.dictionary
 
 * Data Type: string
-* Default Value: `words.sqlite`
+* Default Value: `dictionary/words.sqlite`
 
 Location of the word frequency dictionary. If the absolute file path isn't found, then
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
