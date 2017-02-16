@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.JsonUtils;
 
 
 class UpdateTagsCommand implements InternalCommand {
@@ -79,7 +80,12 @@ class UpdateTagsCommand implements InternalCommand {
         tags.put("input2", input2Name);
 
         // Need to reformat the list of hoot command options to json properties
-        tags.put("params", oParams.toJSONString()/*JsonUtils.escapeJson(params)*/);
+        try {
+            tags.put("params", JsonUtils.escapeJson(params));
+        }
+        catch (ParseException e) {
+            throw new RuntimeException("Error escaping JSON: " + params);
+        }
 
         // Hack alert!
         // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
