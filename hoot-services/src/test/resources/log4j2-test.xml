@@ -39,6 +39,14 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
+        <Logger name="hoot.services.controllers.ingest.CustomScriptResource" level="OFF" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="hoot.services.utils.MultipartSerializer" level="OFF" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
