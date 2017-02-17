@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.net.URL;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -66,6 +65,7 @@ public class JobResourceTest {
     private static final File homeFolder;
     private static final String original_HOME_FOLDER;
 
+
     static {
         try {
             original_HOME_FOLDER = HOME_FOLDER;
@@ -73,10 +73,6 @@ public class JobResourceTest {
             FileUtils.forceMkdir(homeFolder);
             Assert.assertTrue(homeFolder.exists());
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
-
-            URL inputUrl = JobResourceTest.class.getResource("/hoot/services/command/services_fields_metadata.json");
-            File dest = new File(new File(homeFolder, "scripts"), "services_fields_metadata.json");
-            FileUtils.copyURLToFile(inputUrl, dest);
         }
         catch (Exception e) {
             throw new RuntimeException(e);

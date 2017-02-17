@@ -45,7 +45,7 @@ public class JobRunnable implements Runnable {
     private final JobStatusManager jobStatusManager;
 
 
-    public JobRunnable(Job job, JobStatusManager jobStatusManager) {
+    JobRunnable(Job job, JobStatusManager jobStatusManager) {
         this.job = job;
         this.jobStatusManager = jobStatusManager;
     }

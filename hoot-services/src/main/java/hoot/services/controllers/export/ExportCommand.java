@@ -30,6 +30,7 @@ import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -93,7 +94,7 @@ class ExportCommand extends ExternalCommand {
             commandArgs.add(arg);
         }
         else if ("osm_api_db".equalsIgnoreCase(type)) {
-            addExportToOsmApiDbCommandArgs(commandArgs, oParams);
+            addExportToOsmApiDbCommandArgs(jobId, commandArgs, oParams);
         }
         else if ("osc".equalsIgnoreCase(type)) {
             addExportToChangesetCommandArgs(commandArgs, oParams);
@@ -123,7 +124,7 @@ class ExportCommand extends ExternalCommand {
         super.configureAsMakeCommand(EXPORT_SCRIPT, caller, commandArgs);
     }
 
-    private JSONArray addExportToOsmApiDbCommandArgs(JSONArray commandArgs, JSONObject oParams) {
+    private static JSONArray addExportToOsmApiDbCommandArgs(String jobId, JSONArray commandArgs, JSONObject oParams) {
         if (!OSM_API_DB_ENABLED) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
@@ -140,15 +141,11 @@ class ExportCommand extends ExternalCommand {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
         }
 
-        // This logic is a little out of line with the rest of
-        // ExportJobResource, but since
-        // this export option will probably go away completely soon, no point in
-        // changing
-        // it now.
+        // This logic is a little out of line with the rest of ExportResource, but since this export option will
+        // probably go away completely soon, no point in changing it now.
 
         // ignoring outputname, since we're only going to have a single mapedit
-        // connection configured in the core for now configured in the core for
-        // now
+        // connection configured in the core for now
         JSONObject arg = new JSONObject();
         File tempOutputDir = new File(TEMP_OUTPUT_PATH);
         if (!tempOutputDir.exists()) {
@@ -158,7 +155,8 @@ class ExportCommand extends ExternalCommand {
         // services currently always write changeset with sql
         File tempFile = null;
         try {
-            tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
+            tempFile = Files.createFile(new File(tempOutputDir, "changeset-" + jobId + ".osc.sql").toPath()).toFile();
+            //tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
         }
         catch (IOException ioe) {
             throw new RuntimeException("Error occurred!", ioe);
@@ -168,14 +166,13 @@ class ExportCommand extends ExternalCommand {
         commandArgs.add(arg);
 
         // This option allows the job executor return std out to the client.
-        // This is the only way
-        // I've found to get the conflation summary text back from hoot command
-        // line to the UI.
+        // This is the only way I've found to get the conflation summary text back from hoot command line to the UI.
         arg = new JSONObject();
         arg.put("writeStdOutToStatusDetail", "true");
         commandArgs.add(arg);
 
-        Map conflatedMap = getConflatedMap(oParams);
+        String mapName = JsonUtils.getParameterValue("input", oParams);
+        Map conflatedMap = getConflatedMap(mapName);
 
         // pass the export timestamp to the export bash script
         addMapForExportTag(conflatedMap, commandArgs);
@@ -184,7 +181,7 @@ class ExportCommand extends ExternalCommand {
         // if sent a bbox in the url (reflecting task grid bounds)
         // use that, otherwise use the bounds of the conflated output
         BoundingBox bbox;
-        if (oParams.get("TASK_BBOX") != null) {
+            if (oParams.get("TASK_BBOX") != null) {
             bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
         }
         else {
@@ -203,8 +200,8 @@ class ExportCommand extends ExternalCommand {
         return commandArgs;
     }
 
-    private void addExportToChangesetCommandArgs(JSONArray commandArgs, JSONObject oParams) {
-        //handling these inputs a little differently than the rest of ExportJobResource as makes it
+    private static void addExportToChangesetCommandArgs(JSONArray commandArgs, JSONObject oParams) {
+        //handling these inputs a little differently than the rest of ExportJResource as makes it
         //it possible to test osm2ogrscript with file inputs
 
         JSONObject commandArg = new JSONObject();
@@ -230,11 +227,9 @@ class ExportCommand extends ExternalCommand {
         }
     }
 
-    private Map getConflatedMap(JSONObject oParams) {
-        String mapName = JsonUtils.getParameterValue("input", oParams);
+    private static Map getConflatedMap(String mapName) {
         Long mapId = DbUtils.getMapIdByName(mapName);
 
-        // this may be checked somewhere else down the line...not sure
         if (mapId == null) {
             String msg = "Error exporting data.  No map exists with name: " + mapName;
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
@@ -242,16 +237,15 @@ class ExportCommand extends ExternalCommand {
 
         Map conflatedMap = new Map(mapId);
         conflatedMap.setDisplayName(mapName);
+        conflatedMap.setTags(DbUtils.getMapsTableTags(mapId));
 
         return conflatedMap;
     }
 
-    private void addMapForExportTag(Map map, JSONArray commandArgs) {
-        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(map.getId());
-
+    private static void addMapForExportTag(Map conflatedMap, JSONArray commandArgs) {
+        java.util.Map<String, String> tags = (java.util.Map<String, String>) conflatedMap.getTags();
         if (!tags.containsKey("osm_api_db_export_time")) {
-            String msg = "Error exporting data.  Map with ID: " + map.getId() + " and name: " + map.getDisplayName()
-                    + " has no osm_api_db_export_time tag.";
+            String msg = "Error exporting data.  Map with ID: " + conflatedMap.getId() + " has no osm_api_db_export_time tag.";
             throw new WebApplicationException(Response.status(Response.Status.CONFLICT).entity(msg).build());
         }
 
@@ -260,7 +254,7 @@ class ExportCommand extends ExternalCommand {
         commandArgs.add(arg);
     }
 
-    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
+    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
         arg.put("aoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);

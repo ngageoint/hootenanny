@@ -37,12 +37,19 @@ public interface ExternalCommandManager {
      */
     CommandResult exec(String jobId, ExternalCommand command);
 
-    String getJobProgress(String jobId);
+    /**
+     * Returns stdout of the currently executing command that belongs to the job defined by jobId.
+     *
+     * @param jobId ID of the job
+     *
+     * @return stdout of the currently executing command that runs in the context of the job
+     */
+    String getProgress(String jobId);
 
     /**
-     * Terminates job
+     * Terminates currently executing command for the job.  This should abort the entire job.
      *
-     * @param jobId ID of the job to terminate
+     * @param jobId ID of the job for which to terminate its currently executing command
      */
     void terminate(String jobId);
 }

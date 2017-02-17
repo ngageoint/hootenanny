@@ -119,7 +119,7 @@ public class ClipDatasetResource {
             jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
-            String msg = "Error processing cookie cutter request!";
+            String msg = "Error processing dataset clipping request!";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

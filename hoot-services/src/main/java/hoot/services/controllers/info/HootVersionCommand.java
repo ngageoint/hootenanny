@@ -33,9 +33,9 @@ import org.json.simple.JSONObject;
 import hoot.services.command.ExternalCommand;
 
 
-public class HootVersionCommand extends ExternalCommand {
+class HootVersionCommand extends ExternalCommand {
 
-    public HootVersionCommand(boolean withDetails, Class clazz) {
+    HootVersionCommand(boolean withDetails, Class<?> caller) {
         super.put("exectype", "hoot");
         super.put("exec", "version");
 
@@ -48,6 +48,6 @@ public class HootVersionCommand extends ExternalCommand {
         }
 
         super.put("params", params);
-        super.put("caller", clazz.getSimpleName());
+        super.put("caller", caller.getName());
     }
 }

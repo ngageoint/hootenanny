@@ -27,82 +27,92 @@
 package hoot.services.controllers.export;
 
 
-import static hoot.services.HootProperties.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.FileUtils;
-import org.json.simple.JSONObject;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import hoot.services.UnitTest;
-import hoot.services.geo.BoundingBox;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.DbUtils;
 
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({DbUtils.class, ExportCommand.class})
+@PowerMockIgnore("javax.management.*")
 public class ExportCommandTest {
 
-    @Ignore
-    @Test
-    @Category(UnitTest.class)
-    public void testProcess() throws Exception {
-        String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"gdb\",\"removereview\" : \"false\"}";
+    private static final String MAP_NAME = "MyTestMap";
+    private static final String EXPORT_TIME = "2016-05-04 10:15";
+    private static final Map<String, String> tags = new HashMap<>();
 
-        String tempOutputPath = TEMP_OUTPUT_PATH;
-        JSONObject arg = new JSONObject();
-        arg.put("outputfolder", tempOutputPath + "/" + "f9a8d471");
-        tempOutputPath = arg.toJSONString();
-        String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},";
-        jobArgs += "{\"outputtype\":\"gdb\"},{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
-        jobArgs += tempOutputPath + ",";
-        jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}],";
-        jobArgs += "\"exectype\":\"make\"}";
+    @Before
+    public void beforeTest() throws Exception {
+        PowerMockito.mockStatic(DbUtils.class);
 
-        ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-        Response resp = spy.export(params);
-        //String jobId = resp.getJobid();
-
-        //jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        // verify(spy).postJobRequest(Matchers.matches(jobId),
-        // Matchers.endsWith(jobArgs));
+        BDDMockito.given(DbUtils.getMapIdByName(MAP_NAME)).willReturn(1L);
+        BDDMockito.given(DbUtils.getMapsTableTags(1L)).willReturn(tags);
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
-    public void testProcessForWFS() throws Exception {
-        String pgUrl = replaceSensitiveData("host='" + DB_HOST + "' port='" + DB_PORT + "' user='" + DB_USER_ID + "' password='" + DB_PASSWORD
-                + "' dbname='" + WFS_STORE_DB + "'");
+    public void testWFSCommandCreation() throws Exception {
+        String jobId = UUID.randomUUID().toString();
 
-        String params = "{\"translation\":\"MGCP.js\",\"inputtype\":\"db\",\"input\":\"ToyTestA\",\"outputtype\":\"wfs\",\"removereview\" : \"false\"}";
+        String params = "{\"translation\":\"MGCP.js\"," +
+                         "\"inputtype\":\"db\"," +
+                         "\"input\":\"ToyTestA\"," +
+                         "\"outputtype\":\"wfs\"," +
+                         "\"removereview\" : \"false\"}";
 
-        JSONObject arg = new JSONObject();
-        arg.put("outputfolder", TEMP_OUTPUT_PATH + "/" + "f9a8d471");
-        String tempOutputPath = arg.toJSONString();
-        String jobArgs = ",\"exec\":\"osm2ogrscript\",\"params\":[{\"input\":\"ToyTestA\"},{\"translation\":\"MGCP.js\"},{\"outputtype\":\"wfs\"},"
-                + "{\"removereview\":\"false\"},{\"inputtype\":\"db\"},";
-        jobArgs += tempOutputPath + ",";
-        jobArgs += "{\"output\":\"f9a8d471\"},{\"outputname\":\"f9a8d471\"}," + "{\"PG_URL\":\"" + pgUrl
-                + "\"}],\"exectype\":\"make\"},{\"class\":\"hoot.services.wfs.WfsManager\","
-                + "\"method\":\"createWfsResource\",\"params\":[{\"isprimitivetype\":\"false\",\"value\":\"f9a8d471\","
-                + "\"paramtype\":\"java.lang.String\"}],\"exectype\":\"reflection_sync\"}]";
+        ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
 
-        ExportJobResource spy = Mockito.spy(new ExportJobResource());
-        //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-//        Response resp = spy.process(params);
+        String actualCaller = exportCommand.get("caller").toString();
+        String expectedCaller = this.getClass().getName();
 
-        // /String jobId = resp.getJobid();
+        assertEquals(expectedCaller, actualCaller);
 
-        //jobArgs = jobArgs.replaceAll("f9a8d471", jobId);
-        // verify(spy).postChainJobRequest(Matchers.matches(jobId),
-        // Matchers.endsWith(jobArgs));}
+        String actualExectype = exportCommand.get("exectype").toString();
+        String expectedExectype = "make";
+
+        assertEquals(expectedExectype, actualExectype);
+
+        String actualExec = exportCommand.get("exec").toString();
+        String expectedExec = "osm2ogrscript";
+
+        assertEquals(expectedExec, actualExec);
+
+        String actualParams = exportCommand.get("params").toString();
+        String expectedParams =
+                "[{\"input\":\"ToyTestA\"}," +
+                "{\"translation\":\"MGCP.js\"}," +
+                "{\"inputtype\":\"db\"}," +
+                "{\"outputtype\":\"wfs\"}," +
+                "{\"removereview\":\"false\"}," +
+                "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                "{\"output\":\"" + jobId + "\"}," +
+                "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
+                "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                "{\"outputname\":\"" + jobId + "\"}," +
+                "{\"PG_URL\":\"host='${dbHost}' port='${dbPort}' user='${dbUserId}' password='${dbPassword}' dbname='wfsstoredb'\"}]";
+
+        assertEquals(expectedParams, actualParams);
     }
 
     @Test
@@ -110,35 +120,272 @@ public class ExportCommandTest {
     public void testExportToOsmApiDb() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/export/ExportResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()), "UTF-8");
 
-            ExportJobResource spy = Mockito.spy(new ExportJobResource());
-            //Mockito.doNothing().when((AbstractJobResource) spy).processJob(any());
-            Long mapId = 1L;
-            //Mockito.doReturn(mapId).when(spy).getMapIdByName(anyString());
-            java.util.Map<String, String> mapTags = new HashMap<>();
-            String exportTime = "2016-05-04 10:15";
-            mapTags.put("osm_api_db_export_time", exportTime);
-            //Mockito.doReturn(mapTags).when(spy).getMapTags(anyLong());
-            BoundingBox mapBounds = new BoundingBox(0.0, 0.0, 0.0, 0.0);
-            String mapBoundsStr = mapBounds.toServicesString();
-            //Mockito.doReturn(mapBounds).when(spy).getMapBounds(any(Map.class));
+            tags.put("osm_api_db_export_time", EXPORT_TIME);
 
-            //String commandArgs = spy.getExportToOsmApiDbCommandArgs(JsonUtils.parseParams(inputParams),
-            //        (JSONObject) new JSONParser().parse(inputParams)).toString();
+            String jobId = UUID.randomUUID().toString();
 
-            //assertTrue(commandArgs.contains("{\"input\":\"MyTestMap\"}"));
-            //assertTrue(commandArgs.contains("{\"outputtype\":\"osm_api_db\"}"));
-            //assertTrue(commandArgs.contains("{\"removereview\":\"false\"}"));
-            //assertTrue(commandArgs.contains("{\"inputtype\":\"db\"}"));
-            //assertTrue(commandArgs.contains("{\"changesetoutput\":"));
-            //assertTrue(commandArgs.contains("{\"changesetsourcedatatimestamp\":\"" + exportTime + "\"}"));
-            //assertTrue(commandArgs.contains("{\"aoi\":\"" + mapBoundsStr + "\"}"));
+            String params = "{\"inputtype\":\"db\"," +
+                             "\"input\":\"" + MAP_NAME + "\"," +
+                             "\"outputtype\":\"osm_api_db\"," +
+                             "\"removereview\":\"false\"," +
+                             "\"TASK_BBOX\":\"0.0,0.0,0.0,0.0\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+
+            String actualCaller = exportCommand.get("caller").toString();
+            String expectedCaller = this.getClass().getName();
+
+            assertEquals(expectedCaller, actualCaller);
+
+            String actualExectype = exportCommand.get("exectype").toString();
+            String expectedExectype = "make";
+
+            assertEquals(expectedExectype, actualExectype);
+
+            String actualExec = exportCommand.get("exec").toString();
+            String expectedExec = "osm2ogrscript";
+
+            assertEquals(expectedExec, actualExec);
+
+            String actualParams = exportCommand.get("params").toString();
+            String expectedParams =
+                    "[{\"input\":\"" + MAP_NAME + "\"}," +
+                     "{\"inputtype\":\"db\"}," +
+                     "{\"TASK_BBOX\":\"0.0,0.0,0.0,0.0\"}," +
+                     "{\"outputtype\":\"osm_api_db\"}," +
+                     "{\"removereview\":\"false\"}," +
+                     "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                     "{\"output\":\"" + jobId + "\"}," +
+                     "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
+                     "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                     "{\"changesetoutput\":\"\\/tmp\\/changeset-" + jobId + ".osc.sql\"}," +
+                     "{\"writeStdOutToStatusDetail\":\"true\"}," +
+                     "{\"changesetsourcedatatimestamp\":\"2016-05-04 10:15\"}," +
+                     "{\"aoi\":\"0.0,0.0,0.0,0.0\"}]";
+
+            assertEquals(expectedParams, actualParams);
         }
         finally {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportToChangeset() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+
+        String params = "{\"inputtype\":\"db\"," +
+                         "\"input\":\"" + MAP_NAME + "\"," +
+                         "\"outputtype\":\"osc\"," +
+                         "\"USER_ID\":\"test_user\"," +
+                         "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
+
+        ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+
+        String actualCaller = exportCommand.get("caller").toString();
+        String expectedCaller = this.getClass().getName();
+
+        assertEquals(expectedCaller, actualCaller);
+
+        String actualExectype = exportCommand.get("exectype").toString();
+        String expectedExectype = "make";
+
+        assertEquals(expectedExectype, actualExectype);
+
+        String actualExec = exportCommand.get("exec").toString();
+        String expectedExec = "osm2ogrscript";
+
+        assertEquals(expectedExec, actualExec);
+
+        String actualParams = exportCommand.get("params").toString();
+        String expectedParams =
+                "[{\"input\":\"" + MAP_NAME + "\"}," +
+                 "{\"inputtype\":\"db\"}," +
+                 "{\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}," +
+                 "{\"USER_ID\":\"test_user\"}," +
+                 "{\"outputtype\":\"osc\"}," +
+                 "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                 "{\"output\":\"" + jobId +"\"}," +
+                 "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
+                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                 "{\"input1\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                 "{\"input2\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/MyTestMap\"}," +
+                 "{\"aoi\":\"10.1,10.1,10.1,10.1\"}," +
+                 "{\"userid\":\"test_user\"}]";
+
+        assertEquals(expectedParams, actualParams);
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbWithTranslation() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+
+            String jobId = UUID.randomUUID().toString();
+
+            String params = "{\"inputtype\":\"db\"," +
+                             "\"input\":\"" + MAP_NAME + "\"," +
+                             "\"outputtype\":\"osm_api_db\"," +
+                             "\"removereview\":\"false\"," +
+                             "\"translation\":\"MyTranslation.js\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString()
+                    .contains("Custom translation not allowed when exporting to OSM API database."));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+        }
+
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbNoTimestampTag() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+
+            tags.remove("osm_api_db_export_time");
+
+            String jobId = UUID.randomUUID().toString();
+
+            String params = "{\"inputtype\":\"db\"," +
+                             "\"input\":\"" + MAP_NAME + "\"," +
+                             "\"outputtype\":\"osm_api_db\"," +
+                             "\"removereview\":\"false\"," +
+                             "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString().contains("has no osm_api_db_export_time tag"));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbMissingMap() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+
+            tags.put("osm_api_db_export_time", EXPORT_TIME);
+            BDDMockito.given(DbUtils.getMapIdByName(MAP_NAME)).willReturn(null);
+
+            String jobId = UUID.randomUUID().toString();
+
+            String params = "{\"inputtype\":\"db\"," +
+                             "\"input\":\"" + MAP_NAME + "\"," +
+                             "\"outputtype\":\"osm_api_db\"," +
+                             "\"removereview\":\"false\"," +
+                             "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString().contains("No map exists with name"));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportOsmApiDbNotEnabled() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+
+            tags.put("osm_api_db_export_time", EXPORT_TIME);
+
+            String jobId = UUID.randomUUID().toString();
+
+            String params = "{\"inputtype\":\"db\"," +
+                    "\"input\":\"" + MAP_NAME + "\"," +
+                    "\"outputtype\":\"osm_api_db\"," +
+                    "\"removereview\":\"false\"," +
+                    "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString()
+                    .contains("Attempted to export to an OSM API database but OSM API database support is disabled"));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToOsmApiDbBadInputType() throws Exception {
+        try {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+
+            tags.put("osm_api_db_export_time", EXPORT_TIME);
+
+            String jobId = UUID.randomUUID().toString();
+
+            String params = "{\"inputtype\":\"file\"," +
+                    "\"input\":\"" + MAP_NAME + "\"," +
+                    "\"outputtype\":\"osm_api_db\"," +
+                    "\"removereview\":\"false\"," +
+                    "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString()
+                    .contains("When exporting to an OSM API database, the input type must be a Hootenanny API database."));
+            throw e;
+        }
+        finally {
+            HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+        }
+    }
+
+    @Test(expected = WebApplicationException.class)
+    @Category(UnitTest.class)
+    public void testExportToChangesetNoTaskBbox() throws Exception {
+        try {
+            String params = "{\"inputtype\":\"db\"," +
+                    "\"input\":\"" + MAP_NAME + "\"," +
+                    "\"outputtype\":\"osc\"," +
+                    "\"USER_ID\":\"test_user\"}";
+
+            String jobId = UUID.randomUUID().toString();
+
+            ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        }
+        catch (WebApplicationException e) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            assertTrue(e.getResponse().getEntity().toString().contains("TASK_BBOX must be specified"));
+            throw e;
         }
     }
 }

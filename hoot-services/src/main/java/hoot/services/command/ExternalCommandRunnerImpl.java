@@ -64,7 +64,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
     @Override
     public CommandResult exec(String[] command, String jobId, String caller) {
-        logger.debug("Trying to execute the following command: {}", commandArrayToString(command, caller));
+        logger.debug("About to execute the following command: {}", commandArrayToString(command, caller));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
              OutputStream stderr = new ByteArrayOutputStream()) {
@@ -151,7 +151,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     }
 
     private static String commandArrayToString(String[] command, String caller) {
-        return Arrays.toString(command).replace(",", "") + ", Caller=" + caller ;
+        return Arrays.toString(command) + ", Caller=" + caller ;
     }
 
     @Override

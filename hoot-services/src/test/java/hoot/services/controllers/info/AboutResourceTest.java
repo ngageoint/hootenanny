@@ -38,6 +38,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -47,6 +48,7 @@ import hoot.services.testsupport.HootServicesJerseyTestAbstract;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ BuildInfo.class })
+@PowerMockIgnore("javax.management.*")
 public class AboutResourceTest extends HootServicesJerseyTestAbstract {
 
     public AboutResourceTest() {}

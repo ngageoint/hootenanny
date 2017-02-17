@@ -565,13 +565,6 @@ public class CustomScriptResourceTest {
         assertTrue(file.exists());
     }
 
-    /**
-     * Removes the first line from a file
-     *
-     * @param file
-     *            file to modify
-     * @throws IOException
-     */
     private static void removeFirstLineFromFile(File file) throws IOException {
         try (Scanner fileScanner = new Scanner(file)) {
             fileScanner.nextLine();
@@ -592,8 +585,6 @@ public class CustomScriptResourceTest {
             }
         }
     }
-
-
 
     @Test
     @Category(UnitTest.class)

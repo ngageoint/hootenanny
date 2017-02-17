@@ -71,8 +71,8 @@ import hoot.services.wfs.WFSManager;
 @Controller
 @Path("/export")
 @Transactional
-public class ExportJobResource {
-    private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
+public class ExportResource {
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
 
     @Autowired
     private JobProcessor jobProcessor;
@@ -84,7 +84,7 @@ public class ExportJobResource {
     private ExportCommandFactory exportCommandFactory;
 
 
-    public ExportJobResource() {}
+    public ExportResource() {}
 
     /**
      * Asynchronous export service.

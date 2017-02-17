@@ -52,7 +52,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static final Map<String, ExternalCommandRunner> activeCommands = new ConcurrentHashMap<>();
 
     @Override
-    public String getJobProgress(String jobId) {
+    public String getProgress(String jobId) {
         String stdStr = "";
         ExternalCommandRunner commandRunner = activeCommands.get(jobId);
         if (commandRunner != null) {
