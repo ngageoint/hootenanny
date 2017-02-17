@@ -26,16 +26,13 @@
  */
 package hoot.services.command;
 
-/**
- * @author Jong Choi
- *
- *         Abstract class for Native Interface.
- */
+
 public interface ExternalCommandManager {
 
     /**
-     * Performs execution. All required meta data should be in command parameter.
+     * Performs external command execution.
      *
+     * @param jobId id of the job this command belongs to
      * @param command command to execute
      */
     CommandResult exec(String jobId, ExternalCommand command);
