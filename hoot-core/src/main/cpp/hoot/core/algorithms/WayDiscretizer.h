@@ -39,7 +39,7 @@ namespace geos {
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 namespace hoot {
   class Way;
   class WayLocation;

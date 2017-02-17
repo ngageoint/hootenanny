@@ -28,7 +28,7 @@
 #ifndef WAYMERGER_H
 #define WAYMERGER_H
 
-#include "../Conflator.h"
+#include <hoot/core/conflate/Conflator.h>
 #include "WayManipulator.h"
 
 // GEOS
@@ -39,7 +39,7 @@ namespace geos {
 }
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 namespace hoot {
   class OsmMap;
   class Node;

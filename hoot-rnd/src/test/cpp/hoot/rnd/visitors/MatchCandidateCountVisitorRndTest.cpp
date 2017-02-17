@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

@@ -40,7 +40,7 @@ namespace hoot
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>

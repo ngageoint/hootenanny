@@ -27,7 +27,7 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchThreshold.h>

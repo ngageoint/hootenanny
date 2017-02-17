@@ -36,7 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 

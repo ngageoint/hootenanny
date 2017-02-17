@@ -29,7 +29,7 @@
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/core/IdGenerator.h>
+#include <hoot/core/util/IdGenerator.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 // Qt

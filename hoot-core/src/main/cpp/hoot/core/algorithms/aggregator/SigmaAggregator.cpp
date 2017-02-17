@@ -28,7 +28,7 @@
 
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <tbs/stats/SampleStats.h>
 
 namespace hoot

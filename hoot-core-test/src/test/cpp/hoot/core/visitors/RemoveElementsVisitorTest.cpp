@@ -32,7 +32,7 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt

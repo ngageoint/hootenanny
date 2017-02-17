@@ -27,7 +27,7 @@
 #include "ScriptMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>

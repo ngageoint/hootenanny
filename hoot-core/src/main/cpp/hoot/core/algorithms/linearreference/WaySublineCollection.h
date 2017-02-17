@@ -31,7 +31,7 @@
 #include <vector>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include "WaySubline.h"
 
 // Qt

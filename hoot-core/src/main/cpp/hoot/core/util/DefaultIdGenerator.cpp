@@ -25,18 +25,18 @@
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "PositiveIdGenerator.h"
+#include "DefaultIdGenerator.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(IdGenerator, PositiveIdGenerator)
+HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
 
-IdGeneratorPtr PositiveIdGenerator::clone() const
+IdGeneratorPtr DefaultIdGenerator::clone() const
 {
-  PositiveIdGenerator* copy = new PositiveIdGenerator();
+  DefaultIdGenerator* copy = new DefaultIdGenerator();
   IdGeneratorPtr result(copy);
 
   copy->_nodeId = _nodeId;
@@ -47,4 +47,3 @@ IdGeneratorPtr PositiveIdGenerator::clone() const
 }
 
 }
-

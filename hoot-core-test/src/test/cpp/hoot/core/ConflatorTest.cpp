@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/OsmPbfReader.h>

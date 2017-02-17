@@ -27,7 +27,7 @@
 #include "BuildingMatch.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>

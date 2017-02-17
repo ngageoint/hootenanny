@@ -33,7 +33,7 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/Hoot.h>
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/Command.h>

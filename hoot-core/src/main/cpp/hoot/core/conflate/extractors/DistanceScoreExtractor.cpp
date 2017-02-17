@@ -26,7 +26,7 @@
  */
 #include "DistanceScoreExtractor.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 
 namespace hoot

@@ -39,7 +39,7 @@
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

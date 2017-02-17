@@ -27,7 +27,7 @@
 #include "KeepBuildingsVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveElementOp.h>

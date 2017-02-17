@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
