@@ -26,7 +26,7 @@
  */
 package hoot.services.command;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import hoot.services.utils.JsonUtils;
 
 
 @Transactional
@@ -89,8 +87,6 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
         else {
             throw new IllegalArgumentException("Invalid exectype specified");
         }
-
-        validate(command);
 
         ExternalCommandRunner cmdRunner = new ExternalCommandRunnerImpl();
 
@@ -178,17 +174,5 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
         }
 
         return execCmd.toArray(new String[execCmd.size()]);
-    }
-
-    private static void validate(JSONObject command) {
-        String resourceName = command.get("caller").toString();
-        CommandFieldsValidator validator = new CommandFieldsValidator(resourceName);
-
-        Map<String, String> paramsMap = JsonUtils.paramsToMap(command);
-
-        List<String> missingList = new ArrayList<>();
-        if (!validator.validateRequiredExists(paramsMap, missingList)) {
-            throw new RuntimeException("Missing following required field(s): " + missingList);
-        }
     }
 }
