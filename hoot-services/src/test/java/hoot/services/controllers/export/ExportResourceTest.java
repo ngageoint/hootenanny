@@ -71,7 +71,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @ActiveProfiles("test")
 @Transactional
-public class ExportJobResourceTest {
+public class ExportResourceTest {
 
     @Autowired
     private ExternalCommandManager externalCommandInterface;
