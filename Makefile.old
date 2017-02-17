@@ -174,81 +174,81 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 ##### MGCP
 # Build the MGCP schema
-plugins/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/schema/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP  "To English" rules
-plugins/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/schema/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP "From English" rules
-plugins/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/schema/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv40
-plugins/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/schema/nfdd/TDSv40.csv.gz
+plugins/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-plugins/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/schema/nfdd/TDSv40.csv.gz
+plugins/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "To English" rules
 # This need to be full TDS so we have access to the full range of attributes
-plugins/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/schema/nfdd/TDSv40.csv.gz
+plugins/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "From English" rules
-plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/schema/nfdd/TDSv40.csv.gz
+plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
-plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/schema/nfdd/TDSv60.csv.gz conf/schema/nfdd/TDS_NGAv01.csv.gz
+plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
 # This one has all of the Text Enumerations
-plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/schema/nfdd/TDSv60.csv.gz conf/schema/nfdd/TDS_NGAv01.csv.gz
+plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "To English" rules
-plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/schema/nfdd/TDSv60.csv.gz conf/schema/nfdd/TDS_NGAv01.csv.gz
+plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "From English" rules
-plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/schema/nfdd/TDSv60.csv.gz conf/schema/nfdd/TDS_NGAv01.csv.gz
+plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### GGDMv30
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
-plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/schema/ggdm/GGDM30_Features.csv.gz conf/schema/ggdm/GGDM30_Layers.csv.gz conf/schema/ggdm/GGDM30_Values.csv.gz
+plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # GGDMv30 full schema
 # This one has all of the Text Enumerations
-plugins/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/schema/ggdm/GGDM30_Features.csv.gz conf/schema/ggdm/GGDM30_Layers.csv.gz conf/schema/ggdm/GGDM30_Values.csv.gz
+plugins/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "To English" rules
-plugins/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/schema/ggdm/GGDM30_Features.csv.gz conf/schema/ggdm/GGDM30_Layers.csv.gz conf/schema/ggdm/GGDM30_Values.csv.gz
+plugins/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "From English" rules
-plugins/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/schema/ggdm/GGDM30_Features.csv.gz conf/schema/ggdm/GGDM30_Layers.csv.gz conf/schema/ggdm/GGDM30_Values.csv.gz
+plugins/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
