@@ -40,6 +40,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -49,6 +51,8 @@ import hoot.services.utils.JsonUtils;
 
 
 class ExportCommand extends ExternalCommand {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
     //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
     ExportCommand(String jobId, String params, Class<?> caller) {

@@ -27,6 +27,7 @@
 package hoot.services.controllers.export;
 
 
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -46,6 +47,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
 import hoot.services.testsupport.HootCustomPropertiesSetter;
@@ -56,6 +59,8 @@ import hoot.services.utils.DbUtils;
 @PrepareForTest({DbUtils.class, ExportCommand.class})
 @PowerMockIgnore("javax.management.*")
 public class ExportCommandTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExportCommandTest.class);
 
     private static final String MAP_NAME = "MyTestMap";
     private static final String EXPORT_TIME = "2016-05-04 10:15";
@@ -105,7 +110,7 @@ public class ExportCommandTest {
                 "{\"inputtype\":\"db\"}," +
                 "{\"outputtype\":\"wfs\"}," +
                 "{\"removereview\":\"false\"}," +
-                "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                 "{\"output\":\"" + jobId + "\"}," +
                 "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
@@ -156,11 +161,11 @@ public class ExportCommandTest {
                      "{\"TASK_BBOX\":\"0.0,0.0,0.0,0.0\"}," +
                      "{\"outputtype\":\"osm_api_db\"}," +
                      "{\"removereview\":\"false\"}," +
-                     "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                     "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                      "{\"output\":\"" + jobId + "\"}," +
                      "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
                      "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
-                     "{\"changesetoutput\":\"\\/tmp\\/changeset-" + jobId + ".osc.sql\"}," +
+                     "{\"changesetoutput\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/changeset-" + jobId + ".osc.sql\"}," +
                      "{\"writeStdOutToStatusDetail\":\"true\"}," +
                      "{\"changesetsourcedatatimestamp\":\"2016-05-04 10:15\"}," +
                      "{\"aoi\":\"0.0,0.0,0.0,0.0\"}]";
@@ -208,7 +213,7 @@ public class ExportCommandTest {
                  "{\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}," +
                  "{\"USER_ID\":\"test_user\"}," +
                  "{\"outputtype\":\"osc\"}," +
-                 "{\"outputfolder\":\"\\/tmp\\/" + jobId + "\"}," +
+                 "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                  "{\"output\":\"" + jobId +"\"}," +
                  "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
                  "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +

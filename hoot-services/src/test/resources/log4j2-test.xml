@@ -47,6 +47,14 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
+        <Logger name="hoot.services.controllers.review.ReviewResource" level="OFF" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="hoot.services.command.ExternalCommandRunnerImpl" level="OFF" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
