@@ -62,7 +62,7 @@ import hoot.services.IntegrationTest;
 import hoot.services.UnitTest;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.testsupport.HootServicesSpringTestConfig;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.utils.XmlDocumentBuilder;
 
 

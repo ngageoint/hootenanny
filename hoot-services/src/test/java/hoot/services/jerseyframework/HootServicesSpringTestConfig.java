@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-package hoot.services.testsupport;
+package hoot.services.jerseyframework;
 
 import javax.sql.DataSource;
 

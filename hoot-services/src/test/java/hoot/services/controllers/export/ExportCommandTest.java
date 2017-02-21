@@ -51,7 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.DbUtils;
 
 

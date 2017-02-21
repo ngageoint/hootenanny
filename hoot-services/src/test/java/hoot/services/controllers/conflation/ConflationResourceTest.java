@@ -29,21 +29,18 @@ package hoot.services.controllers.conflation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ConflationResourceTest {
@@ -55,11 +52,20 @@ public class ConflationResourceTest {
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestOsmApiDbInputAsSecondaryInput.json")
-                    .getPath()), Charset.defaultCharset());
+
+            String inputParams = "{" +
+                    "\"INPUT1_TYPE\":\"DB\"," +
+                    "\"INPUT1\":\"1\"," +
+                    "\"INPUT2_TYPE\":\"OSM_API_DB\"," +
+                    "\"INPUT2\":\"-1\"," +
+                    "\"OUTPUT_NAME\":\"OutputLayer\"," +
+                    "\"CONFLATION_TYPE\":\"Reference\"," +
+                    "\"MATCH_THRESHOLD\":\"0.6\"," +
+                    "\"MISS_THRESHOLD\":\"0.6\"," +
+                    "\"USER_EMAIL\":\"test@test.com\"," +
+                    "\"COLLECT_STATS\":\"false\"," +
+                    "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" +
+                    "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             spy.conflate(inputParams);
@@ -79,11 +85,21 @@ public class ConflationResourceTest {
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestOsmApiDbInputAsSecondary2Input.json")
-                    .getPath()), Charset.defaultCharset());
+
+            String inputParams = "{" +
+                       "\"REFERENCE_LAYER\":\"2\"," +
+                       "\"INPUT1_TYPE\":\"OSM_API_DB\"," +
+                       "\"INPUT1\":\"1\"," +
+                       "\"INPUT2_TYPE\":\"DB\"," +
+                       "\"INPUT2\":\"-1\"," +
+                       "\"OUTPUT_NAME\":\"OutputLayer\"," +
+                       "\"CONFLATION_TYPE\":\"Reference\"," +
+                       "\"MATCH_THRESHOLD\":\"0.6\"," +
+                       "\"MISS_THRESHOLD\":\"0.6\"," +
+                       "\"USER_EMAIL\":\"test@test.com\"," +
+                       "\"COLLECT_STATS\":\"false\"," +
+                       "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" +
+                    "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             spy.conflate(inputParams);
@@ -103,11 +119,20 @@ public class ConflationResourceTest {
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
-            String inputParams = FileUtils.readFileToString(new File(Thread
-                .currentThread()
-                .getContextClassLoader()
-                .getResource("hoot/services/controllers/conflation/ConflationResourceTestProcessOsmApiDbMissingMapInput.json")
-                .getPath()), Charset.defaultCharset());
+
+            String inputParams = "{" +
+                        "\"INPUT1_TYPE\":\"OSM_API_DB\"," +
+                        "\"INPUT1\":\"-1\"," +
+                        "\"INPUT2_TYPE\":\"DB\"," +
+                        "\"INPUT2\":\"-999\"," +
+                        "\"OUTPUT_NAME\":\"OutputLayer\"," +
+                        "\"CONFLATION_TYPE\":\"Reference\"," +
+                        "\"MATCH_THRESHOLD\":\"0.6\"," +
+                        "\"MISS_THRESHOLD\":\"0.6\"," +
+                        "\"USER_EMAIL\":\"test@test.com\"," +
+                        "\"COLLECT_STATS\":\"false\"," +
+                        "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" +
+                    "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
             spy.conflate(inputParams);
@@ -127,10 +152,20 @@ public class ConflationResourceTest {
     public void testConflateOsmApiDbNotEnabled() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
-            String inputParams = FileUtils.readFileToString(new File(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("hoot/services/controllers/conflation/ConflationResourceTestProcessOsmApiDbInputInput.json")
-                    .getPath()), Charset.defaultCharset());
+
+            String inputParams = "{" +
+                       "\"INPUT1_TYPE\":\"OSM_API_DB\"," +
+                       "\"INPUT1\":\"-1\"," +
+                       "\"INPUT2_TYPE\":\"DB\"," +
+                       "\"INPUT2\":\"2\"," +
+                       "\"OUTPUT_NAME\":\"OutputLayer\"," +
+                       "\"CONFLATION_TYPE\":\"Reference\"," +
+                       "\"MATCH_THRESHOLD\":\"0.6\"," +
+                       "\"MISS_THRESHOLD\":\"0.6\"," +
+                       "\"USER_EMAIL\":\"test@test.com\"," +
+                       "\"COLLECT_STATS\":\"false\"," +
+                       "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" +
+                   "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
 

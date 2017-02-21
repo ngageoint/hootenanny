@@ -44,8 +44,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 
 
 public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {

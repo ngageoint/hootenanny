@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootServicesSpringTestConfig;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -75,7 +75,7 @@ import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.QuadTileCalculator;

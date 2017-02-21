@@ -43,7 +43,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootServicesSpringTestConfig;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.utils.MapUtils;
 
 

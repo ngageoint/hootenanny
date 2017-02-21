@@ -67,7 +67,7 @@ import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
 

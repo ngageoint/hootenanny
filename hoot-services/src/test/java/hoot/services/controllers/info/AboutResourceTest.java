@@ -43,7 +43,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 
 
 @RunWith(PowerMockRunner.class)

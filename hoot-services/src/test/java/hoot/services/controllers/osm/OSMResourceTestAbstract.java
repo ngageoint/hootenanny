@@ -39,7 +39,7 @@ import org.junit.BeforeClass;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.utils.MapUtils;
 
 
