@@ -82,11 +82,10 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   Meters length1 = string1->calculateLength(map);
   Meters length2 = string2->calculateLength(map);
 
-  // These loops assume that equal portions of a line equal the same point on the line. Said another
-  // way if you're 10% down line 1, then that is equivalent to 10% down line 2. Unfortunately this
-  // can be a very coarse estimate. Something like [1] may improve this matching.
-  //
-  // 1. https://github.com/ngageoint/hootenanny/issues/426
+  // TODO: These loops assume that equal portions of a line equal the same point on the line.
+  // Said another way if you're 10% down line 1, then that is equivalent to 10% down line 2.
+  // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
+  // improve this matching.
   Meters d1 = 0.0;
   for (int i = 0; i < string1->getMembers().size(); ++i)
   {
