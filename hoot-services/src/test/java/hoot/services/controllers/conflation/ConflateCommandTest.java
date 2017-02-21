@@ -71,24 +71,6 @@ public class ConflateCommandTest {
 
         assertEquals(expectedCommandArgs, actualCommandArgs);
 
-        //{"caller":"hoot.services.controllers.conflation.ConflationResourceTest",
-        // "params":[
-        //            {"MISS_THRESHOLD":"0.6"},
-        //            {"INPUT1":"DcGisRoads"},
-        //            {"CONFLATION_TYPE":"Reference"},
-        //            {"USER_EMAIL":"test@test.com"},
-        //            {"OUTPUT_NAME":"Merged_Roads_e0d"},
-        //            {"MATCH_THRESHOLD":"0.6"},
-        //            {"INPUT2":"DcTigerRoads"},
-        //            {"COLLECT_STATS":"false"},
-        //            {"INPUT1_TYPE":"DB"},
-        //            {"INPUT2_TYPE":"DB"},
-        //            {"DB_URL":"hootapidb:\/\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\/${dbName}"},
-        //            {"OSM_API_DB_URL":"osmapidb:\/\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\/${osmApiDbName}"}
-        //          ],
-        // "exectype":"make",
-        // "exec":"makeconflate"}
-
         String actualCaller = (String) conflateCommand.get("caller");
         String expectedCaller = this.getClass().getName();
 
