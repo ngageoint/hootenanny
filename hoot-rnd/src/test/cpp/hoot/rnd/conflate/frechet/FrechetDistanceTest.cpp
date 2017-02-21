@@ -41,7 +41,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 

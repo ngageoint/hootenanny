@@ -27,7 +27,7 @@
 #include "VagabondNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 

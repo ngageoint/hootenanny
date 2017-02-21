@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/perty/PertyRemoveTagVisitor.h>
 #include <hoot/core/util/Log.h>

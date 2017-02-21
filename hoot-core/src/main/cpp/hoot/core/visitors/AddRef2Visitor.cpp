@@ -27,7 +27,7 @@
 #include "AddRef2Visitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/MetadataTags.h>
 

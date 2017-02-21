@@ -43,7 +43,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 
 // Qt

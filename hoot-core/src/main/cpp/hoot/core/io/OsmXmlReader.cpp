@@ -35,7 +35,7 @@ using namespace boost;
 #include <boost/lexical_cast.hpp>
 
 // Hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
@@ -46,7 +46,7 @@ using namespace boost;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 
 // Qt

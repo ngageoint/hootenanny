@@ -29,8 +29,8 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>

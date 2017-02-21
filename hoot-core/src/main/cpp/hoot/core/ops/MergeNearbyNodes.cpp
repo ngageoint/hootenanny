@@ -28,8 +28,8 @@
 #include "MergeNearbyNodes.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/index/ClosePointHash.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>

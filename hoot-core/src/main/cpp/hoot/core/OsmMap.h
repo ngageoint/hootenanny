@@ -37,7 +37,7 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
@@ -58,10 +58,10 @@ namespace hoot
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
 
-#include "DefaultIdGenerator.h"
-#include "RelationMap.h"
-#include "WayMap.h"
-#include "NodeMap.h"
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/elements/RelationMap.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/elements/NodeMap.h>
 
 
 namespace hoot

@@ -27,7 +27,7 @@
 #include "ElementVisitorJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>

@@ -27,8 +27,8 @@
 #include "TranslationOp.h"
 
 // hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>

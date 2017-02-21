@@ -27,7 +27,7 @@
 #include "HootApiDbReader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>

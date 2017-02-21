@@ -32,7 +32,7 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>

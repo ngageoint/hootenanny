@@ -27,7 +27,7 @@
 #include "WaySnapMerger.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 #include "WaySnapMergeManipulation.h"
 

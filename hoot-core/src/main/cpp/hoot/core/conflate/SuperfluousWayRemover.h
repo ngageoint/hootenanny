@@ -30,7 +30,7 @@
 
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Standard
