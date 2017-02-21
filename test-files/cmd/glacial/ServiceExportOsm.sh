@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 export PG_URL="dbname='$WFS_DB_NAME' host='$DB_HOST' port='$DB_PORT' user='$DB_USER' password='$DB_PASSWORD'"
@@ -26,22 +26,22 @@ echo $SQL | psql -h localhost -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT > /dev/nul
 # Test osm with no translation
 export translation=""
 export outputtype=osm
-MAKEFLAGS= make -f $HOOT_HOME/scripts/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/services/osm2ogrscript > /dev/null
 
 # Test shp with MPCP translation
 export translation="translations/MGCP_TRD4.js"
 export outputtype=shp
-MAKEFLAGS= make -f $HOOT_HOME/scripts/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/services/osm2ogrscript > /dev/null
 
 # Test gdb with TDSv6.1 translation
 export translation="translations/TDSv61.js"
 export outputtype=gdb
-MAKEFLAGS= make -f $HOOT_HOME/scripts/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/services/osm2ogrscript > /dev/null
 
 # Test wfs with TDSv4.0 translation
 export translation="translations/TDSv40.js"
 export outputtype=wfs
-MAKEFLAGS= make -f $HOOT_HOME/scripts/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/services/osm2ogrscript > /dev/null
 
 
 # Remove ingested data

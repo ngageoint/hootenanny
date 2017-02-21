@@ -1,6 +1,0 @@
-{
-  "#description" : "map.cleanup.transforms - List of additional transforms to apply when cleaning up a map. A set of default transforms will always be applied.",
-  "map.cleaner.transforms" : "",
-
-  "#" : "end"
-}

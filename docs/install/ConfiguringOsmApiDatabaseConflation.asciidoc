@@ -4,8 +4,8 @@
 
 By default, Hootenanny is configured with an empty test OSM API database.  To conflate against your own OSM API database:
 
-* Create a custom OSM API database configuration file $HOOT_HOME/conf/DatabaseConfigLocal.sh by copying the file 
-$HOOT_HOME/conf/DatabaseConfigDefault.sh
+* Create a custom OSM API database configuration file $HOOT_HOME/conf/database/DatabaseConfigLocal.sh by copying the file 
+$HOOT_HOME/conf/database/DatabaseConfigDefault.sh
 * Fill in the following settings with your production OSM API database information:
 ** database server name: DB_HOST_OSMAPI
 ** database name: DB_NAME_OSMAPI

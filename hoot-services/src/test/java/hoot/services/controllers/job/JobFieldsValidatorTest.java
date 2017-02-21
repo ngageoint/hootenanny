@@ -53,7 +53,7 @@ public class JobFieldsValidatorTest {
     @BeforeClass
     public static void beforeClass() throws Exception {
         URL inputUrl = JobFieldsValidatorTest.class.getResource("/hoot.services.controllers.job/services_fields_metadata.json");
-        File dest = new File(new File(testFolder, "scripts"), "services_fields_metadata.json");
+        File dest = new File(new File(testFolder, "scripts/services"), "services_fields_metadata.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
         originalHomeFolderDir = HOME_FOLDER;

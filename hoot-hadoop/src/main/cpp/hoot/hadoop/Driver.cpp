@@ -79,11 +79,11 @@ void Driver::_addDefaultJobSettings(pp::Job& job)
 
   if (!fileList.contains("dictionary.json"))
   {
-    job.addFile(ConfPath::search("dictionary.json").toStdString());
+    job.addFile(ConfPath::search("dictionary/dictionary.json").toStdString());
   }
   else
   {
-    throw HootException("Duplicate config files: " + ConfPath::search("dictionary.json") +
+    throw HootException("Duplicate config files: " + ConfPath::search("dictionary/dictionary.json") +
                         " and " + fileList.value("dictionary.json"));
   }
 }

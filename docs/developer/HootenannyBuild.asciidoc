@@ -92,7 +92,7 @@ Web Services Maven files of note:
 * pom.xml
 * hoot-services/pom.xml.in
 * distribution/pom.xml
-* scripts/mvn-build
+* scripts/maven/mvn-build
 
 
 
