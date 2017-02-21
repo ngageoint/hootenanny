@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>

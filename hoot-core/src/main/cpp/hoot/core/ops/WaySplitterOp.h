@@ -29,7 +29,7 @@
 #define __WAY_SPLITTER_OP_H__
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
 

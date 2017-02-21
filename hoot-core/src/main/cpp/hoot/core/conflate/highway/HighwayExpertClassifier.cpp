@@ -27,7 +27,7 @@
 #include "HighwayExpertClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/util/ElementConverter.h>

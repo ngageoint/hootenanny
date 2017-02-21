@@ -40,7 +40,7 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // Qt

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QRegExp>

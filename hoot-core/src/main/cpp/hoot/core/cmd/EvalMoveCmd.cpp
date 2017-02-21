@@ -29,8 +29,8 @@
 #include <boost/random/uniform_int.hpp>
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>

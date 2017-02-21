@@ -35,7 +35,7 @@
 #include <tgs/System/Time.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
 namespace hoot

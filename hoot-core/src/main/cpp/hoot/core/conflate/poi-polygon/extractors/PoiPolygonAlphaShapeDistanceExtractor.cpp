@@ -27,7 +27,7 @@
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 

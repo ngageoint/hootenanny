@@ -27,7 +27,7 @@
 #include "RemoveDuplicateReviewsOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/CopySubsetOp.h>

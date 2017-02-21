@@ -27,8 +27,8 @@
 #include "GeoNamesReader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
 // qt

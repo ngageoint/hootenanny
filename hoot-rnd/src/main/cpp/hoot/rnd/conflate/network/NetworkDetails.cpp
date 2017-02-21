@@ -39,7 +39,7 @@
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
@@ -82,8 +82,8 @@ Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocation
 
   if (d == numeric_limits<double>::max())
   {
-    LOG_VARW(s);
-    LOG_VARW(el);
+    LOG_VART(s);
+    LOG_VART(el);
     throw IllegalArgumentException("el isn't close enough to s to provide a distance.");
   }
   else if (d < 0)
@@ -113,7 +113,7 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNet
 {
   if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
   {
-    LOG_VAR(e);
+    LOG_VART(e);
     throw IllegalArgumentException("The input edge must have exactly 1 way as its member.");
   }
 

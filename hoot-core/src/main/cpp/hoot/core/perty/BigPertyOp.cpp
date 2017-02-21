@@ -31,8 +31,8 @@
 #include <boost/random/variate_generator.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MetadataTags.h>

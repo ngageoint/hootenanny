@@ -27,8 +27,8 @@
 #include "CookieCutterOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/filters/StatusCriterion.h>

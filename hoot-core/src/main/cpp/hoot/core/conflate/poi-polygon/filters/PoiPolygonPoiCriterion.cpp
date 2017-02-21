@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

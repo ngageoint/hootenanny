@@ -34,7 +34,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/manipulators/Manipulation.h>

@@ -27,7 +27,7 @@
 #include "WeightedWordDistance.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>

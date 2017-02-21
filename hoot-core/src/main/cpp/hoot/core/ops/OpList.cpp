@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/ObjectOutputStream.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
