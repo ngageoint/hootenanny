@@ -2,7 +2,7 @@
 The node-mapnik-server is a Node.js app that uses node-mapnik to render tiles on-demand for Hoot datasets exported to PostGIS render db format.  It leverages sample code found in [node-mapnik-sample-code](https://github.com/mapnik/node-mapnik-sample-code).
 
 ### Datasource
-The render databases are built for each Hoot dataset and follow the naming convention 'renderdb_*layerid*'.  A separate PostGIS enabled database is created for each Hoot dataset with the script found [here](https://github.com/ngageoint/hootenanny/blob/mapnik/scripts/exportrenderdb.sh).  The map dataset features are exported from the OSM nodes, ways, and relations in the hoot db to PostGIS layers using the following hoot command:
+The render databases are built for each Hoot dataset and follow the naming convention 'renderdb_*layerid*'.  A separate PostGIS enabled database is created for each Hoot dataset with the script found [here](https://github.com/ngageoint/hootenanny/blob/mapnik/scripts/services/exportrenderdb.sh).  The map dataset features are exported from the OSM nodes, ways, and relations in the hoot db to PostGIS layers using the following hoot command:
 
 `hoot osm2ogr -D api.db.email=test@test.com translations/RenderDb.js "postgresql://hoot:hoottest@localhost:5432/hoot/example" "PG:dbname='renderdb_example' host='localhost' port='5432' user='hoot' password='hoottest'"`
 
@@ -25,7 +25,7 @@ To run:
 ```
 cd hoot
 source SetupEnv.sh
-source conf/DatabaseConfig.sh
+source conf/database/DatabaseConfig.sh
 cd node-mapnik-server
 npm start
 ```
