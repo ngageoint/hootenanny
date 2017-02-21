@@ -48,10 +48,7 @@ class RasterToTilesCommand extends ExternalCommand {
     RasterToTilesCommand(String name, String userEmail) {
         long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
-        BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
-
-        Map currentMap = new Map(mapId);
-        JSONObject extents = currentMap.retrieveNodesMBR(queryBounds);
+        JSONObject extents = getExtents(mapId);
 
         Object oMinLon = extents.get("minlon");
         Object oMaxLon = extents.get("maxlon");
@@ -232,5 +229,12 @@ class RasterToTilesCommand extends ExternalCommand {
         zoomInfo.put("rastersize", rasterSize);
 
         return zoomInfo;
+    }
+
+    private static JSONObject getExtents(Long mapId) {
+        Map currentMap = new Map(mapId);
+        BoundingBox queryBounds = new BoundingBox("-180,-90,180,90");
+        JSONObject extents = currentMap.retrieveNodesMBR(queryBounds);
+        return extents;
     }
 }
