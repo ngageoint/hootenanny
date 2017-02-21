@@ -630,8 +630,11 @@ When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|
   Capybara.default_max_wait_time = oldTimeout
 end
 
-When(/^I click the image carousel button$/) do
-  find('div.carousel-control').find('button').click
+When(/^I open the image carousel$/) do
+  btn = find('div.carousel-control').find('button')
+  unless btn.has_css?('active')
+    btn.click
+  end
 end
 
 Given(/^that the EGD plugin is available$/) do
