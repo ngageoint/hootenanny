@@ -8,4 +8,4 @@
 
 #hoot convert tmp/haiti-and-domrep-latest.osm.pbf test-files/cmd/slow/haiti-and-domrep-latest.osm
 #hoot crop-map tmp/haiti-and-domrep-latest.osm test-files/cmd/slow/haiti-and-domrep-latest-cropped.osm "-72.509,18.517,-72.463,18.558"
-scripts/ServiceOsmApiDbHootApiDbConflate.sh tmp/haiti-and-domrep-latest-cropped.osm tmp/PapMgcpClip.osm -72.4822997917,18.5264918926,-72.4768066276,18.531700324028872 ServiceOsmApiDbHootApiDbHaitiDrConflateTest
+scripts/core/ServiceOsmApiDbHootApiDbConflate.sh tmp/haiti-and-domrep-latest-cropped.osm tmp/PapMgcpClip.osm -72.4822997917,18.5264918926,-72.4768066276,18.531700324028872 ServiceOsmApiDbHootApiDbHaitiDrConflateTest
