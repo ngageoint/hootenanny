@@ -27,7 +27,7 @@
 #include "NamedOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/OsmMap.h>

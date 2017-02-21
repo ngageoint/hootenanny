@@ -27,8 +27,8 @@
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>

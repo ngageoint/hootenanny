@@ -22,43 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SOURCEFEATURE_H
-#define SOURCEFEATURE_H
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
+#include "PositiveIdGenerator.h"
 
-// OGR Includes
-class OGRFeature;
+#include <hoot/core/util/Factory.h>
 
-/**
- * This class represents a single source feature used for conflation. If this SourceFeature needs
- * to manipulate the geometry it should be first copied. Similar to the concepts in the RoadMatcher
- * documentation the individual features may be in one of several source states.
- */
-class SourceFeature
+namespace hoot
 {
-public:
-    enum SourceState
-    {
-        Unknown,
-        Matched,
-        Standalone,
-        Retired
-    };
 
-    const boost::shared_ptr<OGRFeature> getFeature() { return _feature; }
+HOOT_FACTORY_REGISTER(IdGenerator, PositiveIdGenerator)
 
-    SourceState getSourceState() { return _state; }
+IdGeneratorPtr PositiveIdGenerator::clone() const
+{
+  PositiveIdGenerator* copy = new PositiveIdGenerator();
+  IdGeneratorPtr result(copy);
 
-    void setSourceState(SourceState s) { _state = s; }
+  copy->_nodeId = _nodeId;
+  copy->_wayId = _wayId;
+  copy->_relationId = _relationId;
 
-private:
+  return result;
+}
 
-    SourceState _state;
-    boost::shared_ptr<OGRFeature> _feature;
-};
+}
 
-#endif // SOURCEFEATURE_H

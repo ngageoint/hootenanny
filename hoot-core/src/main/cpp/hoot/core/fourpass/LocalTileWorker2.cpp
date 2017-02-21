@@ -28,8 +28,8 @@
 #include "LocalTileWorker2.h"
 
 // hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>

@@ -35,7 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 

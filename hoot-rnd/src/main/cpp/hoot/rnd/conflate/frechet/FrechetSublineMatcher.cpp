@@ -29,8 +29,8 @@
 // geos
 #include <geos/geom/LineString.h>
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/rnd/conflate/frechet/FrechetDistance.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>

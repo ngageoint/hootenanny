@@ -33,7 +33,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>

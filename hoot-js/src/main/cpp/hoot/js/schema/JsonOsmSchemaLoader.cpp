@@ -27,7 +27,7 @@
 #include "JsonOsmSchemaLoader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/core/schema/SchemaChecker.h>

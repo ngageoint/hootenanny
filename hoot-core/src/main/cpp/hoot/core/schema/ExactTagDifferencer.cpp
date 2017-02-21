@@ -27,7 +27,7 @@
 #include "ExactTagDifferencer.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 

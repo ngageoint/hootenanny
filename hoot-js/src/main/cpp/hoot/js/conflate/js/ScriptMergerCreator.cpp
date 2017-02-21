@@ -30,7 +30,7 @@
 #include "ScriptMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 

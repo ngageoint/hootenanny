@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>

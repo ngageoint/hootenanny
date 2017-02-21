@@ -27,7 +27,7 @@
 #include "ConflictsNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"

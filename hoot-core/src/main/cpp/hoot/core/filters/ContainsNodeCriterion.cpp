@@ -27,7 +27,7 @@
 #include "ContainsNodeCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>

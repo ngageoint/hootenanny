@@ -27,7 +27,7 @@
 #include "OsmMapWriterFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>

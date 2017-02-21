@@ -31,7 +31,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 namespace hoot
 {
   class OsmMap;

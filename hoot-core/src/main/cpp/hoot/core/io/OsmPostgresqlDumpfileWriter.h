@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POSTGRESQLDUMPFILEWRITER_H
-#define POSTGRESQLDUMPFILEWRITER_H
+#ifndef OSMPOSTGRESQLDUMPFILEWRITER_H
+#define OSMPOSTGRESQLDUMPFILEWRITER_H
 
 /*
  * This file is part of Hootenanny.
@@ -83,16 +83,16 @@ namespace hoot
  * OSM element write optimization that writes out a Postgres dump file which can later be applied
  * to Postgres.
  */
-class PostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
+class OsmPostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::PostgresqlDumpfileWriter"; }
+  static std::string className() { return "hoot::OsmPostgresqlDumpfileWriter"; }
 
-  PostgresqlDumpfileWriter();
+  OsmPostgresqlDumpfileWriter();
 
-  ~PostgresqlDumpfileWriter();
+  ~OsmPostgresqlDumpfileWriter();
 
   virtual bool isSupported(QString url);
 
@@ -257,4 +257,4 @@ private:
 
 }
 
-#endif // POSTGRESQLDUMPFILEWRITER_H
+#endif // OSMPOSTGRESQLDUMPFILEWRITER_H

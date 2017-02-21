@@ -31,7 +31,7 @@
 #include <geos/geom/LineSegment.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/OsmMap.h>
 

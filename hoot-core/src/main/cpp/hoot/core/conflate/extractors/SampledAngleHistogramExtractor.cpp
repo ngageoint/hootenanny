@@ -32,7 +32,7 @@
 using namespace geos::geom;
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>

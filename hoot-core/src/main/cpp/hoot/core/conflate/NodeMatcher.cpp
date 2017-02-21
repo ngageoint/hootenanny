@@ -33,7 +33,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>

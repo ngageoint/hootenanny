@@ -30,7 +30,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>

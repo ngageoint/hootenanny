@@ -27,7 +27,7 @@
 #include "MatchFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/MatchThreshold.h>

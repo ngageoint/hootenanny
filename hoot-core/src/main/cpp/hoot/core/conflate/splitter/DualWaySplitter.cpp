@@ -39,7 +39,7 @@ using namespace geos::geom;
 using namespace geos::operation::buffer;
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>

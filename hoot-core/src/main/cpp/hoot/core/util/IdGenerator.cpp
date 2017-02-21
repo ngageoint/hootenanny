@@ -24,31 +24,25 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SOURCEMAP_H
-#define SOURCEMAP_H
 
-// Local Includes
-class FeatureVector;
+#include "IdGenerator.h"
 
-/**
- * This class represents a single source map used for conflation. This source map may be manipulated
- * to generate a new source map (e.g. vector generalization, merging ways, etc.). Similar to the
- * concepts in the RoadMatcher documentation the individual features may be in one of several
- * source states.
- */
-class SourceMap
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
+
+namespace hoot
 {
-public:
 
-    /**
-     * Initializes the source map with a set of unknown vectors.
-     */
-    SourceMap(FeatureVector& fv);
+shared_ptr<IdGenerator> IdGenerator::_theInstance;
 
-    /**
-     * Performs a deep copy of all SourceFeatures.
-     */
-    SourceMap(const SourceMap& sm);
-};
+shared_ptr<IdGenerator> IdGenerator::getInstance()
+{
+  if (!_theInstance)
+  {
+    _theInstance.reset(Factory::getInstance().constructObject<IdGenerator>(
+      ConfigOptions().getIdGenerator()));
+  }
+  return _theInstance;
+}
 
-#endif // SOURCEMAP_H
+}

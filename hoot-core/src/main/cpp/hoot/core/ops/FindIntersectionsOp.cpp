@@ -27,8 +27,8 @@
 #include "FindIntersectionsOp.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>

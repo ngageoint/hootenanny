@@ -36,7 +36,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 

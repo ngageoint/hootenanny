@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>

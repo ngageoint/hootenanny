@@ -27,7 +27,7 @@
 #include "FilteredVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/filters/ElementCriterion.h>

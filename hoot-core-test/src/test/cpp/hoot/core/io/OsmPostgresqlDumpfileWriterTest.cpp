@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/PostgresqlDumpfileWriter.h>
+#include <hoot/core/io/OsmPostgresqlDumpfileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
 
@@ -44,9 +44,9 @@
 namespace hoot
 {
 
-class PostgresqlDumpfileWriterTest : public CppUnit::TestFixture
+class OsmPostgresqlDumpfileWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PostgresqlDumpfileWriterTest);
+  CPPUNIT_TEST_SUITE(OsmPostgresqlDumpfileWriterTest);
   CPPUNIT_TEST(runWriterTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -120,7 +120,7 @@ public:
 
   void runWriterTest()
   {
-    PostgresqlDumpfileWriter pgDumpWriter;
+    OsmPostgresqlDumpfileWriter pgDumpWriter;
 
     QDir().mkpath("test-output/io/PostgresqlDumpWriterTest/");
     QString outFile = "test-output/io/PostgresqlDumpWriterTest/PostgresqlDumpWriter_out.sql";
@@ -172,6 +172,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PostgresqlDumpfileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPostgresqlDumpfileWriterTest, "quick");
 
 }

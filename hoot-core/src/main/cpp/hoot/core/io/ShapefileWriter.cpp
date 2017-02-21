@@ -28,7 +28,7 @@
 #include "ShapefileWriter.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 // GDAL
 #include <ogr_geometry.h>
