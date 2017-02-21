@@ -43,7 +43,7 @@ import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.controllers.osm.OSMTestUtils;
 import hoot.services.geo.BoundingBox;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.utils.MapUtils;
 
 
 public class ChangesetResourceUploadCommonTest extends OSMResourceTestAbstract {

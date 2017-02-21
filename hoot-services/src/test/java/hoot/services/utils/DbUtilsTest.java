@@ -26,7 +26,7 @@
  */
 package hoot.services.utils;
 
-import static hoot.services.testsupport.MapUtils.insertMap;
+import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -52,7 +52,6 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
 import hoot.services.testsupport.HootServicesSpringTestConfig;
-import hoot.services.testsupport.MapUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

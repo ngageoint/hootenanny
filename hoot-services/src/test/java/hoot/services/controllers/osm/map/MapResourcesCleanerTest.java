@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
 import hoot.services.testsupport.HootServicesSpringTestConfig;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.utils.MapUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

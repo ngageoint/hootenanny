@@ -41,7 +41,7 @@ import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.models.osm.Element;
 import hoot.services.models.osm.Element.ElementType;
-import hoot.services.testsupport.ReviewTestUtils;
+import hoot.services.utils.ReviewTestUtils;
 import hoot.services.utils.RandomNumberGenerator;
 
 

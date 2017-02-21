@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.command;
+package hoot.services.controllers.job;
 
 import static hoot.services.HootProperties.TEST_JOB_STATUS_POLLER_TIMEOUT;
 import static hoot.services.utils.DbUtils.createQuery;

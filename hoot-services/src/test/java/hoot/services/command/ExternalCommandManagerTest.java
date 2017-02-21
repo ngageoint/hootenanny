@@ -38,7 +38,7 @@ import org.junit.experimental.categories.Category;
 import hoot.services.UnitTest;
 
 
-public class ProcessStreamInterfaceTest {
+public class ExternalCommandManagerTest {
 
     @Test
     @Category(UnitTest.class)

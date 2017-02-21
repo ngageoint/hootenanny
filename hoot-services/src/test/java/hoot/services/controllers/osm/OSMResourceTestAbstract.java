@@ -40,7 +40,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.testsupport.HootServicesJerseyTestAbstract;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.utils.MapUtils;
 
 
 /*
