@@ -35,24 +35,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import hoot.services.ApplicationContextUtils;
-import hoot.services.HootServicesSpringConfig;
-import hoot.services.command.ExternalCommandManager;
-import hoot.services.command.ExternalCommandManagerImpl;
 
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"hoot.services"},
-        excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
-@Profile("test")
+@ComponentScan(basePackages = {"hoot.services"}
+        /*, excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE)*/)
+//@Profile("test")
 public class HootServicesSpringTestConfig {
 
     @Bean
@@ -81,11 +76,6 @@ public class HootServicesSpringTestConfig {
     @DependsOn("dataSource")
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Bean
-    public ExternalCommandManager externalCommandManager() {
-        return new ExternalCommandManagerImpl();
     }
 
     @Bean
