@@ -15,7 +15,7 @@ See "Configuring an OSM API Database Connection" section of the Hootenanny Insta
 If you do not already have an OSM API database, you can run the following:
 
 ----------------------------
-$HOOT_HOME/scripts/CleanAndInitializeOsmApiDb.sh
+$HOOT_HOME/scripts/database/CleanAndInitializeOsmApiDb.sh
 -------------------------------
 
 This will create an empty OSM API database with a single test user.
@@ -47,15 +47,15 @@ Hootenanny ships with an empty OSM API database, configured by default, which ca
 To load data into an existing OSM API database using Hootenanny, run:
 
 -----------------------
-$HOOT_HOME/scripts/LoadOsmApiDbData.sh yourDataset1.osm
-$HOOT_HOME/scripts/LoadOsmApiDbData.sh yourDataset2.osm
+$HOOT_HOME/scripts/database/LoadOsmApiDbData.sh yourDataset1.osm
+$HOOT_HOME/scripts/database/LoadOsmApiDbData.sh yourDataset2.osm
 # etc.
 -------------------------
 
 To create a new database and load a single layer in one step, run:
 
 -----------------------
-$HOOT_HOME/scripts/CleanAndLoadOsmApiDbData.sh yourDataset.osm
+$HOOT_HOME/scripts/database/CleanAndLoadOsmApiDbData.sh yourDataset.osm
 -------------------------
 
 This script completely cleans out the database with each use.

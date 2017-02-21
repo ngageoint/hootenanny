@@ -63,7 +63,7 @@ conflation framework.  "log.identical.message.limit" is included here only, so y
 log messages for debugging purposes.
 
 As you build your model, you may need to add new configuration options which can be customized at
-runtime.  To do this, see @$HOOT_HOME/conf/ConfigOptions.asciidoc@. 
+runtime.  To do this, see @$HOOT_HOME/conf/core/ConfigOptions.asciidoc@. 
 
 To be able to go ahead and do an initial match scoring, copy one of the existing *.js rules files in
 @$HOOT_HOME/rules@ to a new file and make sure its referenced from your configuration file. 

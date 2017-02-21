@@ -63,7 +63,6 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
   }
 
 //  bool strResult = es1->toString() == es2->toString();
-
 //  if (result != strResult)
 //  {
 //    LOG_VARE(result);
@@ -197,7 +196,6 @@ bool EdgeString::contains(const shared_ptr<const EdgeString> other) const
       return false;
     }
   }
-
   return true;
 }
 
@@ -210,7 +208,6 @@ bool EdgeString::contains(ConstNetworkEdgePtr e) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -223,7 +220,6 @@ bool EdgeString::contains(const ConstEdgeSublinePtr& e) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -236,7 +232,6 @@ bool EdgeString::contains(ConstNetworkVertexPtr v) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -249,7 +244,6 @@ bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -270,7 +264,6 @@ ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(ConstOsmMapPtr map, Meters offse
       return ee.getEdge();
     }
   }
-
   return getLastEdge();
 }
 
@@ -281,7 +274,6 @@ QSet<ConstNetworkEdgePtr> EdgeString::getEdgeSet() const
   {
     result.insert(ee.getEdge());
   }
-
   return result;
 }
 
@@ -336,12 +328,10 @@ ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map
 QList<ConstElementPtr> EdgeString::getMembers() const
 {
   QList<ConstElementPtr> result;
-
   foreach (const EdgeEntry& e, _edges)
   {
     result += e.getEdge()->getMembers();
   }
-
   return result;
 }
 
@@ -358,20 +348,19 @@ ConstNetworkVertexPtr EdgeString::getToVertex() const
 bool EdgeString::isEdgeClosed() const
 {
   bool result = false;
-
   // if the end of the subline isn't at a vertex.
   if (_edges.back().getSubline()->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) == false ||
-    _edges.back().getSubline()->isZeroLength())
+      _edges.back().getSubline()->isZeroLength())
   {
     result = true;
   }
-
   return result;
 }
 
 bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
 {
   bool result = false;
+
   const ConstEdgeLocationPtr& start = getFrom();
   const ConstEdgeLocationPtr& end = getTo();
 
@@ -394,7 +383,6 @@ bool EdgeString::overlaps(shared_ptr<const EdgeString> other) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -407,7 +395,6 @@ bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -421,7 +408,6 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
       return true;
     }
   }
-
   return false;
 }
 
@@ -437,14 +423,14 @@ void EdgeString::prependEdge(ConstEdgeSublinePtr subline)
 
     ConstEdgeSublinePtr newEntry;
     if (subline->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
+        getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+        subline->getEnd()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
     {
       newEntry = subline;
     }
     else if (subline->getStart()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
+             getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
+             subline->getStart()->getVertex(EdgeLocation::SLOPPY_EPSILON) == getFromVertex())
     {
       EdgeSublinePtr copy = subline->clone();
       copy->reverse();
@@ -459,9 +445,9 @@ void EdgeString::prependEdge(ConstEdgeSublinePtr subline)
     }
     else
     {
-      LOG_VARW(subline->intersects(_edges.front().getSubline()));
-      LOG_VARW(subline);
-      LOG_VARW(_edges.front().getSubline());
+      LOG_VART(subline->intersects(_edges.front().getSubline()));
+      LOG_VART(subline);
+      LOG_VART(_edges.front().getSubline());
       throw HootException("Error attempting to prepend an edge that isn't connected.");
     }
 
@@ -532,6 +518,7 @@ bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
       return true;
     }
   }
+
   if (getTo()->isExtreme())
   {
     if (es->getStart()->isExtreme() && getTo()->getVertex() == es->getStart()->getVertex())
@@ -564,12 +551,11 @@ bool EdgeString::touches(const shared_ptr<const EdgeString>& es) const
       return true;
     }
   }
-
   return false;
 }
 
 void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOffset,
-  Meters newEndOffset)
+                      Meters newEndOffset)
 {
   assert(newStartOffset < newEndOffset);
 

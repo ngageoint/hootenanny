@@ -23,7 +23,7 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
-    ../conf/ConfigOptions.asciidoc \
+    ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
     ../rules/PoiGeneric.js \
     ../rules/lib/HootLib.js \

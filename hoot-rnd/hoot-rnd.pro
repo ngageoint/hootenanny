@@ -66,11 +66,10 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 HEADERS += \
-    src/test/cpp/hoot/rnd/conflate/network/LegacyVertexMatcherTest.h
+
 }
 
 SOURCES += \
-    src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.cpp \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMerger.cpp \
@@ -91,7 +90,6 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSetFinder.cpp \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.cpp \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.cpp \
     src/main/cpp/hoot/rnd/conflate/network/SingleSidedNetworkMatcher.cpp \
@@ -109,7 +107,6 @@ SOURCES += \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
 
 HEADERS += \
-    src/main/cpp/hoot/rnd/ops/KeepPoiAndBuildingRefOp.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatch.h \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMerger.h \
@@ -132,7 +129,6 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/EdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/InvertedEdgeMatchSet.h \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeMatchSet.h \
-    src/main/cpp/hoot/rnd/conflate/network/EdgeLinkCreator.h \
     src/main/cpp/hoot/rnd/conflate/network/IndexedEdgeLinks.h \
     src/main/cpp/hoot/rnd/conflate/network/LegacyVertexMatcher.h \
     src/main/cpp/hoot/rnd/conflate/network/SearchRadiusProvider.h \

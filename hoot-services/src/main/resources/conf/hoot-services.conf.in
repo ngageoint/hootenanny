@@ -78,7 +78,7 @@ testChangesetAutoClose=false
 # ETL
 
 # the folder location of the make file script for some endpoints
-coreScriptPath=$(homeFolder)/scripts
+coreScriptPath=$(homeFolder)/scripts/services
 
 # intermediate file output location (working folder)
 coreScriptOutputPath=$(homeFolder)/test-output/ETL_OUTPUT
@@ -96,19 +96,16 @@ CookieCutterMakefilePath=makecookiecutter
 ClipDatasetMakefilePath=makeclipdataset
 
 # Translation javascript header script path
-jsHeaderScriptPath=$(homeFolder)/scripts/rh.js
+jsHeaderScriptPath=$(homeFolder)/scripts/services/rh.js
 
 # Translation header used for just function scanning
-dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
+dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
 # Temporary OSM output path
 osmTempOutputPath=$(homeFolder)/tmp
-
-# Translation osm conversion batch script
-osmConvertorScript=osmconvert.sh
 
 # osm2ogr script used in export
 ExportScript=osm2ogrscript
@@ -183,7 +180,7 @@ ErrorLogPath=/var/log/tomcat8/catalina.out
 JobQueryInterval=3000
 
 # Default translations config file
-defaultTranslationsConfig=$(homeFolder)/conf/DefaultTranslations.json
+defaultTranslationsConfig=$(homeFolder)/conf/services/DefaultTranslations.json
 
 # Default FOUO translations config file
 defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
@@ -215,9 +212,6 @@ GetOgrAttributeScript=makeGetOgrAttrib
 # Report storage location
 reportDataPath=data/reports
 
-# Conflation advanced options node script
-confAdvOptsScript=confAdvOpts.js
-
 # Ingest size threshold
 ingestSizeThreshold=200000000
 
@@ -228,19 +222,19 @@ conflateSizeThreshold=200000000
 exportSizeThreshold=400000000
 
 # Config options asciidoc location
-configAsciidocPath=conf/ConfigOptions.asciidoc
+configAsciidocPath=conf/core/ConfigOptions.asciidoc
 
 # Advanced options template
-advOptTemplate=conf/conflateAdvOps.json
+advOptTemplate=conf/services/conflateAdvOps.json
 
 # Advanced options reference override
-advOptRefOverride=conf/conflationRefOps.json
+advOptRefOverride=conf/services/conflationRefOps.json
 
 # Advanced options horizontal override
-advOptHorizontalOverride=conf/conflationHorizontalOps.json
+advOptHorizontalOverride=conf/services/conflationHorizontalOps.json
 
 # Advanced options horizontal override
-advOptAverageOverride=conf/conflationAverageOps.json
+advOptAverageOverride=conf/services/conflationAverageOps.json
 
 # Element merge Node Server port
 ElementMergeServerPort=8096
@@ -254,7 +248,7 @@ ElementMergeServerScript=/plugins/ElementMergeServer.js
 # HGIS
 
 # HGIS review prepare for validation script name
-hgisPrepareForValidationScript=custom/HGIS/PrepareForValidation.sh
+hgisPrepareForValidationScript=PrepareForValidation.sh
 
 # HGIS filter script name
-hgisFilterScript=custom/HGIS/RemoveNonHgisPois.sh
+hgisFilterScript=RemoveNonHgisPois.sh

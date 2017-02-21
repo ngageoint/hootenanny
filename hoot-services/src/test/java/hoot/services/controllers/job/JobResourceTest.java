@@ -73,7 +73,7 @@ public class JobResourceTest {
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
             URL inputUrl = JobResourceTest.class.getResource("/hoot.services.controllers.job/services_fields_metadata.json");
-            File dest = new File(new File(homeFolder, "scripts"), "services_fields_metadata.json");
+            File dest = new File(new File(homeFolder, "scripts/services"), "services_fields_metadata.json");
             FileUtils.copyURLToFile(inputUrl, dest);
         }
         catch (Exception e) {

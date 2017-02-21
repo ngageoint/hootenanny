@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Hoot.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Qt
 #include <QList>
@@ -37,7 +38,6 @@
 namespace hoot
 {
 
-class WaySubline;
 class WayLocation;
 
 /**
