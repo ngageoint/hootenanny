@@ -73,7 +73,7 @@ public class HGISReviewResourceTest {
 
         JSONObject command = (JSONObject) result.get(0);
 
-        assertEquals("custom/HGIS/PrepareForValidation.sh", command.get("exec"));
+        assertEquals("PrepareForValidation.sh", command.get("exec"));
         assertEquals("bash", command.get("exectype"));
         assertNotNull(command.get("params"));
 

@@ -46,7 +46,7 @@ public class JobFieldsValidator {
     private final String resourceName;
 
     static {
-        META_DATA_PATH = HOME_FOLDER + "/scripts/services_fields_metadata.json";
+        META_DATA_PATH = HOME_FOLDER + "/scripts/services/services_fields_metadata.json";
         try {
             try (FileReader fReader = new FileReader(META_DATA_PATH)) {
                 JSONParser parser = new JSONParser();

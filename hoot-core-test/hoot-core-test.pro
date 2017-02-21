@@ -24,7 +24,7 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
-    ../conf/ConfigOptions.asciidoc \
+    ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
     ../rules/LineStringGenericTest.js \
     ../rules/PoiGeneric.js \

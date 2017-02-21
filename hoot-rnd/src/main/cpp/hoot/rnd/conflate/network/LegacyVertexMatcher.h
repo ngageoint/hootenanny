@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/NodeMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
-#include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/OsmMap.h>
 
 // Qt
 #include <QList>
@@ -41,6 +41,8 @@
 
 namespace hoot
 {
+
+class SearchRadiusProvider;
 
 /**
  * Identifies both candidate and confident tie points. Tie points are intersections that are joined

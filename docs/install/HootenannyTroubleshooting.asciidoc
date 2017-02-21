@@ -19,8 +19,8 @@ settings used in the UpdateHoot-CentOS6.sh script):
 * *Not sure if hoot is using the correct version of a dependency library?* --> run: +ldd /usr/local/bin/hoot.bin+ to see a list of the libraries its using. You can use +yum list installed | grep <library name>+ to see the libraries installed on your system.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigLocal.sh+
-	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigDefault.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigLocal.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigDefault.sh+
 
 * *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in INSTALL-CentOS6.5-PG9.1.txt that were run during the hoot core installation.
 
@@ -58,7 +58,7 @@ dropdb 'database name'
 
 --------------------------------------
 export HOOT_HOME=/usr/local/hoot
-$HOOT_HOME/scripts/DeleteAllTables.sh
+$HOOT_HOME/scripts/database/DeleteAllTables.sh
 --------------------------------------
 
 To re-create the hoot database, run the UpdateHoot-CentOS6.sh script with only the +UPDATE_DATABASE+ variable set to "true".
@@ -69,7 +69,7 @@ To re-create the hoot database, run the UpdateHoot-CentOS6.sh script with only t
 	** Check to see if following table exists in +wfsstoredb:spatial_ref_sys+
 
 * *liquibase update fails to run on the hoot database?*-->
-	** The update will fail if you do not reference the path to the changelog files in exactly the same way the hoot database references them in the databasechangelog table. If they are referenced from a different path, then you will lose all your data. As a last resort if the liquibase update does not work, you can run the $HOOT_HOME/DeleteAllTables.sh script and then re-create the tables with $HOOT_HOME/DbSchema.sql. You will lose all existing data with this method.
+	** The update will fail if you do not reference the path to the changelog files in exactly the same way the hoot database references them in the databasechangelog table. If they are referenced from a different path, then you will lose all your data. As a last resort if the liquibase update does not work, you can run the $HOOT_HOME/database/DeleteAllTables.sh script and then re-create the tables with $HOOT_HOME/DbSchema.sql. You will lose all existing data with this method.
 
 * *Getting a change log lock error?* -->
 
@@ -130,8 +130,8 @@ installations:
 * *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
-	**  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
+	**  +$HOOT_HOME/conf/database/DatabaseConfigLocal.sh+
+	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
