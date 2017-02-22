@@ -4,10 +4,10 @@ set -e
 #echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 
 # clean out the database
-source scripts/SetupOsmApiDB.sh force
+source scripts/database/SetupOsmApiDB.sh force
 
 # setup DB variables for automation
-source conf/DatabaseConfig.sh
+source conf/database/DatabaseConfig.sh
 
 export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
@@ -31,12 +31,11 @@ hoot is-match test-files/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm $OUTPUT_
 
 echo "Bounding box selection from osm api db..."
 
-source conf/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 
-source scripts/SetupOsmApiDB.sh force
+source scripts/database/SetupOsmApiDB.sh force
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
 hoot convert --error $HOOT_OPTS test-files/DcGisRoads.osm $OUTPUT_DIR/DcGisRoads.sql

@@ -52,6 +52,6 @@ PDF_SIZE=`wc -c test-output/cmd/csr/csr.pdf | cut -d' ' -f1`
 
 # TEST 5: test a sampling of the stats in the output of the stats command
 # - will output difference if fails
-python scripts/CheckThreeScores.py test-output/cmd/csr/csrStats.txt "Node Count,35,37,64,66,36,38" "Way Count,3,5,3,5,8,10" "Highway Count,3,5,3,5,8,10" "Total Unmatched Features,3,5,3,5,0,1"
+python scripts/core/CheckThreeScores.py test-output/cmd/csr/csrStats.txt "Node Count,35,37,64,66,36,38" "Way Count,3,5,3,5,8,10" "Highway Count,3,5,3,5,8,10" "Total Unmatched Features,3,5,3,5,0,1"
 echo "completed test 5"
 

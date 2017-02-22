@@ -8,7 +8,7 @@ NODE_APP="app.js"
 STYLE="hoot_style.xml"
 # Change the port as needed
 PORT="8000"
-PREREQS="source $HOOT_HOME/SetupEnv.sh && source $HOOT_HOME/conf/DatabaseConfig.sh"
+PREREQS="source $HOOT_HOME/SetupEnv.sh && source $HOOT_HOME/conf/database/DatabaseConfig.sh"
 LOG_DIR="$APP_DIR/log"
 LOG_FILE="$LOG_DIR/app.log"
 NODE_EXEC=$(which node)

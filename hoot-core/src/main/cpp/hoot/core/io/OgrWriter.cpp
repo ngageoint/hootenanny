@@ -35,8 +35,8 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>

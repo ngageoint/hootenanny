@@ -29,7 +29,7 @@
 #define NODEMATCHER_H
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>

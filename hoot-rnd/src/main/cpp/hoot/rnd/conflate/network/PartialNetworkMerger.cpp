@@ -95,7 +95,6 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   WayStringPtr str2 = merger->getMapping()->getWayString2();
 
   merger->mergeTags();
-
   // set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
 
@@ -127,10 +126,8 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   merger->replaceScraps();
 }
 
-WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
-  const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced,
-  ConstEdgeMatchPtr edgeMatch) const
+WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const OsmMapPtr& map,
+  vector< pair<ElementId, ElementId> >& replaced, ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1 = _details->toWayString(edgeMatch->getString1(), *this);
@@ -139,16 +136,14 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
   WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
 
   /******************
-   * At the beginning the merger should identify where the primary way should be broken into bits
+   * At the beginning, the merger should identify where the primary way should be broken into bits
    * then each way in the secondary will match 1 or more bits in the primary. This mapping can be
    * created at the beginning in the merger and used throughout the rest of the operations.
    ******************/
 
   WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
-
   // merge the tags in the keeper segments
   merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
-
   return merger;
 }
 

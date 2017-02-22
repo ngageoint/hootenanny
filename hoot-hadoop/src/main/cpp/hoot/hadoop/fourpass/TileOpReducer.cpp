@@ -17,8 +17,8 @@
 #include "TileOpReducer.h"
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/io/ObjectInputStream.h>

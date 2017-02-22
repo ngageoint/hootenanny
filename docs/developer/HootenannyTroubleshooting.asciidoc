@@ -12,8 +12,8 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 * *Not sure if hoot is using the correct version of a dependency library?* --> run: +ldd /usr/local/bin/hoot.bin+ to see a list of the libraries its using.  You can use +dpkg -l | grep <library name>+ to see the libraries installed on your system.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigLocal.sh+
-	**  +/usr/local/hootenanny-X.Y.Z/conf/DatabaseConfigDefault.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigLocal.sh+
+	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigDefault.sh+
 
 * *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* --> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in scripts/InstallHoot-CentOS-RHEL.sh that were run during the hoot core installation.
 
@@ -53,7 +53,7 @@ dropdb 'database name'
 
 --------------------------------------
 export HOOT_HOME=/usr/local/hoot
-$HOOT_HOME/scripts/DeleteAllTables.sh
+$HOOT_HOME/scripts/database/DeleteAllTables.sh
 --------------------------------------
 
 To re-create the hoot database, recompile Hootenanny using the --with-services option.
@@ -91,8 +91,8 @@ tail -f /usr/share/tomcat8/logs/catalina.out | grep -i -e ERROR -e SEVERE
 * *Do you want to see more granular services log output or redirect it to a file?* --> Edit +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
-	**  +$HOOT_HOME/conf/DatabaseConfigLocal.sh+
-	**  +$HOOT_HOME/conf/DatabaseConfigDefault.sh+
+	**  +$HOOT_HOME/conf/database/DatabaseConfigLocal.sh+
+	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+ 
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 

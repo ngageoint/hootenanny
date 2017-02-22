@@ -30,8 +30,8 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>

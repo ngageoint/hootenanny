@@ -21,8 +21,8 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build model-build conf/words.sqlite \
-	conf/WordsAbridged.sqlite osmapidb
+build: js-make qt-make pp-build services-build model-build conf/dictionary/words.sqlite \
+	conf/dictionary/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \
@@ -53,7 +53,7 @@ clean: Makefile.qmake services-clean clean-coverage
 	rm -rf `find test-files/cases -type d -empty`
 	cd docs; $(MAKE) clean
 ifeq ($(BUILD_SERVICES),services)
-	scripts/CleanOsmApiDB.sh
+	scripts/database/CleanOsmApiDB.sh
 endif
 ifeq ($(BUILD_UI_TESTS),uitests)
 	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
@@ -99,7 +99,7 @@ test-all: test-all-no-core
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial
 
 licenses:
-	scripts/UpdateAllCopyrightHeaders.sh
+	scripts/copyright/UpdateAllCopyrightHeaders.sh
 
 pp-build-jar: qt-make
 ifneq ($(HADOOP_HOME),)
@@ -150,11 +150,11 @@ hoot-core/src/main/cpp/hoot/core/HootConfig.h: config.h
 	echo "#endif" >> hoot-core/src/main/cpp/hoot/core/HootConfig.h
 
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h: hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
-hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/ConfigOptions.asciidoc scripts/CreateConfigCode.py
-	python scripts/CreateConfigCode.py conf/ConfigOptions.asciidoc hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
+hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.asciidoc scripts/core/CreateConfigCode.py
+	python scripts/core/CreateConfigCode.py conf/core/ConfigOptions.asciidoc hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 
-plugins/config.js: conf/ConfigOptions.asciidoc scripts/CreateJsConfigCode.py
-	python scripts/CreateJsConfigCode.py conf/ConfigOptions.asciidoc plugins/config.js
+plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
+	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
 
 tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	echo "#ifndef __TGS_CONFIG_H__" > tgs/src/main/cpp/tgs/TgsConfig.h
@@ -174,81 +174,81 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 ##### MGCP
 # Build the MGCP schema
-plugins/mgcp_schema.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP  "To English" rules
-plugins/emgcp_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP "From English" rules
-plugins/emgcp_osm_rules.js: scripts/ConvertMGCPSchema_XML.py conf/mgcp/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+plugins/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv40
-plugins/tds40_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+plugins/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-plugins/tds40_full_schema.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+plugins/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "To English" rules
 # This need to be full TDS so we have access to the full range of attributes
-plugins/etds40_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+plugins/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "From English" rules
-plugins/etds40_osm_rules.js: scripts/ConvertTDSv40Schema.py conf/nfdd/TDSv40.csv.gz
+plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
-plugins/tds61_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
 # This one has all of the Text Enumerations
-plugins/tds61_full_schema.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "To English" rules
-plugins/etds61_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "From English" rules
-plugins/etds61_osm_rules.js: scripts/ConvertTDSv61Schema.py conf/nfdd/TDSv60.csv.gz conf/nfdd/TDS_NGAv01.csv.gz
+plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### GGDMv30
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
-plugins/ggdm30_schema.js: scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # GGDMv30 full schema
 # This one has all of the Text Enumerations
-plugins/ggdm30_full_schema.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+plugins/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "To English" rules
-plugins/eggdm30_rules.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+plugins/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "From English" rules
-plugins/eggdm30_osm_rules.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_Features.csv.gz conf/ggdm/GGDM30_Layers.csv.gz conf/ggdm/GGDM30_Values.csv.gz
+plugins/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
@@ -256,7 +256,7 @@ plugins/eggdm30_osm_rules.js:  scripts/ConvertGGDMv30Schema.py conf/ggdm/GGDM30_
 # Build osmapi db
 osmapidb:
 ifeq ($(BUILD_SERVICES),services)
-	scripts/SetupOsmApiDB.sh
+	scripts/database/SetupOsmApiDB.sh
 endif
 
 # Build automatically generated JS files
@@ -265,14 +265,14 @@ js-make: $(SCHEMA_FILES) plugins/config.js
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
 # task for another time.
-ARFFS=$(wildcard conf/*.arff.bz2)
+ARFFS=$(wildcard conf/models/*.arff.bz2)
 RF_MODELS=$(ARFFS:.arff.bz2=.rf)
 model-build: $(RF_MODELS)
 
 # These are not cleaned b/c they take a long time to build and it would simply
 # be unnecessary. Use the appropriate git command if you want everything
 # cleaned.
-conf/%.rf: conf/%.arff.bz2 qt-make
+conf/models/%.rf: conf/models/%.arff.bz2 qt-make
 	[ $< -nt $@ ] && hoot build-rf $< $@ || true
 
 qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
@@ -361,7 +361,7 @@ HOOT_VERSION_FILE: FORCE
 -include HOOT_VERSION_FILE
 
 rebuild-db:
-	scripts/DeleteAllTables.sh
+	scripts/database/DeleteAllTables.sh
 	cd hoot-services && $(MAKE) -f Makefile build
 
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
@@ -373,7 +373,7 @@ archive: js-make services-build docs
 	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
 	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
-	scripts/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
+	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
 	# Put the docs in their own compressed file
 	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
@@ -405,10 +405,10 @@ archive: js-make services-build docs
 	# Copy the buildInfo.json file for hoot services
 	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	# Don't include RF files at this time, to speed up archive
-	#mkdir -p $(HOOT_TARNAME)/conf/
-	#cp conf/BuildingModel.rf $(HOOT_TARNAME)/conf/BuildingModel.rf
-	#cp conf/HighwayModel.rf $(HOOT_TARNAME)/conf/HighwayModel.rf
-	#cp conf/PoiModel.rf $(HOOT_TARNAME)/conf/PoiModel.rf
+	#mkdir -p $(HOOT_TARNAME)/conf/models/
+	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
+	#cp conf/models/HighwayModel.rf $(HOOT_TARNAME)/conf/models/HighwayModel.rf
+	#cp conf/models/PoiModel.rf $(HOOT_TARNAME)/conf/models/PoiModel.rf
 	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	# tar the file and zip it
@@ -477,21 +477,21 @@ core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html cov
 
 coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
 
-conf/WordsAbridged.sqlite: conf/WordsAbridged.sqlite.gz
+conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@
 
-conf/words.sqlite: conf/words1.sqlite
-	rm -f conf/words.sqlite
-	[ -e $^ ] && ln -s words1.sqlite conf/words.sqlite
+conf/dictionary/words.sqlite: conf/dictionary/words1.sqlite
+	rm -f conf/dictionary/words.sqlite
+	[ -e $^ ] && ln -s words1.sqlite conf/dictionary/words.sqlite
 
 # If you create a new words.sqlite please just increment the number rather than
 # replacing the old file. This way we can maintain the history.
-conf/words1.sqlite:
+conf/dictionary/words1.sqlite:
 	([ -e /tmp/words1.sqlite.bz2 ] && \
 	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
-	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
 	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
-	 bzcat /tmp/words1.sqlite.bz2 > conf/words1.sqlite) || \
+	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
 	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
@@ -509,7 +509,7 @@ bin/hoot: scripts/RunHoot.sh bin/HootEnv.sh
 
 eclipse:
 ifeq ($(BUILD_SERVICES),services)
-	scripts/mvn-build $(MVN_QUIET) eclipse
+	scripts/maven/mvn-build $(MVN_QUIET) eclipse
 endif
 
 vagrant:

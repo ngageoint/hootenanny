@@ -28,7 +28,7 @@
 #include "UnlikelyIntersectionRemover.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>

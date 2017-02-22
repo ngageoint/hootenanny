@@ -265,7 +265,6 @@ QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
-//TODO: this needs to be better named
 QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
@@ -328,22 +327,23 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
   if (_selectMembersForRelation->exec() == false)
   {
-    throw HootException("Error selecting members for relation with ID: " +
-      QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
+    throw HootException("Error selecting members for relation: " + QString::number(relationId) +
+      " Error: " + _selectMembersForRelation->lastError().text());
   }
   LOG_VARD(_selectMembersForRelation->executedQuery());
-  LOG_VARD(_selectMembersForRelation->executedQuery());
+  LOG_VARD(_selectMembersForRelation->numRowsAffected());
 
   while (_selectMembersForRelation->next())
   {
     const QString memberType = _selectMembersForRelation->value(0).toString();
+    LOG_VART(memberType);
     if (ElementType::isValidTypeString(memberType))
     {
       RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-                    _selectMembersForRelation->value(1).toLongLong()));
+          _selectMembersForRelation->value(1).toLongLong()));
       LOG_VART(member);
       result.push_back(member);
     }

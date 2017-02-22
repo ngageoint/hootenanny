@@ -48,7 +48,8 @@ class EdgeString
 {
 public:
   /// @todo this structure can likely go away in the near future.
-  struct EdgeEntry {
+  struct EdgeEntry
+  {
     EdgeEntry(ConstEdgeSublinePtr subline) : _subline(subline)
     {
     }

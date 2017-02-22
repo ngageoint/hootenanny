@@ -24,7 +24,7 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
-    ../conf/ConfigOptions.asciidoc \
+    ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
     ../rules/LineStringGenericTest.js \
     ../rules/PoiGeneric.js \
@@ -193,7 +193,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/PostgresqlDumpfileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPostgresqlDumpfileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlWriterTest.cpp \

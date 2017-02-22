@@ -36,7 +36,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 
@@ -297,7 +297,7 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
   const QString errMsg = "Invalid envelope string: " + boundsStr;
   if (boundsStr.contains(","))
   {
-    const QStringList bboxParts = boundsStr.split(",");
+    const QStringList bboxParts = boundsStr.trimmed().split(",");
     if (bboxParts.size() == 4)
     {
       bool parseSuccess = true;

@@ -36,7 +36,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>

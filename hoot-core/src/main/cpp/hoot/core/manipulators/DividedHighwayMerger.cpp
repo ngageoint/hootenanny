@@ -40,7 +40,7 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/WorkingMap.h>
+#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/elements/Node.h>

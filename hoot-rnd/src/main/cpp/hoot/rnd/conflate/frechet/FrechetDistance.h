@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/Way.h>
 

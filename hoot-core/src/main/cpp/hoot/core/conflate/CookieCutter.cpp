@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>

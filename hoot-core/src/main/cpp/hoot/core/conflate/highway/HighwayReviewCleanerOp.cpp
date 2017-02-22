@@ -26,7 +26,7 @@
  */
 #include "HighwayReviewCleanerOp.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>

@@ -28,7 +28,7 @@
 #include "AttributeCount.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/ConfigOptions.h>

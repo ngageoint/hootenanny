@@ -41,6 +41,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 
 // Qt
 #include <QString>
@@ -48,8 +49,6 @@
 
 // Standard
 #include <stdint.h>
-
-#include "MultiPolygonCreator.h"
 
 namespace hoot
 {

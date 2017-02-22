@@ -28,14 +28,14 @@
 #include "SearchRadiusCalculator.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
 //TODO: a lot of the logging levels in this class need changed, as they've revealed issues

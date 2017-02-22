@@ -28,7 +28,7 @@
 #include "DistanceNodeCriterion.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Node.h>
 
 namespace hoot

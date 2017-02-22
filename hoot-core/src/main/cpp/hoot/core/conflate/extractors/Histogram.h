@@ -28,7 +28,7 @@
 #define HISTOGRAM_H
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // standard
 #include <vector>

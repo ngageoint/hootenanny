@@ -28,7 +28,7 @@
 #include "OsmSchemaLoaderFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 
 namespace hoot

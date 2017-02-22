@@ -38,7 +38,6 @@ bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPt
     (em1->getString1() == em2->getString1() && em1->getString2() == em2->getString2());
 
 //  bool strResult = em1->toString() == em2->toString();
-
 //  if (result != strResult)
 //  {
 //    LOG_VARE(result);
@@ -144,14 +143,13 @@ bool EdgeMatch::isVerySimilarTo(const shared_ptr<const EdgeMatch>& other) const
   this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
   other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
 
-  //LOG_INFO(this1);
-  //LOG_INFO(other1);
-  //LOG_INFO(this2);
-  //LOG_INFO(other2);
-
   if (0 == this1.compare(other1) && 0 == this2.compare(other2))
+  {
+    LOG_TRACE("Matches very similar: " << this << "; " << other);
     return true;
+  }
 
+  LOG_TRACE("Matches not very similar: " << this << "; " << other);
   return false;
 }
 

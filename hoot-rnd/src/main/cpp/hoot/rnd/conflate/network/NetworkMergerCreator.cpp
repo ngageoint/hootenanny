@@ -27,7 +27,7 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -57,14 +57,11 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
   MatchSet matches = matchesIn;
   _removeDuplicates(matches);
+  LOG_VART(matches);
 
   bool result = false;
   assert(matches.size() > 0);
-
   const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(*matches.begin());
-
-  LOG_VART(matches);
-
   if (m)
   {
     bool matchOverlap = false;
@@ -79,8 +76,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
         if (!nmi || !nmj)
         {
-          LOG_VARE(*it);
-          LOG_VARE(*jt);
+          LOG_VART(*it);
+          LOG_VART(*jt);
           throw UnsupportedException(
             "If one match is a network match they should all be network matches.");
         }
@@ -88,6 +85,15 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         if (nmi->getEdgeMatch()->overlaps(nmj->getEdgeMatch()))
         {
           matchOverlap = true;
+          LOG_TRACE("Overlapping matches:");
+          LOG_VART(nmi->getEdgeMatch());
+          LOG_VART(nmj->getEdgeMatch());
+          break;
+        }
+
+        if (matchOverlap)
+        {
+          break;
         }
       }
     }
@@ -98,6 +104,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     // reasonable heuristic.
     if (const NetworkMatch* larger = _getLargestContainer(matches))
     {
+      LOG_TRACE("Adding the larger match to the partial network merger...");
       mergers.push_back(
         new PartialNetworkMerger(
           larger->getMatchPairs(),
@@ -107,6 +114,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     // create a merger that can merge multiple partial matches
     else if (!matchOverlap)
     {
+      LOG_TRACE("Adding the match to the partial network merger...");
       QSet<ConstEdgeMatchPtr> edgeMatches;
       set< pair<ElementId, ElementId> > pairs;
       foreach (const Match* itm, matches)
@@ -164,6 +172,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
 
   if (matches.size() <= 1)
   {
+    LOG_TRACE("No largest match found.");
     return 0;
   }
 
@@ -172,8 +181,8 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
   foreach (const Match* m, matches)
   {
     const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m);
-    int count = nm->getEdgeMatch()->getString1()->getCount() +
-      nm->getEdgeMatch()->getString2()->getCount();
+    int count =
+      nm->getEdgeMatch()->getString1()->getCount() + nm->getEdgeMatch()->getString2()->getCount();
     if (count > largestCount)
     {
       largestCount = count;
@@ -181,20 +190,17 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     }
   }
 
-  LOG_VART(largest);
-
   foreach (const Match* m, matches)
   {
     const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m);
-    if (nm != largest &&
-      largest->getEdgeMatch()->contains(nm->getEdgeMatch()) == false)
+    if (nm != largest && largest->getEdgeMatch()->contains(nm->getEdgeMatch()) == false)
     {
+      LOG_TRACE("No largest match found.");
       return 0;
     }
   }
 
-  LOG_TRACE("Found largest");
-
+  LOG_VART(largest);
   return largest;
 }
 

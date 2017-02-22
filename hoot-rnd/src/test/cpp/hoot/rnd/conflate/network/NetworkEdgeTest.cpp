@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/conflate/network/NetworkEdge.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {

@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 
 namespace hoot

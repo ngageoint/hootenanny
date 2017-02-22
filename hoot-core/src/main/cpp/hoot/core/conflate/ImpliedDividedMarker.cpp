@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/filters/TagCriterion.h>
 

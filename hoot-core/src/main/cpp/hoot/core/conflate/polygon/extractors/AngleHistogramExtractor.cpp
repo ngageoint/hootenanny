@@ -31,7 +31,7 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>

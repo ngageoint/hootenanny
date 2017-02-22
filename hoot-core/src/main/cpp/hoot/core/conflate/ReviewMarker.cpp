@@ -228,7 +228,6 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   }
 
   map->addElement(r);
-
 }
 
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,

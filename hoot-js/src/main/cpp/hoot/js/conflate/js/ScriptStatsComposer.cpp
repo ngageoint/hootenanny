@@ -33,7 +33,7 @@
 #include <QStringList>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/OsmMapJs.h>

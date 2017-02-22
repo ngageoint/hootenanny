@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/MergerCreator.h>
 
 namespace hoot

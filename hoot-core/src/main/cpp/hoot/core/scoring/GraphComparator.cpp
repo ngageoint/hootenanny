@@ -39,8 +39,8 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>

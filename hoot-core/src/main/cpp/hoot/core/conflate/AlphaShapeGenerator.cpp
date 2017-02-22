@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/AlphaShape.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 

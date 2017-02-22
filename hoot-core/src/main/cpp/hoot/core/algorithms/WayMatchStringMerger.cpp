@@ -372,16 +372,16 @@ void WayMatchStringMerger::replaceScraps()
   LOG_TRACE("Replacing scraps...");
 
   // Determine which bits in secondary will be replaced by bits in the primary. Once we have that
-  // we can replace them all at once, delete them and update the _replaced structure.
+  // we can replace them all at once, delete them, and update the _replaced structure.
 
   QMap< WayPtr, QList<ElementPtr> > w2ToW1;
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
+    LOG_VART(sm->subline2);
+
     ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
     WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
-
-    LOG_VART(sm->subline2);
 
     // w1 should only occur once.
     assert(w2ToW1[w2].contains(w1) == false);
@@ -389,8 +389,7 @@ void WayMatchStringMerger::replaceScraps()
     w2ToW1[w2].append(w1);
   }
 
-  for (QMap< WayPtr, QList<ElementPtr> >::iterator it = w2ToW1.begin();
-    it != w2ToW1.end(); ++it)
+  for (QMap< WayPtr, QList<ElementPtr> >::iterator it = w2ToW1.begin(); it != w2ToW1.end(); ++it)
   {
     _map->replace(it.key(), it.value());
 
@@ -400,8 +399,8 @@ void WayMatchStringMerger::replaceScraps()
 
     for (int i = 0; i < it.value().size(); ++i)
     {
-      _replaced.push_back(pair<ElementId, ElementId>(it.key()->getElementId(),
-        it.value()[i]->getElementId()));
+      _replaced.push_back(
+        pair<ElementId, ElementId>(it.key()->getElementId(), it.value()[i]->getElementId()));
     }
   }
 }

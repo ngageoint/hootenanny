@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source conf/DatabaseConfig.sh
+source conf/database/DatabaseConfig.sh
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 OUTPUT_DIR=test-output/cmd/slow/ServiceHootApiDbReaderTest

@@ -32,7 +32,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot

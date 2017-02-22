@@ -28,7 +28,7 @@
 #ifndef DIVIDEDHIGHWAYMERGER_H
 #define DIVIDEDHIGHWAYMERGER_H
 
-#include "../Conflator.h"
+#include <hoot/core/conflate/Conflator.h>
 #include "Manipulator.h"
 
 // GEOS
@@ -39,7 +39,7 @@ namespace geos {
 }
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ChainCriterion.h>
 namespace hoot {
   class OsmMap;

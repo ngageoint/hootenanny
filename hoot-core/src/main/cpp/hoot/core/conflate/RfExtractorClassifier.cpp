@@ -27,7 +27,7 @@
 #include "RfExtractorClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/MatchClassification.h>

@@ -28,7 +28,7 @@
 #include "ScriptTest.h"
 
 // hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 

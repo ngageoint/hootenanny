@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
 #include <hoot/core/TestUtils.h>
 

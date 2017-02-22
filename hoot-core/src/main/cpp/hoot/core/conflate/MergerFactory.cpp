@@ -27,7 +27,7 @@
 #include "MergerFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>

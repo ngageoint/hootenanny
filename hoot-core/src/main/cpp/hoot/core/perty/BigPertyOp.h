@@ -33,7 +33,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/perty/RngConsumer.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {

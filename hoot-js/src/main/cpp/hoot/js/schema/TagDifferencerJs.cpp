@@ -30,7 +30,7 @@
 #include <boost/any.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>

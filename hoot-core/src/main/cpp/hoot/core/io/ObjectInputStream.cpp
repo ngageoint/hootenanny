@@ -27,7 +27,7 @@
 #include "ObjectInputStream.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
 
 namespace hoot

@@ -13,13 +13,13 @@ endif
 
 default: build
 
-src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in ../conf/DatabaseConfig.sh
+src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in ../conf/database/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml.in src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 
-src/main/resources/db/db.properties: src/main/resources/db/db.properties.in ../conf/DatabaseConfig.sh
+src/main/resources/db/db.properties: src/main/resources/db/db.properties.in ../conf/database/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/db.properties.in src/main/resources/db/db.properties
 
-src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/DatabaseConfig.sh
+src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/database/DatabaseConfig.sh
 	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/conf/hoot-services.conf.in src/main/resources/conf/hoot-services.conf
 
 build-info:
@@ -36,14 +36,14 @@ run-liquibase:
 build: build-info config run-liquibase
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
-	../scripts/mvn-build $(MVN_QUIET) build
+	../scripts/maven/mvn-build $(MVN_QUIET) build
 	cp target/hoot-services-*.war ../bin
 
 docs: config
-	../scripts/mvn-build $(MVN_QUIET) docs
+	../scripts/maven/mvn-build $(MVN_QUIET) docs
 
 clean: config clean-coverage
-	../scripts/mvn-build $(MVN_QUIET) clean
+	../scripts/maven/mvn-build $(MVN_QUIET) clean
 	rm -rf ./db.properties
 	rm -rf ./src/main/java/hoot/services/db2
 	rm -rf ./src/main/resources/db/liquibase.properties
@@ -55,19 +55,19 @@ clean: config clean-coverage
 clean-db: clean-db-force
 
 clean-db-force:
-	../scripts/DeleteAllTables.sh
+	../scripts/database/DeleteAllTables.sh
 
 coverage:
 	echo "Generating services code coverage report (runs services tests)..."
 	mkdir -p ../coverage
 	# Run the integration tests for the code coverage, so we get a report covering all of the code.
-	../scripts/mvn-build $(MVN_QUIET) coverage
+	../scripts/maven/mvn-build $(MVN_QUIET) coverage
 	rm -rf ../coverage/services
 	cp -R target/site/cobertura ../coverage
 	mv ../coverage/cobertura ../coverage/services
 
 clean-coverage:
-	#../scripts/mvn-build $(MVN_QUIET) cobertura:clean
+	#../scripts/maven/mvn-build $(MVN_QUIET) cobertura:clean
 	rm -rf target/site/cobertura
 	rm -rf target/cobertura
 	rm -rf ../coverage/services
@@ -75,17 +75,17 @@ clean-coverage:
 test: config
 	echo Running services tests...
 ifneq ($(MVN_QUIET),)
-	../scripts/mvn-build $(MVN_QUIET) test 2> >( $(FILTER) >&2 )
+	../scripts/maven/mvn-build $(MVN_QUIET) test 2> >( $(FILTER) >&2 )
 else
-	../scripts/mvn-build $(MVN_QUIET) test
+	../scripts/maven/mvn-build $(MVN_QUIET) test
 endif
 
 test-all: config
 	echo Running services tests...
 ifneq ($(MVN_QUIET),)
-	../scripts/mvn-build $(MVN_QUIET) verify 2> >( $(FILTER) >&2 )
+	../scripts/maven/mvn-build $(MVN_QUIET) verify 2> >( $(FILTER) >&2 )
 else
-	../scripts/mvn-build $(MVN_QUIET) verify
+	../scripts/maven/mvn-build $(MVN_QUIET) verify
 endif
 
 generate-querydsl-entities: run-liquibase

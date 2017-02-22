@@ -33,8 +33,8 @@
 #include "PythonTranslator.h"
 
 // hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
 

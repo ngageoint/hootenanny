@@ -29,7 +29,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
