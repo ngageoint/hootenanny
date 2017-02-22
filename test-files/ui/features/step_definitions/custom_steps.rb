@@ -7,12 +7,15 @@ Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
 end
 
 When(/^I click Get Started$/) do
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 5
   begin
     el = find_button('Get Started')
   rescue Capybara::ElementNotFound
     # In Capybara 0.4+ #find_field raises an error instead of returning nil
     el = nil
   end
+  Capybara.default_max_wait_time = oldTimeout
   el.click unless el.nil?
 end
 
