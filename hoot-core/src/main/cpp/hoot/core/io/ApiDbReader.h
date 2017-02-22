@@ -59,6 +59,9 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
+  void setBoundingBox(const QString bbox);
+  void setOverrideBoundingBox(const QString bbox);
+
 protected:
 
   bool _useDataSourceIds;
@@ -68,6 +71,9 @@ protected:
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
+
+  Envelope _bounds;
+  Envelope _overrideBounds; //this will override _bounds
 
   virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -79,12 +85,14 @@ protected:
   virtual shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
-   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
-   * implemented yet.
+   * This is based off of the Map.java query method.
    */
   virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
 
   void _updateMetadataOnElement(ElementPtr element);
+
+  static bool _isValidBounds(const Envelope& bounds);
+  bool _hasBounds();
 };
 
 }

@@ -103,6 +103,7 @@ public:
     loadMap(map1, input1, true, Status::Unknown1);
     OsmMapPtr map2(new OsmMap());
     loadMap(map2, input2, true, Status::Unknown1);
+    //changeset derivation requires element sorting to work properly
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));

@@ -195,10 +195,6 @@ void OsmChangesetSqlWriter::_createNewElement(ConstElementPtr element)
   LOG_VART(note);
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
@@ -283,10 +279,6 @@ void OsmChangesetSqlWriter::_updateExistingElement(ConstElementPtr element)
   LOG_VART(note);
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
@@ -339,10 +331,6 @@ void OsmChangesetSqlWriter::_deleteExistingElement(ConstElementPtr element)
   LOG_VART(note);
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
-  if (!note.isEmpty())
-  {
-    commentStr += " - note: " + note;
-  }
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
@@ -423,7 +411,6 @@ QString OsmChangesetSqlWriter::_getInsertValuesStr(ConstElementPtr element) cons
 
 QString OsmChangesetSqlWriter::_getInsertValuesNodeStr(ConstNodePtr node) const
 {
-  LOG_VART(node->getChangeset());
   return
     QString("latitude, longitude, changeset_id, visible, \"timestamp\", "
       "tile, version) VALUES (%1, %2, %3, %4, %5, %8, %6, %7);\n")
@@ -456,8 +443,7 @@ void OsmChangesetSqlWriter::_createTags(ConstElementPtr element)
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
 
   Tags tags = element->getTags();
-  if (element->getElementType().getEnum() == ElementType::Relation &&
-      !tags.contains("type"))
+  if (element->getElementType().getEnum() == ElementType::Relation && !tags.contains("type"))
   {
     ConstRelationPtr tmp = dynamic_pointer_cast<const Relation>(element);
     tags.appendValue("type", tmp->getType());
@@ -559,6 +545,7 @@ void OsmChangesetSqlWriter::_createRelationMembers(ConstRelationPtr relation)
 
 void OsmChangesetSqlWriter::_deleteCurrentTags(const ElementId& eid)
 {
+  LOG_TRACE("Deleting tags for: " << eid);
   QStringList tableNames = _tagTableNamesForElement(eid);
   foreach (QString tableName, tableNames)
   {

@@ -39,10 +39,7 @@
 namespace hoot
 {
 
-class HootApiDbReader :
-    public ApiDbReader,
-    public PartialOsmMapReader,
-    public Configurable,
+class HootApiDbReader : public ApiDbReader, public PartialOsmMapReader, public Configurable,
     public EnvelopeProvider
 {
 public:
@@ -95,14 +92,11 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  void setBoundingBox(const QString bbox);
-
 protected:
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map);
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
@@ -112,7 +106,6 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
-  Envelope _bounds;
 
   shared_ptr<Element> _nextElement;
 
@@ -120,7 +113,6 @@ private:
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
 
-  //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();
 
   /**
