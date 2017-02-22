@@ -57,9 +57,9 @@ clean:
 coverage: clean-coverage
 	echo Generating user interface coverage report...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/coverage/CoverHootUI.sh &> coverage.log
+	$(HOOT_HOME)/scripts/cover/CoverHootUI.sh &> coverage.log
 else
-	$(HOOT_HOME)/scripts/coverage/CoverHootUI.sh
+	$(HOOT_HOME)/scripts/cover/CoverHootUI.sh
 endif
 	echo ""
 
