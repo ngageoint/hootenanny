@@ -115,7 +115,7 @@ public class MapResource {
 
     /**
      * Returns a list of all map layers in the services database
-     * 
+     *
      * GET hoot-services/osm/api/0.6/map/layers
      *
      * @return a JSON object containing a list of map layers
@@ -173,7 +173,7 @@ public class MapResource {
 
     /**
      * Returns a list of all folders in the services database
-     * 
+     *
      * GET hoot-services/osm/api/0.6/map/links
      *
      * @return a JSON object containing a list of folders
@@ -660,7 +660,7 @@ public class MapResource {
 
     /**
      * Deletes a map
-     * 
+     *
      * POST hoot-services/osm/api/0.6/map/delete?mapId={Map ID}
      *
      * //TODO: should be an HTTP DELETE
@@ -748,10 +748,10 @@ public class MapResource {
 
     /**
      * Adds new dataset folder
-     * 
+     *
      * POST hoot-services/osm/api/0.6/map/addfolder?folderName={foldername}&
      * parentId= {parentId}
-     * 
+     *
      * @param folderName
      *            Display name of folder
      * @param parentId
@@ -795,9 +795,9 @@ public class MapResource {
 
     /**
      * Deletes a dataset folder.
-     * 
+     *
      * POST hoot-services/osm/api/0.6/map/deletefolder?folderId={folderId}
-     * 
+     *
      * //TODO: should be an HTTP DELETE
      *
      * @param folderId
@@ -843,7 +843,7 @@ public class MapResource {
     }
 
     /**
-     * 
+     *
      * POST hoot-services/osm/api/0.6/map/updateParentId?folderId={folderId}
      *
      * //TODO: should be an HTTP PUT
@@ -880,7 +880,7 @@ public class MapResource {
     /**
      * Adds or modifies record in folder_map_mappings if layer is created or
      * modified
-     * 
+     *
      * @param folderId
      *            ID of folder
      * @param mapId
@@ -1019,6 +1019,7 @@ public class MapResource {
         }
 
         Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(responseDoc);
+        elementRootXml.setAttribute("mapid", String.valueOf(mapId));
         responseDoc.appendChild(elementRootXml);
 
         if (!results.isEmpty()) {
