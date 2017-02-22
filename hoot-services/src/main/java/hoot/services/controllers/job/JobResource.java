@@ -38,6 +38,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +96,21 @@ public class JobResource {
 
                 if (includeCommandDetail) {
                     List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
-                    response.put("commandDetail", commandDetail);
+                    JSONArray commands = new JSONArray();
+                    for (CommandStatus commandStatus : commandDetail) {
+                        JSONObject command = new JSONObject();
+                        command.put("command", commandStatus.getCommand());
+                        command.put("exitCode", commandStatus.getExitCode());
+                        command.put("jobId", commandStatus.getJobId());
+                        command.put("startTime", commandStatus.getStart());
+                        command.put("finishTime", commandStatus.getFinish());
+                        command.put("stderr", commandStatus.getStderr());
+                        command.put("stdout", commandStatus.getStdout());
+                        command.put("id", commandStatus.getId());
+                        commands.add(command);
+                    }
+
+                    response.put("commandDetail", commands.toJSONString());
                 }
             }
             else {
