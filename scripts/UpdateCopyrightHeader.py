@@ -232,7 +232,7 @@ try:
                 # If there is a match then assign it to existingCopyrightYears
                 if m:
                     existingCopyrightYears = m.group(1)
-                    #print "existingCopyrightYears: " + existingCopyrightYears
+                    print "existingCopyrightYears: " + existingCopyrightYears
         lineCount += 1
         oldHeaderBlock += line
       else:
@@ -244,7 +244,7 @@ try:
     # Set the condition for whether or not the copyright header needs updating.
     copyrightYears = findCopyrightYears(options.fileName)
     updateNeeded = False
-    #print "\tcopyrightYears: " + copyrightYears
+    print "\tcopyrightYears: " + copyrightYears
     if (copyrightYears == existingCopyrightYears):
         #print "\tcopyrightYears match existingCopyrightYears"
         copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
