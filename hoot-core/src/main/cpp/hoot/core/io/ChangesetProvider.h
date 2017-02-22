@@ -76,8 +76,8 @@ public:
   QString toString() const
   {
     return
-      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +		       "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
-      ", Note: " + note;		+      ", Note: " + note + "\n" + e->toString();
+      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
+      ", Note: " + note + "\n" + e->toString();
   }
 
   ConstElementPtr e;
@@ -85,7 +85,6 @@ public:
   QString note;
 
 };
-
 
 /**
  * Interface for classes implementing OSM changeset capabilities
