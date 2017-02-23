@@ -28,7 +28,7 @@
 #define PERMUTE_GRID_CALCULATOR_H
 
 //hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // geos
 #include <geos/geom/Envelope.h>

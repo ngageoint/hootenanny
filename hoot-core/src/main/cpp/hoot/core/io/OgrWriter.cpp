@@ -35,8 +35,8 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>
@@ -71,6 +71,8 @@
 
 namespace hoot
 {
+
+unsigned int OgrWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OgrWriter)
 
@@ -231,8 +233,9 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   OgrOptions options;
   if (_ds->GetDriver())
   {
+    QString name = _ds->GetDriverName();
     // if this is a CSV file
-    if (_ds->GetDriver()->GetName() == QString("CSV"))
+    if (name == QString("CSV"))
     {
       // if we're exporting point data, then export with x/y at the front
       if (gtype == wkbPoint)
@@ -247,13 +250,13 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
       options["CREATE_CSVT"] = "YES";
     }
 
-    if (_ds->GetDriver()->GetName() == QString("ESRI Shapefile"))
+    if (name == QString("ESRI Shapefile"))
     {
       options["ENCODING"] = "UTF-8";
     }
 
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
-    if (_ds->GetDriver()->GetName() == QString("FileGDB"))
+    if (name == QString("FileGDB"))
     {
       if (layer->getFdName() != "")
       {
@@ -283,8 +286,15 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
-        //        throw HootException(QString("Error: Unable to find output field: %1 in layer %2.").arg(f->getName()).arg(layerName));
-        LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }
@@ -559,7 +569,15 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     }
     catch (IllegalArgumentException& err)
     {
-      LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 

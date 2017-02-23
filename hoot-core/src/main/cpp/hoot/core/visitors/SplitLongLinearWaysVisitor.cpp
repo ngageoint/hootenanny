@@ -36,7 +36,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -44,6 +44,8 @@
 
 namespace hoot
 {
+
+unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 
@@ -58,8 +60,16 @@ SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 
   if ( _maxNodesPerWay < 2 )
   {
-    LOG_WARN("Invalid value for config value " << configOptions.getWayMaxNodesPerWayKey() << ": " <<
-      _maxNodesPerWay << ", ignoring");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid value for config value " << configOptions.getWayMaxNodesPerWayKey() <<
+               ": " << _maxNodesPerWay << ", ignoring...");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     _maxNodesPerWay = _defaultMaxNodesPerWay;
   }
 

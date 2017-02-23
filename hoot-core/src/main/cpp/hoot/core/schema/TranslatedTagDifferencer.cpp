@@ -27,7 +27,7 @@
 #include "TranslatedTagDifferencer.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>

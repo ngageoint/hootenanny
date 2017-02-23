@@ -27,7 +27,7 @@
 #include "OsmMapReaderFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -148,7 +148,7 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
 void OsmMapReaderFactory::read(shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map data from " << url << " ...");
+  LOG_INFO("Loading map from " << url << " ...");
   shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   reader->open(url);

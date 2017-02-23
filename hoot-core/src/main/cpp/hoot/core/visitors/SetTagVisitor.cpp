@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@
 #include "SetTagVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -41,9 +41,10 @@ SetTagVisitor::SetTagVisitor()
 {
 }
 
-SetTagVisitor::SetTagVisitor(QString key, QString value) :
+SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue) :
 _k(key),
-_v(value)
+_v(value),
+_appendToExistingValue(appendToExistingValue)
 {
 }
 
@@ -52,6 +53,7 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   _k = configOptions.getSetTagVisitorKey();
   _v = configOptions.getSetTagVisitorValue();
+  _appendToExistingValue = configOptions.getSetTagVisitorAppendToExistingValue();
 }
 
 void SetTagVisitor::visit(const shared_ptr<Element>& e)
@@ -72,7 +74,17 @@ void SetTagVisitor::visit(const shared_ptr<Element>& e)
   }
   else
   {
-    e->getTags()[_k] = _v;
+    if (_appendToExistingValue && e->getTags().keys().contains(_k))
+    {
+      e->getTags()[_k] = e->getTags()[_k] + "," + _v;
+    }
+    else
+    {
+      e->getTags()[_k] = _v;
+    }
+    LOG_VART(_k);
+    LOG_VART(_v);
+    LOG_VART(e->getTags()[_k]);
   }
 }
 

@@ -13,6 +13,6 @@ count. More capabilities will likely be added in future implementations.
 === Usage
 
 --------------------------------------
-stats [--quick] [--output=path] (input) [input2, ...]
+stats [--brief] [--output=path] (input) [input2, ...]
 --------------------------------------
 

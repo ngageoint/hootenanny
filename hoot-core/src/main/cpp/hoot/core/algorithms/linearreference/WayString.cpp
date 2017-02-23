@@ -28,12 +28,13 @@
 
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include "WayLocation.h"
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
+
+unsigned int WayString::logWarnCount = 0;
 
 // if the difference is smaller than this we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
@@ -81,16 +82,26 @@ void WayString::append(const WaySubline& subline)
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
         subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        LOG_VART(back());
-        LOG_VART(back().getWay());
-        LOG_VART(subline);
-        LOG_VART(subline.getWay());
-        LOG_TRACE("Nodes don't match: "
-          << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
-          << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
-        //TODO: Possibly change this back to an exception as part of the work to be done in #1312.
+        //TODO: The intent of this class is being violated.  So either change this back to an
+        //exception as part of the work to be done in #1312, or create a new class for the new
+        //behavior.
         //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
-        LOG_WARN("Ways must connect at a node in the WayString.");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Ways must connect at a node in the WayString.");
+          LOG_VART(back());
+          LOG_VART(back().getWay());
+          LOG_VART(subline);
+          LOG_VART(subline.getWay());
+          LOG_TRACE("Nodes don't match: "
+            << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
+            << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }
@@ -209,8 +220,8 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     // first, create a vector that contains all the node IDs in ascending order.
     ConstWayPtr oldWay = subline.getWay();
 
-    newTags = TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(),
-      ElementType::Way);
+    newTags =
+      TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
     // figure out which node is the first node, if we're between nodes, then create a new node to
     // add.
@@ -219,7 +230,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     if (subline.getFormer().isNode() == false)
     {
       NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-        subline.getFormer().getCoordinate(), ce));
+                                   subline.getFormer().getCoordinate(), ce));
       destination->addNode(n);
       newNids.push_back(n->getId());
       formeri = subline.getFormer().getSegmentIndex() + 1;
@@ -240,7 +251,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
       destination->addNode(NodePtr(new Node(*map.getNode(nid))));
     }
 
-    // if the last locaiton isn't on a node, create a new node for it
+    // if the last location isn't on a node, create a new node for it
     if (subline.getLatter().isNode() == false)
     {
       NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
@@ -256,7 +267,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     }
 
     // add each node to the new way. If the node is a duplicate (could happen with adjoining
-    // sublines) then just don't add it.
+    // sublines), then just don't add it.
     foreach (long nid, newNids)
     {
       if (newWay->getNodeCount() == 0 || newWay->getLastNodeId() != nid)

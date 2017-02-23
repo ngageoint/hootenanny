@@ -25,7 +25,7 @@ var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
-exports.init = function(map)
+exports.calculateSearchRadius = function(map)
 {
   var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
   if (autoCalcSearchRadius)
@@ -33,7 +33,7 @@ exports.init = function(map)
     hoot.log("Calculating search radius for waterway conflation...");
     exports.searchRadius =
       parseFloat(
-        calculateSearchRadius(
+        calculateSearchRadiusUsingRubberSheeting(
           map,
           hoot.get("waterway.rubber.sheet.ref"),
           hoot.get("waterway.rubber.sheet.minimum.ties")));

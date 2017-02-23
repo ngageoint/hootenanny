@@ -27,7 +27,7 @@
 #include "TagMergerFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include "TagMerger.h"
 
@@ -49,7 +49,7 @@ TagMergerFactory& TagMergerFactory::getInstance()
 {
   if (!_theInstance.get())
   {
-      _theInstance.reset(new TagMergerFactory());
+    _theInstance.reset(new TagMergerFactory());
   }
   return *_theInstance;
 }

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D writer.include.debug=true --warn"
 

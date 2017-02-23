@@ -29,7 +29,7 @@
 #define NODEMATCHER_H
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -50,6 +50,11 @@ using namespace boost;
 class NodeMatcher
 {
 public:
+
+  static std::string className() { return "hoot::NodeMatcher"; }
+
+  static unsigned int logWarnCount;
+
   // exposed for white box testing.
   friend class NodeMatcherTest;
 
@@ -81,6 +86,7 @@ public:
     Meters delta = 0.001);
 
 private:
+
   shared_ptr<const OsmMap> _map;
 
   double _strictness;

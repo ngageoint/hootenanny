@@ -33,7 +33,7 @@
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 //#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

@@ -36,7 +36,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 
@@ -49,6 +49,8 @@
 
 namespace hoot
 {
+
+unsigned int GeometryUtils::logWarnCount = 0;
 
 union DoubleCast
 {
@@ -188,7 +190,15 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return GeometryFactory::getDefaultInstance()->createGeometry(g);
   }
 }
@@ -271,7 +281,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
       }
       else
       {
-        LOG_WARN("Why isn't it a linear ring?");
+        LOG_TRACE("Why isn't it a linear ring?");
         holes->push_back(validateGeometry(ls));
       }
     }
@@ -287,7 +297,7 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
   const QString errMsg = "Invalid envelope string: " + boundsStr;
   if (boundsStr.contains(","))
   {
-    const QStringList bboxParts = boundsStr.split(",");
+    const QStringList bboxParts = boundsStr.trimmed().split(",");
     if (bboxParts.size() == 4)
     {
       bool parseSuccess = true;

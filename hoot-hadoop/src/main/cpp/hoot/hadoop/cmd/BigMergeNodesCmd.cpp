@@ -15,7 +15,7 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/ops/OpList.h>

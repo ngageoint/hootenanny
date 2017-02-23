@@ -18,10 +18,10 @@ single seamless map.
 Conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. 
 
 # Project Goals
+* Automatically combine geospatial features for decision making
+* Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
+* Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
-* Combine attributes from different sources
-* Combine POIs and polygons for geolocation and sense making
-* Maintain geometry and attribute provenance
 
 # Supported Geodata Types
 Hootenanny can conflate:
@@ -43,7 +43,6 @@ Hootenanny can export to:
 * Shapefile (.shp)
 * OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
-* Web Feature Service
 * OSM changeset file (.osc)
 * OSM API database
 
@@ -78,7 +77,7 @@ Hootenanny is developed under the open source General Public License (GPL) and m
 
 Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience without the extra overhead of thick desktop GIS clients.  The application is primarily supported in either the Chrome or Chromium browser with more limited supported in Firefox.   
 
-A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints and the resulting vector data is accessible via an Open Geospatial Consortium (OGC) Web Feature Service (WFS) for additional open interoperability. 
+A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints. 
 
 We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions), so please refer to that page for any questions about general Hootenanny capabilities.  If you have any support questions please create an issue in this repo or contact us via email: Hootenanny.Help@DigitalGlobe.com.
 

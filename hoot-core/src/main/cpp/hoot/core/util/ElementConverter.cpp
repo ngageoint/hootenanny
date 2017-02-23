@@ -41,12 +41,13 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 
 // Qt
 #include <QString>
@@ -54,8 +55,6 @@
 
 // Standard
 #include <stdint.h>
-
-#include "MultiPolygonCreator.h"
 
 namespace hoot
 {
@@ -103,7 +102,7 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Relation:
     return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
-    LOG_WARN(e->toString());
+    LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }

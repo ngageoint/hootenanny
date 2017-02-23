@@ -27,8 +27,8 @@
 #include "UnifyingConflator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/Merger.h>
 #include <hoot/core/conflate/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/MatchFactory.h>
@@ -141,7 +141,6 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }
 
-  LOG_INFO("Creating matches...");
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -267,7 +266,6 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   {
     LOG_TRACE(
       "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " << _mergers[i]->toString());
-
     _mergers[i]->apply(map, replaced);
 
     // update any mergers that reference the replaced values

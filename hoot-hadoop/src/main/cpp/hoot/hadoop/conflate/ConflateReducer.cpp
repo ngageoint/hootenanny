@@ -17,8 +17,8 @@
 #include "ConflateReducer.h"
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
@@ -47,13 +47,12 @@
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
 
-// Qt
-//#include <QUuid>
-
 #include "ConflateMapper.h"
 
 namespace hoot
 {
+
+unsigned int ConflateReducer::logWarnCount = 0;
 
 PP_FACTORY_REGISTER(pp::Reducer, ConflateReducer)
 
@@ -190,8 +189,15 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   {
     if (result->containsNode(it->first))
     {
-      LOG_WARN("Strange, a replaced node is still in the map.");
-      LOG_WARN("nid: " << it->first);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Strange, a replaced node is still in the map.  nid: " << it->first);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -333,7 +339,6 @@ void ConflateReducer::reduce(HadoopPipes::ReduceContext& context)
 void ConflateReducer::_validate(const shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
-  LOG_DEBUG("Testing debug.");
   Debug::printTroubled(map);
   map->validate(true);
 }

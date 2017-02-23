@@ -40,7 +40,7 @@ namespace hoot
 #include <boost/shared_ptr.hpp>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
@@ -64,7 +64,10 @@ namespace hoot
 class OsmXmlReader : public QXmlDefaultHandler, public OsmMapReader
 {
 public:
+
   static std::string className() { return "hoot::OsmXmlReader"; }
+
+  static unsigned int logWarnCount;
 
   OsmXmlReader();
 
@@ -85,18 +88,15 @@ public:
 
   void read(const QString& path, boost::shared_ptr<OsmMap> map);
 
-  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; }
-
   virtual void setDefaultStatus(Status s) { _status = s; }
 
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                     const QString &qName, const QXmlAttributes &attributes);
 
   void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
-
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
-
   void setKeepStatusFromFile(bool keepFileStatus) { _keepFileStatus = keepFileStatus; }
+  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; }
 
 protected:
 

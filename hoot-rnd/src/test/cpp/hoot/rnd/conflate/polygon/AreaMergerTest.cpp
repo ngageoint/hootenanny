@@ -56,7 +56,7 @@
 //#include <hoot/core/io/OsmMapReaderFactory.h>
 //#include <hoot/core/io/OsmMapWriterFactory.h>
 //#include <hoot/core/conflate/polygon/AreaMerger.h>
-//#include <hoot/core/MapProjector.h>
+//#include <hoot/core/util/MapProjector.h>
 
 //// Qt
 //#include <QDir>

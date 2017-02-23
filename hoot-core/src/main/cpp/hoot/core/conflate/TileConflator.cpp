@@ -28,8 +28,8 @@
 #include "TileConflator.h"
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeReplacements.h>
@@ -128,8 +128,8 @@ void TileConflator::conflate(QString outputPath)
         {
           if (e.intersects(conflatedBits[j]))
           {
-            LOG_WARN("Overlapping env 1: " << e.toString());
-            LOG_WARN("Overlapping env 2: " << conflatedBits[j].toString());
+            LOG_TRACE("Overlapping env 1: " << e.toString());
+            LOG_TRACE("Overlapping env 2: " << conflatedBits[j].toString());
             throw HootException("Two tiles overlap.");
           }
         }

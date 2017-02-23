@@ -27,7 +27,7 @@
 #include "MeanWordSetDistance.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 
 // Qt

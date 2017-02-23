@@ -45,6 +45,8 @@ public:
 
   static string className() { return "hoot::WayJoin1Reducer"; }
 
+  static unsigned int logWarnCount;
+
   WayJoin1Reducer();
 
   void close();

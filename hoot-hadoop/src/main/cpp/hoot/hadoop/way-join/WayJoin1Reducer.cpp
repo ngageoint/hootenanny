@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+unsigned int WayJoin1Reducer::logWarnCount = 0;
+
 PP_FACTORY_REGISTER(pp::Reducer, WayJoin1Reducer)
 
 WayJoin1Reducer::WayJoin1Reducer()
@@ -54,7 +56,15 @@ void WayJoin1Reducer::close()
 
   if (_missingNodes > 0)
   {
-    LOG_WARN("Found " << _missingNodes << " missing nodes.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Found " << _missingNodes << " missing nodes.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _stats.write(*os);
 }
@@ -136,16 +146,15 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
     {
       // record the number of missing nodes for reporting.
       _missingNodes++;
-      // report a reasonable number of missing nodes.
-      if (_missingNodes <= 10)
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
-        LOG_WARN("Found ways, but no nodes. node id: " << *key);
-        LOG_WARN("  wayIds: " << _wayIds);
-        if (_missingNodes == 10)
-        {
-          LOG_WARN("Found 10 missing nodes, no longer reporting missing nodes.");
-        }
+        LOG_WARN("Found ways, but no nodes. node id: " << *key << "  wayIds: " << _wayIds);
       }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
   // we found a node to go with our ways.

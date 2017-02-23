@@ -30,7 +30,7 @@
 #include "ScriptMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 
@@ -45,7 +45,7 @@ ScriptMergerCreator::ScriptMergerCreator()
 
 bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
-  LOG_TRACE("Creating mergers...");
+  LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
   assert(matches.size() > 0);
@@ -59,8 +59,11 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(*it);
-    // check to make sure all the input matches are building matches.
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m);
+    // check to make sure all the input matches are script matches.
+    LOG_VART(sm == 0);
     if (sm == 0)
     {
       // return an empty result
@@ -85,7 +88,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   }
 
   ScriptMerger* sm = new ScriptMerger(script, plugin, eids);
-  // only add the POI merge if there are elements to merge.
+  // only add the merge if there are elements to merge.
   if (sm->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)

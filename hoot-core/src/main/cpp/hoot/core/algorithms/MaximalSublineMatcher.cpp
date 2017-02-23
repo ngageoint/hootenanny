@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,9 +27,9 @@
 #include "MaximalSublineMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 #include "MaximalSubline.h"
 
@@ -49,7 +49,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map
 {
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
-//  LOG_WARN("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
+  LOG_TRACE("min split size: " << _minSplitSize << " _maxAngle " << _maxAngle << " mrd: " << mrd);
 //  assert(_minSplitSize >= 0.0 && _maxAngle >= 0.0 && mrd >= 0.0);
 
   MaximalSubline::ThresholdMatchCriteria* threshold =

@@ -27,7 +27,7 @@
 #include "BuildingMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 #include "BuildingMatch.h"
@@ -44,7 +44,7 @@ BuildingMergerCreator::BuildingMergerCreator()
 
 bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
-  LOG_TRACE("Creating mergers...");
+  LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
   assert(matches.size() > 0);
@@ -54,7 +54,10 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(*it);
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m);
+    LOG_VART(bm == 0);
     // check to make sure all the input matches are building matches.
     if (bm == 0)
     {

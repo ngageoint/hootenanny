@@ -33,7 +33,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
@@ -55,6 +55,8 @@
 
 namespace hoot
 {
+
+unsigned int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
   const set< pair<ElementId, ElementId> >& pairs,
@@ -181,7 +183,15 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 {
   if (!e1 && !e2)
   {
-    LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   else if (e1 && e2)
   {

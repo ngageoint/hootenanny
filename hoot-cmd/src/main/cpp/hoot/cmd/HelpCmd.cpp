@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/Version.h>
 #include <hoot/core/cmd/BaseCommand.h>
 

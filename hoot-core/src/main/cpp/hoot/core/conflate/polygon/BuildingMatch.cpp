@@ -27,7 +27,7 @@
 #include "BuildingMatch.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
@@ -152,10 +152,6 @@ QString BuildingMatch::toString() const
 {
   stringstream ss;
   ss << "BuildingMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
-  //if (getType() == MatchType::Review)
-  //{
-    //ss << " note: " << _explainText;
-  //}
   return QString::fromStdString(ss.str());
 }
 

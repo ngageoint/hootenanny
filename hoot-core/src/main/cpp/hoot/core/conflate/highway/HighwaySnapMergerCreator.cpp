@@ -27,7 +27,7 @@
 #include "HighwaySnapMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -46,7 +46,7 @@ HighwaySnapMergerCreator::HighwaySnapMergerCreator()
 
 bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
-  LOG_TRACE("Creating mergers...");
+  LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
   assert(matches.size() > 0);
@@ -57,8 +57,11 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(*it);
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m);
     // check to make sure all the input matches are building matches.
+    LOG_VART(hm == 0);
     if (hm == 0)
     {
       // return an empty result

@@ -30,7 +30,7 @@
 #include <fstream>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -68,8 +68,6 @@ void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& 
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
   }
   t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
-
-  //LOG_VART(t[MetadataTags::HootStatus()]);
 }
 
 void HootApiDbWriter::close()
@@ -179,7 +177,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        LOG_INFO("Removing map with ID: " << *it);
+        LOG_DEBUG("Removing map with ID: " << *it);
         _hootdb.deleteMap(*it);
         LOG_DEBUG("Finished removing map with ID: " << *it);
       }

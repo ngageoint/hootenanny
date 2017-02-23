@@ -27,8 +27,8 @@
 #include "NetworkMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -83,9 +83,8 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VARD(threshold);
-
   LOG_INFO("Extracting networks...");
+  LOG_VARD(threshold);
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -112,7 +111,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   LOG_INFO("Optimizing network...");
 
-  const size_t numIterations = 10;
+  const size_t numIterations = 10; //TODO: should this be an option?
   for (size_t i = 0; i < numIterations; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
@@ -157,9 +156,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Network Match Creator", Highway, true));
-
   return result;
 }
 

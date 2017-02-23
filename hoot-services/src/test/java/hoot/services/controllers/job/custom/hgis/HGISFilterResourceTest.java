@@ -71,7 +71,7 @@ public class HGISFilterResourceTest {
         JSONParser parser = new JSONParser();
         JSONObject result = (JSONObject) parser.parse(param);
 
-        assertEquals("custom/HGIS/RemoveNonHgisPois.sh", result.get("exec"));
+        assertEquals("RemoveNonHgisPois.sh", result.get("exec"));
         assertEquals("bash", result.get("exectype"));
         assertNotNull(result.get("params"));
 

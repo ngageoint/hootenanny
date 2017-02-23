@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,21 +33,15 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/OneWayFilter.h>
 #include <hoot/core/filters/ParallelWayFilter.h>
-#include <hoot/core/filters/StatusFilter.h>
-#include <hoot/core/filters/UnknownFilter.h>
-#include <hoot/core/filters/WayFilterChain.h>
-#include <hoot/core/filters/WayDirectionFilter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
-
 
 // Qt
 #include <QDebug>

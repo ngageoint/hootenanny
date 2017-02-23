@@ -27,7 +27,7 @@
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -41,7 +41,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
@@ -271,7 +271,7 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Using match creator: " << className());
+  LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff);

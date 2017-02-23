@@ -29,12 +29,14 @@
 
 // Hoot
 #include <hoot/core/algorithms/AlphaShape.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
+
+unsigned int AlphaShapeGenerator::logWarnCount = 0;
 
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
@@ -47,7 +49,15 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
-    LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   shared_ptr<OsmMap> result;

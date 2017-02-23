@@ -27,7 +27,7 @@
 #include "ConflictsNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"
@@ -246,8 +246,8 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // any edge that touches, but isn't supporting its a conflict.
     touches -= em;
     touches -= support;
-    // Removing the non-supporting, touching edges from the conflicts was done to make
-    // conflicts/highway-017 pass at the expense of no other case tests failing and no decrease
+    // TODO: Removing the non-supporting, touching edges from the conflicts was done to make
+    // a case test pass at the expense of no other case tests failing and no decrease
     // in regression performance.  However, this seems like an important piece of logic, so we need
     // to keep in mind that this change may have to be reverted if we encounter a situation where
     // having it disabled causes problems.
@@ -276,27 +276,25 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       }
     }
 
-//    foreach (ConstEdgeMatchPtr aSupport, support) LOG_VARD(aSupport);
-//    foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VARD(aConflict);
+    foreach (ConstEdgeMatchPtr aSupport, support) LOG_VART(aSupport);
+    foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VART(aConflict);
 
     _scores[em] = 1.0;
     _weights[em] = 1.0;
   }
 
-  //LOG_VART(_scores);
-  //LOG_VART(_weights);
+  LOG_VART(_scores);
+  LOG_VART(_weights);
 }
 
 QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
 {
   QList<NetworkEdgeScorePtr> result;
-
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     NetworkEdgeScorePtr p(new NetworkEdgeScore(em, _scores[em], _scores[em]));
     result.append(p);
   }
-
   return result;
 }
 

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/conflate/NodeMatcher.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -53,14 +54,6 @@ void LegacyVertexMatcher::_balanceVertexScores()
     for (int i = 0; i < ties1.size(); ++i)
     {
       _finalScores[v1][ties1[i]->v2] = ties1[i]->rawScore / _denominatorForTie(ties1[i]);
-
-//      if (v1->getElementId().getId() == -9 && (ties1[i]->v2->getElementId().getId() == -19 ||
-//        ties1[i]->v2->getElementId().getId() == -22))
-//      {
-//        LOG_VAR(ties1[i]->rawScore);
-//        LOG_VAR(_denominatorForTie(ties1[i]));
-//        LOG_VAR(_finalScores[v1][ties1[i]->v2]);
-//      }
     }
   }
 
@@ -234,7 +227,7 @@ bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetwor
   {
     // if these aren't technically intersections they might be tie points.
     if (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
-      _getNodeMatcher()->getDegree(v2->getElementId()) <= 2)
+        _getNodeMatcher()->getDegree(v2->getElementId()) <= 2)
     {
       Meters sr = srp.getSearchRadius(v1, v2);
 

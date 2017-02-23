@@ -28,8 +28,8 @@
 #include "JavaScriptTranslator.h"
 
 // hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/schema/Feature.h>
@@ -64,6 +64,8 @@ using namespace v8;
 
 namespace hoot
 {
+
+unsigned int JavaScriptTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
@@ -406,9 +408,6 @@ shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     }
   }
 
-//  LOG_WARN("Returning from GetOgrOutputSchema")
-//  shared_ptr<Schema> schema(new Schema());
-
   return _schema;
 }
 
@@ -437,7 +436,15 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -471,7 +478,15 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {

@@ -31,7 +31,7 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 
 namespace hoot

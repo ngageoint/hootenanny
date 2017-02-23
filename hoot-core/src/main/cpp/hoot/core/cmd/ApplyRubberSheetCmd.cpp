@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -63,8 +63,6 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
-
-    LOG_WARN("has way -1108: " << map->containsWay(-1108));
 
     // make sure rubber sheeting isn't applied during cleaning.
     QStringList l = ConfigOptions().getMapCleanerTransforms();

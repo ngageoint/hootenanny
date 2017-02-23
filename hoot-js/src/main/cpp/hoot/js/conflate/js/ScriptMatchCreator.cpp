@@ -27,7 +27,7 @@
 #include "ScriptMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
@@ -82,7 +82,7 @@ public:
     _result(result),
     _mt(mt),
     _script(script),
-    _searchRadius(-1.0)
+    _customSearchRadius(-1.0)
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -95,7 +95,8 @@ public:
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
     //this is meant to have been set externally in a js rules file
-    _searchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    LOG_VART(_customSearchRadius);
 
     Handle<v8::Value> value = plugin->Get(toV8("getSearchRadius"));
     if (value->IsUndefined())
@@ -111,7 +112,8 @@ public:
       _getSearchRadius = Persistent<Function>::New(Handle<Function>::Cast(value));
     }
 
-    boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+    boost::function<bool (ConstElementPtr e)> f =
+      boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
     ArbitraryCriterion crit(f);
     WorstCircularErrorVisitor worstV;
     FilteredVisitor filteredV(crit, worstV);
@@ -136,10 +138,8 @@ public:
     env->expandBy(searchRadius);
 
     // find other nearby candidates
-    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                   getIndex(),
-                                                                   _indexToEid,
-                                                                   getMap());
+    set<ElementId> neighbors =
+      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -225,13 +225,15 @@ public:
     Meters result;
     if (_getSearchRadius.IsEmpty())
     {
-      if (_searchRadius < 0)
+      if (_customSearchRadius < 0)
       {
+        //base the radius off of the element itself
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
-        result = _searchRadius * _candidateDistanceSigma;
+        //base the radius off some predefined radius
+        result = _customSearchRadius * _candidateDistanceSigma;
       }
     }
     else
@@ -241,6 +243,7 @@ public:
       int argc = 0;
       jsArgs[argc++] = ElementJs::New(e);
 
+      LOG_TRACE("Calling getSearchRadius...");
       Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
 
       result = toCpp<Meters>(f) * _candidateDistanceSigma;
@@ -253,21 +256,24 @@ public:
   /*
    * This is meant to run one time when the match creator is initialized.
    */
-  void customScriptInit()
+  void calculateSearchRadius()
   {
     Context::Scope context_scope(_script->getContext());
     HandleScope handleScope;
 
     Persistent<Object> plugin = getPlugin();
-    Handle<String> initStr = String::New("init");
+    Handle<String> initStr = String::New("calculateSearchRadius");
+    //optional method, so don't throw an error
     if (plugin->Has(initStr) == false)
     {
-      throw HootException("Error finding 'init' function.");
+      LOG_DEBUG("calculateSearchRadius function not present.");
+      return;
     }
     Handle<v8::Value> value = plugin->Get(initStr);
     if (value->IsFunction() == false)
     {
-      throw HootException("init is not a function.");
+      LOG_DEBUG("calculateSearchRadius function not present.");
+      return;
     }
 
     Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
@@ -281,10 +287,11 @@ public:
     func->Call(plugin, argc, jsArgs);
 
     //this is meant to have been set externally in a js rules file
-    _searchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    LOG_VART(_customSearchRadius);
 
-    LOG_DEBUG("Custom script init complete.");
-
+    QFileInfo scriptFileInfo(_scriptPath);
+    LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
   }
 
   shared_ptr<HilbertRTree>& getIndex()
@@ -297,9 +304,9 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that have Status::Unknown2 and
-      // _smv.isMatchCandidate(e)
       shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
-      boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+      boost::function<bool (ConstElementPtr e)> f =
+        boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
       shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
       shared_ptr<ChainCriterion> pCC(new ChainCriterion());
       pCC->addCriterion(pC1);
@@ -355,6 +362,12 @@ public:
     }
   }
 
+  void setScriptPath(QString path) { _scriptPath = path; }
+  QString getScriptPath() const { return _scriptPath; }
+
+  Meters getCustomSearchRadius() const { return _customSearchRadius; }
+  void setCustomSearchRadius(Meters searchRadius) { _customSearchRadius = searchRadius; }
+
 private:
 
   // don't hold on to the map.
@@ -375,12 +388,10 @@ private:
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
-  //used for automatic search radius calculation; it is expected that this is set from the Javascript
-  //rules file used for the generic conflation
-  double _searchRadius;
-
-  double _test;
-
+  //used for automatic search radius calculation; it is expected that this is set from the
+  //Javascript rules file used for the generic conflation
+  double _customSearchRadius;
+  QString _scriptPath;
 };
 
 ScriptMatchCreator::ScriptMatchCreator() :
@@ -408,14 +419,18 @@ void ScriptMatchCreator::setArguments(QStringList args)
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _matchCandidateChecker.reset();
+
+  QFileInfo scriptFileInfo(_scriptPath);
+  LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
 }
 
 Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
-    return new ScriptMatch(_script, ScriptMatchVisitor::getPlugin(_script), map,
-      eid1, eid2, getMatchThreshold());
+    return
+      new ScriptMatch(
+        _script, ScriptMatchVisitor::getPlugin(_script), map, eid1, eid2, getMatchThreshold());
   }
   else
   {
@@ -431,12 +446,16 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  QFileInfo scriptFileInfo(_scriptPath);
-  LOG_INFO("Using match creator: " << className() << " - rules: " << scriptFileInfo.fileName());
-  LOG_VARD(*threshold);
-
   ScriptMatchVisitor v(map, matches, threshold, _script);
-  v.customScriptInit();
+  v.setScriptPath(_scriptPath);
+  v.calculateSearchRadius();
+  _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
+  LOG_VART(_scriptPath);
+  LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
+  QFileInfo scriptFileInfo(_scriptPath);
+  LOG_INFO(
+    "Creating matches with: " << className() << "; rules: " << scriptFileInfo.fileName() << "...");
+  LOG_VARD(*threshold);
   map->visitRo(v);
 }
 
@@ -516,14 +535,39 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
+
   if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
   {
-    LOG_DEBUG("Resetting the match candidate checker...");
+    LOG_VART(_matchCandidateChecker.get());
+    QString scriptPath = _scriptPath;
+    if (_matchCandidateChecker.get())
+    {
+      LOG_VART(_matchCandidateChecker->getMap() == map);
+      scriptPath = _matchCandidateChecker->getScriptPath();
+    }
+    LOG_VART(scriptPath);
+
+    QFileInfo scriptFileInfo(_scriptPath);
+    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
+
     vector<const Match*> emptyMatches;
     _matchCandidateChecker.reset(
       new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
-    _matchCandidateChecker->customScriptInit();
+    _matchCandidateChecker->setScriptPath(scriptPath);
+    //If the search radius has already been calculated for this matcher once, we don't want to do
+    //it again due to the expense.
+    LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
+    if (!_cachedCustomSearchRadii.contains(scriptPath))
+    {
+      _matchCandidateChecker->calculateSearchRadius();
+    }
+    else
+    {
+      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
+      _matchCandidateChecker->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
+    }
   }
+
   return _matchCandidateChecker->isMatchCandidate(element);
 }
 

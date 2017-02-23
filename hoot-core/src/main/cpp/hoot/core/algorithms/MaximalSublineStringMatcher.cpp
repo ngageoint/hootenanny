@@ -30,7 +30,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>
@@ -48,6 +48,8 @@
 
 namespace hoot
 {
+
+unsigned int MaximalSublineStringMatcher::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(SublineStringMatcher, MaximalSublineStringMatcher)
 
@@ -300,8 +302,16 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
 {
   if (r > M_PI)
   {
-    LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-             "of radians?");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+               "of radians?");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _maxAngle = r;
 }

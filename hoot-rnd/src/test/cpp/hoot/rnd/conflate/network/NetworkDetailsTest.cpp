@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

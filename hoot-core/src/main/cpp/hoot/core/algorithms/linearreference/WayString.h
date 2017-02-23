@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Hoot.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Qt
 #include <QList>
@@ -37,7 +38,6 @@
 namespace hoot
 {
 
-class WaySubline;
 class WayLocation;
 
 /**
@@ -49,6 +49,11 @@ class WayLocation;
 class WayString
 {
 public:
+
+  static std::string className() { return "hoot::WayString"; }
+
+  static unsigned int logWarnCount;
+
   WayString();
 
   void append(const WaySubline& subline);
@@ -93,6 +98,7 @@ public:
   void visitRo(const ElementProvider& map, ElementVisitor& v) const;
 
 private:
+
   QList<WaySubline> _sublines;
   static Meters _epsilon;
 

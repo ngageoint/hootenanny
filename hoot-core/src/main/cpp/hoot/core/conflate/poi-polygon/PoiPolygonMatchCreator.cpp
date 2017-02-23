@@ -27,7 +27,7 @@
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -338,7 +338,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Using match creator: " << className());
+  LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
 
   PoiPolygonMatch::resetMatchDistanceInfo();

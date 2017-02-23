@@ -32,7 +32,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Tgs
@@ -54,6 +54,8 @@ class DualWaySplitter : public OsmMapOperation
 public:
 
   static string className() { return "hoot::DualWaySplitter"; }
+
+  static unsigned int logWarnCount;
 
   typedef enum DrivingSide
   {

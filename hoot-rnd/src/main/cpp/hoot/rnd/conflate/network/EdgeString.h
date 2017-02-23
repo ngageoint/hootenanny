@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,7 +48,8 @@ class EdgeString
 {
 public:
   /// @todo this structure can likely go away in the near future.
-  struct EdgeEntry {
+  struct EdgeEntry
+  {
     EdgeEntry(ConstEdgeSublinePtr subline) : _subline(subline)
     {
     }
@@ -82,6 +83,10 @@ public:
     /// the edge is reversed.
     ConstEdgeSublinePtr _subline;
   };
+
+  static std::string className() { return "hoot::EdgeString"; }
+
+  static unsigned int logWarnCount;
 
   EdgeString();
 
@@ -229,7 +234,6 @@ private:
   friend class EdgeStringTest;
 
   QList<EdgeEntry> _edges;
-
 };
 
 typedef shared_ptr<EdgeString> EdgeStringPtr;

@@ -27,7 +27,7 @@
 #include "ScriptMatch.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
@@ -44,7 +44,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -60,6 +60,8 @@
 namespace hoot
 {
 using namespace Tgs;
+
+unsigned int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -121,7 +123,7 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
   }
   catch (NeedsReviewException& ex)
   {
-    LOG_VAR(ex.getClassName());
+    LOG_VART(ex.getClassName());
     _p.setReview();
     _explainText = ex.getWhat();
   }
@@ -388,7 +390,15 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
       result[it.key()] = d;
       if (isnan(result[it.key()]))
       {
-        LOG_WARN("found NaN feature value for: " << it.key());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("found NaN feature value for: " << it.key());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
   }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,7 +35,7 @@ using namespace boost;
 #include <boost/lexical_cast.hpp>
 
 // Hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
@@ -46,7 +46,7 @@ using namespace boost;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 
 // Qt
@@ -60,6 +60,8 @@ using namespace std;
 namespace hoot
 {
 using namespace elements;
+
+unsigned int OsmXmlReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
@@ -513,14 +515,15 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         if (_nodeIdMap.contains(ref) == false)
         {
           _missingNodeCount++;
-          if (_missingNodeCount <= 10)
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
           {
             LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
           }
-          if (_missingNodeCount == 10)
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
           {
-            LOG_WARN("Found 10 missing nodes, no longer reporting missing nodes.");
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
+          logWarnCount++;
         }
         else
         {
@@ -544,14 +547,15 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           if (_nodeIdMap.contains(ref) == false)
           {
             _missingNodeCount++;
-            if (_missingNodeCount <= 10)
+            if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
             {
               LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
             }
-            if (_missingNodeCount == 10)
+            else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
             {
-              LOG_WARN("Found 10 missing nodes, no longer reporting missing nodes.");
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
             }
+            logWarnCount++;
           }
           else
           {
@@ -564,14 +568,15 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           if (_wayIdMap.contains(ref) == false)
           {
             _missingWayCount++;
-            if (_missingWayCount <= 10)
+            if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
             {
               LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
             }
-            if (_missingWayCount == 10)
+            else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
             {
-              LOG_WARN("Found 10 missing ways, no longer reporting missing nodes.");
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
             }
+            logWarnCount++;
           }
           else
           {
@@ -587,8 +592,16 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         }
         else
         {
-          LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
-                   << _relationId << ")");
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
+                     << _relationId << ")");
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
       }
       else if (qName == "tag" && _element)
@@ -640,14 +653,18 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
               isBad = true;
             }
 
-            if (isBad && _badAccuracyCount < 10)
+            if (isBad)
             {
-              LOG_WARN("Bad circular error value: " << value.toStdString());
               _badAccuracyCount++;
-              if (_badAccuracyCount == 10)
+              if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
               {
-                LOG_WARN("Found 10 bad circular error values, no longer reporting bad accuracies.");
+                LOG_WARN("Bad circular error value: " << value.toStdString());
               }
+              else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
             }
           }
           if (ConfigOptions().getReaderPreserveAllTags())

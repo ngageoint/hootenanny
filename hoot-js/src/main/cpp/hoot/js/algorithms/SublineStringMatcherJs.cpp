@@ -27,8 +27,8 @@
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
@@ -52,6 +52,8 @@
 
 namespace hoot
 {
+
+unsigned int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
@@ -113,7 +115,8 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
     {
       // this is unusual print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
-      LOG_WARN(OsmXmlWriter::toString(copiedMap));
+      LOG_TRACE(OsmXmlWriter::toString(copiedMap));
+      logWarnCount++;
       throw e;
     }
 

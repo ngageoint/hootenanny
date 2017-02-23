@@ -31,7 +31,7 @@
 #include "Manipulation.h"
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {

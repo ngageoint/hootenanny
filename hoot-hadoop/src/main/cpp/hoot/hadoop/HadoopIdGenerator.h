@@ -17,7 +17,7 @@
 #ifndef HADOOPIDGENERATOR_H
 #define HADOOPIDGENERATOR_H
 
-#include <hoot/core/IdGenerator.h>
+#include <hoot/core/util/IdGenerator.h>
 #include <hoot/core/util/HootException.h>
 
 namespace hoot

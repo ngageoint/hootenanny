@@ -27,7 +27,7 @@
 #include "ScriptTranslatorFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Settings.h>
 

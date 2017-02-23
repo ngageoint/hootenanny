@@ -31,7 +31,7 @@
 
 // Hoot Includes
 #include <hoot/core/Version.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/HootException.h>

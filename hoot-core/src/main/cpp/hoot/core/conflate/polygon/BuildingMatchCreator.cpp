@@ -27,7 +27,7 @@
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
@@ -249,7 +249,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Using match creator: " << className());
+  LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
@@ -269,7 +269,7 @@ shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   if (!_rf)
   {
     QString path = ConfPath::search(ConfigOptions().getConflateMatchBuildingModel());
-    LOG_INFO("Loading model from: " << path);
+    LOG_DEBUG("Loading model from: " << path);
 
     QFile file(path.toAscii().data());
     if (!file.open(QIODevice::ReadOnly))

@@ -23,7 +23,7 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
-    ../conf/ConfigOptions.asciidoc \
+    ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
     ../rules/PoiGeneric.js \
     ../rules/lib/HootLib.js \
@@ -62,9 +62,7 @@ log4cxx {
 
 SOURCES += \
     src/main/cpp/hoot/core/util/Progress.cpp \
-    src/main/cpp/hoot/core/OgrFeatureProvider.cpp \
-    src/main/cpp/hoot/core/Conflator.cpp \
-    src/main/cpp/hoot/core/VectorFeatureProvider.cpp \
+    src/main/cpp/hoot/core/conflate/Conflator.cpp \
     src/main/cpp/hoot/core/elements/Node.cpp \
     src/main/cpp/hoot/core/index/OsmMapIndex.cpp \
     src/main/cpp/hoot/core/io/OgrReader.cpp \
@@ -74,8 +72,8 @@ SOURCES += \
     src/main/cpp/hoot/core/elements/WayData.cpp \
     src/main/cpp/hoot/core/elements/NodeData.cpp \
     src/main/cpp/hoot/core/elements/ElementData.cpp \
-    src/main/cpp/hoot/core/MapProjector.cpp \
-    src/main/cpp/hoot/core/WorkingMap.cpp \
+    src/main/cpp/hoot/core/util/MapProjector.cpp \
+    src/main/cpp/hoot/core/conflate/WorkingMap.cpp \
     src/main/cpp/hoot/core/manipulators/WayMerger.cpp \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.cpp \
     src/main/cpp/hoot/core/algorithms/DirectionFinder.cpp \
@@ -96,22 +94,15 @@ SOURCES += \
     src/main/cpp/hoot/core/manipulators/DividedHighwayMerger.cpp \
     src/main/cpp/hoot/core/manipulators/DividedHighwayManipulation.cpp \
     src/main/cpp/hoot/core/algorithms/WayHeading.cpp \
-    src/main/cpp/hoot/core/filters/OneWayFilter.cpp \
-    src/main/cpp/hoot/core/filters/WayFilterChain.cpp \
-    src/main/cpp/hoot/core/filters/UnknownFilter.cpp \
-    src/main/cpp/hoot/core/filters/WayDirectionFilter.cpp \
     src/main/cpp/hoot/core/algorithms/LineStringAverager.cpp \
     src/main/cpp/hoot/core/filters/ParallelWayFilter.cpp \
     src/main/cpp/hoot/core/ops/SuperfluousNodeRemover.cpp \
-    src/main/cpp/hoot/core/filters/WayBufferFilter.cpp \
     src/main/cpp/hoot/core/manipulators/WayMergeManipulation.cpp \
     src/main/cpp/hoot/core/algorithms/WayAverager.cpp \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.cpp \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.cpp \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.cpp \
     src/main/cpp/hoot/core/elements/Tags.cpp \
-    src/main/cpp/hoot/core/filters/DistanceNodeFilter.cpp \
-    src/main/cpp/hoot/core/filters/ChainNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/InWayNodeFilter.cpp \
     src/main/cpp/hoot/core/conflate/UnlikelyIntersectionRemover.cpp \
     src/main/cpp/hoot/core/conflate/NodeToWayMap.cpp \
@@ -141,9 +132,9 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/TileBoundsCalculator.cpp \
     src/main/cpp/hoot/core/io/PbfConstants.cpp \
     src/main/cpp/hoot/core/cmd/Command.cpp \
-    src/main/cpp/hoot/core/Factory.cpp \
-    src/main/cpp/hoot/core/IdGenerator.cpp \
-    src/main/cpp/hoot/core/DefaultIdGenerator.cpp \
+    src/main/cpp/hoot/core/util/Factory.cpp \
+    src/main/cpp/hoot/core/util/IdGenerator.cpp \
+    src/main/cpp/hoot/core/util/DefaultIdGenerator.cpp \
     src/main/cpp/hoot/core/conflate/LocalTileWorker.cpp \
     src/main/cpp/hoot/core/util/ConfPath.cpp \
     src/main/cpp/hoot/core/util/GeometryUtils.cpp \
@@ -203,8 +194,7 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/RubberSheetCmd.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.cpp \
     src/main/cpp/hoot/core/visitors/RemoveElementsVisitor.cpp \
-    src/main/cpp/hoot/core/filters/TagElementFilter.cpp \
-    src/main/cpp/hoot/core/schema/Building.cpp \
+    src/main/cpp/hoot/core/conflate/polygon/Building.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/OverlapExtractor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/CompactnessExtractor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.cpp \
@@ -336,7 +326,6 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/BaseFilter.cpp \
     src/main/cpp/hoot/core/visitors/CalculateAreaVisitor.cpp \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.cpp \
-    src/main/cpp/hoot/core/io/BulkInsert.cpp \
     src/main/cpp/hoot/core/io/SqlBulkInsert.cpp \
     src/main/cpp/hoot/core/conflate/extractors/WeightedShapeDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/extractors/WayFeatureExtractor.cpp \
@@ -352,7 +341,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.cpp \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.cpp \
     src/main/cpp/hoot/core/cmd/CropMapCmd.cpp \
-    src/main/cpp/hoot/core/util/MultiPolygonCreator.cpp \
+    src/main/cpp/hoot/core/conflate/polygon/MultiPolygonCreator.cpp \
     src/main/cpp/hoot/core/io/InternalIdReserver.cpp \
     src/main/cpp/hoot/core/conflate/ReviewMarker.cpp \
     src/main/cpp/hoot/core/cmd/AttributeCoOccuranceCmd.cpp \
@@ -385,7 +374,7 @@ SOURCES += \
     src/main/cpp/hoot/core/perty/PertyTestRunResult.cpp \
     src/main/cpp/hoot/core/io/MapStatsWriter.cpp \
     src/main/cpp/hoot/core/conflate/NoInformationElementRemover.cpp \
-    src/main/cpp/hoot/core/GeometryPainter.cpp \
+    src/main/cpp/hoot/core/util/GeometryPainter.cpp \
     src/main/cpp/hoot/core/perty/PertyOp.cpp \
     src/main/cpp/hoot/core/perty/PertyMatchScorer.cpp \
     src/main/cpp/hoot/core/cmd/PertyCmd.cpp \
@@ -395,7 +384,7 @@ SOURCES += \
     src/main/cpp/hoot/core/perty/PermuteGridCalculator.cpp \
     src/main/cpp/hoot/core/perty/DirectSequentialSimulation.cpp \
     src/main/cpp/hoot/core/cmd/AccuracyDistributionCmd.cpp \
-    src/main/cpp/hoot/core/PositiveIdGenerator.cpp \
+    src/main/cpp/hoot/core/util/PositiveIdGenerator.cpp \
     src/main/cpp/hoot/core/util/ElementConverter.cpp \
     src/main/cpp/hoot/core/io/PartialOsmMapWriter.cpp \
     src/main/cpp/hoot/core/cmd/PaintNodesCmd.cpp \
@@ -446,7 +435,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-    src/main/cpp/hoot/core/io/PostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -520,14 +509,12 @@ SOURCES += \
     src/main/cpp/hoot/core/visitors/RemoveAttributeVisitor.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AbstractDistanceExtractor.cpp \
     src/main/cpp/hoot/core/conflate/MatchCreator.cpp \
-    src/main/cpp/hoot/core/filters/AreaFilter.cpp \
     src/main/cpp/hoot/core/filters/ContainsNodeCriterion.cpp \
     src/main/cpp/hoot/core/filters/HighwayFilter.cpp \
     src/main/cpp/hoot/core/filters/IsNodeFilter.cpp \
     src/main/cpp/hoot/core/filters/LinearFilter.cpp \
     src/main/cpp/hoot/core/filters/OneWayCriterion.cpp \
     src/main/cpp/hoot/core/filters/StatsAreaFilter.cpp \
-    src/main/cpp/hoot/core/filters/StatusFilter.cpp \
     src/main/cpp/hoot/core/filters/UnknownCriterion.cpp \
     src/main/cpp/hoot/core/manipulators/WayManipulator.cpp \
     src/main/cpp/hoot/core/schema/ComparatorTagDifferencer.cpp \
@@ -556,15 +543,10 @@ SOURCES += \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
-    src/main/cpp/hoot/core/FeatureProvider.h \
-    src/main/cpp/hoot/core/OgrFeatureProvider.h \
-    src/main/cpp/hoot/core/Conflator.h \
-    src/main/cpp/hoot/core/VectorFeatureProvider.h \
-    src/main/cpp/hoot/core/Exception.h \
+    src/main/cpp/hoot/core/conflate/Conflator.h \
+    src/main/cpp/hoot/core/util/Exception.h \
     src/main/cpp/hoot/core/manipulators/Manipulator.h \
-    src/main/cpp/hoot/core/SourceMap.h \
-    src/main/cpp/hoot/core/SourceFeature.h \
-    src/main/cpp/hoot/core/WorkingMap.h \
+    src/main/cpp/hoot/core/conflate/WorkingMap.h \
     src/main/cpp/hoot/core/elements/Node.h \
     src/main/cpp/hoot/core/io/OgrReader.h \
     src/main/cpp/hoot/core/OsmMap.h \
@@ -574,8 +556,8 @@ HEADERS += \
     src/main/cpp/hoot/core/elements/WayData.h \
     src/main/cpp/hoot/core/elements/NodeData.h \
     src/main/cpp/hoot/core/elements/ElementData.h \
-    src/main/cpp/hoot/core/MapProjector.h \
-    src/main/cpp/hoot/core/Units.h \
+    src/main/cpp/hoot/core/util/MapProjector.h \
+    src/main/cpp/hoot/core/util/Units.h \
     src/main/cpp/hoot/core/manipulators/WayMerger.h \
     src/main/cpp/hoot/core/algorithms/WayDiscretizer.h \
     src/main/cpp/hoot/core/algorithms/Distance.h \
@@ -599,27 +581,19 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/Manipulation.h \
     src/main/cpp/hoot/core/manipulators/DividedHighwayManipulation.h \
     src/main/cpp/hoot/core/algorithms/WayHeading.h \
-    src/main/cpp/hoot/core/filters/OneWayFilter.h \
     src/main/cpp/hoot/core/filters/WayFilter.h \
-    src/main/cpp/hoot/core/WayMap.h \
-    src/main/cpp/hoot/core/NodeMap.h \
-    src/main/cpp/hoot/core/filters/WayFilterChain.h \
-    src/main/cpp/hoot/core/filters/UnknownFilter.h \
-    src/main/cpp/hoot/core/filters/StatusFilter.h \
-    src/main/cpp/hoot/core/filters/WayDirectionFilter.h \
+    src/main/cpp/hoot/core/elements/WayMap.h \
+    src/main/cpp/hoot/core/elements/NodeMap.h \
     src/main/cpp/hoot/core/algorithms/LineStringAverager.h \
     src/main/cpp/hoot/core/filters/ParallelWayFilter.h \
     src/main/cpp/hoot/core/ops/SuperfluousNodeRemover.h \
-    src/main/cpp/hoot/core/filters/WayBufferFilter.h \
     src/main/cpp/hoot/core/manipulators/WayMergeManipulation.h \
     src/main/cpp/hoot/core/algorithms/WayAverager.h \
     src/main/cpp/hoot/core/algorithms/ProbabilityOfMatch.h \
     src/main/cpp/hoot/core/conflate/SuperfluousWayRemover.h \
     src/main/cpp/hoot/core/conflate/splitter/DualWaySplitter.h \
-    src/main/cpp/hoot/core/filters/DistanceNodeFilter.h \
     src/main/cpp/hoot/core/filters/NodeFilter.h \
     src/main/cpp/hoot/core/filters/Filter.h \
-    src/main/cpp/hoot/core/filters/ChainNodeFilter.h \
     src/main/cpp/hoot/core/filters/InWayNodeFilter.h \
     src/main/cpp/hoot/core/conflate/UnlikelyIntersectionRemover.h \
     src/main/cpp/hoot/core/conflate/NodeToWayMap.h \
@@ -654,9 +628,9 @@ HEADERS += \
     src/main/cpp/hoot/core/io/PbfConstants.h \
     src/main/cpp/hoot/core/Version.h \
     src/main/cpp/hoot/core/cmd/Command.h \
-    src/main/cpp/hoot/core/Factory.h \
-    src/main/cpp/hoot/core/IdGenerator.h \
-    src/main/cpp/hoot/core/DefaultIdGenerator.h \
+    src/main/cpp/hoot/core/util/Factory.h \
+    src/main/cpp/hoot/core/util/IdGenerator.h \
+    src/main/cpp/hoot/core/util/DefaultIdGenerator.h \
     src/main/cpp/hoot/core/conflate/TileWorker.h \
     src/main/cpp/hoot/core/conflate/LocalTileWorker.h \
     src/main/cpp/hoot/core/util/ConfPath.h \
@@ -685,7 +659,7 @@ HEADERS += \
     src/main/cpp/hoot/core/ops/ReprojectToGeographicOp.h \
     src/main/cpp/hoot/core/elements/Relation.h \
     src/main/cpp/hoot/core/elements/RelationData.h \
-    src/main/cpp/hoot/core/RelationMap.h \
+    src/main/cpp/hoot/core/elements/RelationMap.h \
     src/main/cpp/hoot/core/algorithms/AlphaShape.h \
     src/main/cpp/hoot/core/io/PbfElementIterator.h \
     src/main/cpp/hoot/core/ops/WaySplitterOp.h \
@@ -712,8 +686,7 @@ HEADERS += \
     src/main/cpp/hoot/core/manipulators/WayManipulator.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h \
     src/main/cpp/hoot/core/visitors/RemoveElementsVisitor.h \
-    src/main/cpp/hoot/core/filters/TagElementFilter.h \
-    src/main/cpp/hoot/core/schema/Building.h \
+    src/main/cpp/hoot/core/conflate/polygon/Building.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/OverlapExtractor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/CompactnessExtractor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h \
@@ -875,7 +848,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/HighwayFilter.h \
     src/main/cpp/hoot/core/filters/LinearFilter.h \
     src/main/cpp/hoot/core/filters/BaseFilter.h \
-    src/main/cpp/hoot/core/filters/AreaFilter.h \
     src/main/cpp/hoot/core/filters/StatsAreaFilter.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateAreaForStatsVisitor.h \
@@ -903,7 +875,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/ScriptToOgrTranslator.h \
     src/main/cpp/hoot/core/conflate/polygon/BuildingRfClassifier.h \
     src/main/cpp/hoot/core/conflate/RfExtractorClassifier.h \
-    src/main/cpp/hoot/core/util/MultiPolygonCreator.h \
+    src/main/cpp/hoot/core/conflate/polygon/MultiPolygonCreator.h \
     src/main/cpp/hoot/core/io/InternalIdReserver.h \
     src/main/cpp/hoot/core/conflate/ReviewMarker.h \
     src/main/cpp/hoot/core/visitors/LongestTagVisitor.h \
@@ -942,7 +914,7 @@ HEADERS += \
     src/main/cpp/hoot/core/perty/PertyTestRunResult.h \
     src/main/cpp/hoot/core/io/MapStatsWriter.h \
     src/main/cpp/hoot/core/conflate/NoInformationElementRemover.h \
-    src/main/cpp/hoot/core/GeometryPainter.h \
+    src/main/cpp/hoot/core/util/GeometryPainter.h \
     src/main/cpp/hoot/core/perty/PertyOp.h \
     src/main/cpp/hoot/core/perty/PertyMatchScorer.h \
     src/main/cpp/hoot/core/perty/PertyTestRunner.h \
@@ -950,7 +922,7 @@ HEADERS += \
     src/main/cpp/hoot/core/perty/DirectSequentialSimulation.h \
     src/main/cpp/hoot/core/elements/ElementConsumer.h \
     src/main/cpp/hoot/core/elements/ConstElementConsumer.h \
-    src/main/cpp/hoot/core/PositiveIdGenerator.h \
+    src/main/cpp/hoot/core/util/PositiveIdGenerator.h \
     src/main/cpp/hoot/core/util/ElementConverter.h \
     src/main/cpp/hoot/core/io/PartialOsmMapWriter.h \
     src/main/cpp/hoot/core/elements/ElementProvider.h \
@@ -1053,7 +1025,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
-    src/main/cpp/hoot/core/io/PostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.h \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \

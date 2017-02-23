@@ -27,7 +27,7 @@
 #include "MergerFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
@@ -83,8 +83,8 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
-  LOG_WARN("Error finding Mergers for these matches: " << matches);
-  LOG_WARN("Creators: " << _creators);
+  LOG_DEBUG("Error finding Mergers for these matches: " << matches);
+  LOG_DEBUG("Creators: " << _creators);
   throw HootException("Error creating a merger for the provided set of matches.");
 }
 

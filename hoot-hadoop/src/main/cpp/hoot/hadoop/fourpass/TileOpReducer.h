@@ -40,6 +40,8 @@ public:
 
   static string opKey() { return "hoot.op.key"; }
 
+  static unsigned int logWarnCount;
+
   TileOpReducer();
 
   virtual void close();

@@ -32,7 +32,7 @@
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 //#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
