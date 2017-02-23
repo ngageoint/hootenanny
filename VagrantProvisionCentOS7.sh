@@ -310,62 +310,18 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo systemctl restart postgresql-$PG_VERSION
 
-#  if [ "! ogrinfo --formats | grep --quiet FileGDB" ]; then
-#     if [ ! -f gdal-1.10.1.tar.gz ]; then
-#         echo "### Downloading GDAL source..."
-#         wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
-#     fi
-#     if [ ! -d gdal-1.10.1 ]; then
-#         echo "### Extracting GDAL source..."
-#         tar zxfp gdal-1.10.1.tar.gz
-#     fi
-#
-#     if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
-#         echo "### Downloading FileGDB API source..."
-#         wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
-#     fi
-#     if [ ! -d /usr/local/FileGDB_API ]; then
-#         echo "### Extracting FileGDB API source & installing lib..."
-#         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-#         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
-#     fi
-#
-#     # compile gdal
-#     echo "### Building GDAL w/ FileGDB..."
-#     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-#     cd gdal-1.10.1
-#     echo "GDAL: configure"
-#     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python
-#     echo "GDAL: make"
-#     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
-#     echo "GDAL: install"
-#     sudo make -s install >> GDAL_Build.txt 2>&1
-#     cd swig/python
-#     echo "GDAL: python build"
-#     python setup.py build >> GDAL_Build.txt 2>&1
-#     echo "GDAL: python install"
-#     sudo python setup.py install >> GDAL_Build.txt 2>&1
-#     sudo ldconfig
-#     cd ~
-#     GDAL_DATA=/usr/local/share/gdal
-#     GDAL_LIB_DIR=/usr/local/lib
-#
-#     # Remove gdal libs installed by libgdal-dev that interfere with
-#     # renderdb-export-server using gdal libs compiled from source (fgdb support)
-#     if [ -f "/usr/lib/libgdal.*" ]; then
-#         echo "Removing GDAL libs installed by libgdal-dev..."
-#         sudo rm /lib64/libgdal.*
-#     fi
-# fi # End GDAL
 
-if ! hash ogrinfo >/dev/null 2>&1 || ogrinfo --formats | grep --quiet FileGDB; then
-    if [ ! -f gdal-1.10.1.tar.gz ]; then
-        echo "### Downloading GDAL source..."
-        wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+# For convenience, set the version of GDAL to download and install
+GDAL_VERSION=2.1.3
+
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
+    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+        echo "### Downloading GDAL $GDAL_VERSION source..."
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
     fi
-    if [ ! -d gdal-1.10.1 ]; then
-        echo "### Extracting GDAL source..."
-        tar zxfp gdal-1.10.1.tar.gz
+    if [ ! -d gdal-$GDAL_VERSION ]; then
+        echo "### Extracting GDAL $GDAL_VERSION source..."
+        tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
     if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
@@ -378,9 +334,9 @@ if ! hash ogrinfo >/dev/null 2>&1 || ogrinfo --formats | grep --quiet FileGDB; t
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
-    echo "### Building GDAL w/ FileGDB..."
+    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-1.10.1
+    cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python

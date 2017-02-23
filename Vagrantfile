@@ -48,7 +48,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.synced_folder ".", "/home/vagrant/hoot"
 
-    hoot_ubuntu1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionUbuntu1404.sh"
+    hoot_ubuntu1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
     hoot_ubuntu1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     hoot_ubuntu1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
     hoot_ubuntu1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
