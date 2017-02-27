@@ -26,6 +26,9 @@
  */
 #include "MatchCandidateCountVisitor.h"
 
+#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 

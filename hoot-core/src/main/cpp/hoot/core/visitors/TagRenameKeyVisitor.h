@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,9 +28,6 @@
 #define TAGRENAMEKEYVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "ElementOsmMapVisitor.h"
@@ -52,13 +49,6 @@ public:
   TagRenameKeyVisitor(const QString oldKey, const QString newKey);
 
   virtual ~TagRenameKeyVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * TagRenameKeyVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   virtual void visit(const shared_ptr<Element>& e);
 

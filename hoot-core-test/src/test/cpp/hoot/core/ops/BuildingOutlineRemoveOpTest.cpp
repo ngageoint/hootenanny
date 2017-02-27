@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;
@@ -66,7 +66,7 @@ public:
   {
     DisableLog dl;
 
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -79,7 +79,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir().mkpath("test-output/ops/BuildingOutlineRemoveOp/");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm",
                      "test-output/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm");

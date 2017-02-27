@@ -105,7 +105,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
-    LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
+    LOG_DEBUG("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
   else if (_bounds.isNull() ||
@@ -247,7 +247,8 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     tags.clear();
   }
 
-  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() <<
+            " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
@@ -338,6 +339,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 {
   for (unsigned int i = 0; i < nodeIds.size(); i++)
   {
+    LOG_VART(nodeIds[i]);
     QStringList tags;
     if (map.containsNode(nodeIds[i]) == false)
     {
@@ -353,12 +355,12 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 
         if (tags.size() > 0)
         {
-          //LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(node);
         }
         //we want the reader's status to always override any existing status
         if (_status != Status::Invalid) { node->setStatus(_status); }
+        LOG_VART(node);
         map.addElement(node);
       }
     }

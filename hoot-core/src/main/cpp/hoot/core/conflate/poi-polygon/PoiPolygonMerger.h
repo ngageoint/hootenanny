@@ -41,6 +41,10 @@ class PoiPolygonMerger : public MergerBase
 
 public:
 
+  static std::string className() { return "hoot::PoiPolygonMerger"; }
+
+  static unsigned int logWarnCount;
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.

@@ -10,13 +10,6 @@ exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
 exports.experimental = true;
 
 /**
- * Runs before match creation occurs and provides an opportunity to perform custom initialization.
- */
-exports.init = function(map) {
-
-}
-
-/**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.

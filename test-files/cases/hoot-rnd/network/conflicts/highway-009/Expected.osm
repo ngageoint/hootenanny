@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544960219599957" lon="-104.9022127761400043">
-        <tag k="hoot:id" v="-13"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-13"/>
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543450483499981" lon="-104.9022466425199980">
-        <tag k="hoot:id" v="-12"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-12"/>
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544919433099878" lon="-104.9022529302200013">
-        <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-11"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546550891699951" lon="-104.9022599135399787">
-        <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-10"/>
     </node>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543451117299909" lon="-104.9022075386500035">
-        <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-9"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546598475800025" lon="-104.9022232511200059">
-        <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-8"/>
     </node>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544905837600041" lon="-104.9022302344399975">
-        <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-5"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541982798299941" lon="-104.9022249969499967">
-        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-4"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546564487100028" lon="-104.9022407094099947">
-        <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-3"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543192802099995" lon="-104.9022232511200059">
-        <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
     </node>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540432902899937" lon="-104.9022145219699951">
-        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1"/>
     </node>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10"/>
@@ -50,8 +50,8 @@
         <nd ref="-12"/>
         <nd ref="-2"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-5"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8"/>
@@ -59,24 +59,24 @@
         <nd ref="-9"/>
         <nd ref="-2"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-4"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="-5"/>
         <nd ref="-3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-4"/>
         <nd ref="-2"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-1"/>
     </way>
     <relation visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-4" role="reviewee"/>
@@ -84,12 +84,9 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="0.364442"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:sort_order" v="0"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-8"/>
     </relation>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5" role="reviewee"/>
@@ -97,11 +94,8 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="0.364442"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:sort_order" v="1"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:id" v="-7"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-7"/>
     </relation>
 </osm>

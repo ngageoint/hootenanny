@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,13 +41,12 @@ using namespace geos::operation::distance;
 // Hoot
 #include <hoot/core/GeometryPainter.h>
 #include <hoot/core/MapProjector.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -87,7 +86,8 @@ cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordina
   if (wl.isNode() == false)
   {
     // I haven't been able to recreate the case when this happens.
-    LOG_WARN("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+    LOG_ERROR("Internal Error: Expected wl to be on a node, but it was this: " << wl);
+    //throw here?
   }
   assert(wl.isNode() == true);
 
@@ -278,7 +278,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
-  LOG_WARN("Running cost");
+  LOG_DEBUG("Running cost");
   ShortestPath sp(graph);
 
   for (size_t i = 0; i < c.size(); i++)
@@ -295,7 +295,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
 
   // calculate cost
   sp.calculateCost();
-  LOG_WARN("Cost done");
+  LOG_DEBUG("Cost done");
 
   cv::Mat mat = _paintGraph(map, *graph, sp);
 

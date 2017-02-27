@@ -46,7 +46,7 @@ class EdgeStringTest : public CppUnit::TestFixture
   CPPUNIT_TEST(reverseTest);
   CPPUNIT_TEST(partialTest);
   CPPUNIT_TEST(stubTest);
-  CPPUNIT_TEST(edgeClosedTest);
+  // CPPUNIT_TEST(edgeClosedTest); // See comment below
   CPPUNIT_TEST(addDisconnectedEdgeTest);
   CPPUNIT_TEST(equalsTest);
   CPPUNIT_TEST(containsEdgeStringTest);
@@ -359,6 +359,7 @@ public:
     CPPUNIT_ASSERT(edgeStr.isStub());
   }
 
+  /* This tries to test code that was removed by Surratt on 26SEP2016 [14749b245]
   void edgeClosedTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -387,6 +388,7 @@ public:
       "Illegal argument, you attempted to add an edge to an edge string that is already closed. Ends in a partial match?",
       exceptionMsg.toStdString());
   }
+  */
 
   void addDisconnectedEdgeTest()
   {

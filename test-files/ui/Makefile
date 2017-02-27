@@ -8,7 +8,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
-# Check if we are using a different Tomcat6 port
+# Check if we are using a different Tomcat8 port
 ifeq ($(TOMCAT_PORT),)
   TOMCAT_PORT=8080
 endif
@@ -25,9 +25,9 @@ HOOT_OPTS+= -D reader.add.source.datetime=false
 
 test: load-data
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
+	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PORT) --quiet 2> >( $(FILTER) >&2 )
 else
-	$(HOOT_HOME)/scripts/VerifyTomcatStarted.sh $(TOMCAT_PORT)
+	$(HOOT_HOME)/scripts/tomcat/VerifyTomcatStarted.sh $(TOMCAT_PORT)
 endif
 	echo Running user interface tests...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
@@ -46,18 +46,20 @@ endif
 
 clean:
 	#Remove test datasets from db
-	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
-	| while read mapname; do \
- 	   echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
-	done; \
-	true
+	@if [[ `PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='maps');"` = 't' ]]; then \
+		PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
+		| while read mapname; do \
+			echo hoot delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+		done; \
+		true; \
+	fi
 
 coverage: clean-coverage
-	echo Running user interface coverage report...
+	echo Generating user interface coverage report...
 ifneq (,$(findstring s,$(MAKEFLAGS)))
-	$(HOOT_HOME)/scripts/CoverHootUI.sh &> coverage.log
+	$(HOOT_HOME)/scripts/coverage/CoverHootUI.sh &> coverage.log
 else
-	$(HOOT_HOME)/scripts/CoverHootUI.sh
+	$(HOOT_HOME)/scripts/coverage/CoverHootUI.sh
 endif
 	echo ""
 
@@ -80,7 +82,7 @@ load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
 
 	# MapEdit conflation
-	source $(HOOT_HOME)/scripts/SetupOsmApiDB.sh force
+	source $(HOOT_HOME)/scripts/database/SetupOsmApiDB.sh force
 	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql
 	hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=1 $(HOOT_HOME)/test-files/DcGisRoads.osm $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql
 	PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/tmp/DcGisRoadsCucumber.sql

@@ -34,12 +34,15 @@
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
+
+//  tgs
+#include <tgs/Statistics/Random.h>
 
 // Qt
 #include <QFile>
@@ -55,7 +58,7 @@ TestUtils::TestUtils()
 
 bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
 {
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
@@ -210,6 +213,8 @@ void TestUtils::resetEnvironment()
   {
     rr->reset();
   }
+  //  Reset the pseudo random number generator seed
+  Tgs::Random::instance()->seed();
 }
 
 QString TestUtils::toQuotedString(QString str)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -46,7 +46,6 @@ HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 HootApiDbReader::HootApiDbReader() :
 _database(new HootApiDb())
 {
-  LOG_VARD(_useDataSourceIds);
   setConfiguration(conf());
 }
 
@@ -189,8 +188,8 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
     }
   }
 
-  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
-  LOG_DEBUG("Current map:");
+  LOG_DEBUG(
+    "Select all query read " << elementCount << " " << elementType.toString() << " elements.");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
   LOG_VARD(map->getRelationMap().size());

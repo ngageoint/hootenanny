@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include "Node.h"
 
 // Boost
 using namespace boost;

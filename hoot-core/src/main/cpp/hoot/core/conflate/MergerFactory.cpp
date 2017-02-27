@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/match-graph/MatchGraph.h>
 
 namespace hoot
 {
@@ -82,8 +83,8 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
-  LOG_WARN("Error finding Mergers for these matches: " << matches);
-  LOG_WARN("Creators: " << _creators);
+  LOG_DEBUG("Error finding Mergers for these matches: " << matches);
+  LOG_DEBUG("Creators: " << _creators);
   throw HootException("Error creating a merger for the provided set of matches.");
 }
 

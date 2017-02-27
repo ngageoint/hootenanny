@@ -14,8 +14,8 @@ AC_DEFUN([UI_TESTS_INIT],[
     AC_DEFINE([HAVE_UI_TESTS], [1], [UI tests are present])
     if test "$with_uitests" = "yes" ; then
 
-      if test "$TOMCAT6_HOME" == ""; then
-        AC_MSG_ERROR([Tomcat not installed.  Set TOMCAT6_HOME environment variable to installed location.])
+      if test "$TOMCAT8_HOME" == ""; then
+        AC_MSG_ERROR([Tomcat not installed.  Set TOMCAT8_HOME environment variable to installed location.])
       fi
 
       # ui tests deploy the hoot ui to tomcat, which installs the mapnik server that needs npm

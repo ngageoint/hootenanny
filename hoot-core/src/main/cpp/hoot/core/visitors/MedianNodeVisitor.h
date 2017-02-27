@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,9 +28,8 @@
 #define MEDIANNODEVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/Node.h>
 
 namespace hoot
 {
@@ -39,19 +38,18 @@ namespace hoot
  * Calculates the median node. This is very inefficient and shouldn't be used on large maps. E.g.
  * O(n^2).
  */
-class MedianNodeVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class MedianNodeVisitor : public ElementVisitor
 {
 public:
-  MedianNodeVisitor();
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  MedianNodeVisitor();
 
   virtual void visit(const ConstElementPtr& e);
 
   ConstNodePtr calculateMedianNode() const;
 
 private:
-  const OsmMap* _map;
+
   QList<ConstNodePtr> _nodes;
 
   double _calculateRmsd(ConstNodePtr n) const;

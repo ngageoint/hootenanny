@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -187,7 +187,10 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
-    return e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold();
+    const Meters searchRadius =
+      e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold();
+    LOG_VART(searchRadius);
+    return searchRadius;
   }
 
   virtual void visit(const ConstElementPtr& e)
@@ -335,7 +338,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_VARD(*threshold);
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 

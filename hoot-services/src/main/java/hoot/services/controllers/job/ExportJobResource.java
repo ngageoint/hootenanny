@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,6 +29,7 @@ package hoot.services.controllers.job;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.transform.dom.DOMSource;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -57,38 +60,46 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.wfs.WFSManager;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.FileUtils;
+import hoot.services.utils.XmlDocumentBuilder;
 
 
 @Controller
 @Path("/export")
 @Transactional
 public class ExportJobResource extends JobControllerBase {
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(ExportJobResource.class);
 
     public ExportJobResource() {
         super(EXPORT_SCRIPT);
     }
 
-
     /**
      * Asynchronous export service.
-     *
+     * 
      * POST hoot-services/job/export/execute
-     *
-     * { "translation":"MGCP.js", //Translation script name. "inputtype":"db",
-     * //[db | file] db means input from hoot db will be used. file mean a file
-     * path will be specified. "input":"ToyTestA", //Input name. for inputtype =
-     * db then specify name from hoot db. For inputtype=file, specify full path
-     * to a file. "outputtype":"gdb", //[gdb | shp | wfs | osm_api_db]. gdb will
-     * produce file gdb, shp will output shapefile. if outputtype = wfs then a
-     * wfs front end will be created. osm_api_db will derive and apply a
-     * changeset to an OSM API database "removereview" : "false" //? }
-     *
+     * 
+     * example request:
+     * 
+     * { 
+     *   "translation":"MGCP.js", //Translation script name. 
+     *   "inputtype":"db",        //[db | file] db means input from hoot db will be used. file mean 
+     *                            //a file path will be specified. 
+     *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db. 
+     *                            //For inputtype=file, specify full path to a file. 
+     *   "outputtype":"gdb",      //[gdb | shp | wfs | osm_api_db | osc]. gdb will produce file gdb, 
+     *                            //shp will output shapefile. if outputtype = wfs then a wfs 
+     *                            //front end will be created. osm_api_db will derive and apply a
+     *                            //changeset to an OSM API database, osc will derive changeset 
+     *                            //xml computing the the difference between the configured 
+     *                            //OSM API database and the specified input layer 
+     *   "removereview" : "false" 
+     * }
+     * 
      * @param params
      * @return Job ID
+     * @todo outputtype=osm_api_db may end up being obsolete with the addition of osc
      */
     @POST
     @Path("/execute")
@@ -139,8 +150,8 @@ public class ExportJobResource extends JobControllerBase {
                 param.put("isprimitivetype", "false");
                 wfsArgs.add(param);
 
-                JSONObject createWfsResCommand = createReflectionSycJobReq(wfsArgs,
-                        "hoot.services.wfs.WfsManager", "createWfsResource");
+                JSONObject createWfsResCommand = createReflectionSycJobReq(wfsArgs, "hoot.services.wfs.WfsManager",
+                        "createWfsResource");
 
                 JSONArray jobArgs = new JSONArray();
                 jobArgs.add(osm2orgCommand);
@@ -150,6 +161,10 @@ public class ExportJobResource extends JobControllerBase {
             }
             else if ("osm_api_db".equalsIgnoreCase(type)) {
                 commandArgs = getExportToOsmApiDbCommandArgs(commandArgs, oParams);
+                postJobRequest(jobId, createPostBody(commandArgs));
+            }
+            else if ("osc".equalsIgnoreCase(type)) {
+                commandArgs = getExportToChangesetCommandArgs(commandArgs, oParams);
                 postJobRequest(jobId, createPostBody(commandArgs));
             }
             else {
@@ -188,7 +203,39 @@ public class ExportJobResource extends JobControllerBase {
         return new JobId(jobId);
     }
 
-    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {
+    JSONArray getExportToChangesetCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) {
+        JSONArray commandArgs = new JSONArray();
+        commandArgs.addAll(inputCommandArgs);
+        
+        //handling these inputs a little differently than the rest of ExportJobResource as makes it
+        //it possible to test osm2ogrscript with file inputs
+        
+        JSONObject commandArg = new JSONObject();
+        commandArg.put("input1", OSM_API_DB_URL);
+        commandArgs.add(commandArg);
+        
+        commandArg = new JSONObject();
+        commandArg.put("input2", DB_URL + "/" + oParams.get("input"));
+        commandArgs.add(commandArg);
+
+        if (oParams.get("TASK_BBOX") == null) {
+            String msg = "When exporting to a changeset, TASK_BBOX must be specified.";
+            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
+        }
+        BoundingBox bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
+        setAoi(bbox, commandArgs);
+
+        // put the osm userid in the command args
+        if (oParams.get("USER_ID") != null) {
+            JSONObject uid = new JSONObject();
+            uid.put("userid", oParams.get("USER_ID"));
+            commandArgs.add(uid);
+        }
+
+        return commandArgs;
+    }
+
+    JSONArray getExportToOsmApiDbCommandArgs(JSONArray inputCommandArgs, JSONObject oParams) throws IOException {
         if (!Boolean.parseBoolean(OSM_API_DB_ENABLED)) {
             String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
             throw new WebApplicationException(Response.serverError().entity(msg).build());
@@ -208,34 +255,50 @@ public class ExportJobResource extends JobControllerBase {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }
 
+        // This logic is a little out of line with the rest of
+        // ExportJobResource, but since
+        // this export option will probably go away completely soon, no point in
+        // changing
+        // it now.
+
         // ignoring outputname, since we're only going to have a single mapedit
-        // connection configured in the core for now configured in the core for now
+        // connection configured in the core for now configured in the core for
+        // now
         JSONObject arg = new JSONObject();
-        arg.put("temppath", TEMP_OUTPUT_PATH);
+        File tempOutputDir = new File(TEMP_OUTPUT_PATH);
+        if (!tempOutputDir.exists()) {
+            tempOutputDir.mkdir();
+        }
+        // services currently always write changeset with sql
+        File tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
+        arg.put("changesetoutput", tempFile.getAbsolutePath());
         commandArgs.add(arg);
 
-        // This option allows the job executor return std out to the client.  This is the only way
-        // I've found to get the conflation summary text back from hoot command line to the UI.
+        // This option allows the job executor return std out to the client.
+        // This is the only way
+        // I've found to get the conflation summary text back from hoot command
+        // line to the UI.
         arg = new JSONObject();
         arg.put("writeStdOutToStatusDetail", "true");
         commandArgs.add(arg);
 
         Map conflatedMap = getConflatedMap(commandArgs);
 
-        //pass the export timestamp to the export bash script
+        // pass the export timestamp to the export bash script
         addMapForExportTag(conflatedMap, commandArgs);
 
-        //pass the export aoi to the export bash script
-        //if sent a bbox in the url (reflecting task grid bounds)
-        //use that, otherwise use the bounds of the conflated output
+        // pass the export aoi to the export bash script
+        // if sent a bbox in the url (reflecting task grid bounds)
+        // use that, otherwise use the bounds of the conflated output
         BoundingBox bbox;
         if (oParams.get("TASK_BBOX") != null) {
             bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
-        } else {
+        }
+        else {
             bbox = getMapBounds(conflatedMap);
         }
         setAoi(bbox, commandArgs);
-        //put the osm userid in the command args
+        // put the osm userid in the command args
         if (oParams.get("USER_ID") != null) {
             JSONObject uid = new JSONObject();
             uid.put("userid", oParams.get("USER_ID"));
@@ -280,8 +343,8 @@ public class ExportJobResource extends JobControllerBase {
         java.util.Map<String, String> tags = getMapTags(map.getId());
 
         if (!tags.containsKey("osm_api_db_export_time")) {
-            String msg = "Error exporting data.  Map with ID: " + map.getId()
-                    + " and name: " + map.getDisplayName() + " has no osm_api_db_export_time tag.";
+            String msg = "Error exporting data.  Map with ID: " + map.getId() + " and name: " + map.getDisplayName()
+                    + " has no osm_api_db_export_time tag.";
             throw new WebApplicationException(Response.status(Status.CONFLICT).entity(msg).build());
         }
 
@@ -290,84 +353,146 @@ public class ExportJobResource extends JobControllerBase {
         commandArgs.add(arg);
     }
 
-    private void setAoi(BoundingBox bounds, JSONArray commandArgs) {
+    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
         JSONObject arg = new JSONObject();
-        arg.put("changesetaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," +
-                bounds.getMaxLon() + "," + bounds.getMaxLat());
+        arg.put("aoi",
+                bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
+    }
+
+    private static File getExportFile(String id, String outputname, String fileExt) {
+        File out = null;
+        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
+
+        String errorMsg = "Error exporting data.  Missing output file.";
+        if (folder != null) {
+            String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
+            out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
+
+            if ((out == null) || !out.exists()) {
+                throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+            }
+        }
+        else {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+        }
+        return out;
     }
 
     /**
      * To retrieve the output from job make Get request.
-     *
+     * 
      * GET hoot-services/job/export/[job id from export job]?outputname=[user
-     * defined name]&removecache=[true | false]&ext=[file extension override from zip]
-     *
+     * defined name]&removecache=[true | false]&ext=[file extension override
+     * from zip]
+     * 
      * @param id
-     *            ?
+     *            job id
      * @param outputname
      *            parameter overrides the output file name with the user defined
      *            name. If not specified then defaults to job id as name.
-     * @param remove
+     * @param removeCache
      *            parameter controls if the output file from export job should
-     *            be delete when Get request completes.
+     *            be deleted when Get request completes. - DISABLED
      * @param ext
-     *            parameter overrides the file extension of the file being downloaded
+     *            parameter overrides the file extension of the file being
+     *            downloaded
      * @return Octet stream
      */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportFile(@PathParam("id") String id,
-                               @QueryParam("outputname") String outputname,
-                               @QueryParam("removecache") String remove,
-                               @QueryParam("ext") String ext) {
+    public Response exportFile(@PathParam("id") String id, @QueryParam("outputname") String outputname,
+            @QueryParam("removeCache") Boolean removeCache, @QueryParam("ext") String ext) {
+        Response response = null;
         File out = null;
-        String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
         try {
-            File folder = FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
+            String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
+            out = getExportFile(id, outputname, fileExt);
 
-            if (folder != null) {
-                String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
-                out = FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
-
-                if ((out == null) || !out.exists()) {
-                    throw new NativeInterfaceException("Missing output file",
-                            NativeInterfaceException.HttpCode.SERVER_ERROR);
-                }
+            String outFileName = id;
+            if ((outputname != null) && (!outputname.isEmpty())) {
+                outFileName = outputname;
             }
+
+            ResponseBuilder rBuild = Response.ok(out);
+            rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+
+            response = rBuild.build();
         }
-        catch (NativeInterfaceException ne) {
-            int nStat = ne.getExceptionCode().toInt();
-            return Response.status(nStat).entity(ne.getMessage()).build();
+        catch (WebApplicationException e) {
+            throw e;
         }
-        catch (WebApplicationException wae) {
-            throw wae;
+        catch (Exception e) {
+            throw new WebApplicationException(e);
         }
-        catch (Exception ex) {
-            String msg = "Error exporting data: " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        finally {
+              //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were 
+              //made.  So, to keep from breaking some UI tests this will be left disabled for now.
+//            if (removeCache) {
+//                FileUtils.deleteQuietly(out);
+//            }
         }
 
-        String outFileName = id;
-        if ((outputname != null) && (!outputname.isEmpty())) {
-            outFileName = outputname;
+        return response;
+    }
+
+    /**
+     * Returns the contents of an XML job output file
+     * 
+     * * GET hoot-services/job/export/xml/[job id from export
+     * job]?removeCache=[true | false]&ext=[file extension override from xml]
+     * 
+     * @param id
+     *            job id
+     * @param removeCache
+     *            parameter controls if the output file from export job should
+     *            be deleted when Get request completes. - DISABLED
+     * @param ext
+     *            parameter overrides the file extension of the file being
+     *            downloaded
+     * @return job output XML
+     * @throws WebApplicationException
+     *             if the job with ID = id does not exist, the referenced job
+     *             output file no longer exists, or the changeset is made up of
+     *             multiple changeset files.
+     */
+    @GET
+    @Path("/xml/{id}")
+    @Produces(MediaType.TEXT_XML)
+    public Response getXmlOutput(@PathParam("id") String id, @QueryParam("removeCache") Boolean removeCache,
+            @QueryParam("ext") String ext) {
+        File out = null;
+        Response response = null;
+        try {
+            out = getExportFile(id, id, StringUtils.isEmpty(ext) ? "xml" : ext);
+            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8"))))
+                    .build();
         }
-
-        ResponseBuilder rBuild = Response.ok(out);
-        rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
-
-        return rBuild.build();
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+        finally {
+              //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were 
+              //made.  So, to keep from breaking some UI tests this will be left disabled for now.
+//            if (removeCache) {
+//                FileUtils.deleteQuietly(out);
+//            }
+        }
+        return response;
     }
 
     /**
      * Removes specified WFS resource.
-     *
+     * 
      * GET
      * hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b
-     *
+     * 
      * //TODO: should be an HTTP DELETE
-     *
+     * 
      * @param id
      *            id of the wfs resource to remove
      * @return Removed id
@@ -400,9 +525,9 @@ public class ExportJobResource extends JobControllerBase {
 
     /**
      * Lists all wfs resources.
-     *
+     * 
      * GET hoot-services/job/export/wfs/resources
-     *
+     * 
      * @return List of wfs resources
      */
     @GET
@@ -435,9 +560,9 @@ public class ExportJobResource extends JobControllerBase {
     /**
      * Based on the existence of translation script extension, it will send the
      * list of available translations script for export.
-     *
+     * 
      * GET hoot-services/job/export/resources
-     *
+     * 
      * @return List of translation script resources
      */
     @GET

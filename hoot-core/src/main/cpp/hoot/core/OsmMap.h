@@ -38,7 +38,6 @@
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
@@ -72,6 +71,7 @@ using namespace std;
 
 class OsmMapIndex;
 class OsmMapListener;
+class ElementId;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,11 +29,9 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
-#include <hoot/core/algorithms/zindex/Range.h>
 
 // Qt
 #include <QFile>
-
 
 namespace hoot
 {
@@ -42,6 +40,10 @@ class OsmApiDb : public ApiDb
 {
 
 public:
+
+  static std::string className() { return "hoot::OsmApiDb"; }
+
+  static unsigned int logWarnCount;
 
   static const QString TIME_FORMAT;
   static const QString TIMESTAMP_FUNCTION;

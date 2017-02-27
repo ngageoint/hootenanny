@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,11 +28,10 @@
 #define BUILDINGPARTMERGEOP_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/OsmMap.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -52,6 +51,9 @@ template<>
 
 namespace hoot
 {
+class Relation;
+class OsmSchema;
+
 using namespace Tgs;
 
 /**
@@ -82,6 +84,8 @@ public:
 
   static string className() { return "hoot::BuildingPartMergeOp"; }
 
+  static unsigned int logWarnCount;
+
   BuildingPartMergeOp();
 
   virtual void apply(shared_ptr<OsmMap>& map);
@@ -96,6 +100,7 @@ public:
     const vector< shared_ptr<Element> >& parts);
 
 private:
+
   /// Used to keep track of which elements make up a building.
   DisjointSetMap< shared_ptr<Element> > _ds;
   shared_ptr<OsmMap> _map;

@@ -5,8 +5,8 @@
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L - %m%n"/>
         </Console>
         <RollingFile name="RollingFile"
-                     fileName="/var/log/tomcat6/hoot-services.log"
-                     filePattern="/var/log/tomcat6/hoot-services-%d{MM-dd-yyyy}.log.gz"
+                     fileName="/var/log/tomcat8/hoot-services.log"
+                     filePattern="/var/log/tomcat8/hoot-services-%d{MM-dd-yyyy}.log.gz"
                      append="true"
                      createOnDemand="true">
             <BurstFilter level="INFO" rate="16" maxBurst="100"/>

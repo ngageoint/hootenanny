@@ -16,11 +16,11 @@ autom4te.cache
 BuildDate.txt
 bin/
 callgrind.*
-conf/DatabaseConfigLocal.sh
+conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
-conf/*.rf
-conf/words*.sqlite
-conf/WordsAbridged.sqlite
+conf/models/*.rf
+conf/dictionary/words*.sqlite
+conf/dictionary/WordsAbridged.sqlite
 config.h.in
 config.h
 config.status
@@ -146,7 +146,6 @@ tagCountHistogram2.png
 uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
-test-files/DcTigerRoadsFrechetInput.osm
 data/
 .vagrant/
 inputFeatures.png

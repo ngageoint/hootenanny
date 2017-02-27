@@ -1,0 +1,29 @@
+14:01:59.906 WARN  ...etwork/OsmNetworkExtractor.cpp( 196) Found a non-contiguous relation when extracting a network. Ignoring: relation(-1)
+type: multilinestring
+members:   Entry: role: , eid: Way:-52
+  Entry: role: , eid: Way:-51
+
+tags: source:ingest:datetime = 2016-04-11T17:50:37.775Z
+source:name = very_high_resolution_commercial_monoscopic_imagery
+width:minimum_traveled_way = 2
+source:accuracy:horizontal:evaluation = emc_product_specification
+seasonal = fair
+source:copyright = Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved.
+source:commercial_distribution_restriction = Unrestricted.  For Public Release.
+uuid = {340B01E5-488E-4365-87B4-5685B9ADFC49}
+source = mgcp
+source:description = Very High Resolution Commercial Monoscopic Imagery
+source:accuracy:horizontal = 25
+source:accuracy:horizontal:category = accurate
+source:datetime = 2010-01-01T00:00:00Z
+highway = track
+status: unknown1
+version: 1
+visible: 1
+circular error: 28.65
+14:02:18.192 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.195 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.238 WARN  .../linearreference/WayString.cpp(  92) Ways must connect at a node in the WayString.
+14:02:18.241 WARN  .../linearreference/WayString.cpp( 103) hoot::WayString: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+14:02:22.818 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-output/cmd/NonContiguousRoadReviewsTest/output.osm ...
+14:02:23.006 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/cmd/glacial/NonContiguousRoadReviewsTest/output.osm ...

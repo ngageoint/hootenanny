@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,15 +28,14 @@
 #define KEEPTAGSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
+
+class Element;
 
 /**
  * Keeps any tags with keys matching those passed to this visitor; removes all others

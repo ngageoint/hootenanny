@@ -65,6 +65,8 @@ using namespace v8;
 namespace hoot
 {
 
+unsigned int JavaScriptTranslator::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
 // Return the current time
@@ -406,9 +408,6 @@ shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     }
   }
 
-//  LOG_WARN("Returning from GetOgrOutputSchema")
-//  shared_ptr<Schema> schema(new Schema());
-
   return _schema;
 }
 
@@ -437,7 +436,15 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -471,7 +478,15 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -747,8 +762,6 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
-  //LOG_DEBUG("Started translateToOgr");
-
   _tags = &tags;
 
   HandleScope handleScope;

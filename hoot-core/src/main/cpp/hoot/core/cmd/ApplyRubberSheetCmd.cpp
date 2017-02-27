@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/OsmMap.h>
 
 // Qt
 #include <QFile>
@@ -62,8 +63,6 @@ public:
     shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
-
-    LOG_WARN("has way -1108: " << map->containsWay(-1108));
 
     // make sure rubber sheeting isn't applied during cleaning.
     QStringList l = ConfigOptions().getMapCleanerTransforms();

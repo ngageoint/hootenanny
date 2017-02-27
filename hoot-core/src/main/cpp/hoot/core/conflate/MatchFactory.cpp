@@ -30,6 +30,7 @@
 #include <hoot/core/Factory.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/MatchThreshold.h>
 
 //Qt
 #include <QString>
@@ -124,7 +125,7 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     QString c = matchCreatorsList[i];
     QStringList args = c.split(",");
     QString className = args[0];
-    //LOG_VARD(className);
+    LOG_VART(className);
     if (className.length() > 0)
     {
       args.removeFirst();

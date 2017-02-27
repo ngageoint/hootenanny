@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,10 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+#include <hoot/core/algorithms/zindex/BBox.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
@@ -161,9 +165,6 @@ void ApiDb::open(const QUrl& url)
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
-  //LOG_DEBUG("debug email = " + email);
-  //LOG_DEBUG("debug throwwhenmissing = " + QString::number(throwWhenMissing));
-
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
@@ -191,7 +192,6 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
   {
     QString error = QString("No user found with the email: %1 (maybe specify `%2=true`?)")
         .arg(email).arg(ConfigOptions::getHootapiDbWriterCreateUserKey());
-    LOG_WARN(error);
     throw HootException(error);
   }
 
@@ -204,7 +204,6 @@ long ApiDb::insertUser(const QString email, const QString displayName)
 {
   long id = -1;
 
-  LOG_DEBUG("Inside insert user");
   if (_insertUser == 0)
   {
     _insertUser.reset(new QSqlQuery(_db));
@@ -227,12 +226,11 @@ long ApiDb::insertUser(const QString email, const QString displayName)
     {
       QString err = QString("Error executing query: %1 (%2)").arg(_insertUser->executedQuery()).
           arg(_insertUser->lastError().text());
-      LOG_WARN(err)
       throw HootException(err);
     }
     else
     {
-      LOG_DEBUG("Did not insert user, queryied a previously created user.")
+      LOG_DEBUG("Did not insert user, queried a previously created user.")
     }
   }
   // if the insert succeeded
@@ -317,29 +315,40 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
+  /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
+   *  classes that should enable the regex below that has both greedy matching
+   *  and lazy matching in the same regex.  The QRegExp class doesn't allow this
+   *  that is why there are two regex objects in this function.
+   *
+   *  Replace it with this:
+   *    QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
+   */
   assert(v.type() == QVariant::String);
-  QString s = v.toString();
+  QString str = v.toString();
 
   Tags result;
-
-  QStringList list = s.split("=>");
-  while (list.size() > 1)
+  QRegExp rxKey("\"(.*)\"=>\"");
+  QRegExp rxValue("((?:(?!\",).)*)\"(?:, )?");
+  //  The key regex needs to be minimal should be (.*?) but that doesn't work
+  //  while the value regex needs to be maximal to consume quotes within the value
+  rxKey.setMinimal(true);
+  rxValue.setMinimal(false);
+  int pos = 0;
+  //  Match the key first
+  while ((pos = rxKey.indexIn(str, pos)) != -1)
   {
-    QString key = list.first();
-    list.pop_front();
-    QString value = list.first();
-    list.pop_front();
-    //  Split the value/key that wasn't split at the beginning
-    if (list.size() > 0)
+    pos += rxKey.matchedLength();
+    //  Then match the value, ignoring any key/value pairs that don't match
+    if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
-      QStringList vk = value.split("\", \"");
-      value = vk[0];
-      list.push_front(vk[1]);
+      QString key = rxKey.cap(1);
+      QString value = rxValue.cap(1);
+      //  Unescape the actual key/value pairs
+      _unescapeString(key);
+      _unescapeString(value);
+      result.insert(key, value);
+      pos += rxValue.matchedLength();
     }
-    //  Unescape the rest
-    _unescapeString(key);
-    _unescapeString(value);
-    result.insert(key, value);
   }
 
   return result;

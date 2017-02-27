@@ -40,6 +40,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QString>
@@ -52,6 +53,8 @@
 
 namespace hoot
 {
+
+unsigned int GeometryConverter::logWarnCount = 0;
 
 shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
   Status s, double circularError)
@@ -99,17 +102,16 @@ shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* 
   case GEOS_GEOMETRYCOLLECTION:
     return convertGeometryCollection(dynamic_cast<const GeometryCollection*>(g), s,
       circularError);
-  default:\
-    _logCount++;
-    int logLimit = ConfigOptions().getLogIdenticalMessageLimit();
-    if (_logCount <= logLimit)
+  default:
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
     {
       LOG_WARN("Unsupported geometry type. Element will be removed from the map. " + g->toString());
     }
-    else
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
     {
-      LOG_WARN("GeometryConverter::convertGeometryToElement reached maximum number of log. No longer logging.");
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
+    logWarnCount++;
     return shared_ptr<Element>();
   }
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrFeatureProvider.h"
+#include <hoot/core/io/OgrUtilities.h>
 
 // Local Includes
 #include "Exception.h"
 
 // GDAL Includes
 #include <ogrsf_frmts.h>
+#include <gdal_frmts.h>
 
 // Qt Includes
 #include <QDebug>
@@ -43,56 +45,60 @@ namespace hoot
 
 OgrFeatureProvider::OgrFeatureProvider(OGRLayer* layer)
 {
-    _dataSource = 0;
-    _layer = layer;
+  _layer = layer;
 
-    _layer->ResetReading();
-    _next.reset(_layer->GetNextFeature());
+  _layer->ResetReading();
+  _next.reset(_layer->GetNextFeature());
 }
 
 OgrFeatureProvider::~OgrFeatureProvider()
 {
-    if (_dataSource != 0)
-    {
-        OGRDataSource::DestroyDataSource(_dataSource);
-    }
+  if (_dataSource)
+    GDALClose(_dataSource.get());
 }
 
 bool OgrFeatureProvider::hasNext()
 {
-    return _next != 0;
+  return _next != 0;
 }
 
 shared_ptr<OGRFeature> OgrFeatureProvider::next()
 {
-    shared_ptr<OGRFeature> result = _next;
-    _next.reset(_layer->GetNextFeature());
-    return result;
+  shared_ptr<OGRFeature> result = _next;
+  _next.reset(_layer->GetNextFeature());
+  return result;
 }
 
 shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString& ds)
 {
-    static bool first = true;
-    if (first == true)
-    {
-        OGRRegisterAll();
-        first = false;
-    }
+  static bool first = true;
+  if (first == true)
+  {
+    GDALAllRegister();
+    first = false;
+  }
 
-    OGRDataSource* dataSource(OGRSFDriverRegistrar::Open(ds.toAscii(), FALSE));
+  /* Check for the correct driver name in OgrUtilities, if unknown try all drivers.
+   * This can be an issue because drivers are tried in the order that they are
+   * loaded which has been known to cause issues.
+   */
+  OgrDriverInfo driverInfo = OgrUtilities::getInstance().getDriverInfo(ds);
+  const char* drivers[2] = { driverInfo._driverName, NULL };
+  GDALDataset* dataSource = (GDALDataset*)GDALOpenEx(ds.toAscii(), driverInfo._driverType,
+    (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL);
 
-    QString errorMsg = CPLGetLastErrorMsg();
-    qDebug() << errorMsg;
-    if (dataSource->GetLayerCount() != 1)
-    {
-        throw Exception("Invalid layer count.");
-    }
+  QString errorMsg = CPLGetLastErrorMsg();
+  qDebug() << errorMsg;
+  if (dataSource->GetLayerCount() != 1)
+  {
+    throw Exception("Invalid layer count.");
+  }
 
-    shared_ptr<OgrFeatureProvider> result(
-            new OgrFeatureProvider(dataSource->GetLayer(0)));
-    result->_dataSource = dataSource;
+  shared_ptr<OgrFeatureProvider> result(
+    new OgrFeatureProvider(dataSource->GetLayer(0)));
+  result->_dataSource.reset(dataSource);
 
-    return result;
+  return result;
 }
 
 }

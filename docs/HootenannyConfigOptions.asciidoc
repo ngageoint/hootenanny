@@ -433,6 +433,19 @@ Use the value +hoot::GeneralizeTagMerger+ . For example:
 hoot --conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
 ------
 
+[[Provenance-Aware-Overwrite-Tag-Merger]]
+===== Provenance Aware Overwrite Tag Merger
+
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key "hoot:source".  This tag merger
+will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both features 
+are concatenated together.
+
+Use the value +hoot::ProvenanceAwareOverwriteTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm output.osm
+------
+
 
 [[Road-Conflation-Configuration]]
 === Road Conflation Configuration
@@ -475,7 +488,7 @@ hoot --conflate -D conflator.manipulators=hoot::WaySnapMerger input1.osm input2.
 There is also a convenience configuration file that enables both the Snap Way Manipulator( +conflator.manipulators=hoot::WaySnapMerger+ ) and the Overwrite Tag 2tag merging operation ( +tag.merger.default=hoot::OverwriteTag2Merger+ ). This is most useful if the first input is superior in terms of geometry and attribution and the second data set is just supplementing with missing attributes and geometries. This can be run with:
 
 ------
-hoot --conflate -C Snap.json input1.osm input2.osm output.osm
+hoot --conflate -C core/Snap.json input1.osm input2.osm output.osm
 ------
 
 [[Hoot-ConfigOptions]]
@@ -483,6 +496,6 @@ hoot --conflate -C Snap.json input1.osm input2.osm output.osm
 
 :leveloffset: 1
 
-include::../conf/ConfigOptions.asciidoc[]
+include::../conf/core/ConfigOptions.asciidoc[]
 
 :leveloffset: 0

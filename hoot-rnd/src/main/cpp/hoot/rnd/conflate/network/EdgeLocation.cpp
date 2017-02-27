@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,6 +25,8 @@
  * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeLocation.h"
+
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 
 namespace hoot
 {
@@ -47,6 +49,22 @@ ConstNetworkVertexPtr EdgeLocation::getVertex(double epsilon) const
   {
     return _e->getTo();
   }
+}
+
+Meters EdgeLocation::getOffset(const ConstElementProviderPtr& provider) const
+{
+  return _portion * _e->calculateLength(provider);
+}
+
+shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& provider,
+  Meters distance) const
+{
+  Meters l = _e->calculateLength(provider);
+
+  Meters offset = _portion * l + distance;
+  Meters portion = min(1.0, max(offset / l, 0.0));
+
+  return shared_ptr<EdgeLocation>(new EdgeLocation(_e, portion));
 }
 
 QString EdgeLocation::toString() const

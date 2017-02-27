@@ -183,10 +183,10 @@ Settings ServicesDbTestUtils::_readDbConfig()
 {
   Settings result;
   //  Read in the default values
-  QString defaults = ConfPath::getHootHome() + "/conf/DatabaseConfigDefault.sh";
+  QString defaults = ConfPath::getHootHome() + "/conf/database/DatabaseConfigDefault.sh";
   _readDbConfig(result, defaults);
   //  Read in the local values if the file exists
-  QString local = ConfPath::getHootHome() + "/conf/DatabaseConfigLocal.sh";
+  QString local = ConfPath::getHootHome() + "/conf/database/DatabaseConfigLocal.sh";
   if (QFile::exists(local))
   {
     _readDbConfig(result, local);

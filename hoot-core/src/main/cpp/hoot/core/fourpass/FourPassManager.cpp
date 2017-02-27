@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,6 +36,7 @@
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <set>
@@ -119,8 +120,8 @@ void FourPassManager::apply(QString outputPath)
         {
           if (e.intersects(appliedBits[j]))
           {
-            LOG_WARN("Overlapping env 1: " << e.toString());
-            LOG_WARN("Overlapping env 2: " << appliedBits[j].toString());
+            LOG_TRACE("Overlapping env 1: " << e.toString());
+            LOG_TRACE("Overlapping env 2: " << appliedBits[j].toString());
             throw HootException("Two tiles overlap.");
           }
         }

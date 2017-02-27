@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,21 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/match-graph/MatchGraph.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
-#include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/conflate/match-graph/MatchGraph.h>
+#include <hoot/core/ops/stats/SingleStat.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -49,6 +47,8 @@ class MatchFactory;
 class MatchThreshold;
 class Merger;
 class MergerFactory;
+class Settings;
+class ElementId;
 
 using namespace geos::geom;
 
@@ -69,10 +69,6 @@ class UnifyingConflator : public OsmMapOperation, public Serializable, public Bo
 {
 public:
   static string className() { return "hoot::UnifyingConflator"; }
-
-//  static QString reviewScoreKey() { return QString("hoot:score:review"); }
-//  static QString missScoreKey() { return QString("hoot:score:miss"); }
-//  static QString scoreUuidKey() { return QString("hoot:score:uuid"); }
 
   UnifyingConflator();
 

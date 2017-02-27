@@ -36,8 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
-#include <hoot/core/filters/TagElementFilter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 
@@ -68,7 +67,7 @@ public:
 
   shared_ptr<OsmMap> load(QString s1, QString s2)
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
@@ -94,7 +93,7 @@ public:
     uut.processMap(load("test-files/conflate/extractor/BuildingsA.osm",
       "test-files/conflate/extractor/BuildingsB.osm"));
 
-    //LOG_INFO(uut.getResults().toStdString());
+    LOG_TRACE(uut.getResults().toStdString());
 
     QDir().mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
     QFile fp("test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");

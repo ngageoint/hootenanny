@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,20 +29,21 @@
 
 #include "HighwayClassifier.h"
 
-// hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
-
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
 namespace hoot
 {
 
+class FeatureExtractor;
+
 class HighwayRfClassifier : public HighwayClassifier
 {
 public:
 
   static std::string className() { return "hoot::HighwayRfClassifier"; }
+
+  static unsigned int logWarnCount;
 
   HighwayRfClassifier();
 

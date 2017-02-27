@@ -168,14 +168,6 @@ function logWarn(e)
 }
 
 /**
- * Wrapper for logVerbose for backward compatibility.
- */
-function logVerbose(e)
-{
-    return hoot.logVerbose(e);
-}
-
-/**
  * Wrapper for logError for backward compatibility.
  */
 function logError(e)
@@ -192,22 +184,12 @@ function print(e)
 }
 
 /**
- * Wrapper for require for backward compatibility.
- */
-/*
-function require(e)
-{
-    return hoot.require(e);
-}
-*/
-
-/**
  * Returns true if the specified element is an area element. The approach used
  * to determine area vs. linear is quite complex, but some example are below.
  * - building=yes
  * - area=yes
  *
- * See the OSM wiki for more information: 
+ * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
 function isArea(e)
@@ -287,7 +269,7 @@ function mergeTags(e1, e2)
 /**
  * Calculates the percent overlap of two elements. If the elements are of a
  * non-area type then the overlap will always be 0.
- * 
+ *
  * @param map Map that contains the two elements.
  * @param e1 The first element to compare
  * @param e2 The second element to compare
@@ -341,14 +323,14 @@ function snapWays(sublineMatcher, map, pairs, replaced)
 /**
  * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points found
  * in the two input datasets.
- * 
+ *
  * @param map Map that contains the input datasets to be conflated
  * @param rubberSheetRef If true, the source layer will be moved toward the reference layer during
  * the rubber sheeting required to automatically calculate the search radius.
  * @param rubberSheetMinTies The minimum number of tie points that need to be found during rubber
  * sheeting for the automatic search radius calculation to occur.
  */
-function calculateSearchRadius(map, rubberSheetRef, rubberSheetMinTies)
+function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies)
 {
   return new hoot.SearchRadiusCalculator(
       { "rubber.sheet.ref" : rubberSheetRef },

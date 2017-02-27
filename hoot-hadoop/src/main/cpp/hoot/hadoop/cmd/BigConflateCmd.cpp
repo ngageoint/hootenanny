@@ -23,6 +23,7 @@
 #include <hoot/hadoop/HadoopTileWorker2.h>
 #include <hoot/hadoop/PaintNodesDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>

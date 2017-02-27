@@ -13,7 +13,7 @@ Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 opera
 [[OldDocsConflation]]
 == Conflation
 
-[[UnifyingPoi]]
+[[PoiToPoi]]
 === POI Conflation
 
 Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>> 
@@ -61,12 +61,12 @@ Obviously, combining n records into a single record requires that some attribute
 The approach described above generally provides good results. There is no getting around it, the approach will drop information during conflation in some situations. As new business rules are defined we expect to revisit the above attribute merging approach to create something that addresses specific user concerns and needs. Please contact the developers if you have any specific needs or concerns.
 
 
-[[POI-to-Polygon-Conflation]]
+[[PoiToPolygonConflation]]
 === POI to Polygon Conflation
  
 Hootenanny conflates POIs with both building and area polygons.  It uses the distance between the two features, name similarity, type similarity, and address similarity as the criteria for matching the features.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
 
-[[POI-to-Polygon-Configurable-Options]]
+[[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
   
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
@@ -99,7 +99,7 @@ command similar to the following may be issued:
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in +conf/ConfigOptions.asciidoc++ and are read in by 
+All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc++ and are read in by 
 +rules/LinearWaterway.js+  Tweaking the settings can result in better conflation performance depending on the datasets being conflated.  
 See the configuration options for details on the settings that may be modified (search for "waterway").
 

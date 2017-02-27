@@ -33,8 +33,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/WaySplitterOp.h>
 #include <hoot/core/util/Log.h>
 
@@ -67,7 +67,7 @@ public:
     QString outputFile = "ToySplit.osm";
 
 
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -78,7 +78,7 @@ public:
     myOp.apply(map);
 
     QDir().mkpath(outputPath);
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
     HOOT_FILE_EQUALS(inputPath+outputFile,
                      outputPath+outputFile);

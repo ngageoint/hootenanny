@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,6 +25,8 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatch.h"
+
+#include "WaySublineCollection.h"
 
 namespace hoot
 {
@@ -47,6 +49,20 @@ WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, b
 {
   assert(_ws1.getWay() != _ws2.getWay());
   _reversed = reversed;
+}
+
+WaySublineCollection WaySublineMatch::getSublineString1() const
+{
+  WaySublineCollection result;
+  result.addSubline(_ws1);
+  return result;
+}
+
+WaySublineCollection WaySublineMatch::getSublineString2() const
+{
+  WaySublineCollection result;
+  result.addSubline(_ws2);
+  return result;
 }
 
 bool WaySublineMatch::overlaps(const WaySublineMatch& ws) const

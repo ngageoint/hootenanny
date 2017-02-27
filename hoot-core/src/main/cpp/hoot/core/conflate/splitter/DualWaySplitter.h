@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,6 +55,8 @@ public:
 
   static string className() { return "hoot::DualWaySplitter"; }
 
+  static unsigned int logWarnCount;
+
   typedef enum DrivingSide
   {
     Left,
@@ -86,7 +88,6 @@ private:
   void _addConnector(long nodeId);
 
   shared_ptr<Way> _createOneWay(shared_ptr<const Way> w, Meters bufferSize, bool left);
-
 
   void _createStub(shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
@@ -32,7 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -64,13 +64,16 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 
 void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 {
+  if (!ConfigOptions().getConflateAddReviewDetail())
+  {
+    LOG_DEBUG("AddHilbertReviewSortOrderOp disabled due to conflate.add.review.detail=false.");
+    return;
+  }
+
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
   const RelationMap& relations = map->getRelationMap();
-
-  Envelope e = CalculateBoundsVisitor::getGeosBounds(map);
-
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.
@@ -82,7 +85,7 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
-      //LOG_VARD(eids.size());
+      LOG_VART(eids.size());
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);
@@ -124,11 +127,11 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
       env->expandToInclude(te.get());
     }
   }
-  //LOG_VARD(env->toString());
+  LOG_VART(env->toString());
 
   if (_mapEnvelope.get() == 0)
   {
-    _mapEnvelope.reset(new Envelope(CalculateBoundsVisitor::getGeosBounds(map)));
+    _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
   }
 
   Coordinate center;

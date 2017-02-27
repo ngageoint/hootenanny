@@ -24,9 +24,9 @@ hoot --osm2ogr $HOOT_HOME/translations/TDSv61.js $outputDir/tds61.osm $outputDir
 # Now look at the individual shapefiles
 #for x in $inputDir/*.shp; do
 #    echo $(basename $x) "  Forward"
-#    $HOOT_HOME/scripts/CompareShapefiles.py  $x $outputDir/$(basename $x)
+#    $HOOT_HOME/scripts/util/CompareShapefiles.py  $x $outputDir/$(basename $x)
 #    echo $(basename $x) "  Backward"
-#    $HOOT_HOME/scripts/CompareShapefiles.py  $outputDir/$(basename $x) $x
+#    $HOOT_HOME/scripts/util/CompareShapefiles.py  $outputDir/$(basename $x) $x
 #    echo 
 #done
 

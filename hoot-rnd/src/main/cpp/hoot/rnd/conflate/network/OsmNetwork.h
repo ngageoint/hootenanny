@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,6 @@
 #define OSMNETWORK_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/rnd/conflate/network/NetworkEdge.h>
 #include <hoot/rnd/conflate/network/NetworkVertex.h>
 
@@ -66,6 +65,8 @@ public:
   void addEdge(NetworkEdgePtr edge);
 
   void addVertex(ConstNetworkVertexPtr node);
+
+  bool contains(ConstNetworkVertexPtr v) const { return _vertexToEdge.contains(v); }
 
   QList<ConstNetworkEdgePtr> getEdgesFromVertex(ConstNetworkVertexPtr v) const;
 

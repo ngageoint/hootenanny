@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,7 +33,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 #include "PertyDuplicatePoiOp.h"
@@ -245,7 +245,7 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 
   LOG_INFO(toString());
 
-  geos::geom::Envelope env = CalculateBoundsVisitor::getGeosBounds(map);
+  geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
 
   int rows, cols;
@@ -289,7 +289,7 @@ void PertyOp::permute(const shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToPlanar(map);
 
-  geos::geom::Envelope env = CalculateBoundsVisitor::getGeosBounds(map);
+  geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
 
   int rows, cols;
   Mat EX = _calculatePermuteGrid(env, rows, cols);

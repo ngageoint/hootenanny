@@ -7,6 +7,9 @@ source ~/.profile
 
 #To get rid of "dpkg-preconfigure: unable to re-open stdin: No such file or directory" warnings
 export DEBIAN_FRONTEND=noninteractive
+if [ -f /etc/apt/apt.conf.d/70debconf ]; then
+  sudo sed -i 's/ --apt//' /etc/apt/apt.conf.d/70debconf
+fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
@@ -14,7 +17,7 @@ sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
-sudo apt-get -q -y install ntp
+sudo apt-get -q -y install ntp 2>&1
 sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
@@ -58,7 +61,15 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev libcv-dev libopencv-dev libgdal-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov tomcat6 maven libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server htop unzip postgresql-9.5  postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 >> Ubuntu_upgrade.txt 2>&1
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
+ libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
+ automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
+ libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 \
+ libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
+ texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev \
+ gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
+ htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
+ libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -76,6 +87,10 @@ fi
 sudo apt-get -y autoremove
 
 echo "### Configuring environment..."
+
+# Configure https alternative mirror for maven isntall, this can likely be removed once
+# we are using maven 3.2.3 or higher
+sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
@@ -107,13 +122,13 @@ fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
     # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
     source /home/vagrant/.rvm/scripts/rvm
 
-    rvm install ruby-2.3
+    stdbuf -o L -e L rvm install ruby-2.3
     rvm --default use 2.3
 
 # Don't install documentation for gems
@@ -168,6 +183,7 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
+    sudo apt-get -f -y -q install
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -f -y -q install
 fi
@@ -204,28 +220,34 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
-if ! ogrinfo --formats | grep --quiet FileGDB; then
-    if [ ! -f gdal-1.10.1.tar.gz ]; then
-        echo "### Downloading GDAL source..."
-        wget --quiet http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+
+# For convenience, set the version of GDAL to download and install
+GDAL_VERSION=2.1.3
+
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
+    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+        echo "### Downloading GDAL $GDAL_VERSION source..."
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
     fi
-    if [ ! -d gdal-1.10.1 ]; then
-        echo "### Extracting GDAL source..."
-        tar zxfp gdal-1.10.1.tar.gz
+    if [ ! -d gdal-$GDAL_VERSION ]; then
+        echo "### Extracting GDAL $GDAL_VERSION source..."
+        tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
-    if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
+
+    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo tar xfp FileGDB_API_1_3-64.tar.gz --directory /usr/local
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
-    echo "### Building GDAL w/ FileGDB..."
+    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-1.10.1
+    cd gdal-$GDAL_VERSION
+    touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
@@ -301,100 +323,34 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
+if dpkg -l | grep --quiet tomcat6; then
+    echo "Disabling Tomcat 6 service"
+
+    # Shut down tomcat6 service
+    sudo service tomcat6 stop
+
+    # Deregister tomcat6 service from autostart
+    sudo update-rc.d -f tomcat6 remove
+
+    #uninstall Tomcat
+    sudo apt-get -y purge tomcat6
+    sudo apt-get -y autoremove
+    sudo rm -f /etc/default/tomcat6*
+    sudo rm -rf /etc/tomcat6
+    sudo rm -rf /usr/share/tomcat6
+    sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
+fi
+
+TOMCAT_HOME=/usr/share/tomcat8
+
+# Install Tomcat 8
+sudo $HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
+
 # Configure Tomcat
-if ! grep --quiet TOMCAT6_HOME ~/.profile; then
+if ! grep --quiet TOMCAT8_HOME ~/.profile; then
     echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/var/lib/tomcat6" >> ~/.profile
+    echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.profile
     source ~/.profile
-fi
-
-# Add tomcat6 and vagrant to each others groups so we can get the group write working with nfs
-if ! groups vagrant | grep --quiet '\btomcat6\b'; then
-    echo "Adding vagrant user to tomcat6 user group..."
-    sudo usermod -a -G tomcat6 vagrant
-fi
-if ! groups tomcat6 | grep --quiet "\bvagrant\b"; then
-    echo "Adding tomcat6 user to vagrant user group..."
-    sudo usermod -a -G vagrant tomcat6
-fi
-
-if ! grep -i --quiet HOOT /etc/default/tomcat6; then
-echo "Configuring tomcat6 environment..."
-# This echo properly substitutes the home path dir and keeps it from having to be hardcoded, but
-# fails on permissions during write...so hardcoding the home path here instead for now.  This
-# hardcode needs to be removed in order for hoot dev env install script to work correctly.
-#
-#sudo echo "#--------------
-# Hoot Settings
-#--------------
-#HOOT_HOME=\$HOOT_HOME/hoot" >> /etc/default/tomcat6
-
-sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-
-#--------------
-# Hoot Settings
-#--------------
-HOOT_HOME=/home/vagrant/hoot
-HADOOP_HOME=/home/vagrant/hadoop
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
-GDAL_DATA=/usr/local/share/gdal
-GDAL_LIB_DIR=/usr/local/lib
-HOOT_WORKING_NAME=hoot
-PATH=$HOOT_HOME/bin:$PATH
-EOT
-fi
-
-# Trying this to try to get rid of errors
-sudo mkdir -p /usr/share/tomcat6/server/classes
-sudo mkdir -p /usr/share/tomcat6/shared/classes
-sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/server
-sudo chown -R tomcat6:tomcat6 /usr/share/tomcat6/shared
-
-# Can change it to 000 to get rid of errors
-if ! grep -i --quiet 'umask 002' /etc/default/tomcat6; then
-echo "### Changing Tomcat umask to group write..."
-sudo bash -c "cat >> /etc/default/tomcat6" <<EOT
-# Set tomcat6 umask to group write because all files in shared folder are owned by vagrant
-umask 002
-EOT
-fi
-
-if grep -i --quiet '^JAVA_OPTS=.*\-Xmx128m' /etc/default/tomcat6; then
-    echo "### Changing Tomcat java opts..."
-    sudo sed -i.bak "s@\-Xmx128m@\-Xms512m \-Xmx2048m@" /etc/default/tomcat6
-fi
-
-if grep -i --quiet '^#JAVA_HOME=' /etc/default/tomcat6; then
-    echo "### Changing Tomcat JAVA_HOME..."
-    sudo sed -i.bak '/.*#JAVA_HOME=.*/c\JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' /etc/default/tomcat6
-fi
-
-if grep -i --quiet 'gdal/1.10' /etc/default/tomcat6; then
-    echo "### Fixing Tomcat GDAL_DATA env var path..."
-    sudo sed -i.bak s@^GDAL_DATA=.*@GDAL_DATA=\/usr\/local\/share\/gdal@ /etc/default/tomcat6
-fi
-
-# Remove gdal libs installed by libgdal-dev that interfere with
-# node-export-server using gdal libs compiled from source (fgdb support)
-if [ -f "/usr/lib/libgdal.*" ]; then
-    echo "Removing GDAL libs installed by libgdal-dev..."
-    sudo rm /usr/lib/libgdal.*
-fi
-
-if ! grep -i --quiet 'ingest/processed' /etc/tomcat6/server.xml; then
-    echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' /etc/tomcat6/server.xml
-fi
-
-if ! grep -i --quiet 'allowLinking="true"' /etc/tomcat6/context.xml; then
-    echo "Set allowLinking to true in Tomcat context..."
-    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" /etc/tomcat6/context.xml
-fi
-
-if [ ! -d /usr/share/tomcat6/.deegree ]; then
-    echo "Creating deegree directory for webapp..."
-    sudo mkdir /usr/share/tomcat6/.deegree
-    sudo chown tomcat6:tomcat6 /usr/share/tomcat6/.deegree
 fi
 
 if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
@@ -406,10 +362,6 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo "Removing services local.conf..."
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
-
-# Clean out tomcat logfile. We restart tomcat after provisioning
-sudo service tomcat6 stop
-sudo rm -f /var/log/tomcat6/catalina.out
 
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
@@ -436,7 +388,6 @@ if ! which hadoop > /dev/null ; then
   cd hadoop
   sudo find . -type d -exec chmod a+rwx {} \;
   sudo find . -type f -exec chmod a+rw {} \;
-  sudo chmod go-w bin
   cd ~
 
 #TODO: remove these home dir hardcodes
@@ -549,6 +500,7 @@ EOT
   sudo mkdir -p $HOME/hadoop/dfs/name/current
   # this could perhaps be more strict
   sudo chmod -R 777 $HOME/hadoop
+  sudo chmod go-w $HOME/hadoop/bin $HOME/hadoop
   echo 'Y' | hadoop namenode -format
 
   cd /lib

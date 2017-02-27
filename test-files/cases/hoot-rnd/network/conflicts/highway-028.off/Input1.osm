@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-170855" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921170880879785" lon="-77.0544828999999964"/>
+    <node visible="true" id="-170854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8913895000000025" lon="-77.0545554078516943"/>
+    <node visible="true" id="-170853" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923092998045732" lon="-77.0550999999999959"/>
+    <node visible="true" id="-153907" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915658981526633" lon="-77.0546824771353158"/>
+    <node visible="true" id="-153906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915459058291333" lon="-77.0546690906903819"/>
+    <node visible="true" id="-153905" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915042105574287" lon="-77.0546402416848082"/>
+    <node visible="true" id="-153904" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8914627859062492" lon="-77.0546105867633884"/>
+    <node visible="true" id="-153903" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8914217219595031" lon="-77.0545801245554713"/>
+    <node visible="true" id="-15036" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8922220501690603" lon="-77.0550477874796798"/>
+    <node visible="true" id="-15035" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921495043437417" lon="-77.0546779563510285"/>
+    <node visible="true" id="-15034" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921307105815188" lon="-77.0545648707543194"/>
+    <way visible="true" id="-13536" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170855"/>
+        <nd ref="-15034"/>
+        <nd ref="-15035"/>
+        <nd ref="-15036"/>
+        <tag k="name" v="OHIO DR NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-13535" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170854"/>
+        <nd ref="-153903"/>
+        <nd ref="-153904"/>
+        <nd ref="-153905"/>
+        <nd ref="-153906"/>
+        <nd ref="-153907"/>
+        <nd ref="-15036"/>
+        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-13534" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15036"/>
+        <nd ref="-170853"/>
+        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+</osm>

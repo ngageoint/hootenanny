@@ -25,15 +25,15 @@ var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
-exports.init = function(map)
+exports.calculateSearchRadius = function(map)
 {
   var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
   if (autoCalcSearchRadius)
   {
-    hoot.log("Calculating search radius...");
+    hoot.log("Calculating search radius for waterway conflation...");
     exports.searchRadius =
       parseFloat(
-        calculateSearchRadius(
+        calculateSearchRadiusUsingRubberSheeting(
           map,
           hoot.get("waterway.rubber.sheet.ref"),
           hoot.get("waterway.rubber.sheet.minimum.ties")));
@@ -41,7 +41,7 @@ exports.init = function(map)
   else
   {
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.log("Using specified search radius: " + exports.searchRadius);
+    hoot.log("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 }
 
@@ -63,7 +63,8 @@ exports.isMatchCandidate = function(map, e)
  * If this function returns false the conflation routines will attempt to
  * pick the best subset of matches that do not conflict.
  */
-exports.isWholeGroup = function() {
+exports.isWholeGroup = function()
+{
     return false;
 };
 
@@ -93,12 +94,12 @@ exports.matchScore = function(map, e1, e2)
 
     if (sampledAngleHistogramValue == 0 && weightedShapeDistanceValue > 0.861844)
     {
-      hoot.log("Found Match!");
+      hoot.trace("Found Match!");
       result = { match: 1.0, explain:"match" };
     }
     else if (sampledAngleHistogramValue > 0)
     {
-      hoot.log("Found Match!");
+      hoot.trace("Found Match!");
       result = { match: 1.0, explain:"match" };
     }
   }
@@ -123,7 +124,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.log("Merging elements.");
+  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
   return snapWays(sublineMatcher, map, pairs, replaced);

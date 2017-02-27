@@ -23,6 +23,7 @@
 #include <hoot/core/ops/ReprojectToGeographicOp.h>
 #include <hoot/core/ops/ReprojectToPlanarOp.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
 
 // Pretty Pipes

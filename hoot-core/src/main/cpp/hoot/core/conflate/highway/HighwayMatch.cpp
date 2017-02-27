@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,6 +43,8 @@
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 #include "HighwayClassifier.h"
 
@@ -70,8 +72,9 @@ HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
   try
   {
     // calculated the shared sublines
-    _sublineMatch = _sublineMatcher->findMatch(map, e1, e2,
-      ConfigOptions().getSearchRadiusHighway());
+    LOG_VART(ConfigOptions().getSearchRadiusHighway());
+    _sublineMatch =
+      _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
 
     if (_sublineMatch.isValid())
     {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,6 +46,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QString>
@@ -102,7 +103,7 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Relation:
     return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
-    LOG_WARN(e->toString());
+    LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }
@@ -118,7 +119,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
   return convertToGeometry((ConstWayPtr)w);
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
@@ -137,7 +140,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 

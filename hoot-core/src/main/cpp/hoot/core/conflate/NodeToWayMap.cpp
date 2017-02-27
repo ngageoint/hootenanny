@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,6 +34,8 @@
 
 namespace hoot
 {
+
+unsigned int NodeToWayMap::logWarnCount = 0;
 
 NodeToWayMap::NodeToWayMap(const OsmMap& map)
 {
@@ -115,7 +117,15 @@ bool NodeToWayMap::validate(const OsmMap& map)
       assert(*it != 0);
       if (map.containsWay(*it) == false)
       {
-        LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*it).arg(nid));
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*it).arg(nid));
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
         result = false;
       }
     }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,10 +28,9 @@
 #define NETWORKEDGE_H
 
 // hoot
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/rnd/conflate/network/NetworkVertex.h>
+#include <hoot/core/elements/ElementProvider.h>
 
 // Qt
 #include <QSet>
@@ -49,7 +48,8 @@ class NetworkEdge
 public:
   NetworkEdge();
 
-  NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed);
+  NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed = false,
+    ConstElementPtr member = ConstElementPtr());
 
   void addMember(ConstElementPtr e) { _members.append(e); }
 
@@ -88,6 +88,11 @@ typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
+
+inline bool operator==(const ConstNetworkEdgePtr& a, const ConstNetworkEdgePtr& b)
+{
+  return *a == *b;
+}
 
 inline uint qHash(const ConstNetworkEdgePtr& v)
 {

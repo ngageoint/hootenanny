@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,8 +32,8 @@
 
 // hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/OsmMap.h>
 
 #include "Sparse2dMatrix.h"
 
@@ -44,6 +44,7 @@ namespace hoot
 {
 class Sparse2dMatrix;
 class WayLocation;
+class WaySublineMatch;
 
 /**
  * Given a set of limitations on defining whether or not two points "match", calculate an
@@ -56,6 +57,10 @@ class WayLocation;
 class MaximalSubline
 {
 public:
+
+  static std::string className() { return "hoot::MaximalSubline"; }
+
+  static unsigned int logWarnCount;
 
   class MatchCriteria
   {

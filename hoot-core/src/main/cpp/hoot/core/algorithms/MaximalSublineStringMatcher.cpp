@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,6 +38,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/algorithms/SublineMatcher.h>
 
 // Standard
 #include <algorithm>
@@ -46,6 +48,8 @@
 
 namespace hoot
 {
+
+unsigned int MaximalSublineStringMatcher::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(SublineStringMatcher, MaximalSublineStringMatcher)
 
@@ -112,7 +116,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // this likely shouldn't be necessary. See #4593
+    // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
     return result;
   }
@@ -298,8 +302,16 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
 {
   if (r > M_PI)
   {
-    LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-             "of radians?");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+               "of radians?");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _maxAngle = r;
 }

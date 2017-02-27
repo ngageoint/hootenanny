@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GmlWriter.h"
@@ -38,6 +38,9 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/OsmMap.h>
 
 // Qt
 #include <QFileInfo>
@@ -56,16 +59,17 @@ void GmlWriter::write(shared_ptr<const OsmMap> map, QString path)
 
 void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
 {
-  OGRRegisterAll();
+  GDALAllRegister();
+  OGRSetNonLinearGeometriesEnabledFlag(FALSE);
 
   const char *pszDriverName = "GML";
-  OGRSFDriver *poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if( poDriver == NULL )
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  OGRDataSource* poDS = poDriver->CreateDataSource(path.toAscii(), NULL );
+  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -148,7 +152,7 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
     }
   }
 
-  OGRDataSource::DestroyDataSource(poDS);
+  GDALClose(poDS);
 }
 
 }
