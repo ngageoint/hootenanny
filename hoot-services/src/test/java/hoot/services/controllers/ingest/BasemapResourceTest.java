@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -31,6 +31,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -41,7 +42,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class BasemapResourceTest {
@@ -98,13 +99,13 @@ public class BasemapResourceTest {
         cont.put("path", "/projects/hoot/ingest/processed/BASEMAP/TestMap");
 
         File file = new File(ingestStagingPath + "/BASEMAP/TestMap.enabled");
-        FileUtils.writeStringToFile(file, cont.toJSONString());
+        FileUtils.writeStringToFile(file, cont.toJSONString(), Charset.defaultCharset());
 
         File f2 = new File(tileServerPath + "/BASEMAP/TestMap2");
         FileUtils.forceMkdir(f2);
 
         File file2 = new File(ingestStagingPath + "/BASEMAP/TestMap2.enabled");
-        FileUtils.writeStringToFile(file2, cont.toJSONString());
+        FileUtils.writeStringToFile(file2, cont.toJSONString(), Charset.defaultCharset());
 
         Method getBasemapListHelperMethod = BasemapResource.class.getDeclaredMethod("getBasemapListHelper");
         getBasemapListHelperMethod.setAccessible(true);

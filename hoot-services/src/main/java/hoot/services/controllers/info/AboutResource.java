@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -37,15 +37,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.nativeinterfaces.JobExecutionManager;
-import hoot.services.nativeinterfaces.NativeInterfaceException;
+import hoot.services.command.CommandResult;
+import hoot.services.command.ExternalCommandManager;
 
 
 /**
@@ -57,7 +55,7 @@ public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
 
     @Autowired
-    private JobExecutionManager jobExecutionManager;
+    private ExternalCommandManager externalCommandInterface;
 
     public AboutResource() {}
 
@@ -199,23 +197,11 @@ public class AboutResource {
         return coreVersion;
     }
 
-    private String getCoreInfo(boolean withDetails) throws NativeInterfaceException {
-        JSONObject command = new JSONObject();
-        command.put("exectype", "hoot");
-        command.put("exec", "version");
+    private String getCoreInfo(boolean withDetails) {
+        HootVersionCommand hootVersionCommand = new HootVersionCommand(withDetails, this.getClass());
 
-        JSONArray params = new JSONArray();
-
-        if (withDetails) {
-            JSONObject param = new JSONObject();
-            param.put("", "--debug");
-            params.add(param);
-        }
-
-        command.put("params", params);
-        command.put("caller", AboutResource.class.getSimpleName());
-
-        String output = this.jobExecutionManager.exec(command).get("stdout").toString();
+        CommandResult commandResult = this.externalCommandInterface.exec(null, hootVersionCommand);
+        String output = commandResult.getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);
     }

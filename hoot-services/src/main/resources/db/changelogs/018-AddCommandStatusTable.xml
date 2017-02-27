@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="dmitriy.mylov" id="18" context="default">
+        <comment>Command Status table for hoot service</comment>
+
+        <createTable tableName="command_status">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="job_id" type="varchar(64)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="start" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finish" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="exit_code" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="command" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stdout" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stderr" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="job_status_jobid_fkey"
+                referencedTableName="job_status"
+                baseColumnNames="job_id"
+                baseTableName="command_status"
+                referencedColumnNames="job_id" />
+    </changeSet>
+</databaseChangeLog>
