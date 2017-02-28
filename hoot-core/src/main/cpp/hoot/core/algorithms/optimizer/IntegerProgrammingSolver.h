@@ -169,6 +169,7 @@ public:
     glp_iocp iocp;
     glp_init_iocp(&iocp);
     iocp.presolve = GLP_ON;
+    iocp.binarize = GLP_ON;
     if (_timeLimit > 0)
     {
       iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
