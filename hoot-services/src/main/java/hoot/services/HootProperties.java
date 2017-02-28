@@ -34,7 +34,10 @@ import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,23 +76,19 @@ public final class HootProperties {
     public static final String TRANSLATION_SERVER_THREAD_COUNT;
     public static final String TRANSLATION_SERVER_SCRIPT;
     public static final String TRANSLATION_EXT_PATH;
-    public static final String CORE_JOB_SERVER_URL;
-    public static final String INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI;
     public static final String DB_NAME;
     public static final String DB_USER_ID;
     public static final String DB_PASSWORD;
     public static final String DB_HOST;
+    public static final String DB_PORT;
     public static final String HGIS_FILTER_SCRIPT;
     public static final String CONFLATE_SIZE_THRESHOLD;
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String ETL_MAKEFILE;
     public static final String OSM_API_DB_NAME;
-    public static final String OSM_API_DB_USER_ID;
-    public static final String OSM_API_DB_PASSWORD;
-    public static final String OSM_API_DB_HOST;
     public static final String EXPORT_SCRIPT;
-    public static final String OSM_API_DB_ENABLED;
+    public static final Boolean OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
     public static final String MAX_QUERY_NODES;
@@ -99,10 +98,7 @@ public final class HootProperties {
     public static final String RASTER_TO_TILES;
     public static final String BASEMAP_RASTER_EXTENSIONS;
     public static final String BASEMAP_RASTER_TO_TILES;
-    public static final String LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL;
     public static final String CONFLATE_MAKEFILE_PATH;
-    public static final String CLEAN_DATA_MAKEFILE_PATH;
-    public static final String AUTO_SCAN_FOR_LOG_PROPS_CHANGES;
     public static final String COPYRIGHT;
     public static final String ATTRIBUTION;
     public static final String LICENSE;
@@ -118,15 +114,18 @@ public final class HootProperties {
     public static final String TEST_CHANGESET_AUTO_CLOSE;
     public static final String RANDOM_QUERY_SEED;
     public static final String SEED_RANDOM_QUERIES;
-    public static final String CHAIN_JOS_STATUS_PING_INTERVAL;
     public static final String INTERNAL_JOB_THREAD_SIZE;
     public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
-    public static final String GRIZZLY_PORT;
     public static final String TRANSLATION_SCRIPT_PATH;
-    public static final String DB_URL;
-    public static final String OSM_API_DB_URL;
     public static final String UPLOAD_FOLDER;
     public static final String DERIVE_CHANGESET_SCRIPT;
+    public static final String HOOT_APIDB_URL;
+    public static final String OSM_APIDB_URL;
+
+    private static final String OSM_API_DB_USER_ID;
+    private static final String OSM_API_DB_PASSWORD;
+    private static final String OSM_API_DB_HOST;
+    private static final String OSM_API_DB_PORT;
 
     static {
         try {
@@ -183,23 +182,13 @@ public final class HootProperties {
         TRANSLATION_SERVER_THREAD_COUNT = getProperty("translationServerThreadCount");
         TRANSLATION_SERVER_SCRIPT = getProperty("translationServerScript");
         TRANSLATION_EXT_PATH = getProperty("translationExtPath");
-        CORE_JOB_SERVER_URL = getProperty("coreJobServerUrl");
-        INTERNAL_JOB_REQUEST_WAIT_TIME_MILLI = getProperty("internalJobRequestWaitTimeMilli");
-        DB_NAME = getProperty("dbName");
-        DB_USER_ID = getProperty("dbUserId");
-        DB_PASSWORD = getProperty("dbPassword");
-        DB_HOST = getProperty("dbHost");
         HGIS_FILTER_SCRIPT = getProperty("hgisFilterScript");
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         ETL_MAKEFILE = getProperty("ETLMakefile");
-        OSM_API_DB_NAME = getProperty("osmApiDbName");
-        OSM_API_DB_USER_ID = getProperty("osmApiDbUserId");
-        OSM_API_DB_PASSWORD = getProperty("osmApiDbPassword");
-        OSM_API_DB_HOST = getProperty("osmApiDbHost");
         EXPORT_SCRIPT = getProperty("ExportScript");
-        OSM_API_DB_ENABLED = getProperty("osmApiDbEnabled");
+        OSM_API_DB_ENABLED = Boolean.parseBoolean(getProperty("osmApiDbEnabled"));
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
@@ -209,10 +198,7 @@ public final class HootProperties {
         RASTER_TO_TILES = getProperty("RasterToTiles");
         BASEMAP_RASTER_EXTENSIONS = getProperty("BasemapRasterExtensions");
         BASEMAP_RASTER_TO_TILES = getProperty("BasemapRasterToTiles");
-        LOG_PROPS_DYNAMIC_CHANGE_SCAN_INTERVAL = getProperty("logPropsDynamicChangeScanInterval");
         CONFLATE_MAKEFILE_PATH = getProperty("ConflateMakefilePath");
-        CLEAN_DATA_MAKEFILE_PATH = getProperty("cleanDataMakePath");
-        AUTO_SCAN_FOR_LOG_PROPS_CHANGES = getProperty("autoScanForLogPropsChanges");
         COPYRIGHT = getProperty("copyright");
         ATTRIBUTION = getProperty("attribution");
         LICENSE = getProperty("license");
@@ -228,15 +214,26 @@ public final class HootProperties {
         TEST_CHANGESET_AUTO_CLOSE = getProperty("testChangesetAutoClose");
         RANDOM_QUERY_SEED = getProperty("randomQuerySeed");
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
-        CHAIN_JOS_STATUS_PING_INTERVAL = getProperty("chainJosStatusPingInterval");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
-        GRIZZLY_PORT = getProperty("grizzlyPort");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
-        DB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + "/" + DB_NAME;
-        OSM_API_DB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + "/" + OSM_API_DB_NAME;
         UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
         DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
+
+        // Adding another layer of indirection for "sensitive" properties.
+        // They should be resolved just before being used to minimize any unintended exposure (f.e. logging).
+        DB_NAME = "${dbName}";
+        DB_USER_ID = "${dbUserId}";
+        DB_PASSWORD = "${dbPassword}";
+        DB_HOST = "${dbHost}";
+        DB_PORT = "${dbPort}";
+        OSM_API_DB_NAME = "${osmApiDbName}";
+        OSM_API_DB_USER_ID = "${osmApiDbUserId}";
+        OSM_API_DB_PASSWORD = "${osmApiDbPassword}";
+        OSM_API_DB_HOST = "${osmApiDbHost}";
+        OSM_API_DB_PORT = "${osmApiDbPort}";
+        HOOT_APIDB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
+        OSM_APIDB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + ":" + OSM_API_DB_PORT + "/" + OSM_API_DB_NAME;
     }
 
     private HootProperties() {}
@@ -292,6 +289,28 @@ public final class HootProperties {
         return sFullProp.toString();
     }
 
+    public static String replaceSensitiveData(String text) {
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}"); // matches ${} pattern
+        Matcher matcher = pattern.matcher(text);
+
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (matcher.find()) {
+            String token = matcher.group(1);
+            String replacement = getProperty(token);
+            if (StringUtils.isBlank(replacement)) {
+                throw new RuntimeException("Could not resolve " + token + " token to a valid value!");
+            }
+            result.append(text.substring(i, matcher.start()));
+            result.append(replacement);
+            i = matcher.end();
+        }
+
+        result.append(text.substring(i, text.length()));
+
+        return result.toString();
+    }
+
     private static Map<String, String> getProperties() {
         Map<String, String> props = new TreeMap<>();
 
@@ -303,6 +322,6 @@ public final class HootProperties {
     }
 
     static void init() {
-        logger.debug("Hoot Properties - {}", getProperties());
+        //logger.debug("Hoot Properties - {}", getProperties());
     }
 }

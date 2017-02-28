@@ -1,8 +1,5 @@
 # GENERAL
 
-# Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
-grizzlyPort=9998
-
 # generic setting for max size of records when executing batch query; this setting could be
 # duplicated and made more specific for different types of queries
 maxRecordBatchSize=2000
@@ -22,13 +19,6 @@ homeFolder=$(HOOT_HOME)
 # 2000 or more in some continuous integration environments where postgres seems to respond more
 # slowly to queries
 testJobStatusPollerTimeout=250
-
-# determines whether the system automatically scans for changes to the log4j props file
-autoScanForLogPropsChanges=true
-
-# amount of time in minutes (integer) that the system checks the log verbosity level for changes
-# in the log4j properties file
-logPropsDynamicChangeScanInterval=1
 
 # Loosely enforced setting that determines the maximum number of times a class logs a warning
 maxWarningsDisplayed=10
@@ -113,9 +103,6 @@ ExportScript=osm2ogrscript
 # Temporary output path
 tempOutputPath=$(homeFolder)/tmp
 
-# CleanData Service Make file name
-cleanDataMakePath=makecleandata
-
 # Custom Script Service folder location
 customScriptPath=$(homeFolder)/customscript
 
@@ -128,8 +115,11 @@ dbUserId=${DB_USER}
 # hoot api db server user password
 dbPassword=${DB_PASSWORD}
 
-# hoot api db server user host
-dbHost=${DB_HOST}:${DB_PORT}
+# hoot api db server host
+dbHost=${DB_HOST}
+
+# hoot api db server port
+dbPort=${DB_PORT}
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
@@ -149,8 +139,11 @@ osmApiDbUserId=${DB_USER_OSMAPI}
 # osm api db server user password
 osmApiDbPassword=${DB_PASSWORD_OSMAPI}
 
-# osm api db server user host
-osmApiDbHost=${DB_HOST_OSMAPI}:${DB_PORT_OSMAPI}
+# osm api db server host
+osmApiDbHost=${DB_HOST_OSMAPI}
+
+# osm api db server port
+osmApiDbPort=${DB_PORT_OSMAPI}
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp

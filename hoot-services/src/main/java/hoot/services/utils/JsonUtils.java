@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -64,7 +64,7 @@ public final class JsonUtils {
      */
     public static String objectToJson(Object obj) throws IOException {
         StringWriter writer = new StringWriter();
-        try (JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(writer)) {
+        try (JsonGenerator jsonGenerator = new JsonFactory().createGenerator(writer)) {
             jsonGenerator.setCodec(new ObjectMapper());
             jsonGenerator.writeObject(obj);
         }
@@ -143,5 +143,27 @@ public final class JsonUtils {
         }
 
         return paramsMap;
+    }
+
+    public static JSONArray parseParams(String params) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject command = (JSONObject) parser.parse(params);
+        JSONArray commandArgs = new JSONArray();
+
+        for (Object o : command.entrySet()) {
+            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
+            String key = (String) mEntry.getKey();
+            String val = (String) mEntry.getValue();
+
+            JSONObject arg = new JSONObject();
+            arg.put(key, val);
+            commandArgs.add(arg);
+        }
+
+        return commandArgs;
+    }
+
+    public static String getParameterValue(String key, JSONObject jsonObject) {
+        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
     }
 }

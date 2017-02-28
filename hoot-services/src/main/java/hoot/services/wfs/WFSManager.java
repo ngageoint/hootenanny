@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.wfs;
 
@@ -31,6 +31,7 @@ import static hoot.services.HootProperties.WFS_STORE_CONN_NAME;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -68,10 +70,20 @@ public final class WFSManager {
 
     private WFSManager() {}
 
-    public static void createWfsResource(String wfsJobName) throws Exception {
+    public static CommandResult createWfsResource(String jobId, String wfsJobName) throws Exception {
+        CommandResult commandResult = new CommandResult();
+        commandResult.setJobId(jobId);
+        commandResult.setCommand("createWfsResource()");
+        commandResult.setStart(LocalDateTime.now());
+
         List<String> tblsList = DbUtils.getTablesList(wfsJobName);
         createWFSDatasourceFeature(wfsJobName, WFS_STORE_CONN_NAME, tblsList);
         createService(wfsJobName);
+
+        commandResult.setFinish(LocalDateTime.now());
+        commandResult.setExitCode(CommandResult.SUCCESS);
+
+        return commandResult;
     }
 
     public static void removeWfsResource(String wfsJobName) throws Exception {
