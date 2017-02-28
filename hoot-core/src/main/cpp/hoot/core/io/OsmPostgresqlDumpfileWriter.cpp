@@ -226,10 +226,18 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
     {
        QTextStream inStream(&tempInputFile);
        QString line;
+       long lineCtr = 0;
        do
        {
          line = inStream.readLine();
          outStream << line << "\n";
+         lineCtr++;
+
+         if (lineCtr == ConfigOptions().getPostgresqlDumpfileWriterOutputBufferMaxLineSize())
+         {
+           outStream.flush();
+           lineCtr = 0;
+         }
        }
        while (!line.isNull());
        outStream.flush();
