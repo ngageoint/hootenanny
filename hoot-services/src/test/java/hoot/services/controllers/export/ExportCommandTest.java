@@ -112,10 +112,10 @@ public class ExportCommandTest {
                 "{\"removereview\":\"false\"}," +
                 "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                 "{\"output\":\"" + jobId + "\"}," +
-                "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
-                "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
+                "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}," +
                 "{\"outputname\":\"" + jobId + "\"}," +
-                "{\"PG_URL\":\"host='${dbHost}' port='${dbPort}' user='${dbUserId}' password='${dbPassword}' dbname='wfsstoredb'\"}]";
+                "{\"PG_URL\":\"host='${HOOTAPI_DB_HOST}' port='${HOOTAPI_DB_PORT}' user='${HOOTAPI_DB_USER}' password='${HOOTAPI_DB_PASSWORD}' dbname='wfsstoredb'\"}]";
 
         assertEquals(expectedParams, actualParams);
     }
@@ -163,8 +163,8 @@ public class ExportCommandTest {
                      "{\"removereview\":\"false\"}," +
                      "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                      "{\"output\":\"" + jobId + "\"}," +
-                     "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
-                     "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
+                     "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
+                     "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}," +
                      "{\"changesetoutput\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/changeset-" + jobId + ".osc.sql\"}," +
                      "{\"writeStdOutToStatusDetail\":\"true\"}," +
                      "{\"changesetsourcedatatimestamp\":\"2016-05-04 10:15\"}," +
@@ -215,10 +215,10 @@ public class ExportCommandTest {
                  "{\"outputtype\":\"osc\"}," +
                  "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
                  "{\"output\":\"" + jobId +"\"}," +
-                 "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
-                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
-                 "{\"input1\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}," +
-                 "{\"input2\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/MyTestMap\"}," +
+                 "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
+                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}," +
+                 "{\"input1\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}," +
+                 "{\"input2\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/MyTestMap\"}," +
                  "{\"aoi\":\"10.1,10.1,10.1,10.1\"}," +
                  "{\"userid\":\"test_user\"}]";
 

@@ -1,5 +1,36 @@
-DB_HOST=${DB_HOST}
-DB_PORT=${DB_PORT}
-DB_NAME=${DB_NAME}
-DB_USER=${DB_USER}
-DB_PASSWORD=${DB_PASSWORD}
+# hoot api db server host
+HOOTAPI_DB_HOST=${DB_HOST}
+
+# hoot api db server port
+HOOTAPI_DB_PORT=${DB_PORT}
+
+# hoot api db Name
+HOOTAPI_DB_NAME=${DB_NAME}
+
+# hoot api db server user id
+HOOTAPI_DB_USER=${DB_USER}
+
+# hoot api db server user password
+HOOTAPI_DB_PASSWORD=${DB_PASSWORD}
+
+HOOTAPI_CONNECTION_POOL_INITIAL_SIZE=25
+
+HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90
+
+HOOTAPI_CONNECTION_POOL_MAX_IDLE=30
+
+# osm api db Name
+OSMAPI_DB_NAME=${DB_NAME_OSMAPI}
+
+# osm api db server user id
+OSMAPI_DB_USER=${DB_USER_OSMAPI}
+
+# osm api db server user password
+OSMAPI_DB_PASSWORD=${DB_PASSWORD_OSMAPI}
+
+# osm api db server host
+OSMAPI_DB_HOST=${DB_HOST_OSMAPI}
+
+# osm api db server port
+OSMAPI_DB_PORT=${DB_PORT_OSMAPI}
+

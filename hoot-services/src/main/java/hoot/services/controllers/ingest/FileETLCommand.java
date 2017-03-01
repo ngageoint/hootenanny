@@ -27,7 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.ETL_MAKEFILE;
-import static hoot.services.HootProperties.HOOT_APIDB_URL;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ class FileETLCommand extends ExternalCommand {
             int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
             int osmCnt, int geonamesCnt, List<String> zipList, String translation,
             String jobId, String etlName, List<String> inputsList, String userEmail,
-            String isNoneTranslation, String fgdbFeatureClasses) {
+            String isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
 
         String inputs = "";
         for (Object r : reqList) {
@@ -134,7 +134,7 @@ class FileETLCommand extends ExternalCommand {
         param.put("INPUT", inputs);
         param.put("INPUT_NAME", etlName);
         param.put("USER_EMAIL", userEmail);
-        param.put("DB_URL", HOOT_APIDB_URL);
+        param.put("DB_URL", HOOTAPI_DB_URL);
 
         if (curInputType.equalsIgnoreCase("FGDB") && (fgdbFeatureClasses != null) && (!fgdbFeatureClasses.isEmpty())) {
             Object oRq = reqList.get(0);
@@ -162,6 +162,6 @@ class FileETLCommand extends ExternalCommand {
             throw new RuntimeException("Error parsing: " + param.toJSONString(), pe);
         }
 
-        super.configureAsMakeCommand(ETL_MAKEFILE, this.getClass(), commandArgs);
+        super.configureAsMakeCommand(ETL_MAKEFILE, caller, commandArgs);
     }
 }

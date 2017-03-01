@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/bin/bash -x
 set -e
 
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
+
+MAP_ID=$1
+DB_URL=$2
 
 # setup db, user, and password to avoid password prompt
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"

@@ -57,8 +57,8 @@ public class HGISPrepareForValidationCommandTest {
         assertEquals(expectedExectype, actualExectype);
 
         String expectedCommandArgs =
-                "[{\"SOURCE\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/testSrc1\"}," +
-                        "{\"OUTPUT\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\\/out1\"}]";
+                "[{\"SOURCE\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/testSrc1\"}," +
+                 "{\"OUTPUT\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/out1\"}]";
 
         String actualCommandArgs = command.get("params").toString();
 

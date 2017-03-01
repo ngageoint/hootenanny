@@ -59,6 +59,6 @@ class HGISCommand extends ExternalCommand {
      * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
      */
     private static String generateDbMapParam(String mapName) {
-        return HootProperties.HOOT_APIDB_URL + "/" + mapName;
+        return HootProperties.HOOTAPI_DB_URL + "/" + mapName;
     }
 }

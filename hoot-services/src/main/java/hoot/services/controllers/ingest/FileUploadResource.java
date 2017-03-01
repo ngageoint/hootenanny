@@ -62,7 +62,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommandFactory;
+import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
@@ -84,7 +84,7 @@ public class FileUploadResource {
     private FileETLCommandFactory fileETLCommandFactory;
 
     @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
+    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -244,7 +244,7 @@ public class FileUploadResource {
             // variables that are not final or effectively final.
             FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
-                    noneTranslation, fgdbFeatureClasses);
+                    noneTranslation, fgdbFeatureClasses, this.getClass());
 
             String mapDisplayName = etlName;
 
@@ -254,13 +254,9 @@ public class FileUploadResource {
                         return externalCommandManager.exec(jobId, etlCommand);
                     },
 
-                    // Ingest
                     () -> {
-                        // rasterToTilesCommand needs to be created after etlCommand has been executed.  During
-                        // execution of etlCommand, the command inserts some information into the database that's
-                        // required needed by rasterToTilesCommand.
-                        ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(mapDisplayName, userEmail);
-                        return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                        ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(mapDisplayName, this.getClass());
+                        return externalCommandManager.exec(jobId, exportRenderDBCommand);
                     }
             };
 

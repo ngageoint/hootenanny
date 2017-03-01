@@ -46,7 +46,7 @@ import org.springframework.stereotype.Controller;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommandFactory;
+import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
@@ -66,7 +66,7 @@ public class ClipDatasetResource {
     private ClipDatasetCommandFactory clipDatasetCommandFactory;
 
     @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
+    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
 
     /**
@@ -103,16 +103,16 @@ public class ClipDatasetResource {
             String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
 
             Command[] commands = {
+
                 // Clip to a bounding box
                 () -> {
                     ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, this.getClass());
                     return externalCommandManager.exec(jobId, clipCommand);
                 },
 
-                // Ingest
                 () -> {
-                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(newDatasetOutputName, null);
-                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(newDatasetOutputName, this.getClass());
+                    return externalCommandManager.exec(jobId, exportRenderDBCommand);
                 }
             };
 
