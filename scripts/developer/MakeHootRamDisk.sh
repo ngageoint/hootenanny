@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
-sudo mkdir -p /media/ramdisk 
-sudo mount -t tmpfs -o size=2048M tmpfs /media/ramdisk
-cp -R ~/hoot /media/ramdisk
+if [ ! -d /ramdisk/hoot ]; then
+  echo "Creating hoot RAM disk..."
+  sudo mkdir -p /ramdisk 
+  sudo mount -t tmpfs -o size=2048M tmpfs /ramdisk
+  cp -R ~/hoot /ramdisk
+else
+  echo "Hoot RAM disk already created."
+fi
