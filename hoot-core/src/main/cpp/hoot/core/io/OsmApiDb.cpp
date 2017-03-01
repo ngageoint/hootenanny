@@ -38,6 +38,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/DbUtils.h>
 
 // qt
 #include <QStringList>
@@ -101,39 +102,58 @@ void OsmApiDb::close()
 void OsmApiDb::deleteData()
 {
   // delete ways data first
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationsTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentRelationsSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationMembersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db,
+    "DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentRelationTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentRelationsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentRelationsSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getRelationMembersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
 
   // delete relations data 2nd
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWaysTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentWaysSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWayNodesTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWayTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWaysTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentWaysSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
 
   // delete nodes data 3rd
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodesTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentNodesSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentNodesSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
 
   // delete changesets
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getChangesetsSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getChangesetsSequenceName() + " RESTART WITH 1");
 
   // delete users
-  _execNoPrepare("DELETE FROM " + ApiDb::getUsersTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getUsersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
 }
 
 bool OsmApiDb::isSupported(QUrl url)

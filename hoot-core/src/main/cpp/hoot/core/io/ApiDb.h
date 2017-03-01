@@ -192,7 +192,7 @@ public:
   /**
    * Returns database
    */
-  QSqlDatabase getDB() { return _db; }
+  QSqlDatabase& getDB() { return _db; }
 
   static long round(double x);
 
@@ -320,15 +320,8 @@ protected:
   shared_ptr<QSqlQuery> _insertUser;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
 
-  virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                          QVariant v3 = QVariant()) const;
-
-  /**
-   * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
-   * constraints, tables, etc.
-   * @param sql SQL to execute.
-   */
-  virtual QSqlQuery _execNoPrepare(const QString sql) const;
+  QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                  QVariant v3 = QVariant()) const;
 
   static void _unescapeString(QString& s);
 

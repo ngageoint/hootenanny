@@ -123,7 +123,7 @@ void ApiDb::open(const QUrl& url)
   }
   else
   {
-    _db =  QSqlDatabase::database(connectionName);
+    _db = QSqlDatabase::database(connectionName);
   }
 
   if (_db.isOpen() == false)
@@ -160,7 +160,7 @@ void ApiDb::open(const QUrl& url)
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_DEBUG("Successfully opened _db: " << url.toString());
+  LOG_DEBUG("Successfully opened db: " << url.toString());
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
@@ -418,22 +418,6 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   }
 
   return tile;
-}
-
-QSqlQuery ApiDb::_execNoPrepare(const QString sql) const
-{
-  // inserting strings in this fashion is safe b/c it is private and we closely control the table
-  // names.
-  QSqlQuery q(_db);
-  LOG_VARD(sql);
-
-  if (q.exec(sql) == false)
-  {
-    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
-  }
-  LOG_VARD(q.numRowsAffected());
-
-  return q;
 }
 
 long ApiDb::round(double x)
