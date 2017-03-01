@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 set -e
 
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
