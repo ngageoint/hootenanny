@@ -32,6 +32,10 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 
 namespace hoot
 {
@@ -225,7 +229,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
   tempfile->close();
 
-  //TODO: write element sql
+  //TODO: write element sql with psql
 
 
   const QString sqlFileCopyPath =
@@ -245,6 +249,15 @@ void OsmApiDbBulkWriter::write(shared_ptr<const OsmMap> map)
 {
   //TODO: id count pass and setval writes here
   // Output updates for sequences to ensure database sanity
+//  int test =
+//    (int)FilteredVisitor::getStat(
+//      new ChainCriterion(
+//        new ElementTypeCriterion(ElementType::),
+//        new ElementTypeCriterion(elementType),
+//        new ElementTypeCriterion(elementType)),
+//      new ElementCountVisitor(),
+//      map);
+
   //_writeSequenceUpdates();
 
 

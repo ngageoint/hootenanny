@@ -102,7 +102,7 @@ public:
     writer.setConfiguration(testSettings);
     writer
       .write(
-        "test-output/io/ServiceOsmApiDbChangesetSqlWriterTest/changeset.split.osc.sql",
+        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql",
         changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile(

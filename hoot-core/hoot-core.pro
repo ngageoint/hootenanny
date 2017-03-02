@@ -210,7 +210,6 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/BuildModelCmd.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.cpp \
     src/main/cpp/hoot/core/visitors/GetElementIdsVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/CountNodesVisitor.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/MatchGraph.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMerger.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMergerCreator.cpp \
@@ -702,7 +701,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h \
     src/main/cpp/hoot/core/visitors/GetElementIdsVisitor.h \
-    src/main/cpp/hoot/core/visitors/CountNodesVisitor.h \
     src/main/cpp/hoot/core/conflate/match-graph/MatchGraph.h \
     src/main/cpp/hoot/core/conflate/Match.h \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatch.h \
