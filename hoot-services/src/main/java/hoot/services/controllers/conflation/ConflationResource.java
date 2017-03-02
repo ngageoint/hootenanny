@@ -52,7 +52,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
 import hoot.services.command.InternalCommandManager;
-import hoot.services.controllers.RasterToTilesCommandFactory;
+import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -79,7 +79,7 @@ public class ConflationResource {
     private ConflateCommandFactory conflateCommandFactory;
 
     @Autowired
-    private RasterToTilesCommandFactory rasterToTilesCommandFactory;
+    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
     @Autowired
     private UpdateTagsCommandFactory updateTagsCommandFactory;
@@ -176,13 +176,15 @@ public class ConflationResource {
                     ExternalCommand conflateCommand = conflateCommandFactory.build(oParams.toJSONString(), bbox, this.getClass());
                     return externalCommandManager.exec(jobId, conflateCommand);
                 },
+
                 () -> {
                     InternalCommand updateTagsCommand = updateTagsCommandFactory.build(oParams.toJSONString(), confOutputName, jobId);
                     return internalCommandManager.exec(jobId, updateTagsCommand);
                 },
+
                 () -> {
-                    ExternalCommand rasterToTilesCommand = rasterToTilesCommandFactory.build(confOutputName, userEmail);
-                    return externalCommandManager.exec(jobId, rasterToTilesCommand);
+                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(confOutputName, this.getClass());
+                    return externalCommandManager.exec(jobId, exportRenderDBCommand);
                 }
             };
 

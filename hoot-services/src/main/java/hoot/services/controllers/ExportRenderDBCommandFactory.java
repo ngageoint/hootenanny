@@ -31,9 +31,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class RasterToTilesCommandFactory {
+public class ExportRenderDBCommandFactory {
 
-    public RasterToTilesCommand build(String name, String userEmail) {
-        return new RasterToTilesCommand(name, userEmail);
+    public ExportRenderDBCommand build(String name, Class<?> caller) {
+        return new ExportRenderDBCommand(name, caller);
     }
 }

@@ -24,44 +24,37 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.conflation;
+package hoot.services.controllers;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.EXPORT_RENDERDB_SCRIPT;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.geo.BoundingBox;
-import hoot.services.utils.JsonUtils;
+import hoot.services.models.db.QMaps;
+import hoot.services.utils.DbUtils;
 
 
-class ConflateCommand extends ExternalCommand {
+class ExportRenderDBCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ExportRenderDBCommand.class);
 
-    ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
-        JSONArray commandArgs;
-        try {
-            commandArgs = JsonUtils.parseParams(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
+    ExportRenderDBCommand(String name, Class<?> caller) {
+        long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
 
-        if (bounds != null) {
-            JSONObject conflateAOI = new JSONObject();
-            conflateAOI.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
-            commandArgs.add(conflateAOI);
-        }
+        JSONArray commandArgs = new JSONArray();
 
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
+        JSONObject argument = new JSONObject();
+        argument.put("MAP_ID", String.valueOf(mapId));
+        commandArgs.add(argument);
 
-        JSONObject osmAPIDBURL = new JSONObject();
-        osmAPIDBURL.put("OSM_API_DB_URL", OSMAPI_DB_URL);
-        commandArgs.add(osmAPIDBURL);
+        argument = new JSONObject();
+        argument.put("DB_URL", HOOTAPI_DB_URL);
+        commandArgs.add(argument);
 
-        super.configureAsMakeCommand(CONFLATE_MAKEFILE_PATH, caller, commandArgs);
+        super.configureAsBashCommand(EXPORT_RENDERDB_SCRIPT, caller, commandArgs);
     }
 }

@@ -76,11 +76,11 @@ class ExportCommand extends ExternalCommand {
         commandArgs.add(output);
 
         JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOT_APIDB_URL);
+        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
         commandArgs.add(hootDBURL);
 
         JSONObject osmAPIDBURL = new JSONObject();
-        osmAPIDBURL.put("OSM_API_DB_URL", OSM_APIDB_URL);
+        osmAPIDBURL.put("OSM_API_DB_URL", OSMAPI_DB_URL);
         commandArgs.add(osmAPIDBURL);
 
         String type = JsonUtils.getParameterValue("outputtype", oParams);
@@ -90,8 +90,8 @@ class ExportCommand extends ExternalCommand {
             arg.put("outputname", jobId);
             commandArgs.add(arg);
 
-            String pgUrl = "host='" + DB_HOST + "' port='" + DB_PORT + "' user='" + DB_USER_ID
-                    + "' password='" + DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
+            String pgUrl = "host='" + HOOTAPI_DB_HOST + "' port='" + HOOTAPI_DB_PORT + "' user='" + HOOTAPI_DB_USER
+                    + "' password='" + HOOTAPI_DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
 
             arg = new JSONObject();
             arg.put("PG_URL", pgUrl);
@@ -209,11 +209,11 @@ class ExportCommand extends ExternalCommand {
         //it possible to test osm2ogrscript with file inputs
 
         JSONObject commandArg = new JSONObject();
-        commandArg.put("input1", OSM_APIDB_URL);
+        commandArg.put("input1", OSMAPI_DB_URL);
         commandArgs.add(commandArg);
 
         commandArg = new JSONObject();
-        commandArg.put("input2", HOOT_APIDB_URL + "/" + oParams.get("input"));
+        commandArg.put("input2", HOOTAPI_DB_URL + "/" + oParams.get("input"));
         commandArgs.add(commandArg);
 
         if (oParams.get("TASK_BBOX") == null) {

@@ -39,9 +39,10 @@ class FileETLCommandFactory {
     FileETLCommand build(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
                          int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt,
                          List<String> zipList, String translation, String jobId, String etlName,
-                         List<String> inputsList, String userEmail, String isNoneTranslation, String fgdbFeatureClasses) {
+                         List<String> inputsList, String userEmail, String isNoneTranslation, String fgdbFeatureClasses,
+                         Class<?> caller) {
         return new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                                   shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId,
-                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses);
+                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses, caller);
     }
 }

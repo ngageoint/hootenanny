@@ -42,9 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * Services configuration file
- */
 public final class HootProperties {
     private static final Logger logger = LoggerFactory.getLogger(HootProperties.class);
 
@@ -76,17 +73,17 @@ public final class HootProperties {
     public static final String TRANSLATION_SERVER_THREAD_COUNT;
     public static final String TRANSLATION_SERVER_SCRIPT;
     public static final String TRANSLATION_EXT_PATH;
-    public static final String DB_NAME;
-    public static final String DB_USER_ID;
-    public static final String DB_PASSWORD;
-    public static final String DB_HOST;
-    public static final String DB_PORT;
+    public static final String HOOTAPI_DB_NAME;
+    public static final String HOOTAPI_DB_USER;
+    public static final String HOOTAPI_DB_PASSWORD;
+    public static final String HOOTAPI_DB_HOST;
+    public static final String HOOTAPI_DB_PORT;
     public static final String HGIS_FILTER_SCRIPT;
     public static final String CONFLATE_SIZE_THRESHOLD;
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String ETL_MAKEFILE;
-    public static final String OSM_API_DB_NAME;
+    public static final String OSMAPI_DB_NAME;
     public static final String EXPORT_SCRIPT;
     public static final Boolean OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
@@ -95,7 +92,7 @@ public final class HootProperties {
     public static final String HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
     public static final String CLIP_DATASET_MAKEFILE_PATH;
     public static final String GET_OGR_ATTRIBUTE_SCRIPT;
-    public static final String RASTER_TO_TILES;
+    public static final String EXPORT_RENDERDB_SCRIPT;
     public static final String BASEMAP_RASTER_EXTENSIONS;
     public static final String BASEMAP_RASTER_TO_TILES;
     public static final String CONFLATE_MAKEFILE_PATH;
@@ -115,17 +112,16 @@ public final class HootProperties {
     public static final String RANDOM_QUERY_SEED;
     public static final String SEED_RANDOM_QUERIES;
     public static final String INTERNAL_JOB_THREAD_SIZE;
-    public static final String TEST_JOB_STATUS_POLLER_TIMEOUT;
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String UPLOAD_FOLDER;
     public static final String DERIVE_CHANGESET_SCRIPT;
-    public static final String HOOT_APIDB_URL;
-    public static final String OSM_APIDB_URL;
+    public static final String HOOTAPI_DB_URL;
+    public static final String OSMAPI_DB_URL;
 
-    private static final String OSM_API_DB_USER_ID;
-    private static final String OSM_API_DB_PASSWORD;
-    private static final String OSM_API_DB_HOST;
-    private static final String OSM_API_DB_PORT;
+    private static final String OSMAPI_DB_USER;
+    private static final String OSMAPI_DB_PASSWORD;
+    private static final String OSMAPI_DB_HOST;
+    private static final String OSMAPI_DB_PORT;
 
     static {
         try {
@@ -133,6 +129,18 @@ public final class HootProperties {
             try (InputStream propsStrm = HootProperties.class.getClassLoader()
                     .getResourceAsStream("conf/hoot-services.conf")) {
                 appProperties.load(propsStrm);
+            }
+
+            // Load DB properties
+            try (InputStream in = HootProperties.class.getClassLoader().getResourceAsStream("db/db.properties")) {
+                Properties dbProperties = new Properties();
+                dbProperties.load(in);
+                Enumeration<?> enumeration = dbProperties.propertyNames();
+                while (enumeration.hasMoreElements()) {
+                    String key = (String) enumeration.nextElement();
+                    String value = dbProperties.getProperty(key);
+                    appProperties.setProperty(key, value);
+                }
             }
 
             // This block of code checks for the local.conf and if there is one
@@ -195,7 +203,7 @@ public final class HootProperties {
         HGIS_PREPARE_FOR_VALIDATION_SCRIPT = getProperty("hgisPrepareForValidationScript");
         CLIP_DATASET_MAKEFILE_PATH = getProperty("ClipDatasetMakefilePath");
         GET_OGR_ATTRIBUTE_SCRIPT = getProperty("GetOgrAttributeScript");
-        RASTER_TO_TILES = getProperty("RasterToTiles");
+        EXPORT_RENDERDB_SCRIPT = getProperty("exportRenderDBScript");
         BASEMAP_RASTER_EXTENSIONS = getProperty("BasemapRasterExtensions");
         BASEMAP_RASTER_TO_TILES = getProperty("BasemapRasterToTiles");
         CONFLATE_MAKEFILE_PATH = getProperty("ConflateMakefilePath");
@@ -215,25 +223,25 @@ public final class HootProperties {
         RANDOM_QUERY_SEED = getProperty("randomQuerySeed");
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
-        TEST_JOB_STATUS_POLLER_TIMEOUT = getProperty("testJobStatusPollerTimeout");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
         DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
 
         // Adding another layer of indirection for "sensitive" properties.
         // They should be resolved just before being used to minimize any unintended exposure (f.e. logging).
-        DB_NAME = "${dbName}";
-        DB_USER_ID = "${dbUserId}";
-        DB_PASSWORD = "${dbPassword}";
-        DB_HOST = "${dbHost}";
-        DB_PORT = "${dbPort}";
-        OSM_API_DB_NAME = "${osmApiDbName}";
-        OSM_API_DB_USER_ID = "${osmApiDbUserId}";
-        OSM_API_DB_PASSWORD = "${osmApiDbPassword}";
-        OSM_API_DB_HOST = "${osmApiDbHost}";
-        OSM_API_DB_PORT = "${osmApiDbPort}";
-        HOOT_APIDB_URL = "hootapidb://" + DB_USER_ID + ":" + DB_PASSWORD + "@" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
-        OSM_APIDB_URL = "osmapidb://" + OSM_API_DB_USER_ID + ":" + OSM_API_DB_PASSWORD + "@" + OSM_API_DB_HOST + ":" + OSM_API_DB_PORT + "/" + OSM_API_DB_NAME;
+        HOOTAPI_DB_NAME = "${HOOTAPI_DB_NAME}";
+        HOOTAPI_DB_USER = "${HOOTAPI_DB_USER}";
+        HOOTAPI_DB_PASSWORD = "${HOOTAPI_DB_PASSWORD}";
+        HOOTAPI_DB_HOST = "${HOOTAPI_DB_HOST}";
+        HOOTAPI_DB_PORT = "${HOOTAPI_DB_PORT}";
+        OSMAPI_DB_NAME = "${OSMAPI_DB_NAME}";
+        OSMAPI_DB_USER = "${OSMAPI_DB_USER}";
+        OSMAPI_DB_PASSWORD = "${OSMAPI_DB_PASSWORD}";
+        OSMAPI_DB_HOST = "${OSMAPI_DB_HOST}";
+        OSMAPI_DB_PORT = "${OSMAPI_DB_PORT}";
+
+        HOOTAPI_DB_URL = "hootapidb://" + HOOTAPI_DB_USER + ":" + HOOTAPI_DB_PASSWORD + "@" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME;
+        OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PASSWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
     }
 
     private HootProperties() {}

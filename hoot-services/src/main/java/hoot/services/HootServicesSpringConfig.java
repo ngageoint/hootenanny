@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -63,17 +63,18 @@ public class HootServicesSpringConfig {
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://" + env.getProperty("DB_HOST") + ":" +
-                                                 env.getProperty("DB_PORT") + "/" +
-                                                 env.getProperty("DB_NAME"));
-        dataSource.setUsername(env.getProperty("DB_USER"));
-        dataSource.setPassword(env.getProperty("DB_PASSWORD"));
-        dataSource.setInitialSize(25);
-        dataSource.setMaxActive(90);
-        dataSource.setMaxIdle(30);
+        dataSource.setUrl("jdbc:postgresql://" + env.getProperty("HOOTAPI_DB_HOST") + ":" +
+                                                 env.getProperty("HOOTAPI_DB_PORT") + "/" +
+                                                 env.getProperty("HOOTAPI_DB_NAME"));
+        dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
+        dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
+        dataSource.setInitialSize(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_INITIAL_SIZE")));
+        dataSource.setMaxActive(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_ACTIVE")));
+        dataSource.setMaxIdle(Integer.valueOf(env.getProperty("HOOTAPI_CONNECTION_POOL_MAX_IDLE")));
         dataSource.setDefaultAutoCommit(false);
         dataSource.setRemoveAbandoned(true);
         dataSource.setLogAbandoned(true);
+
         return dataSource;
     }
 

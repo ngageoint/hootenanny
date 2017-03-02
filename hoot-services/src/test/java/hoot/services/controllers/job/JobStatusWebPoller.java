@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import static hoot.services.HootProperties.TEST_JOB_STATUS_POLLER_TIMEOUT;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
@@ -61,9 +60,13 @@ public class JobStatusWebPoller {
         this.conn = conn;
 
         // increase this to something long when debugging in debugger to the
-        // poller from polling and changing
-        // program flow while you're trying to debug service code
-        this.jobStatusPollDelayMs = Integer.parseInt(TEST_JOB_STATUS_POLLER_TIMEOUT);
+        // poller from polling and changing program flow while you're trying to debug service code.
+        // Amount of time in ms the job status polling class used only in test code waits before attempting
+        // to determine the status of a running job; 250 is a good value for development environments and
+        // prevents the services tests from taking a long time to run; may need to increase to as much as
+        // 2000 or more in some continuous integration environments where postgres seems to respond more
+        // slowly to queries
+        this.jobStatusPollDelayMs = 250;
     }
 
     /**
