@@ -37,8 +37,6 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true"
-#-D writer.include.debug=true
-#-D conflate.add.score.tags=true
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -48,8 +46,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   echo ""
   echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
   echo ""
-  source scripts/database/SetupOsmApiDB.sh force
-  psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
+  scripts/database/CleanAndInitializeOsmApiDb.sh
 
   echo ""
   echo "STEP 2: Writing the complete reference dataset to the osm api db..."
