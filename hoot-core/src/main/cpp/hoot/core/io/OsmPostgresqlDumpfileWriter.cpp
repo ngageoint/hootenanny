@@ -30,13 +30,8 @@
 #include <QDateTime>
 
 #include <hoot/core/util/HootException.h>
-//#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-//#include <hoot/core/elements/ElementId.h>
-//#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Settings.h>
-//#include <hoot/core/elements/Tags.h>
-//#include <hoot/core/io/OsmMapWriter.h>
 
 namespace hoot
 {
@@ -85,6 +80,7 @@ void OsmPostgresqlDumpfileWriter::open(QString url)
   _changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
 
+  //TODO: fix
   _idMappings.nextNodeId = _configData.startingNodeId;
   _idMappings.nodeIdMap.reset();
 

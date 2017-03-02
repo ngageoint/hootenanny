@@ -58,9 +58,6 @@
 #include <map>
 #include <list>
 #include <vector>
-//#include <utility>
-
-//#include <boost/shared_ptr.hpp>
 
 #include <QString>
 #include <QTemporaryFile>
