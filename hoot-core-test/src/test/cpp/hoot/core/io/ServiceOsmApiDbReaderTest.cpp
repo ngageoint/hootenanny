@@ -68,11 +68,6 @@ public:
     _deleteData();
   }
 
-//  void tearDown()
-//  {
-//    _deleteData();
-//  }
-
   void insertData()
   {
     // parse out the osm api dbname, dbuser, and dbpassword

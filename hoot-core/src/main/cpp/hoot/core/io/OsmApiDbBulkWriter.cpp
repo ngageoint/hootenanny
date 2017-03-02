@@ -76,7 +76,7 @@ void OsmApiDbBulkWriter::open(QString url)
 
   _zeroWriteStats();
 
-  _changesetData.changesetId = _configData.startingChangesetId;
+  //_changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
 
   //_idMappings.nextNodeId = _configData.startingNodeId;
@@ -150,7 +150,6 @@ void OsmApiDbBulkWriter::finalizePartial()
   _createTable("byte_order_mark", "\n", true);
 
   // Create our user data if the email value is set
-  //TODO: keep this
   if (_configData.addUserEmail.isEmpty() == false)
   {
     _createTable(
@@ -227,6 +226,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   tempfile->close();
 
   //TODO: write element sql
+
 
   const QString sqlFileCopyPath =
     ConfigOptions().getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed();
