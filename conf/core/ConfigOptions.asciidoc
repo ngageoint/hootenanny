@@ -1703,81 +1703,22 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== postgresql.dumpfile.writer.auto.calc.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then the OSM API database ingest operation will check the ID sequences of the target
-database (one time only) to determine the starting changeset and element ID's to use for the entire
-write operation.  Enabling this setting precludes a user from having to specify the
-"postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
-must be used in conjunction with the "osmapidb.id.aware.url" setting.  IMPORTANT: This setting
-should only be enabled in situations where a single user is writing to the target OSM API database
-(database is offline).  Since the command does not continually check for the next available ID
-(for performance reasons), ID conflict errors may occur if multiple users are writing to the
-database simultaneously when this option is enabled.
-
-=== postgresql.dumpfile.writer.element.status.count.interval
-
-* Data Type: long
-* Default Value: `100000`
-
-Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
-e.g. With a value of 100000, you will see a element load status update message for every 100000
-elements parsed.
-
-=== postgresql.dumpfile.writer.output.buffer.max.line.size
-
-* Data Type: long
-* Default Value: `1000000`
-
-Maximum number of lines to keep in memory when serializing the Postgresql Dumpfile Writer's output.
-Each line roughly represents an element and each one of its tags.
-
-=== postgresql.dumpfile.writer.start.id.changeset
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for changesets created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.node
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for nodes created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.relation
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for relations created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.way
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for ways created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.user.email
+=== osmapidb.bulk.writer.sql.output.file.copy.location
 
 * Data Type: string
 * Default Value: ``
 
-If this value is set, the generated dumpfile will insert statements that add a user with the
-specified email address to the database.
+If populated, the generated SQL file whose statements are executed against the target database as
+the result of a hoot convert command with an OSM API database target is copied to the specified
+location. For debugging purposes.
 
-=== postgresql.dumpfile.writer.user.id
+=== osmapidb.bulk.writer.file.output.buffer.max.line.size
 
-* Data Type: int
-* Default Value: `1`
+* Data Type: long
+* Default Value: `1000000`
 
-If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
-database will be assigned the user id set by this field.
+Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
+For the most part, each line represents an element or an element tag.
 
 === progress.reporting.format
 

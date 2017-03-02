@@ -54,7 +54,7 @@ public:
 
   virtual void close();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 

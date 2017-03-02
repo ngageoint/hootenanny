@@ -156,7 +156,7 @@ void OsmApiDb::deleteData()
     _db, "ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
 }
 
-bool OsmApiDb::isSupported(QUrl url)
+bool OsmApiDb::isSupported(const QUrl& url)
 {
   bool valid = ApiDb::isSupported(url);
 

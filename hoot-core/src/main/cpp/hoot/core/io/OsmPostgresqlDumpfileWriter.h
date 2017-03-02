@@ -58,9 +58,9 @@
 #include <map>
 #include <list>
 #include <vector>
-#include <utility>
+//#include <utility>
 
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
 
 #include <QString>
 #include <QTemporaryFile>
@@ -79,20 +79,30 @@
 namespace hoot
 {
 
+using namespace boost;
+using namespace std;
+using namespace Tgs;
+
 /**
- * OSM element write optimization that writes out a Postgres dump file which can later be applied
- * to Postgres.
+ * OSM element writer optimized for bulk element writes.  If you are writing smaller amounts of
+ * data, you probably want to create a new writer, as this writer performs additional logic to
+ * reserver element IDs as described below.
+ *
+ * This writer safely be used against a live database.  It first reserves the required element IDs
+ * by doing an initial count of the elements and executing the ID reservation SQL, then generates
+ * SQL copy statements to a file for the element inserts (dump file), and then finally executes the
+ * element SQL statements.
  */
-class OsmPostgresqlDumpfileWriter : public hoot::PartialOsmMapWriter, public hoot::Configurable
+class OsmPostgresqlDumpfileWriter : public PartialOsmMapWriter, public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::OsmPostgresqlDumpfileWriter"; }
+  static string className() { return "hoot::OsmPostgresqlDumpfileWriter"; }
 
   OsmPostgresqlDumpfileWriter();
 
-  ~OsmPostgresqlDumpfileWriter();
+  virtual ~OsmPostgresqlDumpfileWriter();
 
   virtual bool isSupported(QString url);
 
@@ -108,14 +118,13 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
+  virtual void setConfiguration(const hoot::Settings& conf);
+
 private:
 
-  std::map<QString,
-    std::pair<boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
 
-  std::list<QString> _sectionNames;
-
-  QFile _outputFilename;
+  list<QString> _sectionNames;
 
   struct _ElementWriteStats
   {
@@ -129,7 +138,6 @@ private:
     unsigned long relationMembersUnresolved;
     unsigned long relationTagsWritten;
   };
-
   _ElementWriteStats _writeStats;
 
   // A lot of the Hootenanny code assumes we are on 64-bit platforms and declares ID type as "long."
@@ -138,121 +146,94 @@ private:
 
   struct ConfigData
   {
-    QString           addUserEmail;
-    qint64            addUserId;
+    QString addUserEmail;
+    qint64 addUserId;
     ElementIdDatatype changesetUserId;
-    qint64            startingChangesetId;
+    qint64 startingChangesetId;
     ElementIdDatatype startingNodeId;
     ElementIdDatatype startingWayId;
     ElementIdDatatype startingRelationId;
-    unsigned long     maxMapElements;
+    unsigned long maxMapElements;
   };
-
   ConfigData _configData;
 
   struct _IdMappings
   {
     ElementIdDatatype nextNodeId;
-    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > nodeIdMap;
+    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > nodeIdMap;
 
     ElementIdDatatype nextWayId;
-    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > wayIdMap;
+    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > wayIdMap;
 
     ElementIdDatatype nextRelationId;
-    boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > relationIdMap;
+    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > relationIdMap;
   };
-
   _IdMappings _idMappings;
 
   struct _ChangesetData
   {
-    qint64        changesetId;
-    unsigned int  changesInChangeset;
+    qint64 changesetId;
+    unsigned int changesInChangeset;
     Envelope changesetBounds;
   };
-
   _ChangesetData _changesetData;
 
   struct _UnresolvedRelationReference
   {
-    ElementIdDatatype     sourceRelationId;
-    ElementIdDatatype     sourceDbRelationId;
-    RelationData::Entry   relationMemberData;
-    unsigned int          relationMemberSequenceId;
+    ElementIdDatatype sourceRelationId;
+    ElementIdDatatype sourceDbRelationId;
+    RelationData::Entry relationMemberData;
+    unsigned int relationMemberSequenceId;
   };
-
   struct _UnresolvedReferences
   {
-    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence order for waynode)
-    boost::shared_ptr< Tgs::BigMap<ElementIdDatatype, std::vector< std::pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodeRefs;
+    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
+    // order for waynode)
+    shared_ptr<BigMap<ElementIdDatatype, vector< pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodeRefs;
 
-    boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > > unresolvedRelationRefs;
+    shared_ptr< map<ElementId, _UnresolvedRelationReference > > unresolvedRelationRefs;
   };
-
   _UnresolvedReferences _unresolvedRefs;
-
-  virtual void setConfiguration(const hoot::Settings& conf);
-
-  qint64 _getChangesetId() const { return _changesetData.changesetId; }
-
-  std::list<QString> _createSectionNameList();
 
   bool _dataWritten;
 
-  void _closeSectionTempFilesAndConcat();
-
-  void _createNodeTables();
+  OsmApiDb _database;
 
   void _zeroWriteStats();
+  void _createNodeTables();
+  list<QString> _createSectionNameList();
+  void _createWayTables();
+  void _createRelationTables();
+  void _createTable(const QString& tableName, const QString& tableHeader);
+  void _createTable(const QString& tableName, const QString& tableHeader,
+                    const bool addByteOrderMarker);
 
+  qint64 _getChangesetId() const { return _changesetData.changesetId; }
+  void _incrementChangesInChangeset();
   ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
+  void _checkUnresolvedReferences(const ConstElementPtr& element,
+                                  const ElementIdDatatype elementDbId);
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
-
-  void _writeNodeToTables(const ConstNodePtr& node, const ElementIdDatatype nodeDbId);
-
-  void _writeTagsToTables(
-    const Tags& tags,
-    const ElementIdDatatype nodeDbId,
-    boost::shared_ptr<QTextStream>& currentTable,
-    const QString& currentTableFormatString,
-    boost::shared_ptr<QTextStream>& historicalTable,
-    const QString& historicalTableFormatString );
-
-  void _createWayTables();
-
-  void _writeWayToTables(const ElementIdDatatype wayDbId );
-
-  void _writeWaynodesToTables( const ElementIdDatatype wayId,
-    const std::vector<long>& waynodeIds );
-
-  void _createRelationTables();
-
-  void _writeRelationToTables(const ElementIdDatatype relationDbId );
-
-  void _writeRelationMembersToTables( const ConstRelationPtr& relation );
-
-  void _writeRelationMember( const ElementIdDatatype sourceRelation,
-    const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId,
-    const unsigned int memberSequenceIndex );
-
-  void _createTable( const QString& tableName, const QString& tableHeader );
-
-  void _createTable( const QString& tableName, const QString& tableHeader, const bool addByteOrderMarker );
-
-  void _incrementChangesInChangeset();
-
-  void _checkUnresolvedReferences( const ConstElementPtr& element,
-    const ElementIdDatatype elementDbId );
-
-  QString _escapeCopyToData( const QString& stringToOutput) const;
+  QString _escapeCopyToData(const QString& stringToOutput) const;
 
   void _writeChangesetToTable();
-
   void _writeSequenceUpdates();
+  void _writeRelationToTables(const ElementIdDatatype relationDbId);
+  void _writeRelationMembersToTables(const ConstRelationPtr& relation);
+  void _writeRelationMember(const ElementIdDatatype sourceRelation,
+    const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId,
+    const unsigned int memberSequenceIndex);
+  void _writeWayToTables(const ElementIdDatatype wayDbId);
+  void _writeWaynodesToTables(const ElementIdDatatype wayId,
+    const vector<long>& waynodeIds);
+  void _writeNodeToTables(const ConstNodePtr& node, const ElementIdDatatype nodeDbId);
+  void _writeTagsToTables(const Tags& tags, const ElementIdDatatype nodeDbId,
+    shared_ptr<QTextStream>& currentTable, const QString& currentTableFormatString,
+    shared_ptr<QTextStream>& historicalTable, const QString& historicalTableFormatString);
+  void _closeSectionTempFilesAndConcat();
 
-  //this is used for the optional id sequence queries only
-  OsmApiDb _db;
+
 };
 
 }

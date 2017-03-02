@@ -27,27 +27,16 @@
 
 #include "OsmPostgresqlDumpfileWriter.h"
 
-#include <cstdlib>
-#include <cstdio>
-#include <math.h>
-#include <utility>
-#include <vector>
-
-#include <boost/shared_ptr.hpp>
-
-#include <QString>
-#include <QTemporaryFile>
-#include <QTextStream>
 #include <QDateTime>
 
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+//#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/ElementType.h>
+//#include <hoot/core/elements/ElementId.h>
+//#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/OsmMapWriter.h>
+//#include <hoot/core/elements/Tags.h>
+//#include <hoot/core/io/OsmMapWriter.h>
 
 namespace hoot
 {
@@ -58,7 +47,6 @@ OsmPostgresqlDumpfileWriter::OsmPostgresqlDumpfileWriter():
 
   _outputSections(),
   _sectionNames(_createSectionNameList()),
-  _outputFilename(),
   _writeStats(),
   _configData(),
   _idMappings(),
@@ -75,40 +63,35 @@ OsmPostgresqlDumpfileWriter::OsmPostgresqlDumpfileWriter():
 
 OsmPostgresqlDumpfileWriter::~OsmPostgresqlDumpfileWriter()
 {
-  if (ConfigOptions().getPostgresqlDumpfileWriterAutoCalcIds())
-  {
-    _db.close();
-  }
   close();
 }
 
-bool OsmPostgresqlDumpfileWriter::isSupported(QString url)
+bool OsmPostgresqlDumpfileWriter::isSupported(QString urlStr)
 {
-  return ( url.endsWith(".sql") );
+  QUrl url(urlStr);
+  return _database.isSupported(url);
 }
 
 void OsmPostgresqlDumpfileWriter::open(QString url)
 {
   // Make sure we're not already open and the URL is valid
-  if ( isSupported(url) == false )
+  if (isSupported(url) == false)
   {
     throw HootException( QString("Could not open URL ") + url);
   }
 
-  _outputFilename.setFileName(url);
-
   _zeroWriteStats();
 
-  _changesetData.changesetId  = _configData.startingChangesetId;
+  _changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
 
-  _idMappings.nextNodeId      = _configData.startingNodeId;
+  _idMappings.nextNodeId = _configData.startingNodeId;
   _idMappings.nodeIdMap.reset();
 
-  _idMappings.nextWayId       = _configData.startingWayId;
+  _idMappings.nextWayId = _configData.startingWayId;
   _idMappings.wayIdMap.reset();
 
-  _idMappings.nextRelationId  = _configData.startingRelationId;
+  _idMappings.nextRelationId = _configData.startingRelationId;
   _idMappings.relationIdMap.reset();
 
   _unresolvedRefs.unresolvedWaynodeRefs.reset();
@@ -128,78 +111,79 @@ void OsmPostgresqlDumpfileWriter::close()
 
   finalizePartial();
 
-  if ( (_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
-       (_writeStats.relationsWritten > 0) )
+  if ((_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
+       (_writeStats.relationsWritten > 0))
   {
     LOG_DEBUG("Write stats:");
     LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
     LOG_DEBUG("\tWays written: " + QString::number(_writeStats.waysWritten) );
     LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
     LOG_DEBUG("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
-    LOG_DEBUG("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
+    LOG_DEBUG("\tUnresolved relation members:" +
+              QString::number(_writeStats.relationMembersWritten));
   }
 
   _zeroWriteStats();
   _outputSections.clear();
   _sectionNames.erase(_sectionNames.begin(), _sectionNames.end());
-  _changesetData.changesetId  = _configData.startingChangesetId;
+  _changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
+
+  _database.close();
 }
 
 void OsmPostgresqlDumpfileWriter::finalizePartial()
 {
-  if ( (_writeStats.nodesWritten == 0) && (_writeStats.waysWritten == 0) &&
-       (_writeStats.relationsWritten == 0) )
+  if ((_writeStats.nodesWritten == 0) && (_writeStats.waysWritten == 0) &&
+      (_writeStats.relationsWritten == 0))
   {
     return;
   }
 
-  if ( _dataWritten == true )
+  if (_dataWritten == true)
   {
     return;
   }
 
-  LOG_DEBUG( QString("Finalize called, time to create ") + _outputFilename.fileName());
-
-  // Remove file if it used to be there;
-  if (_outputFilename.exists())
+  shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
+  if (!tempfile->open())
   {
-    _outputFilename.remove();
+    throw HootException("Could not open temp file for SQL output.");
   }
+  LOG_DEBUG(QString("Finalize called, time to create ") + tempfile->fileName());
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
-  _createTable( "byte_order_mark", "\n", true );
+  _createTable("byte_order_mark", "\n", true);
 
+  //TODO: do this after first pass instead
   // Output updates for sequences to ensure database sanity
-  _writeSequenceUpdates();
+  //_writeSequenceUpdates();
 
   // Create our user data if the email value is set
-  if ( _configData.addUserEmail.isEmpty() == false )
+  if (_configData.addUserEmail.isEmpty() == false)
   {
     _createTable(
       ApiDb::getUsersTableName(),
-      "COPY " + ApiDb::getUsersTableName() + " (email, id, pass_crypt, creation_time) FROM stdin;\n");
+      "COPY " + ApiDb::getUsersTableName() +
+      " (email, id, pass_crypt, creation_time) FROM stdin;\n");
 
     *(_outputSections[ApiDb::getUsersTableName()].second) <<
       QString("%1\t%2\t\tNOW()\n").arg(
-        _configData.addUserEmail,
-        QString::number(_configData.addUserId) );
+        _configData.addUserEmail, QString::number(_configData.addUserId));
   }
 
   // Do we have an unfinished changeset that needs flushing?
-  if ( _changesetData.changesInChangeset >  0 )
+  if (_changesetData.changesInChangeset > 0)
   {
     LOG_DEBUG("Flushed changeset to disk");
     _writeChangesetToTable();
   }
 
-  _outputFilename.open(QIODevice::Append);
-  QTextStream outStream(&_outputFilename);
-
-  for ( std::list<QString>::const_iterator it = _sectionNames.begin();
-        it != _sectionNames.end(); ++it )
+  QTextStream outStream(tempfile.get());
+  for (list<QString>::const_iterator it = _sectionNames.begin();
+       it != _sectionNames.end(); ++it)
   {
-    if ( _outputSections.find(*it) == _outputSections.end() )
+    if (_outputSections.find(*it) == _outputSections.end())
     {
       LOG_DEBUG("No data for table " + *it);
       continue;
@@ -208,14 +192,14 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
     LOG_DEBUG("Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
 
     // Write close marker for table
-    if ( (*it != "byte_order_mark") && (*it != "sequence_updates") )
+    if ((*it != "byte_order_mark") && (*it != "sequence_updates"))
     {
       *(_outputSections[*it].second) << QString("\\.\n\n\n");
     }
 
     // Flush any residual content from text stream/file
     (_outputSections[*it].second)->flush();
-    if ( (_outputSections[*it].first)->flush() == false )
+    if ((_outputSections[*it].first)->flush() == false)
     {
       throw HootException("Could not flush tempfile for table " + *it);
     }
@@ -233,7 +217,7 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
          outStream << line << "\n";
          lineCtr++;
 
-         if (lineCtr == ConfigOptions().getPostgresqlDumpfileWriterOutputBufferMaxLineSize())
+         if (lineCtr == ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
          {
            outStream.flush();
            lineCtr = 0;
@@ -247,9 +231,21 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
        _outputSections[*it].first->remove();
     }
 
-    LOG_DEBUG( "Wrote contents of section " + *it );
+    LOG_DEBUG("Wrote contents of section " + *it);
   }
-  _outputFilename.close();
+  tempfile->close();
+
+  //TODO: write sql
+
+  const QString sqlFileCopyPath =
+    ConfigOptions().getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed();
+  if (!sqlFileCopyPath.isEmpty())
+  {
+    if (!tempfile->copy(sqlFileCopyPath))
+    {
+      LOG_WARN("Unable to copy temp SQL output file to " << sqlFileCopyPath);
+    }
+  }
 
   _dataWritten = true;
 }
@@ -263,17 +259,18 @@ void OsmPostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
   LOG_VART(_changesetData.changesetBounds.toString());
 
-  if ( _writeStats.nodesWritten == 0 )
+  if (_writeStats.nodesWritten == 0)
   {
     _createNodeTables();
-    _idMappings.nodeIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.nodeIdMap =
+      shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
+        new BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype nodeDbId;
 
   // Do we already know about this node?
-  if ( _idMappings.nodeIdMap->contains(n->getId()) == true )
+  if (_idMappings.nodeIdMap->contains(n->getId()) == true)
   {
     throw hoot::NotImplementedException("Writer class does not support update operations");
   }
@@ -290,29 +287,31 @@ void OsmPostgresqlDumpfileWriter::writePartial(const ConstNodePtr& n)
   _writeStats.nodesWritten++;
   _incrementChangesInChangeset();
 
-  _checkUnresolvedReferences( n, nodeDbId );
+  _checkUnresolvedReferences(n, nodeDbId);
 
-  if (_writeStats.nodesWritten %
-      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-  {
-    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
-  }
+  //TODO: fix
+//  if (_writeStats.nodesWritten %
+//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+//  {
+//    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
+//  }
 }
 
 void OsmPostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
 {
-  if ( _writeStats.waysWritten == 0 )
+  if (_writeStats.waysWritten == 0)
   {
     _createWayTables();
 
-    _idMappings.wayIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.wayIdMap =
+      shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
+        new BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype wayDbId;
 
   // Do we already know about this way?
-  if ( _idMappings.wayIdMap->contains(w->getId()) == true )
+  if (_idMappings.wayIdMap->contains(w->getId()) == true)
   {
     throw hoot::NotImplementedException("Writer class does not support update operations");
   }
@@ -320,9 +319,9 @@ void OsmPostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   // Have to establish new mapping
   wayDbId = _establishNewIdMapping(w->getElementId());
 
-  _writeWayToTables( wayDbId );
+  _writeWayToTables(wayDbId);
 
-  _writeWaynodesToTables( _idMappings.wayIdMap->at( w->getId() ), w->getNodeIds() );
+  _writeWaynodesToTables(_idMappings.wayIdMap->at(w->getId()), w->getNodeIds());
 
   _writeTagsToTables(w->getTags(), wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second, "%1\t%2\t%3\n",
@@ -331,29 +330,31 @@ void OsmPostgresqlDumpfileWriter::writePartial(const ConstWayPtr& w)
   _writeStats.waysWritten++;
   _incrementChangesInChangeset();
 
-  _checkUnresolvedReferences( w, wayDbId );
+  _checkUnresolvedReferences(w, wayDbId);
 
-  if (_writeStats.waysWritten %
-      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-  {
-    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
-  }
+  //TODO: fix
+//  if (_writeStats.waysWritten %
+//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+//  {
+//    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
+//  }
 }
 
 void OsmPostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
 {
-  if ( _writeStats.relationsWritten == 0 )
+  if (_writeStats.relationsWritten == 0)
   {
     _createRelationTables();
 
-    _idMappings.relationIdMap = boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >(
-          new Tgs::BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.relationIdMap =
+    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
+      new BigMap<ElementIdDatatype, ElementIdDatatype>());
   }
 
   ElementIdDatatype relationDbId;
 
   // Do we already know about this node?
-  if ( _idMappings.relationIdMap->contains(r->getId()) == true )
+  if (_idMappings.relationIdMap->contains(r->getId()) == true)
   {
     throw hoot::NotImplementedException("Writer class does not support update operations");
   }
@@ -361,59 +362,55 @@ void OsmPostgresqlDumpfileWriter::writePartial(const ConstRelationPtr& r)
   // Have to establish new mapping
   relationDbId = _establishNewIdMapping(r->getElementId());
 
-  _writeRelationToTables( relationDbId );
+  _writeRelationToTables(relationDbId);
 
-  _writeRelationMembersToTables( r );
+  _writeRelationMembersToTables(r);
 
-  _writeTagsToTables( r->getTags(), relationDbId,
+  _writeTagsToTables(r->getTags(), relationDbId,
     _outputSections[ApiDb::getCurrentRelationTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getRelationTagsTableName()].second, "%1\t1\t%2\t%3\n");
 
   _writeStats.relationsWritten++;
   _incrementChangesInChangeset();
 
-  _checkUnresolvedReferences( r, relationDbId );
+  _checkUnresolvedReferences(r, relationDbId);
 
-  if (_writeStats.relationsWritten %
-      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-  {
-    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
-  }
+  //TODO: fix
+//  if (_writeStats.relationsWritten %
+//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
+//  {
+//    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
+//  }
 }
 
 void OsmPostgresqlDumpfileWriter::setConfiguration(const hoot::Settings &conf)
 {
   const ConfigOptions confOptions(conf);
 
-  _configData.addUserEmail        = confOptions.getPostgresqlDumpfileWriterUserEmail();
-  _configData.addUserId           = confOptions.getPostgresqlDumpfileWriterUserId();
-  _configData.changesetUserId     = confOptions.getChangesetUserId();
-  if (!confOptions.getPostgresqlDumpfileWriterAutoCalcIds())
-  {
-    _configData.startingChangesetId = confOptions.getPostgresqlDumpfileWriterStartIdChangeset();
-    _configData.startingNodeId      = confOptions.getPostgresqlDumpfileWriterStartIdNode();
-    _configData.startingWayId       = confOptions.getPostgresqlDumpfileWriterStartIdWay();
-    _configData.startingRelationId  = confOptions.getPostgresqlDumpfileWriterStartIdRelation();
-  }
-  else
-  {
-    _db.open(confOptions.getOsmapidbIdAwareUrl());
-    _configData.startingChangesetId = _db.getNextId(ApiDb::getChangesetsTableName());
-    _configData.startingNodeId      = _db.getNextId(ElementType::Node);
-    _configData.startingWayId       = _db.getNextId(ElementType::Way);
-    _configData.startingRelationId  = _db.getNextId(ElementType::Relation);
-  }
+  //TODO: is this needed?
+  _configData.addUserEmail = confOptions.getApiDbEmail();
+  //TODO: is this needed?
+  //_configData.addUserId = confOptions.getPostgresqlDumpfileWriterUserId();
+  _configData.changesetUserId = confOptions.getChangesetUserId();
 
-  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
-  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
-  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
-  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
-  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
+//TODO: fix
+//  LOG_TRACE("Opening database at: " << confOptions.getOsmapidbIdAwareUrl());
+//  _database.open(confOptions.getOsmapidbIdAwareUrl());
+//  _configData.startingChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
+//  _configData.startingNodeId = _database.getNextId(ElementType::Node);
+//  _configData.startingWayId = _database.getNextId(ElementType::Way);
+//  _configData.startingRelationId = _database.getNextId(ElementType::Relation);
+
+//  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
+//  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
+//  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
+//  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
+//  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
 }
 
-std::list<QString> OsmPostgresqlDumpfileWriter::_createSectionNameList()
+list<QString> OsmPostgresqlDumpfileWriter::_createSectionNameList()
 {
-  std::list<QString> sections;
+  list<QString> sections;
 
   sections.push_back(QString("byte_order_mark"));
   sections.push_back(QString("sequence_updates"));
@@ -443,17 +440,18 @@ void OsmPostgresqlDumpfileWriter::_createNodeTables()
 {
   _createTable(ApiDb::getCurrentNodesTableName(),
                 "COPY " + ApiDb::getCurrentNodesTableName() +
-               " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) FROM stdin;\n" );
+               " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
+               "FROM stdin;\n" );
   _createTable(ApiDb::getCurrentNodeTagsTableName(),
                 "COPY " + ApiDb::getCurrentNodeTagsTableName() +
-               " (node_id, k, v) FROM stdin;\n" );
+               " (node_id, k, v) FROM stdin;\n");
 
   _createTable(ApiDb::getNodesTableName(),
                 "COPY " + ApiDb::getNodesTableName() +
                " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
   _createTable(ApiDb::getNodeTagsTableName(),
                 "COPY " + ApiDb::getNodeTagsTableName() +
-               " (node_id, version, k, v) FROM stdin;\n" );
+               " (node_id, version, k, v) FROM stdin;\n");
 }
 
 void OsmPostgresqlDumpfileWriter::_zeroWriteStats()
@@ -470,7 +468,7 @@ void OsmPostgresqlDumpfileWriter::_zeroWriteStats()
 }
 
 OsmPostgresqlDumpfileWriter::ElementIdDatatype OsmPostgresqlDumpfileWriter::_establishNewIdMapping(
-    const ElementId& sourceId)
+  const ElementId& sourceId)
 {
   ElementIdDatatype dbIdentifier;
 
@@ -487,11 +485,13 @@ OsmPostgresqlDumpfileWriter::ElementIdDatatype OsmPostgresqlDumpfileWriter::_est
     _idMappings.wayIdMap->insert(sourceId.getId(), dbIdentifier);
     _idMappings.nextWayId++;
     break;
+
   case ElementType::Relation:
     dbIdentifier = _idMappings.nextRelationId;
     _idMappings.relationIdMap->insert(sourceId.getId(), dbIdentifier);
     _idMappings.nextRelationId++;
     break;
+
   default:
     throw NotImplementedException("Unsupported element type");
     break;
@@ -505,9 +505,8 @@ unsigned int OsmPostgresqlDumpfileWriter::_convertDegreesToNanodegrees(const dou
   return (round(degrees * ApiDb::COORDINATE_SCALE));
 }
 
-void OsmPostgresqlDumpfileWriter::_writeNodeToTables(
-  const ConstNodePtr& node,
-  const ElementIdDatatype nodeDbId)
+void OsmPostgresqlDumpfileWriter::_writeNodeToTables(const ConstNodePtr& node,
+                                                     const ElementIdDatatype nodeDbId)
 {
   LOG_TRACE("Writing node with ID: " << nodeDbId);
 
@@ -516,60 +515,64 @@ void OsmPostgresqlDumpfileWriter::_writeNodeToTables(
   const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
   const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring =
+    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(nodeY, nodeX)));
 
-  if ( (nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000) )
+  if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
   {
-    throw HootException(QString("Invalid latitude conversion, Y = %1 to %2").arg(
-      QString::number(nodeY), QString::number(nodeYNanodegrees)));
+    throw HootException(
+      QString("Invalid latitude conversion, Y = %1 to %2").arg(
+        QString::number(nodeY), QString::number(nodeYNanodegrees)));
   }
-  if ( (nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000) )
+  if ((nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000))
   {
-    throw HootException(QString("Invalid longitude conversion, X = %1 to %2").arg(
-      QString::number(nodeX), QString::number(nodeXNanodegrees)));
+    throw HootException(
+      QString("Invalid longitude conversion, X = %1 to %2").arg(
+        QString::number(nodeX), QString::number(nodeXNanodegrees)));
   }
 
-  QString outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
-    QString::number(nodeDbId),
-    QString::number(nodeYNanodegrees),
-    QString::number(nodeXNanodegrees),
-    QString::number(changesetId),
-    datestring,
-    tileNumberString );
+  QString outputLine =
+    QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
+      QString::number(nodeDbId),
+      QString::number(nodeYNanodegrees),
+      QString::number(nodeXNanodegrees),
+      QString::number(changesetId),
+      datestring,
+      tileNumberString);
 
   *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << outputLine;
 
-  outputLine = QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
-    QString::number(nodeDbId),
-    QString::number(nodeYNanodegrees),
-    QString::number(nodeXNanodegrees),
-    QString::number(changesetId),
-    datestring,
-    tileNumberString );
+  outputLine =
+    QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
+      QString::number(nodeDbId),
+      QString::number(nodeYNanodegrees),
+      QString::number(nodeXNanodegrees),
+      QString::number(changesetId),
+      datestring,
+      tileNumberString);
 
   *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
 }
 
-void OsmPostgresqlDumpfileWriter::_writeTagsToTables(
-  const Tags& tags,
-  const ElementIdDatatype nodeDbId,
-  boost::shared_ptr<QTextStream>& currentTable,
-  const QString& currentTableFormatString,
-  boost::shared_ptr<QTextStream>& historicalTable,
-  const QString& historicalTableFormatString )
+void OsmPostgresqlDumpfileWriter::_writeTagsToTables(const Tags& tags,
+                                                     const ElementIdDatatype nodeDbId,
+                                                     shared_ptr<QTextStream>& currentTable,
+                                                     const QString& currentTableFormatString,
+                                                     shared_ptr<QTextStream>& historicalTable,
+                                                     const QString& historicalTableFormatString)
 {
-  const QString nodeDbIdString( QString::number(nodeDbId) );
+  const QString nodeDbIdString(QString::number(nodeDbId));
 
-  for ( Tags::const_iterator it = tags.begin(); it != tags.end(); ++it )
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString key = _escapeCopyToData( it.key() );
+    const QString key = _escapeCopyToData(it.key());
     LOG_VART(key);
-    const QString value = _escapeCopyToData( it.value() );
+    const QString value = _escapeCopyToData(it.value());
     LOG_VART(value);
 
-    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value );
-    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value );
+    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value);
+    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value);
   }
 }
 
@@ -577,40 +580,48 @@ void OsmPostgresqlDumpfileWriter::_createWayTables()
 {
   _createTable(
     ApiDb::getCurrentWaysTableName(),
-    "COPY " + ApiDb::getCurrentWaysTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentWaysTableName() +
+    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
   _createTable(
     ApiDb::getCurrentWayTagsTableName(),
-    "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
   _createTable(
     ApiDb::getCurrentWayNodesTableName(),
-    "COPY " + ApiDb::getCurrentWayNodesTableName() + " (way_id, node_id, sequence_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentWayNodesTableName() +
+    " (way_id, node_id, sequence_id) FROM stdin;\n" );
 
   _createTable(
     ApiDb::getWaysTableName(),
-    "COPY " + ApiDb::getWaysTableName() + " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getWaysTableName() +
+    " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
   _createTable(
     ApiDb::getWayTagsTableName(),
-    "COPY " + ApiDb::getWayTagsTableName() + " (way_id, version, k, v) FROM stdin;\n" );
+    "COPY " + ApiDb::getWayTagsTableName() +
+    " (way_id, version, k, v) FROM stdin;\n");
   _createTable(
     ApiDb::getWayNodesTableName(),
-    "COPY " + ApiDb::getWayNodesTableName() + " (way_id, node_id, version, sequence_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getWayNodesTableName() +
+    " (way_id, node_id, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmPostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId )
+void OsmPostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayDbId)
 {
   LOG_TRACE("Writing way with ID: " << wayDbId);
 
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring =
+    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
-  QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
+  QString outputLine =
+    QString("%1\t%2\t%3\tt\t1\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
 
   *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << outputLine;
 
-  outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
+  outputLine =
+    QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
@@ -618,33 +629,33 @@ void OsmPostgresqlDumpfileWriter::_writeWayToTables(const ElementIdDatatype wayD
   *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
 }
 
-void OsmPostgresqlDumpfileWriter::_writeWaynodesToTables( const ElementIdDatatype dbWayId,
-  const std::vector<long>& waynodeIds )
+void OsmPostgresqlDumpfileWriter::_writeWaynodesToTables(const ElementIdDatatype dbWayId,
+                                                         const vector<long>& waynodeIds)
 {
   unsigned int nodeIndex = 1;
 
-  boost::shared_ptr<QTextStream> currentWayNodesStream  =
+  shared_ptr<QTextStream> currentWayNodesStream =
     _outputSections[ApiDb::getCurrentWayNodesTableName()].second;
-  boost::shared_ptr<QTextStream> wayNodesStream =
-    _outputSections[ApiDb::getWayNodesTableName()].second;
+  shared_ptr<QTextStream> wayNodesStream = _outputSections[ApiDb::getWayNodesTableName()].second;
   const QString currentWaynodesFormat("%1\t%2\t%3\n");
   const QString waynodesFormat("%1\t%2\t1\t%3\n");
   const QString dbWayIdString( QString::number(dbWayId));
 
-  for ( std::vector<long>::const_iterator it = waynodeIds.begin();
-      it != waynodeIds.end(); ++it )
+  for (vector<long>::const_iterator it = waynodeIds.begin(); it != waynodeIds.end(); ++it)
   {
-    if ( _idMappings.nodeIdMap->contains(*it) == true )
+    if (_idMappings.nodeIdMap->contains(*it) == true)
     {
-      const QString dbNodeIdString = QString::number( _idMappings.nodeIdMap->at(*it) );
-      const QString nodeIndexString( QString::number(nodeIndex) );
-      *currentWayNodesStream << currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      const QString dbNodeIdString = QString::number(_idMappings.nodeIdMap->at(*it));
+      const QString nodeIndexString(QString::number(nodeIndex));
+      *currentWayNodesStream <<
+        currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
       *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
     }
     else
     {
-      LOG_ERROR( QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it) );
-      throw NotImplementedException("Unresolved waynodes are not supported");
+      throw NotImplementedException(
+        "Unresolved waynodes are not supported.  " +
+        QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
     }
 
     ++nodeIndex;
@@ -655,40 +666,48 @@ void OsmPostgresqlDumpfileWriter::_createRelationTables()
 {
   _createTable(
     ApiDb::getCurrentRelationsTableName(),
-    "COPY " + ApiDb::getCurrentRelationsTableName() + " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentRelationsTableName() +
+    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
   _createTable(
     ApiDb::getCurrentRelationTagsTableName(),
-    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
   _createTable(
     ApiDb::getCurrentRelationMembersTableName(),
-    "COPY " + ApiDb::getCurrentRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getCurrentRelationMembersTableName() +
+    " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
 
   _createTable(
     ApiDb::getRelationsTableName(),
-    "COPY " + ApiDb::getRelationsTableName() + " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getRelationsTableName() +
+    " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
   _createTable(
     ApiDb::getRelationTagsTableName(),
-    "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, version, k, v) FROM stdin;\n" );
+    "COPY " + ApiDb::getRelationTagsTableName() +
+    " (relation_id, version, k, v) FROM stdin;\n" );
   _createTable(
     ApiDb::getRelationMembersTableName(),
-    "COPY " + ApiDb::getRelationMembersTableName() + " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n" );
+    "COPY " + ApiDb::getRelationMembersTableName() +
+    " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmPostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId )
+void OsmPostgresqlDumpfileWriter::_writeRelationToTables(const ElementIdDatatype relationDbId)
 {
   LOG_TRACE("Writing relation with ID: " << relationDbId);
 
   const int changesetId = _getChangesetId();
-  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString datestring =
+  QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
-  QString outputLine = QString("%1\t%2\t%3\tt\t1\n")
+  QString outputLine =
+    QString("%1\t%2\t%3\tt\t1\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
 
   *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << outputLine;
 
-  outputLine = QString("%1\t%2\t%3\t1\tt\t\\N\n")
+  outputLine =
+    QString("%1\t%2\t%3\t1\tt\t\\N\n")
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
@@ -701,49 +720,54 @@ void OsmPostgresqlDumpfileWriter::_writeRelationMembersToTables(const ConstRelat
   unsigned int memberSequenceIndex = 1;
   const ElementIdDatatype relationId = relation->getId();
   const ElementIdDatatype dbRelationId = _idMappings.relationIdMap->at(relationId);
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-  boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> > knownElementMap;
+  const vector<RelationData::Entry> relationMembers = relation->getMembers();
+  shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > knownElementMap;
 
-  for ( vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
-      it != relationMembers.end(); ++it )
+  for (vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
+       it != relationMembers.end(); ++it)
   {
     const ElementId memberElementId = it->getElementId();
 
-    switch ( memberElementId.getType().getEnum() )
+    switch (memberElementId.getType().getEnum())
     {
     case ElementType::Node:
       knownElementMap = _idMappings.nodeIdMap;
       break;
+
     case ElementType::Way:
       knownElementMap = _idMappings.wayIdMap;
       break;
+
     case ElementType::Relation:
       knownElementMap = _idMappings.relationIdMap;
       break;
+
     default:
       throw HootException("Unsupported element member type");
       break;
     }
 
-    if ( (knownElementMap != boost::shared_ptr<Tgs::BigMap<ElementIdDatatype, ElementIdDatatype> >())
-          && (knownElementMap->contains(memberElementId.getId()) == true) )
+    if ((knownElementMap != shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >())
+          && (knownElementMap->contains(memberElementId.getId()) == true))
     {
-      _writeRelationMember(dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
+      _writeRelationMember(
+        dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
     }
     else
     {
-      if ( _unresolvedRefs.unresolvedRelationRefs ==
-          boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >() )
+      if (_unresolvedRefs.unresolvedRelationRefs ==
+          shared_ptr<map<ElementId, _UnresolvedRelationReference > >())
       {
         _unresolvedRefs.unresolvedRelationRefs =
-          boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >( new
-          std::map<ElementId, _UnresolvedRelationReference>() );
+          shared_ptr<map<ElementId, _UnresolvedRelationReference > >(
+            new map<ElementId, _UnresolvedRelationReference>());
       }
 
-      const _UnresolvedRelationReference relationRef = { relationId, dbRelationId, *it, memberSequenceIndex };
+      const _UnresolvedRelationReference relationRef =
+        { relationId, dbRelationId, *it, memberSequenceIndex };
 
-      _unresolvedRefs.unresolvedRelationRefs->insert(std::pair<ElementId,
-        _UnresolvedRelationReference>(memberElementId, relationRef) );
+      _unresolvedRefs.unresolvedRelationRefs->insert(
+        pair<ElementId, _UnresolvedRelationReference>(memberElementId, relationRef));
     }
 
     ++memberSequenceIndex;
@@ -751,43 +775,46 @@ void OsmPostgresqlDumpfileWriter::_writeRelationMembersToTables(const ConstRelat
 }
 
 void OsmPostgresqlDumpfileWriter::_writeRelationMember(const ElementIdDatatype sourceRelationDbId,
-                                                    const RelationData::Entry& memberEntry,
-                                                    const ElementIdDatatype memberDbId,
-                                                    const unsigned int memberSequenceIndex)
+                                                       const RelationData::Entry& memberEntry,
+                                                       const ElementIdDatatype memberDbId,
+                                                       const unsigned int memberSequenceIndex)
 {
   QString memberType;
   const ElementId memberElementId = memberEntry.getElementId();
 
-  switch ( memberElementId.getType().getEnum() )
+  switch (memberElementId.getType().getEnum())
   {
   case ElementType::Node:
     memberType = "Node";
     break;
+
   case ElementType::Way:
     memberType = "Way";
     break;
+
   case ElementType::Relation:
     memberType = "Relation";
     break;
+
   default:
     throw HootException("Unsupported element member type");
     break;
   }
 
-  const QString dbRelationIdString( QString::number(sourceRelationDbId));
-  const QString memberRefIdString( QString::number(memberDbId) );
-  const QString memberSequenceString( QString::number(memberSequenceIndex) );
-  const QString memberRole = _escapeCopyToData( memberEntry.getRole() );
-  boost::shared_ptr<QTextStream> currentRelationMembersStream =
+  const QString dbRelationIdString(QString::number(sourceRelationDbId));
+  const QString memberRefIdString(QString::number(memberDbId));
+  const QString memberSequenceString(QString::number(memberSequenceIndex));
+  const QString memberRole = _escapeCopyToData(memberEntry.getRole());
+  shared_ptr<QTextStream> currentRelationMembersStream =
     _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
-  boost::shared_ptr<QTextStream> relationMembersStream =
-   _outputSections[ApiDb::getRelationMembersTableName()].second;
+  shared_ptr<QTextStream> relationMembersStream =
+    _outputSections[ApiDb::getRelationMembersTableName()].second;
   const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
   const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
   *currentRelationMembersStream << currentRelationMemberFormat.arg(
     dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-  *relationMembersStream        << relationMembersFormat.arg(
+  *relationMembersStream << relationMembersFormat.arg(
     dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
 
   _writeStats.relationMembersWritten++;
@@ -798,26 +825,26 @@ void OsmPostgresqlDumpfileWriter::_createTable(const QString &tableName, const Q
   _createTable(tableName, tableHeader, false);
 }
 
-void OsmPostgresqlDumpfileWriter::_createTable( const QString& tableName, const QString& tableHeader,
-  const bool addByteOrderMark )
+void OsmPostgresqlDumpfileWriter::_createTable(const QString& tableName, const QString& tableHeader,
+                                               const bool addByteOrderMark )
 {
-  boost::shared_ptr<QTemporaryFile> tempfile( new QTemporaryFile() );
-  if ( tempfile->open() == false )
+  shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
+  if (tempfile->open() == false)
   {
     throw HootException("Could not open temp file for contents of table " + tableName);
   }
   tempfile->setAutoRemove(false);
 
   _outputSections[tableName] =
-      std::pair< boost::shared_ptr<QTemporaryFile>, boost::shared_ptr<QTextStream> >(
-        tempfile, boost::shared_ptr<QTextStream>(new QTextStream(tempfile.get())) );
+    pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> >(
+      tempfile, shared_ptr<QTextStream>(new QTextStream(tempfile.get())));
 
   // Database is encoded in UTF-8, so force encoding as otherwise file is in local
   //    Western encoding which goes poorly for a lot of countries
   _outputSections[tableName].second->setCodec("UTF-8");
 
   // First table written out should have byte order mark to help identifify content as UTF-8
-  if ( addByteOrderMark == true )
+  if (addByteOrderMark == true)
   {
     _outputSections[tableName].second->setGenerateByteOrderMark(true);
   }
@@ -828,7 +855,7 @@ void OsmPostgresqlDumpfileWriter::_createTable( const QString& tableName, const 
 void OsmPostgresqlDumpfileWriter::_incrementChangesInChangeset()
 {
   _changesetData.changesInChangeset++;
-  if ( _changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize() )
+  if (_changesetData.changesInChangeset == ConfigOptions().getChangesetMaxSize())
   {
     _writeChangesetToTable();
     LOG_DEBUG("Parsed changeset with ID: " + QString::number(_changesetData.changesetId));
@@ -839,21 +866,21 @@ void OsmPostgresqlDumpfileWriter::_incrementChangesInChangeset()
 }
 
 void OsmPostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementPtr& element,
-  const ElementIdDatatype elementDbId )
+                                                             const ElementIdDatatype elementDbId)
 {
   // Regardless of type, may be referenced in relation
-  if ( _unresolvedRefs.unresolvedRelationRefs !=
-      boost::shared_ptr< std::map<ElementId, _UnresolvedRelationReference > >() )
+  if (_unresolvedRefs.unresolvedRelationRefs !=
+      shared_ptr<map<ElementId, _UnresolvedRelationReference > >())
   {
-    std::map<ElementId, _UnresolvedRelationReference >::iterator relationRef =
-      _unresolvedRefs.unresolvedRelationRefs->find( element->getElementId() );
+    map<ElementId, _UnresolvedRelationReference >::iterator relationRef =
+      _unresolvedRefs.unresolvedRelationRefs->find( element->getElementId());
 
-    if ( relationRef != _unresolvedRefs.unresolvedRelationRefs->end() )
+    if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
     {
       LOG_DEBUG("Found unresolved relation member ref!");
-      LOG_DEBUG( QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
+      LOG_DEBUG(QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
         QString(" (DB ID=") + QString::number(relationRef->second.sourceDbRelationId) +
-        QString(") has ref to ") + relationRef->second.relationMemberData.toString() );
+        QString(") has ref to ") + relationRef->second.relationMemberData.toString());
 
       _writeRelationMember(
         relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
@@ -868,13 +895,12 @@ void OsmPostgresqlDumpfileWriter::_checkUnresolvedReferences(const ConstElementP
   if (element->getElementType().getEnum() == ElementType::Node)
   {
     if ((_unresolvedRefs.unresolvedWaynodeRefs !=
-        boost::shared_ptr<
-        Tgs::BigMap<ElementIdDatatype, std::vector<
-        std::pair<ElementIdDatatype, unsigned long> > > >()) &&
-        ( _unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
+        shared_ptr<BigMap<ElementIdDatatype, vector<pair<ElementIdDatatype, unsigned long> > > >()) &&
+        (_unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
     {
-      LOG_ERROR("Found unresolved waynode ref!");
-      throw NotImplementedException("Need to insert waynode ref that is now resolved");
+      throw NotImplementedException(
+        "Found unresolved waynode ref!  For node: " + QString::number(element->getId()) +
+        " Need to insert waynode ref that is now resolved");
     }
   }
 }
@@ -898,15 +924,16 @@ QString OsmPostgresqlDumpfileWriter::_escapeCopyToData(const QString& stringToOu
 
 void OsmPostgresqlDumpfileWriter::_writeChangesetToTable()
 {
-  if ( _changesetData.changesetId == _configData.startingChangesetId )
+  if (_changesetData.changesetId == _configData.startingChangesetId)
   {
     _createTable(
       ApiDb::getChangesetsTableName(),
-      "COPY " + ApiDb::getChangesetsTableName() + " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) FROM stdin;\n" );
+      "COPY " + ApiDb::getChangesetsTableName() +
+      " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
+      "FROM stdin;\n" );
   }
 
-  boost::shared_ptr<QTextStream> changesetsStream  =
-    _outputSections[ApiDb::getChangesetsTableName()].second;
+  shared_ptr<QTextStream> changesetsStream = _outputSections[ApiDb::getChangesetsTableName()].second;
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 
@@ -919,38 +946,44 @@ void OsmPostgresqlDumpfileWriter::_writeChangesetToTable()
     QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMinX())),
     QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxX())),
     datestring,
-    QString::number(_changesetData.changesInChangeset) );
+    QString::number(_changesetData.changesInChangeset));
 }
 
 void OsmPostgresqlDumpfileWriter::_writeSequenceUpdates()
 {
-  _createTable( "sequence_updates", "" );
+  _createTable("sequence_updates", "");
 
-  boost::shared_ptr<QTextStream> sequenceUpdatesStream  = _outputSections["sequence_updates"].second;
+  shared_ptr<QTextStream> sequenceUpdatesStream = _outputSections["sequence_updates"].second;
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   // Users
-  if ( _configData.addUserEmail.isEmpty() == false )
+  if (_configData.addUserEmail.isEmpty() == false)
   {
-    *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getUsersSequenceName(),
-      QString::number(_configData.addUserId + 1) );
+    *sequenceUpdatesStream <<
+      sequenceUpdateFormat.arg(
+        ApiDb::getUsersSequenceName(), QString::number(_configData.addUserId + 1));
   }
 
   // Changesets
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(),
-    QString::number(_changesetData.changesetId + 1) );
+  *sequenceUpdatesStream <<
+    sequenceUpdateFormat.arg(
+      ApiDb::getChangesetsSequenceName(), QString::number(_changesetData.changesetId + 1));
 
   // Nodes
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(),
-    QString::number(_idMappings.nextNodeId) );
+  *sequenceUpdatesStream <<
+    sequenceUpdateFormat.arg(
+      ApiDb::getCurrentNodesSequenceName(), QString::number(_idMappings.nextNodeId));
 
   // Ways
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(),
-    QString::number(_idMappings.nextWayId) );
+  *sequenceUpdatesStream <<
+    sequenceUpdateFormat.arg(
+      ApiDb::getCurrentWaysSequenceName(), QString::number(_idMappings.nextWayId));
 
   // Relations
-  *sequenceUpdatesStream << sequenceUpdateFormat.arg(ApiDb::getCurrentRelationsSequenceName(),
-    QString::number(_idMappings.nextRelationId) ) << "\n\n";
+  *sequenceUpdatesStream <<
+    sequenceUpdateFormat.arg(
+      ApiDb::getCurrentRelationsSequenceName(),
+      QString::number(_idMappings.nextRelationId)) << "\n\n";
 }
 
 }

@@ -58,7 +58,7 @@ public:
 
   virtual QString getDbVersion();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 

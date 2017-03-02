@@ -53,7 +53,10 @@ OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
+  LOG_VART(url);
+
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  LOG_VART(writerOverride);
 
   shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
@@ -65,6 +68,7 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
     Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
     if (writer->isSupported(url))
     {
