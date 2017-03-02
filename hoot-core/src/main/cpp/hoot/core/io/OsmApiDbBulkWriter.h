@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMPOSTGRESQLDUMPFILEWRITER_H
-#define OSMPOSTGRESQLDUMPFILEWRITER_H
+#ifndef OSMAPIDBBULKWRITER_H
+#define OSMAPIDBBULKWRITER_H
 
 /*
  * This file is part of Hootenanny.
@@ -82,24 +82,24 @@ using namespace Tgs;
 
 /**
  * OSM element writer optimized for bulk element writes.  If you are writing smaller amounts of
- * data, you probably want to create a new writer, as this writer performs additional logic to
- * reserver element IDs as described below.
+ * data, you probably want to create a new writer.  This writer performs additional logic up front
+ * to reserve element IDs due to the fact its doing a bulk SQL copy vs multiple inserts.
  *
  * This writer safely be used against a live database.  It first reserves the required element IDs
  * by doing an initial count of the elements and executing the ID reservation SQL, then generates
  * SQL copy statements to a file for the element inserts (dump file), and then finally executes the
  * element SQL statements.
  */
-class OsmPostgresqlDumpfileWriter : public PartialOsmMapWriter, public Configurable
+class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
 
 public:
 
-  static string className() { return "hoot::OsmPostgresqlDumpfileWriter"; }
+  static string className() { return "hoot::OsmApiDbBulkWriter"; }
 
-  OsmPostgresqlDumpfileWriter();
+  OsmApiDbBulkWriter();
 
-  virtual ~OsmPostgresqlDumpfileWriter();
+  virtual ~OsmApiDbBulkWriter();
 
   virtual bool isSupported(QString url);
 
@@ -235,4 +235,4 @@ private:
 
 }
 
-#endif // OSMPOSTGRESQLDUMPFILEWRITER_H
+#endif // OSMAPIDBBULKWRITER_H

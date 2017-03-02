@@ -435,7 +435,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbBulkWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -1026,7 +1026,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
-    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/OsmApiDbBulkWriter.h \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \

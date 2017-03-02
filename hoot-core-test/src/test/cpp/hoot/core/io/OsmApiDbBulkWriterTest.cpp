@@ -32,9 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/io/OsmPostgresqlDumpfileWriter.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/io/OsmApiDbBulkWriter.h>
 
 // Qt
 #include <QDir>
@@ -44,9 +42,9 @@
 namespace hoot
 {
 
-class OsmPostgresqlDumpfileWriterTest : public CppUnit::TestFixture
+class OsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmPostgresqlDumpfileWriterTest);
+  CPPUNIT_TEST_SUITE(OsmApiDbBulkWriterTest);
   CPPUNIT_TEST(runWriterTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -120,17 +118,17 @@ public:
 
   void runWriterTest()
   {
-    OsmPostgresqlDumpfileWriter pgDumpWriter;
+    OsmApiDbBulkWriter writer;
 
-    QDir().mkpath("test-output/io/PostgresqlDumpWriterTest/");
-    QString outFile = "test-output/io/PostgresqlDumpWriterTest/PostgresqlDumpWriter_out.sql";
-    pgDumpWriter.open(outFile);
-    pgDumpWriter.write(createTestMap());
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+    QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
+    writer.open(outFile);
+    writer.write(createTestMap());
 
     QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
     QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
 
-    QString stdFile = "test-files/io/PostgresqlDumpWriterTest/PostgresqlDumpWriter.sql";
+    QString stdFile = "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter.sql";
     QFile stdInputFile(stdFile);
 
     QStringList stdList;
@@ -161,7 +159,7 @@ public:
       }
       inputFile.close();
     }
-    pgDumpWriter.close();
+    writer.close();
 
     CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
 
@@ -173,6 +171,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmPostgresqlDumpfileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiDbBulkWriterTest, "quick");
 
 }
