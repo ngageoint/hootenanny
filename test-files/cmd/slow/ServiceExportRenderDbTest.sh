@@ -23,7 +23,7 @@ dropdb $AUTH $RENDER_DB &>/dev/null || true
 # to test the streaming reader to ogr writer
 # with data that generated the error:
 # Relation element did not exist in cache
-scripts/services/exportrenderdb.sh # || true # Don't error out so test will continue to clean up
+scripts/services/exportrenderdb.sh $MAP_ID $DB_URL # || true # Don't error out so test will continue to clean up
 
 # Clean up
 hoot delete-map $HOOT_OPTS "$DB_URL/$INPUT"
