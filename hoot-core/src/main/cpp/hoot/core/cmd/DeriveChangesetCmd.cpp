@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlWriter.h>
-#include <hoot/core/io/OsmChangesetSqlWriter.h>
+#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 #include <hoot/core/io/HootApiDb.h>
 
 // Qt
@@ -110,13 +110,13 @@ public:
 
     if (isXmlOutput)
     {
-      OsmChangesetXmlWriter().write(output, delta);
+      OsmChangesetXmlFileWriter().write(output, delta);
     }
     else
     {
       assert(!osmApiDbUrl.isEmpty());
       LOG_DEBUG(osmApiDbUrl);
-      OsmChangesetSqlWriter(QUrl(osmApiDbUrl)).write(output, delta);
+      OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
 
     return 0;

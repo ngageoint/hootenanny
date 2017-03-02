@@ -109,6 +109,8 @@ public:
 
   virtual void finalizePartial();
 
+  virtual void write(shared_ptr<const OsmMap> map);
+
   virtual void writePartial(const ConstNodePtr& n);
 
   virtual void writePartial(const ConstWayPtr& w);

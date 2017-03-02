@@ -71,7 +71,7 @@ void OsmApiDbBulkWriter::open(QString url)
   // Make sure we're not already open and the URL is valid
   if (isSupported(url) == false)
   {
-    throw HootException( QString("Could not open URL ") + url);
+    throw HootException(QString("Could not open URL ") + url);
   }
 
   _zeroWriteStats();
@@ -79,14 +79,13 @@ void OsmApiDbBulkWriter::open(QString url)
   _changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
 
-  //TODO: fix
-  _idMappings.nextNodeId = _configData.startingNodeId;
+  //_idMappings.nextNodeId = _configData.startingNodeId;
   _idMappings.nodeIdMap.reset();
 
-  _idMappings.nextWayId = _configData.startingWayId;
+  //_idMappings.nextWayId = _configData.startingWayId;
   _idMappings.wayIdMap.reset();
 
-  _idMappings.nextRelationId = _configData.startingRelationId;
+  //_idMappings.nextRelationId = _configData.startingRelationId;
   _idMappings.relationIdMap.reset();
 
   _unresolvedRefs.unresolvedWaynodeRefs.reset();
@@ -150,11 +149,8 @@ void OsmApiDbBulkWriter::finalizePartial()
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable("byte_order_mark", "\n", true);
 
-  //TODO: do this after first pass instead
-  // Output updates for sequences to ensure database sanity
-  //_writeSequenceUpdates();
-
   // Create our user data if the email value is set
+  //TODO: keep this
   if (_configData.addUserEmail.isEmpty() == false)
   {
     _createTable(
@@ -175,8 +171,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
 
   QTextStream outStream(tempfile.get());
-  for (list<QString>::const_iterator it = _sectionNames.begin();
-       it != _sectionNames.end(); ++it)
+  for (list<QString>::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
     if (_outputSections.find(*it) == _outputSections.end())
     {
@@ -184,7 +179,8 @@ void OsmApiDbBulkWriter::finalizePartial()
       continue;
     }
 
-    LOG_DEBUG("Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
+    LOG_DEBUG("Flushing section " << *it << " to file " <<
+              (_outputSections[*it].first)->fileName());
 
     // Write close marker for table
     if ((*it != "byte_order_mark") && (*it != "sequence_updates"))
@@ -230,7 +226,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
   tempfile->close();
 
-  //TODO: write sql
+  //TODO: write element sql
 
   const QString sqlFileCopyPath =
     ConfigOptions().getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed();
@@ -243,6 +239,16 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
 
   _dataWritten = true;
+}
+
+void OsmApiDbBulkWriter::write(shared_ptr<const OsmMap> map)
+{
+  //TODO: id count pass and setval writes here
+  // Output updates for sequences to ensure database sanity
+  //_writeSequenceUpdates();
+
+
+  PartialOsmMapWriter::write(map);
 }
 
 void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
@@ -952,6 +958,7 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates()
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   // Users
+  //TODO: keep this?
   if (_configData.addUserEmail.isEmpty() == false)
   {
     *sequenceUpdatesStream <<

@@ -121,7 +121,7 @@ void OsmApiDbChangesetSqlWriter::write(const QString sql)
       }
       else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
       {
-        //some tight coupling here to OsmChangesetSqlWriter
+        //some tight coupling here to OsmChangesetSqlFileWriter
         changesetStatType = "";
         _changesetDetailsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
         //need to do some extra processing here to convert the coords in the string from ints to

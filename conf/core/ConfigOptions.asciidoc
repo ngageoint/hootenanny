@@ -1232,7 +1232,7 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osm.changeset.sql.writer.generate.new.ids
+=== osm.changeset.sql.file.writer.generate.new.ids
 
 * Data Type: bool
 * Default Value: `true`

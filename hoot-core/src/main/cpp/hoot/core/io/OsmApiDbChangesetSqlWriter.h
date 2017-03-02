@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database.
  *
- * This class expects incoming changesets to have been written by the OsmChangesetSqlWriter
+ * This class expects incoming changesets to have been written by the OsmChangesetSqlFileWriter
  * and is coupled to its output format in certain parts of the SQL parsing logic.
  */
 class OsmApiDbChangesetSqlWriter

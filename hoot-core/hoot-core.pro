@@ -532,8 +532,8 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
     src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp \
@@ -1059,8 +1059,8 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmPbfReader.h \
     src/main/cpp/hoot/core/io/OsmPbfWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h \
