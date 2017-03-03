@@ -122,7 +122,7 @@ cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
 
 if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG_HOME}/server.xml; then
     echo "Adding Tomcat context path for tile images..."
-    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG_HOME}/server.xml
+    sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG_HOME}/server.xml
 fi
 
 if ! grep -i --quiet 'allowLinking="true"' ${TOMCAT_CONFIG_HOME}/context.xml; then

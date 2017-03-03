@@ -29,6 +29,7 @@ package hoot.services;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -51,9 +52,7 @@ public class HootServletContext implements ServletContextListener {
 
         HootProperties.init();
 
-        createIngestFolder();
-
-        createUploadFolder();
+        createFolders();
 
         TranslationServiceResource.startTranslationService();
 
@@ -78,20 +77,16 @@ public class HootServletContext implements ServletContextListener {
         SLF4JBridgeHandler.install();
     }
 
-    private static void createIngestFolder() {
-        File ingestFolder = new File(TILE_SERVER_PATH);
-        if (!ingestFolder.exists()) {
-            if (!ingestFolder.mkdir()) {
-                throw new RuntimeException("Error creating " + ingestFolder.getAbsolutePath() + " directory!");
-            }
-        }
-    }
+    private static void createFolders() {
+        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER, RPT_STORE_PATH,
+                BASEMAPS_FOLDER, SCRIPT_FOLDER, TEMP_OUTPUT_PATH };
 
-    private static void createUploadFolder() {
-        File uploadDir = new File(UPLOAD_FOLDER);
-        if (!uploadDir.exists()) {
-            if (!uploadDir.mkdir()) {
-                throw new RuntimeException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+        for (String folder : folders) {
+            try {
+                FileUtils.forceMkdir(new File(folder));
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error creating " + folder + " directory!", ioe);
             }
         }
     }

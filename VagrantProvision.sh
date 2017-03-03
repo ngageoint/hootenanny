@@ -552,11 +552,8 @@ rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
-
-rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
+rm -rf $HOOT_HOME/userfiles/ingest/processed
+mkdir -p $HOOT_HOME/userfiles/ingest/processed
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'

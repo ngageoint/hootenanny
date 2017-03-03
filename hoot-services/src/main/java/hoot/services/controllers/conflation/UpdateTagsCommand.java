@@ -92,7 +92,7 @@ class UpdateTagsCommand implements InternalCommand {
         // file will be read and its contents placed in the stats tag.
         if ((oParams.get("COLLECT_STATS") != null)
                 && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
-            String statsName = HOME_FOLDER + "/" + RPT_STORE_PATH + "/" + confOutputName + "-stats.csv";
+            String statsName = RPT_STORE_PATH + File.separator + confOutputName + "-stats.csv";
             tags.put("stats", statsName);
         }
 

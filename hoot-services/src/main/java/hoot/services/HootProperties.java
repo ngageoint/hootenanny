@@ -55,8 +55,8 @@ public final class HootProperties {
     public static final String AVE_OVERRIDE_PATH;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
-    public static final String TILE_SERVER_PATH;
-    public static final String INGEST_STAGING_PATH;
+    public static final String BASEMAPS_TILES_FOLDER;
+    public static final String BASEMAPS_FOLDER;
     public static final String JS_HEADER_SCRIPT_PATH;
     public static final String SCRIPT_FOLDER;
     public static final String DEFAULT_TRANSLATIONS_CONFIG;
@@ -118,6 +118,7 @@ public final class HootProperties {
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
 
+    private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
     private static final String OSMAPI_DB_PASSWORD;
     private static final String OSMAPI_DB_HOST;
@@ -171,16 +172,11 @@ public final class HootProperties {
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
         AVE_OVERRIDE_PATH = getProperty("advOptAverageOverride");
         DOC_NAME = getProperty("documentName");
-        RPT_STORE_PATH = getProperty("reportDataPath");
-        TILE_SERVER_PATH = getProperty("tileServerPath");
-        INGEST_STAGING_PATH = getProperty("ingestStagingPath");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
-        SCRIPT_FOLDER = getProperty("customScriptPath");
         DEFAULT_TRANSLATIONS_CONFIG = getProperty("defaultTranslationsConfig");
         DEFAULT_FOUO_TRANSLATIONS_CONFIG = getProperty("defaultFOUOTranslationsConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
-        TEMP_OUTPUT_PATH = getProperty("tempOutputPath");
         WFS_STORE_CONN_NAME = getProperty("wfsStoreConnName");
         WFS_STORE_DB = getProperty("wfsStoreDb");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
@@ -224,8 +220,15 @@ public final class HootProperties {
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
-        UPLOAD_FOLDER = HOME_FOLDER + File.separator + "upload";
         DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
+
+        USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
+        SCRIPT_FOLDER = USERFILES_FOLDER + File.separator + "customscript";
+        TEMP_OUTPUT_PATH = USERFILES_FOLDER + File.separator + "tmp";
+        UPLOAD_FOLDER = USERFILES_FOLDER + File.separator + "upload";
+        RPT_STORE_PATH = USERFILES_FOLDER + File.separator + "reports";
+        BASEMAPS_TILES_FOLDER = USERFILES_FOLDER + File.separator + "ingest" + File.separator + "processed" + File.separator + "BASEMAP";
+        BASEMAPS_FOLDER = USERFILES_FOLDER + File.separator + "ingest" + File.separator + "upload" + File.separator + "BASEMAP";
 
         // Adding another layer of indirection for "sensitive" properties.
         // They should be resolved just before being used to minimize any unintended exposure (f.e. logging).

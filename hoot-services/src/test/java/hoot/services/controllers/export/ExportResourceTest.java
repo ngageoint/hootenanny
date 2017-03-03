@@ -27,8 +27,7 @@
 package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -46,6 +45,8 @@ import org.apache.xpath.XPathAPI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -63,6 +64,7 @@ import hoot.services.UnitTest;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -71,8 +73,21 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class ExportResourceTest {
 
+    private static String originalTEMP_OUTPUT_PATH;
+
     @Autowired
     private ExternalCommandManager externalCommandInterface;
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        originalTEMP_OUTPUT_PATH = TEMP_OUTPUT_PATH;
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", "/tmp");
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", originalTEMP_OUTPUT_PATH);
+    }
 
     @Test
     @Category(UnitTest.class)

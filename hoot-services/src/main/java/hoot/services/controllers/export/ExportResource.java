@@ -392,21 +392,13 @@ public class ExportResource {
     }
 
     private static File getExportFile(String id, String outputname, String fileExt) {
-        File out = null;
-        File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(TEMP_OUTPUT_PATH, id);
+        File out = new File(new File(TEMP_OUTPUT_PATH, id), outputname + "." + fileExt);
 
-        String errorMsg = "Error exporting data.  Missing output file.";
-        if (folder != null) {
-            String workingFolder = TEMP_OUTPUT_PATH + "/" + id;
-            out = hoot.services.utils.FileUtils.getFileFromFolder(workingFolder, outputname, fileExt);
-
-            if ((out == null) || !out.exists()) {
-                throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
-            }
-        }
-        else {
+        if (!out.exists()) {
+            String errorMsg = "Error exporting data.  Missing output file.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
         }
+
         return out;
     }
 }

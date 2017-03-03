@@ -38,7 +38,9 @@ import java.util.UUID;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -51,20 +53,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({DbUtils.class, ExportCommand.class})
 @PowerMockIgnore("javax.management.*")
 public class ExportCommandTest {
-
     private static final Logger logger = LoggerFactory.getLogger(ExportCommandTest.class);
 
     private static final String MAP_NAME = "MyTestMap";
     private static final String EXPORT_TIME = "2016-05-04 10:15";
     private static final Map<String, String> tags = new HashMap<>();
+    private static String originalTEMP_OUTPUT_PATH;
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        originalTEMP_OUTPUT_PATH = TEMP_OUTPUT_PATH;
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", "/tmp");
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", originalTEMP_OUTPUT_PATH);
+    }
 
     @Before
     public void beforeTest() throws Exception {

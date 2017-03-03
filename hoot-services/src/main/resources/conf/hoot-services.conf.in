@@ -66,12 +66,6 @@ translationScriptPath=$(homeFolder)/translations
 # osm2ogr script used in export
 ExportScript=osm2ogrscript
 
-# Temporary output path
-tempOutputPath=$(homeFolder)/tmp
-
-# Custom Script Service folder location
-customScriptPath=$(homeFolder)/customscript
-
 exportRenderDBScript=exportrenderdb.sh
 
 # WFS Store Connection Name
@@ -85,12 +79,6 @@ osmApiDbEnabled=true
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
-
-# Ingest service staging folder
-ingestStagingPath=$(homeFolder)/ingest/upload
-
-# Tile server folder
-tileServerPath=$(homeFolder)/ingest/processed
 
 # Basemap Raster to tile make file
 BasemapRasterToTiles=makebasemaprastertotiles.sh
@@ -124,9 +112,6 @@ translationServerScript=/plugins/TranslationServer.js
 
 # Ogr Attributes script name
 GetOgrAttributeScript=makeGetOgrAttrib
-
-# Report storage location
-reportDataPath=data/reports
 
 # Ingest size threshold
 ingestSizeThreshold=200000000

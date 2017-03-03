@@ -28,6 +28,8 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
 
+import java.io.File;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -44,7 +46,7 @@ class IngestBasemapCommand extends ExternalCommand {
 
         // $1
         JSONObject arg = new JSONObject();
-        arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
+        arg.put("INPUT", UPLOAD_FOLDER + File.separator + groupId + File.separator + inputFileName);
         commandArgs.add(arg);
 
         // $2
@@ -54,7 +56,7 @@ class IngestBasemapCommand extends ExternalCommand {
 
         // $3
         arg = new JSONObject();
-        arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH +"/BASEMAP");
+        arg.put("RASTER_OUTPUT_DIR", BASEMAPS_TILES_FOLDER);
         commandArgs.add(arg);
 
         // $4
@@ -69,7 +71,7 @@ class IngestBasemapCommand extends ExternalCommand {
 
         // $5
         arg = new JSONObject();
-        arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
+        arg.put("JOB_PROCESSOR_DIR", BASEMAPS_FOLDER);
         commandArgs.add(arg);
 
         // $6
