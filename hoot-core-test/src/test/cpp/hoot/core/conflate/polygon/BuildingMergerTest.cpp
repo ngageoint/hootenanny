@@ -42,13 +42,13 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -92,7 +92,7 @@ public:
 
   void runMatchTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -120,7 +120,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     QDir(".").mkpath("test-output/conflate/polygon");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/polygon/BuildingMergerTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
@@ -146,7 +146,7 @@ public:
 
   void runTagTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
@@ -173,7 +173,7 @@ public:
     bm.apply(map, replaced);
 
 //    QDir(".").mkpath("test-output/conflate/polygon");
-//    OsmWriter writer;
+//    OsmXmlWriter writer;
 //    writer.write(map, "test-output/conflate/polygon/BuildingTagTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-26, Relation:-1), (Way:-25, Relation:-1), (Way:-14, Relation:-1)}",

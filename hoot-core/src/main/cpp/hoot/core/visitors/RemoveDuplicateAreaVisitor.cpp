@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateAreaVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -41,7 +41,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/IsCompleteVisitor.h>
+#include <hoot/core/visitors/CompletelyContainedByMapElementVisitor.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/schema/TagDifferencer.h>
 
 namespace hoot
 {
@@ -161,7 +163,7 @@ void RemoveDuplicateAreaVisitor::visit(const shared_ptr<Element>& e1)
   auto_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
-      IsCompleteVisitor::isComplete(_map, e1->getElementId()) == false ||
+      CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
       schema.isArea(e1) == false)
   {
     return;

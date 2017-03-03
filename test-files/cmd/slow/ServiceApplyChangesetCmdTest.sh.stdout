@@ -1,0 +1,38 @@
+ setval 
+--------
+      1
+(1 row)
+
+16:45:43.082 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  60) Applying changeset test-files/cmd/slow/ServiceApplyChangesetCmdTest/changeset.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+16:45:43.102 DEBUG ...ain/cpp/hoot/core/io/ApiDb.cpp( 163) Successfully opened _db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+16:45:43.102 DEBUG ...OsmApiDbChangesetSqlWriter.cpp(  65) Executing changeset SQL queries against OSM API database...
+16:45:43.102 DEBUG ...OsmApiDbChangesetSqlWriter.cpp( 258) sql: INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (1, 1, now(), now());
+16:45:43.105 DEBUG ...OsmApiDbChangesetSqlWriter.cpp( 264) q.numRowsAffected(): 1
+16:45:43.105 DEBUG ...OsmApiDbChangesetSqlWriter.cpp( 258) sql: 
+/* create node 1 */
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388925209, -770386440, 1, true, now(), 3221225472, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 388925209, -770386440, 1, true, now(), 3221225472, 1);
+UPDATE changesets SET min_lat=388925209, max_lat=388925209, min_lon=-770386440, max_lon=-770386440 WHERE id=1;
+
+
+;
+16:45:43.107 DEBUG ...OsmApiDbChangesetSqlWriter.cpp( 264) q.numRowsAffected(): 1
+16:45:43.112 DEBUG ...OsmApiDbChangesetSqlWriter.cpp( 173) Changeset SQL queries execute finished against OSM API database.
+Changeset(s) Created: 1
+Changeset Details: min_lat=38.892521, max_lat=38.892521, min_lon=-77.038644, max_lon=-77.038644
+Node(s) Created: 1
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 0
+Way(s) Modified: 0
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+16:45:43.254 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/ServiceApplyChangesetCmdTest/output.osm...
+16:45:43.257 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from osmapidb://hoot:hoottest@localhost:5432/osmapi_test ...
+16:45:43.278 INFO  ...oot/core/io/OsmApiDbReader.cpp( 105) Executing OSM API read query...
+16:45:43.284 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/cmd/ServiceApplyChangesetCmdTest/output.osm
+16:45:43.284 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 116) Convert operation complete.
+16:45:43.425 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/cmd/slow/ServiceApplyChangesetCmdTest/output.osm ...
+16:45:43.428 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-output/cmd/ServiceApplyChangesetCmdTest/output.osm ...

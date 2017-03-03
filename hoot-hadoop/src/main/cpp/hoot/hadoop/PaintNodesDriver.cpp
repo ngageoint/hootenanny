@@ -21,6 +21,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/hadoop/MapStats.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -62,6 +62,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -69,12 +70,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hoot.services.controllers.job.JobControllerBase;
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
+import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
+
 
 @Controller
 @Path("/basemap")
 @Transactional
-public class BasemapResource extends JobControllerBase {
+public class BasemapResource {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
     private static final Map<String, String> basemapRasterExt;
 
@@ -87,9 +93,15 @@ public class BasemapResource extends JobControllerBase {
         }
     }
 
-    public BasemapResource() {
-        super(BASEMAP_RASTER_TO_TILES);
-    }
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private IngestBasemapCommandFactory ingestBasemapCommandFactory;
+
 
     /**
      * Upload dataset file and create TMS tiles.
@@ -150,52 +162,29 @@ public class BasemapResource extends JobControllerBase {
             }
 
             for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+                String fileName = pairs.getKey();
+
+                logger.debug("Preparing Basemap Ingest for :{}", fileName);
+
+                String basemapName = ((inputName == null) || (inputName.isEmpty())) ? fileName : inputName;
+                String inputFileName = uploadedFilesPaths.get(fileName);
                 String jobId = UUID.randomUUID().toString();
-                String fName = pairs.getKey();
 
-                logger.debug("Preparing Basemap Ingest for :{}", fName);
-                String bmName = inputName;
+                Command[] commands = {
+                    () -> {
+                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, groupId,
+                                inputFileName, projection, basemapName, this.getClass());
+                        return externalCommandManager.exec(jobId, ingestBasemapCommand);
+                    }
+                };
 
-                if ((bmName == null) || (bmName.isEmpty())) {
-                    bmName = fName;
-                }
+                jobProcessor.process(new Job(jobId, commands));
 
-                String inputFileName = uploadedFilesPaths.get(fName);
+                JSONObject response = new JSONObject();
+                response.put("jobid", jobId);
+                response.put("name", basemapName);
 
-                JSONArray commandArgs = new JSONArray();
-                JSONObject arg = new JSONObject();
-                arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("INPUT_NAME", bmName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                if ((projection != null) && (!projection.isEmpty())) {
-                    arg.put("PROJECTION", projection);
-                }
-                else {
-                    arg.put("PROJECTION", "auto");
-                }
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
-                String argStr = createBashPostBody(commandArgs);
-                postJobRequest(jobId, argStr);
-
-                JSONObject res = new JSONObject();
-                res.put("jobid", jobId);
-                res.put("name", bmName);
-
-                jobsArr.add(res);
+                jobsArr.add(response);
             }
         }
         catch (Exception e) {
@@ -217,7 +206,6 @@ public class BasemapResource extends JobControllerBase {
     @Path("/getlist")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBasemapList() {
-        JSONArray basemapList = new JSONArray();
         JSONArray filesList;
 
         try {
@@ -236,6 +224,7 @@ public class BasemapResource extends JobControllerBase {
             sortedScripts.put(sName.toUpperCase(), cO);
         }
 
+        JSONArray basemapList = new JSONArray();
         basemapList.addAll(sortedScripts.values());
 
         return Response.ok(basemapList.toJSONString()).build();

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapIoJs.h"
 
 // hoot
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 // node.js
-// #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
 
 #include "JsRegistrar.h"
@@ -103,7 +102,7 @@ public:
       status = (Status::Type)args[3]->ToInteger()->Value();
     }
 
-    OsmReader reader;
+    OsmXmlReader reader;
     bool useDataSourceIds = false;
     if (args.Length() >= 5)
     {

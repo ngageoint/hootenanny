@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -47,6 +47,8 @@
 
 namespace hoot
 {
+
+unsigned int RubberSheet::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RubberSheet)
 
@@ -138,7 +140,15 @@ void RubberSheet::applyTransform(shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 

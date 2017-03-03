@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -89,14 +90,9 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Create;
     result.e = _toE;
 
-    /*if (_toE->getTags().contains("note"))
-    {
-      result.note = _toE->getTags().get("note");
-    }*/
-    /*LOG_DEBUG(
-      "run out of from elements; 'from' element null; 'to' element not null: " <<
-        _toE->getElementId() << "; creating 'to' element...");
-    LOG_VARD(result.toString());*/
+    LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
+              _toE->getElementId() << "; creating 'to' element: ");
+    LOG_VART(result);
 
     _toE = _to->readNextElement();
   }
@@ -106,14 +102,9 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Delete;
     result.e = _fromE;
 
-    /*if (_fromE->getTags().contains("note"))
-    {
-      result.note = _fromE->getTags().get("note");
-    }*/
-    /*LOG_DEBUG(
-      "run out of 'to' elements; to' element null; 'from' element not null: " <<
-      _fromE->getElementId() << "; deleting 'from' element...");
-    LOG_VARD(result.toString());*/
+    LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
+              _fromE->getElementId() << "; deleting 'from' element: ");
+    LOG_VART(result);
 
     _fromE = _from->readNextElement();
   }
@@ -123,10 +114,10 @@ Change ChangesetDeriver::_nextChange()
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
            ElementComparer().isSame(_fromE, _toE))
     {
-      /*LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+      LOG_TRACE("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());
-      LOG_VARD(_fromE->toString());
-      LOG_VARD(_toE->toString());*/
+      LOG_VART(_fromE);
+      LOG_VART(_toE);
 
       _toE = _to->readNextElement();
       _fromE = _from->readNextElement();
@@ -135,7 +126,7 @@ Change ChangesetDeriver::_nextChange()
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      //LOG_DEBUG("both are null elements; skipping");
+      LOG_TRACE("both are null elements; skipping");
     }
     // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
@@ -143,15 +134,9 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      /*if (_toE->getTags().contains("note"))
-      {
-        result.note = _toE->getTags().get("note");
-      }*/
-      /*LOG_DEBUG(
-        "run out of from elements; 'from' element null; 'to' element not null: " <<
-          _toE->getElementId() << "; creating 'to' element...");
-      LOG_VARD(_toE->toString());
-      LOG_VARD(result.toString());*/
+      LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
+                _toE->getElementId() << "; creating 'to' element: ");
+      LOG_VART(result.e);
 
       _toE = _to->readNextElement();
     }
@@ -161,15 +146,9 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      /*if (_fromE->getTags().contains("note"))
-      {
-        result.note = _fromE->getTags().get("note");
-      }*/
-      /*LOG_DEBUG(
-        "run out of 'to' elements; to' element null; 'from' element not null: " <<
-        _fromE->getElementId() << "; deleting 'from' element...");
-      LOG_VARD(_fromE->toString());
-      LOG_VARD(result.toString());*/
+      LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
+                _fromE->getElementId() << "; deleting 'from' element: ");
+      LOG_VART(result.e);
 
       _fromE = _from->readNextElement();
     }
@@ -178,16 +157,10 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Modify;
       result.e = _toE;
 
-      /*if (_toE->getTags().contains("note"))
-      {
-        result.note = _toE->getTags().get("note");
-      }*/
-      /*LOG_DEBUG(
-        "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
-        _toE->getElementId() << " modifying 'to' element...");
-      LOG_VARD(_fromE->toString());
-      LOG_VARD(_toE->toString());
-      LOG_VARD(result.toString());*/
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
+                _toE->getElementId() << " modifying 'to' element: ");
+      //LOG_VART(_fromE);
+      LOG_VART(result.e);
 
       _toE = _to->readNextElement();
     }
@@ -196,16 +169,10 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      /*if (_fromE->getTags().contains("note"))
-      {
-        result.note = _fromE->getTags().get("note");
-      }*/
-      /*LOG_DEBUG(
-        "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
-        _toE->getElementId() << " deleting 'from' element...");
-      LOG_VARD(_fromE->toString());
-      LOG_VARD(_toE->toString());
-      LOG_VARD(result.toString());*/
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
+                _toE->getElementId() << " deleting 'from' element: ");
+      //LOG_VART(_toE);
+      LOG_VART(result.e);
 
       _fromE = _from->readNextElement();
     }
@@ -214,16 +181,10 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      /*if (_toE->getTags().contains("note"))
-      {
-        result.note = _toE->getTags().get("note");
-      }*/
-      /*LOG_DEBUG(
-        "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
-        _toE->getElementId() << " creating 'to' element...");
-      LOG_VARD(_fromE->toString());
-      LOG_VARD(_toE->toString());
-      LOG_VARD(result.toString());*/
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
+                _toE->getElementId() << " creating 'to' element: ");
+      //LOG_VART(_fromE));
+      LOG_VART(result.e);
 
       _toE = _to->readNextElement();
     }

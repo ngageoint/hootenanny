@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KNNWAYITERATOR_H
@@ -31,19 +31,20 @@
 // GEOS
 #include <geos/geom/LineString.h>
 
-// hoot
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/OsmMap.h>
-
 // tgs
 #include <tgs/RStarTree/KnnIterator.h>
+
+// Hoot
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
   class Way;
+  class OsmMapIndex;
 
   using namespace geos::geom;
   using namespace Tgs;
+  using namespace std;
 
 /**
  */

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYDUPLICATEPOIOP_H
 #define PERTYDUPLICATEPOIOP_H
@@ -49,11 +49,8 @@ namespace hoot
 class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer
 {
 public:
-  static string className() { return "hoot::PertyDuplicatePoiOp"; }
 
-  static QString duplicateSigmaKey() { return "perty.duplicate.poi.duplicate.sigma"; }
-  static QString moveMultiplierKey() { return "perty.duplicate.poi.move.multiplier"; }
-  static QString pKey() { return "perty.duplicate.poi.p"; }
+  static string className() { return "hoot::PertyDuplicatePoiOp"; }
 
   PertyDuplicatePoiOp();
 

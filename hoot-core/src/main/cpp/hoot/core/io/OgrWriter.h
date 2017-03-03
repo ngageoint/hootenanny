@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -32,18 +32,10 @@
 #include <boost/shared_ptr.hpp>
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ElementCache.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
-#include <hoot/core/elements/ElementProvider.h>
-
+#include <hoot/core/io/schema/StrictChecking.h>
 
 // GDAL
 #include <ogr_spatialref.h>
@@ -58,11 +50,18 @@ class QString;
 // Standard
 #include <vector>
 
-namespace hoot {
+namespace hoot
+{
 
 class Feature;
 class Layer;
 class Schema;
+class OsmMap;
+class ScriptTranslator;
+class ScriptToOgrTranslator;
+class ElementInputStream;
+class ElementOutputStream;
+class ElementProvider;
 
 /**
  * Writes a file to an OGR data source.
@@ -70,7 +69,10 @@ class Schema;
 class OgrWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::OgrWriter"; }
+
+  static unsigned int logWarnCount;
 
   /**
    * A true/false value to determine whether or not all layers are created.
@@ -141,7 +143,7 @@ protected:
   bool _appendData;
   QString _scriptPath;
   mutable shared_ptr<ScriptToOgrTranslator> _translator;
-  shared_ptr<OGRDataSource> _ds;
+  shared_ptr<GDALDataset> _ds;
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
   shared_ptr<const Schema> _schema;

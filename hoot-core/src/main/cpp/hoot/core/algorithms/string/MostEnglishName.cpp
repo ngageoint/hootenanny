@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MostEnglishName.h"
 
@@ -30,6 +30,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Tags.h>
 
 // Qt
 #include <QFile>
@@ -39,6 +40,8 @@
 
 namespace hoot
 {
+
+unsigned int MostEnglishName::logWarnCount = 0;
 
 MostEnglishNamePtr MostEnglishName::_theInstance;
 
@@ -54,10 +57,8 @@ const MostEnglishNamePtr& MostEnglishName::getInstance()
   {
     _theInstance.reset(new MostEnglishName());
   }
-
   return _theInstance;
 }
-
 
 QString MostEnglishName::getMostEnglishName(const Tags& tags)
 {
@@ -100,9 +101,17 @@ const QSet<QString>& MostEnglishName::_getWords()
 
     if (_englishWords.size() == 0)
     {
-      LOG_WARN("Failed to load any English dictionaries. Please modify " +
-        ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
-        "dictionary. Search path: " << _wordPaths);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Failed to load any English dictionaries. Please modify " +
+          ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
+          "dictionary. Search path: " << _wordPaths);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
 
     LOG_DEBUG("Unique (case-insensitive) words: " + QString::number(_englishWords.size()));
@@ -127,12 +136,15 @@ long MostEnglishName::_loadEnglishWords(QString path)
       QByteArray ba = fp.readLine(MAX_LINE_SIZE);
       if (ba.size() == MAX_LINE_SIZE && count < 10)
       {
-        LOG_WARN("Loaded a line of max size. Is this a proper dictionary?");
-        count++;
-        if (count == 10)
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {
-          LOG_WARN("Silencing dictionary record warnings.");
+          LOG_WARN("Loaded a line of max size. Is this a proper dictionary?");
         }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
       QString s = QString::fromUtf8(ba.data());
       wordCount++;

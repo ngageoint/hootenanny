@@ -29,15 +29,15 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot;
 
@@ -73,7 +73,7 @@ public:
 
     void runTest()
     {
-      OsmReader reader;
+      OsmXmlReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -83,7 +83,7 @@ public:
       shared_ptr<OsmMap> map2(new OsmMap(map->getProjection()));
 
       shared_ptr<OGRSpatialReference> srs =
-          MapProjector::createAeacProjection(CalculateBoundsVisitor::getBounds(map));
+          MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
       MapProjector::project(map, srs);
 
       stringstream ss;
@@ -116,7 +116,7 @@ public:
 //      {
 //        shared_ptr<OsmMap> wgs84(new OsmMap(map2));
 //        MapProjector::reprojectToWgs84(wgs84);
-//        OsmWriter writer;
+//        OsmXmlWriter writer;
 //        QString fn = QString("test-output/algorithms/MaximalNearestSublineTestOutput.osm");
 //        writer.write(wgs84, fn);
 //      }
@@ -132,7 +132,7 @@ public:
     {
       TestUtils::resetEnvironment();
 
-      OsmReader reader;
+      OsmXmlReader reader;
 
       shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
@@ -171,7 +171,7 @@ public:
       {
         shared_ptr<OsmMap> wgs84(new OsmMap(map));
         MapProjector::projectToWgs84(wgs84);
-        OsmWriter writer;
+        OsmXmlWriter writer;
         writer.setIncludeCompatibilityTags(false);
         writer.setIncludeHootInfo(false);
         writer.setIncludeIds(false);
@@ -186,7 +186,7 @@ public:
 
     void oneShortTest()
     {
-      OsmReader reader;
+      OsmXmlReader reader;
 
       OsmMap::resetCounters();
 
@@ -230,7 +230,7 @@ public:
       {
         shared_ptr<OsmMap> wgs84(new OsmMap(map));
         MapProjector::projectToWgs84(wgs84);
-        OsmWriter writer;
+        OsmXmlWriter writer;
         QString fn = QString("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
         writer.write(wgs84, fn);
       }

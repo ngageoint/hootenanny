@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_WAY_GENERALIZE_VISITOR_H
 #define PERTY_WAY_GENERALIZE_VISITOR_H
@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/Configurable.h>
 
 #include "RngConsumer.h"
@@ -39,9 +38,10 @@ namespace hoot
 {
   class Way;
   class Node;
+  class RdpWayGeneralizer;
 
 /**
- * Performs random way generalization of a map's ways in accordance with [1].  Uses the
+ * Performs random generalization of a map's ways in accordance with [1].  Uses the
  * Ramer-Douglas Peucker algorithm [2].
  *
  * 1. Evaluating conflation methods using uncertainty modeling - Peter Doucette, et al. 2013
@@ -51,7 +51,8 @@ namespace hoot
  *
  * The input map data should be projected to an orthographic coordinate system.
  */
-class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable
+class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer,
+  public Configurable
 {
 
 public:

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGROPTIONS_H
 #define OGROPTIONS_H
@@ -47,55 +47,19 @@ class OgrOptions : public QMap<QString, QString>
 {
 public:
 
-  OgrOptions()
-  {
-    _cryptic = 0;
-  }
+  OgrOptions();
 
-  ~OgrOptions()
-  {
-    deleteCrypticOptions();
-  }
+  ~OgrOptions();
 
-  void deleteCrypticOptions()
-  {
-    if (_cryptic)
-    {
-      for (size_t i = 0; _cryptic[i] != 0; ++i)
-      {
-        delete[] _cryptic[i];
-      }
-      delete[] _cryptic;
-    }
-  }
+  void deleteCrypticOptions();
 
   /**
    * Returns an old school C encoding of the options suitable for OGR parameters.
    */
-  char** getCrypticOptions()
-  {
-    deleteCrypticOptions();
-
-    if (size() == 0)
-    {
-      return 0;
-    }
-
-    _cryptic = new char*[size() + 1];
-    _cryptic[size()] = 0;
-    size_t i = 0;
-    for (OgrOptions::const_iterator it = constBegin(); it != constEnd(); ++it)
-    {
-      QByteArray s = (it.key() + "=" + it.value()).toUtf8();
-      _cryptic[i] = new char[s.size() + 1];
-      strcpy(_cryptic[i], s.data());
-      ++i;
-    }
-
-    return _cryptic;
-  }
+  char** getCrypticOptions();
 
 private:
+
   char** _cryptic;
 };
 

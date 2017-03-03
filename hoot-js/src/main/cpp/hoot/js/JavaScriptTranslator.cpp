@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "JavaScriptTranslator.h"
 
 // hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/schema/Feature.h>
@@ -64,6 +64,8 @@ using namespace v8;
 
 namespace hoot
 {
+
+unsigned int JavaScriptTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
@@ -406,9 +408,6 @@ shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     }
   }
 
-//  LOG_WARN("Returning from GetOgrOutputSchema")
-//  shared_ptr<Schema> schema(new Schema());
-
   return _schema;
 }
 
@@ -437,7 +436,15 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated double value repeated in enumerations table: " << v << " = " << vm["value"]);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -471,7 +478,15 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
 
     if (fd->hasEnumeratedValue(v))
     {
-      LOG_WARN("Enumerated int value repeated in enumerations table: " << v << " = " << vm["value"]);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -747,8 +762,6 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
-  //LOG_DEBUG("Started translateToOgr");
-
   _tags = &tags;
 
   HandleScope handleScope;

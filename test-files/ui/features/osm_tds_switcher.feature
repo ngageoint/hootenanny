@@ -7,7 +7,7 @@ Feature: OSM/TDS Switcher
         And I press "Add Reference Dataset"
         And I click the "DcGisRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
 
     Scenario: I can select a feature and switch between attribute schemas
         When I select a way map feature with OSM id "w309"

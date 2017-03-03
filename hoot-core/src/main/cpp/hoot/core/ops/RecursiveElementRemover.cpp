@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 
 namespace hoot
 {
@@ -54,8 +54,10 @@ void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
   {
     return;
   }
+
   const ConstElementPtr& e = map->getElement(_eid);
-  SetVisitor sv;
+  LOG_TRACE("Removing: " << e->getElementId() << "...");
+  ElementIdSetVisitor sv;
   e->visitRo(*map, sv);
 
   // find all potential candidates for erasure. We'll whittle away any invalid candidates.

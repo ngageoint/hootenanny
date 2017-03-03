@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/rnd/conflate/network/EdgeString.h>
 #include <hoot/core/TestUtils.h>
 
@@ -46,7 +46,7 @@ class EdgeStringTest : public CppUnit::TestFixture
   CPPUNIT_TEST(reverseTest);
   CPPUNIT_TEST(partialTest);
   CPPUNIT_TEST(stubTest);
-  CPPUNIT_TEST(edgeClosedTest);
+  // CPPUNIT_TEST(edgeClosedTest); // See comment below
   CPPUNIT_TEST(addDisconnectedEdgeTest);
   CPPUNIT_TEST(equalsTest);
   CPPUNIT_TEST(containsEdgeStringTest);
@@ -359,6 +359,7 @@ public:
     CPPUNIT_ASSERT(edgeStr.isStub());
   }
 
+  /* This tries to test code that was removed by Surratt on 26SEP2016 [14749b245]
   void edgeClosedTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -387,6 +388,7 @@ public:
       "Illegal argument, you attempted to add an edge to an edge string that is already closed. Ends in a partial match?",
       exceptionMsg.toStdString());
   }
+  */
 
   void addDisconnectedEdgeTest()
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAdvancedMatcher.h"
 
@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/util/Log.h>
 
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
@@ -109,7 +110,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getLogIdenticalMessageLimit())
+        if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DualWaySplitter.h"
@@ -39,7 +39,7 @@ using namespace geos::geom;
 using namespace geos::operation::buffer;
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
@@ -57,7 +57,6 @@ using namespace geos::operation::buffer;
 #include <hoot/core/visitors/FindNodesVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
-
 // Qt
 #include <QDebug>
 
@@ -71,6 +70,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+unsigned int DualWaySplitter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
@@ -116,19 +117,28 @@ shared_ptr<Way> DualWaySplitter::_createOneWay(shared_ptr<const Way> w, Meters b
   if (newLs == 0)
   {
     /// @todo MultiLineString not handled properly See r2275
-    LOG_WARN("Inappropriate handling of geometry.");
-    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
 
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(
+        "Inappropriate handling of geometry.  Adding original line back in to keep things moving...");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+
+    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
     auto_ptr<Geometry> unioned(ls->Union(p.get()));
     auto_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
     auto_ptr<Geometry> buffered(ls->buffer(0));
-    LOG_WARN("input geometry: " << ls->toString());
-    LOG_WARN("unioned geometry: " << unioned->toString());
-    LOG_WARN("cleaned geometry: " << cleaned->toString());
-    LOG_WARN("buffered geometry: " << buffered->toString());
-    LOG_WARN("output geometry: " << g->toString());
+    LOG_TRACE("input geometry: " << ls->toString());
+    LOG_TRACE("unioned geometry: " << unioned->toString());
+    LOG_TRACE("cleaned geometry: " << cleaned->toString());
+    LOG_TRACE("buffered geometry: " << buffered->toString());
+    LOG_TRACE("output geometry: " << g->toString());
 
-    LOG_WARN("Adding original line back in to keep things moving.");
     const CoordinateSequence* cs = ls->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
@@ -251,119 +261,27 @@ shared_ptr<OsmMap> DualWaySplitter::splitAll()
   _result = result;
 
   TagCriterion tagCrit("divider", "yes");
-  LOG_DEBUG("  filtering...");
-
   vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
-  LOG_DEBUG("  filtered.");
 
+  bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (Log::getInstance().isInfoEnabled())
+    if (Log::getInstance().isInfoEnabled() && wayIds.size() % 1000 == 0 && wayIds.size() > 0)
     {
       cout << "  splitting " << i << " / " << wayIds.size() << "\r";
       cout.flush();
+      todoLogged = true;
     }
     _splitWay(wayIds[i]);
   }
 
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && todoLogged)
   {
     cout << endl;
   }
 
   _result.reset();
   return result;
-}
-
-void DualWaySplitter::_addConnector(long /*nodeId*/)
-{
-//  vector<long> intersectingWays = _result->findWayByNode(nodeId);
-//
-//  // If this isn't the only way connected to the endpoint.
-//  if (intersectingWays.size() > 1)
-//  {
-//    // get the index of nodeId in _working
-//    long workingNodeIndex = _working->getNodeId(0) == nodeId ? 0 : _working->getNodeCount() - 1;
-//
-//    for (size_t i = 0; i < intersectingWays.size(); i++)
-//    {
-//      // if this is not the input way
-//      if (intersectingWays[i] != _working->getId())
-//      {
-//        shared_ptr<Way> other = _result->getWay(intersectingWays[i]);
-//
-//        if (other->getStatus() == _working->getStatus())
-//        {
-//          Radians heading1 = WayHeading::calculateHeading(WayLocation(_working, midNodeIndex, 0), 5.0);
-//          Radians heading2 = WayHeading::calculateHeading(LocationOfPoint::locate(other,
-//            _result->getNode(nodeId)->toCoordinate()), 5.0);
-//
-//          Radians angle = fabs(heading1 - heading2);
-//          if (angle > M_PI)
-//          {
-//            angle = toRadians(360) - angle;
-//          }
-//
-//          if (other->getTags()[MetadataTags::HootStub()] == "true")
-//          {
-//            map->removeWay(other);
-//          }
-//          // if the angle is less than 45
-//          else if (angle < toRadians(45))
-//          {
-//            // create two stub connectors
-//            _createStub(map, map->getWay(_left), nodeId);
-//            _createStub(map, map->getWay(_right), nodeId);
-//          }
-//          // if the angle is 45 or greater
-//          else
-//          {
-//            _mergeInbound(map, other, nodeId);
-//          }
-//        }
-//      }
-//    }
-//  }
-}
-
-void DualWaySplitter::_createStub(shared_ptr<Way> /*dividedWay*/, long /*centerNodeId*/,
-                                  long /*edgeNodeId*/)
-{
-//  shared_ptr<Node> node = map->getNode(nodeId);
-//  Coordinate c = node->toCoordinate();
-//
-//  shared_ptr<Way> mid = map->getWay(_mid);
-//
-//  shared_ptr<const Node> endNode;
-//  double d0 = oneway->getNodeN(0)->toCoordinate().distance(c);
-//  double d1 = oneway->getLastNode()->toCoordinate().distance(c);
-//
-//  if (d0 < d1)
-//  {
-//    endNode = oneway->getNodeN(0);
-//  }
-//  else
-//  {
-//    endNode = oneway->getLastNode();
-//  }
-//
-//  Status otherUnknown;
-//  if (oneway->getStatus() == Unknown1)
-//  {
-//    otherUnknown = Unknown2;
-//  }
-//  else
-//  {
-//    otherUnknown = Unknown1;
-//  }
-//
-//  shared_ptr<Way> stub(new Way(otherUnknown, OsmMap::createNextWayId(),
-//                               oneway->getAccuracy()));
-//  stub->addNode(endNode->getId());
-//  stub->addNode(nodeId);
-//  stub->setTags(_way->getTags());
-//  stub->setTag(MetadataTags::HootStub(), "true");
-//  map->addWay(stub);
 }
 
 void DualWaySplitter::_fixLanes(shared_ptr<Way> w)

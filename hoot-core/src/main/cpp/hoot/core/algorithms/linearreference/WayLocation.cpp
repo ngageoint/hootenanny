@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayLocation.h"
@@ -32,15 +32,16 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iomanip>
 
-namespace hoot {
+namespace hoot
+{
+
+unsigned int WayLocation::logWarnCount = 0;
 
 Coordinate c;
 
@@ -186,7 +187,15 @@ int WayLocation::compareTo(const WayLocation& other) const
 {
   if (!(_segmentFraction < 1.0 && other._segmentFraction < 1.0))
   {
-    LOG_WARN(_segmentFraction << " other: " << other._segmentFraction);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(_segmentFraction << " other: " << other._segmentFraction);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   assert(_segmentFraction < 1.0 && other._segmentFraction < 1.0);
   // compare way ids

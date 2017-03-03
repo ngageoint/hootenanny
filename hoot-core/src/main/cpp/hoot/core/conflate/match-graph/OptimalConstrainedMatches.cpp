@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OptimalConstrainedMatches.h"
 
@@ -52,9 +52,9 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating match conflicts...");
+  LOG_INFO("Calculating optimal match conflicts...");
   _calculateMatchConflicts();
-  LOG_DEBUG("Done calculating match conflicts");
+  LOG_DEBUG("Done calculating optimal match conflicts");
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -35,7 +35,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -49,6 +49,8 @@ using namespace boost;
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/ElementId.h>
 using namespace hoot::elements;
 
 // Qt
@@ -694,14 +696,14 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   it = _nodes.find(oldId);
   if (it == _nodes.end())
   {
-    //LOG_WARN("Tried to replace a non-existent node " << oldId );
+    LOG_TRACE("Tried to replace a non-existent node " << oldId );
     return;
   }
 
   it = _nodes.find(newId);
   if ( it == _nodes.end() )
   {
-    //LOG_WARN("Replacement node " << newId << "does not exist");
+    LOG_TRACE("Replacement node " << newId << "does not exist");
     return;
   }
 
@@ -714,7 +716,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
     if ( currRelation->contains(oldNodeId) == true )
     {
-      LOG_DEBUG("Trying to replace node " << oldNode->getId() << " with node " <<
+      LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
                 newNode->getId() << " in relation " << currRelation->getId());
 
       currRelation->replaceElement(oldNode, newNode);

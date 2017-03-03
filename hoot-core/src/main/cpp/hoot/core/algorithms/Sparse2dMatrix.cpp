@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Sparse2dMatrix.h"
 
@@ -47,6 +47,19 @@ QString Sparse2dMatrix::toString() const
     sl << QString("(%1, %2): %3").arg(it->first.row()).arg(it->first.col()).arg(it->second);
   }
   return "{ " + sl.join("\n") + " }";
+}
+
+double Sparse2dMatrix::get(const CellId& cid) const
+{
+  const_iterator it = _map.find(cid);
+  if (it != _map.end())
+  {
+    return it->second;
+  }
+  else
+  {
+    return 0.0;
+  }
 }
 
 }

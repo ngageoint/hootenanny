@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MeanAggregator.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -35,6 +35,16 @@ HOOT_FACTORY_REGISTER(ValueAggregator, MeanAggregator)
 
 MeanAggregator::MeanAggregator()
 {
+}
+
+double MeanAggregator::aggregate(vector<double>& d) const
+{
+  double sum = 0.0;
+  for (size_t i = 0; i < d.size(); i++)
+  {
+    sum += d[i];
+  }
+  return sum / double(d.size());
 }
 
 }

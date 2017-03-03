@@ -34,9 +34,9 @@
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 
@@ -140,7 +140,7 @@ public:
     uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
-    shared_ptr<OsmWriter> writer(new OsmWriter());
+    shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map,
       "test-output/algorithms/WayMatchStringMergerTestMergeNode.osm");
@@ -170,7 +170,7 @@ public:
     uut.setKeeperStatus(Status::Conflated);
 
     MapProjector::projectToWgs84(map);
-    shared_ptr<OsmWriter> writer(new OsmWriter());
+    shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map,
       "test-output/algorithms/WayMatchStringMergerTestMergeTags.osm");

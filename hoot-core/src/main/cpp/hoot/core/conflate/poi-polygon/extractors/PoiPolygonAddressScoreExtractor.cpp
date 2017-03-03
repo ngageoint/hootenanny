@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAddressScoreExtractor.h"
 
@@ -33,7 +33,7 @@
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 //#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -231,7 +231,7 @@ bool PoiPolygonAddressScoreExtractor::_addressesMatchesOnSubLetter(const QString
 
   QString polyAddressTemp = polyAddressParts[0];
   const QString polyHouseNumStr = polyAddressTemp.replace(QRegExp("[a-z]+"), "");
-  LOG_VARD(polyHouseNumStr);
+  LOG_VART(polyHouseNumStr);
   bool polyHouseNumOk = false;
   /*const int polyHouseNum = */polyHouseNumStr.toInt(&polyHouseNumOk);
 

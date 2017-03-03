@@ -1,6 +1,0 @@
-{  
-   "inputtype":"db",
-   "input":"MyTestMap",
-   "outputtype":"osm_api_db",
-   "removereview":"false"
-}

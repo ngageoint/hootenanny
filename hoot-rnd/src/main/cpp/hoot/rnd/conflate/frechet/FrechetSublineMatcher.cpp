@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FrechetSublineMatcher.h"
 // geos
 #include <geos/geom/LineString.h>
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/rnd/conflate/frechet/FrechetDistance.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,18 +23,20 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MULTI_LINE_STRING_LOCATION_H__
 #define __MULTI_LINE_STRING_LOCATION_H__
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 
 namespace hoot
 {
 
-  class Relation;
+class Relation;
+class OsmMap;
 
 /**
  * Represents a location on a multi-line feature

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMergerCreator.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 #include "MarkForReviewMerger.h"
 
@@ -42,8 +43,10 @@ MarkForReviewMergerCreator::MarkForReviewMergerCreator()
 }
 
 bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+                                               vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers with " << className() << "...");
+
   bool result = false;
 
   set< pair<ElementId, ElementId> > eids;
@@ -56,14 +59,16 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* match = (*it);
+    const Match* match = *it;
+    LOG_VART(match->toString());
     MatchType type = match->getType();
+    LOG_VART(type);
     if (type == MatchType::Review)
     {
-      set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+      set< pair<ElementId, ElementId> > s = match->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      matchStrings.append((*it)->explain());
-      score = max<double>((*it)->getClassification().getReviewP(), score);
+      matchStrings.append(match->explain());
+      score = max<double>(match->getClassification().getReviewP(), score);
       reviewCount++;
       if (reviewType.contains(match->getMatchName()) == false)
       {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,7 +41,8 @@ using namespace std;
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+    public Configurable
 {
 public:
 
@@ -56,7 +58,12 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual void setConfiguration(const Settings& conf);
+
+  void setMaxReport(int maxReport) { _maxReport = maxReport; }
+
 protected:
+
   OsmMap* _map;
   const OsmMap* _constMap;
   int _maxReport;

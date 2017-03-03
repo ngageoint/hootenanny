@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
 
 // hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QCoreApplication>
 #include <QDir>
 #include <QProcess>
 #include <QThreadPool>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -77,7 +79,7 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   QStringList outLines;
   QStringList inLines = output.split("\n");
 
-  // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/PbfReader.cpp(455) - "
+  // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/OsmPbfReader.cpp(455) - "
   QRegExp reWarn("[0-9:\\.]+ WARN  .*\\( *-?[0-9]+\\) ");
   QRegExp reError("[0-9:\\.]+ ERROR .*\\( *-?[0-9]+\\) ");
 
@@ -231,8 +233,19 @@ void ScriptTest::_runDiff(QString file1, QString file2)
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  bool scriptTimeOutSpecified = false;
+  int waitToFinishTime = 30000;
+  if (scriptTestTimeOutSeconds != -1)
+  {
+    waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    scriptTimeOutSpecified = true;
+  }
+
   bool first = true;
-  while (p.waitForFinished(30000) == false)
+  QElapsedTimer timer;
+  timer.start();
+  while (p.waitForFinished(waitToFinishTime) == false)
   {
     if (first)
     {
@@ -240,6 +253,14 @@ void ScriptTest::_runDiff(QString file1, QString file2)
       cout << endl;
       LOG_WARN("Waiting for process to finish: " + _script);
       first = false;
+    }
+
+    //if the process hangs this will allows us to get out
+    const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
+    if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
+    {
+      LOG_WARN("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      break;
     }
   }
 
@@ -259,15 +280,34 @@ void ScriptTest::_runProcess()
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
-  bool first = true;
-  while (p.waitForFinished(30000) == false)
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  bool scriptTimeOutSpecified = false;
+  int waitToFinishTime = 30000;
+  if (scriptTestTimeOutSeconds != -1)
   {
-    if (first)
+    waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    scriptTimeOutSpecified = true;
+  }
+
+  bool first = true;
+  QElapsedTimer timer;
+  timer.start();
+  while (p.waitForFinished(waitToFinishTime) == false)
+  {
+    if (first && !scriptTimeOutSpecified)
     {
       // throw an endl in there so the dots in the test list don't look funny.
       cout << endl;
       LOG_WARN("Waiting for process to finish: " + _script);
       first = false;
+    }
+
+    //if the process hangs this will allows us to get out
+    const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
+    if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
+    {
+      LOG_WARN("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      break;
     }
   }
 

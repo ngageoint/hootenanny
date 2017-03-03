@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPARSE2DMATRIX_H
 #define SPARSE2DMATRIX_H
@@ -84,18 +84,7 @@ public:
 
   Sparse2dMatrix();
 
-  double get(const CellId& cid) const
-  {
-    const_iterator it = _map.find(cid);
-    if (it != _map.end())
-    {
-      return it->second;
-    }
-    else
-    {
-      return 0.0;
-    }
-  }
+  double get(const CellId& cid) const;
 
   double get(int row, int col) const { return get(CellId(row, col)); }
 

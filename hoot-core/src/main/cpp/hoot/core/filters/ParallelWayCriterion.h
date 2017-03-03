@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLELWAYCRITERION_H
@@ -33,8 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
@@ -45,6 +44,10 @@ namespace hoot
 class ParallelWayCriterion : public ElementCriterion
 {
 public:
+
+  static string className() { return "hoot::ParallelWayCriterion"; }
+
+  ParallelWayCriterion() {}
   ParallelWayCriterion(const ConstOsmMapPtr& map,
                        shared_ptr<const Way> baseWay,
                        bool isParallel = true);
@@ -60,6 +63,7 @@ public:
   ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
 
 private:
+
   ConstOsmMapPtr _map;
   shared_ptr<const Way> _baseWay;
   bool _isParallel;

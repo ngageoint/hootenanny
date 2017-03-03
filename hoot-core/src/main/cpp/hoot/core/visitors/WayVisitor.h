@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,18 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYVISITOR_H
 #define WAYVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -55,21 +52,11 @@ public:
   virtual void setOsmMap(OsmMap* map) { _map = map; }
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual void visit(const ConstElementPtr& e)
-  {
-    if (e->getElementType() == ElementType::Way)
-    {
-      WayPtr w = _map->getWay(e->getId());
-      if (w)
-      {
-        visit(w);
-      }
-    }
-  }
-
+  virtual void visit(const ConstElementPtr& e);
   virtual void visit(const WayPtr& w) = 0;
 
 protected:
+
   OsmMap* _map;
 };
 

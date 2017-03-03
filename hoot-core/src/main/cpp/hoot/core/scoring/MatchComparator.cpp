@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -33,25 +33,27 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/HasTagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
-#include <hoot/core/visitors/SetVisitor.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
 
 namespace hoot
 {
+
+unsigned int MatchComparator::logWarnCount = 0;
 
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
@@ -87,8 +89,8 @@ public:
     QString uuid = e->getTags()["uuid"];
     if (refs.size() > 0 && uuid.isEmpty())
     {
-      LOG_WARN("refs: " << refs);
-      LOG_WARN("Element: " << e->toString());
+      LOG_TRACE("refs: " << refs);
+      LOG_TRACE("Element: " << e->toString());
       throw HootException("uuid must be provided on all REF* features.");
     }
 
@@ -206,7 +208,7 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
 {
   TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid1);
   tcf.addPair("uuid", uuid2);
-  SetVisitor sv;
+  ElementIdSetVisitor sv;
   FilteredVisitor fv2(tcf, sv);
   in->visitRo(fv2);
   const set<ElementId>& s = sv.getElementSet();
@@ -418,7 +420,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   set<QString> cUuids;
   GetTagValuesVisitor vc("uuid", cUuids);
   conflated->visitRo(vc);
-  //LOG_DEBUG("cUuids size: " << cUuids.size());
+  LOG_TRACE("cUuids size: " << cUuids.size());
 
   // go through all the reviews in the conflated map
   set<ReviewMarker::ReviewUid> ruuid = ReviewMarker::getReviewUids(conflated);
@@ -431,10 +433,32 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     for (set<ElementId>::iterator eid = eids.begin(); eid != eids.end(); eid++)
     {
       ElementId p = *eid;
-      QString uuidStr = conflated->getElement(p)->getTags()["uuid"];
+      ConstElementPtr element = conflated->getElement(p);
+      if (!element.get())
+      {
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Missing element for " + p.toString());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+        continue;
+      }
+      QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
-        LOG_WARN("Missing uuid for " + p.toString());
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Missing uuid for " + p.toString());
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
         continue;
       }
 
@@ -476,14 +500,14 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
   StatusCriterion sf1(Status::Unknown1);
   FilteredVisitor fvIn1(sf1, gtv1);
   in->visitRo(fvIn1);
-  //LOG_DEBUG("in1Uuids size: " << in1Uuids.size());
+  LOG_TRACE("in1Uuids size: " << in1Uuids.size());
 
   set<QString> in2Uuids;
   GetTagValuesVisitor gtv2("uuid", in2Uuids);
   StatusCriterion sf2(Status::Unknown2);
   FilteredVisitor fvIn2(sf2, gtv2);
   in->visitRo(fvIn2);
-  //LOG_DEBUG("in2Uuids size: " << in2Uuids.size());
+  LOG_TRACE("in2Uuids size: " << in2Uuids.size());
 
   for (set<QString>::const_iterator it = cUuids.begin(); it != cUuids.end(); ++it)
   {
@@ -497,16 +521,16 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       if (in1Uuids.find(cList[i]) != in1Uuids.end())
       {
         u1.insert(cList[i]);
-        //LOG_DEBUG("Inserted " << cList[i] << " into u1.");
+        LOG_TRACE("Inserted " << cList[i] << " into u1.");
       }
       else if (in2Uuids.find(cList[i]) != in2Uuids.end())
       {
         u2.insert(cList[i]);
-        //LOG_DEBUG("Inserted " << cList[i] << " into u2.");
+        LOG_TRACE("Inserted " << cList[i] << " into u2.");
       }
       else
       {
-        LOG_WARN("Missing UUID: " << cList[i]);
+        LOG_TRACE("Missing UUID: " << cList[i]);
         throw HootException("Conflated uuid wasn't found in either input.");
       }
     }
@@ -692,8 +716,8 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
   FilteredVisitor elementWrongVisitor(
     new ChainCriterion(
       new ElementTypeCriterion(elementType),
-      new HasTagCriterion(MetadataTags::HootWrong())),
-    new CountVisitor());
+      new TagKeyCriterion(MetadataTags::HootWrong())),
+    new ElementCountVisitor());
   FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
   SingleStatistic* singleStat =
     dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());

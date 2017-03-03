@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -36,8 +36,8 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
@@ -48,6 +48,10 @@ using namespace geos::geom;
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Progress.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -130,6 +134,7 @@ public:
   Progress streamGetProgress() const;
 
 protected:
+
   Meters _circularError;
   Status _status;
   shared_ptr<OsmMap> _map;
@@ -138,7 +143,7 @@ protected:
   long _count;
   long _featureCount;
   bool _useFileId;
-  shared_ptr<OGRDataSource> _dataSource;
+  shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
@@ -146,13 +151,6 @@ protected:
   auto_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
-
-  /*
-  long _partialNodesRead;
-  long _partialWaysRead;
-  long _partialRelationsRead;
-  bool _firstPartialReadCompleted;
-  */
 
   //partial read iterators
   NodeMap::const_iterator _nodesItr;
@@ -360,7 +358,7 @@ shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
-  shared_ptr<OGRDataSource> ds = OgrUtilities::getInstance().openDataSource(path);
+  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -435,7 +433,7 @@ void OgrReader::setLimit(long limit)
 }
 
 void OgrReader::setTranslationFile(QString translate)
-{ 
+{
   _d->setTranslationFile(translate);
 }
 
@@ -517,7 +515,7 @@ OgrReaderInternal::~OgrReaderInternal()
 QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
 {
   QStringList result;
-  shared_ptr<OGRDataSource> ds = OgrUtilities::getInstance().openDataSource(path);
+  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -578,10 +576,9 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      /*
-      LOG_DEBUG("Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+      LOG_TRACE(
+        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
         " since the value field is empty");
-      */
       continue;
     }
 
@@ -609,26 +606,26 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       switch (wkbFlatten(g->getGeometryType()))
       {
         case wkbLineString:
-          //LOG_DEBUG("Adding line string");
+          LOG_TRACE("Adding line string");
           _addLineString((OGRLineString*)g, t);
           break;
         case wkbPoint:
-          //LOG_DEBUG("Adding point");
+          LOG_TRACE("Adding point");
           _addPoint((OGRPoint*)g, t);
           break;
         case wkbPolygon:
-          //LOG_DEBUG("Adding polygon");
+          LOG_TRACE("Adding polygon");
           _addPolygon((OGRPolygon*)g, t);
           break;
         case wkbMultiPolygon:
-          //LOG_DEBUG("Adding multi-polygon");
+          LOG_TRACE("Adding multi-polygon");
           _addMultiPolygon((OGRMultiPolygon*)g, t);
           break;
         case wkbMultiPoint:
         case wkbMultiLineString:
         case wkbGeometryCollection:
         {
-          LOG_DEBUG("Adding geometry collection (multipoint, multiline, etc.)");
+          LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.)");
           OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
           int nParts = gc->getNumGeometries();
           for (int i = 0; i < nParts; i++)
@@ -643,8 +640,8 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
     }
     catch (IllegalArgumentException& e)
     {
-      LOG_WARN("Error projecting geometry with tags: " << t.toString());
-      throw e;
+      throw IllegalArgumentException(
+        "Error projecting geometry with tags: " + t.toString() + " " + e.what());
     }
   }
 }
@@ -1059,7 +1056,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
       progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && _count > 0)
   {
     cout << endl;
   }
@@ -1118,10 +1115,10 @@ void OgrReaderInternal::_reproject(double& x, double& y)
     double iny = y;
     if (_transform->Transform(1, &x, &y) == FALSE)
     {
-      LOG_WARN("Source x: " << inx);
-      LOG_WARN("Source y: " << iny);
-      LOG_WARN("Target x: " << x);
-      LOG_WARN("Target y: " << y);
+      LOG_TRACE("Source x: " << inx);
+      LOG_TRACE("Source y: " << iny);
+      LOG_TRACE("Target x: " << x);
+      LOG_TRACE("Target y: " << y);
       throw IllegalArgumentException("Unable to transform point. Is the point outside the "
                                      "projection bounds?");
     }
@@ -1220,8 +1217,6 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  //LOG_DEBUG("Inside OGR::readNextElement");
-
   if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
       && (_relationsItr == _map->getRelationMap().end()) )
   {
@@ -1281,7 +1276,6 @@ Progress OgrReaderInternal::streamGetProgress() const
   const float floatCount = _streamFeatureCount;
   const float percentComplete = floatCount / _featureCount * 100;
   streamProgress.setPercentComplete( percentComplete );
-  //LOG_DEBUG("Percent complete set to " << percentComplete );
 
   return streamProgress;
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 #include "BuildingMatch.h"
@@ -42,9 +42,10 @@ BuildingMergerCreator::BuildingMergerCreator()
 {
 }
 
-bool BuildingMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers with " << className() << "...");
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -53,7 +54,10 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(*it);
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m);
+    LOG_VART(bm == 0);
     // check to make sure all the input matches are building matches.
     if (bm == 0)
     {
@@ -81,9 +85,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches,
 vector<MergerCreator::Description> BuildingMergerCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Building Merge Creator", false));
-
   return result;
 }
 

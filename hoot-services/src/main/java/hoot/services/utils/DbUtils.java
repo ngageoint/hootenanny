@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -47,8 +47,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
+import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.spring.SpringConnectionProvider;
@@ -250,5 +253,91 @@ public final class DbUtils {
                 .select(Expressions.numberTemplate(Long.class, "pg_total_relation_size('" + tableName + "')"))
                 .from()
                 .fetchOne();
+    }
+
+    /**
+     * Checks for the existence of map
+     *
+     * @param mapName
+     * @return returns true when exists else false
+     */
+    public static boolean mapExists(String mapName) {
+        long id = getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
+        return (id > -1);
+    }
+
+    /**
+     * Returns the record ID associated with the record request input string for
+     * the given DAO type. First attempts to parse the request string as a
+     * record ID. If that is unsuccessful, it treats the request string as a
+     * record display name. This currently only supports Map and User types.
+     *
+     * @param input
+     *            can be either a map ID or a map name
+     * @return if a record ID string is passed in, it is verified and returned;
+     *         if a record name string is passed in, it is verified that only
+     *         one record of the requested type exists with the given name, and
+     *         its ID is returned
+     */
+    public static long getRecordIdForInputString(String input, RelationalPathBase<?> table,
+            NumberPath<Long> idField, StringPath nameField) {
+
+        if (org.apache.commons.lang3.StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException("No record exists with ID: " + input
+                    + ".  Please specify a valid record.");
+        }
+
+        // Check if we can compare by ID
+        if (org.apache.commons.lang3.StringUtils.isNumeric(input)) {
+            logger.debug("Verifying that record with ID = {} in '{}' table has previously been created ...",
+                    input, table.getTableName());
+
+            long recordCount = createQuery()
+                    .from(table)
+                    .where(idField.eq(Long.valueOf(input)))
+                    .fetchCount();
+
+            if (recordCount == 0) {
+                throw new IllegalArgumentException("No record exists with ID = " + input +
+                        " in '" + table + "' table.  Please specify a valid record.");
+            }
+
+            if (recordCount == 1) {
+                return Long.valueOf(input);
+            }
+
+            if (recordCount > 1) {
+                throw new IllegalArgumentException("Multiple records exist with ID " + " = " + input
+                        + " in '" + table + "' table.  Please specify a single, valid record.");
+            }
+        }
+        else { // input wasn't parsed as a numeric ID, so let's try it as a name
+            logger.debug("Verifying that record with NAME = {} in '{}' table has previously been created ...",
+                    input, table.getTableName());
+
+            // there has to be a better way to do this against the generated
+            // code but haven't been able to get it to work yet
+            List<Long> records = createQuery()
+                    .select(idField)
+                    .from(table)
+                    .where(nameField.eq(input))
+                    .fetch();
+
+            if (records.isEmpty()) {
+                throw new IllegalArgumentException("No record exists with NAME = " + input +
+                        " in '" + table + "' table.  Please specify a valid record.");
+            }
+
+            if (records.size() == 1) {
+                return records.get(0);
+            }
+
+            if (records.size() > 1) {
+                throw new IllegalArgumentException("Multiple records exist with NAME " + " = " + input
+                        + " in '" + table + "' table.  Please specify a single, valid record.");
+            }
+        }
+
+        return -1;
     }
 }

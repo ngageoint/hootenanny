@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,10 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IndexedEdgeMatchSet.h"
 
+#include "IndexedEdgeLinks.h"
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -39,6 +40,8 @@ void IndexedEdgeMatchSet::addEdgeMatch(const ConstEdgeMatchPtr &em, double score
 {
   if (!contains(em))
   {
+    LOG_TRACE("Adding edge match...");
+
     _matches.insert(em, score);
 
     // index it so we can quickly determine which match an edge is part of.
@@ -53,7 +56,6 @@ void IndexedEdgeMatchSet::_addEdgeToMatchMapping(ConstEdgeStringPtr str,
   const ConstEdgeMatchPtr &em)
 {
   QList<EdgeString::EdgeEntry> e = str->getAllEdges();
-
   foreach (const EdgeString::EdgeEntry& ee, e)
   {
     _edgeToMatch[ee.getEdge()].insert(em);
@@ -81,13 +83,12 @@ void IndexedEdgeMatchSet::_addVertexToMatchMapping(ConstEdgeStringPtr str,
 shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 {
   shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
-
   for (QHash<ConstEdgeMatchPtr, double>::const_iterator it = getAllMatches().begin();
-    it != getAllMatches().end(); ++it)
+       it != getAllMatches().end(); ++it)
   {
     ConstEdgeMatchPtr em = it.key();
     ConstNetworkVertexPtr from1, from2, to1, to2;
-    LOG_VAR(em);
+    LOG_VART(em);
     from1 = em->getString1()->getFromVertex();
     to1 = em->getString1()->getToVertex();
     from2 = em->getString2()->getFromVertex();
@@ -146,12 +147,10 @@ bool IndexedEdgeMatchSet::contains(const ConstEdgeMatchPtr &em) const
 ConstEdgeMatchPtr IndexedEdgeMatchSet::getMatch(const ConstEdgeMatchPtr &em) const
 {
   MatchHash::const_iterator it = _matches.find(em);
-
   if (it == _matches.end())
   {
     throw HootException("The specified match was not found: " + em->toString());
   }
-
   return it.key();
 }
 
@@ -173,19 +172,16 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatTerminateAt(ConstNetw
       result.insert(em);
     }
   }
-
   return result;
 }
 
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeStringPtr str) const
 {
   QSet<ConstEdgeMatchPtr> result;
-
   foreach (const EdgeString::EdgeEntry& ee, str->getAllEdges())
   {
     result.unite(getMatchesThatContain(ee.getEdge()));
   }
-
   return result;
 }
 
@@ -214,8 +210,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
 
   foreach (const ConstEdgeMatchPtr& em, candidates)
   {
-    if (em->getString1()->overlaps(e->getString1()) ||
-      em->getString2()->overlaps(e->getString2()))
+    if (em->getString1()->overlaps(e->getString1()) || em->getString2()->overlaps(e->getString2()))
     {
       result.insert(em);
     }
@@ -224,8 +219,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
   return result;
 }
 
-QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v)
-  const
+QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstNetworkVertexPtr v) const
 {
   QSet<ConstEdgeMatchPtr> result;
   foreach (const ConstEdgeMatchPtr& em,
@@ -238,7 +232,6 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithInteriorVertex(ConstN
       result.insert(em);
     }
   }
-
   return result;
 }
 
@@ -286,18 +279,22 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesWithTermination(ConstNetw
 }
 
 QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeMatchPtr a,
-  ConstEdgeMatchPtr b) const
+                                                                ConstEdgeMatchPtr b) const
 {
   QSet<ConstEdgeMatchPtr> result;
 
-  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
-    b->getString1()->getFrom(), b->getString2()->getFrom());
-  result += getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
-    b->getString1()->getTo(), b->getString2()->getTo());
-  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
-    b->getString1()->getTo(), b->getString2()->getTo());
-  result += getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
-    b->getString1()->getFrom(), b->getString2()->getFrom());
+  result +=
+    getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+                       b->getString1()->getFrom(), b->getString2()->getFrom());
+  result +=
+    getConnectingStubs(a->getString1()->getFrom(), a->getString2()->getFrom(),
+                       b->getString1()->getTo(), b->getString2()->getTo());
+  result +=
+    getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+                       b->getString1()->getTo(), b->getString2()->getTo());
+  result +=
+    getConnectingStubs(a->getString1()->getTo(), a->getString2()->getTo(),
+                       b->getString1()->getFrom(), b->getString2()->getFrom());
 
   return result;
 }
@@ -308,7 +305,7 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getConnectingStubs(ConstEdgeLocatio
   QSet<ConstEdgeMatchPtr> result;
 
   if (ela1->isExtreme() == false || ela2->isExtreme() == false || elb1->isExtreme() == false ||
-    elb2->isExtreme() == false)
+      elb2->isExtreme() == false)
   {
     return result;
   }

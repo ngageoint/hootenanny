@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/AreaFilter.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
@@ -46,7 +45,7 @@
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/visitors/CountVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
@@ -60,8 +59,9 @@
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/DataProducer.h>
+#include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
 using namespace std;
@@ -128,13 +128,13 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
 
   _stats.append(SingleStat("Node Count",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-      new CountVisitor()))));
+      new ElementCountVisitor()))));
   _stats.append(SingleStat("Way Count",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-      new CountVisitor()))));
+      new ElementCountVisitor()))));
   _stats.append(SingleStat("Relation Count",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-      new CountVisitor()))));
+      new ElementCountVisitor()))));
   _stats.append(SingleStat("Minimum Node ID",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
       new MinIdVisitor()))));
@@ -365,7 +365,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     logMsg += " for " + _mapName;
   }
   logMsg += ".";
-  LOG_INFO(logMsg);
+  LOG_DEBUG(logMsg);
 }
 
 bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& m1,

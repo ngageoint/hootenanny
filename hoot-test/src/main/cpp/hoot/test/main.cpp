@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GDAL
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
             "--include=[regex] - Include only tests that match the specified regex.\n"
             "--exclude=[regex] - Exclude tests that match the specified regex.\n"
             "\n"
-            "See https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Developer_-_Code_Testing\n"
+            "See the Hootenanny Developer Guide for more information.\n"
             ;
   }
   else
@@ -437,26 +437,6 @@ int main(int argc, char *argv[])
 
     CppUnit::TextTestResult result;
 
-    if (args.contains("--trace"))
-    {
-      Log::getInstance().setLevel(Log::Trace);
-    }
-    if (args.contains("--debug"))
-    {
-      Log::getInstance().setLevel(Log::Debug);
-    }
-    if (args.contains("--verbose"))
-    {
-      Log::getInstance().setLevel(Log::Verbose);
-    }
-    if (args.contains("--info"))
-    {
-      Log::getInstance().setLevel(Log::Info);
-    }
-    if (args.contains("--warn"))
-    {
-      Log::getInstance().setLevel(Log::Warn);
-    }
     if (args.contains("--names"))
     {
       listener->showTestNames(true);
@@ -467,6 +447,9 @@ int main(int argc, char *argv[])
     ConfigOptions::populateDefaults(conf());
     LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
     conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+
+    //allows us to pass config options through HootTest
+    Settings::parseCommonArguments(args);
 
     result.addListener(listener);
     runner.run(result);

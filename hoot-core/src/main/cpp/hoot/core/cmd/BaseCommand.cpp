@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseCommand.h"
@@ -32,15 +32,16 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/PbfReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>
@@ -58,7 +59,7 @@ QString BaseCommand::getHelp() const
 
   if (fp.open(QFile::ReadOnly) == false)
   {
-    LOG_WARN(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
+    LOG_ERROR(QString("Error opening command help for reading. (%1) Is HOOT_HOME set properly?").
       arg(_getHelpPath()));
   }
 
@@ -75,7 +76,6 @@ QString BaseCommand::_getHelpPath() const
 void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
                           Status defaultStatus)
 {
-  LOG_INFO("Loading map data from " << path << " ...");
   OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
 }
 

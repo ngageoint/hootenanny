@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDB_H
 #define APIDB_H
@@ -31,12 +31,8 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/io/ElementCache.h>
-#include <hoot/core/algorithms/zindex/Range.h>
-#include <hoot/core/io/TableType.h>
+#include <hoot/core/elements/RelationData.h>
+#include <hoot/core/elements/Status.h>
 
 // Qt
 #include <QUrl>
@@ -69,11 +65,15 @@ class OsmMap;
 class Node;
 class Way;
 class Relation;
+class ElementType;
+class ElementCache;
+class Range;
+class TableType;
 
 /**
- * This class abstracts out all SQL calls to interact with the services DB. It also strives to
- * abstract out some of the storage details such as the conversion of lat/lng to integers and the
- * calculation of quad tiles.
+ * This class abstracts out all SQL calls to interact with an API DB (either hoot or OSM). It also
+ * strives to abstract out some of the storage details such as the conversion of lat/lng to integers
+ * and the calculation of quad tiles.
  */
 class ApiDb
 {
@@ -105,7 +105,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "17:jason.surratt"; }
+  static QString expectedDbVersion() { return "18:dmitriy.mylov"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ZCURVERANGER_H
 #define ZCURVERANGER_H
@@ -30,14 +30,14 @@
 //Hoot Includes
 #include "LongBox.h"
 #include "ZValue.h"
-#include "LongBox.h"
-#include "Range.h"
-#include "BBox.h"
 
 namespace hoot
 {
 
 using namespace std;
+
+class Range;
+class BBox;
 
 /**
  * Decomposes a bounding box into a range of zcurve values.
@@ -45,7 +45,6 @@ using namespace std;
  * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex
  * covered in Zs.
  */
-
 class ZCurveRanger
 {
 public:

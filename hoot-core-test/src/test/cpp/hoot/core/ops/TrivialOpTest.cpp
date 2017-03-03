@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CookieCutterOp.h>
 #include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>
@@ -53,7 +53,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 
 // Qt

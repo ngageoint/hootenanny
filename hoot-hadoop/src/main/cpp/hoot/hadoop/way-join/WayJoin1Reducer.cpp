@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+unsigned int WayJoin1Reducer::logWarnCount = 0;
+
 PP_FACTORY_REGISTER(pp::Reducer, WayJoin1Reducer)
 
 WayJoin1Reducer::WayJoin1Reducer()
@@ -54,7 +56,15 @@ void WayJoin1Reducer::close()
 
   if (_missingNodes > 0)
   {
-    LOG_WARN("Found " << _missingNodes << " missing nodes.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Found " << _missingNodes << " missing nodes.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   _stats.write(*os);
 }
@@ -93,7 +103,7 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
       point.x = node->x;
       point.y = node->y;
       _stats.expandEnvelope(point.x, point.y);
-      //LOG_INFO("Got node: " << " x: " << point.x << " y: " << point.y);
+      LOG_TRACE("Got node: " << " x: " << point.x << " y: " << point.y);
       foundNode = true;
     }
     else if (value.size() == sizeof(WayJoin1Mapper::ValueWay))
@@ -102,7 +112,7 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
       _wayIds.push_back(way->id);
 
       _stats.expandWayRange(way->id);
-      //LOG_INFO("Got way: " << way->id);
+      LOG_TRACE("Got way: " << way->id);
     }
     else
     {
@@ -136,16 +146,15 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
     {
       // record the number of missing nodes for reporting.
       _missingNodes++;
-      // report a reasonable number of missing nodes.
-      if (_missingNodes <= 10)
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
-        LOG_WARN("Found ways, but no nodes. node id: " << *key);
-        LOG_WARN("  wayIds: " << _wayIds);
-        if (_missingNodes == 10)
-        {
-          LOG_WARN("Found 10 missing nodes, no longer reporting missing nodes.");
-        }
+        LOG_WARN("Found ways, but no nodes. node id: " << *key << "  wayIds: " << _wayIds);
       }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
   // we found a node to go with our ways.
@@ -153,8 +162,8 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
   {
     for (size_t i = 0; i < _wayIds.size(); i++)
     {
-      //LOG_INFO("emitting: " << _wayIds[i] << " nodeId: " << point.nodeId << " x: " << point.x <<
-      //         " y: " << point.y);
+      LOG_TRACE("emitting: " << _wayIds[i] << " nodeId: " << point.nodeId << " x: " << point.x <<
+                " y: " << point.y);
       _writer->emitRaw<int64_t, Value>(_wayIds[i], point);
     }
   }

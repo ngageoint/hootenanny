@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBREADER_H
 #define HOOTAPIDBREADER_H
@@ -39,10 +39,7 @@
 namespace hoot
 {
 
-class HootApiDbReader :
-    public ApiDbReader,
-    public PartialOsmMapReader,
-    public Configurable,
+class HootApiDbReader : public ApiDbReader, public PartialOsmMapReader, public Configurable,
     public EnvelopeProvider
 {
 public:
@@ -57,7 +54,7 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) { _status = status; LOG_VARD(_status); }
+  virtual void setDefaultStatus(Status status) { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
@@ -95,14 +92,11 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  void setBoundingBox(const QString bbox);
-
 protected:
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map);
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
@@ -112,7 +106,6 @@ private:
   shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
-  Envelope _bounds;
 
   shared_ptr<Element> _nextElement;
 
@@ -120,7 +113,6 @@ private:
 
   void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
 
-  //get element from QSqlQuery iterator
   shared_ptr<Element> _getElementUsingIterator();
 
   /**

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IterativeNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"
@@ -103,11 +103,11 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 {
   if (na == _n1)
   {
-    LOG_INFO("na is n1");
+    LOG_TRACE("na is n1");
   }
   else
   {
-    LOG_INFO("na is n2");
+    LOG_TRACE("na is n2");
   }
   const OsmNetwork::VertexMap& vm = na->getVertexMap();
 
@@ -184,7 +184,6 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb,
   ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB)
 {
-
   /// @todo break this into smaller functions
   // Find all the edges that connect to eb
   QSet<ConstNetworkEdgePtr> ebNeighborhood = QSet<ConstNetworkEdgePtr>::fromList(
@@ -251,14 +250,14 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
     {
       // create a new stub vertex in na
       NetworkVertexPtr newV(new NetworkVertex(va->getElement()));
-      LOG_INFO("Adding vertex: " << newV);
+      LOG_TRACE("Adding vertex: " << newV);
       na->addVertex(newV);
       involvedVertices.append(newV);
 
       // for each edge that clearly matches vb
       foreach (ConstNetworkEdgePtr ea, edgeVMatch[vb])
       {
-        LOG_INFO("Removing edge: " << ea);
+        LOG_TRACE("Removing edge: " << ea);
         na->removeEdge(ea);
         ConstNetworkVertexPtr newFrom = ea->getFrom();
         ConstNetworkVertexPtr newTo = ea->getTo();
@@ -274,7 +273,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
         // relink each edge to this vertex by recreating the edge
         NetworkEdgePtr newEdge(new NetworkEdge(newFrom, newTo, ea->isDirected()));
         newEdge->setMembers(ea->getMembers());
-        LOG_INFO("Adding new edge: " << newEdge);
+        LOG_TRACE("Adding new edge: " << newEdge);
         na->addEdge(newEdge);
       }
     }
@@ -301,7 +300,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
         // Create stub
         NetworkEdgePtr newStub(new NetworkEdge(vi, vj, false));
         newStub->addMember(va->getElement());
-        LOG_INFO("Adding new edge: " << newStub);
+        LOG_TRACE("Adding new edge: " << newStub);
         na->addEdge(newStub);
       }
     }
@@ -366,10 +365,10 @@ void IterativeNetworkMatcher::iterate()
 
   // create a more refined estimate of edge match based on the typical similarity scores and
   // the neighboring node scores (product of neighboring scores?)
-  LOG_INFO("these should use a copy of _edge**Scores, then update the original");
-  LOG_INFO("1 to 2");
+  // these should use a copy of _edge**Scores, then update the original
+  LOG_TRACE("1 to 2");
   _updateEdgeScores(_edge12Scores, _vertex12Scores);
-  LOG_INFO("2 to 1");
+  LOG_TRACE("2 to 1");
   _updateEdgeScores(_edge21Scores, _vertex21Scores);
 
   _normalizeAllScores();

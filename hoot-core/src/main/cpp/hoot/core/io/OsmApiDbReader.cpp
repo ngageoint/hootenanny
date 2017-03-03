@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbReader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
@@ -55,14 +55,6 @@ _osmElemType(ElementType::Unknown)
 OsmApiDbReader::~OsmApiDbReader()
 {
   close();
-}
-
-void OsmApiDbReader::setBoundingBox(const QString bbox)
-{
-  if (!bbox.trimmed().isEmpty())
-  {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
-  }
 }
 
 bool OsmApiDbReader::isSupported(QString urlStr)
@@ -105,12 +97,10 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
-    LOG_INFO("Executing OSM API read query against element type " << _osmElemType << "...");
+    LOG_DEBUG("Executing OSM API read query against element type " << _osmElemType << "...");
     _read(map, _osmElemType);
   }
-  else if (_bounds.isNull() ||
-            (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
-              && _bounds.getMaxY() == 90.0))
+  else if (!_hasBounds())
   {
     LOG_INFO("Executing OSM API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
@@ -120,8 +110,17 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_INFO("Executing OSM API bounded read query with bounds " << _bounds.toString() << "...");
-    _readByBounds(map, _bounds);
+    Envelope bounds;
+    if (!_overrideBounds.isNull())
+    {
+      bounds = _overrideBounds;
+    }
+    else
+    {
+      bounds = _bounds;
+    }
+    LOG_DEBUG("Executing OSM API bounded read query with bounds " << bounds.toString() << "...");
+    _readByBounds(map, bounds);
   }
 }
 
@@ -160,7 +159,6 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   }
   if (tags.size() > 0)
   {
-    //LOG_VART(tags);
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
   }
 }
@@ -247,7 +245,8 @@ void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTyp
     tags.clear();
   }
 
-  LOG_INFO("Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_DEBUG("Select all query read " << elementCount << " " << elementType.toString() <<
+            " elements.");
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodeMap().size());
   LOG_VARD(map->getWays().size());
@@ -265,7 +264,7 @@ void OsmApiDbReader::close()
   }
 }
 
-shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
+NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long rawId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << rawId);
@@ -292,11 +291,10 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { node->setStatus(_status); }
 
-  //LOG_VART(node);
   return node;
 }
 
-shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
+WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << wayId);
@@ -330,7 +328,6 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { way->setStatus(_status); }
 
-  //LOG_VART(way);
   return way;
 }
 
@@ -338,6 +335,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 {
   for (unsigned int i = 0; i < nodeIds.size(); i++)
   {
+    LOG_VART(nodeIds[i]);
     QStringList tags;
     if (map.containsNode(nodeIds[i]) == false)
     {
@@ -353,20 +351,19 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
 
         if (tags.size() > 0)
         {
-          //LOG_VART(tags);
           node->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(node);
         }
         //we want the reader's status to always override any existing status
         if (_status != Status::Invalid) { node->setStatus(_status); }
+        LOG_VART(node);
         map.addElement(node);
       }
     }
   }
 }
 
-shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-  const OsmMap& map)
+RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << relationId);
@@ -402,7 +399,6 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { relation->setStatus(_status); }
 
-  //LOG_VART(relation);
   return relation;
 }
 
@@ -411,17 +407,7 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
-}
-
-boost::shared_ptr<OGRSpatialReference> OsmApiDbReader::getProjection() const
-{
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-
-  return wgs84;
+  setOverrideBoundingBox(configOptions.getConvertBoundingBoxOsmApiDatabase());
 }
 
 }

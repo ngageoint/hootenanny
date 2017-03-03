@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SchemaChecker.h"
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
+
+unsigned int SchemaChecker::logWarnCount = 0;
 
 SchemaChecker::SchemaChecker(OsmSchema& osmSchema)
 {
@@ -45,7 +49,15 @@ void SchemaChecker::checkUnknownVertexType()
     SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.isValid() == false)
     {
-      LOG_WARN("Error: unknown type. " << schemaVertex.name);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Warning: unknown type. " << schemaVertex.name);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }
@@ -57,7 +69,15 @@ void SchemaChecker::checkEmptyGeometry()
     SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.geometries == 0)
     {
-      LOG_WARN("Error: empty geometries. " << schemaVertex.name);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Warning: empty geometries. " << schemaVertex.name);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 }

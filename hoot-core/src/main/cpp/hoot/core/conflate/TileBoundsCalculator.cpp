@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TileBoundsCalculator.h"
@@ -30,7 +30,9 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QImage>
@@ -38,6 +40,8 @@
 
 namespace hoot
 {
+
+unsigned int TileBoundsCalculator::logWarnCount = 0;
 
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {
@@ -79,8 +83,8 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
   boxes[0] = PixelBox(0, _r1.cols - 1, 0, _r1.rows - 1);
 
   double nodeCount = _sumPixels(boxes[0]);
-  LOG_INFO("w: " << _r1.cols << " h: " << _r1.rows);
-  LOG_INFO("Total node count: " << nodeCount);
+  LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
+  LOG_DEBUG("Total node count: " << nodeCount);
 
   while (!_isDone(boxes))
   {
@@ -89,14 +93,14 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     vector<PixelBox> nextLayer;
     nextLayer.resize(width * width);
 
-    //LOG_INFO("width: " << width);
+    LOG_TRACE("width: " << width);
     for (size_t i = 0; i < boxes.size(); i++)
     {
       PixelBox& b = boxes[i];
       double splitX = _calculateSplitX(b);
       int tx = i % (width / 2);
       int ty = i / (width / 2);
-      //LOG_INFO("  i: " << i << " tx: " << tx << " ty: " << ty);
+      LOG_TRACE("  i: " << i << " tx: " << tx << " ty: " << ty);
 
       double splitYLeft = _calculateSplitY(PixelBox(b.minX, splitX, b.minY, b.maxY));
       nextLayer[(tx * 2 + 0) + (ty * 2 + 0) * width] = PixelBox(b.minX, splitX, b.minY,
@@ -132,7 +136,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
       result[tx][ty] = _toEnvelope(pb);
     }
   }
-  LOG_INFO("Max node count in one tile: " << maxNodeCount);
+  LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
   _exportResult(boxes, "tmp/result.png");
 
   return result;
@@ -171,7 +175,15 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    LOG_WARN("bestSum isn't valid. " << b.toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("bestSum isn't valid. " << b.toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return best;
@@ -209,8 +221,16 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
-             b.maxY - b.minY);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
+               b.maxY - b.minY);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return best;
@@ -304,7 +324,7 @@ void TileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
   pen.setColor(qRgb(1, 0, 0));
   pt.setPen(pen);
 
-  LOG_INFO("max value: " << _maxValue);
+  LOG_DEBUG("max value: " << _maxValue);
 
   for (int y = 0; y < r.rows; y++)
   {
@@ -344,7 +364,7 @@ void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString 
   pen.setColor(qRgb(1, 0, 0));
   pt.setPen(pen);
 
-  LOG_INFO("max value: " << _maxValue);
+  LOG_DEBUG("max value: " << _maxValue);
 
   for (int y = 0; y < _r1.rows; y++)
   {
@@ -401,7 +421,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   renderImage(map, _r1, _r2);
 
@@ -414,7 +434,7 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
 
 void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
-  _envelope = CalculateBoundsVisitor::getBounds(map);
+  _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;

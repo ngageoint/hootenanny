@@ -32,11 +32,11 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         When I press "Add Reference Dataset"
         And I click the "1AllDataTypes_Cucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "1AllDataTypes_Cucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "1AllDataTypes_Cucumber"
         And I press "Add Secondary Dataset"
         And I click the "2AllDataTypes_Cucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "2AllDataTypes_Cucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "2AllDataTypes_Cucumber"
         Then I should see "Conflate"
         And I press "Conflate"
         And I fill "saveAs" input with "3MergeDataTypes_Cucumber"
@@ -64,7 +64,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         And I press "Add Layer"
         And I wait
         And I accept the alert
-        Then I wait 15 "seconds" to see "span.strong" element with text "3MergeDataTypes_Cucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "3MergeDataTypes_Cucumber"
         Then I should see "Complete Review"
         And I click the "Complete Review" link
         And I should see "There are 8 reviews"

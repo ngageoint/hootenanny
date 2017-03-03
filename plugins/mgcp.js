@@ -192,14 +192,14 @@ mgcp = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -1442,7 +1442,7 @@ mgcp = {
 
             case 'EA010': // Crop Land
                 if (attrs.CSP == '15') attrs.F_CODE = 'EA040';
-                // hoot.logVerbose('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
+                // hoot.logTrace('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
                 break;
 
             case 'ED030': // Mangrove Swamp
@@ -1562,7 +1562,7 @@ mgcp = {
             }
             else
             {
-                hoot.logVerbose('Translation for FCODE ' + attrs.F_CODE + ' not found');
+                hoot.logTrace('Translation for FCODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1709,7 +1709,7 @@ mgcp = {
                 }
             }
 
-            hoot.logVerbose('FCODE and Geometry: ' + tableName + ' is not in the schema');
+            hoot.logTrace('FCODE and Geometry: ' + tableName + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
@@ -1739,7 +1739,7 @@ mgcp = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 

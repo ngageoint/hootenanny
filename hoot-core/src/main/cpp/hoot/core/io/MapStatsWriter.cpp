@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -30,9 +30,9 @@
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -61,21 +61,17 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-
 void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList names)
 {
-  //QString statsMsg = statsToString( stats, "\t" );
-  //cout << "stats string = " << statsMsg << endl;
-
   ConfigOptions configOptions;
   QString statsFormat = configOptions.getStatsFormat();
   QString statsOutput = configOptions.getStatsOutput();
   QString statsClassName = configOptions.getStatsClass();
   QString statsScript = configOptions.getStatsScript();
-  LOG_INFO("stats format = " << statsFormat << endl);
-  LOG_INFO("stats outfile= " << statsOutput << endl);
-  LOG_INFO("stats className= " << statsClassName << endl);
-  LOG_INFO("stats script= " << statsScript << endl);
+  LOG_DEBUG("stats format = " << statsFormat << endl);
+  LOG_DEBUG("stats outfile= " << statsOutput << endl);
+  LOG_DEBUG("stats className= " << statsClassName << endl);
+  LOG_DEBUG("stats script= " << statsScript << endl);
 
   if(statsOutput=="") return; // just need to specify only output file, rest of args have default values
 
@@ -115,12 +111,6 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
 
   // compose the stats object
   QString asciidoc = sc->compose( stats, names );
-  QStringList reportTemplateElements = asciidoc.split("\n");
-  QStringListIterator elementIterator(reportTemplateElements);
-  //while(elementIterator.hasNext())
-  //{
-  //  cout << elementIterator.next().toLocal8Bit().constData() << endl;
-  //}
 
   // write the file out (it will always generate asciidoc because needed for pdf and html)
   QFile outputFile(statsOutput+".asciidoc");
@@ -146,10 +136,7 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
     arguments << "-v" <<
       "--dblatex-opts \"-P latex.output.revhistory=0 -P 'doc.layout=mainmatter' -P doc.publisher.show=0\"" <<
       "-f pdf" << statsOutput+".asciidoc";
-    //QProcess myProcess;
     QString prog = program + QString(" ") + arguments.join(" ");
-    //myProcess.start(program, arguments);
-    //myProcess.waitForFinished(3000);
 
     int result = system(prog.toStdString().c_str());
     if(result != 0)

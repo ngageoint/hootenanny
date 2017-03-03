@@ -15,7 +15,7 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/ops/OpList.h>
@@ -23,6 +23,7 @@
 #include <hoot/core/ops/ReprojectToGeographicOp.h>
 #include <hoot/core/ops/ReprojectToPlanarOp.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
 
 // Pretty Pipes

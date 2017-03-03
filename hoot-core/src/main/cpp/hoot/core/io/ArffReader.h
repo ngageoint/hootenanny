@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ARFFREADER_H
@@ -30,9 +30,7 @@
 
 // boost
 #include <boost/iostreams/filtering_stream.hpp>
-
-// hoot
-#include <hoot/core/scoring/DataSamples.h>
+#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -45,7 +43,10 @@
 
 namespace hoot
 {
+class DataSamples;
+
 using namespace std;
+using namespace boost;
 
 /**
  * @brief The ArffReader class
@@ -69,6 +70,7 @@ public:
   shared_ptr<DataSamples> read();
 
 private:
+
   auto_ptr<fstream> _autoStrm;
   auto_ptr<boost::iostreams::filtering_istream> _bstrm;
   istream* _strm;

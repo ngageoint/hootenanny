@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
 
 // Hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -376,7 +376,7 @@ const QStringList& Tags::getNameKeys()
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      //LOG_INFO("key : " << (tags[i].key.toStdString()));
+      LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _nameKeys.append(tags[i].key);
     }
   }
@@ -392,7 +392,7 @@ int Tags::getNonDebugCount() const
     QString key = it.key();
     if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
     {
-      //LOG_DEBUG("non-debug key: " + key);
+      LOG_TRACE("non-debug key: " + key);
       count++;
     }
   }
@@ -409,7 +409,7 @@ const QStringList& Tags::getPseudoNameKeys() const
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      //LOG_INFO("key : " << (tags[i].key.toStdString()));
+      LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _pseudoNameKeys.append(tags[i].key);
     }
   }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <set>
 #include <utility>    // For std::pair
@@ -119,7 +119,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     OsmMapPtr mergedMap(map);
 
     const ElementId firstId = ElementId::node(elementId);
-    //LOG_DEBUG("First ID: " << firstId.getId());
+    LOG_TRACE("First ID: " << firstId.getId());
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
       if (it->second->getId() != elementId) {
@@ -136,10 +136,8 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
 
         if ( replacedNodes.size() == 1 )
         {
-          /*
-          LOG_DEBUG("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
-            " with updated version of node #" << replacedNodes[0].second.getId() );
-          */
+          LOG_TRACE("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
+                    " with updated version of node #" << replacedNodes[0].second.getId() );
           mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
         }
       }

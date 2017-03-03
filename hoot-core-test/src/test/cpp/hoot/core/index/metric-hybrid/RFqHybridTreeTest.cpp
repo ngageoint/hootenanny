@@ -32,13 +32,13 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QStringList>
@@ -145,7 +145,7 @@ public:
       RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, -1, -1);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"
@@ -181,7 +181,7 @@ public:
       RFqHybridTree<RFqHybridDummyData, int, LevenshteinDistance> uut(1, 2, 3, 5);
       uut.buildIndex(keys, values);
 
-      //LOG_INFO(TestUtils::toCString(uut.toString()));
+      LOG_VART(uut.toString());
       HOOT_STR_EQUALS("RNode: \n"
                       "  Env[0:1,0:1]\n"
                       "  FqNode: \n"
@@ -474,8 +474,8 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
-//    PbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
+    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+//    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);
 
     MapProjector::projectToPlanar(map);
@@ -492,7 +492,7 @@ public:
     }
     LOG_INFO("Key count: " << keys.size());
 
-    Envelope bounds = CalculateBoundsVisitor::getGeosBounds(map);
+    Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
 
 //    OptimizeFunction::TestRun best;
 //    best.score = -1e12;

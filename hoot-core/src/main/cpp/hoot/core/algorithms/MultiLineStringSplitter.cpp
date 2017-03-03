@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringSplitter.h"
 
@@ -34,6 +34,10 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -65,8 +69,8 @@ auto_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
 }
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
-  const WaySublineCollection& string, const vector<bool> &reverse, GeometryConverter::NodeFactory *nf)
-  const
+  const WaySublineCollection& string, const vector<bool> &reverse,
+  GeometryConverter::NodeFactory *nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   // if there were no matches then the result will be null
@@ -103,6 +107,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // if there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
+    LOG_TRACE("multilinestring: multiple matches get relation");
     RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
       matches[0]->getCircularError(), Relation::MULTILINESTRING));
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -40,11 +40,14 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 
 #include "Way.h"
 
 namespace hoot
 {
+
+unsigned int Relation::logWarnCount = 0;
 
 QString Relation::INNER = "inner";
 QString Relation::MULTILINESTRING = "multilinestring";
@@ -259,7 +262,15 @@ void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 
@@ -307,7 +318,15 @@ void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
 

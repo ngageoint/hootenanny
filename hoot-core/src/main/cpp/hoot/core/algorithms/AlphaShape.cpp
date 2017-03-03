@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AlphaShape.h"
@@ -32,13 +32,13 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/elements/Way.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 using namespace geos::geom;
 
@@ -59,6 +59,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+unsigned int AlphaShape::logWarnCount = 0;
 
 class FaceGroup
 {
@@ -386,13 +388,13 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
   // while there is more than one geometry.
   while (tmp.size() > 1)
   {
-    LOG_DEBUG("Sorting size: " << tmp.size());
+    LOG_TRACE("Sorting size: " << tmp.size());
     // sort polygons using the hilbert value. This increases the chances that nearby polygons will
     // be merged early and speed up the union process.
     ComparePolygon compare(e);
     sort(tmp.begin(), tmp.end(), compare);
 
-    LOG_DEBUG("Remaining pieces: " << tmp.size());
+    LOG_TRACE("Remaining pieces: " << tmp.size());
     tmp2.resize(0);
     tmp2.reserve(tmp.size() / 2 + 1);
     // merge pairs at a time. This makes the join faster.
@@ -413,7 +415,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
       }
       catch (geos::util::GEOSException& e)
       {
-        LOG_DEBUG("Topology error. Attempting to fix it: " << e.what());
+        LOG_TRACE("Topology error. Attempting to fix it: " << e.what());
         cleanAndRetry = true;
       }
 
@@ -465,8 +467,16 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
   // We still carry on with a warning even though the output may not be correct.
   if (fabs(preUnionArea - result->getArea()) > 1)
   {
-    LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
-      " post union: " << result->getArea());
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
+        " post union: " << result->getArea());
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   return result;

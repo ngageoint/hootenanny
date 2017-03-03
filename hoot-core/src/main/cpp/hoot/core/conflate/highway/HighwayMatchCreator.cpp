@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -41,8 +41,12 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
 
 // Standard
 #include <fstream>
@@ -164,14 +168,17 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
+    Meters searchRadius;
     if (_searchRadius >= 0)
     {
-      return _searchRadius;
+      searchRadius = _searchRadius;
     }
     else
     {
-      return e->getCircularError();
+      searchRadius = e->getCircularError();
     }
+    LOG_VART(searchRadius);
+    return searchRadius;
   }
 
   virtual void visit(const ConstElementPtr& e)
@@ -264,17 +271,17 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
-  HighwayMatchVisitor v(map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff);
+  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_VARD(*threshold);
+  HighwayMatchVisitor v(
+    map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff);
   map->visitRo(v);
 }
 
 vector<MatchCreator::Description> HighwayMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Highway Match Creator", MatchCreator::Highway, false));
-
   return result;
 }
 
@@ -295,4 +302,4 @@ shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
   return _matchThreshold;
 }
 
-} // end namespace hoot
+}

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,15 +23,16 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-
+#include <hoot/core/OsmMap.h>
 #include "MultiLineStringLocation.h"
-
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -88,7 +89,7 @@ MultiLineStringLocation::MultiLineStringLocation(shared_ptr<const OsmMap> map,
   //add line from start of way where way location resides up to the split point
   _waySublineString.addSubline(
     WaySubline(WayLocation(map, _wayLocation.getWay(), 0, 0.0), _wayLocation));
-  LOG_VARD(_waySublineString.getSublines().size());
+  LOG_VART(_waySublineString.getSublines().size());
 }
 
 }

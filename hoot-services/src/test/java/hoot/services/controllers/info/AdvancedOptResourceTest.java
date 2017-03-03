@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -44,8 +44,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 
 
 public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
@@ -64,23 +64,23 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
         File testFolder = new File(homeFolder, "conf");
         FileUtils.forceMkdir(testFolder);
 
-        File dest = new File(testFolder, "conflationRefOps.json");
+        File dest = new File(testFolder, "services/conflationRefOps.json");
         URL inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationRefOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        dest = new File(testFolder, "conflateAdvOps.json");
+        dest = new File(testFolder, "services/conflateAdvOps.json");
         inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflateAdvOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        dest = new File(testFolder, "conflationAverageOps.json");
+        dest = new File(testFolder, "services/conflationAverageOps.json");
         inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationAverageOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        dest = new File(testFolder, "conflationHorizontalOps.json");
+        dest = new File(testFolder, "services/conflationHorizontalOps.json");
         inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationHorizontalOps.json");
         FileUtils.copyURLToFile(inputUrl, dest);
 
-        dest = new File(testFolder, "ConfigOptions.asciidoc");
+        dest = new File(testFolder, "core/ConfigOptions.asciidoc");
         inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/ConfigOptions.asciidoc");
         FileUtils.copyURLToFile(inputUrl, dest);
     }

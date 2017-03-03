@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
@@ -40,6 +40,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include "BuildingRfClassifier.h"
 
 // Standard
 #include <fstream>
@@ -157,6 +158,7 @@ public:
 
   Meters getSearchRadius(const shared_ptr<const Element>& e) const
   {
+    LOG_VART(e->getCircularError());
     return e->getCircularError();
   }
 
@@ -247,7 +249,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(className());
+  LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
@@ -267,7 +269,7 @@ shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   if (!_rf)
   {
     QString path = ConfPath::search(ConfigOptions().getConflateMatchBuildingModel());
-    LOG_INFO("Loading model from: " << path);
+    LOG_DEBUG("Loading model from: " << path);
 
     QFile file(path.toAscii().data());
     if (!file.open(QIODevice::ReadOnly))

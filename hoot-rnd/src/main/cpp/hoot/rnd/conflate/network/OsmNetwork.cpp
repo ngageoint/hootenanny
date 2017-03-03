@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,9 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmNetwork.h"
+
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -36,7 +38,7 @@ OsmNetwork::OsmNetwork()
 void OsmNetwork::addEdge(NetworkEdgePtr edge)
 {
   if (_eidToVertex.contains(edge->getFrom()->getElementId()) == false ||
-    _eidToVertex.contains(edge->getTo()->getElementId()) == false)
+      _eidToVertex.contains(edge->getTo()->getElementId()) == false)
   {
     throw IllegalArgumentException("Please add the vertices on an edge before adding the edge.");
   }
@@ -64,8 +66,8 @@ ConstNetworkVertexPtr OsmNetwork::getSingleVertex(ElementId eid) const
   QList<ConstNetworkVertexPtr> vertices = _eidToVertex.values(eid);
   if (vertices.size() > 1)
   {
-    LOG_VARW(eid);
-    LOG_VARW(vertices);
+    LOG_VART(eid);
+    LOG_VART(vertices);
     throw IllegalArgumentException("Expected to receive a single vertex, but got more than one.");
   }
   else if (vertices.size() == 1)
@@ -93,7 +95,7 @@ void OsmNetwork::removeVertex(ConstNetworkVertexPtr v)
 {
   if (_vertexToEdge.count(v) >= 1)
   {
-    LOG_VARW(v);
+    LOG_VART(v);
     throw IllegalArgumentException("When removing a vertex the vertex cannot be part of an edge.");
   }
 

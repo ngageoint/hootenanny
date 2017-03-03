@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 
@@ -36,11 +36,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
-ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport)
+ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
+_maxReport(maxReport),
+_missingCount(0),
+_removeMissing(removeMissing)
 {
-  _removeMissing = removeMissing;
-  _maxReport = maxReport;
-  _missingCount = 0;
+}
+
+void ReportMissingElementsVisitor::setConfiguration(const Settings& conf)
+{
+  setMaxReport(ConfigOptions(conf).getLogWarnMessageLimit());
 }
 
 void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId missing)
@@ -49,13 +54,11 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      LOG_WARN("Removing missing " << missing.toString() << " in " <<
-               referer.toString() << ".");
+      LOG_WARN("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
     }
     else
     {
-      LOG_WARN("Missing " << missing.toString() << " in " <<
-               referer.toString() << ".");
+      LOG_WARN("Missing " << missing.toString() << " in " << referer.toString() << ".");
     }
   }
   _missingCount++;

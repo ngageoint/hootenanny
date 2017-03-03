@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -37,8 +37,7 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/Units.h>
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
@@ -59,10 +58,10 @@ namespace hoot
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
 
-#include "DefaultIdGenerator.h"
-#include "RelationMap.h"
-#include "WayMap.h"
-#include "NodeMap.h"
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/elements/RelationMap.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/elements/NodeMap.h>
 
 
 namespace hoot
@@ -72,6 +71,7 @@ using namespace std;
 
 class OsmMapIndex;
 class OsmMapListener;
+class ElementId;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,

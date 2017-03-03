@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
 // GDAL
 #include <gdal.h>
+#include <ogrsf_frmts.h>
 
 // GEOS
 // contains geosversion()
@@ -35,7 +36,7 @@
 #include <geos/version.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -75,10 +76,12 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
+  LOG_TRACE("Hoot instance init...");
+
 # ifdef TGS_HAVE_LIBSTXXL
     // initialize the environment variable for loading STXXL configuration. If the environment
     // variable has already been set then don't overwrite it (that is the 0 at the end).
-    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/stxxl.conf";
+    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
     Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 
@@ -89,7 +92,7 @@ void Hoot::_init()
   // All streams will default to UTF-8. This makes supporting other scripts much easier.
   setlocale(LC_ALL, "en_US.UTF-8");
 
-  // make sure our GDAL versions are consistent.
+  // Make sure our GDAL versions are consistent.
   const char* gdalVersion = GDALVersionInfo("RELEASE_NAME");
   if (gdalVersion != QString(GDAL_RELEASE_NAME))
   {
@@ -142,6 +145,8 @@ void Hoot::loadLibrary(QString name)
 
 void Hoot::reinit()
 {
+  LOG_TRACE("Hoot instance reinit...");
+
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
   {

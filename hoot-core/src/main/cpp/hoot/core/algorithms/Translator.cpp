@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Translator.h"
@@ -334,7 +334,7 @@ QString Translator::_transform(Transliterator* t, const QString& input)
   t->transliterate(str);
 
   QString result((QChar*)str.getTerminatedBuffer(), str.length());
-  //LOG_WARN("from: " << input.toUtf8().data() << " to " << result.toUtf8().data());
+  LOG_TRACE("from: " << input.toUtf8().data() << " to " << result.toUtf8().data());
 
   return result;
 }

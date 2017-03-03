@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -57,9 +57,10 @@ Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementI
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers with " << className() << "...");
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -70,6 +71,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const Match* m = *it;
+    LOG_VART(m->toString());
     if (m->getMatchMembers() & MatchMembers::Poi)
     {
       foundAPoi = true;
@@ -93,14 +95,22 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
     // go through all the matches
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      set< pair<ElementId, ElementId> > s = (*it)->getMatchPairs();
+      const Match* m = *it;
+      LOG_VART(m->toString());
+
+      //All of the other merger creators check the type of the match and do nothing if it isn't
+      //the correct type (in this case a PoiPolygon match).  Adding that logic in here can cause
+      //problems where some matches are passed up completely by all mergers, which results in an
+      //exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
+      //not, then some rework may need to be done here.
+      set< pair<ElementId, ElementId> > s = m->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
 
     if (_isConflictingSet(matches))
     {
-      mergers.push_back(new MarkForReviewMerger(eids, "Conflicting information",
-        matchTypes.join(";"), 1));
+      mergers.push_back(
+        new MarkForReviewMerger(eids, "Conflicting information", matchTypes.join(";"), 1));
     }
     else
     {
@@ -116,9 +126,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 vector<MergerCreator::Description> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "POI to Polygon Merge Creator", true));
-
   return result;
 }
 
@@ -127,13 +135,11 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
 {
   bool foundAPoi = false;
   bool foundAPolygon = false;
-  if (m1->getMatchMembers() & MatchMembers::Poi ||
-      m2->getMatchMembers() & MatchMembers::Poi)
+  if (m1->getMatchMembers() & MatchMembers::Poi || m2->getMatchMembers() & MatchMembers::Poi)
   {
     foundAPoi = true;
   }
-  if (m1->getMatchMembers() & MatchMembers::Polygon ||
-      m2->getMatchMembers() & MatchMembers::Polygon)
+  if (m1->getMatchMembers() & MatchMembers::Polygon || m2->getMatchMembers() & MatchMembers::Polygon)
   {
     foundAPolygon = true;
   }
@@ -185,8 +191,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
 
     // return conflict only if it is a miss, a review is ok.
     result = false;
-    if (ma.get() == 0 ||
-        ma->getType() == MatchType::Miss)
+    if (ma.get() == 0 || ma->getType() == MatchType::Miss)
     {
       result = true;
     }

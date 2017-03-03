@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
-#include "ReportMissingElementsVisitor.h"
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include "ReportMissingElementsVisitor.h"
 
 namespace hoot
 {
+class ReportMissingElementsVisitor;
+
 using namespace std;
 
 class RemoveMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
@@ -46,7 +48,8 @@ public:
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
-  virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException("Set Map with const is not supported"); }
+  virtual void setOsmMap(const OsmMap* /*map*/)
+  { throw NotImplementedException("Set Map with const is not supported"); }
 
   virtual void visit(const ConstElementPtr& e);
 

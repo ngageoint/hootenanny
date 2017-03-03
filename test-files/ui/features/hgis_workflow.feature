@@ -28,7 +28,7 @@ Feature: HGIS Imagery Validation Workflow
         And I press "Add Reference Dataset"
         And I click the "BrazilValidateCucumber" Dataset
         And I press "Add Layer"
-        And I wait 10 seconds
+        And I wait 30 seconds
         And I accept the alert
         Then I wait 30 "seconds" to see "Validation items remaining: 2"
         When I press "Assessed"

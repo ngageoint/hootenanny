@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MARKFORREVIEWMERGER_H
 #define MARKFORREVIEWMERGER_H
@@ -45,17 +45,16 @@ public:
    * and Unknown2 as second.
    */
   MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs, QString note,
-    QString reviewType, double score);
+                      QString reviewType, double score);
 
   /**
    * Review when a whole group of elements needs to be reviewed instead of specific pairs. This
    * will create a single review that contains all the specified elements.
    */
   MarkForReviewMerger(const set<ElementId>& eids, QString note,
-    QString reviewType, double score);
+                      QString reviewType, double score);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
 
   virtual set<ElementId> getImpactedElementIds() const;
 
@@ -66,6 +65,7 @@ public:
   virtual QString toString() const;
 
 private:
+
   set<ElementId> _eids;
   set< pair<ElementId, ElementId> > _pairs;
   QString _note;

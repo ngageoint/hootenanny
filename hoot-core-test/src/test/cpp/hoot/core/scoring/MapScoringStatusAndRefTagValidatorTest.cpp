@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/scoring/MapScoringStatusAndRefTagValidator.h>
 using namespace hoot;
 
@@ -64,7 +64,7 @@ public:
   void runTest()
   {
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map1(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

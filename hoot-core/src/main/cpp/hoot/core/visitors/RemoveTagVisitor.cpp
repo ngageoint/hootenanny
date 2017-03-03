@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveTagVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -60,7 +60,7 @@ _keys(keys)
 void RemoveTagVisitor::setConfiguration(const Settings& conf)
 {
   _keys = ConfigOptions(conf).getRemoveTagVisitorKeys();
-  LOG_VARD(_keys);
+  LOG_VART(_keys);
 }
 
 void RemoveTagVisitor::addKey(QString key)
@@ -72,7 +72,7 @@ void RemoveTagVisitor::visit(const shared_ptr<Element>& e)
 {
   for (int i = 0; i < _keys.size(); i++)
   {
-    LOG_DEBUG("Remove tag " << _keys[i]);
+    LOG_TRACE("Removing tag " << _keys[i] << "...");
     e->getTags().remove(_keys[i]);
   }
 }

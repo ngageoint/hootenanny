@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="1" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9117555335719985" lon="-43.2025490379888026">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Bistro"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="2" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.8976031180629001" lon="-43.1829118318802969">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Rio Porto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="3" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9119500781977017" lon="-43.2021260746806988">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Barcelos"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="4" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.8999598359971017" lon="-43.1999512727765023">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Go Japa Delivery"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.8999017033005003" lon="-43.2002833707067992">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Foodie"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="6" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9052370407498991" lon="-43.1786865232206978">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Colombo"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="7" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9017395717856012" lon="-43.1771008701893990">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Restaurante Miletto"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="8" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9011633798923988" lon="-43.1761287612958000">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.589Z"/>
+        <tag k="name" v="Cafe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="9" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9016992017327006" lon="-43.1747223906424011">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="name" v="Galaxy Cafe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="10" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9031213213519003" lon="-43.1755251772900976">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="name" v="Beco de Hamburger"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="11" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9021166641994007" lon="-43.1761984822204994">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="name" v="Dedo de Gourmet"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="12" timestamp="2017-01-16T21:26:31Z" version="1" changeset="6385" lat="-22.9054636574794017" lon="-43.1748239839898034">
+        <tag k="source:ingest:datetime" v="2017-01-16T21:26:31.588Z"/>
+        <tag k="name" v="Lype"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

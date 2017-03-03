@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace hoot;
 

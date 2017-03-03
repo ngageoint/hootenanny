@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LargeWaySplitter.h"
@@ -36,9 +36,14 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
+
+unsigned int LargeWaySplitter::logWarnCount = 0;
 
 using namespace geos::geom;
 
@@ -81,7 +86,15 @@ void LargeWaySplitter::_divideWay(shared_ptr<Way> way, int numPieces)
     if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() == 0.0)
     {
       WayLocation wl2(_map, tmp, pieceLength);
-      LOG_WARN("Invalid line piece. Odd.");
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid line piece. Odd: " << wl.toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {

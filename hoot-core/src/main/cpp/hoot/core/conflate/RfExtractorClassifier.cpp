@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RfExtractorClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 // Standard
 #include <sstream>
@@ -39,6 +40,8 @@
 
 namespace hoot
 {
+
+unsigned int RfExtractorClassifier::logWarnCount = 0;
 
 RfExtractorClassifier::RfExtractorClassifier()
 {
@@ -129,10 +132,19 @@ void RfExtractorClassifier::import(QDomElement& docRoot)
 
   if (missingExtractors.size() > 0)
   {
-    LOG_WARN("An extractor used by the model is not being calculated. We will still try, but");
-    LOG_WARN("this will undoubtably result in poor quality matches. Missing extractors:");
-    LOG_WARN(missingExtractors);
-    LOG_WARN("Available extractors: " << extractorNames);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(
+        "An extractor used by the model is not being calculated. We will still try, but this will "
+        "undoubtably result in poor quality matches. Missing extractors:");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+    LOG_TRACE("Missing extractors: " << missingExtractors);
+    LOG_TRACE("Available extractors: " << extractorNames);
   }
 }
 

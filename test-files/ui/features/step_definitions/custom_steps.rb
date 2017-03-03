@@ -7,12 +7,15 @@ Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
 end
 
 When(/^I click Get Started$/) do
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 5
   begin
     el = find_button('Get Started')
   rescue Capybara::ElementNotFound
     # In Capybara 0.4+ #find_field raises an error instead of returning nil
     el = nil
   end
+  Capybara.default_max_wait_time = oldTimeout
   el.click unless el.nil?
 end
 
@@ -630,8 +633,11 @@ When(/^I wait ([0-9]*) seconds to see image thumbnails$/) do |timeout|
   Capybara.default_max_wait_time = oldTimeout
 end
 
-When(/^I click the image carousel button$/) do
-  find('div.carousel-control').find('button').click
+When(/^I open the image carousel$/) do
+  btn = find('div.carousel-control').find('button')
+  unless btn.has_css?('active')
+    btn.click
+  end
 end
 
 Given(/^that the EGD plugin is available$/) do

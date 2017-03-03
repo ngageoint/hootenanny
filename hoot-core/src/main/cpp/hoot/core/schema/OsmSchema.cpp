@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -49,6 +49,9 @@ using namespace boost;
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/schema/OsmSchemaLoader.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QDomDocument>
@@ -219,7 +222,8 @@ class OsmSchemaData
 {
 public:
 
-  OsmSchemaData()
+  OsmSchemaData() :
+  _logWarnCount(0)
   {
     _isACost = 1.0;
   }
@@ -864,7 +868,15 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+      }
+      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      _logWarnCount++;
     }
 
     _updateVertex(vid, tv);
@@ -895,6 +907,9 @@ private:
   VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;
+
+  //this should be static, but there's no header file
+  unsigned int _logWarnCount;
 
   VertexId _addVertex(const SchemaVertex& v)
   {
@@ -950,7 +965,7 @@ private:
     double bestScore = -1.0;
     VertexId bestVid = vid1;
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    // LOG_DEBUG("from " << _graph[vid1].name << " to " << _graph[vid2].name);
+    LOG_TRACE("from " << _graph[vid1].name << " to " << _graph[vid2].name);
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       // The best minimum score is generally the average.
@@ -958,9 +973,9 @@ private:
       // give a very slight advantage to the first input.
       double s = std::min(d1[*vi], d2[*vi] + 1e-6) +
         std::max(d1[*vi], d2[*vi]) / 1e6;
-      //if (s > 0)
-      // LOG_DEBUG("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
-      // " (" << s << ")");
+      if (s > 0)
+       LOG_TRACE("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
+       " (" << s << ")");
 
       if (s > bestScore)
       {
@@ -969,7 +984,7 @@ private:
       }
     }
 
-//    LOG_DEBUG("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
+    LOG_TRACE("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
 
     score = bestScore;
     return bestVid;
@@ -990,12 +1005,12 @@ private:
                             distance_compare(comparer));
 
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    //LOG_DEBUG("Scores for: " << _graph[vd].name.toStdString());
+    LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       pair<VertexId, VertexId> key = pair<VertexId, VertexId>(vd, *vi);
       _cachedScores[key] = d[*vi];
-      //LOG_DEBUG("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
+      LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
 
       // cache the score between vd and vi in another structure that is more efficient for other
       // query types.
@@ -1280,12 +1295,28 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        LOG_WARN("Influence for " << childTv.name << " has not been specified.");
+        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Influence for " << childTv.name << " has not been specified.");
+        }
+        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        _logWarnCount++;
         childTv.influence = 1.0;
       }
       if (childTv.valueType == Unknown)
       {
-        LOG_WARN("Value type for " << childTv.name << " has not been specified.");
+        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Value type for " << childTv.name << " has not been specified.");
+        }
+        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        _logWarnCount++;
       }
     }
   }
@@ -1449,7 +1480,7 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    //LOG_INFO(_theInstance->toGraphvizString());
+    LOG_TRACE(_theInstance->toGraphvizString());
   }
   return *_theInstance;
 }
@@ -1531,7 +1562,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   }
 
   // Print out tags
-  //LOG_DEBUG("Tags: " << t.toString() );
+  LOG_TRACE("Tags: " << t.toString() );
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1682,10 +1713,10 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
     result = !isArea(t, type);
   }
 
-  /*if (result)
+  if (result)
   {
-    LOG_DEBUG("isLinearHighway; key: " << it.key());
-  }*/
+    LOG_TRACE("isLinearHighway; key: " << it.key());
+  }
 
   return result;
 }

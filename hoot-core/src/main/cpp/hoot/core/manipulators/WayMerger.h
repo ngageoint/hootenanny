@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYMERGER_H
 #define WAYMERGER_H
 
-#include "../Conflator.h"
+#include <hoot/core/conflate/Conflator.h>
 #include "WayManipulator.h"
-#include "WayMatchSet.h"
 
 // GEOS
 namespace geos {
@@ -40,7 +39,7 @@ namespace geos {
 }
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 namespace hoot {
   class OsmMap;
   class Node;
@@ -92,61 +91,6 @@ private:
   void _findMatches(long baseWayId);
 
 };
-
-//class WayMerger : public Manipulator
-//{
-//public:
-//
-//  WayMerger();
-//
-//  virtual const std::vector< boost::shared_ptr<const WorkingMap> >& apply(
-//          boost::shared_ptr<const WorkingMap> wm);
-//
-//  /** TODO */
-//  virtual const vector< shared_ptr<const Manipulation> >& findAllManipulations(
-//      shared_ptr<const OsmMap> /*map*/) { return _result2; }
-//
-//  virtual shared_ptr<WorkingMap> initialize(shared_ptr<WorkingMap> baseMap);
-//
-//protected:
-//
-//  vector< shared_ptr<const Manipulation> > _result2;
-//  size_t _maxResults;
-//  // a map of all possible matches
-//  WayMatchSet _possibleMatches;
-//  // a set of all ids that have been evaluated for matches from both unknown1 and unknown2
-//  HashSet<long> _evaluatedWays;
-//  std::vector< boost::shared_ptr<const WorkingMap> > _result;
-//  boost::shared_ptr<const WorkingMap> _map;
-//  boost::shared_ptr<OsmMap> _newMap;
-//  std::priority_queue<
-//          boost::shared_ptr<const WorkingMap>,
-//          std::deque< boost::shared_ptr<const WorkingMap> >,
-//          Conflator::LesserWorkingMap > _resultHeap;
-//
-//  double _matchPercent;
-//  double _matchBuffer;
-//
-//  Meters _distance(boost::shared_ptr<hoot::Node> n1,
-//                 boost::shared_ptr<hoot::Node> n2);
-//
-//  /**
-//   * Ensures that both ways are approximately pointed in the same direction as w1 by reversing
-//   * the order of w2 if necessary.
-//   */
-//  void _ensureDirection(boost::shared_ptr<const hoot::Way> w1,
-//                        boost::shared_ptr<hoot::Way> w2);
-//
-//  void _findMatches(boost::shared_ptr<const hoot::Way> way);
-//
-//  bool _isMatched(long wayId1, long wayId2);
-//
-//  long _mergeNodes(long nid1, long nid2, std::map<long, long>& replacementMap);
-//
-//  void _mergeWays(long wayId1, long wayId2, shared_ptr<WorkingMap> result);
-//
-//  void _moveTowardLine(hoot::Node* n, const geos::geom::LineString* line);
-//};
 
 }
 

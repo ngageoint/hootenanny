@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOCATIONOFPOINT_H
@@ -33,16 +33,16 @@
 #include <geos/geom/LineSegment.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-
 #include "WayLocation.h"
 
-namespace hoot {
+namespace hoot
+{
 
-  // GEOS
-  using namespace geos::geom;
+// GEOS
+using namespace geos::geom;
 
 class Way;
+class OsmMap;
 
 /**
  * @author RoadMatcher
@@ -91,7 +91,6 @@ public:
    * @return the location of the nearest point
    */
   WayLocation locateAfter(const Coordinate& inputPt, const WayLocation& minLocation) const;
-
 
   /**
    * Tests whether a location given by a <index, segmentFraction> pair

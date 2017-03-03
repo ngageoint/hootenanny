@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -83,36 +83,36 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_VAR(threshold);
-  LOG_INFO("Extracting network...");
+  LOG_INFO("Extracting networks...");
+  LOG_VARD(threshold);
+
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
   ElementCriterionPtr c1(new ChainCriterion(new StatusCriterion(Status::Unknown1),
     _userCriterion));
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
+  LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
   ElementCriterionPtr c2(new ChainCriterion(new StatusCriterion(Status::Unknown2),
     _userCriterion));
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
+  LOG_TRACE("Extracted Network 2: " << n2->toString());
 
+  LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
-  //IterativeNetworkMatcherPtr matcher = IterativeNetworkMatcher::create();
-  //VagabondNetworkMatcherPtr matcher = VagabondNetworkMatcher::create();
-  //SingleSidedNetworkMatcherPtr matcher = SingleSidedNetworkMatcher::create();
   NetworkMatcherPtr matcher(
     Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
-
-  LOG_INFO("Matching network...");
   matcher->matchNetworks(map, n1, n2);
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
   LOG_INFO("Optimizing network...");
 
-  for (size_t i = 0; i < 10; ++i)
+  const size_t numIterations = 10; //TODO: should this be an option?
+  for (size_t i = 0; i < numIterations; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
@@ -128,31 +128,35 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     }
 
     matcher->iterate();
+
+    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
   }
 
-  LOG_INFO("Creating matches...");
+  LOG_DEBUG("Retrieving edge scores...");
 
   // convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
+  LOG_VART(matcher->getMatchThreshold());
   for (int i = 0; i < edgeMatch.size(); i++)
   {
+    LOG_VART(edgeMatch[i]->getUid());
+    LOG_VART(edgeMatch[i]->getScore());
+    LOG_VART(edgeMatch[i]->getEdgeMatch());
+
     /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
+      LOG_TRACE("is match");
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
-
-  LOG_INFO("Network match creation complete.");
 }
 
 vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(Description(className(), "Network Match Creator", Highway, true));
-
   return result;
 }
 

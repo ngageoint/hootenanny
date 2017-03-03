@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONADDRESSSCOREEXTRACTOR_H
 #define POIPOLYGONADDRESSSCOREEXTRACTOR_H
@@ -39,7 +39,7 @@ namespace hoot
  * Calculates the address similarity score of two features.  Only exact string matches yield a
  * positive score.  This translates addresses, but doesn't handle abbreviations.
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase//, public Configurable
+class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
 {
 public:
 
@@ -68,14 +68,7 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
-  //virtual void setConfiguration(const Settings& conf);
-
-  //double getAddressScoreThreshold() { return _addressScoreThreshold; }
-  //void setAddressScoreThreshold(double threshold) { _addressScoreThreshold = threshold; }
-
 private:
-
-  //double _addressScoreThreshold;
 
   void _collectAddressesFromElement(ConstElementPtr element, QSet<QString>& addresses) const;
   void _collectAddressesFromWayNodes(ConstWayPtr way, QSet<QString>& addresses,

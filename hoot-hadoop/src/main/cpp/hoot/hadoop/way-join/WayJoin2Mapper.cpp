@@ -17,8 +17,8 @@
 #include "WayJoin2Mapper.h"
 
 // Hoot
-#include <hoot/core/io/PbfReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
@@ -80,7 +80,7 @@ void WayJoin2Mapper::_flushNodes()
     pp::DataOutputStream dos(ss);
 
     dos.writeByte(PbfData);
-    PbfWriter writer;
+    OsmPbfWriter writer;
     // RHEL calls this ambiguous.
     const shared_ptr<const OsmMap>& co = _nodeMap;
     writer.writePb(co, &ss);
@@ -133,7 +133,7 @@ void WayJoin2Mapper::map(HadoopPipes::MapContext& context)
 void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
 {
   // The first byte on the value says if it is a PBF/WayJoin1Reducer::Value
-  PbfWriter writer;
+  OsmPbfWriter writer;
 
   // Remove all non-roads.
   shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
@@ -160,7 +160,7 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
     stringstream ss(stringstream::out);
     pp::DataOutputStream dos(ss);
 
-    //LOG_INFO("Writing way: " << _key->id);
+    LOG_TRACE("Writing way: " << _key->id);
 
     dos.writeByte(PbfData);
     writer.writePb(w, &ss);
@@ -176,7 +176,7 @@ void WayJoin2Mapper::mapWayPoints(int64_t& k, WayJoin1Reducer::Value& v)
   _key->id = k;
 
   _rawValue->rawWay = v;
-  //LOG_INFO("Writing way raw: " << _key->id);
+  LOG_TRACE("Writing way raw: " << _key->id);
 
   _context->emit(_keyStr, _rawValueStr);
 }

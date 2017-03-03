@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMALOADERFACTORY_H
 #define OSMSCHEMALOADERFACTORY_H
 
-#include "OsmSchemaLoader.h"
+// Boost
+#include <boost/shared_ptr.hpp>
+
+// Qt
+#include <QString>
+
+#include <memory>
 
 namespace hoot
 {
 
+class OsmSchemaLoader;
+
+using namespace boost;
+using namespace std;
+
 class OsmSchemaLoaderFactory
 {
 public:
-  OsmSchemaLoaderFactory() {};
+  OsmSchemaLoaderFactory() {}
 
   static OsmSchemaLoaderFactory& getInstance();
 

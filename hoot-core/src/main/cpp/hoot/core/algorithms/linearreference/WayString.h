@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
 
-// hoot
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/Hoot.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Qt
@@ -35,6 +37,8 @@
 
 namespace hoot
 {
+
+class WayLocation;
 
 /**
  * Represents an ordered collection of WaySublines. Each subline must match end to start and all
@@ -45,6 +49,11 @@ namespace hoot
 class WayString
 {
 public:
+
+  static std::string className() { return "hoot::WayString"; }
+
+  static unsigned int logWarnCount;
+
   WayString();
 
   void append(const WaySubline& subline);
@@ -89,6 +98,7 @@ public:
   void visitRo(const ElementProvider& map, ElementVisitor& v) const;
 
 private:
+
   QList<WaySubline> _sublines;
   static Meters _epsilon;
 

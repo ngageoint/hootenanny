@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -42,6 +42,7 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 // Qt
 #include <QStringList>
@@ -51,6 +52,8 @@
 
 namespace hoot
 {
+
+unsigned int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 
@@ -112,7 +115,8 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
     {
       // this is unusual print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
-      LOG_WARN(OsmWriter::toString(copiedMap));
+      LOG_TRACE(OsmXmlWriter::toString(copiedMap));
+      logWarnCount++;
       throw e;
     }
 

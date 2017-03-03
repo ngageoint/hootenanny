@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -56,8 +58,9 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
       membersToReview[ReviewMarker::getReviewElements(map, eid)].append(eid);
     }
   }
+  LOG_VART(membersToReview);
 
-  //loop through dupplicate reviews
+  //loop through duplicate reviews
   QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> >::iterator it = membersToReview.begin();
   while (it != membersToReview.end())
   {
@@ -65,6 +68,9 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
 
     //remove duplicate reviews
     QList<ReviewMarker::ReviewUid> duplicateReviews = it.value();
+
+    LOG_VART(eids.size());
+    LOG_VART(duplicateReviews.size());
 
     //Only remove reviews and process if there is more than one review
     // See discussion here: https://github.com/ngageoint/hootenanny/issues/81#issuecomment-162980656
@@ -98,7 +104,7 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
             explain = "Multiple overlapping high confidence reviews: " + explain;
           }
         }
-        ReviewMarker::mark(map, map->getElement(beid), map->getElement(eeid), 
+        ReviewMarker::mark(map, map->getElement(beid), map->getElement(eeid),
           explain, match->getMatchName(), match->getClassification().getReviewP());
       }
     }

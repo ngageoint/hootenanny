@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source $HOOT_HOME/conf/DatabaseConfig.sh
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export INPUT="Ex Ren Db"
 # setup db, user, and password to avoid password prompt
@@ -23,7 +23,7 @@ dropdb $AUTH $RENDER_DB &>/dev/null || true
 # to test the streaming reader to ogr writer
 # with data that generated the error:
 # Relation element did not exist in cache
-scripts/exportrenderdb.sh # || true # Don't error out so test will continue to clean up
+scripts/services/exportrenderdb.sh $MAP_ID $DB_URL # || true # Don't error out so test will continue to clean up
 
 # Clean up
 hoot delete-map $HOOT_OPTS "$DB_URL/$INPUT"

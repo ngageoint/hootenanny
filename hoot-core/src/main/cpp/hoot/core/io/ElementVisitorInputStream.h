@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,19 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
 
-#include <boost/shared_ptr.hpp>
-
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
+
+class ElementVisitor;
 
 class ElementVisitorInputStream : public ElementInputStream
 {
@@ -44,7 +43,8 @@ public:
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input source before being returned
    */
-  ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource, const shared_ptr<ElementVisitor>& visitor);
+  ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource,
+                            const shared_ptr<ElementVisitor>& visitor);
 
   /**
    * @brief close

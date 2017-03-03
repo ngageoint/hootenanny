@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 
 // Standard
@@ -51,8 +51,6 @@ SuperfluousNodeRemover::SuperfluousNodeRemover()
 
 void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("Removing superfluous nodes...");
-
   _usedNodes.clear();
 
   const WayMap& ways = map->getWays();
@@ -94,12 +92,12 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
-        LOG_TRACE("Removing node. " << n->toString());
+        LOG_TRACE("Removing node. " << n->getElementId());
         RemoveNodeOp::removeNodeNoCheck(map, n->getId());
       }
       else
       {
-        LOG_TRACE("node not in bounds. " << n->toString());
+        LOG_TRACE("node not in bounds. " << n->getElementId());
         LOG_VART(_bounds);
       }
     }

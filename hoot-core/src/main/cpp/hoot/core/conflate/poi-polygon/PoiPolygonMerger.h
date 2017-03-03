@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -40,6 +40,10 @@ class PoiPolygonMerger : public MergerBase
 {
 
 public:
+
+  static std::string className() { return "hoot::PoiPolygonMerger"; }
+
+  static unsigned int logWarnCount;
 
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first

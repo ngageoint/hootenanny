@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRINGMERGER_H
 #define WAYSTRINGMERGER_H
@@ -43,11 +43,18 @@ class WayMatchStringMergerTest;
  */
 class WayMatchStringMerger
 {
+
 public:
+
+  static std::string className() { return "hoot::WayMatchStringMerger"; }
+
+  static unsigned int logWarnCount;
+
   /// @todo clean me
   class SublineMapping
   {
   public:
+
     WayPtr newWay1;
     WaySubline subline2;
     ConstWayPtr way2;
@@ -82,7 +89,9 @@ public:
         .arg(hoot::toString(subline2))
         .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
     }
+
   private:
+
     WayLocation _start;
     WayLocation _end;
     WayPtr _newWay2;
@@ -92,6 +101,7 @@ public:
   class SublineMappingLessThan1
   {
   public:
+
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
@@ -102,6 +112,7 @@ public:
   class SublineMappingLessThan2
   {
   public:
+
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
@@ -129,7 +140,7 @@ public:
   /**
    * Merge scrapNode into the keeper way node at the end of a keeper way.
    */
-  void mergeIntersection(ElementId scrapNode);
+  void mergeIntersection(ElementId scrapNodeId);
 
   /**
    * Merge scrapNode into the keeper way.
@@ -182,6 +193,12 @@ private:
   /// @todo merge these two together.
   void _rebuildWayString1();
   void _rebuildWayString2();
+
+  /**
+   * Using WayLocation::SLOPPY_EPSILON snap locations that are nearly at the end of a way to the
+   * end of a way.
+   */
+  WayLocation _snapToEnd(const WayLocation& wl) const;
 
   void _splitPrimary();
 };

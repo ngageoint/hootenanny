@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayCleaner.h"
 
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
+
+unsigned int WayCleaner::logWarnCount = 0;
 
 bool WayCleaner::hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bool logDetails)
 {
@@ -38,11 +42,19 @@ bool WayCleaner::hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bo
   {
     if (logDetails)
     {
-      LOG_WARN(
-        "Duplicate coordinate " << map.getNode(nodeIds.at(0))->toCoordinate() <<
-        " for node with ID:'s " << nodeIds[0] << " and " << nodeIds[1] <<
-        " found at indexes 0 and 1; For way with ID: " << way->getElementId().getId());
-      LOG_VARW(nodeIds);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(
+          "Duplicate coordinate " << map.getNode(nodeIds.at(0))->toCoordinate() <<
+          " for node with ID:'s " << nodeIds[0] << " and " << nodeIds[1] <<
+          " found at indexes 0 and 1; For way with ID: " << way->getElementId().getId());
+        LOG_VART(nodeIds);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     return true;
   }
@@ -68,10 +80,19 @@ bool WayCleaner::hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bo
       {
         if (logDetails)
         {
-          LOG_WARN(
-            "Duplicate coord " << map.getNode(nodeIds[i])->toCoordinate() << " for node with ID: " <<
-            nodeIds[i] << " found at index: " << i << " For way with ID: " << way->getElementId().getId());
-          LOG_VARW(nodeIds);
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Duplicate coord " << map.getNode(nodeIds[i])->toCoordinate() <<
+              " for node with ID: " << nodeIds[i] << " found at index: " << i <<
+              " For way with ID: " << way->getElementId().getId());
+            LOG_VART(nodeIds);
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
         return found;
       }
@@ -92,10 +113,18 @@ bool WayCleaner::hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
   {
     if (logDetails)
     {
-      LOG_WARN(
-        "Duplicate node with ID: " << nodeIds[0] << " found at indexes 0 and 1; For way with ID: " <<
-        way->getElementId().getId());
-      LOG_VARW(nodeIds);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(
+          "Duplicate node with ID: " << nodeIds[0] << " found at indexes 0 and 1; " <<
+          "For way with ID: " << way->getElementId().getId());
+        LOG_VART(nodeIds);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     return true;
   }
@@ -119,10 +148,18 @@ bool WayCleaner::hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
       {
         if (logDetails)
         {
-          LOG_WARN(
-            "Duplicate node with ID: " << nodeIds[i] << " found at index: " << i <<
-            " For way with ID: " << way->getElementId().getId());
-          LOG_VARW(nodeIds);
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Duplicate node with ID: " << nodeIds[i] << " found at index: " << i <<
+              " For way with ID: " << way->getElementId().getId());
+            LOG_VART(nodeIds);
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
         return found;
       }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,37 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTTYPEFILTER_H
-#define ELEMENTTYPEFILTER_H
+#ifndef ELEMENTTYPECRITERION_H
+#define ELEMENTTYPECRITERION_H
 
 #include "ElementCriterion.h"
-
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementType.h>
 
 namespace hoot
 {
 
-
 class ElementTypeCriterion : public BaseElementFilter
 {
+
 public:
+
+  ElementTypeCriterion() {}
   ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
 
   virtual ~ElementTypeCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
-  {
-    return e->getElementType() == _elementType;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new ElementTypeCriterion(_elementType); }
 
 protected:
+
   ElementType::Type _elementType;
 };
 
 }
 
-#endif // ELEMENTTYPEFILTER_H
+#endif // ELEMENTTYPECRITERION_H

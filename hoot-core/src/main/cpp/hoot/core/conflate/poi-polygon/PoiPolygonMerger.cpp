@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMerger.h"
 
@@ -36,6 +36,8 @@
 
 namespace hoot
 {
+
+unsigned int PoiPolygonMerger::logWarnCount = 0;
 
 PoiPolygonMerger::PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs) :
 _pairs(pairs)
@@ -69,7 +71,19 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   {
     //building merger must not have been able to merge...maybe need an earlier check for this
     //and also handle it differently...
-    LOG_WARN("Building merger unable to merge.");
+
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Building merger unable to merge.");
+      LOG_VART(buildings1);
+      LOG_VART(buildings2);
+      LOG_VART(replaced);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
   assert(finalBuilding.get());
@@ -77,13 +91,15 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
   Tags finalBuildingTags = finalBuilding->getTags();
   if (poiTags1.size())
   {
-    finalBuildingTags = TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
-      finalBuilding->getElementType());
+    finalBuildingTags =
+      TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
+                                                finalBuilding->getElementType());
   }
   if (poiTags2.size())
   {
-    finalBuildingTags = TagMergerFactory::getInstance().mergeTags(finalBuildingTags,
-      poiTags2, finalBuilding->getElementType());
+    finalBuildingTags =
+      TagMergerFactory::getInstance().mergeTags(finalBuildingTags, poiTags2,
+                                                finalBuilding->getElementType());
   }
   finalBuilding->setTags(finalBuildingTags);
 

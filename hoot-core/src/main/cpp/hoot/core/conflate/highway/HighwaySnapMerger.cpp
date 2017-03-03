@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMerger.h"
 
@@ -33,7 +33,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
@@ -50,9 +50,13 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
+
+unsigned int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
   const set< pair<ElementId, ElementId> >& pairs,
@@ -179,7 +183,15 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 {
   if (!e1 && !e2)
   {
-    LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
   else if (e1 && e2)
   {
@@ -214,6 +226,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
+    LOG_TRACE("Missing match pair");
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return;
   }
@@ -233,12 +246,14 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
   catch (NeedsReviewException& e)
   {
+    LOG_VART(e.getWhat());
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return;
   }
 
   if (!match.isValid())
   {
+    LOG_TRACE("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return;
@@ -469,6 +484,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     RelationPtr r;
     if (!scrap || scrap->getElementType() == ElementType::Way)
     {
+      LOG_TRACE("multilinestring: scrap relation");
       r.reset(new Relation(splitee->getStatus(), map->createNextRelationId(),
                            splitee->getCircularError(), Relation::MULTILINESTRING));
       if (scrap)
@@ -520,6 +536,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
         scrap->getElementType() == ElementType::Way)
     {
       // create a new relation to contain this single way (footway relation)
+      LOG_TRACE("multilinestring: footway relation");
       RelationPtr r(new Relation(splitee->getStatus(), map->createNextRelationId(),
         splitee->getCircularError(), Relation::MULTILINESTRING));
       r->addElement("", scrap->getElementId());

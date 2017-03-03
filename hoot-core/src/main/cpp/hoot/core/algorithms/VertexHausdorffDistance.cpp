@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VertexHausdorffDistance.h"
 
@@ -49,7 +49,9 @@ class VertexHausdorffFilter : public CoordinateFilter
 {
 public:
 
-  VertexHausdorffFilter(const Geometry& g) : _g(g)
+  VertexHausdorffFilter(const Geometry& g) :
+  _g(g),
+  _logWarnCount(0)
   {
     _distance = -1;
   }
@@ -61,7 +63,15 @@ public:
 
     if (d < 0)
     {
-      LOG_WARN("d less than zero. " << _g.toString());
+      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("d less than zero. " << _g.toString());
+      }
+      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      _logWarnCount++;
     }
 
     if (d > _distance || _distance == -1)
@@ -73,8 +83,12 @@ public:
   double getDistance() const { return _distance; }
 
 private:
+
   double _distance;
   const Geometry& _g;
+
+  //this should be static, but there's no header file
+  unsigned int _logWarnCount;
 };
 
 VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geometry& g2)

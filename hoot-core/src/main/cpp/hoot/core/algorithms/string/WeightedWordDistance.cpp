@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WeightedWordDistance.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
@@ -113,7 +113,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   QStringList sl1 = _tokenizer.tokenize(s1);
   QStringList sl2 = _tokenizer.tokenize(s2);
 
-  //LOG_INFO(std::setprecision(8));
+  LOG_TRACE(std::setprecision(8));
   // calculate the relative weight of each word term.
   vector<double> w1 = _calculateWeights(sl1);
   vector<double> w2 = _calculateWeights(sl2);
@@ -128,7 +128,7 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
     for (int j = 0; j < sl2.size(); j++)
     {
       double distance = 1 - _d->compare(sl1[i], sl2[j]);
-      //LOG_DEBUG(sl1[i] << " vs. " << sl2[j] << ": " << distance);
+      LOG_TRACE(sl1[i] << " vs. " << sl2[j] << ": " << distance);
       // if we assume they represent the same word this is the weight of that new combined word.
       double w = w1[i] + w2[j];
       scores.set(i + 1, j + 1, distance);
@@ -142,24 +142,24 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
     weightedScores.set(0, j + 1, w2[j]);
   }
 
-//  LOG_VARD(scores.toTableString());
-//  LOG_VARD(weightedScores.toTableString());
-//  LOG_VARD(scores.minSumMatrix().toTableString());
-//  LOG_VARD(scores.minSumMatrix().multiplyCells(weightedScores).toTableString());
+  LOG_VART(scores.toTableString());
+  LOG_VART(weightedScores.toTableString());
+  LOG_VART(scores.minSumMatrix().toTableString());
+  LOG_VART(scores.minSumMatrix().multiplyCells(weightedScores).toTableString());
 
   double denominator = tbs::SampleStats(w1).calculateSum() +
     tbs::SampleStats(w2).calculateSum();
-//  LOG_VARD(denominator);
+  LOG_VART(denominator);
 
   double score = scores.minSumMatrix().multiplyCells(weightedScores).sumCells();
 
-//  LOG_VARD(1 - score / denominator);
+  LOG_VART(1 - score / denominator);
   return 1 - score / denominator;
 }
 
 void WeightedWordDistance::setConfiguration(const Settings& conf)
 {
-  _p = ConfigOptions(conf).getWeightedWordDistanceP();
+  _p = ConfigOptions(conf).getWeightedWordDistanceProbability();
   _tokenizer.setConfiguration(conf);
 }
 

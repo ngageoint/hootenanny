@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 #include "PertyDuplicatePoiOp.h"
@@ -245,7 +245,7 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
 
   LOG_INFO(toString());
 
-  geos::geom::Envelope env = CalculateBoundsVisitor::getGeosBounds(map);
+  geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
 
   int rows, cols;
@@ -289,7 +289,7 @@ void PertyOp::permute(const shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToPlanar(map);
 
-  geos::geom::Envelope env = CalculateBoundsVisitor::getGeosBounds(map);
+  geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
 
   int rows, cols;
   Mat EX = _calculatePermuteGrid(env, rows, cols);

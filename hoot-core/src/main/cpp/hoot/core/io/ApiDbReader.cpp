@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDbReader.h"
 
 // Hoot
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/io/TableType.h>
+#include <hoot/core/io/ApiDb.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -35,12 +39,35 @@
 namespace hoot
 {
 
+unsigned int ApiDbReader::logWarnCount = 0;
+
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false)
 {
 
+}
+
+void ApiDbReader::setBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+void ApiDbReader::setOverrideBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+bool ApiDbReader::_hasBounds()
+{
+  return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
@@ -119,8 +146,16 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-               QString::number(element->getId()));
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                 QString::number(element->getId()));
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
@@ -156,7 +191,15 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
     //We don't need to carry this tag around once the value is set on the element...it will
@@ -182,12 +225,31 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
     }
     //I don't think OSM non-hoot metadata tags should be removed here...
     //tags.remove(MetadataTags::Accuracy());
   }
+}
+
+bool ApiDbReader::_isValidBounds(const Envelope& bounds)
+{
+  if (bounds.isNull() ||
+      (bounds.getMinX() == -180.0 && bounds.getMinY() == -90.0 && bounds.getMaxX() == 180.0 &&
+       bounds.getMaxY() == 90.0))
+  {
+    return false;
+  }
+  return true;
 }
 
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)

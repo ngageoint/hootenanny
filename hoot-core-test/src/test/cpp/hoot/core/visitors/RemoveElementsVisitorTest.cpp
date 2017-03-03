@@ -32,8 +32,8 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/MapProjector.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
 #include <QDir>
@@ -66,7 +66,7 @@ public:
 
     MapProjector::projectToWgs84(map);
     QDir().mkpath("test-output/visitors");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorOutput.osm",
                      "test-output/visitors/RemoveElementsVisitorOutput.osm");
@@ -85,7 +85,7 @@ public:
 
     MapProjector::projectToWgs84(map);
     QDir().mkpath("test-output/visitors");
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorRecursiveOutput.osm",
                      "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");

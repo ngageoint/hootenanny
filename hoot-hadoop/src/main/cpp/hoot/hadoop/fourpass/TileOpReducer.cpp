@@ -17,26 +17,27 @@
 #include "TileOpReducer.h"
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/io/ObjectInputStream.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
-
-// Qt
-//#include <QUuid>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
@@ -46,6 +47,8 @@
 
 namespace hoot
 {
+
+unsigned int TileOpReducer::logWarnCount = 0;
 
 PP_FACTORY_REGISTER(pp::Reducer, TileOpReducer)
 
@@ -114,7 +117,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  QString tmp = "tmp/" + QUuid::createUuid().toString().replace("{", "").replace("}", "") +
 //      "-conflate-input.pbf";
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
-//  PbfWriter writer;
+//  OsmPbfWriter writer;
 //  pp::Hdfs fs;
 //  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());
@@ -126,13 +129,13 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     // read the map from the given string.
     stringstream ss(context.getInputValue(), stringstream::in);
 
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
   LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
     map->getWays().size());
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
   delete e;
 
@@ -162,8 +165,15 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   {
     if (map->containsNode(it->first))
     {
-      LOG_WARN("Strange, a replaced node is still in the map.");
-      LOG_WARN("nid: " << it->first);
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Strange, a replaced node is still in the map.  nid: " << it->first);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -208,7 +218,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
 void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 {
-  Envelope* e = GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map));
+  Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
   delete e;
   // write the map out to the working directory.
@@ -218,7 +228,7 @@ void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
 
 const Envelope& TileOpReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateBoundsVisitor::getBounds(map)));
+  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -281,7 +291,7 @@ shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
   shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
-  PbfReader reader(true);
+  OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<
@@ -321,7 +331,6 @@ void TileOpReducer::reduce(HadoopPipes::ReduceContext& context)
 void TileOpReducer::_validate(const shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
-  LOG_DEBUG("Testing debug.");
   Debug::printTroubled(map);
   map->validate(true);
 

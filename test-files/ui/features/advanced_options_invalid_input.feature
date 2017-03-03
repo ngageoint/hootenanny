@@ -7,11 +7,11 @@ Feature: Advanced Conflation Options
 	    And I press "Add Reference Dataset"
 	    And I click the "AllDataTypesACucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+	    Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
 	    And I press "Add Secondary Dataset"
 	    And I click the "AllDataTypesBCucumber" Dataset
 	    And I press "Add Layer"
-	    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+	    Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
 
 	Scenario: I can set up standard conflation parameters
 	    Then I should see "Conflate"
@@ -48,8 +48,8 @@ Feature: Advanced Conflation Options
 		Then I click on "#<option id>"
 
 		Examples:
-			| option name | option id | element | placeholder |   
-			| Cleaning Options | hoot_cleaning_options_label | small_way_merger_threshold | 15 | 
+			| option name | option id | element | placeholder |
+			| Cleaning Options | hoot_cleaning_options_label | small_way_merger_threshold | 15 |
 			| General Conflation Options | hoot_general_conflation_options_label | unify_optimizer_time_limit | 30 |
 			| General Conflation Options | hoot_general_conflation_options_label | element_cache_size_node | 2000000 |
 			| General Conflation Options | hoot_general_conflation_options_label | element_cache_size_relation | 200000 |
@@ -113,7 +113,7 @@ Feature: Advanced Conflation Options
 			When I press tab in the "#<element>" input
 			And I should see element "#<element>" with no value and placeholder <placeholder>
 			Then I click on "#<option id>"
-				
+
 			Examples:
 				| option name | option id | element | placeholder | might |
 				| Road Options | hoot_road_options_label | search_radius_highway | "-1" | should |

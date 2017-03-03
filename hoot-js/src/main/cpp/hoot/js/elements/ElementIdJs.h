@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 
 // node.js
-// #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt
@@ -72,7 +69,6 @@ private:
   ElementId _eid;
   static Persistent<Function> _constructor;
 
-  //static Handle<Value> getId(const Arguments& args);
   static Handle<Value> getType(const Arguments& args);
   static Handle<Value> toJSON(const Arguments& args);
   static Handle<Value> toString(const Arguments& args);

@@ -6,11 +6,11 @@ Feature: Check Layer Visibility
         And I press "Add Reference Dataset"
         And I click the "DcGisRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
         And I press "Add Secondary Dataset"
         And I click the "DcOsmRoadsCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
 
     Scenario: Check Layer Visbility
         When I click the Background settings button

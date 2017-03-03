@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,17 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DecomposeBuildingRelationsVisitor.h"
 
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {
+
+unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
@@ -64,7 +67,15 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     r->removeElement(eid);
     if (eid.getType() == ElementType::Node)
     {
-      LOG_WARN("Unexpected node encountered in building relation. " << r->getElementId());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Unexpected node encountered in building relation. " << r->getElementId());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       continue;
     }
     // we're dropping the outline. We only care about the parts.
@@ -74,7 +85,15 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     }
     else if (members[i].getRole() != "part")
     {
-      LOG_WARN("Encountered an unexpected role in a building relation. " << r->getElementId());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Encountered an unexpected role in a building relation. " << r->getElementId());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
 
     // ok, we've got a building part. Recompose it as a building.

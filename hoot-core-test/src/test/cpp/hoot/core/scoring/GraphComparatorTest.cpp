@@ -27,10 +27,10 @@
 
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
-#include <hoot/core/io/OsmReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/scoring/GraphComparator.h>
 #include <hoot/core/util/OpenCv.h>
 using namespace hoot;
@@ -65,7 +65,7 @@ public:
 
     void runTest()
     {
-        OsmReader reader;
+        OsmXmlReader reader;
 
         Tgs::Random::instance()->seed(0);
 
@@ -101,7 +101,7 @@ public:
 
     void runDenverDistanceTest()
     {
-        OsmReader reader;
+        OsmXmlReader reader;
 
         Tgs::Random::instance()->seed(0);
 
@@ -141,7 +141,7 @@ public:
 
     void runKentuckyDistanceTest()
     {
-        OsmReader reader;
+        OsmXmlReader reader;
 
         Tgs::Random::instance()->seed(0);
 

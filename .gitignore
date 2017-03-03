@@ -16,11 +16,11 @@ autom4te.cache
 BuildDate.txt
 bin/
 callgrind.*
-conf/DatabaseConfigLocal.sh
+conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
-conf/*.rf
-conf/words*.sqlite
-conf/WordsAbridged.sqlite
+conf/models/*.rf
+conf/dictionary/words*.sqlite
+conf/dictionary/WordsAbridged.sqlite
 config.h.in
 config.h
 config.status

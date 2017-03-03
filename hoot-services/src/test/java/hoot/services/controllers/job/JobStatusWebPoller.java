@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
-import static hoot.services.HootProperties.TEST_JOB_STATUS_POLLER_TIMEOUT;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
@@ -42,7 +41,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
+import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QJobStatus;
 
@@ -61,9 +60,13 @@ public class JobStatusWebPoller {
         this.conn = conn;
 
         // increase this to something long when debugging in debugger to the
-        // poller from polling and changing
-        // program flow while you're trying to debug service code
-        this.jobStatusPollDelayMs = Integer.parseInt(TEST_JOB_STATUS_POLLER_TIMEOUT);
+        // poller from polling and changing program flow while you're trying to debug service code.
+        // Amount of time in ms the job status polling class used only in test code waits before attempting
+        // to determine the status of a running job; 250 is a good value for development environments and
+        // prevents the services tests from taking a long time to run; may need to increase to as much as
+        // 2000 or more in some continuous integration environments where postgres seems to respond more
+        // slowly to queries
+        this.jobStatusPollDelayMs = 250;
     }
 
     /**

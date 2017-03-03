@@ -35,11 +35,11 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/MaximalSubline.h>
 #include <hoot/core/algorithms/WaySplitter.h>
@@ -47,6 +47,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 using namespace hoot;
 
 // Qt
@@ -122,7 +123,7 @@ public:
    */
   void runCircleTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -160,7 +161,7 @@ public:
 
   void runJoinTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -182,7 +183,7 @@ public:
 
     QDir().mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
-    OsmWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
+    OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
   }
 
   void runDiagonalOffsetTest()
@@ -409,7 +410,7 @@ public:
   {
     {
       shared_ptr<OsmMap> map(new OsmMap());
-      OsmReader reader;
+      OsmXmlReader reader;
       OsmMap::resetCounters();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);

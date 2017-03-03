@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDb.h"
 
@@ -37,6 +37,7 @@
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/io/TableType.h>
 
 // qt
 #include <QStringList>
@@ -58,6 +59,8 @@
 
 namespace hoot
 {
+
+unsigned int OsmApiDb::logWarnCount = 0;
 
 const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
 const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";
@@ -198,7 +201,6 @@ void OsmApiDb::rollback()
 
   if (!_db.rollback())
   {
-    LOG_WARN("Error rolling back transaction.");
     throw HootException("Error rolling back transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
@@ -230,7 +232,6 @@ void OsmApiDb::commit()
   _resetQueries();
   if (!_db.commit())
   {
-    LOG_WARN("Error committing transaction.");
     throw HootException("Error committing transaction: " + _db.lastError().text());
   }
   _inTransaction = false;
@@ -264,7 +265,6 @@ QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
-//TODO: this needs to be better named
 QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
@@ -299,7 +299,6 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   QString sql =  "SELECT node_id FROM " +
                   getCurrentWayNodesTableName() +
                  " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
@@ -328,24 +327,37 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   _selectMembersForRelation->bindValue(":relationId", (qlonglong)relationId);
   if (_selectMembersForRelation->exec() == false)
   {
-    throw HootException("Error selecting members for relation with ID: " +
-      QString::number(relationId) + " Error: " + _selectMembersForRelation->lastError().text());
+    throw HootException("Error selecting members for relation: " + QString::number(relationId) +
+      " Error: " + _selectMembersForRelation->lastError().text());
   }
+  LOG_VARD(_selectMembersForRelation->executedQuery());
+  LOG_VARD(_selectMembersForRelation->numRowsAffected());
 
   while (_selectMembersForRelation->next())
   {
     const QString memberType = _selectMembersForRelation->value(0).toString();
+    LOG_VART(memberType);
     if (ElementType::isValidTypeString(memberType))
     {
-      result.push_back(
+      RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-          _selectMembersForRelation->value(1).toLongLong())));
+          _selectMembersForRelation->value(1).toLongLong()));
+      LOG_VART(member);
+      result.push_back(member);
     }
     else
     {
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -366,7 +378,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   if (_selectNodeById->exec() == false)
   {
     QString err = _selectNodeById->lastError().text();
-    LOG_WARN(sql);
     throw HootException("Error selecting node by id: " + QString::number(elementId) +
       " Error: " + err);
   }
@@ -393,7 +404,6 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   if (_selectElementsForMap->exec() == false)
   {
     QString err = _selectElementsForMap->lastError().text();
-    LOG_WARN(sql);
     throw HootException("Error selecting elements of type: " + elementType.toString() +
       " Error: " + err);
   }

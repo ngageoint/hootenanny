@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatch.h"
 
@@ -48,6 +48,7 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   {
     // Send the score through a logistic function to keep the values in range. These values are
     // arbitrary and may need tweaking.
+
     // steepness
     double k = 2.0;
     // max value
@@ -62,8 +63,10 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   }
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
-  LOG_VAR(score);
-  LOG_VAR(p);
+
+  LOG_VART(edgeMatch);
+  LOG_VART(score);
+  LOG_VART(p);
 
   // find all the match pairs
   _discoverWayPairs(details->getMap(), edgeMatch);
@@ -71,17 +74,18 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
 
 void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch)
 {
+  LOG_TRACE("Discovering way pairs...");
+
   // traverse the match and determine all the match pairs.
   ConstEdgeStringPtr string1 = edgeMatch->getString1();
   ConstEdgeStringPtr string2 = edgeMatch->getString2();
   Meters length1 = string1->calculateLength(map);
   Meters length2 = string2->calculateLength(map);
 
-  // These loops assume that equal portions of a line equal the same point on the line. Said another
-  // way if you're 10% down line 1, then that is equivalent to 10% down line 2. Unfortunately this
-  // can be a very coarse estimate. Something like [1] may improve this matching.
-  //
-  // 1. https://github.com/ngageoint/hootenanny/issues/426
+  // TODO: These loops assume that equal portions of a line equal the same point on the line.
+  // Said another way if you're 10% down line 1, then that is equivalent to 10% down line 2.
+  // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
+  // improve this matching.
   Meters d1 = 0.0;
   for (int i = 0; i < string1->getMembers().size(); ++i)
   {
@@ -132,6 +136,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
       if (ip.first == jp.first || ip.second == jp.first ||
         ip.second == jp.first || ip.second == jp.second)
       {
+        LOG_TRACE("conflicting: " << other);
         return true;
       }
     }
@@ -142,9 +147,14 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
 
 QString NetworkMatch::toString() const
 {
-  LOG_VAR(_threshold->toString());
+  LOG_VART(_threshold->toString());
   return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
     arg(hoot::toString(_pairs)).arg(getScore());
+}
+
+bool NetworkMatch::isVerySimilarTo(const NetworkMatch* other) const
+{
+  return getEdgeMatch()->isVerySimilarTo(other->getEdgeMatch());
 }
 
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const

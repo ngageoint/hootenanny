@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -35,10 +35,10 @@
 #include <geos/geom/LineString.h>
 // Hoot
 #include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
@@ -129,7 +129,7 @@ public:
     Settings s;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
-    OsmReader reader;
+    OsmXmlReader reader;
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
     double score;
 

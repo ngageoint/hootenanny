@@ -11,7 +11,7 @@ endif
 define buildAsciidoc
 	mkdir -p tmp
 	git log --simplify-by-decoration --no-merges "--pretty=%h|$$|%ct|$$|%s|$$|%aN" `find $(filter-out tmp/asciidoc-config,$^) || true` | node ParseRevisions.js > $(patsubst %.asciidoc,%-docinfo.xml,$<)
-	@REVNUMBER=`$$HOOT_HOME/scripts/GitVersion.sh` ; \
+	@REVNUMBER=`$$HOOT_HOME/scripts/git/GitVersion.sh` ; \
 	REVDATE=`date -d @$$(git log -n 1 "--pretty=%at" ../.) "+%B %e, %Y"`; \
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f pdf $<
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f text $<
@@ -88,7 +88,7 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	HootJavaScriptInterfaces.asciidoc \
 	HootenannyConfigOptions.asciidoc \
 	commands/* \
-	../conf/ConfigOptions.asciidoc \
+	../conf/core/ConfigOptions.asciidoc \
 	References.asciidoc \
 	user/*.asciidoc
 	$(call buildAsciidoc)

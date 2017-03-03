@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/PbfElementIterator.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Settings.h>
 
 // Standard
@@ -66,7 +66,7 @@ public:
       throw HootException("The output must be .osm.pbf.");
     }
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
     ofstream fp;
     fp.open(output.toUtf8().data(), ios::out | ios::binary);
     if (fp.is_open() == false)

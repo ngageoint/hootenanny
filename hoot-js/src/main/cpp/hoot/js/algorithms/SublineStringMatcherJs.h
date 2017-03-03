@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SUBLINE_STRING_MATCHER_JS_H__
 #define __SUBLINE_STRING_MATCHER_JS_H__
@@ -32,7 +32,6 @@
 #include <hoot/js/util/DataConvertJs.h>
 
 // node.js
-// #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt
@@ -48,11 +47,17 @@ class OsmMapOperation;
 class SublineStringMatcherJs : public node::ObjectWrap
 {
 public:
+
+  static std::string className() { return "hoot::SublineStringMatcherJs"; }
+
+  static unsigned int logWarnCount;
+
   static void Init(v8::Handle<v8::Object> target);
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
 
 private:
+
   SublineStringMatcherJs(SublineStringMatcherPtr sm);
   ~SublineStringMatcherJs();
 

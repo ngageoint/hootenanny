@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -61,7 +61,7 @@ public:
   {
     QDir().mkpath("test-output/conflate/splitter");
 
-    OsmReader reader;
+    OsmXmlReader reader;
 
     OsmMap::resetCounters();
 
@@ -71,7 +71,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/splitter/IntersectionSplitterTest.osm");
 
@@ -83,7 +83,7 @@ public:
   {
     QDir().mkpath("test-output/conflate/splitter");
 
-    OsmReader reader;
+    OsmXmlReader reader;
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -91,7 +91,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/splitter/SimpleSplitterOutput.osm");
 

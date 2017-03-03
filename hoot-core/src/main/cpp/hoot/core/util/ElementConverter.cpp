@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <ogr_spatialref.h>
@@ -41,11 +41,13 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 
 // Qt
 #include <QString>
@@ -53,8 +55,6 @@
 
 // Standard
 #include <stdint.h>
-
-#include "MultiPolygonCreator.h"
 
 namespace hoot
 {
@@ -102,7 +102,7 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   case ElementType::Relation:
     return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
-    LOG_WARN(e->toString());
+    LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
 }
@@ -118,7 +118,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
   return convertToGeometry((ConstWayPtr)w);
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Way>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
@@ -137,7 +139,9 @@ shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const 
   }
 }
 
-shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e, bool throwError, const bool statsFlag) const
+shared_ptr<Geometry> ElementConverter::convertToGeometry(const shared_ptr<const Relation>& e,
+                                                         bool throwError,
+                                                         const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 

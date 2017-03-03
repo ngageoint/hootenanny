@@ -1,8 +1,8 @@
 
-[[POI-to-Polygon-Conflation]]
+[[PoiToPolygonConflation]]
 == POI to Polygon Conflation
 
-[[POI-to-Polygon-Feature-Definitions]]
+[[PoiToPolygonFeatureDefinitions]]
 === Feature Definitions
 
 POI to polygon conflation defines the following feature types:
@@ -12,7 +12,7 @@ it to be classifed as a POI or a building by the Hootenanny schema definitions.
 * Hootenanny defines a polygon as any polygon feature that is either an area or a building and has either a populated name tag or
 any other tag which causes it to be classified as a POI or a building by the Hootenanny schema definitions.
 
-[[POI-to-Polygon-Matching]]
+[[PoiToPolygonMatching]]
 === Matching
   
 POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
@@ -52,8 +52,10 @@ Techniques that were experimented with but proved to add no benefit to the model
 * varying the match distance based on the feature type
 * using Weka to fine tune the factors and score thresholds used
 
-[[POI-to-Polygon-Merging]]
+[[PoiToPolygonMerging]]
 === Merging
+
+The first layer selected is the reference layer and the second, the secondary layer, same as in all other hoot conflation types.  The reference layer gets priority on the tags that are kept.  Geometry merging is a little more complex as later described.
   
 Once a relationship has been established between elements a graph is created to determine any interdependencies. If a single element is involved in multiple matches then all the elements involved in that set of matches are marked as needing review. This avoids complex situations where there are multiple conflicting POI attributes.
 
@@ -61,13 +63,63 @@ However, if a review relationship is found and a match relationship is found, th
 
 If a merge is warranted, the geometry of the building is used and the tags are merged using the default tag merging mechanism ( +tag.merger.default+ configuration key).
 
-[[POI-to-Polygon-Configurable-Options]]
+Detailed Merging Workflow:
+
+* Merge the tags of all matching POIs in the reference layer together with each other if there is more than one POI in the reference layer to merge
+* Merge the tags of all matching POIs in the secondary layer together with each other if there is more than one POI in the secondary layer to merge
+* Merge the building tags for matching buildings from both layers together as described in https://github.com/ngageoint/hootenanny/files/595244/Hootenanny.-.Building.Conflation.2014-08-19.pptx slide 6; they’re averged together
+* Merge the building geometries for matching buildings from both layers together as described in that slide; pick the most complex building geometry and if both are the same complexity then pick the first geometry
+* Merge the tags of the matching POIs and buildings from both layers with each other; all first layer reference tags take priority over secondary layer tags
+* Remove the POI geometries as they’ve been “merged” with the building geometries.
+
+[[PoiToPolygonConfigurableOptions]]
 === Configurable Options
   
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
 
-[[POI-to-Polygon-Test-Results]]
+[[PoiToPolygonTestResults]]
 === Test Results
 
-TODO:
+Match truth for several datasets was obtained by having a human manual match features (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx for more details on the process involved).  Then, Hootenanny conflated the same data and scored
+how many matches it correctly made.
+
+.POI to Polygon Test Data Sources
+[options="header"]
+|======
+| Test | Region | Schema 1 | Schema 2 | Geospatial Accuracy | Type Attribution | Name Attribution | Address Attribution
+| 1 | KisMaayo, Somalia | MGCP | UTP | good | good | poor | none
+| 2 | KisMaayo, Somalia | MGCP | OSM | good | good | poor in MGCP; average in OSM | none
+| 3 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt 
+| 4 | Munich, Germany | OSM | NAVTEQ | good in OSM; poor near intersections for NAVTEQ | average for OSM; good for NAVTEQ | good | average 
+| 5 | Cairo, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
+| 6 | Alexandria, Egypt | N/A | N/A | good for poly; average for POIs | good | good | none
+| 7 | Rafah, Syria | N/A | N/A | good | good | poor for polys; good for POIs | none 
+|======
+
+.POI to Polygon Test Results
+[options="header,footer"]
+|======
+| Test | Total Manual Matches | Correct | Unnecessary Reviews (expected match) | Wrong  | Ratio Unnecessary Reviews to Correct Matches (expected miss) | Combined Correct
+| 1 | 58 | 25.9% | 72.4% | 1.7% | 0.9 | **98.3%**
+| 2 | 13 | 46.1% | 53.9% | 0.0% | 0.31 | **100.0%**
+| 3 | 989 | 42.4% | 46.3% | 11.3% | 1.20 | **88.7%**
+| 4 | 386 | 36.0% | 46.4% | 17.6%| 1.31 | **82.4%** 
+| 5 | 56 | 87.5% | 5.3% | 7.2% | 0.63 | **92.8%**
+| 6 | 6 | 66.7% | 0.0% | 33.3% | 0.0 | **66.7%**
+| 7 | 5 | 100.0% | 0.0% | 0.0% | 0.2 | **100.0%**
+|======
+
+Combined Correct = number of correct matches + number of unnecessary reviews
+
+[[PoiToPolygonPoiFutureWork]]
+=== Future Work
+
+* improve tag similarity calculation
+* more intelligent POI merging
+* reduce unnecessary reviews
+* more advanced name parsing
+* model based classification
+* real world workflow application
+
+For more information on POI to polygon conflation: https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
 

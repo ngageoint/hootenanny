@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SingleSidedNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"
@@ -123,7 +123,7 @@ QList<NetworkEdgeScorePtr> SingleSidedNetworkMatcher::getAllEdgeScores() const
   {
     // game the system so the final score is what we want.
     double s = sqrt(_calculateProbabilityOfMatch(match));
-    LOG_INFO("s: " << _calculateProbabilityOfMatch(match) << " " << match);
+    LOG_TRACE("s: " << _calculateProbabilityOfMatch(match) << " " << match);
     NetworkEdgeScorePtr score(new NetworkEdgeScore(match, s, s));
     result.append(score);
   }
@@ -207,7 +207,7 @@ void SingleSidedNetworkMatcher::_normalizeScores()
     QList<EdgeLinkScorePtr> scores = _edge2Scores[e2];
     double sum = 0.0;
 
-    LOG_INFO("e2: " << e2 << " score links: " << scores);
+    LOG_TRACE("e2: " << e2 << " score links: " << scores);
     foreach (const EdgeLinkScorePtr& s, scores)
     {
       sum += pow(s->score, _w);
@@ -221,7 +221,7 @@ void SingleSidedNetworkMatcher::_normalizeScores()
         scores[i]->score = std::max(EPSILON, pow(scores[i]->score, _w) / sum);
       }
     }
-    LOG_INFO("e2: " << e2 << " score links: " << scores);
+    LOG_TRACE("e2: " << e2 << " score links: " << scores);
   }
 }
 
@@ -242,7 +242,7 @@ void SingleSidedNetworkMatcher::_seedEdgeScores()
 
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
-  LOG_VAR(em);
+  LOG_VART(em);
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
     ConstNetworkEdgePtr e1 = it.value();
@@ -250,7 +250,7 @@ void SingleSidedNetworkMatcher::_seedEdgeScores()
     Envelope env = _details->getEnvelope(it.value());
     env.expandBy(_details->getSearchRadius(it.value()));
     IntersectionIterator iit = _createIterator(env, _edge2Index);
-    LOG_VAR(e1);
+    LOG_VART(e1);
 
     while (iit.next())
     {
@@ -337,10 +337,10 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
         }
         else
         {
-          LOG_VAR(e2);
-          LOG_VAR(link);
-          LOG_VAR(e2Match);
-          LOG_VAR(_links->values(e2Match));
+          LOG_TRACE(e2);
+          LOG_TRACE(link);
+          LOG_TRACE(e2Match);
+          LOG_TRACE(_links->values(e2Match));
           throw InternalErrorException("Expected the link to contain either the from or to "
             "vertex.");
         }
@@ -351,16 +351,16 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
         double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFromVertex(),
           e2Match->getString2()->getFromVertex());
         pOfNoMatchesFrom *= 1 - (p * _dampening);
-        LOG_VAR(e2Match);
-        LOG_VAR(p);
+        LOG_VART(e2Match);
+        LOG_VART(p);
       }
       if (!foundToLink)
       {
         double p = _calculateProbabilityOfMatch(e2Match->getString1()->getToVertex(),
           e2Match->getString2()->getToVertex());
         pOfNoMatchesTo *= 1 - (p * _dampening);
-        LOG_VAR(e2Match);
-        LOG_VAR(p);
+        LOG_VART(e2Match);
+        LOG_VART(p);
       }
 
       double score = _getScore(e2, e2Match);
@@ -372,12 +372,12 @@ void SingleSidedNetworkMatcher::_updateEdgeScores()
 
       if (e2->getMembers()[0]->getElementId().getId() == -19)
       {
-        LOG_VAR(e2Match);
-        LOG_VAR(pOfNoMatchesFrom);
-        LOG_VAR(pOfNoMatchesTo);
-        LOG_VAR(foundFromLink);
-        LOG_VAR(foundToLink);
-        LOG_VAR(score);
+        LOG_VART(e2Match);
+        LOG_VART(pOfNoMatchesFrom);
+        LOG_VART(pOfNoMatchesTo);
+        LOG_VART(foundFromLink);
+        LOG_VART(foundToLink);
+        LOG_VART(score);
       }
 
       newScores[e2].append(EdgeLinkScorePtr(new EdgeLinkScore(e2Match, score)));
@@ -432,9 +432,9 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
         }
         else
         {
-          LOG_VAR(e2);
-          LOG_VAR(link);
-          LOG_VAR(e2Match);
+          LOG_VART(e2);
+          LOG_VART(link);
+          LOG_VART(e2Match);
           throw InternalErrorException("Expected the link to contain either the from or to "
             "vertex.");
         }
@@ -445,16 +445,16 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
         double p = _calculateProbabilityOfMatch(e2Match->getString1()->getFromVertex(),
           e2Match->getString2()->getFromVertex());
         scoreFrom += (p * _dampening);
-        LOG_VAR(e2Match);
-        LOG_VAR(p);
+        LOG_VART(e2Match);
+        LOG_VART(p);
       }
       if (!foundToLink)
       {
         double p = _calculateProbabilityOfMatch(e2Match->getString1()->getToVertex(),
           e2Match->getString2()->getToVertex());
         scoreTo += (p * _dampening);
-        LOG_VAR(e2Match);
-        LOG_VAR(p);
+        LOG_VART(e2Match);
+        LOG_VART(p);
       }
 
       double score = _getScore(e2, e2Match);
@@ -466,12 +466,12 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
 
       if (e2->getMembers()[0]->getElementId().getId() == -19)
       {
-        LOG_VAR(e2Match);
-        LOG_VAR(scoreFrom);
-        LOG_VAR(scoreTo);
-        LOG_VAR(foundFromLink);
-        LOG_VAR(foundToLink);
-        LOG_VAR(score);
+        LOG_VART(e2Match);
+        LOG_VART(scoreFrom);
+        LOG_VART(scoreTo);
+        LOG_VART(foundFromLink);
+        LOG_VART(foundToLink);
+        LOG_VART(score);
       }
 
       newScores[e2].append(EdgeLinkScorePtr(new EdgeLinkScore(e2Match, score)));

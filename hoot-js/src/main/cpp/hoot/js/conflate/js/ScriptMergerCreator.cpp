@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -30,7 +30,7 @@
 #include "ScriptMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 
@@ -43,9 +43,10 @@ ScriptMergerCreator::ScriptMergerCreator()
 {
 }
 
-bool ScriptMergerCreator::createMergers(const MatchSet& matches,
-  vector<Merger*>& mergers) const
+bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
 {
+  LOG_TRACE("Creating mergers with " << className() << "...");
+
   bool result = false;
   assert(matches.size() > 0);
 
@@ -58,8 +59,11 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(*it);
-    // check to make sure all the input matches are building matches.
+    const Match* m = *it;
+    LOG_VART(m->toString());
+    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m);
+    // check to make sure all the input matches are script matches.
+    LOG_VART(sm == 0);
     if (sm == 0)
     {
       // return an empty result
@@ -84,7 +88,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
   }
 
   ScriptMerger* sm = new ScriptMerger(script, plugin, eids);
-  // only add the POI merge if there are elements to merge.
+  // only add the merge if there are elements to merge.
   if (sm->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)
@@ -107,8 +111,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches,
     else if (eids.size() > 1)
     {
       delete sm;
-      mergers.push_back(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"),
-        1.0));
+      mergers.push_back(
+        new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0));
       result = true;
     }
     else

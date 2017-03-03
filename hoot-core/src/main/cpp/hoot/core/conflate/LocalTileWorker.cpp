@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalTileWorker.h"
 
 // hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -49,7 +49,9 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/NodeReplacements.h>
 
 #include "TileBoundsCalculator.h"
 
@@ -74,7 +76,6 @@ protected:
 
 LocalTileWorker::LocalTileWorker()
 {
-  //LOG_VARD(ConfigOptions().getUuidHelperRepeatable());
   LOG_VARD(Settings::getInstance().get(ConfigOptions().getUuidHelperRepeatableKey()));
 
   _mapPart = 0;
@@ -88,7 +89,7 @@ void LocalTileWorker::breakWays(QString out)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
@@ -105,20 +106,20 @@ OGREnvelope LocalTileWorker::calculateEnvelope()
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
   reader.read(_in2, map);
 
-  return CalculateBoundsVisitor::getBounds(map);
+  return CalculateMapBoundsVisitor::getBounds(map);
 }
 
 void LocalTileWorker::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
   reader.read(_in1, map);
   reader.setDefaultStatus(Status::Unknown2);
@@ -132,7 +133,7 @@ void LocalTileWorker::cleanup(QString mapIn, QString mapOut)
 {
   shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, mapOut);
@@ -203,7 +204,7 @@ shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
 {
   shared_ptr<OsmMap> map(new OsmMap());
 
-  OsmReader reader;
+  OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
@@ -218,8 +219,8 @@ shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
   QDir d(dir);
   Q_FOREACH(QFileInfo info, d.entryList(filters, QDir::Files, QDir::Name))
   {
-    LOG_INFO(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " << d.absolutePath() <<
-             " " << info.absoluteFilePath());
+    LOG_DEBUG(info.filePath() << " " << d.absoluteFilePath(info.filePath()) << " " <<
+              d.absolutePath() << " " << info.absoluteFilePath());
     reader.read(d.absoluteFilePath(info.filePath()), map);
   }
 
@@ -259,7 +260,7 @@ void LocalTileWorker::rmdir(QString dir)
 void LocalTileWorker::_storeMapPart(shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);
@@ -284,7 +285,7 @@ void LocalTileWorker::_writeTheRest(QString dirIn, QString dirOut,
   SuperfluousNodeRemover::removeNodes(map);
 
   QString fn = dirOut + QString("/Dregs.osm");
-  OsmWriter writer;
+  OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
   writer.setIncludeHootInfo(true);
   writer.write(map, fn);

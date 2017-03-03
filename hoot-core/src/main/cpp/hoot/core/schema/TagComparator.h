@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAGCOMPARATOR_H
 #define TAGCOMPARATOR_H
 
-#include <hoot/core/elements/Tags.h>
-
 // Standard
 #include <set>
 #include <vector>
 
+// Qt
+#include <QString>
+#include <QSet>
+
 namespace hoot
 {
+
+class Tags;
 
 class TagComparator
 {
@@ -47,8 +51,7 @@ public:
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false)
-  { averageTags(t1, 1.0, t2, 1.0, result, keepAllUnknownTags); }
+  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false);
 
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be

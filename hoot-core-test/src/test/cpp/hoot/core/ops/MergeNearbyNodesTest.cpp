@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
 using namespace hoot;
@@ -80,7 +80,7 @@ public:
 
       MapProjector::projectToWgs84(map);
 
-      OsmWriter writer;
+      OsmXmlWriter writer;
       writer.write(map, "output.osm");
 
     }

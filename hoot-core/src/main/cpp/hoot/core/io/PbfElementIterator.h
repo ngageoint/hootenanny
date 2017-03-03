@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,18 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PBFELEMENTITERATOR_H
 #define PBFELEMENTITERATOR_H
 
 // hoot
 #include <hoot/core/elements/ElementIterator.h>
-
-#include "PbfReader.h"
+#include "OsmPbfReader.h"
 
 namespace hoot
 {
+
+class OsmPbfReader;
 
 class PbfElementIterator : public ElementIterator
 {
@@ -50,8 +51,8 @@ public:
 
 private:
   auto_ptr<istream> _in;
-  auto_ptr<PbfReader> _reader;
-  vector<PbfReader::BlobLocation> _blobs;
+  auto_ptr<OsmPbfReader> _reader;
+  vector<OsmPbfReader::BlobLocation> _blobs;
   shared_ptr<OsmMap> _map;
   int _blobIndex;
 

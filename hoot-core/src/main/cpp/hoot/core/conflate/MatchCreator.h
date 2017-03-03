@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,29 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
 
-// hoot
-#include <hoot/core/OsmMap.h>
+// Hoot
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/WaterwayCriterion.h>
-#include <hoot/core/filters/HighwayFilter.h>
-
 
 // Standard
 #include <string>
 #include <vector>
+
+// QT
+#include <QString>
 
 namespace hoot
 {
 
 using namespace std;
 class Match;
+class ElementCriterion;
 
 class MatchCreator
 {
@@ -68,38 +66,9 @@ public:
     CalcTypeArea = 2
   };
 
-  static QString BaseFeatureTypeToString(BaseFeatureType t)
-  {
-    switch (t)
-    {
-      case POI:
-        return "POI";
-      case Highway:
-        return "Highway";
-      case Building:
-        return "Building";
-      case Waterway:
-        return "Waterway";
-      case Unknown:
-      default:
-        return "Unknown";
-    }
-  }
+  static QString BaseFeatureTypeToString(BaseFeatureType t);
 
-  static BaseFeatureType StringToBaseFeatureType(QString s)
-  {
-    s = s.toLower();
-    if (0 == s.compare("poi"))
-      return POI;
-    else if (0 == s.compare("highway"))
-      return Highway;
-    else if (0 == s.compare("building"))
-      return Building;
-    else if (0 == s.compare("waterway"))
-      return Waterway;
-    else
-      return Unknown;
-  }
+  static BaseFeatureType StringToBaseFeatureType(QString s);
 
   /* These two functions, getFeatureCalcType & getElementCriterion could be
    * pushed down into the classes that are derived from MatchCreator, and
@@ -110,47 +79,16 @@ public:
    * class. SO, rather than that - we'll just keep all of this feature type
    * stuff grouped together in one place.
    */
-  static FeatureCalcType getFeatureCalcType (BaseFeatureType t)
-  {
-    switch (t)
-    {
-      case POI:
-        return CalcTypeNone;
-      case Highway:
-        return CalcTypeLength;
-      case Building:
-        return CalcTypeArea;
-      case Waterway:
-        return CalcTypeLength;
-      case Unknown:
-      default:
-        return CalcTypeNone;
-    }
-  }
+  static FeatureCalcType getFeatureCalcType (BaseFeatureType t);
 
-  static ElementCriterion * getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
-  {
-    switch (t)
-    {
-      case POI:
-        return new PoiCriterion();
-      case Highway:
-        return new HighwayFilter(Filter::KeepMatches);
-      case Building:
-        return new BuildingCriterion(map);
-      case Waterway:
-        return new WaterwayCriterion();
-      case Unknown:
-      default:
-        return NULL;
-    }
-  }
+  static ElementCriterion* getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map);
 
   class Description
   {
   public:
     Description() : experimental() {}
-    Description(string className, QString description, BaseFeatureType featureType, bool experimental)
+    Description(string className, QString description, BaseFeatureType featureType,
+                bool experimental)
     {
       this->className = className;
       this->experimental = experimental;

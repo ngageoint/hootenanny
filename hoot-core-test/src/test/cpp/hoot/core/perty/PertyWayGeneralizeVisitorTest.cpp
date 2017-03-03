@@ -32,10 +32,10 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/perty/PertyWayGeneralizeVisitor.h>
 
 // Qt
@@ -85,7 +85,7 @@ public:
     }
     else
     {
-      OsmReader reader;
+      OsmXmlReader reader;
       reader.setDefaultStatus(Status::Unknown1);
       reader.setUseDataSourceIds(true);
       reader.read(inputFile, map);
@@ -120,7 +120,7 @@ public:
 
     QFileInfo outputFileInfo(outputFile);
     QDir().mkpath(outputFileInfo.absolutePath());
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, outputFile);
 

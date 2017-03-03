@@ -18,7 +18,6 @@
 #define CONFLATEMAPPER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/OsmMapMapper.h>
 
 // Standard
@@ -26,6 +25,8 @@
 
 namespace hoot
 {
+
+class OsmMap;
 
 class ConflateMapper : public OsmMapMapper
 {
@@ -45,13 +46,13 @@ public:
 
   virtual ~ConflateMapper() {}
 
-  virtual void close() {};
+  virtual void close() {}
 
   static vector<Envelope> parseEnvelopes(const string& envStr);
 
 protected:
 
-  QHash< int, shared_ptr<PbfWriter> > _writers;
+  QHash< int, shared_ptr<OsmPbfWriter> > _writers;
   QHash< int, shared_ptr<stringstream> > _buffers;
   double _tileBufferSize;
 
@@ -65,7 +66,7 @@ protected:
   void _addNode(const shared_ptr<Node>& n);
 
   void _addWay(ConstOsmMapPtrR map, const shared_ptr<Way>& w);
-  
+
   /**
    * After each input OsmMap, emit all the data thus far. This reduce memory usage.
    */

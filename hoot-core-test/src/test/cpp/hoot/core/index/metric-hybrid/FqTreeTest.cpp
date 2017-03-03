@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/FqTree.h>
-#include <hoot/core/io/PbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 
 // Qt
@@ -100,7 +100,7 @@ public:
 
     uut.setDepth(3);
     uut.buildIndex(names, data);
-    //LOG_INFO(TestUtils::toCString(uut.toString()));
+    LOG_VART(uut.toString());
     CPPUNIT_ASSERT_EQUAL(string("FqNode: \n"
                                 "  d: 0\n"
                                 "  FqNode: \n"
@@ -137,7 +137,7 @@ public:
     uut.setDepth(-1);
     uut.setBucketSize(10);
     uut.buildIndex(names, data);
-    //LOG_INFO(TestUtils::toCString(uut.toString()));
+    LOG_VART(uut.toString());
     CPPUNIT_ASSERT_EQUAL(string("Leaf: \n"
                                 "  apple : 0\n"
                                 "  car : 1\n"
@@ -148,7 +148,7 @@ public:
     uut.setDepth(-1);
     uut.setBucketSize(2);
     uut.buildIndex(names, data);
-    //LOG_INFO(TestUtils::toCString(uut.toString()));
+    LOG_VART(uut.toString());
     CPPUNIT_ASSERT_EQUAL(string("FqNode: \n"
                                 "  d: 0\n"
                                 "  Leaf: \n"
@@ -189,7 +189,7 @@ public:
 
     uut.setDepth(3);
     uut.buildIndex(names, data);
-    //LOG_INFO(uut.toString());
+    LOG_TRACE(uut.toString());
     HOOT_STR_EQUALS("[2]{1, 2}", uut.find("car", 2));
     HOOT_STR_EQUALS("[4]{1, 2, 3, 4}", uut.find("band", 4));
     HOOT_STR_EQUALS("[2]{3, 4}", uut.find("bananas", 2));
@@ -223,7 +223,7 @@ public:
     int operator() (const QString& s1, const QString& s2) const
     {
       FqTreeTest::count++;
-      //LOG_INFO("compare: " << s1 << " " << s2);
+      LOG_TRACE("compare: " << s1 << " " << s2);
       return LevenshteinDistance::distance(s1, s2);
     }
   };
@@ -231,7 +231,7 @@ public:
   void runRandomQueryTest()
   {
     shared_ptr<OsmMap> map(new OsmMap());
-    PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;
     GetTagValuesVisitor v1("name", bag, true);

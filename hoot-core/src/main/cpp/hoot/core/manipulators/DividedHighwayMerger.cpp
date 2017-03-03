@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DividedHighwayMerger.h"
@@ -40,14 +40,13 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/WorkingMap.h>
+#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/ParallelWayCriterion.h>
-#include <hoot/core/filters/StatusFilter.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/WayDirectionCriterion.h>
 #include <hoot/core/filters/WayBufferCriterion.h>

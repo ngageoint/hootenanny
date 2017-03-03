@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbWriter.h"
 
@@ -30,7 +30,7 @@
 #include <fstream>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -68,8 +68,6 @@ void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& 
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
   }
   t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
-
-  //LOG_VART(t[MetadataTags::HootStatus()]);
 }
 
 void HootApiDbWriter::close()
@@ -91,25 +89,18 @@ void HootApiDbWriter::_countChange()
 
 void HootApiDbWriter::finalizePartial()
 {
-  //LOG_DEBUG("Inside finalize partial");
   if (_open)
   {
-    //LOG_DEBUG("Ending changeset");
     _hootdb.endChangeset();
-    //LOG_DEBUG("Calling commit");
     _hootdb.commit();
-    //LOG_DEBUG("Calling close");
     _hootdb.close();
     _open = false;
   }
-
-  //LOG_DEBUG("Leaving finalize partial");
 }
 
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-
   return _hootdb.isSupported(url);
 }
 
@@ -133,7 +124,7 @@ void HootApiDbWriter::deleteMap(QString urlStr)
   {
     LOG_INFO("Removing map with ID: " << *it);
     _hootdb.deleteMap(*it);
-    LOG_INFO("Finished removing map with ID: " << *it);
+    LOG_DEBUG("Finished removing map with ID: " << *it);
   }
 
   _hootdb.commit();
@@ -186,16 +177,16 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        LOG_INFO("Removing map with ID: " << *it);
+        LOG_DEBUG("Removing map with ID: " << *it);
         _hootdb.deleteMap(*it);
-        LOG_INFO("Finished removing map with ID: " << *it);
+        LOG_DEBUG("Finished removing map with ID: " << *it);
       }
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
     else
     {
-      LOG_INFO("There are one or more maps with this name. Consider using "
+      LOG_ERROR("There are one or more maps with this name. Consider using "
                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
     }
   }
@@ -275,8 +266,8 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  //LOG_DEBUG("Remapped ID for element type " << eid.getType().toString() << " from " <<
-            //eid.getId() << " to " << retVal);
+  LOG_TRACE("Remapped ID for element type " << eid.getType().toString() << " from " <<
+            eid.getId() << " to " << retVal);
 
   return retVal;
 }
@@ -443,7 +434,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
                               relationMemberElementId.getId(), e.role, i);
   }
 
-  //LOG_DEBUG("All members added to relation " << QString::number(relationId));
+  LOG_TRACE("All members added to relation " << QString::number(relationId));
 
   _countChange();
 

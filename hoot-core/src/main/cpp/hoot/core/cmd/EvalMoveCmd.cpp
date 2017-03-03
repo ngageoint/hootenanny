@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,27 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
 #include <boost/random/uniform_int.hpp>
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
-#include <hoot/core/io/PbfReader.h>
-#include <hoot/core/io/PbfWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QDir>
@@ -143,9 +143,9 @@ public:
 
   shared_ptr<OsmMap> osmTransform(shared_ptr<OsmMap> map, QString workingDir)
   {
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.write(map, workingDir + "/EvalMove.osm");
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> result(new OsmMap());
     reader.read(workingDir + "/EvalMove.osm", result);
     return result;
@@ -157,10 +157,10 @@ public:
 
     QString fn = QString("/EvalMove%1.osm.pbf").arg(granularity);
 
-    PbfWriter writer;
+    OsmPbfWriter writer;
     writer.setGranularity(granularity);
     writer.write(map, workingDir + fn);
-    PbfReader reader(false);
+    OsmPbfReader reader(false);
     reader.read(workingDir + fn, result);
     return result;
   }
@@ -254,10 +254,10 @@ public:
     compareMaps(map, mapReproject, pointCount).print();
     cout << endl;
 
-    OGREnvelope e1 = CalculateBoundsVisitor::getBounds(map);
+    OGREnvelope e1 = CalculateMapBoundsVisitor::getBounds(map);
     e1.MinX = (e1.MinX + e1.MaxX) / 2.0;
     e1.MinY = (e1.MinY + e1.MaxY) / 2.0;
-    OGREnvelope e2 = CalculateBoundsVisitor::getBounds(map);
+    OGREnvelope e2 = CalculateMapBoundsVisitor::getBounds(map);
     e2.MaxX = (e2.MinX + e2.MaxX) / 2.0;
     e2.MaxY = (e2.MinY + e2.MaxY) / 2.0;
     shared_ptr<OsmMap> mapReproject1(new OsmMap(map));

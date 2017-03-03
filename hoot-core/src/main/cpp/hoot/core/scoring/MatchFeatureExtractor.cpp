@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MatchFeatureExtractor.h"
@@ -36,6 +36,9 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <numeric>
@@ -45,6 +48,8 @@
 
 namespace hoot
 {
+
+unsigned int MatchFeatureExtractor::logWarnCount = 0;
 
 MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
 {
@@ -64,8 +69,16 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
 
   if (eids.size() > 2)
   {
-    LOG_WARN("More than two eids. This may not give the intended result. As written now it only "
-             "needs one match to call the whole set good.");
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("More than two eids. This may not give the intended result. As written now it only "
+               "needs one match to call the whole set good.");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   // go through the set of provided ways
@@ -111,8 +124,17 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     }
     else
     {
-      LOG_WARN("Expected the element to be either " << MetadataTags::Unknown1() << " or " << MetadataTags::Unknown2() <<
-               ". " << e->getStatus() << " element: " << e->toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Expected the element to be either " << MetadataTags::Unknown1() << " or " <<
+                 MetadataTags::Unknown2() << ". " << e->getStatus() << " element: " <<
+                 e->toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
 
@@ -124,7 +146,15 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     {
       if (result == MatchType::Review)
       {
-        LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
       result = MatchType::Match;
     }
@@ -132,7 +162,15 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     {
       if (result == MatchType::Match)
       {
-        LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
       result = MatchType::Review;
     }
@@ -219,7 +257,15 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
     if (d == 0)
     {
-      LOG_WARN("Match does not implement MatchDetails. " << matches[i]->toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Match does not implement MatchDetails. " << matches[i]->toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
     else
     {
@@ -230,7 +276,15 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
         set< pair<ElementId, ElementId> > pairs = matches[i]->getMatchPairs();
         if (pairs.size() != 1)
         {
-          LOG_WARN("Got more than one match pair, this case is not handled.");
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN("Got more than one match pair, this case is not handled.");
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
         // no need to store the record if there is no information
         else if (s.size() > 0)
@@ -270,8 +324,8 @@ void MatchFeatureExtractor::_resampleClasses()
       int classId = round(_samples[i]["class"]);
       if (classId > MatchType::Review || classId < MatchType::Miss)
       {
-        LOG_VAR(_samples[i]);
-        LOG_WARN("Got class id: " << _samples[i]["class"]);
+        LOG_VART(_samples[i]);
+        LOG_TRACE("Got class id: " << _samples[i]["class"]);
         throw HootException("Unexpected class id");
       }
 

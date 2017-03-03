@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsonOsmSchemaLoader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/core/schema/SchemaChecker.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QByteArray>
@@ -39,6 +40,8 @@
 
 namespace hoot
 {
+
+unsigned int JsonOsmSchemaLoader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 
@@ -96,7 +99,6 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
     //check if schemavertex is unknown type or has empty geometries
     SchemaChecker(s).check();
   }
-
 }
 
 double JsonOsmSchemaLoader::_asDouble(const QVariant& v) const
@@ -222,8 +224,16 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
 
   if (copy.size() != 0)
   {
-    LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
-      arg(toJson(toV8(copy.keys()))));
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
+        arg(toJson(toV8(copy.keys()))));
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 }
 

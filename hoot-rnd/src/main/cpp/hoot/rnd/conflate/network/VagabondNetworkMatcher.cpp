@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VagabondNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 
@@ -190,7 +190,7 @@ void VagabondNetworkMatcher::iteratePageRankBleeding()
       allWeight += _pr->getScore(from) / (double)_pr->getSize();
     }
   }
-  LOG_VAR(allWeight);
+  LOG_VART(allWeight);
 
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
@@ -266,17 +266,17 @@ void VagabondNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1,
   _details.reset(new NetworkDetails(map, n1, n2));
 
   // calculate all the candidate edge pairs.
-  LOG_INFO("Calculating edge index...");
+  LOG_TRACE("Calculating edge index...");
   _createEdge2Index();
-  LOG_INFO("Calculating edge matches...");
+  LOG_TRACE("Calculating edge matches...");
   _calculateEdgeMatches();
 
   // calculate the edge pairs that can be accessed from each candidate edge pair
-  LOG_INFO("Calculating edge links...");
+  LOG_TRACE("Calculating edge links...");
   _calculateEdgeLinks();
 
   // for each link distribute a PR based on length and frequency an edge is used
-  LOG_INFO("Distributing PR...");
+  LOG_TRACE("Distributing PR...");
   _distributePrLengthWeighted();
   // distribute an even PR to all edge pairs
   //_distributePrEvenly();
@@ -388,7 +388,7 @@ void VagabondNetworkMatcher::_distributePrEvenly()
 {
   // distribute an even PR to all edge pairs
   double startPr = 1.0 / (double)_pr->getSize();
-  LOG_VAR(startPr);
+  LOG_VART(startPr);
   for (IndexedEdgeMatchSet::MatchHash::iterator it = _pr->getAllMatches().begin();
     it != _pr->getAllMatches().end(); ++it)
   {

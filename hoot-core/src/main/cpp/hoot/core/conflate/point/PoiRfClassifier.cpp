@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiRfClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
@@ -56,6 +56,7 @@
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/MatchClassification.h>
 
 // Standard
 #include <fstream>
@@ -65,6 +66,8 @@
 
 namespace hoot
 {
+
+unsigned int PoiRfClassifier::logWarnCount = 0;
 
 PoiRfClassifier::PoiRfClassifier()
 {
@@ -92,7 +95,7 @@ PoiRfClassifier::PoiRfClassifier()
   }
 
   vector<string> factorLabels = _rf->getFactorLabels();
-  LOG_VAR(factorLabels);
+  LOG_VART(factorLabels);
 
   QStringList extractorNames;
   for (size_t i = 0; i < _extractors.size(); i++)
@@ -111,16 +114,25 @@ PoiRfClassifier::PoiRfClassifier()
     }
     _rfFactorLabels.append(fn);
   }
-  LOG_VAR(extractorNames);
-  LOG_VAR(missingExtractors);
-  LOG_VAR(_rfFactorLabels);
+  LOG_VART(extractorNames);
+  LOG_VART(missingExtractors);
+  LOG_VART(_rfFactorLabels);
 
   if (missingExtractors.size() > 0)
   {
-    LOG_WARN("An extractor used by the model is not being calculated. We will still try, but");
-    LOG_WARN("this will undoubtably result in poor quality matches. Missing extractors:");
-    LOG_WARN(missingExtractors);
-    LOG_WARN("Available extractors: " << extractorNames);
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(
+        "An extractor used by the model is not being calculated. We will still try, but this will "
+        "undoubtably result in poor quality matches. Missing extractors:");
+      LOG_TRACE("Missing extractors: " << missingExtractors);
+      LOG_TRACE("Available extractors: " << extractorNames);
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 }
 
@@ -168,7 +180,7 @@ void PoiRfClassifier::_createAllExtractors()
   _extractors.clear();
   vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
     FeatureExtractor::className());
-  LOG_VAR(extractorNames);
+  LOG_VART(extractorNames);
 
 //  for (size_t i = 0; i < extractorNames.size(); i++)
 //  {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetWriter.h>
+#include <hoot/core/io/OsmApiDbChangesetSqlWriter.h>
 
 // Qt
 #include <QFile>
@@ -67,7 +67,7 @@ public:
     else if (args[0].endsWith(".osc.sql"))
     {
       QUrl url(args[1]);
-      OsmApiDbSqlChangesetWriter changesetWriter(url);
+      OsmApiDbChangesetSqlWriter changesetWriter(url);
 
       if (args.size() == 4)
       {
@@ -75,6 +75,8 @@ public:
         {
           //Don't like throwing an exception here from the command line, but this error needs to
           //bubble up to the web service.
+          //TODO: The better thing to do here would be to return an error code and have the services
+          //scripts look for it, I think.
           throw HootException(
             "The changeset will not be written because conflicts exist in the target OSM API database.");
         }
@@ -82,6 +84,7 @@ public:
 
       QFile changesetSqlFile(args[0]);
       changesetWriter.write(changesetSqlFile);
+      //The tests rely on this being output, so leave it as a cout and not a log statement.
       cout << changesetWriter.getChangesetStats();
     }
     else

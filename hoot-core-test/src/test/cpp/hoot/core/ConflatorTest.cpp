@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/io/PbfReader.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 using namespace hoot;
 
 
@@ -60,7 +60,7 @@ public:
 
   void runPbfTest()
   {
-    PbfReader reader(true);
+    OsmPbfReader reader(true);
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setUseFileStatus(true);
@@ -75,14 +75,14 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorPbfTest.osm");
   }
 
   void runTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -99,7 +99,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorTest.osm");
   }
@@ -108,7 +108,7 @@ public:
   //Now the river/building never get mergeed together.
   void runMergeTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -126,7 +126,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelationMap().size());
 
-    OsmWriter writer;
+    OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/RiverBuildingConflatorTest.osm");
   }

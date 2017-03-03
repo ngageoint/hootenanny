@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/filters/HasTagCriterion.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -69,7 +69,7 @@ public:
   {
     DisableLog dl;
 
-    OsmReader reader;
+    OsmXmlReader reader;
 
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
@@ -87,7 +87,7 @@ public:
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.
-    HasTagCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
+    TagKeyCriterion filter(MetadataTags::Ref1(), MetadataTags::Ref2());
     AddUuidVisitor uuid("uuid");
     FilteredVisitor v(filter, uuid);
     map->visitRw(v);
@@ -104,7 +104,7 @@ public:
     // for debugging
 //    MapProjector::projectToWgs84(copy);
 //    QDir(".").mkpath("test-output/scoring");
-//    OsmWriter writer;
+//    OsmXmlWriter writer;
 //    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, tpr, 0.001);

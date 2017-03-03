@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLICTSNETWORKMATCHER_H
 #define CONFLICTSNETWORKMATCHER_H
@@ -50,10 +50,10 @@ class ConflictsNetworkMatcherTest;
 /**
  *
  */
-class ConflictsNetworkMatcher :
-  public NetworkMatcher
+class ConflictsNetworkMatcher : public NetworkMatcher
 {
 public:
+
   static string className() { return "hoot::ConflictsNetworkMatcher"; }
 
   const static double EPSILON;
@@ -70,15 +70,14 @@ public:
 
   virtual double getMatchThreshold() const { return 0.35; }
 
-  void iterate();
+  virtual void iterate();
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
 
-protected:
 private:
 
   // for white box testing.
@@ -91,6 +90,7 @@ private:
   class MatchRelationship
   {
   public:
+
     MatchRelationship(ConstEdgeMatchPtr e, bool conflict) : _e(e), _conflict(conflict) {}
 
     ConstEdgeMatchPtr getEdge() const { return _e; }
@@ -104,7 +104,9 @@ private:
     bool isConflict() const { return _conflict; }
 
     void setThroughStubs(QSet<ConstEdgeMatchPtr> stubs) { _throughStub = stubs; }
+
   private:
+
     ConstEdgeMatchPtr _e;
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
@@ -132,17 +134,19 @@ private:
   /// of 1 will give approx (1 / n * score * weight) influence to each neighbor.
   double _outboundWeighting;
 
-
   MatchRelationshipMap _matchRelationships;
 
   double _aggregateScores(QList<double> pairs);
 
   void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
 
-  void _createMatchRelationships();
+  /* Removes matches that are very similar to each other, where very similar is defined as being
+   * the same match, but with slight variations in portions. Pairs of matches are evaluated for
+   * similarity, and if similar, the higher-scoring match is kept
+   */
+  void _removeDupes();
 
-  void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
-    ConstNetworkEdgePtr eb);
+  void _createMatchRelationships();
 
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
 
@@ -154,6 +158,8 @@ private:
   void _iterateRank();
 
   void _seedEdgeScores();
+
+  void _printEdgeMatches();
 };
 
 typedef shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;

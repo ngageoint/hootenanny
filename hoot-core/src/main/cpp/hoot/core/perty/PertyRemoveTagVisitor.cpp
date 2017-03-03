@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyRemoveTagVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <boost/random/uniform_real.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -63,7 +63,7 @@ QString PertyRemoveTagVisitor::toString()
 void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyRemoveTagP());
+  setProbability(configOptions.getPertyRemoveTagProbability());
   const int seed = configOptions.getPertySeed();
   LOG_VARD(seed);
   if (seed == -1)

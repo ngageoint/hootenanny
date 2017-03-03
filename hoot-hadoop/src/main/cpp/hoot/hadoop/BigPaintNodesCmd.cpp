@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
@@ -34,6 +34,7 @@
 // Qt
 #include <QImage>
 #include <QString>
+#include <QStringList>
 
 #include "PaintNodesDriver.h"
 

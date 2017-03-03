@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEUPDATEOP_H
 #define BUILDINGOUTLINEUPDATEOP_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/elements/Relation.h>
 
 // Standard
 #include <set>
 
 namespace hoot
 {
-using namespace Tgs;
+class OsmMap;
 
 /**
  * Goes through all building relations and updates the outline of the building by taking the union
@@ -48,6 +48,8 @@ class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
 public:
 
   static string className() { return "hoot::BuildingOutlineUpdateOp"; }
+
+  static unsigned int logWarnCount;
 
   BuildingOutlineUpdateOp();
 
@@ -60,6 +62,7 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
+
   shared_ptr<OsmMap> _map;
 
   void _createOutline(const shared_ptr<Relation>& building);
@@ -72,6 +75,10 @@ private:
    */
   void _mergeNodes(const shared_ptr<Element>& changed,
     const shared_ptr<Relation>& reference);
+
+  void _unionOutline(const RelationPtr& building, shared_ptr<Geometry> outline,
+                     ElementPtr buildingMember);
+
 };
 
 }

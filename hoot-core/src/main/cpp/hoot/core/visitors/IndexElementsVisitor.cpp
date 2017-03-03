@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IndexElementsVisitor.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -52,6 +52,17 @@ IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
   _indexToEid(indexToEid)
 {
   // This space intentionally left blank
+}
+
+void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  assert(_filter.get() == 0);
+  _filter = e;
+}
+
+void IndexElementsVisitor::finalizeIndex()
+{
+  _index->bulkInsert(_boxes, _fids);
 }
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
@@ -105,4 +116,4 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   return result;
 }
 
-} // End namespace hoot
+}

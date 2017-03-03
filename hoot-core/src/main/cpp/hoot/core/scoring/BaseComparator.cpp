@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseComparator.h"
@@ -35,13 +35,13 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/visitors/CalculateBoundsVisitor.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -173,8 +173,8 @@ void BaseComparator::_init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
 
   // determine the world bounds by looking at all the nodes.
   _worldBounds = OGREnvelope();
-  _worldBounds.Merge(CalculateBoundsVisitor::getBounds(_map1));
-  _worldBounds.Merge(CalculateBoundsVisitor::getBounds(_map2));
+  _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map1));
+  _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map2));
 
   _mapP1.reset(new OsmMap(_map1));
   MapProjector::projectToOrthographic(_mapP1, _worldBounds);
@@ -225,8 +225,8 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
 void BaseComparator::_updateBounds()
 {
   _projectedBounds = OGREnvelope();
-  _projectedBounds.Merge(CalculateBoundsVisitor::getBounds(_mapP1));
-  _projectedBounds.Merge(CalculateBoundsVisitor::getBounds(_mapP2));
+  _projectedBounds.Merge(CalculateMapBoundsVisitor::getBounds(_mapP1));
+  _projectedBounds.Merge(CalculateMapBoundsVisitor::getBounds(_mapP2));
   _projectedBounds.MinX -= _sigma * 2;
   _projectedBounds.MinY -= _sigma * 2;
   _projectedBounds.MaxX += _sigma * 2;

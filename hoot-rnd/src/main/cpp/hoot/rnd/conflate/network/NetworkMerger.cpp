@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMerger.h"
 
@@ -51,14 +51,17 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   assert(_pairs.size() >= 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_INFO("Applying network merger...");
+
   // put the matched edges into a format where we can map any point on one edge to the
   // corresponding point on the other edge.
 
   if (_edgeMatch->getString1()->isStub())
   {
+    LOG_TRACE("Removing secondary features...");
+
     // If the feature we're merging into is a stub, then just delete the secondary feature.
     // Attributes may be lost, but there isn't really anywhere to put them.
     foreach (ConstElementPtr e, _edgeMatch->getString2()->getMembers())
@@ -86,6 +89,7 @@ void NetworkMerger::apply(const OsmMapPtr& map,
       eids.insert(e->getElementId());
     }
 
+    LOG_TRACE("Marking complex intersection match for review...");
     ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
       "Very short segment?", HighwayMatch::getHighwayMatchName());
   }
@@ -109,12 +113,16 @@ void NetworkMerger::apply(const OsmMapPtr& map,
 
     WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
 
+    LOG_TRACE("Merging tags in keeper segments...");
+
     // merge the tags in the keeper segments
     merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
     merger->mergeTags();
 
     // set the status on all keeper ways to conflated.
     merger->setKeeperStatus(Status::Conflated);
+
+    LOG_TRACE("Parsing scrap nodes...");
 
     // go through all the nodes in the scrap
     QList<ConstNodePtr> scrapNodeList;
@@ -141,6 +149,7 @@ void NetworkMerger::apply(const OsmMapPtr& map,
     /// @todo this will need to replace one scrap with possibly multiple keeper elements
     /// - think about the case when the way is part of an interstate or bus relation
     // remove the duplicate element.
+    LOG_TRACE("Removing duplicate elements...");
     merger->replaceScraps();
   }
 }

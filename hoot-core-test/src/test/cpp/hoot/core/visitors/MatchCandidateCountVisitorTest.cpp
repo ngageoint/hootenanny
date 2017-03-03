@@ -28,10 +28,10 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/io/OsmReader.h>
-#include <hoot/core/io/OsmWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 using namespace hoot;
 
@@ -75,7 +75,7 @@ public:
 
   void runBuildingMatchCandidateCountTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -100,7 +100,7 @@ public:
 
   void runHighwayMatchCandidateCountTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -125,7 +125,7 @@ public:
 
   void runCombinedMatchCandidateCountTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -161,7 +161,7 @@ public:
   //visitor are the correct ones that were specified in the configuration.
   void runScriptMatchCreatorTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -189,7 +189,7 @@ public:
 
   void runMultipleScriptMatchCreatorTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
@@ -219,7 +219,7 @@ public:
 
   void runDualPoiScriptMatchCreatorTest()
   {
-    OsmReader reader;
+    OsmXmlReader reader;
     shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

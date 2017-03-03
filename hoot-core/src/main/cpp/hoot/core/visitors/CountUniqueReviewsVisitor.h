@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTUNIQUEREVIEWSVISITOR_H
 #define COUNTUNIQUEREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -37,13 +36,16 @@
 
 namespace hoot
 {
+class OsmMap;
+
 using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CountUniqueReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class CountUniqueReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+  public SingleStatistic
 {
 public:
 
@@ -57,15 +59,10 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const ConstElementPtr& e)
-  {
-    set<ReviewMarker::ReviewUid> reviews = ReviewMarker().getReviewUids(_map->shared_from_this(),
-      e);
-
-    _reviews.insert(reviews.begin(), reviews.end());
-  }
+  virtual void visit(const ConstElementPtr& e);
 
 private:
+
   const OsmMap* _map;
   set<ReviewMarker::ReviewUid> _reviews;
 };

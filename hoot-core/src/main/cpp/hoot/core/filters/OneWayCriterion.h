@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONEWAYCRITERION_H
 #define ONEWAYCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
@@ -42,21 +40,20 @@ namespace hoot
 class OneWayCriterion : public ElementCriterion
 {
 public:
+
   static string className() { return "hoot::OneWayCriterion"; }
 
   OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
-  {
-    return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
-  }
+  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
 
   OneWayCriterion* clone() { return new OneWayCriterion(); }
 
 private:
+
   bool _isOneWay;
 };
 
-} // namespace hoot
+}
 
 #endif // ONEWAYCRITERION_H

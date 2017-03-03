@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
 
 //hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // geos
 #include <geos/geom/Envelope.h>
