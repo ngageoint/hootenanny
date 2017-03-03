@@ -49,7 +49,7 @@ tds = {
         if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrNoteExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds61.rawSchema);
+        if (config.getOgrTdsExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds.rawSchema);
 
      /*
         // This has been removed since we no longer have text enumerations in the schema

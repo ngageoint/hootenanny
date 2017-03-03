@@ -79,7 +79,8 @@ public final class BrokenPipeFilter extends AbstractFilter {
     }
 
     private Result filter(Throwable t) {
-        if (ExceptionUtils.getRootCauseMessage(t).contains("SocketException: Broken pipe")) {
+        if (ExceptionUtils.getRootCauseMessage(t).contains("SocketException: Broken pipe") ||
+                ExceptionUtils.getRootCauseMessage(t).contains("IOException: Broken pipe")) {
             return Result.DENY;
         }
         else {

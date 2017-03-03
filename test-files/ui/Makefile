@@ -8,7 +8,7 @@ ifneq (,$(findstring s,$(MAKEFLAGS)))
   ECHO=true
 endif
 
-# Check if we are using a different Tomcat6 port
+# Check if we are using a different Tomcat8 port
 ifeq ($(TOMCAT_PORT),)
   TOMCAT_PORT=8080
 endif

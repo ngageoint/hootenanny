@@ -147,7 +147,6 @@ tagCountHistogram2.png
 uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
-test-files/DcTigerRoadsFrechetInput.osm
 data/
 .vagrant/
 inputFeatures.png

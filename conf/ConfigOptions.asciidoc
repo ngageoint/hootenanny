@@ -1787,6 +1787,14 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
+=== reader.keep.file.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
+Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
+
 === remove.duplicate.areas.diff
 
 * Data Type: string

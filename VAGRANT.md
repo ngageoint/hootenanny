@@ -43,7 +43,7 @@ vagrant plugin install vagrant-vmware-workstation
 
 # Vagrant Provisioning
 
-The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. ~~Once it is complete, uncomment the `#, group: "tomcat6"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat6 users to each others group.
+The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. ~~Once it is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
 
 You should be able to log into the running VM by typing:
 
@@ -74,5 +74,5 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    sudo -u tomcat6 scripts/vagrantDeployTomcat.sh 
+    sudo -u tomcat8 scripts/vagrantDeployTomcat.sh 
 

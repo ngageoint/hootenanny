@@ -95,6 +95,8 @@ public:
 
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
 
+  void setKeepStatusFromFile(bool keepFileStatus) { _keepFileStatus = keepFileStatus; }
+
 protected:
 
   bool _osmFound;
@@ -115,6 +117,7 @@ protected:
   int _missingWayCount;
   int _badAccuracyCount;
   QString _path;
+  bool _keepFileStatus;
   bool _useFileStatus;
   bool _useDataSourceId;
   bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?

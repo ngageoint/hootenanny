@@ -9,12 +9,12 @@ output changeset is not meant to be written to a Hootenanny API database.
 * +input1+ - Input 1 (e.g. .osm file).
 * +input2+ - Input 2 (e.g. .osm file).
 * +output+ - Output location (e.g. .osc or .osc.sql file).
-* +databaseUrl+ - Database the changeset will eventually be written to (but not by this command).
+* +databaseUrl+ - Database the changeset will eventually be written to (but not by this command). Only applicable for .osc.sql files.
 
 === Usage
 
 --------------------------------------
-derive-changeset (input1) (input2) (output.osc) [databaseUrl]
+derive-changeset (input1) (input2) (output.osc|output.osc.sql) [databaseUrl]
 --------------------------------------
 
 ==== Example

@@ -151,7 +151,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _matchFactory.createMatches(map, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -188,16 +188,16 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
 
       double cmStart = Time::getTime();
       cmMatches = cm.calculateSubset();
-      LOG_DEBUG("CM took: " << Time::getTime() - cmStart << "s.");
+      LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
       LOG_DEBUG("CM Score: " << cm.getScore());
-      LOG_DEBUG(SystemInfo::getMemoryUsageString());
+      LOG_TRACE(SystemInfo::getMemoryUsageString());
     }
 
     GreedyConstrainedMatches gm(map);
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
     vector<const Match*> gmMatches = gm.calculateSubset();
-    LOG_DEBUG("GM took: " << Time::getTime() - gmStart << "s.");
+    LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
     LOG_DEBUG("GM Score: " << gm.getScore());
 
     if (gm.getScore() > cm.getScore())
@@ -216,7 +216,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
@@ -231,11 +231,11 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     mg.addMatches(_matches.begin(), _matches.end());
     vector< set<const Match*, MatchPtrComparator> > tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-    LOG_DEBUG(SystemInfo::getMemoryUsageString());
+    LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
 
   LOG_DEBUG("Match sets count: " << matchSets.size());
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   /// @todo would it help to sort the matches so the biggest or best ones get merged first?
 
   // convert all the match sets into mergers.
@@ -244,14 +244,14 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   // don't need the matches any more
   _deleteAll(allMatches);
   _matches.clear();
 
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   _mapElementIdsToMergers();
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
@@ -272,11 +272,11 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
   {
     cout << endl;
   }
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();
   // free up any used resources.
   _reset();
-  LOG_DEBUG(SystemInfo::getMemoryUsageString());
+  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));

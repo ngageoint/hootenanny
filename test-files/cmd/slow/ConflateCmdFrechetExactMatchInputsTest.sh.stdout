@@ -1,74 +1,0 @@
-13:54:32.482 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 127) Conflating test-files/DcTigerRoads.osm with test-files/DcTigerRoadsFrechetInput.osm and writing the output to test-output/cmd/ConflateCmdFrechetExactMatchInputsTest/output.osm
-13:54:32.482 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 130) bytesRead: 122409
-13:54:32.483 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcTigerRoads.osm ...
-13:54:32.531 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/DcTigerRoadsFrechetInput.osm ...
-13:54:32.583 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 143) inputBytes: 1.54002e+06
-13:54:32.583 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
-13:54:32.583 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
-13:54:32.583 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 2000 / 6326         Reprojecting 3000 / 6326         Reprojecting 4000 / 6326         Reprojecting 5000 / 6326         Reprojecting 6000 / 6326         
-13:54:32.627 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-13:54:32.627 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
-13:54:32.635 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
-13:54:32.800 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-13:54:32.800 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
-13:54:32.800 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-13:54:32.800 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
-  Intersection splitter todo: 0       
-13:54:32.869 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-13:54:32.888 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-13:54:32.888 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
-13:54:32.888 INFO  ...e/splitter/DualWaySplitter.cpp( 249) Splitting divided ways...
-
-13:54:32.898 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-13:54:32.912 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-13:54:32.919 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-13:54:32.940 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveEmptyAreasVisitor
-13:54:32.956 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-13:54:32.980 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
-13:54:33.036 INFO  ...lygon/BuildingMatchCreator.cpp( 250) *threshold: Thresholds; Match: 0.6 Miss: 0.6 Review: 0.6
-13:54:33.036 INFO  ...lygon/BuildingMatchCreator.cpp( 269) Loading model from: /fouo/hoot-release-2/hoot/conf/BuildingModel.rf
-13:54:34.243 INFO  ...ighway/HighwayRfClassifier.cpp( 285) Loading highway model from: /fouo/hoot-release-2/hoot/conf/HighwayModel.rf
-13:54:35.361 INFO  ...ighway/HighwayRfClassifier.cpp( 305) factorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-13:54:35.367 INFO  ...ighway/HighwayRfClassifier.cpp( 324) extractorNames: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-13:54:35.367 INFO  ...ighway/HighwayRfClassifier.cpp( 325) missingExtractors: [0]{}
-13:54:35.367 INFO  ...ighway/HighwayRfClassifier.cpp( 326) _rfFactorLabels: [4]{EdgeDistanceRmseAggregator, EdgeDistanceSigma_Aggregator, hoot__AngleHistogramExtractor, hoot__WeightedMetricDistanceExtractor_way_agg__MeanAggregator_point_agg__RmseAggregator}
-13:54:40.737 INFO  ...ighway/HighwayMatchCreator.cpp(  96) neighbor counts, max: 5 mean: 1.38624
-13:54:41.353 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
-13:54:41.444 WARN  .../core/conflate/NodeMatcher.cpp( 205) 7 intersections at one spot? Odd. Giving it a high angleScore.
-13:54:41.444 INFO  .../core/conflate/NodeMatcher.cpp( 206) nid1: -4313
-13:54:41.444 INFO  .../core/conflate/NodeMatcher.cpp( 207) nid2: -1150
-13:54:41.444 INFO  .../core/conflate/NodeMatcher.cpp( 208) wids1: [7]{-1063, -1062, -1061, -1060, -465, -463, -401}
-13:54:41.444 INFO  .../core/conflate/NodeMatcher.cpp( 209) wids2: [7]{-885, -884, -883, -882, -493, -492, -174}
-13:54:41.547 WARN  .../core/conflate/NodeMatcher.cpp( 205) 7 intersections at one spot? Odd. Giving it a high angleScore.
-13:54:41.547 INFO  .../core/conflate/NodeMatcher.cpp( 206) nid1: -1150
-13:54:41.547 INFO  .../core/conflate/NodeMatcher.cpp( 207) nid2: -4313
-13:54:41.547 INFO  .../core/conflate/NodeMatcher.cpp( 208) wids1: [7]{-885, -884, -883, -882, -493, -492, -174}
-13:54:41.547 INFO  .../core/conflate/NodeMatcher.cpp( 209) wids2: [7]{-1063, -1062, -1061, -1060, -465, -463, -401}
-13:54:41.594 INFO  .../core/conflate/RubberSheet.cpp( 326) Found 667 potential ties.
-13:54:41.595 INFO  .../core/conflate/RubberSheet.cpp( 364) Found 354 confident ties.
-13:54:41.619 INFO  .../core/conflate/RubberSheet.cpp( 246) candidate: DelaunayInterpolator RMSE: 0
-13:54:43.842 INFO  .../core/conflate/RubberSheet.cpp( 246) candidate: IDW, p: 3.90625 RMSE: 0
-13:54:44.165 INFO  .../core/conflate/RubberSheet.cpp( 246) candidate: Kernel estimation, sigma: 46.1228 RMSE: 0
-13:54:44.165 INFO  .../core/conflate/RubberSheet.cpp( 259) Best candidate: DelaunayInterpolator
-13:54:44.165 INFO  .../core/conflate/RubberSheet.cpp( 373) DelaunayInterpolator
-13:54:44.189 INFO  .../core/conflate/RubberSheet.cpp( 246) candidate: DelaunayInterpolator RMSE: 0
-13:54:44.189 INFO  .../core/conflate/RubberSheet.cpp( 259) Best candidate: DelaunayInterpolator
-13:54:44.189 INFO  .../core/conflate/RubberSheet.cpp( 377) DelaunayInterpolator
-13:54:44.189 INFO  ...ate/SearchRadiusCalculator.cpp( 158) Calculated search radius = 0
-13:54:44.557 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating match conflicts
-13:54:44.623 INFO  .../OptimalConstrainedMatches.cpp(  57) Done calculating match conflicts
-13:54:44.652 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating match conflicts
-13:54:44.655 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
-13:54:45.544 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
-13:54:45.544 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
-Reprojecting 0 / 3613         Reprojecting 1000 / 3613         Reprojecting 2000 / 3613         Reprojecting 3000 / 3613         
-13:54:45.556 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-13:54:45.563 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
-13:54:45.566 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
-13:54:45.569 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
-13:54:45.569 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
-13:54:45.569 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
-13:54:45.758 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ConflateCmdFrechetExactMatchInputsTest/output.osm ...
-13:54:45.833 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ConflateCmdFrechetExactMatchInputsTest/output.osm ...

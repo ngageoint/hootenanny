@@ -13,6 +13,10 @@ Feature: Resolve all reviews feature
     And I press "Add Layer"
     Then I wait 15 "seconds" to see "span.strong" element with text "DcTigerRoadsCucumber"
     Then I should see "Conflate"
+    #Change the color of the reference layer features
+    Then I change the reference layer color to purple
+    #Change the color of the secondary layer features
+    Then I change the secondary layer color to blue
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
