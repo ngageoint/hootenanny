@@ -139,8 +139,7 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 * Data Type: double
 * Default Value: `1`
 
-The user ID used when writing to an OSM API database used by changeset writers and the
-PostgresqlDumpFileWriter.
+The user ID used when writing to an OSM API database used by certain changeset writers.
 
 === circular.error.default.value
 
@@ -1240,14 +1239,14 @@ Operations that should be applied to ingested OGR data before saving the data.
 Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
 For the most part, each line represents an element or an element tag.
 
-=== osmapidb.bulk.writer.file.output.element.status.interval
+=== osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
 * Default Value: `1000000`
 
-Count at which the SQL file output status of each element type should be logged by the
-when bulk writing to an OSM API database.  e.g. With a value of 100, you will see a element load
-status update message logged for every 100 elements parsed.
+Count at which the SQL file output status of each element type should be logged when bulk writing
+the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see
+a load status update message logged for every 100 SQL lines parsed.
 
 === osmapidb.bulk.writer.mode
 
@@ -1267,15 +1266,6 @@ database, and will run more slowly than offline mode.
 If populated, the generated SQL file whose statements are executed against the target database as
 the result of a hoot convert command with an OSM API database target is copied to the specified
 location. For debugging purposes.
-
-=== postgresql.dumpfile.writer.element.status.count.interval
-
-* Data Type: long
-* Default Value: `100000`
-
-Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
-e.g. With a value of 100000, you will see a element load status update message for every 100000
-elements parsed.
 
 === osm.changeset.sql.file.writer.generate.new.ids
 

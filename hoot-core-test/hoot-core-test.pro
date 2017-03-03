@@ -193,7 +193,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmApiDbBulkWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbBulkWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlFileWriterTest.cpp \

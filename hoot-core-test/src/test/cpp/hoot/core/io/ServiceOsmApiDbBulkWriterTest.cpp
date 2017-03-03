@@ -44,11 +44,11 @@
 namespace hoot
 {
 
-class OsmApiDbBulkWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmApiDbBulkWriterTest);
-  //TODO: re-enable and check temp file; also add db output test
-  //CPPUNIT_TEST(runWriterTest);
+  CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
+  //CPPUNIT_TEST(runOfflineTest);
+  //CPPUNIT_TEST(runOnlineTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -119,12 +119,17 @@ public:
     return map;
   }
 
-  void runWriterTest()
+  void runOfflineTest()
   {
     OsmApiDbBulkWriter writer;
+    writer.setFileOutputLineBufferSize(1);
+    writer.setMode("offline");
+    QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
+    writer.setSqlFileCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
 
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
-    QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
+
     writer.open(outFile);
     writer.write(createTestMap());
 
@@ -170,10 +175,17 @@ public:
     {
       HOOT_STR_EQUALS(stdList.at(i), inList.at(i));
     }
+
+    //check database
+
   }
 
+  void runOnlineTest()
+  {
+
+  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiDbBulkWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkWriterTest, "quick");
 
 }

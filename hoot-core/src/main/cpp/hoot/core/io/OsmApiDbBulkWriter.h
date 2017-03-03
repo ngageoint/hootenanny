@@ -83,18 +83,27 @@ using namespace Tgs;
  * OSM element writer optimized for bulk element writes.  It has two modes: offline and online.
  *
  * Offline mode is meant to be used against an offline database (one with no other writers
- * present). Offline mode does not guarantee element ID uniqueness, but will run faster than online
- * mode.  Workflow:
+ * present). Offline mode does not guarantee element/changeset ID uniqueness against an online
+ * database, since external writes can occur during the SQL file generation.  Offline mode will
+ * run faster than online mode due an extra pass over the data required by online mode.
  *
- *   * query for the current element ID sequences from the database
- *   * write the element SQL copy statements out to a file in a buffered fashion
- *   * execute the element SQL copy statements against the database
+ * Offline workflow:
  *
- * Online mode will guarantee element ID uniqueness against a live database.  Workflow:
+ *   * query for the current element/changeset ID sequences from the database
+ *   * write the element/changeset SQL copy statements out to a file in a buffered fashion
+ *   * execute the element/changeset SQL copy and ID sequence update statements against the database
  *
- *   * count the number of each element type by reading from the input data in a buffered fashion
- *   * query for the current element IDs from the live database and locks the ID ranges out
- *   * SQL generation and execution the same as offline mode
+ * Online mode will guarantee element ID uniqueness against a live database  If the element SQL
+ * write in online mode fails, the IDs reserved will not be freed and will go unused in the database.
+ *
+ * Online workflow:
+ *
+ *   * write the element/changeset SQL copy statements out to a file in a buffered fashion; arbitrarily
+ *     start all IDs at 1
+ *   * used the element count obtained during the first pass read to determine the IDs to be consumed
+ *     by the write operation and lock the ID ranges out by executing setval statements against
+ *     the database
+ *   * execute the element/changeset SQL copy statements against the database
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -115,8 +124,6 @@ public:
 
   virtual void finalizePartial();
 
-  virtual void write(ConstOsmMapPtr map);
-
   virtual void writePartial(const ConstNodePtr& n);
 
   virtual void writePartial(const ConstWayPtr& w);
@@ -125,13 +132,19 @@ public:
 
   virtual void setConfiguration(const hoot::Settings& conf);
 
+  void setMode(QString mode)
+  {
+    if (mode != "offline" && mode != "online")
+    {
+      throw HootException("Invalid OSM API database bulk writer mode: " + mode);
+    }
+    _mode = mode;
+  }
+  void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
+  void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
+  void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
+
 private:
-
-  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
-
-  list<QString> _sectionNames;
-
-  QString _outputUrl;
 
   struct _ElementWriteStats
   {
@@ -152,11 +165,10 @@ private:
     QString addUserEmail;
     long addUserId;
     long changesetUserId;
-    long startingChangesetId;
     long startingNodeId;
     long startingWayId;
     long startingRelationId;
-    unsigned long maxMapElements;
+    long startingChangesetId;
   };
   ConfigData _configData;
 
@@ -176,6 +188,7 @@ private:
   struct _ChangesetData
   {
     long changesetId;
+    unsigned long changesetsWritten;
     unsigned int changesInChangeset;
     Envelope changesetBounds;
   };
@@ -198,13 +211,19 @@ private:
   };
   _UnresolvedReferences _unresolvedRefs;
 
-  bool _dataWritten;
-
   OsmApiDb _database;
 
-  QMap<ElementType::Type, long> _getElementCounts();
+  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
+  list<QString> _sectionNames;
 
-  void _zeroWriteStats();
+  QString _outputUrl;
+  bool _dataWritten;
+  QString _mode;
+  long _fileOutputLineBufferSize;
+  long _statusUpdateInterval;
+  QString _sqlFileCopyLocation;
+
+  void _reset();
   void _createNodeTables();
   list<QString> _createSectionNameList();
   void _createWayTables();
@@ -213,7 +232,7 @@ private:
   void _createTable(const QString& tableName, const QString& tableHeader,
                     const bool addByteOrderMarker);
 
-  long _getChangesetId() const { return _changesetData.changesetId; }
+  void _getStartingIdsFromDb();
   void _incrementChangesInChangeset();
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
@@ -238,6 +257,11 @@ private:
     shared_ptr<QTextStream>& historicalTable, const QString& historicalTableFormatString);
   void _closeSectionTempFilesAndConcat();
 
+  shared_ptr<QTemporaryFile> _updateIdOffsets(shared_ptr<QTemporaryFile> inputSqlFile);
+  void _executeElementSql(const QString sqlFile);
+  void _writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
+  void _lockIds();
+  long _totalRecordsWritten() const;
 };
 
 }
