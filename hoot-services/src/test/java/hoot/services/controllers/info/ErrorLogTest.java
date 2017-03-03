@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -47,8 +48,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.utils.HootCustomPropertiesSetter;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 
 
 public class ErrorLogTest extends HootServicesJerseyTestAbstract {
@@ -58,7 +59,7 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        URL inputUrl = ErrorLogTest.class.getResource("/hoot/services/info/catalina.out");
+        URL inputUrl = ErrorLogTest.class.getResource("/hoot/services/controllers/info/catalina.out");
         File dest = new File(testFolder, "catalina.out");
         FileUtils.copyURLToFile(inputUrl, dest);
 
@@ -83,7 +84,7 @@ public class ErrorLogTest extends HootServicesJerseyTestAbstract {
 
         InputStream is = responseData.readEntity(InputStream.class);
         StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer);
+        IOUtils.copy(is, writer, Charset.defaultCharset());
         String theString = writer.toString();
         assertFalse(theString.isEmpty());
     }

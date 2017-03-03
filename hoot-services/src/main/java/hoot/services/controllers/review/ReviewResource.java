@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.review;
 
@@ -62,11 +62,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 
-import hoot.services.controllers.osm.MapResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentRelationMembers;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -102,7 +102,7 @@ public class ReviewResource {
     public ReviewResolverResponse resolveAllReviews(ReviewResolverRequest request) {
         long changesetId = -1;
         try {
-            long mapIdNum = MapResource.validateMap(request.getMapId());
+            long mapIdNum = validateMap(request.getMapId());
 
             long userId;
             try {
@@ -456,7 +456,7 @@ public class ReviewResource {
      *         reviewed with
      */
     private static List<ReviewRef> getAllReferences(ElementInfo queryElementInfo) {
-        long mapIdNum = MapResource.validateMap(queryElementInfo.getMapId());
+        long mapIdNum = validateMap(queryElementInfo.getMapId());
 
         // check for query element existence
         Set<Long> elementIds = new HashSet<>();
@@ -561,5 +561,26 @@ public class ReviewResource {
         logger.error("{} {}", exceptionCode, message, e);
 
         throw new WebApplicationException(e, Response.status(status).entity(message).build());
+    }
+
+    private static long validateMap(String mapId) {
+        long mapIdNum;
+
+        try {
+            // input mapId may be a map ID or a map name
+            mapIdNum = DbUtils.getRecordIdForInputString(mapId, maps, maps.id, maps.displayName);
+        }
+        catch (Exception ex) {
+            if (ex.getMessage().startsWith("Multiple records exist") || ex.getMessage().startsWith("No record exists")) {
+                String msg = ex.getMessage().replaceAll("records", "maps").replaceAll("record", "map");
+                throw new WebApplicationException(ex, Response.status(Status.NOT_FOUND).entity(msg).build());
+            }
+            else {
+                String msg = "Error requesting map with ID: " + mapId + " (" + ex.getMessage() + ")";
+                throw new WebApplicationException(ex, Response.status(Status.BAD_REQUEST).entity(msg).build());
+            }
+        }
+
+        return mapIdNum;
     }
 }

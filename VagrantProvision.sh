@@ -64,9 +64,9 @@ echo "### Installing dependencies from repos..."
 sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
- libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 \
+ libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
- texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev \
+ texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
  libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
@@ -117,6 +117,20 @@ fi
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
+
+# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on, 
+# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on 
+# the slaves.
+if [ ! -f ~/.distcc/hosts ]; then
+    echo "Adding distcc hosts file..."
+    mkdir -p ~/.distcc
+    echo "localhost/4" >> ~/.distcc/hosts
+fi
+if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
+    echo "Configuring distcc in profile..."
+    echo "export DISTCC_TCP_CORK=0" >> ~/.profile
     source ~/.profile
 fi
 

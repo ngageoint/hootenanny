@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
-import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,145 +53,95 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hoot.services.controllers.job.JobControllerBase;
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
+import hoot.services.command.ExternalCommandManager;
+import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
+
 
 @Controller
 @Path("/info")
-public class OGRAttributesResource extends JobControllerBase {
+public class OGRAttributesResource {
     private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
 
-    public OGRAttributesResource() {
-        super(GET_OGR_ATTRIBUTE_SCRIPT);
-    }
+    @Autowired
+    private JobProcessor jobProcessor;
+
+    @Autowired
+    private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private GetAttributesCommandFactory getAttributesCommandFactory;
+
 
     /**
-     * This rest endpoint uploads multipart data from UI and then generates
-     * attribute output Example:
-     * http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
+     * This rest endpoint uploads multipart data from UI and then generates attribute output.
+     * Example: http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
      * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb"}
      * 
-     * After getting the jobId, one can track the progress through job status
-     * rest end point Example:
-     * http://localhost:8080/hoot-services/job/status/e43feae4-0644-47fd-a23c-
-     * 6249e6e7f7fb Output:
-     * {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb","statusDetail":null,
-     * "status":"complete"}
+     * After getting the jobId, one can track the progress through job status rest end point
+     * Example: http://localhost:8080/hoot-services/job/status/e43feae4-0644-47fd-a23c-6249e6e7f7fb
+     * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb","statusDetail":null, "status":"complete"}
      * 
-     * Once status is "complete" Result attribute can be obtained through
-     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-
-     * a23c-6249e6e7f7fb output: JSON of attributes
+     * Once status is "complete", result attribute can be obtained through.
+     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6e7f7fb
+     * Output: JSON of attributes
      * 
      * @param inputType
-     *            : [FILE | DIR] where FILE type should represents zip,shp or
-     *            OMS and DIR represents FGDB
+     *            : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
      */
     @POST
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_TYPE") String inputType, FormDataMultiPart multiPart) {
-        JSONObject response = new JSONObject();
         String jobId = UUID.randomUUID().toString();
 
         try {
-            Map<String, String> uploadedFiles = new HashMap<>();
-            Map<String, String> uploadedFilesPaths = new HashMap<>();
-
-            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
-
             List<String> filesList = new ArrayList<>();
             List<String> zipList = new ArrayList<>();
 
-            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String fName = pairs.getKey();
-                String ext = pairs.getValue();
+            processFormDataMultiPart(filesList, zipList, jobId, inputType, multiPart);
 
-                String inputFileName = uploadedFilesPaths.get(fName);
-
-                // If it is zip file then we crack open to see if it contains
-                // FGDB. If so then we add the folder location and desired output name
-                // which is fgdb name in the zip
-                if (ext.equalsIgnoreCase("ZIP")) {
-                    zipList.add(fName);
-                    String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
-                    try (FileInputStream in = new FileInputStream(zipFilePath)) {
-                        try (ZipInputStream zis = new ZipInputStream(in)) {
-                            ZipEntry ze = zis.getNextEntry();
-                            while (ze != null) {
-                                String zipName = ze.getName();
-                                if (ze.isDirectory()) {
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
-                                            || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                        String fgdbZipName = zipName;
-                                        if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                            fgdbZipName = zipName.substring(0, zipName.length() - 1);
-                                        }
-                                        filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
-                                    }
-                                }
-                                else {
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                        filesList.add("\"" + fName + "/" + zipName + "\"");
-                                    }
-                                }
-                                ze = zis.getNextEntry();
-                            }
-                        }
-                    }
+            Command[] commands = {
+                () -> {
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, filesList, zipList, this.getClass());
+                    return externalCommandManager.exec(jobId, getAttributesCommand);
                 }
-                else {
-                    filesList.add("\"" + inputFileName + "\"");
-                }
-            }
+            };
 
-            String mergeFilesList = StringUtils.join(filesList.toArray(), ' ');
-            String mergedZipList = StringUtils.join(zipList.toArray(), ';');
-
-            JSONArray params = new JSONArray();
-
-            JSONObject param = new JSONObject();
-            param.put("INPUT_FILES", mergeFilesList);
-            params.add(param);
-
-            param = new JSONObject();
-            param.put("INPUT_ZIPS", mergedZipList);
-            params.add(param);
-
-            String argStr = createPostBody(params);
-
-            postJobRequest(jobId, argStr);
+            jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
+        JSONObject response = new JSONObject();
         response.put("jobId", jobId);
 
         return Response.ok(response.toJSONString()).build();
     }
 
     /**
-     * This rest end point is for getting the result of get attribute upload
-     * operation
+     * This rest end point is for getting the result of get attribute upload operation
      * 
      * @param id
      *            : The jobid from upload
+     *
      * @param doDelete
-     *            : [true | false] if true then it deletes the output resource
-     *            after getting the result
-     * 
-     *            Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-
-     *            0644-47fd-a23c-6249e6 e7f7fb output: JSON of attributes
+     *            : [true | false] if true then it deletes the output resource after getting the result
+     *
+     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6 e7f7fb output: JSON of attributes
      * 
      * @return JSON object of requested attribute
      */
@@ -209,10 +159,60 @@ public class OGRAttributesResource extends JobControllerBase {
             }
         }
         catch (Exception e) {
-            String msg = "Error getting attribute: " + id + ".  Cause : " + e.getMessage();
+            String msg = "Error getting attribute: " + id + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(script).build();
+    }
+
+    private void processFormDataMultiPart(List<String> filesList, List<String> zipList, String jobId, String inputType, FormDataMultiPart multiPart)
+            throws IOException {
+        Map<String, String> uploadedFiles = new HashMap<>();
+        Map<String, String> uploadedFilesPaths = new HashMap<>();
+
+        MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
+
+        for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
+            String fName = pairs.getKey();
+            String ext = pairs.getValue();
+
+            String inputFileName = uploadedFilesPaths.get(fName);
+
+            // If it is zip file then we crack open to see if it contains
+            // FGDB. If so then we add the folder location and desired output name
+            // which is fgdb name in the zip
+            if (ext.equalsIgnoreCase("ZIP")) {
+                zipList.add(fName);
+                String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
+                try (FileInputStream in = new FileInputStream(zipFilePath)) {
+                    try (ZipInputStream zis = new ZipInputStream(in)) {
+                        ZipEntry ze = zis.getNextEntry();
+                        while (ze != null) {
+                            String zipName = ze.getName();
+                            if (ze.isDirectory()) {
+                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
+                                        || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
+                                    String fgdbZipName = zipName;
+                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
+                                        fgdbZipName = zipName.substring(0, zipName.length() - 1);
+                                    }
+                                    filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
+                                }
+                            }
+                            else {
+                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
+                                    filesList.add("\"" + fName + "/" + zipName + "\"");
+                                }
+                            }
+                            ze = zis.getNextEntry();
+                        }
+                    }
+                }
+            }
+            else {
+                filesList.add("\"" + inputFileName + "\"");
+            }
+        }
     }
 }

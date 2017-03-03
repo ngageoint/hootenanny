@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTEGERPROGRAMMINGSOLVER_H
 #define INTEGERPROGRAMMINGSOLVER_H
@@ -169,6 +169,7 @@ public:
     glp_iocp iocp;
     glp_init_iocp(&iocp);
     iocp.presolve = GLP_ON;
+    iocp.binarize = GLP_ON;
     if (_timeLimit > 0)
     {
       iocp.tm_lim = _timeLimit * 1000.0 + 0.5;

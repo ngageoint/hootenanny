@@ -9,11 +9,11 @@ Feature: Highlight features on click
         And I press "Add Reference Dataset"
         And I click the "AllDataTypesACucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
         And I press "Add Secondary Dataset"
         And I click the "AllDataTypesBCucumber" Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
         Then I should see "Conflate"
         And I press "Conflate"
         And I fill "saveAs" input with "AllDataTypes_HighlightCucumber"

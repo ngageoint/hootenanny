@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -40,17 +40,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.nativeinterfaces.JobExecutionManager;
+import hoot.services.command.ExternalCommandManager;
+import hoot.services.job.JobStatusManager;
 
 
 @Controller
 @Path("/cancel")
+@Transactional
 public class JobCancellationResource {
     private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
     @Autowired
-    private JobExecutionManager jobExecManager;
+    private ExternalCommandManager externalCommandInterface;
 
     @Autowired
     private JobStatusManager jobStatusManager;
@@ -73,22 +76,18 @@ public class JobCancellationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response process(String args) {
         String jobIdToCancel = null;
-        String mapDisplayName = null;
 
         try {
             JSONParser parser = new JSONParser();
             JSONObject command = (JSONObject) parser.parse(args);
             jobIdToCancel = command.get("jobid").toString();
-            mapDisplayName = command.get("mapid").toString();
+            String mapDisplayName = command.get("mapid").toString();
 
-            this.jobExecManager.terminate(jobIdToCancel);
-            this.jobStatusManager.setCancelled(jobIdToCancel);
-
-            // TODO: should be trying to cleanup any files DB data already created by the cancelled job?
-            // TODO: Is this where mapId could come in handy?
+            this.externalCommandInterface.terminate(jobIdToCancel);
+            this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
         }
         catch (Exception e) {
-            String msg = "Error cancellating job with ID = " + jobIdToCancel;
+            String msg = "Error cancelling job with ID = " + jobIdToCancel;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

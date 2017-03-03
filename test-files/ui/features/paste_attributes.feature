@@ -22,7 +22,7 @@ Feature: Paste Attributes
         And I press "Add Reference Dataset"
         And I click the "dcpoi_clip_paste_attribu..." Dataset
         And I press "Add Layer"
-        Then I wait 15 "seconds" to see "span.strong" element with text "dcpoi_clip_paste_attributes_Cucumber"
+        Then I wait 30 "seconds" to see "span.strong" element with text "dcpoi_clip_paste_attributes_Cucumber"
         When I select a node map feature with OSM id "n1"
         And I click the "Point" preset
         And I click the "Park" preset

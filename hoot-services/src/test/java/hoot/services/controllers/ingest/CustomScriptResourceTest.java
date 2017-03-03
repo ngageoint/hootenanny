@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -35,6 +35,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +58,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 /*
@@ -564,13 +565,6 @@ public class CustomScriptResourceTest {
         assertTrue(file.exists());
     }
 
-    /**
-     * Removes the first line from a file
-     *
-     * @param file
-     *            file to modify
-     * @throws IOException
-     */
     private static void removeFirstLineFromFile(File file) throws IOException {
         try (Scanner fileScanner = new Scanner(file)) {
             fileScanner.nextLine();
@@ -591,8 +585,6 @@ public class CustomScriptResourceTest {
             }
         }
     }
-
-
 
     @Test
     @Category(UnitTest.class)
@@ -682,7 +674,7 @@ public class CustomScriptResourceTest {
             File fScript = new File(homefolder, (String) oPath);
             assertTrue(fScript.exists());
 
-            String sScript = FileUtils.readFileToString(fScript);
+            String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
             validateExportMethod.invoke(null, sScript);
 
             if (jsTrans.get("FOUO_PATH") != null) {

@@ -1,45 +1,15 @@
-# GENERAL
-
-# Port Jersey tests running on the Grizzy framework uses; only needed by Jersey async calls
-grizzlyPort=9998
-
 # generic setting for max size of records when executing batch query; this setting could be
 # duplicated and made more specific for different types of queries
 maxRecordBatchSize=2000
 
-# allows for printing executed sql statement
-debugSql=false
-
-# Internal job server location
-coreJobServerUrl=http://localhost:8080
-
 # For the case where hoot home can not be obtained
 homeFolder=$(HOOT_HOME)
-
-# amount of time in ms the job status polling class used only in test code waits before attempting
-# to determine the status of a running job; 250 is a good value for development environments and
-# prevents the services tests from taking a long time to run; may need to increase to as much as
-# 2000 or more in some continuous integration environments where postgres seems to respond more
-# slowly to queries
-testJobStatusPollerTimeout=250
-
-# determines whether the system automatically scans for changes to the log4j props file
-autoScanForLogPropsChanges=true
-
-# amount of time in minutes (integer) that the system checks the log verbosity level for changes
-# in the log4j properties file
-logPropsDynamicChangeScanInterval=1
-
-# Loosely enforced setting that determines the maximum number of times a class logs a warning
-maxWarningsDisplayed=10
 
 # If true, will seed the randomness used in sql queries; for testing purposes only.
 seedRandomQueries=false
 
 # Random query seed value; valid range: -1.0 to 1.0
 randomQuerySeed=0.1
-
-# OSM
 
 # OSM header info
 osmVersion=0.6
@@ -75,13 +45,8 @@ changesetMaxOpenTimeHours=24
 # allows for faster testing of changeset auto closing
 testChangesetAutoClose=false
 
-# ETL
-
 # the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts/services
-
-# intermediate file output location (working folder)
-coreScriptOutputPath=$(homeFolder)/test-output/ETL_OUTPUT
 
 # ETL make files script
 ETLMakefile=makeetl
@@ -89,14 +54,8 @@ ETLMakefile=makeetl
 # Conflate make file script
 ConflateMakefilePath=makeconflate
 
-# CookieCutter make file script
-CookieCutterMakefilePath=makecookiecutter
-
 # ClipDataset make file script
 ClipDatasetMakefilePath=makeclipdataset
-
-# Translation javascript header script path
-jsHeaderScriptPath=$(homeFolder)/scripts/services/rh.js
 
 # Translation header used for just function scanning
 dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
@@ -104,32 +63,16 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
-# Temporary OSM output path
-osmTempOutputPath=$(homeFolder)/tmp
-
 # osm2ogr script used in export
 ExportScript=osm2ogrscript
 
 # Temporary output path
 tempOutputPath=$(homeFolder)/tmp
 
-# CleanData Service Make file name
-cleanDataMakePath=makecleandata
-
 # Custom Script Service folder location
 customScriptPath=$(homeFolder)/customscript
 
-# hoot api db Name
-dbName=${DB_NAME}
-
-# hoot api db server user id
-dbUserId=${DB_USER}
-
-# hoot api db server user password
-dbPassword=${DB_PASSWORD}
-
-# hoot api db server user host
-dbHost=${DB_HOST}:${DB_PORT}
+exportRenderDBScript=exportrenderdb.sh
 
 # WFS Store Connection Name
 wfsStoreConnName=WFS_Connection
@@ -140,18 +83,6 @@ wfsStoreDb=${WFS_DB_NAME}
 # Enable access to a single OSM API database configured by DatabaseConfig.sh.
 osmApiDbEnabled=true
 
-# osm api db Name
-osmApiDbName=${DB_NAME_OSMAPI}
-
-# osm api db server user id
-osmApiDbUserId=${DB_USER_OSMAPI}
-
-# osm api db server user password
-osmApiDbPassword=${DB_PASSWORD_OSMAPI}
-
-# osm api db server user host
-osmApiDbHost=${DB_HOST_OSMAPI}:${DB_PORT_OSMAPI}
-
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
 
@@ -160,12 +91,6 @@ ingestStagingPath=$(homeFolder)/ingest/upload
 
 # Tile server folder
 tileServerPath=$(homeFolder)/ingest/processed
-
-# Ingest service make file
-IngestMakefile=ingestraster
-
-# Raster to tile make file
-RasterToTiles=exportrenderdb.makefile
 
 # Basemap Raster to tile make file
 BasemapRasterToTiles=makebasemaprastertotiles.sh
@@ -176,9 +101,6 @@ BasemapRasterExtensions=png,tif
 # Catalina log location
 ErrorLogPath=/var/log/tomcat8/catalina.out
 
-# Job query interval in milli second
-JobQueryInterval=3000
-
 # Default translations config file
 defaultTranslationsConfig=$(homeFolder)/conf/services/DefaultTranslations.json
 
@@ -188,14 +110,8 @@ defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslatio
 # Main document name
 documentName=Hootenanny - User Interface Guide.pdf
 
-# The interval of ping during internal chain job status tracking in millisec (minimum is 1000)
-chainJosStatusPingInterval=1000
-
-# The size of thread pool used by JobResource.
-internalJobThreadSize=5
-
-# The maximum time to wait for the connection with internal rest endpoint
-internalJobRequestWaitTimeMilli=3000
+# The size of thread pool used during job processing
+internalJobThreadSize=10
 
 # Translation Node Server port
 translationServerPort=8094
@@ -244,8 +160,6 @@ ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
 ElementMergeServerScript=/plugins/ElementMergeServer.js
-
-# HGIS
 
 # HGIS review prepare for validation script name
 hgisPrepareForValidationScript=PrepareForValidation.sh
