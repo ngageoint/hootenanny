@@ -39,8 +39,7 @@ ElementOutputStream::~ElementOutputStream()
 {
 }
 
-void ElementOutputStream::writeAllElements(ElementInputStream& eis,
-  ElementOutputStream& eos)
+void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
 {
   while (eis.hasMoreElements())
   {

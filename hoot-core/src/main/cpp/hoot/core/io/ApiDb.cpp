@@ -34,7 +34,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
@@ -678,6 +677,7 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
 QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
 {
   QMap<QString, QString> dbUrlParts;
+
   QStringList dbUrlPartsList = url.split("/");
   dbUrlParts["name"] = dbUrlPartsList[dbUrlPartsList.size()-1];
   QStringList userParts = dbUrlPartsList[dbUrlPartsList.size() - 2].split(":");
@@ -685,6 +685,8 @@ QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
   dbUrlParts["password"] = userParts[1].split("@")[0];
   dbUrlParts["host"] = userParts[1].split("@")[1];
   dbUrlParts["port"] = userParts[2];
+
+  return dbUrlParts;
 }
 
 QString ApiDb::getPsqlString(const QString url)

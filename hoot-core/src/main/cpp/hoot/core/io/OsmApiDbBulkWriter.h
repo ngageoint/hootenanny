@@ -62,7 +62,6 @@
 #include <QString>
 #include <QTemporaryFile>
 #include <QTextStream>
-#include <Q_INT64>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
@@ -148,39 +147,35 @@ private:
   };
   _ElementWriteStats _writeStats;
 
-  // A lot of the Hootenanny code assumes we are on 64-bit platforms and declares ID type as "long."
-  // Ensuring this code works on any platform that Qt is supported on
-  typedef qint64 ElementIdDatatype;
-
   struct ConfigData
   {
     QString addUserEmail;
-    qint64 addUserId;
-    ElementIdDatatype changesetUserId;
-    qint64 startingChangesetId;
-    ElementIdDatatype startingNodeId;
-    ElementIdDatatype startingWayId;
-    ElementIdDatatype startingRelationId;
+    long addUserId;
+    long changesetUserId;
+    long startingChangesetId;
+    long startingNodeId;
+    long startingWayId;
+    long startingRelationId;
     unsigned long maxMapElements;
   };
   ConfigData _configData;
 
   struct _IdMappings
   {
-    ElementIdDatatype nextNodeId;
-    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > nodeIdMap;
+    long nextNodeId;
+    shared_ptr<BigMap<long, long> > nodeIdMap;
 
-    ElementIdDatatype nextWayId;
-    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > wayIdMap;
+    long nextWayId;
+    shared_ptr<BigMap<long, long> > wayIdMap;
 
-    ElementIdDatatype nextRelationId;
-    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > relationIdMap;
+    long nextRelationId;
+    shared_ptr<BigMap<long, long> > relationIdMap;
   };
   _IdMappings _idMappings;
 
   struct _ChangesetData
   {
-    qint64 changesetId;
+    long changesetId;
     unsigned int changesInChangeset;
     Envelope changesetBounds;
   };
@@ -188,8 +183,8 @@ private:
 
   struct _UnresolvedRelationReference
   {
-    ElementIdDatatype sourceRelationId;
-    ElementIdDatatype sourceDbRelationId;
+    long sourceRelationId;
+    long sourceDbRelationId;
     RelationData::Entry relationMemberData;
     unsigned int relationMemberSequenceId;
   };
@@ -197,7 +192,7 @@ private:
   {
     // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
     // order for waynode)
-    shared_ptr<BigMap<ElementIdDatatype, vector< pair<ElementIdDatatype, unsigned long> > > > unresolvedWaynodeRefs;
+    shared_ptr<BigMap<long, vector< pair<long, unsigned long> > > > unresolvedWaynodeRefs;
 
     shared_ptr< map<ElementId, _UnresolvedRelationReference > > unresolvedRelationRefs;
   };
@@ -206,6 +201,8 @@ private:
   bool _dataWritten;
 
   OsmApiDb _database;
+
+  QMap<ElementType::Type, long> _getElementCounts();
 
   void _zeroWriteStats();
   void _createNodeTables();
@@ -216,31 +213,30 @@ private:
   void _createTable(const QString& tableName, const QString& tableHeader,
                     const bool addByteOrderMarker);
 
-  qint64 _getChangesetId() const { return _changesetData.changesetId; }
+  long _getChangesetId() const { return _changesetData.changesetId; }
   void _incrementChangesInChangeset();
-  ElementIdDatatype _establishNewIdMapping(const ElementId& sourceId);
-  void _checkUnresolvedReferences(const ConstElementPtr& element,
-                                  const ElementIdDatatype elementDbId);
+  long _establishNewIdMapping(const ElementId& sourceId);
+  void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
   QString _escapeCopyToData(const QString& stringToOutput) const;
 
   void _writeChangesetToTable();
-  void _writeSequenceUpdates();
-  void _writeRelationToTables(const ElementIdDatatype relationDbId);
+  void _writeSequenceUpdates(const long nextChangesetId, const long nextNodeId,
+                             const long nextWayId, const long nextRelationId);
+  void _writeRelationToTables(const long relationDbId);
   void _writeRelationMembersToTables(const ConstRelationPtr& relation);
-  void _writeRelationMember(const ElementIdDatatype sourceRelation,
-    const RelationData::Entry& memberEntry, const ElementIdDatatype memberDbId,
+  void _writeRelationMember(const long sourceRelation,
+    const RelationData::Entry& memberEntry, const long memberDbId,
     const unsigned int memberSequenceIndex);
-  void _writeWayToTables(const ElementIdDatatype wayDbId);
-  void _writeWaynodesToTables(const ElementIdDatatype wayId,
+  void _writeWayToTables(const long wayDbId);
+  void _writeWaynodesToTables(const long wayId,
     const vector<long>& waynodeIds);
-  void _writeNodeToTables(const ConstNodePtr& node, const ElementIdDatatype nodeDbId);
-  void _writeTagsToTables(const Tags& tags, const ElementIdDatatype nodeDbId,
+  void _writeNodeToTables(const ConstNodePtr& node, const long nodeDbId);
+  void _writeTagsToTables(const Tags& tags, const long nodeDbId,
     shared_ptr<QTextStream>& currentTable, const QString& currentTableFormatString,
     shared_ptr<QTextStream>& historicalTable, const QString& historicalTableFormatString);
   void _closeSectionTempFilesAndConcat();
-
 
 };
 

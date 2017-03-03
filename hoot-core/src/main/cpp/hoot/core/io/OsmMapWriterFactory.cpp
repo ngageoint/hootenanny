@@ -101,38 +101,6 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-
-bool OsmMapWriterFactory::hasPartialWriter(QString url)
-{
-  bool result = false;
-  shared_ptr<OsmMapWriter> writer = createWriter(url);
-  shared_ptr<PartialOsmMapWriter> streamWriter = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-  if (streamWriter)
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmMapWriterFactory::hasWriter(QString url)
-{
-  vector<std::string> names = Factory::getInstance().getObjectNamesByBase(
-    OsmMapWriter::className());
-
-  bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
-  {
-    shared_ptr<OsmMapWriter> writer(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
-    if (writer->isSupported(url))
-    {
-      result = true;
-    }
-  }
-
-  return result;
-}
-
 void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
 {
   LOG_INFO("Writing map to " << url);
@@ -140,6 +108,5 @@ void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url
   writer->open(url);
   writer->write(map);
 }
-
 
 }

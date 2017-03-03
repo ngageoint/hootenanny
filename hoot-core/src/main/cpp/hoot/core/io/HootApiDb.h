@@ -386,12 +386,6 @@ private:
    */
   long _insertRecord(QSqlQuery& query);
 
-  // Flushes all elements
-  void _flushElementCacheToDb();
-
-  // Only flushes specified type
-  void _flushElementCacheToDb(const ElementType::Type type);
-
   void _updateChangesetEnvelope( const ConstNodePtr node );
 
   void _updateChangesetEnvelope(const ConstWayPtr way);

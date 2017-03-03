@@ -64,7 +64,6 @@
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 #include "OgrOptions.h"

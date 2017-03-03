@@ -107,5 +107,4 @@ void PartialOsmMapWriter::writeElement(ElementPtr &element)
   }
 }
 
-
 }

@@ -36,6 +36,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
+#include <hoot/core/util/DbUtils.h>
 
 namespace hoot
 {
@@ -43,13 +44,13 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
 OsmApiDbBulkWriter::OsmApiDbBulkWriter():
-_outputSections(),
+//_outputSections(),
 _sectionNames(_createSectionNameList()),
-_writeStats(),
-_configData(),
-_idMappings(),
-_changesetData(),
-_unresolvedRefs(),
+//_writeStats(),
+//_configData(),
+//_idMappings(),
+//_changesetData(),
+//_unresolvedRefs(),
 _dataWritten(false)
 {
   setConfiguration(conf());
@@ -184,6 +185,18 @@ void OsmApiDbBulkWriter::finalizePartial()
       continue;
     }
 
+    if (ConfigOptions().getOsmapidbBulkWriterMode().toLower() == "online" &&
+        (*it == "sequence_updates"))
+    {
+      //we've already written this in online mode by this point
+      continue;
+    }
+    else
+    {
+      _writeSequenceUpdates(_changesetData.changesetId + 1, _idMappings.nextNodeId,
+                            _idMappings.nextWayId, _idMappings.nextRelationId);
+    }
+
     LOG_DEBUG("Flushing section " << *it << " to file " <<
               (_outputSections[*it].first)->fileName());
 
@@ -241,8 +254,8 @@ void OsmApiDbBulkWriter::finalizePartial()
     }
   }
 
-  //exec element sql; Using psql here b/c I'm assuming it is doing buffered reads against
-  //the sql file, so no need to handle buffering the sql read manually and applying it to a
+  //exec element sql against the db; Using psql here b/c I'm assuming it is doing buffered reads
+  //against the sql file, so no need to handle buffering the sql read manually and applying it to a
   //QSqlQuery.
   QString cmd = "psql";
   if (!(Log::getInstance().getLevel() <= Log::Debug))
@@ -252,49 +265,62 @@ void OsmApiDbBulkWriter::finalizePartial()
   cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + tempfile->fileName();
   if (system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Failed executing bulk element SQL write.");
+    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
   }
 
   _dataWritten = true;
 }
 
+//TODO:
+QMap<ElementType::Type, long> OsmApiDbBulkWriter::_getElementCounts()
+{
+  //only going to allow formats that support partial reading for online mode; otherwise throw
+
+  return QMap<ElementType::Type, long>();
+}
+
 void OsmApiDbBulkWriter::write(ConstOsmMapPtr map)
 {
+  //get the current ID sequence for each element type from the database
+  _database.open(_outputUrl);
+
+  _configData.startingNodeId = _database.getNextId(ElementType::Node);
+  _configData.startingWayId = _database.getNextId(ElementType::Way);
+  _configData.startingRelationId = _database.getNextId(ElementType::Relation);
+  _configData.startingChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
+  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
+  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
+  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
+  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
+  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
+
   if (ConfigOptions().getOsmapidbBulkWriterMode().toLower() == "online")
   {
-      //TODO: buffered id count pass and starting id update
+    //do a buffered read through the entire input to get the element counts; avoiding using a
+    //visitor to do the count here, as that would require reading the entire data into memory.
+    QMap<ElementType::Type, long> elementCounts = _getElementCounts();
 
-      // Output updates for sequences to ensure database sanity
-    //  int test =
-    //    (int)FilteredVisitor::getStat(
-    //      new ChainCriterion(
-    //        new ElementTypeCriterion(ElementType::),
-    //        new ElementTypeCriterion(elementType),
-    //        new ElementTypeCriterion(elementType)),
-    //      new ElementCountVisitor(),
-    //      map);
+    long endOfNodeIdRange = _configData.startingNodeId + elementCounts[ElementType::Node];
+    long endOfWayIdRange =_configData.startingWayId + elementCounts[ElementType::Way];
+    long endOfRelationIdRange =
+      _configData.startingRelationId + elementCounts[ElementType::Relation];
+    long endOfChangesetIdRange =
+      _configData.startingChangesetId +
+      (elementCounts[ElementType::Node] + elementCounts[ElementType::Way] +
+      elementCounts[ElementType::Relation]) % ConfigOptions().getChangesetMaxSize();
 
-      //TODO: next val query
-
-        //  LOG_TRACE("Opening database at: " << confOptions.getOsmapidbIdAwareUrl());
-        //  _database.open(confOptions.getOsmapidbIdAwareUrl());
-        //  _configData.startingChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
-        //  _configData.startingNodeId = _database.getNextId(ElementType::Node);
-        //  _configData.startingWayId = _database.getNextId(ElementType::Way);
-        //  _configData.startingRelationId = _database.getNextId(ElementType::Relation);
-
-        //  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
-        //  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
-        //  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
-        //  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
-        //  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
-
-
-      //TODO: setval writes
-
-      //_writeSequenceUpdates();
+    //write the id lock sql to a text stream; in online mode we don't serialize it to a temp file,
+    //as we do in offline mode
+    _writeSequenceUpdates(endOfChangesetIdRange, endOfNodeIdRange, endOfWayIdRange,
+                          endOfRelationIdRange);
+    //exec the id lock sql for the needed ID ranges out for this element write; We're not worrying
+    //about cleaning up the locked out ID ranges if this write ends up failing.
+    const QString lockElementIdsSql = _outputSections["sequence_update"].second->readAll();
+    LOG_DEBUG("Writing sequence updates...");
+    DbUtils::execNoPrepare(_database.getDB(), lockElementIdsSql);
   }
 
+  //carry on with the partial element writing
   PartialOsmMapWriter::write(map);
 }
 
@@ -310,12 +336,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
   if (_writeStats.nodesWritten == 0)
   {
     _createNodeTables();
-    _idMappings.nodeIdMap =
-      shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
-        new BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.nodeIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 
-  ElementIdDatatype nodeDbId;
+  long nodeDbId;
 
   // Do we already know about this node?
   if (_idMappings.nodeIdMap->contains(n->getId()) == true)
@@ -350,12 +374,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
   {
     _createWayTables();
 
-    _idMappings.wayIdMap =
-      shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
-        new BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.wayIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 
-  ElementIdDatatype wayDbId;
+  long wayDbId;
 
   // Do we already know about this way?
   if (_idMappings.wayIdMap->contains(w->getId()) == true)
@@ -392,12 +414,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
   {
     _createRelationTables();
 
-    _idMappings.relationIdMap =
-    shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >(
-      new BigMap<ElementIdDatatype, ElementIdDatatype>());
+    _idMappings.relationIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 
-  ElementIdDatatype relationDbId;
+  long relationDbId;
 
   // Do we already know about this node?
   if (_idMappings.relationIdMap->contains(r->getId()) == true)
@@ -501,10 +521,9 @@ void OsmApiDbBulkWriter::_zeroWriteStats()
   _writeStats.relationTagsWritten = 0;
 }
 
-OsmApiDbBulkWriter::ElementIdDatatype OsmApiDbBulkWriter::_establishNewIdMapping(
-  const ElementId& sourceId)
+long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
 {
-  ElementIdDatatype dbIdentifier;
+  long dbIdentifier;
 
   switch( sourceId.getType().getEnum() )
   {
@@ -540,7 +559,7 @@ unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degre
 }
 
 void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node,
-                                            const ElementIdDatatype nodeDbId)
+                                            const long nodeDbId)
 {
   LOG_TRACE("Writing node with ID: " << nodeDbId);
 
@@ -589,8 +608,7 @@ void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node,
   *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
 }
 
-void OsmApiDbBulkWriter::_writeTagsToTables(const Tags& tags,
-                                            const ElementIdDatatype nodeDbId,
+void OsmApiDbBulkWriter::_writeTagsToTables(const Tags& tags, const long nodeDbId,
                                             shared_ptr<QTextStream>& currentTable,
                                             const QString& currentTableFormatString,
                                             shared_ptr<QTextStream>& historicalTable,
@@ -638,7 +656,7 @@ void OsmApiDbBulkWriter::_createWayTables()
     " (way_id, node_id, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmApiDbBulkWriter::_writeWayToTables(const ElementIdDatatype wayDbId)
+void OsmApiDbBulkWriter::_writeWayToTables(const long wayDbId)
 {
   LOG_TRACE("Writing way with ID: " << wayDbId);
 
@@ -663,8 +681,7 @@ void OsmApiDbBulkWriter::_writeWayToTables(const ElementIdDatatype wayDbId)
   *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
 }
 
-void OsmApiDbBulkWriter::_writeWaynodesToTables(const ElementIdDatatype dbWayId,
-                                                const vector<long>& waynodeIds)
+void OsmApiDbBulkWriter::_writeWaynodesToTables(const long dbWayId, const vector<long>& waynodeIds)
 {
   unsigned int nodeIndex = 1;
 
@@ -724,7 +741,7 @@ void OsmApiDbBulkWriter::_createRelationTables()
     " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmApiDbBulkWriter::_writeRelationToTables(const ElementIdDatatype relationDbId)
+void OsmApiDbBulkWriter::_writeRelationToTables(const long relationDbId)
 {
   LOG_TRACE("Writing relation with ID: " << relationDbId);
 
@@ -752,10 +769,10 @@ void OsmApiDbBulkWriter::_writeRelationToTables(const ElementIdDatatype relation
 void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& relation)
 {
   unsigned int memberSequenceIndex = 1;
-  const ElementIdDatatype relationId = relation->getId();
-  const ElementIdDatatype dbRelationId = _idMappings.relationIdMap->at(relationId);
+  const long relationId = relation->getId();
+  const long dbRelationId = _idMappings.relationIdMap->at(relationId);
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
-  shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> > knownElementMap;
+  shared_ptr<BigMap<long, long> > knownElementMap;
 
   for (vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
        it != relationMembers.end(); ++it)
@@ -781,7 +798,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& r
       break;
     }
 
-    if ((knownElementMap != shared_ptr<BigMap<ElementIdDatatype, ElementIdDatatype> >())
+    if ((knownElementMap != shared_ptr<BigMap<long, long> >())
           && (knownElementMap->contains(memberElementId.getId()) == true))
     {
       _writeRelationMember(
@@ -808,9 +825,9 @@ void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& r
   }
 }
 
-void OsmApiDbBulkWriter::_writeRelationMember(const ElementIdDatatype sourceRelationDbId,
+void OsmApiDbBulkWriter::_writeRelationMember(const long sourceRelationDbId,
                                               const RelationData::Entry& memberEntry,
-                                              const ElementIdDatatype memberDbId,
+                                              const long memberDbId,
                                               const unsigned int memberSequenceIndex)
 {
   QString memberType;
@@ -860,7 +877,7 @@ void OsmApiDbBulkWriter::_createTable(const QString &tableName, const QString &t
 }
 
 void OsmApiDbBulkWriter::_createTable(const QString& tableName, const QString& tableHeader,
-                                      const bool addByteOrderMark )
+                                      const bool addByteOrderMark)
 {
   shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
   if (tempfile->open() == false)
@@ -900,7 +917,7 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
 }
 
 void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& element,
-                                                    const ElementIdDatatype elementDbId)
+                                                    const long elementDbId)
 {
   // Regardless of type, may be referenced in relation
   if (_unresolvedRefs.unresolvedRelationRefs !=
@@ -929,7 +946,7 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
   if (element->getElementType().getEnum() == ElementType::Node)
   {
     if ((_unresolvedRefs.unresolvedWaynodeRefs !=
-        shared_ptr<BigMap<ElementIdDatatype, vector<pair<ElementIdDatatype, unsigned long> > > >()) &&
+        shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > >()) &&
         (_unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
     {
       throw NotImplementedException(
@@ -983,7 +1000,8 @@ void OsmApiDbBulkWriter::_writeChangesetToTable()
     QString::number(_changesetData.changesInChangeset));
 }
 
-void OsmApiDbBulkWriter::_writeSequenceUpdates()
+void OsmApiDbBulkWriter::_writeSequenceUpdates(const long nextChangesetId, const long nextNodeId,
+                                               const long nextWayId, const long nextRelationId)
 {
   _createTable("sequence_updates", "");
 
@@ -991,7 +1009,6 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates()
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   // Users
-  //TODO: keep this?
   if (_configData.addUserEmail.isEmpty() == false)
   {
     *sequenceUpdatesStream <<
@@ -1001,24 +1018,20 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates()
 
   // Changesets
   *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      ApiDb::getChangesetsSequenceName(), QString::number(_changesetData.changesetId + 1));
+    sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(nextChangesetId));
 
   // Nodes
   *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      ApiDb::getCurrentNodesSequenceName(), QString::number(_idMappings.nextNodeId));
+    sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nextNodeId));
 
   // Ways
   *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      ApiDb::getCurrentWaysSequenceName(), QString::number(_idMappings.nextWayId));
+    sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(nextWayId));
 
   // Relations
   *sequenceUpdatesStream <<
     sequenceUpdateFormat.arg(
-      ApiDb::getCurrentRelationsSequenceName(),
-      QString::number(_idMappings.nextRelationId)) << "\n\n";
+      ApiDb::getCurrentRelationsSequenceName(), QString::number(nextRelationId)) << "\n\n";
 }
 
 }

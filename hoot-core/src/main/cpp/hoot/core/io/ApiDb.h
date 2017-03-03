@@ -67,7 +67,6 @@ class Node;
 class Way;
 class Relation;
 class ElementType;
-class ElementCache;
 class Range;
 class TableType;
 
