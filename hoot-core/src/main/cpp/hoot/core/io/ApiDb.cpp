@@ -675,4 +675,24 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
   return _selectChangesetsCreatedAfterTime;
 }
 
+QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
+{
+  QMap<QString, QString> dbUrlParts;
+  QStringList dbUrlPartsList = url.split("/");
+  dbUrlParts["name"] = dbUrlPartsList[dbUrlPartsList.size()-1];
+  QStringList userParts = dbUrlPartsList[dbUrlPartsList.size() - 2].split(":");
+  dbUrlParts["user"] = userParts[0];
+  dbUrlParts["password"] = userParts[1].split("@")[0];
+  dbUrlParts["host"] = userParts[1].split("@")[1];
+  dbUrlParts["port"] = userParts[2];
+}
+
+QString ApiDb::getPsqlString(const QString url)
+{
+  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
+  return
+    "-h " + dbUrlParts["host"] + " -h " + dbUrlParts["host"] + " -p " + dbUrlParts["port"] +
+    " -U " + dbUrlParts["user"] + " -d " + dbUrlParts["database"];
+}
+
 }

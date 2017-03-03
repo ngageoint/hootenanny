@@ -1232,6 +1232,51 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.writer.file.output.buffer.max.line.size
+
+* Data Type: long
+* Default Value: `1000000`
+
+Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
+For the most part, each line represents an element or an element tag.
+
+=== osmapidb.bulk.writer.file.output.element.status.interval
+
+* Data Type: long
+* Default Value: `1000000`
+
+Count at which the SQL file output status of each element type should be logged by the
+when bulk writing to an OSM API database.  e.g. With a value of 100, you will see a element load
+status update message logged for every 100 elements parsed.
+
+=== osmapidb.bulk.writer.mode
+
+* Data Type: string
+* Default Value: `online`
+
+Valid values are "offline" and "online".  Offline mode does not guarantee element ID uniqueness
+but will run faster than online mode and is meant to be used against offline databases (ones with
+no writers present).  Online mode guarantees element ID uniqueness, is safe to run against a live
+database, and will run more slowly than offline mode.
+
+=== osmapidb.bulk.writer.sql.output.file.copy.location
+
+* Data Type: string
+* Default Value: ``
+
+If populated, the generated SQL file whose statements are executed against the target database as
+the result of a hoot convert command with an OSM API database target is copied to the specified
+location. For debugging purposes.
+
+=== postgresql.dumpfile.writer.element.status.count.interval
+
+* Data Type: long
+* Default Value: `100000`
+
+Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
+e.g. With a value of 100000, you will see a element load status update message for every 100000
+elements parsed.
+
 === osm.changeset.sql.file.writer.generate.new.ids
 
 * Data Type: bool
@@ -1702,23 +1747,6 @@ The threshold at which a review is called a review for POIs. See `conflate.revie
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== osmapidb.bulk.writer.sql.output.file.copy.location
-
-* Data Type: string
-* Default Value: ``
-
-If populated, the generated SQL file whose statements are executed against the target database as
-the result of a hoot convert command with an OSM API database target is copied to the specified
-location. For debugging purposes.
-
-=== osmapidb.bulk.writer.file.output.buffer.max.line.size
-
-* Data Type: long
-* Default Value: `1000000`
-
-Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
-For the most part, each line represents an element or an element tag.
 
 === progress.reporting.format
 

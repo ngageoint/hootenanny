@@ -165,9 +165,6 @@ public:
 
   void runPerpendicularDistanceTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     const QList<shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
@@ -178,15 +175,10 @@ public:
       generalizer._getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
         inputPoints.at(1), inputPoints.at(0), inputPoints.at(inputPoints.size() - 1)),
       0.0001);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runCalcPointsInput1aTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     const QList<shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
@@ -201,15 +193,10 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runCalcPointsInput1aTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runCalcPointsInput1bTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     const QList<shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
@@ -224,15 +211,10 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runCalcPointsInput1bTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runCalcPointsInput2aTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     const QList<shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
@@ -247,15 +229,10 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runCalcPointsInput2aTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runCalcPointsInput2bTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     const QList<shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
@@ -270,15 +247,10 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runCalcPointsInput2bTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runGeneralizeWayInput1NoInformationNodesTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     QList<Coordinate> inputCoords =
@@ -299,15 +271,10 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runGeneralizeWayInput1NoInformationNodesTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runGeneralizeWayInput1WithInformationNodesTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     OsmMap::resetCounters();
     shared_ptr<OsmMap> map(new OsmMap());
     QList<Coordinate> inputCoords =
@@ -345,8 +312,6 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/algorithms/RdpWayGeneralizerTest/runGeneralizeWayInput1WithInformationNodesTest-out.osm",
       outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
   }
 
   void runInvalidEpsilonTest()

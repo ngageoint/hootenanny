@@ -78,18 +78,20 @@ void OsmApiDbBulkWriter::open(QString url)
     throw HootException(QString("Could not open URL ") + url);
   }
 
+  _outputUrl = url;
+
   _zeroWriteStats();
 
-  //_changesetData.changesetId = _configData.startingChangesetId;
+  _changesetData.changesetId = _configData.startingChangesetId;
   _changesetData.changesInChangeset = 0;
 
-  //_idMappings.nextNodeId = _configData.startingNodeId;
+  _idMappings.nextNodeId = _configData.startingNodeId;
   _idMappings.nodeIdMap.reset();
 
-  //_idMappings.nextWayId = _configData.startingWayId;
+  _idMappings.nextWayId = _configData.startingWayId;
   _idMappings.wayIdMap.reset();
 
-  //_idMappings.nextRelationId = _configData.startingRelationId;
+  _idMappings.nextRelationId = _configData.startingRelationId;
   _idMappings.relationIdMap.reset();
 
   _unresolvedRefs.unresolvedWaynodeRefs.reset();
@@ -113,9 +115,9 @@ void OsmApiDbBulkWriter::close()
        (_writeStats.relationsWritten > 0))
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten) );
+    LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten));
     LOG_DEBUG("\tWays written: " + QString::number(_writeStats.waysWritten) );
-    LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten) );
+    LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten));
     LOG_DEBUG("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
     LOG_DEBUG("\tUnresolved relation members:" +
               QString::number(_writeStats.relationMembersWritten));
@@ -229,9 +231,6 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
   tempfile->close();
 
-  //TODO: write element sql with psql
-
-
   const QString sqlFileCopyPath =
     ConfigOptions().getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed();
   if (!sqlFileCopyPath.isEmpty())
@@ -242,24 +241,59 @@ void OsmApiDbBulkWriter::finalizePartial()
     }
   }
 
+  //exec element sql; Using psql here b/c I'm assuming it is doing buffered reads against
+  //the sql file, so no need to handle buffering the sql read manually and applying it to a
+  //QSqlQuery.
+  QString cmd = "psql";
+  if (!(Log::getInstance().getLevel() <= Log::Debug))
+  {
+    cmd += " --quiet";
+  }
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + tempfile->fileName();
+  if (system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed executing bulk element SQL write.");
+  }
+
   _dataWritten = true;
 }
 
-void OsmApiDbBulkWriter::write(shared_ptr<const OsmMap> map)
+void OsmApiDbBulkWriter::write(ConstOsmMapPtr map)
 {
-  //TODO: id count pass and setval writes here
-  // Output updates for sequences to ensure database sanity
-//  int test =
-//    (int)FilteredVisitor::getStat(
-//      new ChainCriterion(
-//        new ElementTypeCriterion(ElementType::),
-//        new ElementTypeCriterion(elementType),
-//        new ElementTypeCriterion(elementType)),
-//      new ElementCountVisitor(),
-//      map);
+  if (ConfigOptions().getOsmapidbBulkWriterMode().toLower() == "online")
+  {
+      //TODO: buffered id count pass and starting id update
 
-  //_writeSequenceUpdates();
+      // Output updates for sequences to ensure database sanity
+    //  int test =
+    //    (int)FilteredVisitor::getStat(
+    //      new ChainCriterion(
+    //        new ElementTypeCriterion(ElementType::),
+    //        new ElementTypeCriterion(elementType),
+    //        new ElementTypeCriterion(elementType)),
+    //      new ElementCountVisitor(),
+    //      map);
 
+      //TODO: next val query
+
+        //  LOG_TRACE("Opening database at: " << confOptions.getOsmapidbIdAwareUrl());
+        //  _database.open(confOptions.getOsmapidbIdAwareUrl());
+        //  _configData.startingChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
+        //  _configData.startingNodeId = _database.getNextId(ElementType::Node);
+        //  _configData.startingWayId = _database.getNextId(ElementType::Way);
+        //  _configData.startingRelationId = _database.getNextId(ElementType::Relation);
+
+        //  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
+        //  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
+        //  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
+        //  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
+        //  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
+
+
+      //TODO: setval writes
+
+      //_writeSequenceUpdates();
+  }
 
   PartialOsmMapWriter::write(map);
 }
@@ -303,12 +337,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   _checkUnresolvedReferences(n, nodeDbId);
 
-  //TODO: fix
-//  if (_writeStats.nodesWritten %
-//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-//  {
-//    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
-//  }
+  if (_writeStats.nodesWritten %
+      ConfigOptions().getOsmapidbBulkWriterFileOutputElementStatusInterval() == 0)
+  {
+    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
+  }
 }
 
 void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
@@ -346,12 +379,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   _checkUnresolvedReferences(w, wayDbId);
 
-  //TODO: fix
-//  if (_writeStats.waysWritten %
-//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-//  {
-//    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
-//  }
+  if (_writeStats.waysWritten %
+      ConfigOptions().getOsmapidbBulkWriterFileOutputElementStatusInterval() == 0)
+  {
+    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
+  }
 }
 
 void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
@@ -389,37 +421,25 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   _checkUnresolvedReferences(r, relationDbId);
 
-  //TODO: fix
-//  if (_writeStats.relationsWritten %
-//      ConfigOptions().getPostgresqlDumpfileWriterElementStatusCountInterval() == 0)
-//  {
-//    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
-//  }
+  if (_writeStats.relationsWritten %
+      ConfigOptions().getOsmapidbBulkWriterFileOutputElementStatusInterval() == 0)
+  {
+    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
+  }
 }
 
 void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings &conf)
 {
   const ConfigOptions confOptions(conf);
-
-  //TODO: is this needed?
   _configData.addUserEmail = confOptions.getApiDbEmail();
-  //TODO: is this needed?
-  //_configData.addUserId = confOptions.getPostgresqlDumpfileWriterUserId();
+  _configData.addUserId = confOptions.getChangesetUserId();
   _configData.changesetUserId = confOptions.getChangesetUserId();
 
-//TODO: fix
-//  LOG_TRACE("Opening database at: " << confOptions.getOsmapidbIdAwareUrl());
-//  _database.open(confOptions.getOsmapidbIdAwareUrl());
-//  _configData.startingChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
-//  _configData.startingNodeId = _database.getNextId(ElementType::Node);
-//  _configData.startingWayId = _database.getNextId(ElementType::Way);
-//  _configData.startingRelationId = _database.getNextId(ElementType::Relation);
-
-//  LOG_DEBUG("Changeset user ID: " << QString::number(_configData.changesetUserId));
-//  LOG_DEBUG("Starting changeset ID: " << QString::number(_configData.startingChangesetId));
-//  LOG_DEBUG("Starting node ID: " << QString::number(_configData.startingNodeId));
-//  LOG_DEBUG("Starting way ID: " << QString::number(_configData.startingWayId));
-//  LOG_DEBUG("Starting relation ID: " << QString::number(_configData.startingRelationId));
+  const QString mode = ConfigOptions().getOsmapidbBulkWriterMode().toLower();
+  if (mode != "offline" && mode != "online")
+  {
+    throw HootException("Invalid OSM API database bulk writer mode: " + mode);
+  }
 }
 
 list<QString> OsmApiDbBulkWriter::_createSectionNameList()

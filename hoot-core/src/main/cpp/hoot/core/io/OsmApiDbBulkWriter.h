@@ -81,14 +81,21 @@ using namespace std;
 using namespace Tgs;
 
 /**
- * OSM element writer optimized for bulk element writes.  If you are writing smaller amounts of
- * data, you probably want to create a new writer.  This writer performs additional logic up front
- * to reserve element IDs due to the fact its doing a bulk SQL copy vs multiple inserts.
+ * OSM element writer optimized for bulk element writes.  It has two modes: offline and online.
  *
- * This writer safely be used against a live database.  It first reserves the required element IDs
- * by doing an initial count of the elements and executing the ID reservation SQL, then generates
- * SQL copy statements to a file for the element inserts (dump file), and then finally executes the
- * element SQL statements.
+ * Offline mode is meant to be used against an offline database (one with no other writers
+ * present). Offline mode does not guarantee element ID uniqueness, but will run faster than online
+ * mode.  Workflow:
+ *
+ *   * query for the current element ID sequences from the database
+ *   * write the element SQL copy statements out to a file in a buffered fashion
+ *   * execute the element SQL copy statements against the database
+ *
+ * Online mode will guarantee element ID uniqueness against a live database.  Workflow:
+ *
+ *   * count the number of each element type by reading from the input data in a buffered fashion
+ *   * query for the current element IDs from the live database and locks the ID ranges out
+ *   * SQL generation and execution the same as offline mode
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -109,7 +116,7 @@ public:
 
   virtual void finalizePartial();
 
-  virtual void write(shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   virtual void writePartial(const ConstNodePtr& n);
 
@@ -124,6 +131,8 @@ private:
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
 
   list<QString> _sectionNames;
+
+  QString _outputUrl;
 
   struct _ElementWriteStats
   {

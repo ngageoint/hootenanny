@@ -40,6 +40,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QMap>
 
 // Standard
 #include <vector>
@@ -305,6 +306,9 @@ public:
 
   inline static QString getMapsSequenceName()                   { return getMapsTableName() + getSequenceId(); }
   inline static QString getUsersSequenceName()                  { return getUsersTableName() + getSequenceId(); }
+
+  static QMap<QString, QString> getDbUrlParts(const QString url);
+  static QString getPsqlString(const QString url);
 
 protected:
 

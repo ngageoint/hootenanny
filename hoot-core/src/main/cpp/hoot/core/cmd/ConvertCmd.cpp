@@ -33,8 +33,8 @@
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
