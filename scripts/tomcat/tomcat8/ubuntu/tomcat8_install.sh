@@ -125,9 +125,9 @@ if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG_HOME}/server.xml; then
     sudo sed -i.bak 's@<\/Host>@  <Context docBase=\"'"$HOOT_HOME"'\/userfiles\/ingest\/processed\" path=\"\/static\" \/>\n      &@' ${TOMCAT_CONFIG_HOME}/server.xml
 fi
 
-if ! grep -i --quiet 'allowLinking="true"' ${TOMCAT_CONFIG_HOME}/context.xml; then
+if ! grep -i --quiet '<Resources allowLinking="true" />' ${TOMCAT_CONFIG_HOME}/context.xml; then
     echo "Set allowLinking to true in Tomcat context..."
-    sudo sed -i.bak "s@^<Context>@<Context allowLinking=\"true\">@" ${TOMCAT_CONFIG_HOME}/context.xml
+    sudo sed -i.bak '/<Context>/a\    \<Resources allowLinking="true"/>' ${TOMCAT_CONFIG_HOME}/context.xml
 fi
 
 # Clean out tomcat logfile. We restart tomcat after provisioning.
