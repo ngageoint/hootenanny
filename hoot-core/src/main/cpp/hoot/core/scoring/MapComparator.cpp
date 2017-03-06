@@ -232,9 +232,9 @@ MapComparator::MapComparator()
 
 bool MapComparator::isMatch(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
 {
-  if (ref->getNodeMap().size() != test->getNodeMap().size() ||
+  if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||
-      ref->getRelationMap().size() != test->getRelationMap().size())
+      ref->getRelations().size() != test->getRelations().size())
   {
     LOG_WARN("Number of elements does not match.");
     return false;

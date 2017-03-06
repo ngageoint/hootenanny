@@ -263,7 +263,7 @@ public:
     RdpWayGeneralizer generalizer(map, 0.1);
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)148, way->getNodeIds().size());
     const QString outFile =
       writeMap(map, "test-output/algorithms/RdpWayGeneralizerTest",
@@ -304,7 +304,7 @@ public:
     RdpWayGeneralizer generalizer(map, 0.1);
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)137, way->getNodeIds().size());
     const QString outFile =
       writeMap(map, "test-output/algorithms/RdpWayGeneralizerTest",

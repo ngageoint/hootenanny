@@ -83,7 +83,7 @@ public:
     v.setRng(rng);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodes().size());
   }
 
 };

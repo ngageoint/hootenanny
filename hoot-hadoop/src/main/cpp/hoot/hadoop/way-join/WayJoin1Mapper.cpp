@@ -58,7 +58,7 @@ void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   // emit the node's ID as the key and x/y as the value.
   valueStr.resize(sizeof(ValueNode));
   ValueNode* valueNode = (ValueNode*)valueStr.data();
-  const NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     const shared_ptr<const Node>& n = it->second;

@@ -158,7 +158,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
 
   // go through all the nodes
   long nodesRemoved = 0;
-  const NodeMap nodes = result->getNodeMap();
+  const NodeMap nodes = result->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
     const Coordinate& c = it->second->toCoordinate();

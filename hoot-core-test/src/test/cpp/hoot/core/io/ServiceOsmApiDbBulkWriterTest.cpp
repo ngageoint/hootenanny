@@ -161,7 +161,7 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
 
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
@@ -174,7 +174,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
 
@@ -234,7 +234,7 @@ public:
 
     //verify current elements
 
-    CPPUNIT_ASSERT_EQUAL((size_t)16, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)16, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());
 
     CPPUNIT_ASSERT_EQUAL((size_t)6, map->getWays().size());
@@ -247,7 +247,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(5)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(6)->getNodeCount());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelations().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(2)->getTags().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(2)->getMembers().size());
 

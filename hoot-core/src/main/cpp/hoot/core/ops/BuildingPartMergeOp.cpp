@@ -187,7 +187,7 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
 
   i = 0;
   // go through all the relations
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
   {
     if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)

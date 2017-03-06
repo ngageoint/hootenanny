@@ -96,7 +96,7 @@ public:
       }
     }
 
-    const int numNodesBefore = map->getNodeMap().size();
+    const int numNodesBefore = map->getNodes().size();
     LOG_VARD(numNodesBefore);
     const int numWaysBefore = map->getWays().size();
     LOG_VARD(numWaysBefore);
@@ -111,7 +111,7 @@ public:
     map->visitRw(wayGeneralizeVisitor);
     MapProjector::projectToWgs84(map);
 
-    const int numNodesRemoved = numNodesBefore - map->getNodeMap().size();
+    const int numNodesRemoved = numNodesBefore - map->getNodes().size();
     CPPUNIT_ASSERT_EQUAL(0, numNodesRemoved);
     LOG_VARD(numNodesRemoved);
     const int numWaysRemoved = numWaysBefore - map->getWays().size();

@@ -66,7 +66,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   // add the resulting alpha shape for debugging.
   GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
-  const RelationMap& rm = result->getRelationMap();
+  const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
@@ -82,8 +82,8 @@ shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;
-  points.reserve(inputMap->getNodeMap().size());
-  const NodeMap& nodes = inputMap->getNodeMap();
+  points.reserve(inputMap->getNodes().size());
+  const NodeMap& nodes = inputMap->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     pair<double, double> p;

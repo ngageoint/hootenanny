@@ -63,10 +63,10 @@ FindIntersectionsOp::FindIntersectionsOp()
 void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
 {
   // remove all relations
-  LOG_INFO(QString("%1 Relations found.").arg(map->getRelationMap().size()));
+  LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
   shared_ptr<ElementTypeCriterion> rFilter(new ElementTypeCriterion(ElementType::Relation));
   VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
-  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationMap().size()));
+  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan

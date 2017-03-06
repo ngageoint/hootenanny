@@ -547,7 +547,7 @@ void MapProjector::project(shared_ptr<OsmMap> map, shared_ptr<OGRSpatialReferenc
   ReprojectCoordinateFilter rcf(t);
 
   int count = 0;
-  const NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     Node* n = it->second.get();

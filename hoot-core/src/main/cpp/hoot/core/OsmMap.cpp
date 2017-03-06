@@ -114,7 +114,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
   }
   _srs = appendFromMap->getProjection();
 
-  const RelationMap& allRelations = appendFromMap->getRelationMap();
+  const RelationMap& allRelations = appendFromMap->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     RelationPtr relation = it->second;
@@ -258,7 +258,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   _srs = from->getProjection();
 
   int i = 0;
-  const RelationMap& allRelations = from->getRelationMap();
+  const RelationMap& allRelations = from->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*(it->second)));
@@ -335,7 +335,7 @@ ElementPtr OsmMap::getElement(ElementType type, long id)
 
 size_t OsmMap::getElementCount() const
 {
-  return getNodeMap().size() + getWays().size() + getRelationMap().size();
+  return getNodes().size() + getWays().size() + getRelations().size();
 }
 
 set<ElementId> OsmMap::getParents(ElementId eid) const
@@ -517,7 +517,7 @@ bool OsmMap::validate(bool strict) const
     }
   }
 
-  const RelationMap& allRelations = getRelationMap();
+  const RelationMap& allRelations = getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     const shared_ptr<const Relation>& relation = it->second;
@@ -576,7 +576,7 @@ void OsmMap::visitNodesRo(ElementVisitor& visitor) const
   }
 
   // make a copy so we can iterate through even if there are changes.
-  const NodeMap& allNodes = getNodeMap();
+  const NodeMap& allNodes = getNodes();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
     if (containsNode(it->first))
@@ -614,7 +614,7 @@ void OsmMap::visitRelationsRo(ElementVisitor& visitor) const
   }
 
   // make a copy so we can iterate through even if there are changes.
-  const RelationMap& allRelations = getRelationMap();
+  const RelationMap& allRelations = getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
@@ -633,7 +633,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   }
 
   // make a copy so we can iterate through even if there are changes.
-  const NodeMap allNodes = getNodeMap();
+  const NodeMap allNodes = getNodes();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
     if (containsNode(it->first))
@@ -653,7 +653,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   }
 
   // make a copy so we can iterate through even if there are changes.
-  const RelationMap allRelations = getRelationMap();
+  const RelationMap allRelations = getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
@@ -684,7 +684,7 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
 
 void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 {
-  RelationMap allRelations = getRelationMap();
+  RelationMap allRelations = getRelations();
   const ElementId oldNodeId = ElementId::node(oldId);
 
   LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );

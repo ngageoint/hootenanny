@@ -111,7 +111,7 @@ void GmlWriter::writePoints(shared_ptr<const OsmMap> map, const QString& path)
     }
   }
 
-  const NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const shared_ptr<Node>& node = it->second;

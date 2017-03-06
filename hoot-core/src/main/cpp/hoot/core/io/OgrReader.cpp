@@ -228,7 +228,7 @@ protected:
     _map->clear();
     _d->readNext(_map);
 
-    const NodeMap& nm = _map->getNodeMap();
+    const NodeMap& nm = _map->getNodes();
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
     {
       _addElement(_map->getNode(it->first));
@@ -490,9 +490,9 @@ Progress OgrReader::streamGetProgress() const
 OgrReaderInternal::OgrReaderInternal()
 {
   _map = boost::shared_ptr<OsmMap>(new OsmMap());
-  _nodesItr = _map->getNodeMap().begin();
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
@@ -1176,9 +1176,9 @@ void OgrReaderInternal::_translate(Tags& t)
 void OgrReaderInternal::initializePartial()
 {
   _map.reset(new OsmMap());
-  _nodesItr = _map->getNodeMap().begin();
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
 
   _useFileId = false;
 
@@ -1198,8 +1198,8 @@ bool OgrReaderInternal::hasMoreElements()
   }
 
   // Do we have data already in map from previous reads?
-  if ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelationMap().end()) )
+  if ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelations().end()) )
   {
     return true;
   }
@@ -1209,16 +1209,16 @@ bool OgrReaderInternal::hasMoreElements()
   // Do a read if the element maps are empty
   populateElementMap();
 
-  bool result = ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelationMap().end()) );
+  bool result = ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelations().end()) );
 
   return result;
 }
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelationMap().end()) )
+  if ( (_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelations().end()) )
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
@@ -1226,7 +1226,7 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
 
   ElementPtr returnElement;
-  if ( _nodesItr != _map->getNodeMap().end() )
+  if ( _nodesItr != _map->getNodes().end() )
   {
     returnElement.reset(new Node(*_nodesItr->second.get()));
     _nodesItr++;
@@ -1251,9 +1251,9 @@ void OgrReaderInternal::populateElementMap()
 
   readNext(_map);
 
-  _nodesItr = _map->getNodeMap().begin();
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
 
   _streamFeatureCount++;
 }

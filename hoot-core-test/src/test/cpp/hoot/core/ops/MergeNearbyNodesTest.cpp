@@ -71,12 +71,12 @@ public:
 
       MapProjector::projectToOrthographic(map);
 
-      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
 
       // merge all nodes within a meter.
       MergeNearbyNodes::mergeNodes(map, 1.0);
 
-      CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
 
       MapProjector::projectToWgs84(map);
 

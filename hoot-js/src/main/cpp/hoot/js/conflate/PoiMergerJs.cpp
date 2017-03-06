@@ -115,7 +115,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     //   A->B, A->C, A->D, A->E
     //
     // ...then pass those pairs one at a time through the merger, since it only merges pairs
-    NodeMap nodes = map->getNodeMap();
+    NodeMap nodes = map->getNodes();
     OsmMapPtr mergedMap(map);
 
     const ElementId firstId = ElementId::node(elementId);

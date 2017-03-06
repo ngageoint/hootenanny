@@ -78,8 +78,8 @@ void AreaMerger::merge(OsmMapPtr map)
 
   if (parsedElementCount < 2)
   {
-    RelationMap::const_iterator relItr = map->getRelationMap().begin();
-    while (relItr != map->getRelationMap().end())
+    RelationMap::const_iterator relItr = map->getRelations().begin();
+    while (relItr != map->getRelations().end())
     {
       const int relationId = relItr->first;
       if (PoiPolygonMatch::isArea(*map->getRelation(relationId)))
