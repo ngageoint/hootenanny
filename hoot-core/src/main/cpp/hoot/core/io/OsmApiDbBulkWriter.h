@@ -209,7 +209,7 @@ private:
   OsmApiDb _database;
 
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
-  list<QString> _sectionNames;
+  QStringList _sectionNames;
 
   QString _outputUrl;
   QString _mode;
@@ -220,7 +220,7 @@ private:
   void _reset();
 
   void _createNodeTables();
-  list<QString> _createSectionNameList();
+  QStringList _createSectionNameList();
   void _createWayTables();
   void _createRelationTables();
   void _createTable(const QString tableName, const QString tableHeader);
@@ -252,7 +252,7 @@ private:
 
   void _closeSectionTempFilesAndConcat();
 
-  shared_ptr<QTemporaryFile> _updateIdOffsets(shared_ptr<QTemporaryFile> inputSqlFile);
+  shared_ptr<QTemporaryFile> _updateIdOffsetsInNewFile(shared_ptr<QTemporaryFile> inputSqlFile);
   void _executeElementSql(const QString sqlFile);
   void _writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
   void _lockIds();

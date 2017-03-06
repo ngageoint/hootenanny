@@ -56,14 +56,6 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceOsmApiDbBulkWriterTest@hoottestcpp.org"; }
-
-  void setUp()
-  {
-    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-  }
-
   shared_ptr<OsmMap> _map;
 
   shared_ptr<Node> createNode(double x, double y)
@@ -155,7 +147,7 @@ public:
     return tokens;
   }
 
-  void verifyDatabaseOutput()
+  void verifyDatabaseOutputOffline()
   {
     OsmApiDbReader reader;
     OsmMapPtr map(new OsmMap());
@@ -187,7 +179,6 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
 
     //verify historical element table sizes
-
     CPPUNIT_ASSERT_EQUAL(
       (long)14,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
@@ -218,13 +209,86 @@ public:
       (long)1,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
-    //verify sequences - TODO: make sure these aren't too large by 1
-    CPPUNIT_ASSERT_EQUAL((long)16, reader._getDatabase()->getNextId(ElementType::Node));
-    CPPUNIT_ASSERT_EQUAL((long)7, reader._getDatabase()->getNextId(ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL((long)3, reader._getDatabase()->getNextId(ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL((long)3,
-      dynamic_pointer_cast<OsmApiDb>(reader._getDatabase())->getNextId(
-        ApiDb::getChangesetsTableName()));
+    //verify sequences
+    //TODO: these seem off by one
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)16, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)7, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+    reader.close();
+  }
+
+  void verifyDatabaseOutputOnline()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //Reading the osm api db data into a hoot map doesn't verify any of the data in the OSM API db
+    //historical element or changeset tables.  For now, going to consider the previous check on
+    //the SQL file output and the fact none of the db constraints failed during the SQL exec good
+    //enough verification for those tables.
+
+    //verify current elements
+
+    CPPUNIT_ASSERT_EQUAL((size_t)16, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)6, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(6)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(5)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(6)->getNodeCount());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(2)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(2)->getMembers().size());
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)16,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)5,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)6,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)8,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)18,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)3,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)4,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences
+    //TODO: would rather use currval here, but isn't working yet
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)7, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -236,6 +300,8 @@ public:
   void runOfflineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
@@ -262,14 +328,21 @@ public:
       HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
     }
 
-    verifyDatabaseOutput();
+    verifyDatabaseOutputOffline();
 
-    LOG_INFO("runOfflineTest complete");
+    //LOG_INFO("runOfflineTest complete");
   }
 
   void runOnlineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    //insert some dummy data to simulate external writes
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
 
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
@@ -296,7 +369,7 @@ public:
       HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
     }
 
-    verifyDatabaseOutput();
+    verifyDatabaseOutputOnline();
   }
 };
 
