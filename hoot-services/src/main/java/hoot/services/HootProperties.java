@@ -222,12 +222,25 @@ public final class HootProperties {
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
         DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
 
+        // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
+
+        // User uploaded translation scripts go here
         SCRIPT_FOLDER = USERFILES_FOLDER + File.separator + "customscript";
+
+        // Data source files to import and export
         TEMP_OUTPUT_PATH = USERFILES_FOLDER + File.separator + "tmp";
-        UPLOAD_FOLDER = USERFILES_FOLDER + File.separator + "upload";
+
+        // Files uploaded via HTTP for ingest
+        UPLOAD_FOLDER = TEMP_OUTPUT_PATH + File.separator + "upload";
+
+        // Conflation stats and reports go here
         RPT_STORE_PATH = USERFILES_FOLDER + File.separator + "reports";
+
+        // Contains tiles of existing basemaps
         BASEMAPS_TILES_FOLDER = USERFILES_FOLDER + File.separator + "ingest" + File.separator + "processed" + File.separator + "BASEMAP";
+
+        // Contains .enabled/.disabled control file
         BASEMAPS_FOLDER = USERFILES_FOLDER + File.separator + "ingest" + File.separator + "upload" + File.separator + "BASEMAP";
 
         // Adding another layer of indirection for "sensitive" properties.
