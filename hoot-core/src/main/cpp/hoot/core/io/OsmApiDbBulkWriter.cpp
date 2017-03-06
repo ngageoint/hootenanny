@@ -250,7 +250,7 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
     LOG_DEBUG("Wrote contents of section " + *it);
   }
 
-  LOG_INFO("SQL master file write complete.");
+  LOG_DEBUG("SQL master file write complete.");
 }
 
 shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsets(
@@ -374,7 +374,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsets(
   while (!line.isNull());
   outStream.flush();
 
-  LOG_INFO("ID offset updates complete.  Data pass 2/2.");
+  LOG_DEBUG("ID offset updates complete.  Data pass 2 of 2.");
 
   return updateSqlOutputFile;
 }
