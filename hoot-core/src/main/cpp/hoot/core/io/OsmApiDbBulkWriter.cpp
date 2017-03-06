@@ -81,7 +81,6 @@ void OsmApiDbBulkWriter::open(QString url)
 
 void OsmApiDbBulkWriter::close()
 {
-  //finalizePartial();
   _database.close();
 
   _reset();
@@ -151,9 +150,9 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   _executeElementSql(finalMasterSqlOutputFile->fileName());
 
-  if ((_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
-      (_writeStats.relationsWritten > 0))
-  {
+  //if ((_writeStats.nodesWritten > 0) || (_writeStats.waysWritten > 0) ||
+      //(_writeStats.relationsWritten > 0))
+  //{
     LOG_DEBUG("Write stats:");
     LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten));
     LOG_DEBUG("\tNode tags written: " + QString::number(_writeStats.nodeTagsWritten));
@@ -166,8 +165,8 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_DEBUG("\tUnresolved relation members:" +
               QString::number(_writeStats.relationMembersWritten));
     LOG_DEBUG("\tChangesets written: " + QString::number(_changesetData.changesetsWritten));
-    LOG_DEBUG("\tTotal records written: " + _getTotalRecordsWritten());
-  }
+    LOG_DEBUG("\tTotal records written: " + QString::number(_getTotalRecordsWritten()));
+  //}
 }
 
 void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile)
@@ -187,24 +186,6 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
       LOG_DEBUG("No data for table " + *it);
       continue;
     }
-
-//    if (*it == "sequence_updates")
-//    {
-//      if (_mode == "online")
-//      {
-//        //in online mode we'll write the sequence updates to a separate sql file and execute after
-//        //we have the element counts that we got during the first pass read through the data
-//        continue;
-//      }
-//      else
-//      {
-//        //in offline mode we're not guaranteeing id uniqueness, so just prepend the setval statements
-//        //to the element sql
-//        _getStartingIdsFromDb();
-//        _writeSequenceUpdates(_changesetData.nextChangesetId, _idMappings.nextNodeId,
-//                              _idMappings.nextWayId, _idMappings.nextRelationId);
-//      }
-//    }
 
     LOG_DEBUG("Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
 
@@ -254,7 +235,7 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
           {
             totalPasses = "2";
           }
-          msg += "  Data pass 1/" + totalPasses + ".";
+          msg += "  Data pass #1 of " + totalPasses + ".";
           LOG_DEBUG(msg);
         }
       }
@@ -268,6 +249,8 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
 
     LOG_DEBUG("Wrote contents of section " + *it);
   }
+
+  LOG_INFO("SQL master file write complete.");
 }
 
 shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsets(
@@ -384,12 +367,14 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsets(
     if (totalLineCtr % _statusUpdateInterval == 0)
     {
       LOG_DEBUG(
-        "Updated " << totalLineCtr << " IDs for SQL record lines in master SQL output file.  " <<
-        "Data pass 2/2.");
+        "Updated " << totalLineCtr << " ID offsets for SQL record lines in master SQL output " <<
+        "file.  Data pass #2 of 2.");
     }
   }
   while (!line.isNull());
   outStream.flush();
+
+  LOG_INFO("ID offset updates complete.  Data pass 2/2.");
 
   return updateSqlOutputFile;
 }
@@ -446,6 +431,7 @@ void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
   {
     throw HootException("Failed executing bulk element SQL write against the OSM API database.");
   }
+  LOG_INFO("Element SQL execution complete.");
 }
 
 long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
@@ -592,7 +578,7 @@ void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings &conf)
   const ConfigOptions confOptions(conf);
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setMode(confOptions.getOsmapidbBulkWriterMode().toLower());
-  LOG_INFO("OSM API database bulk writer set to " << _mode << " mode.");
+  LOG_DEBUG("OSM API database bulk writer set to " << _mode << " mode.");
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed());

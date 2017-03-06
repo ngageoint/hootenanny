@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/io/OsmApiDbBulkWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/FileUtils.h>
 
 // Qt
@@ -59,6 +60,7 @@ public:
   void setUp()
   {
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
   }
 
   shared_ptr<OsmMap> _map;
@@ -127,6 +129,62 @@ public:
     return map;
   }
 
+  QStringList tokenizeSqlFileWithoutDates(const QString filePath)
+  {
+    QStringList tokens;
+
+    //parse all the string tokens, except those containing dates, which we can't directly compare
+    const QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
+    const QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
+
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly))
+    {
+      QTextStream in(&file);
+      while (!in.atEnd())
+      {
+        QString line = in.readLine();
+        line = line.remove(reDate);
+        line = line.remove(reTime);
+        tokens << line;
+      }
+      file.close();
+    }
+
+    return tokens;
+  }
+
+  void verifyDatabaseOutput()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+    reader.close();
+
+    //Reading the osm api db data into a hoot map doesn't verify any of the data in the OSM API db
+    //historical element or changeset tables.  For now, going to consider the previous check on
+    //the SQL file output and the fact none of the db constraints failed during the SQL exec good
+    //enough verification for those tables.
+
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+  }
+
   void runOfflineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
@@ -134,59 +192,28 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
     writer.setMode("offline");
-    QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
+    const QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
     writer.setSqlFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
-
-    QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
-    QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
-
-    QString stdFile = "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter.sql";
-    QFile stdInputFile(stdFile);
-
-    QStringList stdList;
-    if (stdInputFile.open(QIODevice::ReadOnly))
-    {
-      QTextStream in(&stdInputFile);
-      while (!in.atEnd())
-      {
-        QString line = in.readLine();
-        line = line.remove(reDate);
-        line = line.remove(reTime);
-        stdList << line;
-      }
-      stdInputFile.close();
-    }
-
-    QFile inputFile(outFile);
-    QStringList inList;
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-      QTextStream in(&inputFile);
-      while (!in.atEnd())
-      {
-        QString line = in.readLine();
-        line = line.remove(reDate);
-        line = line.remove(reTime);
-        inList << line;
-      }
-      inputFile.close();
-    }
     writer.close();
 
-    CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
+    //verify SQL file output
 
-    for (int i = 0; i < stdList.size(); i++)
+    const QStringList stdSqlTokens =
+      tokenizeSqlFileWithoutDates("test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter.sql");
+    const QStringList outputSqlTokens =
+      tokenizeSqlFileWithoutDates(outFile);
+    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
+    for (int i = 0; i < stdSqlTokens.size(); i++)
     {
-      HOOT_STR_EQUALS(stdList.at(i), inList.at(i));
+      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
     }
 
-    //check database
-
+    verifyDatabaseOutput();
   }
 
   void runOnlineTest()
@@ -195,6 +222,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkWriterTest, "slow");
 
 }
