@@ -127,20 +127,20 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct IdMappings
   {
-    long nextNodeId;
+    long currentNodeId;
     shared_ptr<BigMap<long, long> > nodeIdMap;
 
-    long nextWayId;
+    long currentWayId;
     shared_ptr<BigMap<long, long> > wayIdMap;
 
-    long nextRelationId;
+    long currentRelationId;
     shared_ptr<BigMap<long, long> > relationIdMap;
   };
 
   struct ChangesetData
   {
     long changesetUserId;
-    long nextChangesetId;
+    long currentChangesetId;
     unsigned long changesetsWritten;
     unsigned int changesInChangeset;
     Envelope changesetBounds;
@@ -227,7 +227,7 @@ private:
   void _createTable(const QString tableName, const QString tableHeader,
                     const bool addByteOrderMarker);
 
-  void _getStartingIdsFromDb();
+  void _getLatestIdsFromDb();
   void _incrementChangesInChangeset();
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
@@ -236,8 +236,8 @@ private:
   QString _escapeCopyToData(const QString stringToOutput) const;
 
   void _writeChangesetToTable();
-  void _writeSequenceUpdates(const long nextChangesetId, const long nextNodeId,
-                             const long nextWayId, const long nextRelationId);
+  void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
+                             const long relationId);
   void _writeRelationToTables(const long relationDbId);
   void _writeRelationMembersToTables(const ConstRelationPtr& relation);
   void _writeRelationMember(const long sourceRelation, const RelationData::Entry& memberEntry,

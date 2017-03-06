@@ -51,7 +51,7 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
   CPPUNIT_TEST(runOfflineTest);
-  //CPPUNIT_TEST(runOnlineTest);
+  CPPUNIT_TEST(runOnlineTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -263,6 +263,8 @@ public:
     }
 
     verifyDatabaseOutput();
+
+    LOG_INFO("runOfflineTest complete");
   }
 
   void runOnlineTest()
