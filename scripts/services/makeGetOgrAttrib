@@ -3,7 +3,7 @@
 #
 
 
-OP_INPUT=$(HOOT_HOME)/userfiles/upload/$(jobid)
+OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
 OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
 
 
