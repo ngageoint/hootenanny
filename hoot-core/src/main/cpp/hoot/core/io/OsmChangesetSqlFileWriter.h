@@ -103,6 +103,8 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
+  void setChangesetUserId(long id) { _changesetUserId = id; }
+
   OsmApiDb _db;
   QFile _outputSql;
 

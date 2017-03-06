@@ -48,7 +48,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-
 namespace hoot
 {
 
@@ -65,7 +64,7 @@ public:
 
   void setUp()
   {
-    _deleteData();
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
 
   void insertData()
@@ -232,16 +231,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
 
     reader.close();
-  }
-
-private:
-
-  void _deleteData()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    database.deleteData();
-    database.close();
   }
 };
 

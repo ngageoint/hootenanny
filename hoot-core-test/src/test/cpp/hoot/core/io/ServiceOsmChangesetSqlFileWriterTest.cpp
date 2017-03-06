@@ -74,6 +74,7 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    writer.setChangesetUserId(1);
     writer
       .write(
         "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
@@ -100,6 +101,7 @@ public:
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
+    writer.setChangesetUserId(1);
     writer
       .write(
         "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql",

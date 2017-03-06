@@ -666,7 +666,8 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
     LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
     LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
     throw HootException(
-      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
+      "Could not execute changesets query: " +
+      _selectChangesetsCreatedAfterTime->lastError().text());
   }
   LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
   LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
@@ -679,7 +680,7 @@ QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
   QMap<QString, QString> dbUrlParts;
 
   QStringList dbUrlPartsList = url.split("/");
-  dbUrlParts["name"] = dbUrlPartsList[dbUrlPartsList.size()-1];
+  dbUrlParts["database"] = dbUrlPartsList[dbUrlPartsList.size() - 1];
   QStringList userParts = dbUrlPartsList[dbUrlPartsList.size() - 2].split(":");
   dbUrlParts["user"] = userParts[0];
   dbUrlParts["password"] = userParts[1].split("@")[0];
@@ -693,7 +694,7 @@ QString ApiDb::getPsqlString(const QString url)
 {
   const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
   return
-    "-h " + dbUrlParts["host"] + " -h " + dbUrlParts["host"] + " -p " + dbUrlParts["port"] +
+    "-h " + dbUrlParts["host"] + " -p " + dbUrlParts["port"] +
     " -U " + dbUrlParts["user"] + " -d " + dbUrlParts["database"];
 }
 

@@ -128,6 +128,11 @@ void OsmChangesetSqlFileWriter::_updateChangeset(const int numChanges)
 
 void OsmChangesetSqlFileWriter::_createChangeSet()
 {
+  if (_changesetUserId == -1)
+  {
+    throw HootException("Invalid changeset user ID: " + QString::number(_changesetUserId));
+  }
+
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
   LOG_DEBUG("Creating changeset: " << _changesetId);
   _outputSql.write(

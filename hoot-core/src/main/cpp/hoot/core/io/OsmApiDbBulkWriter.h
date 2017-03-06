@@ -80,7 +80,12 @@ using namespace std;
 using namespace Tgs;
 
 /**
- * OSM element writer optimized for bulk element writes.  It has two modes: offline and online.
+ * OSM element writer optimized for bulk element writes to an OSM API database.
+ *
+ * If you need to write smaller amounts of elements to an OSM API database, you're beter off
+ * creating a new writer class.
+ *
+ * This writer has two modes: offline and online.
  *
  * Offline mode is meant to be used against an offline database (one with no other writers
  * present). Offline mode does not guarantee element/changeset ID uniqueness against an online
@@ -107,6 +112,55 @@ using namespace Tgs;
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
+  struct ElementWriteStats
+  {
+    unsigned long nodesWritten;
+    unsigned long nodeTagsWritten;
+    unsigned long waysWritten;
+    unsigned long wayNodesWritten;
+    unsigned long wayTagsWritten;
+    unsigned long relationsWritten;
+    unsigned long relationMembersWritten;
+    unsigned long relationMembersUnresolved;
+    unsigned long relationTagsWritten;
+  };
+
+  struct IdMappings
+  {
+    long nextNodeId;
+    shared_ptr<BigMap<long, long> > nodeIdMap;
+
+    long nextWayId;
+    shared_ptr<BigMap<long, long> > wayIdMap;
+
+    long nextRelationId;
+    shared_ptr<BigMap<long, long> > relationIdMap;
+  };
+
+  struct ChangesetData
+  {
+    long changesetUserId;
+    long nextChangesetId;
+    unsigned long changesetsWritten;
+    unsigned int changesInChangeset;
+    Envelope changesetBounds;
+  };
+
+  struct UnresolvedRelationReference
+  {
+    long sourceRelationId;
+    long sourceDbRelationId;
+    RelationData::Entry relationMemberData;
+    unsigned int relationMemberSequenceId;
+  };
+
+  struct UnresolvedReferences
+  {
+    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
+    // order for waynode)
+    shared_ptr<BigMap<long, vector< pair<long, unsigned long> > > > unresolvedWaynodeRefs;
+    shared_ptr< map<ElementId, UnresolvedRelationReference > > unresolvedRelationRefs;
+  };
 
 public:
 
@@ -143,73 +197,14 @@ public:
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
+  void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
 
 private:
 
-  struct _ElementWriteStats
-  {
-    unsigned long nodesWritten;
-    unsigned long nodeTagsWritten;
-    unsigned long waysWritten;
-    unsigned long wayNodesWritten;
-    unsigned long wayTagsWritten;
-    unsigned long relationsWritten;
-    unsigned long relationMembersWritten;
-    unsigned long relationMembersUnresolved;
-    unsigned long relationTagsWritten;
-  };
-  _ElementWriteStats _writeStats;
-
-  struct ConfigData
-  {
-    QString addUserEmail;
-    long addUserId;
-    long changesetUserId;
-    long startingNodeId;
-    long startingWayId;
-    long startingRelationId;
-    long startingChangesetId;
-  };
-  ConfigData _configData;
-
-  struct _IdMappings
-  {
-    long nextNodeId;
-    shared_ptr<BigMap<long, long> > nodeIdMap;
-
-    long nextWayId;
-    shared_ptr<BigMap<long, long> > wayIdMap;
-
-    long nextRelationId;
-    shared_ptr<BigMap<long, long> > relationIdMap;
-  };
-  _IdMappings _idMappings;
-
-  struct _ChangesetData
-  {
-    long changesetId;
-    unsigned long changesetsWritten;
-    unsigned int changesInChangeset;
-    Envelope changesetBounds;
-  };
-  _ChangesetData _changesetData;
-
-  struct _UnresolvedRelationReference
-  {
-    long sourceRelationId;
-    long sourceDbRelationId;
-    RelationData::Entry relationMemberData;
-    unsigned int relationMemberSequenceId;
-  };
-  struct _UnresolvedReferences
-  {
-    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
-    // order for waynode)
-    shared_ptr<BigMap<long, vector< pair<long, unsigned long> > > > unresolvedWaynodeRefs;
-
-    shared_ptr< map<ElementId, _UnresolvedRelationReference > > unresolvedRelationRefs;
-  };
-  _UnresolvedReferences _unresolvedRefs;
+  ElementWriteStats _writeStats;
+  IdMappings _idMappings;
+  ChangesetData _changesetData;
+  UnresolvedReferences _unresolvedRefs;
 
   OsmApiDb _database;
 
@@ -217,19 +212,19 @@ private:
   list<QString> _sectionNames;
 
   QString _outputUrl;
-  bool _dataWritten;
   QString _mode;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   QString _sqlFileCopyLocation;
 
   void _reset();
+
   void _createNodeTables();
   list<QString> _createSectionNameList();
   void _createWayTables();
   void _createRelationTables();
-  void _createTable(const QString& tableName, const QString& tableHeader);
-  void _createTable(const QString& tableName, const QString& tableHeader,
+  void _createTable(const QString tableName, const QString tableHeader);
+  void _createTable(const QString tableName, const QString tableHeader,
                     const bool addByteOrderMarker);
 
   void _getStartingIdsFromDb();
@@ -238,30 +233,30 @@ private:
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
-  QString _escapeCopyToData(const QString& stringToOutput) const;
+  QString _escapeCopyToData(const QString stringToOutput) const;
 
   void _writeChangesetToTable();
   void _writeSequenceUpdates(const long nextChangesetId, const long nextNodeId,
                              const long nextWayId, const long nextRelationId);
   void _writeRelationToTables(const long relationDbId);
   void _writeRelationMembersToTables(const ConstRelationPtr& relation);
-  void _writeRelationMember(const long sourceRelation,
-    const RelationData::Entry& memberEntry, const long memberDbId,
-    const unsigned int memberSequenceIndex);
+  void _writeRelationMember(const long sourceRelation, const RelationData::Entry& memberEntry,
+                            const long memberDbId, const unsigned int memberSequenceIndex);
   void _writeWayToTables(const long wayDbId);
   void _writeWaynodesToTables(const long wayId,
     const vector<long>& waynodeIds);
   void _writeNodeToTables(const ConstNodePtr& node, const long nodeDbId);
   void _writeTagsToTables(const Tags& tags, const long nodeDbId,
-    shared_ptr<QTextStream>& currentTable, const QString& currentTableFormatString,
-    shared_ptr<QTextStream>& historicalTable, const QString& historicalTableFormatString);
+    shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
+    shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
+
   void _closeSectionTempFilesAndConcat();
 
   shared_ptr<QTemporaryFile> _updateIdOffsets(shared_ptr<QTemporaryFile> inputSqlFile);
   void _executeElementSql(const QString sqlFile);
   void _writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
   void _lockIds();
-  long _totalRecordsWritten() const;
+  long _getTotalRecordsWritten() const;
 };
 
 }

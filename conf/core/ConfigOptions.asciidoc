@@ -136,10 +136,10 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 
 === changeset.user.id
 
-* Data Type: double
-* Default Value: `1`
+* Data Type: long
+* Default Value: `-1`
 
-The user ID used when writing to an OSM API database used by certain changeset writers.
+The user ID used by certain changeset writers when writing to an OSM API database.
 
 === circular.error.default.value
 

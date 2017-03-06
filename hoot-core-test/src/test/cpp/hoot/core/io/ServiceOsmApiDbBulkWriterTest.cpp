@@ -40,6 +40,7 @@
 #include <QDir>
 
 #include "../TestUtils.h"
+#include "ServicesDbTestUtils.h"
 
 namespace hoot
 {
@@ -47,11 +48,18 @@ namespace hoot
 class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
-  //CPPUNIT_TEST(runOfflineTest);
+  CPPUNIT_TEST(runOfflineTest);
   //CPPUNIT_TEST(runOnlineTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  static QString userEmail() { return "ServiceOsmApiDbBulkWriterTest@hoottestcpp.org"; }
+
+  void setUp()
+  {
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+  }
 
   shared_ptr<OsmMap> _map;
 
@@ -121,16 +129,17 @@ public:
 
   void runOfflineTest()
   {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
     writer.setMode("offline");
     QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
     writer.setSqlFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
 
-    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
-
-    writer.open(outFile);
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
 
     QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
