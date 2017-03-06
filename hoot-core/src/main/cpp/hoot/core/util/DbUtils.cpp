@@ -55,5 +55,36 @@ QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
   return q;
 }
 
+long DbUtils::getRowCount(const QSqlDatabase& database, const QString tableName)
+{
+  QSqlQuery query(database);
+  if (!query.exec("SELECT COUNT(*) FROM " + tableName))
+  {
+    throw HootException(
+      QString("Error executing row count query: %1 (%2)")
+        .arg(query.lastError().text())
+        .arg(tableName));
+  }
+
+  long result = -1;
+  if (query.next())
+  {
+    bool ok;
+    result = query.value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error executing row count query for " + tableName);
+    }
+  }
+  else
+  {
+    throw HootException(
+      "Error retrieving table row count. type: " + tableName + " Error: " +
+      query.lastError().text());
+  }
+  query.finish();
+
+  return result;
+}
 
 }

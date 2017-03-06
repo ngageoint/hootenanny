@@ -40,12 +40,23 @@ class DbUtils
 public:
 
   /**
-   * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
+   * Executes the provided SQL statement without calling prepare. This is handy when creating
    * constraints, tables, etc.
+   *
+   * @param database the database to execute the query against
    * @param sql SQL to execute.
+   * @return the executed query
    */
   static QSqlQuery execNoPrepare(QSqlDatabase& database, const QString sql);
 
+  /**
+   * Get the number of rows in the table
+   *
+   * @param database the database to execute the query against
+   * @param tableName name of the table to determine the row count for
+   * @return number of rows
+   */
+  static long getRowCount(const QSqlDatabase& database, const QString tableName);
 };
 
 }

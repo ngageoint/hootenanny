@@ -36,6 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QDir>
@@ -160,12 +161,13 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
-    reader.close();
 
     //Reading the osm api db data into a hoot map doesn't verify any of the data in the OSM API db
     //historical element or changeset tables.  For now, going to consider the previous check on
     //the SQL file output and the fact none of the db constraints failed during the SQL exec good
     //enough verification for those tables.
+
+    //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodeMap().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
@@ -183,7 +185,53 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+
+    //verify historical element table sizes
+
+    CPPUNIT_ASSERT_EQUAL(
+      (long)14,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)5,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)7,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)16,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences - TODO: make sure these aren't too large by 1
+    CPPUNIT_ASSERT_EQUAL((long)16, reader._getDatabase()->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)7, reader._getDatabase()->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)3, reader._getDatabase()->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)3,
+      dynamic_pointer_cast<OsmApiDb>(reader._getDatabase())->getNextId(
+        ApiDb::getChangesetsTableName()));
+
+    reader.close();
   }
+
+  //Since there are no other database writers present during the execution of these tests, they
+  //should have identical database output.  The SQL file output will differ in that the online mode
+  //will not have the sequence ID update statements, but the offline output will.
 
   void runOfflineTest()
   {
@@ -192,7 +240,8 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
     writer.setMode("offline");
-    const QString outFile = "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_out.sql";
+    const QString outFile =
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_offline_out.sql";
     writer.setSqlFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -204,9 +253,9 @@ public:
     //verify SQL file output
 
     const QStringList stdSqlTokens =
-      tokenizeSqlFileWithoutDates("test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter.sql");
-    const QStringList outputSqlTokens =
-      tokenizeSqlFileWithoutDates(outFile);
+      tokenizeSqlFileWithoutDates(
+        "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_offline.sql");
+    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
     for (int i = 0; i < stdSqlTokens.size(); i++)
     {
@@ -218,7 +267,34 @@ public:
 
   void runOnlineTest()
   {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
 
+    OsmApiDbBulkWriter writer;
+    writer.setFileOutputLineBufferSize(1);
+    writer.setMode("online");
+    const QString outFile =
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_online_out.sql";
+    writer.setSqlFileCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    //verify SQL file output
+
+    const QStringList stdSqlTokens =
+      tokenizeSqlFileWithoutDates(
+        "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_online.sql");
+    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
+    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
+    for (int i = 0; i < stdSqlTokens.size(); i++)
+    {
+      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
+    }
+
+    verifyDatabaseOutput();
   }
 };
 
