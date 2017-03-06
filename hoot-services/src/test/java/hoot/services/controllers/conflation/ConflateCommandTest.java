@@ -64,8 +64,8 @@ public class ConflateCommandTest {
                  "{\"COLLECT_STATS\":\"false\"}," +
                  "{\"INPUT1_TYPE\":\"DB\"}," +
                  "{\"INPUT2_TYPE\":\"DB\"}," +
-                 "{\"DB_URL\":\"hootapidb:\\/\\/${dbUserId}:${dbPassword}@${dbHost}:${dbPort}\\/${dbName}\"}," +
-                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${osmApiDbUserId}:${osmApiDbPassword}@${osmApiDbHost}:${osmApiDbPort}\\/${osmApiDbName}\"}]";
+                 "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
+                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}]";
 
         String actualCommandArgs = conflateCommand.get("params").toString();
 

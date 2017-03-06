@@ -626,7 +626,7 @@ public class Map extends Maps {
             // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
-            mapLayer.setName("OSM_API_DB_" + replaceSensitiveData(OSM_API_DB_NAME));
+            mapLayer.setName("OSM_API_DB_" + replaceSensitiveData(OSMAPI_DB_NAME));
             mapLayer.setDate(new Timestamp(System.currentTimeMillis()));
             mapLayerList.add(mapLayer);
         }

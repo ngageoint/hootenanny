@@ -27,7 +27,7 @@
 package hoot.services.controllers.clipping;
 
 import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
-import static hoot.services.HootProperties.HOOT_APIDB_URL;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -51,7 +51,7 @@ class ClipDatasetCommand extends ExternalCommand {
         }
 
         JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOT_APIDB_URL);
+        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
         commandArgs.add(hootDBURL);
 
         super.configureAsMakeCommand(CLIP_DATASET_MAKEFILE_PATH, caller, commandArgs);
