@@ -154,11 +154,6 @@ public:
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
-    //Reading the osm api db data into a hoot map doesn't verify any of the data in the OSM API db
-    //historical element or changeset tables.  For now, going to consider the previous check on
-    //the SQL file output and the fact none of the db constraints failed during the SQL exec good
-    //enough verification for those tables.
-
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
@@ -210,8 +205,6 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-    //TODO: these seem to be too high by one
-    //TODO: would like to use currval here, but am having trouble getting it to work
     shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
     CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
@@ -227,11 +220,6 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
-
-    //Reading the osm api db data into a hoot map doesn't verify any of the data in the OSM API db
-    //historical element or changeset tables.  For now, going to consider the previous check on
-    //the SQL file output and the fact none of the db constraints failed during the SQL exec good
-    //enough verification for those tables.
 
     //verify current elements
 
@@ -284,7 +272,6 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-    //TODO: would like to use currval here, but am having trouble getting it to work
     shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
     CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)7, osmApiDb->getNextId(ElementType::Way));

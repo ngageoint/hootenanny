@@ -186,6 +186,8 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
   LOG_VARD(_fileOutputLineBufferSize);
 
   QTextStream outStream(sqlTempOutputFile.get());
+  outStream << "BEGIN TRANSACTION;" << "\n";
+  outStream.flush();
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
     if (_outputSections.find(*it) == _outputSections.end())
@@ -196,7 +198,7 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
 
     if (_mode == "online" && *it == "sequence_updates")
     {
-      //sequences are written straight to the db in online mode and aren't exec'd separately
+      //sequences are written straight to the db in online mode and are exec'd separately
       //before the element sql is exec'd
       LOG_DEBUG("Skipping sequence updates in initial master file write...");
       continue;
@@ -265,6 +267,8 @@ void OsmApiDbBulkWriter::_writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempO
 
     LOG_DEBUG("Wrote contents of section " << *it);
   }
+  outStream << "COMMIT;";
+  outStream.flush();
   sqlTempOutputFile->close();
 
   QFileInfo outputInfo(sqlTempOutputFile->fileName());
@@ -474,7 +478,9 @@ void OsmApiDbBulkWriter::_lockIds()
   sequenceFile.close();
 
   LOG_INFO("Writing sequence ID updates to database...");
+  _database.transaction();
   DbUtils::execNoPrepare(_database.getDB(), lockElementIdsSql);
+  _database.commit();
   LOG_DEBUG("Sequence updates written to database.");
 }
 

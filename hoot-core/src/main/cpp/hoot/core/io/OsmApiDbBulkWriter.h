@@ -80,10 +80,10 @@ using namespace std;
 using namespace Tgs;
 
 /**
- * OSM element writer optimized for bulk element writes to an OSM API database.
+ * OSM element writer optimized for bulk element inserts to an OSM API database.
  *
- * If you need to write smaller amounts of elements to an OSM API database, you're beter off
- * creating a new writer class.
+ * If you need to write small amounts of elements to an OSM API database or modify data in an existing
+ * database, you're beter off creating a new writer class or using the Rails Port.
  *
  * This writer has two modes: offline and online.
  *
@@ -94,9 +94,11 @@ using namespace Tgs;
  *
  * Offline workflow:
  *
- *   * query for the current element/changeset ID sequences from the database
+ *   * query for the current element/changeset ID sequences from the database when it is opened
  *   * write the element/changeset SQL copy statements out to a file in a buffered fashion
- *   * execute the element/changeset SQL copy and ID sequence update statements against the database
+ *   * execute the element/changeset SQL copy and ID sequence update statements against the database;
+ *     IDs begin with the starting IDs obtained when the database was opened and end with the ID
+ *     of the last record written in each sequence
  *
  * Online mode will guarantee element ID uniqueness against a live database  If the element SQL
  * write in online mode fails, the IDs reserved will not be freed and will go unused in the database.
@@ -104,10 +106,10 @@ using namespace Tgs;
  * Online workflow:
  *
  *   * write the element/changeset SQL copy statements out to a file in a buffered fashion; arbitrarily
- *     start all IDs at 1
- *   * used the element count obtained during the first pass read to determine the IDs to be consumed
- *     by the write operation and lock the ID ranges out by executing setval statements against
- *     the database
+ *     start all ID sequences at 1
+ *   * use the element count obtained during the first pass SQL write to determine the ID ranges the
+ *     write consumes; lock these ID ranges out by executing setval statements against the database
+ *     in a separate SQL exec
  *   * execute the element/changeset SQL copy statements against the database
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
