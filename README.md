@@ -32,19 +32,26 @@ Hootenanny can conflate:
 
 # Supported Data Formats
 Hootenanny can import from:
+* OpenStreetMap XML (.osm)
 * Shapefile (.shp)
-* OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
-* Zip files containing shapefiles and/or ESRI File Geodatabase files
+* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
+* Protocol Buffers (.pbf)
+* OpenStreetMap JSON file (.json; similar to Overpass JSON)
 * geonames.org (.geonames)
-* OSM API database
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
 
 Hootenanny can export to: 
+* OpenStreetMap XML file (.osm)
 * Shapefile (.shp)
-* OpenStreetMap (.osm)
 * ESRI File Geodatabase (.gdb)
-* OSM changeset file (.osc)
-* OSM API database
+* Protocol Buffers file (.pbf)
+* OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
+* OpenStreetMap XML changeset file (.osc)
+* OpenStreetMap SQL changeset file (.osc.sql)
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
