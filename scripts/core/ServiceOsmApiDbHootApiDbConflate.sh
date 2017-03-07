@@ -36,7 +36,7 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true"
+export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -56,12 +56,10 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
     hoot convert $HOOT_OPTS $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
-  fi
-  # By default, all of these element ID's will be written starting at 1 by the postgres dump file writer.  
+  fi 
   # By using reader.preserve.all.tags=true, we're forcing the hoot xml file reader to preserve all tags here, such as 'accuracy', 
   # 'type', etc., to simulate the data that would likely be coming from an osm api db.
-  hoot convert $HOOT_OPTS $OUTPUT_DIR/2-ref-raw-complete.osm $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
-  psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
+  hoot convert $HOOT_OPTS $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then

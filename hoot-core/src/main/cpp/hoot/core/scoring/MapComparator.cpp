@@ -172,8 +172,11 @@ public:
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
-      LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
-               " n: " << n->getX() << ", " << n->getY());
+      if (_errorCount <= 10)
+      {
+        LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
+                 " n: " << n->getX() << ", " << n->getY());
+      }
       _matches = false;
       _errorCount++;
     }
