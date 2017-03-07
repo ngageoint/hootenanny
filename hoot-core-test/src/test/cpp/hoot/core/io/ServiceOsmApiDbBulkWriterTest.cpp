@@ -317,8 +317,6 @@ public:
     }
 
     verifyDatabaseOutputOffline();
-
-    //LOG_INFO("runOfflineTest complete");
   }
 
   void runOnlineTest()
@@ -342,6 +340,7 @@ public:
     writer.setChangesetUserId(1);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    //TODO: set log level to error
     writer.write(createTestMap());
     writer.close();
 

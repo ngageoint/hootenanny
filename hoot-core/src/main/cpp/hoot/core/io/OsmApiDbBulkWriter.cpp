@@ -159,7 +159,15 @@ void OsmApiDbBulkWriter::finalizePartial()
     }
   }
 
-  _executeElementSql(finalMasterSqlOutputFile->fileName());
+  if (_executeSql)
+  {
+    _executeElementSql(finalMasterSqlOutputFile->fileName());
+  }
+  else
+  {
+    LOG_DEBUG("Skipping SQL execution due to configuration...");
+  }
+
 
   LOG_DEBUG("Write stats:");
   LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten));
@@ -662,6 +670,7 @@ void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings& conf)
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed());
+  setExecuteSql(confOptions.getOsmapidbBulkWriterExecuteSql());
 }
 
 QStringList OsmApiDbBulkWriter::_createSectionNameList()

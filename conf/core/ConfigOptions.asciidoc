@@ -1239,6 +1239,16 @@ Operations that should be applied to ingested OGR data before saving the data.
 Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
 For the most part, each line represents an element or an element tag.
 
+=== osmapidb.bulk.writer.execute.sql
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, outputting to an OSM API database will write the SQL file to be executed only without
+executing the SQL against the database.  Use this setting in conjuction with the
+osmapidb.bulk.writer.sql.output.file.copy.location setting to view SQL output before applying it to
+a database.
+
 === osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
@@ -1254,9 +1264,9 @@ a load status update message logged for every 100 SQL lines parsed.
 * Default Value: `online`
 
 Valid values are "offline" and "online".  Offline mode does not guarantee element ID uniqueness
-but will run faster than online mode and is meant to be used against offline databases (ones with
-no writers present).  Online mode guarantees element ID uniqueness, is safe to run against a live
-database, and will run more slowly than offline mode.
+but will run faster than online mode.  Offline mode is meant to be used against offline databases
+(ones with no other writers present).  Online mode guarantees element ID uniqueness, is safe to run
+against a live database (other writers present), but will run more slowly than offline mode.
 
 === osmapidb.bulk.writer.sql.output.file.copy.location
 

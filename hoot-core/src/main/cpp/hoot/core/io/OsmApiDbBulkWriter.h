@@ -200,6 +200,7 @@ public:
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
+  void setExecuteSql(bool exec) { _executeSql = exec; }
 
 private:
 
@@ -218,6 +219,7 @@ private:
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   QString _sqlFileCopyLocation;
+  bool _executeSql;
 
   void _reset();
 
