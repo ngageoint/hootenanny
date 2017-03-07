@@ -222,6 +222,7 @@ private:
   QString _sqlFileCopyLocation;
   bool _executeSql;
   long _maxChangesetSize;
+  long _totalFileLinesWrittenFirstPass;
 
   void _reset();
 

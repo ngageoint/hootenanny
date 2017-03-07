@@ -42,13 +42,13 @@ QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
 {
   QSqlQuery q(database);
 
-  LOG_VARD(sql);
+  LOG_VART(sql);
   if (q.exec(sql) == false)
   {
     throw HootException(
       QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
   }
-  LOG_VARD(q.numRowsAffected());
+  LOG_VART(q.numRowsAffected());
 
   return q;
 }

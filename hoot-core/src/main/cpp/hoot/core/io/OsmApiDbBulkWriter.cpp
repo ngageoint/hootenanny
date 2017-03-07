@@ -33,10 +33,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/util/DbUtils.h>
 
 namespace hoot
@@ -44,7 +40,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
-OsmApiDbBulkWriter::OsmApiDbBulkWriter()
+OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
+_totalFileLinesWrittenFirstPass(0)
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -119,7 +116,6 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     _writeChangesetToTable();
   }
-  //TODO: This may not be needed.
   if (_changesetData.changesetsWritten == 0)
   {
     _changesetData.changesetsWritten++;
@@ -154,7 +150,10 @@ void OsmApiDbBulkWriter::finalizePartial()
     {
       copyFile.remove();
     }
-    LOG_INFO("Copying SQL output file to " << _sqlFileCopyLocation << "...");
+    QFileInfo sqlOutputFileInfo(finalSqlOutputFile->fileName());
+    LOG_INFO(
+      "Copying SQL output file of size " << sqlOutputFileInfo.size() << " bytes to " <<
+      _sqlFileCopyLocation << "...");
     if (!finalSqlOutputFile->copy(_sqlFileCopyLocation))
     {
       LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
@@ -300,13 +299,15 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     outStream.flush();
     sqlTempOutputFile->close();
 
-    QString msg = "Parsed " + QString::number(totalLineCtr) + " total SQL lines for output file.";
+    QString msg =
+      "SQL file write complete.  Parsed " + QString::number(totalLineCtr) + " total SQL lines " +
+      "for output file.";
     msg += "  Data pass #1 of " + totalPasses + ".";
     LOG_DEBUG(msg);
+    _totalFileLinesWrittenFirstPass = totalLineCtr;
 
     QFileInfo outputInfo(sqlTempOutputFile->fileName());
     LOG_VART(outputInfo.size());
-    LOG_DEBUG("SQL file write complete.  Data pass #1 of " + totalPasses + "...");
   }
   catch (const Exception& e)
   {
@@ -324,7 +325,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
   shared_ptr<QTemporaryFile> updateSqlOutputFile(new QTemporaryFile());
   try
   {
-    LOG_INFO("Updating ID offsets in SQL file.  Data pass #2 of 2...");
+    LOG_INFO("Updating ID offsets in SQL file.  Data pass #2 of 2.");
     LOG_VART(inputSqlFile->fileName());
      QFileInfo inputInfo(inputSqlFile->fileName());
      LOG_VART(inputInfo.size());
@@ -459,8 +460,8 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
        if (totalLineCtr % _statusUpdateInterval == 0)
        {
          LOG_DEBUG(
-           "Parsed " << totalLineCtr << " lines for SQL ID offset updates in SQL output " <<
-           "file.  Data pass #2 of 2.");
+           "Parsed " << totalLineCtr << " / " << _totalFileLinesWrittenFirstPass <<
+           " lines for ID offset updates in SQL output.  Data pass #2 of 2.");
        }
      }
      while (!line.isNull());
@@ -470,7 +471,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
      updateSqlOutputFile->close();
 
      QFileInfo outputInfo(updateSqlOutputFile->fileName());
-     LOG_VARD(outputInfo.size());
+     LOG_VART(outputInfo.size());
 
      LOG_DEBUG(
        "Parsed " << totalLineCtr << " total lines for SQL ID offset updates in SQL output " <<
@@ -537,7 +538,7 @@ void OsmApiDbBulkWriter::_lockIds()
   }
   sequenceFile.close();
 
-  LOG_INFO("Writing sequence ID updates to database...");
+  LOG_INFO("Writing sequence ID updates to database lock out element IDs...");
   _database.transaction();
   DbUtils::execNoPrepare(_database.getDB(), lockElementIdsSql);
   _database.commit();
@@ -561,12 +562,12 @@ void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
   {
     cmd += " > /dev/null";
   }
-  LOG_DEBUG(cmd);
+  LOG_TRACE(cmd);
   if (system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Failed executing bulk element SQL write against the OSM API database.");
   }
-  LOG_INFO("Element SQL execution complete.");
+  LOG_DEBUG("Element SQL execution complete.");
 }
 
 long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
@@ -586,7 +587,6 @@ void OsmApiDbBulkWriter::_getLatestIdsFromDb()
   _idMappings.currentWayId = _database.getNextId(ElementType::Way);
   _idMappings.currentRelationId = _database.getNextId(ElementType::Relation);
   _changesetData.currentChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
-  //TODO: why does this need to be done?
   if (_mode == "online")
   {
     _idMappings.currentNodeId--;
@@ -607,9 +607,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
+
   //TODO: This actually won't work when ways or relations are written in separate changesets than
   //the nodes they reference.  Since we're streaming the elements, there's no way to get back to
   //the bounds information.  This bug has always been here, but just recently noticed.
+
   _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
   LOG_VART(_changesetData.changesetBounds.toString());
 
