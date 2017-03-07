@@ -1252,22 +1252,29 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
   shared_ptr<QTextStream> sequenceUpdatesStream = _outputSections["sequence_updates"].second;
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
-  // Changesets
+  //At least one changeset and some nodes should always be written by a write operation; ways
+  //and relations are optional.
+
+  assert(changesetId > 0);
   *sequenceUpdatesStream <<
     sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(changesetId));
 
-  // Nodes
+  assert(nodeId > 0);
   *sequenceUpdatesStream <<
     sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nodeId));
 
-  // Ways
-  *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId));
+  if (wayId > 0)
+  {
+    *sequenceUpdatesStream <<
+      sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId));
+  }
 
-  // Relations
-  *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)) << "\n\n";
+  if (relationId > 0)
+  {
+    *sequenceUpdatesStream <<
+      sequenceUpdateFormat.arg(
+        ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)) << "\n\n";
+  }
 }
 
 }
