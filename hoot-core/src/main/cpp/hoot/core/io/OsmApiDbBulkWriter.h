@@ -178,6 +178,8 @@ public:
 
   void close();
 
+  virtual void write(ConstOsmMapPtr map);
+
   virtual void finalizePartial();
 
   virtual void writePartial(const ConstNodePtr& n);

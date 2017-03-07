@@ -93,6 +93,18 @@ void OsmApiDbBulkWriter::close()
   setConfiguration(conf());
 }
 
+void OsmApiDbBulkWriter::write(ConstOsmMapPtr map)
+{
+  QString totalPasses = "2";
+  if (_mode == "online")
+  {
+    totalPasses = "3";
+  }
+  LOG_INFO(
+    "Streaming elements from input to temporary SQL file outputs.  Data pass #1 of " << totalPasses);
+  PartialOsmMapWriter::write(map);
+}
+
 void OsmApiDbBulkWriter::finalizePartial()
 {
   if ((_writeStats.nodesWritten == 0) && (_writeStats.waysWritten == 0) &&
@@ -101,6 +113,11 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_DEBUG("No data written.");
     return;
   }
+
+  LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " total nodes from input.");
+  LOG_DEBUG("Parsed " << _writeStats.waysWritten << " total ways from input.");
+  LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " total relations from input.");
+  LOG_DEBUG("Created " << _changesetData.changesetsWritten << " changesets.");
 
   shared_ptr<QTemporaryFile> sqlOutputFile(new QTemporaryFile());
   if (!sqlOutputFile->open())
@@ -174,7 +191,14 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
 
 
-  LOG_DEBUG("Write stats:");
+  if (_executeSql)
+  {
+    LOG_DEBUG("Database write stats:");
+  }
+  else
+  {
+    LOG_DEBUG("SQL file write stats:");
+  }
   LOG_DEBUG("\tNodes written: " + QString::number(_writeStats.nodesWritten));
   LOG_DEBUG("\tNode tags written: " + QString::number(_writeStats.nodeTagsWritten));
   LOG_DEBUG("\tWays written: " + QString::number(_writeStats.waysWritten));
@@ -192,13 +216,13 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
 {
   try
   {
-    QString totalPasses = "1";
+    QString totalPasses = "2";
     if (_mode == "online")
     {
-      totalPasses = "2";
+      totalPasses = "3";
     }
 
-    LOG_INFO("Writing SQL output file.  Data pass #1 of " + totalPasses + "...");
+    LOG_INFO("Writing combined SQL output file.  Data pass #2 of " + totalPasses + "...");
     LOG_VART(sqlTempOutputFile->fileName());
 
     LOG_VART(_sectionNames.size());
@@ -268,10 +292,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
 
             if ((totalLineCtr % _statusUpdateInterval) == 0)
             {
-              QString msg =
-                "Parsed " + QString::number(totalLineCtr) + " SQL lines for SQL output file.";
-                msg += "  Data pass #1 of " + totalPasses + ".";
-                LOG_DEBUG(msg);
+              LOG_DEBUG("Parsed " << totalLineCtr + " SQL lines for output file.");
             }
           }
           while (!line.isNull());
@@ -300,9 +321,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     sqlTempOutputFile->close();
 
     QString msg =
-      "SQL file write complete.  Parsed " + QString::number(totalLineCtr) + " total SQL lines " +
-      "for output file.";
-    msg += "  Data pass #1 of " + totalPasses + ".";
+      "SQL file write complete; data pass #2 of " + totalPasses + ".  Parsed " +
+      QString::number(totalLineCtr) + " total SQL lines.";
     LOG_DEBUG(msg);
     _totalFileLinesWrittenFirstPass = totalLineCtr;
 
@@ -325,7 +345,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
   shared_ptr<QTemporaryFile> updateSqlOutputFile(new QTemporaryFile());
   try
   {
-    LOG_INFO("Updating ID offsets in SQL file.  Data pass #2 of 2.");
+    LOG_INFO("Updating ID offsets in combined SQL file.  Data pass #3 of 3...");
     LOG_VART(inputSqlFile->fileName());
      QFileInfo inputInfo(inputSqlFile->fileName());
      LOG_VART(inputInfo.size());
@@ -408,7 +428,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
            else if (lineParts[1].toLower() == "way")
            {
              lineParts[2] = QString::number(memberId + _idMappings.currentWayId);
-             }
+           }
          }
          else if (currentTableName == ApiDb::getCurrentNodeTagsTableName() ||
                   currentTableName == ApiDb::getNodeTagsTableName())
@@ -460,8 +480,8 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
        if (totalLineCtr % _statusUpdateInterval == 0)
        {
          LOG_DEBUG(
-           "Parsed " << totalLineCtr << " / " << _totalFileLinesWrittenFirstPass <<
-           " lines for ID offset updates in SQL output.  Data pass #2 of 2.");
+           "Parsed " << totalLineCtr << "/" << _totalFileLinesWrittenFirstPass <<
+           " lines for ID offset updates.");
        }
      }
      while (!line.isNull());
@@ -474,9 +494,8 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
      LOG_VART(outputInfo.size());
 
      LOG_DEBUG(
-       "Parsed " << totalLineCtr << " total lines for SQL ID offset updates in SQL output " <<
-       "file.  Data pass #2 of 2.");
-     LOG_DEBUG("ID offset updates complete.  Data pass #2 of 2.");
+       "ID offset updates complete; data pass #3 of 3.  Parsed " << totalLineCtr <<
+       " total lines for ID offset updates.");
   }
   catch (const Exception& e)
   {
@@ -595,10 +614,10 @@ void OsmApiDbBulkWriter::_getLatestIdsFromDb()
     _changesetData.currentChangesetId--;
   }
 
-  LOG_VARD(_changesetData.currentChangesetId);
-  LOG_VARD(_idMappings.currentNodeId);
-  LOG_VARD(_idMappings.currentWayId);
-  LOG_VARD(_idMappings.currentRelationId);
+  LOG_VART(_changesetData.currentChangesetId);
+  LOG_VART(_idMappings.currentNodeId);
+  LOG_VART(_idMappings.currentWayId);
+  LOG_VART(_idMappings.currentRelationId);
 }
 
 void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
@@ -644,7 +663,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
-    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes.");
+    LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " nodes from input.");
   }
 }
 
@@ -683,7 +702,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
-    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways.");
+    LOG_DEBUG("Parsed " << _writeStats.waysWritten << " ways from input.");
   }
 }
 
@@ -722,7 +741,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
-    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations.");
+    LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " relations from input.");
   }
 }
 
@@ -731,11 +750,12 @@ void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings& conf)
   const ConfigOptions confOptions(conf);
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setMode(confOptions.getOsmapidbBulkWriterMode().toLower());
-  LOG_DEBUG("OSM API database bulk writer set to " << _mode << " mode.");
+  LOG_TRACE("OSM API database bulk writer set to " << _mode << " mode.");
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed());
   setExecuteSql(confOptions.getOsmapidbBulkWriterExecuteSql());
+  setMaxChangesetSize(confOptions.getChangesetMaxSize());
 }
 
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
@@ -768,24 +788,24 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
 void OsmApiDbBulkWriter::_createNodeTables()
 {
   _createTable(ApiDb::getCurrentNodesTableName(),
-                "COPY " + ApiDb::getCurrentNodesTableName() +
+               "COPY " + ApiDb::getCurrentNodesTableName() +
                " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
                "FROM stdin;\n" );
   _createTable(ApiDb::getCurrentNodeTagsTableName(),
-                "COPY " + ApiDb::getCurrentNodeTagsTableName() +
+               "COPY " + ApiDb::getCurrentNodeTagsTableName() +
                " (node_id, k, v) FROM stdin;\n");
 
   _createTable(ApiDb::getNodesTableName(),
-                "COPY " + ApiDb::getNodesTableName() +
+               "COPY " + ApiDb::getNodesTableName() +
                " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, redaction_id) FROM stdin;\n" );
   _createTable(ApiDb::getNodeTagsTableName(),
-                "COPY " + ApiDb::getNodeTagsTableName() +
+               "COPY " + ApiDb::getNodeTagsTableName() +
                " (node_id, version, k, v) FROM stdin;\n");
 }
 
 void OsmApiDbBulkWriter::_reset()
 {
-  LOG_DEBUG("Resetting variables...");
+  LOG_TRACE("Resetting variables...");
 
   _writeStats.nodesWritten = 0;
   _writeStats.nodeTagsWritten = 0;
@@ -1211,7 +1231,7 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
     {
       changesetUpdateInterval = _statusUpdateInterval;
     }
-    if (_changesetData.changesetsWritten % changesetUpdateInterval == 0)
+    if (_changesetData.changesetsWritten > 0 && (_changesetData.changesetsWritten % changesetUpdateInterval == 0))
     {
       LOG_DEBUG("Parsed " << _changesetData.changesetsWritten << " changesets.");
     }
@@ -1314,12 +1334,6 @@ void OsmApiDbBulkWriter::_writeChangesetToTable()
       QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxX())),
       datestring,
       QString::number(_changesetData.changesInChangeset));
-
-//  _changesetData.changesetsWritten++;
-//  LOG_VART(_changesetData.changesetsWritten);
-//  _changesetData.currentChangesetId++;
-//  LOG_VART(_changesetData.currentChangesetId);
-  _changesetData.changesInChangeset = 0; //??
 }
 
 void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const long nodeId,
