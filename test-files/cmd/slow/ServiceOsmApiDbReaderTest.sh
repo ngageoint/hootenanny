@@ -22,7 +22,6 @@ export DB_URL="osmapidb://$DB_USER_OSMAPI:$DB_PASSWORD_OSMAPI@$DB_HOST_OSMAPI:$D
 
 echo "Select all from osm api db..."
 
-#echo $PGDATABASE $PGHOST $PGPORT $PGUSER $PGPASSWORD
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/ToyTestA.sql
 
 hoot convert --error $HOOT_OPTS "$DB_URL" $OUTPUT_DIR/output1.osm
@@ -34,8 +33,7 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 
-source scripts/database/SetupOsmApiDB.sh force
-psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
+scripts/database/CleanAndInitializeOsmApiDb.sh
 
 hoot convert --error $HOOT_OPTS test-files/DcGisRoads.osm $DB_URL
 
