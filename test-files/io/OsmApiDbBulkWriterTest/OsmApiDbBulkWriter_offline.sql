@@ -1,9 +1,9 @@
 
 
-SELECT pg_catalog.setval('changesets_id_seq', 2);
-SELECT pg_catalog.setval('current_nodes_id_seq', 15);
-SELECT pg_catalog.setval('current_ways_id_seq', 6);
-SELECT pg_catalog.setval('current_relations_id_seq', 2);
+SELECT pg_catalog.setval('changesets_id_seq', 1);
+SELECT pg_catalog.setval('current_nodes_id_seq', 14);
+SELECT pg_catalog.setval('current_ways_id_seq', 5);
+SELECT pg_catalog.setval('current_relations_id_seq', 1);
 
 
 

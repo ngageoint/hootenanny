@@ -122,10 +122,14 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   if (_mode == "offline")
   {
-    //in offline mode we're not guaranteeing id uniqueness, so just prepend the setval statements
-    //to the element sql
-    _writeSequenceUpdates(_changesetData.currentChangesetId, _idMappings.currentNodeId,
-                          _idMappings.currentWayId, _idMappings.currentRelationId);
+    //In offline mode we're not guaranteeing id uniqueness, so we prepend the setval statements
+    //to the element sql and don't worry if other writers wrote data while we were serializing the
+    //sql file.  Here, the current IDs represent the next ID for each sequence immediately
+    //after the data we're about to write (the starting IDs were obtained from the db when it
+    //was opened).  Since the IDs were incremented after parsing each piece of data and represent
+    //the next ID, and we want the sequence to reflect the current ID, we decrement each one.
+    _writeSequenceUpdates(_changesetData.currentChangesetId - 1, _idMappings.currentNodeId - 1,
+                          _idMappings.currentWayId - 1, _idMappings.currentRelationId - 1);
   }
 
   _writeMasterSqlFile(masterSqlOutputFile);
@@ -437,6 +441,11 @@ void OsmApiDbBulkWriter::_lockIds()
   }
 
   _getLatestIdsFromDb();
+
+  //We need to prevent other writers from claiming the IDs associated with the elements we're
+  //about to write.  Before the potentially lengthy SQL file ID update process which will happen
+  //next, lock out the ID range starting with the next ID in each sequence we just obtained from
+  //the db up to the number of each sequence type we're writing.
 
   //write the id lock sql out to a temp file
   _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
