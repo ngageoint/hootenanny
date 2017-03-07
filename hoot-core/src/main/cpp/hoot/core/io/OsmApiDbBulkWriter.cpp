@@ -505,6 +505,10 @@ void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
     cmd += " --quiet";
   }
   cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + sqlFile;
+  if (!(Log::getInstance().getLevel() <= Log::Debug))
+  {
+    cmd += " > /dev/null";
+  }
   LOG_DEBUG(cmd);
   //TODO: this doesn't seem to be failing on constraint violations...
   if (system(cmd.toStdString().c_str()) != 0)

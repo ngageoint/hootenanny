@@ -281,13 +281,11 @@ public:
     reader.close();
   }
 
-  //Since there are no other database writers present during the execution of these tests, they
-  //should have identical database output.  The SQL file output will differ in that the online mode
-  //will not have the sequence ID update statements, but the offline output will.
-
   void runOfflineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
+    //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
@@ -305,7 +303,6 @@ public:
     writer.close();
 
     //verify SQL file output
-
     const QStringList stdSqlTokens =
       tokenizeSqlFileWithoutDates(
         "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_offline.sql");
@@ -322,8 +319,11 @@ public:
   void runOnlineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
+    //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
     //insert some dummy data to simulate external writes
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
@@ -340,12 +340,10 @@ public:
     writer.setChangesetUserId(1);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    //TODO: set log level to error
     writer.write(createTestMap());
     writer.close();
 
     //verify SQL file output
-
     const QStringList stdSqlTokens =
       tokenizeSqlFileWithoutDates(
         "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_online.sql");

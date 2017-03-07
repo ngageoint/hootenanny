@@ -40,8 +40,6 @@ namespace hoot
 
 QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
 {
-  // inserting strings in this fashion is safe b/c it is private and we closely control the table
-  // names.
   QSqlQuery q(database);
 
   LOG_VARD(sql);
