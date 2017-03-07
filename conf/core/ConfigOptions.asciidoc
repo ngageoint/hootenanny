@@ -1727,6 +1727,14 @@ Count at which the load status of each element type should be logged by the Post
 e.g. With a value of 100000, you will see a element load status update message for every 100000
 elements parsed.
 
+=== postgresql.dumpfile.writer.output.buffer.max.line.size
+
+* Data Type: long
+* Default Value: `1000000`
+
+Maximum number of lines to keep in memory when serializing the Postgresql Dumpfile Writer's output.
+Each line roughly represents an element and each one of its tags.
+
 === postgresql.dumpfile.writer.start.id.changeset
 
 * Data Type: long

@@ -161,8 +161,9 @@ public:
       }
       inputFile.close();
     }
-    CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
     pgDumpWriter.close();
+
+    CPPUNIT_ASSERT_EQUAL(inList.size(), stdList.size());
 
     for (int i = 0; i < stdList.size(); i++)
     {

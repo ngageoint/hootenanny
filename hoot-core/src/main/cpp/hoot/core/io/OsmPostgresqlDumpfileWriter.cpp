@@ -199,7 +199,7 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
   for ( std::list<QString>::const_iterator it = _sectionNames.begin();
         it != _sectionNames.end(); ++it )
   {
-   if ( _outputSections.find(*it) == _outputSections.end() )
+    if ( _outputSections.find(*it) == _outputSections.end() )
     {
       LOG_DEBUG("No data for table " + *it);
       continue;
@@ -222,11 +222,27 @@ void OsmPostgresqlDumpfileWriter::finalizePartial()
 
     // Append contents of file to output file
     QFile tempInputFile(_outputSections[*it].first->fileName());
-    if (tempInputFile.open(QIODevice::ReadOnly)) {
+    if (tempInputFile.open(QIODevice::ReadOnly))
+    {
        QTextStream inStream(&tempInputFile);
-       QString inText = inStream.readAll();
-       outStream << inText;
+       QString line;
+       long lineCtr = 0;
+       do
+       {
+         line = inStream.readLine();
+         outStream << line << "\n";
+         lineCtr++;
 
+         if (lineCtr == ConfigOptions().getPostgresqlDumpfileWriterOutputBufferMaxLineSize())
+         {
+           outStream.flush();
+           lineCtr = 0;
+         }
+       }
+       while (!line.isNull());
+       outStream.flush();
+
+       tempInputFile.close();
        //remove temp file after write to the output file
        _outputSections[*it].first->remove();
     }
