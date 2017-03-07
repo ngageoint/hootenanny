@@ -201,7 +201,7 @@ public:
 
     //verify changeset table size
     CPPUNIT_ASSERT_EQUAL(
-      (long)1,
+      (long)4,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
@@ -209,7 +209,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
     CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -268,7 +268,7 @@ public:
 
     //verify changeset table size
     CPPUNIT_ASSERT_EQUAL(
-      (long)2,
+      (long)5,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
@@ -276,7 +276,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)7, osmApiDb->getNextId(ElementType::Way));
     CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL((long)3, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -297,6 +297,7 @@ public:
     writer.setSqlFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
@@ -338,6 +339,7 @@ public:
     writer.setSqlFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());

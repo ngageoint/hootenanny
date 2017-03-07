@@ -201,6 +201,7 @@ public:
   void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setExecuteSql(bool exec) { _executeSql = exec; }
+  void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
 
 private:
 
@@ -220,6 +221,7 @@ private:
   long _statusUpdateInterval;
   QString _sqlFileCopyLocation;
   bool _executeSql;
+  long _maxChangesetSize;
 
   void _reset();
 
@@ -258,7 +260,7 @@ private:
 
   shared_ptr<QTemporaryFile> _updateIdOffsetsInNewFile(shared_ptr<QTemporaryFile> inputSqlFile);
   void _executeElementSql(const QString sqlFile);
-  void _writeMasterSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
+  void _writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
   void _lockIds();
   long _getTotalRecordsWritten() const;
 };
