@@ -96,7 +96,8 @@ void OsmApiDbBulkWriter::open(QString url)
     totalPasses = "3";
   }
   //would rather put this in write, but if both reader and writer implement the streaming interface
-  //vs partial you'll never see this message
+  //and neither implement the partial interface you'll never see this message, due to how
+  //ElementOutputStream::writeAllElements works
   LOG_INFO(
     "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of " <<
     totalPasses << "...");
@@ -111,9 +112,10 @@ void OsmApiDbBulkWriter::close()
   setConfiguration(conf());
 }
 
-//I want to see comma separators...probably a better way to handle this...will go with this for now.
 QString OsmApiDbBulkWriter::_formatPotentiallyLargeNumber(const long number)
 {
+  //I want to see comma separators...probably a better way to handle this...will go with this for
+  //now.
   const QLocale& cLocale = QLocale::c();
   QString ss = cLocale.toString((qulonglong)number);
   ss.replace(cLocale.groupSeparator(), ',');
@@ -181,6 +183,7 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable("byte_order_mark", "\n", true);
+
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
   {
@@ -191,33 +194,23 @@ void OsmApiDbBulkWriter::finalizePartial()
     _changesetData.changesetsWritten++;
   }
 
-  if (_mode == "offline")
-  {
-    //In offline mode we're not guaranteeing id uniqueness, so we prepend the setval statements
-    //to the element sql and don't worry if other writers wrote data while we were serializing the
-    //sql file.  Here, the current IDs represent the next ID for each sequence immediately
-    //after the data we're about to write (the starting IDs were obtained from the db when it
-    //was opened).  Since the IDs were incremented after parsing each piece of data and represent
-    //the next ID, and we want the sequence to reflect the current ID, we decrement each one.
-    _writeSequenceUpdates(_changesetData.currentChangesetId - 1, _idMappings.currentNodeId - 1,
-                          _idMappings.currentWayId - 1, _idMappings.currentRelationId - 1);
-  }
-
   _writeCombinedSqlFile(sqlOutputFile);
+
+  if (_executeSql)
+  {
+    _lockIds();
+  }
+  else
+  {
+    //there's no point in locking out the ids if we're not going to write the data to the db, but
+    //we do need to get the latest IDs so that the file ID content is correct
+    _getLatestIdsFromDb();
+  }
 
   //if we're in online mode, we'll be writing a completely new sql output file
   shared_ptr<QTemporaryFile> finalSqlOutputFile = sqlOutputFile;
   if (_mode == "online")
   {
-    //there's no point in locking out the ids if we're not going to write the data to the db
-    if (_executeSql)
-    {
-      _lockIds();
-    }
-    else
-    {
-      _getLatestIdsFromDb();
-    };
     finalSqlOutputFile = _updateIdOffsetsInNewFile(sqlOutputFile);
   }
 
@@ -286,10 +279,9 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
         continue;
       }
 
-      if (_mode == "online" && *it == "sequence_updates")
+      if (*it == "sequence_updates")
       {
-        //sequences are written straight to the db in online mode and are exec'd separately
-        //before the element sql is exec'd
+        //sequences are now exec'd separately before the element sql is exec'd
         LOG_TRACE("Skipping sequence updates in initial master file write...");
         continue;
       }
@@ -298,7 +290,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
         "Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
 
       // Write close marker for table
-      if ((*it != "byte_order_mark") && (*it != "sequence_updates"))
+      if ((*it != "byte_order_mark"))
       {
         LOG_TRACE("Writing byte order mark to stream...");
         *(_outputSections[*it].second) << QString("\\.\n\n\n");
@@ -569,18 +561,32 @@ void OsmApiDbBulkWriter::_lockIds()
       QString("have been parsed from the input."));
   }
 
-  _getLatestIdsFromDb();
+  //TODO: we really don't need to serialize this to a file
+  if (_mode == "online")
+  {
+    _getLatestIdsFromDb();
+    //We need to prevent other writers from claiming the IDs associated with the elements we're
+    //about to write.  Before the potentially lengthy SQL file ID update process which will happen
+    //next, lock out the ID range starting with the next ID in each sequence we just obtained from
+    //the db up to the number of each sequence type we're writing.
 
-  //We need to prevent other writers from claiming the IDs associated with the elements we're
-  //about to write.  Before the potentially lengthy SQL file ID update process which will happen
-  //next, lock out the ID range starting with the next ID in each sequence we just obtained from
-  //the db up to the number of each sequence type we're writing.
-
-  //write the id lock sql out to a temp file
-  _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-                        _idMappings.currentNodeId + _writeStats.nodesWritten,
-                        _idMappings.currentWayId + _writeStats.waysWritten,
-                        _idMappings.currentRelationId + _writeStats.relationsWritten);
+    //write the id lock sql out to a temp file
+    _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+                          _idMappings.currentNodeId + _writeStats.nodesWritten,
+                          _idMappings.currentWayId + _writeStats.waysWritten,
+                          _idMappings.currentRelationId + _writeStats.relationsWritten);
+  }
+  else
+  {
+    //In offline mode we're not guaranteeing id uniqueness, so we prepend the setval statements
+    //to the element sql and don't worry if other writers wrote data while we were serializing the
+    //sql file.  Here, the current IDs represent the next ID for each sequence immediately
+    //after the data we're about to write (the starting IDs were obtained from the db when it
+    //was opened).  Since the IDs were incremented after parsing each piece of data and represent
+    //the next ID, and we want the sequence to reflect the current ID, we decrement each one.
+    _writeSequenceUpdates(_changesetData.currentChangesetId - 1, _idMappings.currentNodeId - 1,
+                          _idMappings.currentWayId - 1, _idMappings.currentRelationId - 1);
+  }
   (_outputSections["sequence_updates"].second)->flush();
   if (!(_outputSections["sequence_updates"].first)->flush())
   {
