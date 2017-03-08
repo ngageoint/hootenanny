@@ -51,6 +51,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -603,7 +604,7 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
 
-        if (!hoot.services.utils.FileUtils.validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
+        if (!validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
             throw new IOException("Script name can not contain path.");
         }
 
@@ -697,5 +698,10 @@ public class CustomScriptResource {
             }
             return false;
         }
+    }
+
+    private static boolean validateFilePath(String expectedPath, String actualPath) {
+        String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
+        return expectedPath.equals(path);
     }
 }

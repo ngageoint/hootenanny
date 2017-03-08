@@ -56,55 +56,55 @@ public class BasemapResourceTest {
     @BeforeClass
     public static void beforeClass() throws Exception {
         original_HOME_FOLDER = HOME_FOLDER;
-        homeFolder = new File(FileUtils.getTempDirectory(), "RasterToTilesResourceTest");
+        homeFolder = new File(FileUtils.getTempDirectory(), "BasemapResourceTest");
         FileUtils.forceMkdir(homeFolder);
         assertTrue(homeFolder.exists());
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
 
-        original_TILE_SERVER_PATH = TILE_SERVER_PATH;
-        File processedFolder = new File(homeFolder, "ingest/processed");
+        original_TILE_SERVER_PATH = BASEMAPS_TILES_FOLDER;
+        File processedFolder = new File(homeFolder, "ingest/processed/BASEMAP");
         FileUtils.forceMkdir(processedFolder);
         assertTrue(processedFolder.exists());
         tileServerPath = processedFolder.getAbsolutePath();
         assertNotNull(tileServerPath);
         assertTrue(!tileServerPath.isEmpty());
+        HootCustomPropertiesSetter.setProperty("BASEMAPS_TILES_FOLDER", processedFolder.getAbsolutePath());
 
-        HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", processedFolder.getAbsolutePath());
-        original_INGEST_STAGING_PATH = INGEST_STAGING_PATH;
-        File ingestStagingFolder = new File(homeFolder, "/ingest/upload");
+        original_INGEST_STAGING_PATH = BASEMAPS_FOLDER;
+        File ingestStagingFolder = new File(homeFolder, "/ingest/upload/BASEMAP");
         FileUtils.forceMkdir(ingestStagingFolder);
         assertTrue(ingestStagingFolder.exists());
         ingestStagingPath = ingestStagingFolder.getAbsolutePath();
         assertNotNull(ingestStagingPath);
         assertTrue(!ingestStagingPath.isEmpty());
-        HootCustomPropertiesSetter.setProperty("INGEST_STAGING_PATH", ingestStagingFolder.getAbsolutePath());
+        HootCustomPropertiesSetter.setProperty("BASEMAPS_FOLDER", ingestStagingFolder.getAbsolutePath());
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
-        HootCustomPropertiesSetter.setProperty("TILE_SERVER_PATH", original_TILE_SERVER_PATH);
-        HootCustomPropertiesSetter.setProperty("INGEST_STAGING_PATH", original_INGEST_STAGING_PATH);
+        HootCustomPropertiesSetter.setProperty("BASEMAPS_TILES_FOLDER", original_TILE_SERVER_PATH);
+        HootCustomPropertiesSetter.setProperty("BASEMAPS_FOLDER", original_INGEST_STAGING_PATH);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestgetBasemapList() throws Exception {
-        File f = new File(tileServerPath + "/BASEMAP/TestMap");
+        File f = new File(tileServerPath + "/TestMap");
         FileUtils.forceMkdir(f);
 
         JSONObject cont = new JSONObject();
         cont.put("jobid", "123-456-789");
         cont.put("path", "/projects/hoot/ingest/processed/BASEMAP/TestMap");
 
-        File file = new File(ingestStagingPath + "/BASEMAP/TestMap.enabled");
+        File file = new File(ingestStagingPath + "/TestMap.enabled");
         FileUtils.writeStringToFile(file, cont.toJSONString(), Charset.defaultCharset());
 
-        File f2 = new File(tileServerPath + "/BASEMAP/TestMap2");
+        File f2 = new File(tileServerPath + "/TestMap2");
         FileUtils.forceMkdir(f2);
 
-        File file2 = new File(ingestStagingPath + "/BASEMAP/TestMap2.enabled");
+        File file2 = new File(ingestStagingPath + "/TestMap2.enabled");
         FileUtils.writeStringToFile(file2, cont.toJSONString(), Charset.defaultCharset());
 
         Method getBasemapListHelperMethod = BasemapResource.class.getDeclaredMethod("getBasemapListHelper");
@@ -128,18 +128,18 @@ public class BasemapResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestToggleBasemap() throws Exception {
-        File file = new File(ingestStagingPath + "/BASEMAP/controltest.enabled");
+        File file = new File(ingestStagingPath + "/controltest.enabled");
         FileUtils.touch(file);
 
         Method toggleBaseMapMethod = BasemapResource.class.getDeclaredMethod("toggleBaseMap", String.class, boolean.class);
         toggleBaseMapMethod.setAccessible(true);
 
         toggleBaseMapMethod.invoke(null, "controltest", false);
-        file = new File(ingestStagingPath + "/BASEMAP/controltest.disabled");
+        file = new File(ingestStagingPath + "/controltest.disabled");
         assertTrue(file.exists());
 
         toggleBaseMapMethod.invoke(null, "controltest", true);
-        file = new File(ingestStagingPath + "/BASEMAP/controltest.enabled");
+        file = new File(ingestStagingPath + "/controltest.enabled");
         assertTrue(file.exists());
 
         FileUtils.forceDelete(file);
@@ -150,12 +150,12 @@ public class BasemapResourceTest {
     public void TestDeleteBasemap() throws Exception {
         String testMapName = "testmap";
 
-        File dir = new File(tileServerPath + "/BASEMAP/" + testMapName);
+        File dir = new File(tileServerPath + "/" + testMapName);
         FileUtils.forceMkdir(dir);
 
         assertTrue(dir.exists());
 
-        File controlFile = new File(ingestStagingPath + "/BASEMAP/" + testMapName + ".enabled");
+        File controlFile = new File(ingestStagingPath + "/" + testMapName + ".enabled");
         FileUtils.touch(controlFile);
         assertTrue(controlFile.exists());
 

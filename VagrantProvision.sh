@@ -552,12 +552,6 @@ rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
-
-rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
-
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -567,3 +561,33 @@ touch Vagrant.marker
 # switch to auto mode and use the highest priority installed alternatives for Java.
 sudo update-alternatives --auto java
 sudo update-alternatives --auto javac
+
+
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp

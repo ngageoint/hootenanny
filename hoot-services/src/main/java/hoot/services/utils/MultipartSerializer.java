@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,8 +64,8 @@ public final class MultipartSerializer {
                 }
                 fileName = FilenameUtils.getName(fileName);
 
-                String fgdbFolderPath = HOME_FOLDER + "/upload/" + jobId + "/" + relPath;
-                boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", fgdbFolderPath);
+                String fgdbFolderPath = UPLOAD_FOLDER + File.separator + jobId + File.separator + relPath;
+                boolean isPathSafe = validatePath(UPLOAD_FOLDER, fgdbFolderPath);
 
                 if (isPathSafe) {
                     String pathVal = folderMap.get(fgdbFolderPath);
@@ -126,9 +126,9 @@ public final class MultipartSerializer {
                     throw new RuntimeException("A valid file name was not specified.");
                 }
 
-                String uploadedPath = repFolderPath + "/" + fileName;
+                String uploadedPath = repFolderPath + File.separator + fileName;
 
-                boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", uploadedPath);
+                boolean isPathSafe = validatePath(UPLOAD_FOLDER, uploadedPath);
                 if (isPathSafe) {
                     try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
                         File file = new File(uploadedPath);
@@ -179,8 +179,8 @@ public final class MultipartSerializer {
 
         try {
             // Uploaded data container folder path. It is unique to each job
-            String repFolderPath = HOME_FOLDER + "/upload/" + jobId;
-            boolean isPathSafe = validatePath(HOME_FOLDER + "/upload", repFolderPath);
+            String repFolderPath = UPLOAD_FOLDER + File.separator + jobId;
+            boolean isPathSafe = validatePath(UPLOAD_FOLDER, repFolderPath);
 
             if (isPathSafe) {
                 File dir = new File(repFolderPath);

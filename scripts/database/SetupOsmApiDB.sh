@@ -68,8 +68,6 @@ if [ "$do_create" = "true" ]; then
   #echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
   createdb $AUTH $DB_NAME_OSMAPI
 
-  mkdir -p $HOOT_HOME/tmp
-
-  psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& $HOOT_HOME/tmp/osmapidb.log
+  psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& /tmp/osmapidb.log
 fi
 
