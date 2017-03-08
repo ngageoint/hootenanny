@@ -326,12 +326,6 @@ public:
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
-    //insert some dummy data to simulate external writes
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
-
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
     writer.setMode("online");
@@ -344,6 +338,13 @@ public:
     writer.setFileOutputLineBufferSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    //insert some dummy data to simulate external writes that happened after we opened the db
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
+
     writer.write(createTestMap());
     writer.close();
 
