@@ -46,6 +46,7 @@ namespace Tgs
 
     static void printMemoryUsage();
     static std::string getMemoryUsageString();
+    static std::string humanReadable(long bytes);
   };
 }
 

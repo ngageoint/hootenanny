@@ -35,8 +35,14 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
 
+#include <tgs/System/SystemInfo.h>
+
 namespace hoot
 {
+
+using namespace Tgs;
+
+unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
@@ -101,7 +107,8 @@ void OsmApiDbBulkWriter::write(ConstOsmMapPtr map)
     totalPasses = "3";
   }
   LOG_INFO(
-    "Streaming elements from input to temporary SQL file outputs.  Data pass #1 of " << totalPasses);
+    "Streaming elements from input to temporary SQL file outputs.  Data pass #1 of " <<
+    totalPasses << "...");
   PartialOsmMapWriter::write(map);
 }
 
@@ -117,7 +124,9 @@ void OsmApiDbBulkWriter::finalizePartial()
   LOG_DEBUG("Parsed " << _writeStats.nodesWritten << " total nodes from input.");
   LOG_DEBUG("Parsed " << _writeStats.waysWritten << " total ways from input.");
   LOG_DEBUG("Parsed " << _writeStats.relationsWritten << " total relations from input.");
-  LOG_DEBUG("Created " << _changesetData.changesetsWritten << " changesets.");
+  LOG_DEBUG(
+    "Created " << _changesetData.changesetsWritten << " changesets with " <<
+    _maxChangesetSize << " changes each.");
 
   shared_ptr<QTemporaryFile> sqlOutputFile(new QTemporaryFile());
   if (!sqlOutputFile->open())
@@ -169,8 +178,8 @@ void OsmApiDbBulkWriter::finalizePartial()
     }
     QFileInfo sqlOutputFileInfo(finalSqlOutputFile->fileName());
     LOG_INFO(
-      "Copying SQL output file of size " << sqlOutputFileInfo.size() << " bytes to " <<
-      _sqlFileCopyLocation << "...");
+      "Copying SQL output file of size " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) <<
+      " to " << _sqlFileCopyLocation << "...");
     if (!finalSqlOutputFile->copy(_sqlFileCopyLocation))
     {
       LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
@@ -205,9 +214,9 @@ void OsmApiDbBulkWriter::finalizePartial()
   LOG_DEBUG("\tWay nodes written: " + QString::number(_writeStats.wayNodesWritten));
   LOG_DEBUG("\tWay tags written: " + QString::number(_writeStats.wayTagsWritten));
   LOG_DEBUG("\tRelations written: " + QString::number(_writeStats.relationsWritten));
-  LOG_DEBUG("\tRelation members written:" + QString::number(_writeStats.relationMembersWritten));
+  LOG_DEBUG("\tRelation members written: " + QString::number(_writeStats.relationMembersWritten));
   LOG_DEBUG("\tRelation tags written: " + QString::number(_writeStats.relationTagsWritten));
-  LOG_DEBUG("\tUnresolved relation members:" + QString::number(_writeStats.relationMembersWritten));
+  LOG_DEBUG("\tUnresolved relation members: " + QString::number(_writeStats.relationMembersWritten));
   LOG_DEBUG("\tChangesets written: " + QString::number(_changesetData.changesetsWritten));
   LOG_DEBUG("\tTotal records written: " + QString::number(_getTotalRecordsWritten()));
 }
@@ -290,9 +299,9 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
               lineCtr = 0;
             }
 
-            if ((totalLineCtr % _statusUpdateInterval) == 0)
+            if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
             {
-              LOG_DEBUG("Parsed " << totalLineCtr + " SQL lines for output file.");
+              LOG_DEBUG("Parsed " << totalLineCtr << " SQL lines for output file.");
             }
           }
           while (!line.isNull());
@@ -320,10 +329,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     outStream.flush();
     sqlTempOutputFile->close();
 
-    QString msg =
-      "SQL file write complete; data pass #2 of " + totalPasses + ".  Parsed " +
-      QString::number(totalLineCtr) + " total SQL lines.";
-    LOG_DEBUG(msg);
+    LOG_DEBUG("SQL file write complete; data pass #2 of " << totalPasses + ".");
+    LOG_DEBUG("Parsed " << QString::number(totalLineCtr) << " total SQL lines.");
     _totalFileLinesWrittenFirstPass = totalLineCtr;
 
     QFileInfo outputInfo(sqlTempOutputFile->fileName());
@@ -477,7 +484,7 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
          lineCtr = 0;
        }
 
-       if (totalLineCtr % _statusUpdateInterval == 0)
+       if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
        {
          LOG_DEBUG(
            "Parsed " << totalLineCtr << "/" << _totalFileLinesWrittenFirstPass <<
@@ -493,9 +500,8 @@ shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
      QFileInfo outputInfo(updateSqlOutputFile->fileName());
      LOG_VART(outputInfo.size());
 
-     LOG_DEBUG(
-       "ID offset updates complete; data pass #3 of 3.  Parsed " << totalLineCtr <<
-       " total lines for ID offset updates.");
+     LOG_DEBUG("ID offset updates complete; data pass #3 of 3.");
+     LOG_DEBUG("Parsed " << totalLineCtr << " total SQL lines.");
   }
   catch (const Exception& e)
   {
@@ -1256,10 +1262,18 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
 
     if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
     {
-      LOG_DEBUG("Found unresolved relation member ref!");
-      LOG_DEBUG(QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
-        QString(" (DB ID=") + QString::number(relationRef->second.sourceDbRelationId) +
-        QString(") has ref to ") + relationRef->second.relationMemberData.toString());
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Found unresolved relation member ref!:");
+        LOG_WARN(QString( "Relation ID ") + QString::number(relationRef->second.sourceRelationId) +
+          QString(" (DB ID=") + QString::number(relationRef->second.sourceDbRelationId) +
+           QString(") has ref to ") + relationRef->second.relationMemberData.toString());
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
 
       _writeRelationMember(
         relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,

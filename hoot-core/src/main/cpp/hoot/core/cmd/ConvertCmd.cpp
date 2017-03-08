@@ -39,6 +39,8 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -113,7 +115,7 @@ public:
       saveMap(map, args[1]);
     }
 
-    LOG_INFO("Convert operation complete.");
+    LOG_DEBUG("Convert operation complete.");
     QString msg = "Convert operation took ";
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
@@ -131,7 +133,7 @@ public:
 
   void streamElements(QString in, QString out)
   {
-    LOG_DEBUG("Streaming data conversion...");
+    LOG_DEBUG("Streaming data conversion from " << in << " to " << out << "...");
 
     shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
@@ -141,6 +143,19 @@ public:
     shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+
+    shared_ptr<PartialOsmMapReader> partialReader =
+      dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    if (partialReader.get())
+    {
+      partialReader->finalizePartial();
+    }
+    shared_ptr<PartialOsmMapWriter> partialWriter =
+      dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    if (partialWriter.get())
+    {
+      partialWriter->finalizePartial();
+    }
   }
 
 };

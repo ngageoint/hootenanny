@@ -1234,7 +1234,7 @@ Operations that should be applied to ingested OGR data before saving the data.
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
 * Data Type: long
-* Default Value: `1000000`
+* Default Value: `100000`
 
 Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
 For the most part, each line represents an element or an element tag.
@@ -1252,7 +1252,7 @@ a database.
 === osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
-* Default Value: `5000000`
+* Default Value: `1000000`
 
 Count at which the SQL file output status of each element type should be logged when bulk writing
 the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see

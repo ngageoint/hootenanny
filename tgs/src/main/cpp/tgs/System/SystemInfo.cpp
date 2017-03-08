@@ -109,7 +109,7 @@ namespace Tgs
     }
   }
 
-  static std::string humanReadable(long bytes)
+  std::string SystemInfo::humanReadable(long bytes)
   {
     std::stringstream ss;
 

@@ -168,6 +168,8 @@ public:
 
   static string className() { return "hoot::OsmApiDbBulkWriter"; }
 
+  static unsigned int logWarnCount;
+
   OsmApiDbBulkWriter();
 
   virtual ~OsmApiDbBulkWriter();
