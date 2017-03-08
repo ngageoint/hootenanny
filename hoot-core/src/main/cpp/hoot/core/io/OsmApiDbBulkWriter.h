@@ -180,8 +180,6 @@ public:
 
   void close();
 
-  virtual void write(ConstOsmMapPtr map);
-
   virtual void finalizePartial();
 
   virtual void writePartial(const ConstNodePtr& n);
@@ -268,6 +266,9 @@ private:
   void _writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
   void _lockIds();
   long _getTotalRecordsWritten() const;
+
+  QString _formatPotentiallyLargeNumber(const long number);
+  void _logStats(const bool debug = false);
 };
 
 }

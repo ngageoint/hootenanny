@@ -133,7 +133,7 @@ public:
 
   void streamElements(QString in, QString out)
   {
-    LOG_DEBUG("Streaming data conversion from " << in << " to " << out << "...");
+    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
     shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);

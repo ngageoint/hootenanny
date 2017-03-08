@@ -72,7 +72,7 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
     if (writer->isSupported(url))
     {
-      LOG_DEBUG("Using writer: " << names[i]);
+      LOG_DEBUG("Using output writer: " << names[i]);
     }
     else
     {
