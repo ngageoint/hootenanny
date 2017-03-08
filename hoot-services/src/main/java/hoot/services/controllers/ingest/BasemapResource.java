@@ -71,6 +71,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
@@ -168,20 +169,56 @@ public class BasemapResource {
 
                 String basemapName = ((inputName == null) || (inputName.isEmpty())) ? fileName : inputName;
                 String inputFileName = uploadedFilesPaths.get(fileName);
-                String jobId = UUID.randomUUID().toString();
+
+                try {
+                    FileUtils.forceMkdir(new File(BASEMAPS_TILES_FOLDER, basemapName));
+                }
+                catch (IOException ioe) {
+                    throw new RuntimeException("Error creating : " + new File(BASEMAPS_TILES_FOLDER, basemapName), ioe);
+                }
+
+                try {
+                    FileUtils.forceMkdir(new File(BASEMAPS_FOLDER));
+                }
+                catch (IOException ioe) {
+                    throw new RuntimeException("Error creating : " + BASEMAPS_TILES_FOLDER, ioe);
+                }
+
+                String tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName).toString();
 
                 Command[] commands = {
                     () -> {
-                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, groupId,
-                                inputFileName, projection, basemapName, this.getClass());
-                        return externalCommandManager.exec(jobId, ingestBasemapCommand);
+                        File file = new File(BASEMAPS_FOLDER, basemapName + ".processing");
+                        try {
+                            String string = "\"jobid\":\"" + groupId + "\",\"path:\"" + tileOutputDir + "\"";
+                            FileUtils.writeStringToFile(file, string, Charset.defaultCharset());
+                        }
+                        catch (IOException ioe) {
+                            throw new RuntimeException("Error creating " + file, ioe);
+                        }
+
+                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(groupId,
+                                inputFileName, projection, tileOutputDir, this.getClass());
+                        CommandResult commandResult = externalCommandManager.exec(groupId, ingestBasemapCommand);
+
+                        String newFileName = BASEMAPS_FOLDER + File.separator + basemapName;
+                        newFileName += commandResult.failed() ? ".failed" : ".disabled";
+
+                        try {
+                            FileUtils.moveFile(file, new File(newFileName));
+                        }
+                        catch (IOException ioe) {
+                            throw new RuntimeException("Error moving " + file + " to " + newFileName, ioe);
+                        }
+
+                        return commandResult;
                     }
                 };
 
-                jobProcessor.process(new Job(jobId, commands));
+                jobProcessor.process(new Job(groupId, commands));
 
                 JSONObject response = new JSONObject();
-                response.put("jobid", jobId);
+                response.put("jobid", groupId);
                 response.put("name", basemapName);
 
                 jobsArr.add(response);

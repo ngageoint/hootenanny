@@ -54,9 +54,6 @@ ETLMakefile=makeetl
 # Conflate make file script
 ConflateMakefilePath=makeconflate
 
-# ClipDataset make file script
-ClipDatasetMakefilePath=makeclipdataset
-
 # Translation header used for just function scanning
 dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 

@@ -26,8 +26,11 @@
  */
 package hoot.services.controllers;
 
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 import static hoot.services.HootProperties.EXPORT_RENDERDB_SCRIPT;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+
+import java.io.File;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -55,6 +58,6 @@ class ExportRenderDBCommand extends ExternalCommand {
         argument.put("DB_URL", HOOTAPI_DB_URL);
         commandArgs.add(argument);
 
-        super.configureAsBashCommand(EXPORT_RENDERDB_SCRIPT, caller, commandArgs);
+        super.configureAsBashCommand(CORE_SCRIPT_PATH + File.separator + EXPORT_RENDERDB_SCRIPT, caller, commandArgs);
     }
 }

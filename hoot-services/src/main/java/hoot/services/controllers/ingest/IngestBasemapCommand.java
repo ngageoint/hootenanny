@@ -26,10 +26,11 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -38,47 +39,84 @@ import hoot.services.command.ExternalCommand;
 
 class IngestBasemapCommand extends ExternalCommand {
 
-    IngestBasemapCommand(String jobId, String groupId, String inputFileName, String projection, String basemapName, Class<?> caller) {
+    IngestBasemapCommand(String groupId, String inputFileName, String projection, String tileOutputDir, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
-        // from scripts/makebasemaprastertotiles.sh:
-        //   make -f $HOOT_HOME/scripts/submakebasemaprastertotiles INPUT="$1" INPUT_NAME="$2" RASTER_OUTPUT_DIR="$3" PROJECTION="$4" JOB_PROCESSOR_DIR="$5" jobid="$6"
-
-        // $1
         JSONObject arg = new JSONObject();
-        arg.put("INPUT", UPLOAD_FOLDER + File.separator + groupId + File.separator + inputFileName);
+        if (!StringUtils.isBlank(projection)) {
+            arg.put("PROJECTION", "-s " + projection);
+        }
         commandArgs.add(arg);
 
-        // $2
+        arg = new JSONObject();
+        arg.put("WEBVIEWER", "-w none");
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("TITLE", "-t " + UPLOAD_FOLDER + File.separator + groupId + File.separator + inputFileName);
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("ZOOM", "-z '0-20'");
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("INPUT_FILE", UPLOAD_FOLDER + File.separator + groupId + File.separator + inputFileName);
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
+        arg.put("TILE_OUTPUT_DIR", tileOutputDir);
+        commandArgs.add(arg);
+
+/*
         arg = new JSONObject();
         arg.put("INPUT_NAME", basemapName);
         commandArgs.add(arg);
 
-        // $3
-        arg = new JSONObject();
-        arg.put("RASTER_OUTPUT_DIR", BASEMAPS_TILES_FOLDER);
-        commandArgs.add(arg);
-
-        // $4
-        arg = new JSONObject();
-        if ((projection != null) && (!projection.isEmpty())) {
-            arg.put("PROJECTION", projection);
-        }
-        else {
-            arg.put("PROJECTION", "auto");
-        }
-        commandArgs.add(arg);
-
-        // $5
         arg = new JSONObject();
         arg.put("JOB_PROCESSOR_DIR", BASEMAPS_FOLDER);
         commandArgs.add(arg);
 
-        // $6
         arg = new JSONObject();
         arg.put("jobid", jobId);
         commandArgs.add(arg);
+*/
+        /*
+        make -f $HOOT_HOME/scripts/services/submakebasemaprastertotiles INPUT="$1" INPUT_NAME="$2" RASTER_OUTPUT_DIR="$3" PROJECTION="$4" JOB_PROCESSOR_DIR="$5" jobid="$6"
+        if [ $? -eq 0 ]; then
+            mv -f "$5/$2.processing" "$5/$2.disabled"
+            exit 0
+        else
+            mv -f "$5/$2.processing" "$5/$2.failed"
+            exit 10
+        fi
+         */
 
-        super.configureAsBashCommand(BASEMAP_RASTER_TO_TILES, caller, commandArgs);
+        /*
+            DQT="\""
+            GDAL2TILES=/usr/local/bin/gdal2tiles.py
+            OP_INPUT=$(INPUT)
+            OP_TILE_OUTPUT_DIR=$(RASTER_OUTPUT_DIR)/$(INPUT_NAME)
+            OP_JOB_PROCESSOR=$(JOB_PROCESSOR_DIR)/$(INPUT_NAME)
+            OP_PROJECTION=
+
+            ifneq "$(PROJECTION)" "auto"
+                OP_PROJECTION=-s $(PROJECTION)
+            endif
+
+            OP_INFO={
+            OP_INFO+=$(DQT)jobid$(DQT):$(DQT)$(jobid)$(DQT),
+            OP_INFO+=$(DQT)path$(DQT):$(DQT)$(OP_TILE_OUTPUT_DIR)$(DQT)
+            OP_INFO+=}
+
+            step1:
+                mkdir -p "$(OP_TILE_OUTPUT_DIR)"
+                mkdir -p "$(JOB_PROCESSOR_DIR)"
+                echo "$(OP_INFO)" > "$(OP_JOB_PROCESSOR).processing"
+
+                "$(GDAL2TILES)" $(OP_PROJECTION)  -w none -t "$(OP_INPUT)" -z '0-20' "$(OP_INPUT)" "$(OP_TILE_OUTPUT_DIR)"
+         */
+
+        super.configureAsBashCommand("/usr/local/bin/gdal2tiles.py", caller, commandArgs);
     }
 }

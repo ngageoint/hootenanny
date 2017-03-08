@@ -26,6 +26,10 @@
  */
 package hoot.services.controllers.hgis;
 
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
+
+import java.io.File;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -48,7 +52,7 @@ class HGISCommand extends ExternalCommand {
         arg.put("OUTPUT", generateDbMapParam(outputMap));
         commandArgs.add(arg);
 
-        super.configureAsBashCommand(scriptName, caller, commandArgs);
+        super.configureAsBashCommand(CORE_SCRIPT_PATH + File.separator + scriptName, caller, commandArgs);
     }
 
     /**

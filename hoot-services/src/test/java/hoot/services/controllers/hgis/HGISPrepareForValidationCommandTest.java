@@ -28,6 +28,7 @@ package hoot.services.controllers.hgis;
 
 
 import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class HGISPrepareForValidationCommandTest {
         assertEquals(expectedCaller, actualCaller);
 
         String actualExec = (String) command.get("exec");
-        String expectedExec = HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
+        String expectedExec = HOME_FOLDER + "/scripts/services/" + HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
         assertEquals(expectedExec, actualExec);
 
         String actualExectype = (String) command.get("exectype");

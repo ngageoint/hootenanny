@@ -26,8 +26,9 @@
  */
 package hoot.services.controllers.clipping;
 
-import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,24 +37,69 @@ import org.json.simple.parser.ParseException;
 import hoot.services.command.ExternalCommand;
 import hoot.services.utils.JsonUtils;
 
+/*
+#
+#  Clip Dataset Make file
+#
+-include $(HOOT_HOME)/HOOT_VERSION_FILE
+
+#HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D add.review.tags=yes
+HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+HOOT_OPTS+= -D api.db.email=test@test.com
+#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
+#OUTPUT_DIR=$(HOOT_HOME)/test-out/$(jobid)
+
+# Clip
+# crop-map (input) (output) (bounds)
+OP_INPUT=$(DB_URL)/$(INPUT_NAME)
+OP_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
+
+step1:
+	hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
+
+ */
 
 class ClipDatasetCommand extends ExternalCommand {
 
     ClipDatasetCommand(String params, Class<?> caller) {
-        JSONArray commandArgs;
+        JSONArray commandArgs = new JSONArray();
 
+        Map<String, String> paramsMap;
         try {
-            // scripts/makeclipdataset: hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-            commandArgs = JsonUtils.parseParams(params);
+            paramsMap = JsonUtils.paramsToMap(params);
         }
         catch (ParseException pe) {
             throw new RuntimeException("Error parsing: " + params, pe);
         }
 
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
+        StringBuilder options = new StringBuilder();
+        options.append("-D hootapi.db.writer.overwrite.map=true");
+        options.append("-D hootapi.db.writer.create.user=true");
+        options.append("-D api.db.email=test@test.com");
 
-        super.configureAsMakeCommand(CLIP_DATASET_MAKEFILE_PATH, caller, commandArgs);
+        JSONObject opts = new JSONObject();
+        opts.put("HOOT_OPTS", options);
+        commandArgs.add(opts);
+
+        JSONObject input = new JSONObject();
+        input.put("INPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME"));
+        commandArgs.add(input);
+
+        JSONObject output = new JSONObject();
+        output.put("OUTPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME"));
+        commandArgs.add(input);
+
+        JSONObject bbox = new JSONObject();
+        bbox.put("BOUNDS", paramsMap.get("BBOX"));
+        commandArgs.add(bbox);
+
+        /*
+            "crop-map" - Crops the input map to the given bounds. Individual features on the border are modified to make
+                     sure nothing is outside the given bounds.
+            • input - The input OSM data path.
+            • output - The output OSM data path.
+            • bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+        */
+        super.configureAsHootCommand("crop-map", caller, commandArgs);
     }
 }

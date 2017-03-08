@@ -70,7 +70,7 @@ public class ExternalCommandManagerTest {
         String[] ret = (String[]) method.invoke(ps, command);
         String commandStr = ArrayUtils.toString(ret);
 
-        String expected = "{hoot,--ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
+        String expected = "{hoot,ogr2osm,/test/loc/translation.js,/test/loc/out.osm,/test/loc/out.osm}";
         Assert.assertEquals(expected, commandStr);
     }
 }

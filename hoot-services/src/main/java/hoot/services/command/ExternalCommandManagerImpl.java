@@ -115,7 +115,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static String[] createCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
         execCmd.add("hoot");
-        execCmd.add("--" + cmd.get("exec"));
+        execCmd.add(cmd.get("exec").toString());
 
         JSONArray params = (JSONArray) cmd.get("params");
         for (Object o : params) {
@@ -159,7 +159,8 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static String[] createBashScriptCmdArray(JSONObject cmd) {
         List<String> execCmd = new ArrayList<>();
         execCmd.add("bash");
-        execCmd.add(CORE_SCRIPT_PATH + "/" + cmd.get("exec"));
+        execCmd.add("-c");
+        execCmd.add(cmd.get("exec").toString());
 
         JSONArray params = (JSONArray) cmd.get("params");
         for (Object o : params) {

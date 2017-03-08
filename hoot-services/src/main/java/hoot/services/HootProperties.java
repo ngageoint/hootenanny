@@ -90,7 +90,6 @@ public final class HootProperties {
     public static final String MAP_QUERY_AREA_DEGREES;
     public static final String MAX_QUERY_NODES;
     public static final String HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-    public static final String CLIP_DATASET_MAKEFILE_PATH;
     public static final String GET_OGR_ATTRIBUTE_SCRIPT;
     public static final String EXPORT_RENDERDB_SCRIPT;
     public static final String BASEMAP_RASTER_EXTENSIONS;
@@ -197,7 +196,6 @@ public final class HootProperties {
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
         HGIS_PREPARE_FOR_VALIDATION_SCRIPT = getProperty("hgisPrepareForValidationScript");
-        CLIP_DATASET_MAKEFILE_PATH = getProperty("ClipDatasetMakefilePath");
         GET_OGR_ATTRIBUTE_SCRIPT = getProperty("GetOgrAttributeScript");
         EXPORT_RENDERDB_SCRIPT = getProperty("exportRenderDBScript");
         BASEMAP_RASTER_EXTENSIONS = getProperty("BasemapRasterExtensions");

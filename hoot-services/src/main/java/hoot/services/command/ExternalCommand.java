@@ -46,4 +46,11 @@ public class ExternalCommand extends JSONObject {
         this.put("caller", caller.getName());
         this.put("params", commandArgs);
     }
+
+    protected void configureAsHootCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
+        this.put("exectype", "hoot");
+        this.put("exec", scriptName);
+        this.put("caller", caller.getName());
+        this.put("params", commandArgs);
+    }
 }
