@@ -132,7 +132,7 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
   messages.append(
     QString("\tChangesets: ") + _formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
   messages.append(
-    QString("\tChangeset size: ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
+    QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
   messages.append(
     QString("\tSQL records: ") + _formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
 
@@ -157,8 +157,8 @@ void OsmApiDbBulkWriter::finalizePartial()
     return;
   }
 
-  LOG_DEBUG("Total input parse stats:");
-  _logStats(true);
+  LOG_INFO("Input records parsed stats (data pass #1 of 2):");
+  _logStats();
 
   shared_ptr<QTemporaryFile> sqlOutputFile(new QTemporaryFile());
   if (!sqlOutputFile->open())
@@ -201,12 +201,12 @@ void OsmApiDbBulkWriter::finalizePartial()
   if (_executeSql)
   {
     _executeElementSql(sqlOutputFile->fileName());
-    LOG_INFO("Total database write stats:");
+    LOG_INFO("Final database write stats:");
   }
   else
   {
     LOG_DEBUG("Skipping SQL execution against database due to configuration...");
-    LOG_INFO("Total SQL file write stats:");
+    LOG_INFO("Final SQL file write stats:");
   }
   _logStats();
 }
@@ -304,8 +304,6 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
 
             if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
             {
-              //This gets a little funky when reading pbf's due to the way that reader logs
-              //messages...maybe worth cleaning up at some point.
               PROGRESS_INFO(
                 "Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " SQL lines.");
             }
@@ -593,6 +591,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
+    //This progress logging gets a little funky when reading pbf's due to the way that reader logs
+    //messages...maybe worth cleaning up at some point.
     PROGRESS_INFO(
       "Parsed " << _formatPotentiallyLargeNumber(_writeStats.waysWritten) << " ways from input.");
   }
