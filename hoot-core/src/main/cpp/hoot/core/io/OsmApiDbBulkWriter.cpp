@@ -85,8 +85,7 @@ void OsmApiDbBulkWriter::open(QString url)
   //would rather put this message in the write method, but if both reader and writer implement the
   //streaming interface and neither implement the partial interface you'll never see this message,
   //due to how ElementOutputStream::writeAllElements works
-  LOG_INFO(
-    "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of 2...");
+  LOG_INFO("Streaming elements from input to temporary SQL file outputs.  Data pass #1 of 2...");
 }
 
 void OsmApiDbBulkWriter::close()
@@ -134,7 +133,8 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
   messages.append(
     QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
   messages.append(
-    QString("\tSQL records: ") + _formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
+    QString("\tExecutable SQL records: ") +
+    _formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
 
   for (int i = 0; i < messages.size(); i++)
   {
@@ -205,7 +205,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
   else
   {
-    LOG_DEBUG("Skipping SQL execution against database due to configuration...");
+    LOG_INFO("Skipping SQL execution against database due to configuration...");
     LOG_INFO("Final SQL file write stats:");
   }
   _logStats();
@@ -220,8 +220,8 @@ void OsmApiDbBulkWriter::_retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutp
   }
   QFileInfo sqlOutputFileInfo(sqlOutputFile->fileName());
   LOG_INFO(
-    "Copying SQL output file of size " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) <<
-    " to " << _sqlFileCopyLocation << "...");
+    "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file to " <<
+    _sqlFileCopyLocation << "...");
   if (!sqlOutputFile->copy(_sqlFileCopyLocation))
   {
     LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
@@ -237,8 +237,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
   try
   {
     LOG_INFO("Writing combined SQL output file.  Data pass #2 of 2...");
-    LOG_VART(sqlTempOutputFile->fileName());
 
+    LOG_VART(sqlTempOutputFile->fileName());
     LOG_VART(_sectionNames.size());
     LOG_VART(_outputSections.size());
     LOG_VART(_statusUpdateInterval);
@@ -247,7 +247,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     QTextStream outStream(sqlTempOutputFile.get());
     outStream << "BEGIN TRANSACTION;" << "\n";
     outStream.flush();
-    long totalLineCtr = 0;
+    long progressLineCtr = 0;
     for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
     {
       if (_outputSections.find(*it) == _outputSections.end())
@@ -290,11 +290,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
             if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
             {
               _updateRecordLineWithIdOffset(*it, line);
+              progressLineCtr++;
             }
-
             outStream << line << "\n";
             lineCtr++;
-            totalLineCtr++;
 
             if (lineCtr == _fileOutputLineBufferSize)
             {
@@ -302,10 +301,17 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
               lineCtr = 0;
             }
 
-            if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
+            if (progressLineCtr > 0 && (progressLineCtr % _statusUpdateInterval == 0))
             {
+              //TODO: changesets is throwing off the progress totals here...not sure why...don't
+              //care that much right now, since the changeset count is far outnumbered by the
+              //size of the rest of the data
               PROGRESS_INFO(
-                "Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " SQL lines.");
+                "Parsed " <<
+                _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
+                _formatPotentiallyLargeNumber(
+                  _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
+                " SQL file lines.");
             }
           }
           while (!line.isNull());
@@ -334,7 +340,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     sqlTempOutputFile->close();
 
     LOG_INFO("SQL file write complete; data pass #2 of 2.");
-    LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " total SQL file lines.");
+    LOG_INFO(
+      "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
 
     QFileInfo outputInfo(sqlTempOutputFile->fileName());
     LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
@@ -488,15 +495,19 @@ void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
 
 long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
 {
+  //the multiplications by 2 account for the fact that two records are written for each type (other
+  //than changesets), one for the current tables and one for the historical tables
   return
-    _writeStats.nodesWritten + _writeStats.nodeTagsWritten + _writeStats.relationMembersWritten +
-    _writeStats.relationsWritten + _writeStats.relationTagsWritten + _writeStats.wayNodesWritten +
-    _writeStats.waysWritten + _writeStats.wayTagsWritten + _changesetData.changesetsWritten;
+    (_writeStats.nodesWritten * 2) + (_writeStats.nodeTagsWritten * 2) +
+    (_writeStats.relationMembersWritten * 2) + (_writeStats.relationsWritten * 2) +
+    (_writeStats.relationTagsWritten * 2) + (_writeStats.wayNodesWritten * 2) +
+    (_writeStats.waysWritten * 2) + (_writeStats.wayTagsWritten * 2) +
+    _changesetData.changesetsWritten;
 }
 
 void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
 {
-  LOG_DEBUG("Retrieving and incrementing current IDs from database...");
+  LOG_DEBUG("Incrementing current ID sequences in database and updating local record IDs...");
   _idMappings.currentNodeId = _database.getNextId(ElementType::Node);
   _idMappings.currentWayId = _database.getNextId(ElementType::Way);
   _idMappings.currentRelationId = _database.getNextId(ElementType::Relation);
