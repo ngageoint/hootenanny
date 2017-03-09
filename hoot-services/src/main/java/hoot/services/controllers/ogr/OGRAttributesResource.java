@@ -26,8 +26,8 @@
  */
 package hoot.services.controllers.ogr;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -166,7 +166,7 @@ public class OGRAttributesResource {
         return Response.ok(script).build();
     }
 
-    private void processFormDataMultiPart(List<String> filesList, List<String> zipList, String jobId, String inputType, FormDataMultiPart multiPart)
+    private static void processFormDataMultiPart(List<String> filesList, List<String> zipList, String jobId, String inputType, FormDataMultiPart multiPart)
             throws IOException {
         Map<String, String> uploadedFiles = new HashMap<>();
         Map<String, String> uploadedFilesPaths = new HashMap<>();
@@ -184,7 +184,7 @@ public class OGRAttributesResource {
             // which is fgdb name in the zip
             if (ext.equalsIgnoreCase("ZIP")) {
                 zipList.add(fName);
-                String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
+                String zipFilePath = UPLOAD_FOLDER + File.separator + jobId + File.separator + inputFileName;
                 try (FileInputStream in = new FileInputStream(zipFilePath)) {
                     try (ZipInputStream zis = new ZipInputStream(in)) {
                         ZipEntry ze = zis.getNextEntry();

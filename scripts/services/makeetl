@@ -8,13 +8,13 @@ HOOT_OPTS+= -D api.db.email=test@test.com
 
 OP_INPUT=$(INPUT)
 OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
-OP_INPUT_PATH=$(HOOT_HOME)/$(INPUT_PATH)
+OP_INPUT_PATH=$(INPUT_PATH)
 
 
 # This replaces semicolon with vsizip and path
 ifeq "$(INPUT_TYPE)" "ZIP"
-#	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;,/" "/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/,$(INPUT))/"
-	OP_INPUT="/vsizip/$(HOOT_HOME)/$(INPUT_PATH)/$(subst ;," "/vsizip/$(HOOT_HOME)/$(INPUT_PATH),$(INPUT))"
+#	OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
+	OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
 endif
 
 ifeq "$(INPUT_TYPE)" "GEONAMES"

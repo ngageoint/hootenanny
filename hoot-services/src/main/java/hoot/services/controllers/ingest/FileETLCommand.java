@@ -28,7 +28,9 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.ETL_MAKEFILE;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +45,10 @@ import hoot.services.utils.JsonUtils;
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt,
-            int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
-            int osmCnt, int geonamesCnt, List<String> zipList, String translation,
-            String jobId, String etlName, List<String> inputsList, String userEmail,
-            String isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
+    FileETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt,
+                   int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt, List<String> zipList, String translation,
+                   String jobId, String etlName, List<String> inputsList, String userEmail,
+                   String isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
 
         String inputs = "";
         for (Object r : reqList) {
@@ -69,28 +70,24 @@ class FileETLCommand extends ExternalCommand {
             }
             else {
                 // Mix of shape and zip then we will unzip and treat it like OGR
-                if (shpCnt > 0) // One or more all ogr zip + shape
-                {
+                if (shpCnt > 0) { // One or more all ogr zip + shape
                     curInputType = "OGR";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
-                else if (osmCnt > 0) // Mix of One or more all osm zip + osm
-                {
+                else if (osmCnt > 0) { // Mix of One or more all osm zip + osm
                     curInputType = "OSM";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
-                else if (geonamesCnt > 0) // Mix of One or more all osm zip + osm
-                {
+                else if (geonamesCnt > 0) { // Mix of One or more all osm zip + osm
                     curInputType = "GEONAMES";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
-                else // One or more zip (all ogr) || One or more zip (all osm)
-                {
-                    // If contains zip of just shape or osm then we will etl zip
-                    // directly
+                else { // One or more zip (all ogr) || One or more zip (all osm)
+
+                    // If contains zip of just shape or osm then we will etl zip directly
                     curInputType = "ZIP";
                     // add zip extension
 
@@ -119,7 +116,7 @@ class FileETLCommand extends ExternalCommand {
             isNone = isNoneTranslation.equals("true");
         }
 
-        String translationPath = "translations/" + translation;
+        String translationPath = "translations" + File.separator + translation;
 
         if (translation.contains("/")) {
             translationPath = translation;
@@ -130,7 +127,7 @@ class FileETLCommand extends ExternalCommand {
         param.put("NONE_TRANSLATION", isNone.toString());
         param.put("TRANSLATION", translationPath);
         param.put("INPUT_TYPE", curInputType);
-        param.put("INPUT_PATH", "upload/" + jobId);
+        param.put("INPUT_PATH", UPLOAD_FOLDER + File.separator + jobId);
         param.put("INPUT", inputs);
         param.put("INPUT_NAME", etlName);
         param.put("USER_EMAIL", userEmail);

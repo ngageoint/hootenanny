@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -56,6 +57,7 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 public class FileUploadResourceTest {
     private static File homeFolder;
     private static String original_HOME_FOLDER;
+    private static String original_UPLOAD_FOLDER;
 
     private static void copyResourcesInfoTestFolder(String[] resources) throws IOException {
         for (String resource : resources) {
@@ -69,10 +71,12 @@ public class FileUploadResourceTest {
     public static void beforeClass() throws Exception {
         try {
             original_HOME_FOLDER = HOME_FOLDER;
+            original_UPLOAD_FOLDER = UPLOAD_FOLDER;
             homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest");
             FileUtils.forceMkdir(homeFolder);
             assertTrue(homeFolder.exists());
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
+            HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", homeFolder.getAbsolutePath() + "/" + "upload");
 
             copyResourcesInfoTestFolder(new String[]
                     {"ogr.zip", "zip1.zip", "osm.zip", "osm1.osm", "osm2.osm",
@@ -91,13 +95,14 @@ public class FileUploadResourceTest {
     public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homeFolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+        HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", original_UPLOAD_FOLDER);
     }
 
     @Test
     @Category(UnitTest.class)
     public void TestBuildNativeRequestFgdbOgr() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -135,7 +140,7 @@ public class FileUploadResourceTest {
     public void TestBuildNativeRequestFgdbOsm() throws Exception {
         String input = "fgdb_osm.zip";
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -168,7 +173,7 @@ public class FileUploadResourceTest {
     public void TestCreateNativeRequestFgdbOgrZip() throws Exception {
         String input = "fgdb_ogr.zip";
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -230,7 +235,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -253,7 +258,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZipAndShp() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -336,7 +341,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -359,7 +364,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsmZipAndOsm() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
 
@@ -442,7 +447,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -465,7 +470,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgrZip() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -548,7 +553,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -566,7 +571,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOgr() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -643,7 +648,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -660,7 +665,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestOsm() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -737,7 +742,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -755,7 +760,7 @@ public class FileUploadResourceTest {
     @Category(UnitTest.class)
     public void TestCreateNativeRequestFgdb() throws Exception {
         String jobId = "test-id-123";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -814,7 +819,7 @@ public class FileUploadResourceTest {
             }
 
             if (oJ.get("INPUT_PATH") != null) {
-                assertEquals("upload/test-id-123", oJ.get("INPUT_PATH").toString());
+                assertTrue(oJ.get("INPUT_PATH").toString().endsWith("/upload/test-id-123"));
                 nP++;
             }
 
@@ -837,7 +842,7 @@ public class FileUploadResourceTest {
         // Create dummy FGDB
 
         String jobId = "123-456-789";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
@@ -872,7 +877,7 @@ public class FileUploadResourceTest {
         // Create dummy FGDB
 
         String jobId = "123-456-789-testosm";
-        String wkdirpath = homeFolder + "/upload/" + jobId;
+        String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
         FileUtils.forceMkdir(workingDir);
         assertTrue(workingDir.exists());
