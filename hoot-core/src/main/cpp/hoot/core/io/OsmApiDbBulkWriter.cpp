@@ -1113,22 +1113,23 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
   {
     LOG_VART(_changesetData.changesInChangeset);
     _writeChangesetToTable();
-    long changesetUpdateInterval;
-    if (_statusUpdateInterval > _maxChangesetSize)
-    {
-      changesetUpdateInterval = _statusUpdateInterval / _maxChangesetSize;
-    }
-    else
-    {
-      changesetUpdateInterval = _statusUpdateInterval;
-    }
-    if (_changesetData.changesetsWritten > 0 &&
-        (_changesetData.changesetsWritten % changesetUpdateInterval == 0))
-    {
-      PROGRESS_INFO(
-        "Parsed " << _formatPotentiallyLargeNumber(_changesetData.changesetsWritten) <<
-        " changesets from input.");
-    }
+    //not sure I want to see this interrupt the status message for the element loads...
+//    long changesetUpdateInterval;
+//    if (_statusUpdateInterval > _maxChangesetSize)
+//    {
+//      changesetUpdateInterval = _statusUpdateInterval / _maxChangesetSize;
+//    }
+//    else
+//    {
+//      changesetUpdateInterval = _statusUpdateInterval;
+//    }
+//    if (_changesetData.changesetsWritten > 0 &&
+//        (_changesetData.changesetsWritten % changesetUpdateInterval == 0))
+//    {
+//      PROGRESS_INFO(
+//        "Parsed " << _formatPotentiallyLargeNumber(_changesetData.changesetsWritten) <<
+//        " changesets from input.");
+//    }
     _changesetData.currentChangesetId++;
     LOG_VART(_changesetData.currentChangesetId);
     _changesetData.changesInChangeset = 0;
