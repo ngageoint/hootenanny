@@ -248,7 +248,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   LOG_VART(_fileOutputLineBufferSize);
 
   QTextStream outStream(_sqlOutputMasterFile.get());
-  outStream << "BEGIN TRANSACTION;" << "\n";
+  outStream << "BEGIN TRANSACTION;\n";
   outStream.flush();
   long progressLineCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
@@ -460,20 +460,24 @@ void OsmApiDbBulkWriter::_lockIds()
 
 void OsmApiDbBulkWriter::_executeElementSql()
 {
+  //I believe a COPY header is created whether there are any records to copy for the table or not,
+  //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
+  //to not write the header if there are no records to copy for the table...s
+  LOG_INFO(
+    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    " records.  17 separate SQL COPY statements will be executed...");
+
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
-  LOG_INFO(
-    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records...");
   QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
   QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (!(Log::getInstance().getLevel() <= Log::Debug))
+  if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " --quiet";
   }
   cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
-  if (!(Log::getInstance().getLevel() <= Log::Debug))
+  if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " > /dev/null";
   }
