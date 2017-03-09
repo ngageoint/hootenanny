@@ -238,7 +238,7 @@ private:
 
   void _writeChangesetToTable();
   void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
-                             const long relationId);
+                             const long relationId, QString& outputStr);
   void _writeRelationToTables(const long relationDbId);
   void _writeRelationMembersToTables(const ConstRelationPtr& relation);
   void _writeRelationMember(const long sourceRelation, const RelationData::Entry& memberEntry,

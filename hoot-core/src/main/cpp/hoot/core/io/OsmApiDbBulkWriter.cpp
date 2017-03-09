@@ -266,12 +266,12 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
         continue;
       }
 
-      if (*it == "sequence_updates")
-      {
-        //sequences are now exec'd separately before the element sql is exec'd
-        LOG_TRACE("Skipping sequence updates in initial master file write...");
-        continue;
-      }
+//      if (*it == "sequence_updates")
+//      {
+//        //sequences are now exec'd separately before the element sql is exec'd
+//        LOG_TRACE("Skipping sequence updates in initial master file write...");
+//        continue;
+//      }
 
       LOG_TRACE(
         "Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
@@ -550,32 +550,13 @@ void OsmApiDbBulkWriter::_lockIds()
       QString("have been parsed from the input."));
   }
 
-  //TODO: we really don't need to serialize this to a file
   _incrementAndGetLatestIdsFromDb();
+  QString lockElementIdsSql;
   _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
                         _idMappings.currentNodeId + _writeStats.nodesWritten,
                         _idMappings.currentWayId + _writeStats.waysWritten,
-                        _idMappings.currentRelationId + _writeStats.relationsWritten);
-  (_outputSections["sequence_updates"].second)->flush();
-  if (!(_outputSections["sequence_updates"].first)->flush())
-  {
-    throw HootException("Could not flush tempfile for table sequence_updates.");
-  }
-
-  //read in and exec the id lock sql for the needed ID ranges out for this element write; We're
-  //not worrying about cleaning up the locked out ID ranges if this db write ends up failing.
-  QString lockElementIdsSql;
-  QFile sequenceFile(_outputSections["sequence_updates"].first->fileName());
-  if (sequenceFile.open(QIODevice::ReadOnly))
-  {
-    QTextStream sequenceStrm(&sequenceFile);
-    lockElementIdsSql = sequenceStrm.readAll();
-  }
-  else
-  {
-    throw HootException("Unable to open sequence updates file.");
-  }
-  sequenceFile.close();
+                        _idMappings.currentRelationId + _writeStats.relationsWritten,
+                        lockElementIdsSql);
   LOG_VART(lockElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to lock out record IDs...");
@@ -779,7 +760,7 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
   QStringList sections;
 
   sections.push_back(QString("byte_order_mark"));
-  sections.push_back(QString("sequence_updates"));
+  //sections.push_back(QString("sequence_updates"));
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
   sections.push_back(ApiDb::getCurrentNodeTagsTableName());
@@ -1367,13 +1348,14 @@ void OsmApiDbBulkWriter::_writeChangesetToTable()
 }
 
 void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const long nodeId,
-                                               const long wayId, const long relationId)
+                                               const long wayId, const long relationId,
+                                               QString& outputStr)
 {
   LOG_TRACE("Writing sequence updates stream...");
 
-  _createTable("sequence_updates", "");
+  //_createTable("sequence_updates", "");
 
-  shared_ptr<QTextStream> sequenceUpdatesStream = _outputSections["sequence_updates"].second;
+  shared_ptr<QTextStream> sequenceUpdatesStream(new QTextStream(&outputStr));
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   //At least one changeset and some nodes should always be written by a write operation; ways
