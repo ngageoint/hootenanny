@@ -181,30 +181,16 @@ void OsmApiDbBulkWriter::finalizePartial()
     _changesetData.changesetsWritten++;
   }
 
-  //combine all the element/changeset temp files that were written during partial streaming into one
-  //file
-  _writeCombinedSqlFile(sqlOutputFile);
-
-  //Get the latest id sequences in case other writes have occurred while we were creating the SQL
-  //file, and lock those ids out so we can exec the sql w/o risk of future conflicts *after* we
+  //Get the latest id sequences in case other writes have occurred while we were parsing the input
+  //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
   //update the ids in the sql file in the next step.
   //We're always going to lock the ids wheter _executeSql is true or false, so that the output SQL
   //file can still be manually applied later if desired.
   _lockIds();
 
-  /*
-   * Update the ids in the SQl file according to the id sequences previously locked out.
-   *
-   * I initially tried to do something fancier where a check would be done here for the current
-   * id sequences, and if none had changed, then the id offset update data pass would be skipped.
-   * What I found was that calls to currval for the current ID sequence are session local, so if
-   * there are other writers that wrote data in their own session the current values obtained with
-   * this class's database connection would be inaccurate.  Its easier to just call nextval here,
-   * use the values as starting ids for the elements/changesets, and update the ids regardless of
-   * whether external changes happened during the initial data pass or not.  So, this id update
-   * pass ends up happening every time, whether actually needed or not.
-  */
-  shared_ptr<QTemporaryFile> finalSqlOutputFile = _updateIdOffsetsInNewFile(sqlOutputFile);
+  //combine all the element/changeset temp files that were written during partial streaming into one
+  //file and update the ids in the SQl file according to the id sequences previously locked out
+  _writeCombinedSqlFile(sqlOutputFile);
 
   //retain the sql output file if that option was selected
   if (!_sqlFileCopyLocation.isEmpty())
@@ -214,11 +200,11 @@ void OsmApiDbBulkWriter::finalizePartial()
     {
       copyFile.remove();
     }
-    QFileInfo sqlOutputFileInfo(finalSqlOutputFile->fileName());
+    QFileInfo sqlOutputFileInfo(sqlOutputFile->fileName());
     LOG_INFO(
       "Copying SQL output file of size " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) <<
       " to " << _sqlFileCopyLocation << "...");
-    if (!finalSqlOutputFile->copy(_sqlFileCopyLocation))
+    if (!sqlOutputFile->copy(_sqlFileCopyLocation))
     {
       LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
     }
@@ -230,7 +216,7 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   if (_executeSql)
   {
-    _executeElementSql(finalSqlOutputFile->fileName());
+    _executeElementSql(sqlOutputFile->fileName());
 
     LOG_INFO("Total database write stats:");
   }
@@ -296,6 +282,12 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
           {
             line = inStream.readLine();
             LOG_VART(line);
+
+            if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
+            {
+              _updateRecordLineWithIdOffset(*it, line);
+            }
+
             outStream << line << "\n";
             lineCtr++;
             totalLineCtr++;
@@ -356,180 +348,85 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
   }
 }
 
-shared_ptr<QTemporaryFile> OsmApiDbBulkWriter::_updateIdOffsetsInNewFile(
-  shared_ptr<QTemporaryFile> inputSqlFile)
+void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName,
+                                                       QString& sqlRecordLine)
 {
-  shared_ptr<QTemporaryFile> updateSqlOutputFile(new QTemporaryFile());
-  try
+  LOG_TRACE("Updating ID offset for line...");
+  LOG_VART(tableName);
+
+  QStringList lineParts = sqlRecordLine.split("\t");
+
+  //update any element/changeset ID reference by adding the current ID offset to it
+
+  bool lineUpdated = true;
+  if (tableName == ApiDb::getChangesetsTableName())
   {
-    LOG_INFO("Updating ID offsets in combined SQL file.  Data pass #3 of 3...");
-    LOG_VART(inputSqlFile->fileName());
-    QFileInfo inputInfo(inputSqlFile->fileName());
-    LOG_VART(SystemInfo::humanReadable(inputInfo.size()));
-
-    if (!updateSqlOutputFile->open())
-    {
-      throw HootException("Could not open file for SQL output: " + updateSqlOutputFile->fileName());
-    }
-
-    QTextStream outStream(updateSqlOutputFile.get());
-    if (!inputSqlFile->open())
-    {
-      throw HootException(
-        "Error opening input SQL file for ID offset updates: " + inputSqlFile->fileName());
-    }
-    QTextStream inStream(inputSqlFile.get());
-
-    QString line;
-    long lineCtr = 0;
-    long totalLineCtr = 0;
-    QString currentTableName = "";
-    do
-    {
-      line = inStream.readLine().trimmed();
-      LOG_VART(line);
-
-      if (line.contains("COPY"))
-      {
-        LOG_VART(line.split(QRegExp("\\s")).size());
-        currentTableName = line.split(QRegExp("\\s"))[1].trimmed();
-        LOG_VART(currentTableName);
-      }
-      else if (!line.isEmpty() && line != "\\.")
-      {
-        LOG_TRACE("Checking for ID update...");
-        LOG_VART(currentTableName);
-
-        QStringList lineParts = line.split("\t");
-
-        //update any element/changeset ID reference by adding the current ID offset to it
-
-        bool lineUpdated = true;
-        if (currentTableName == ApiDb::getChangesetsTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _changesetData.currentChangesetId);
-        }
-        else if (currentTableName == ApiDb::getCurrentNodesTableName() ||
-                 currentTableName == ApiDb::getNodesTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentNodeId);
-          lineParts[3] = QString::number(lineParts[3].toLong() + _changesetData.currentChangesetId);
-        }
-        else if (currentTableName == ApiDb::getCurrentWaysTableName() ||
-                 currentTableName == ApiDb::getWaysTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
-          lineParts[1] = QString::number(lineParts[1].toLong() + _changesetData.currentChangesetId);
-        }
-        else if (currentTableName == ApiDb::getCurrentWayNodesTableName() ||
-                 currentTableName == ApiDb::getWayNodesTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
-          lineParts[1] = QString::number(lineParts[1].toLong() + _idMappings.currentNodeId);
-        }
-        else if (currentTableName == ApiDb::getCurrentRelationsTableName() ||
-                 currentTableName == ApiDb::getRelationsTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
-          lineParts[1] = QString::number(lineParts[1].toLong() + _changesetData.currentChangesetId);
-        }
-        else if (currentTableName == ApiDb::getCurrentRelationMembersTableName() ||
-                 currentTableName == ApiDb::getRelationMembersTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
-          const long memberId = lineParts[2].toLong();
-          if (lineParts[1].toLower() == "node")
-          {
-            lineParts[2] = QString::number(memberId + _idMappings.currentNodeId);
-          }
-          else if (lineParts[1].toLower() == "way")
-          {
-            lineParts[2] = QString::number(memberId + _idMappings.currentWayId);
-          }
-        }
-        else if (currentTableName == ApiDb::getCurrentNodeTagsTableName() ||
-                 currentTableName == ApiDb::getNodeTagsTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentNodeId);
-        }
-        else if (currentTableName == ApiDb::getCurrentWayTagsTableName() ||
-                 currentTableName == ApiDb::getWayTagsTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
-        }
-        else if (currentTableName == ApiDb::getCurrentRelationTagsTableName() ||
-                 currentTableName == ApiDb::getRelationTagsTableName())
-        {
-          lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
-        }
-        else
-        {
-          lineUpdated = false;
-        }
-
-        if (lineUpdated)
-        {
-          line = lineParts.join("\t");
-          LOG_TRACE("Updated line: " << line);
-        }
-      }
-      else
-      {
-        //next line is not a record
-        LOG_TRACE("Passing line through to output with no changes...");
-        currentTableName = "";
-      }
-
-      if (!line.isEmpty())
-      {
-        outStream << line;
-      }
-      outStream << "\n";
-      lineCtr++;
-      totalLineCtr++;
-
-      if (lineCtr == _fileOutputLineBufferSize)
-      {
-        outStream.flush();
-        lineCtr = 0;
-      }
-
-      if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
-      {
-        //TODO: for some reason this is printing statements on separate lines instead of the
-        //the same line as the same statement in _writeCombinedSqlFile does...not sure why
-        PROGRESS_INFO(
-          "Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << "/" <<
-          _formatPotentiallyLargeNumber(_totalFileLinesWrittenFirstPass) <<
-          " SQL file lines for ID offset updates.");
-      }
-    }
-    while (!line.isNull());
-    outStream.flush();
-
-    inputSqlFile->close();
-    updateSqlOutputFile->close();
-
-    QFileInfo outputInfo(updateSqlOutputFile->fileName());
-    LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
-
-    LOG_INFO("ID offset updates complete; data pass #3 of 3.");
-    LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " total SQL lines.");
+    lineParts[0] = QString::number(lineParts[0].toLong() + _changesetData.currentChangesetId);
   }
-  catch (const Exception& e)
+  else if (tableName == ApiDb::getCurrentNodesTableName() ||
+           tableName == ApiDb::getNodesTableName())
   {
-    if (inputSqlFile.get())
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentNodeId);
+    lineParts[3] = QString::number(lineParts[3].toLong() + _changesetData.currentChangesetId);
+  }
+  else if (tableName == ApiDb::getCurrentWaysTableName() || tableName == ApiDb::getWaysTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
+    lineParts[1] = QString::number(lineParts[1].toLong() + _changesetData.currentChangesetId);
+  }
+  else if (tableName == ApiDb::getCurrentWayNodesTableName() ||
+           tableName == ApiDb::getWayNodesTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
+    lineParts[1] = QString::number(lineParts[1].toLong() + _idMappings.currentNodeId);
+  }
+  else if (tableName == ApiDb::getCurrentRelationsTableName() ||
+           tableName == ApiDb::getRelationsTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
+    lineParts[1] = QString::number(lineParts[1].toLong() + _changesetData.currentChangesetId);
+  }
+  else if (tableName == ApiDb::getCurrentRelationMembersTableName() ||
+           tableName == ApiDb::getRelationMembersTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
+    const long memberId = lineParts[2].toLong();
+    if (lineParts[1].toLower() == "node")
     {
-      inputSqlFile->close();
+      lineParts[2] = QString::number(memberId + _idMappings.currentNodeId);
     }
-    if (updateSqlOutputFile.get())
+    else if (lineParts[1].toLower() == "way")
     {
-      updateSqlOutputFile->close();
+      lineParts[2] = QString::number(memberId + _idMappings.currentWayId);
     }
-    throw e;
+  }
+  else if (tableName == ApiDb::getCurrentNodeTagsTableName() ||
+           tableName == ApiDb::getNodeTagsTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentNodeId);
+  }
+  else if (tableName == ApiDb::getCurrentWayTagsTableName() ||
+           tableName == ApiDb::getWayTagsTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentWayId);
+  }
+  else if (tableName == ApiDb::getCurrentRelationTagsTableName() ||
+           tableName == ApiDb::getRelationTagsTableName())
+  {
+    lineParts[0] = QString::number(lineParts[0].toLong() + _idMappings.currentRelationId);
+  }
+  else
+  {
+    lineUpdated = false;
   }
 
-  return updateSqlOutputFile;
+  if (!lineUpdated)
+  {
+    throw HootException("Bad line passed to record ID offsetter: " + sqlRecordLine);
+  }
+
+  sqlRecordLine = lineParts.join("\t");
+  LOG_TRACE("ID offset updated for line: " << sqlRecordLine);
 }
 
 void OsmApiDbBulkWriter::_lockIds()

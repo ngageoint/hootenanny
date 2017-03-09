@@ -27,36 +27,8 @@
 #ifndef OSMAPIDBBULKWRITER_H
 #define OSMAPIDBBULKWRITER_H
 
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
- */
-
 #include <string>
 #include <map>
-#include <list>
 #include <vector>
 
 #include <QString>
@@ -89,25 +61,26 @@ using namespace Tgs;
  * write transaction fails, the element data will not be written but the IDs reserved will not be
  * freed and will go unused in the database.
  *
- * Workflow:
+ * This writer requires two passes over the data.  The first pass streams elements from input and
+ * writes out generated SQL statements to temporary files for each database table type.  The second
+ * pass combines the data from all temp SQL files into a single SQL file with the correct
+ * statement ordering, as well as updates record IDs to ensure no ID conflicts will occur if external
+ * writing occurred during the first pass of the data.
+ *
+ * Detailed workflow:
  *
  *   * write the element/changeset SQL copy statements out to individual temp SQL files in a
  *     buffered fashion with a first pass over the data; arbitrarily start all ID sequences at 1
  *
- *   * combine the temp files into a master SQL file in a buffered fashion in a second pass over
- *     the data
- *
- *   * use the element count obtained during the first pass SQL files write to determine the ID
+ *   * use the element counts obtained during the first pass SQL files write to determine the ID
  *     ranges the elements and changesets being written consume; lock these ID ranges out by
- *     executing setval statements against the database in a separate SQL exec
+ *     executing setval statements against the database
  *
- *   * update the ids in the master SQL file to those that were locked out in a third pass over
- *     the data
+ *   * combine the temp files into a master SQL file in a buffered fashion in a second pass over
+ *     the data; while parsing each record update element/changeset IDs based on those locked out
+ *     in the previous step
  *
  *   * execute the element/changeset SQL copy statements against the database
- *
- * @todo Get rid of the second pass over the data by writing all SQL to a master file from the
- * start, if possible.
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -251,7 +224,7 @@ private:
     shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
     shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
 
-  shared_ptr<QTemporaryFile> _updateIdOffsetsInNewFile(shared_ptr<QTemporaryFile> inputSqlFile);
+  void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
   void _executeElementSql(const QString sqlFile);
   void _writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
   void _lockIds();
