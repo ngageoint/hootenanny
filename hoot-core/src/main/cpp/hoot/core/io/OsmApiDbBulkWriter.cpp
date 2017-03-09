@@ -83,24 +83,11 @@ void OsmApiDbBulkWriter::open(QString url)
   _outputUrl = url;
   _database.open(_outputUrl);
 
-  //offline mode doesn't assume other writers, so just grab the current IDs now and that's what
-  //we'll go with, without worrying about them changing while we're writing the temp output file
-  if (_mode == "offline")
-  {
-    _getLatestIdsFromDb();
-  }
-
-  QString totalPasses = "2";
-  if (_mode == "online")
-  {
-    totalPasses = "3";
-  }
-  //would rather put this in write, but if both reader and writer implement the streaming interface
-  //and neither implement the partial interface you'll never see this message, due to how
+  //would rather put this message in write, but if both reader and writer implement the streaming
+  //interface and neither implement the partial interface you'll never see this message, due to how
   //ElementOutputStream::writeAllElements works
   LOG_INFO(
-    "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of " <<
-    totalPasses << "...");
+    "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of 3...");
 }
 
 void OsmApiDbBulkWriter::close()
@@ -167,7 +154,7 @@ void OsmApiDbBulkWriter::finalizePartial()
 {
   if (_writeStats.nodesWritten == 0)
   {
-    LOG_DEBUG("No data written.");
+    LOG_DEBUG("No data was written.");
     return;
   }
 
@@ -179,7 +166,6 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     throw HootException("Could not open temp file for SQL output: " + sqlOutputFile->fileName());
   }
-  LOG_TRACE(sqlOutputFile->fileName());
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
   _createTable("byte_order_mark", "\n", true);
@@ -189,31 +175,38 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     _writeChangesetToTable();
   }
+  //If there was only one changeset written, this won't have yet been incremented, so do it now.
   if (_changesetData.changesetsWritten == 0)
   {
     _changesetData.changesetsWritten++;
   }
 
+  //combine all the element/changeset temp files that were written during partial streaming into one
+  //file
   _writeCombinedSqlFile(sqlOutputFile);
 
-  if (_executeSql)
-  {
-    _lockIds();
-  }
-  else
-  {
-    //there's no point in locking out the ids if we're not going to write the data to the db, but
-    //we do need to get the latest IDs so that the file ID content is correct
-    _getLatestIdsFromDb();
-  }
+  //Get the latest id sequences in case other writes have occurred while we were creating the SQL
+  //file, and lock those ids out so we can exec the sql w/o risk of future conflicts *after* we
+  //update the ids in the sql file in the next step.
+  //We're always going to lock the ids wheter _executeSql is true or false, so that the output SQL
+  //file can still be manually applied later if desired.
+  _lockIds();
 
-  //if we're in online mode, we'll be writing a completely new sql output file
-  shared_ptr<QTemporaryFile> finalSqlOutputFile = sqlOutputFile;
-  if (_mode == "online")
-  {
-    finalSqlOutputFile = _updateIdOffsetsInNewFile(sqlOutputFile);
-  }
+  /*
+   * Update the ids in the SQl file according to the id sequences previously locked out.
+   *
+   * I initially tried to do something fancier where a check would be done here for the current
+   * id sequences, and if none had changed, then the id offset update data pass would be skipped.
+   * What I found was that calls to currval for the current ID sequence are session local, so if
+   * there are other writers that wrote data in their own session the current values obtained with
+   * this class's database connection would be inaccurate.  Its easier to just call nextval here,
+   * use the values as starting ids for the elements/changesets, and update the ids regardless of
+   * whether external changes happened during the initial data pass or not.  So, this id update
+   * pass ends up happening every time, whether actually needed or not.
+  */
+  shared_ptr<QTemporaryFile> finalSqlOutputFile = _updateIdOffsetsInNewFile(sqlOutputFile);
 
+  //retain the sql output file if that option was selected
   if (!_sqlFileCopyLocation.isEmpty())
   {
     QFile copyFile(_sqlFileCopyLocation);
@@ -253,13 +246,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
 {
   try
   {
-    QString totalPasses = "2";
-    if (_mode == "online")
-    {
-      totalPasses = "3";
-    }
-
-    LOG_INFO("Writing combined SQL output file.  Data pass #2 of " + totalPasses + "...");
+    LOG_INFO("Writing combined SQL output file.  Data pass #2 of 3...");
     LOG_VART(sqlTempOutputFile->fileName());
 
     LOG_VART(_sectionNames.size());
@@ -328,6 +315,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
 
             if (totalLineCtr > 0 && (totalLineCtr % _statusUpdateInterval == 0))
             {
+              //This gets a little funky when reading pbf's due to the way that reader logs
+              //messages...maybe worth cleaning up at some point.
               PROGRESS_INFO(
                 "Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " SQL lines.");
             }
@@ -357,7 +346,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     outStream.flush();
     sqlTempOutputFile->close();
 
-    LOG_INFO("SQL file write complete; data pass #2 of " << totalPasses + ".");
+    LOG_INFO("SQL file write complete; data pass #2 of 3.");
     LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " total SQL file lines.");
     _totalFileLinesWrittenFirstPass = totalLineCtr;
 
@@ -562,31 +551,11 @@ void OsmApiDbBulkWriter::_lockIds()
   }
 
   //TODO: we really don't need to serialize this to a file
-  if (_mode == "online")
-  {
-    _getLatestIdsFromDb();
-    //We need to prevent other writers from claiming the IDs associated with the elements we're
-    //about to write.  Before the potentially lengthy SQL file ID update process which will happen
-    //next, lock out the ID range starting with the next ID in each sequence we just obtained from
-    //the db up to the number of each sequence type we're writing.
-
-    //write the id lock sql out to a temp file
-    _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-                          _idMappings.currentNodeId + _writeStats.nodesWritten,
-                          _idMappings.currentWayId + _writeStats.waysWritten,
-                          _idMappings.currentRelationId + _writeStats.relationsWritten);
-  }
-  else
-  {
-    //In offline mode we're not guaranteeing id uniqueness, so we prepend the setval statements
-    //to the element sql and don't worry if other writers wrote data while we were serializing the
-    //sql file.  Here, the current IDs represent the next ID for each sequence immediately
-    //after the data we're about to write (the starting IDs were obtained from the db when it
-    //was opened).  Since the IDs were incremented after parsing each piece of data and represent
-    //the next ID, and we want the sequence to reflect the current ID, we decrement each one.
-    _writeSequenceUpdates(_changesetData.currentChangesetId - 1, _idMappings.currentNodeId - 1,
-                          _idMappings.currentWayId - 1, _idMappings.currentRelationId - 1);
-  }
+  _incrementAndGetLatestIdsFromDb();
+  _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+                        _idMappings.currentNodeId + _writeStats.nodesWritten,
+                        _idMappings.currentWayId + _writeStats.waysWritten,
+                        _idMappings.currentRelationId + _writeStats.relationsWritten);
   (_outputSections["sequence_updates"].second)->flush();
   if (!(_outputSections["sequence_updates"].first)->flush())
   {
@@ -607,6 +576,7 @@ void OsmApiDbBulkWriter::_lockIds()
     throw HootException("Unable to open sequence updates file.");
   }
   sequenceFile.close();
+  LOG_VART(lockElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to lock out record IDs...");
   _database.transaction();
@@ -650,23 +620,14 @@ long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
     _writeStats.waysWritten + _writeStats.wayTagsWritten + _changesetData.changesetsWritten;
 }
 
-void OsmApiDbBulkWriter::_getLatestIdsFromDb()
+void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
 {
-  //get the current ID sequence for each element type from the database
-  LOG_DEBUG("Retrieving current IDs from database...");
+  LOG_DEBUG("Retrieving and incrementing current IDs from database...");
 
   _idMappings.currentNodeId = _database.getNextId(ElementType::Node);
   _idMappings.currentWayId = _database.getNextId(ElementType::Way);
   _idMappings.currentRelationId = _database.getNextId(ElementType::Relation);
   _changesetData.currentChangesetId = _database.getNextId(ApiDb::getChangesetsTableName());
-  if (_mode == "online")
-  {
-    _idMappings.currentNodeId--;
-    _idMappings.currentWayId--;
-    _idMappings.currentRelationId--;
-    _changesetData.currentChangesetId--;
-  }
-
   LOG_VART(_changesetData.currentChangesetId);
   LOG_VART(_idMappings.currentNodeId);
   LOG_VART(_idMappings.currentWayId);
@@ -806,8 +767,6 @@ void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings& conf)
 {
   const ConfigOptions confOptions(conf);
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
-  setMode(confOptions.getOsmapidbBulkWriterMode().toLower());
-  LOG_TRACE("OSM API database bulk writer set to " << _mode << " mode.");
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed());
@@ -1371,14 +1330,16 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
 
 void OsmApiDbBulkWriter::_writeChangesetToTable()
 {
+  LOG_VART(_changesetData.changesetUserId);
+  LOG_VART(_changesetData.currentChangesetId);
+
   if (_changesetData.changesetUserId == -1)
   {
     throw HootException(
       "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
   }
-  LOG_VART(_changesetData.changesetUserId);
 
-  if (_changesetData.currentChangesetId == 1)
+  if (!_outputSections[ApiDb::getChangesetsTableName()].second.get())
   {
     _createTable(
       ApiDb::getChangesetsTableName(),
@@ -1388,6 +1349,7 @@ void OsmApiDbBulkWriter::_writeChangesetToTable()
   }
 
   shared_ptr<QTextStream> changesetsStream = _outputSections[ApiDb::getChangesetsTableName()].second;
+  LOG_VART(changesetsStream.get());
   const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
 

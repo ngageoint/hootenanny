@@ -1258,16 +1258,6 @@ Count at which the SQL file output status of each element type should be logged 
 the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see
 a load status update message logged for every 100 SQL lines parsed.
 
-=== osmapidb.bulk.writer.mode
-
-* Data Type: string
-* Default Value: `online`
-
-Valid values are "offline" and "online".  Offline mode does not guarantee element ID uniqueness
-but will run faster than online mode.  Offline mode is meant to be used against offline databases
-(ones with no other writers present).  Online mode guarantees element ID uniqueness, is safe to run
-against a live database (other writers present), but will run more slowly than offline mode.
-
 === osmapidb.bulk.writer.sql.output.file.copy.location
 
 * Data Type: string

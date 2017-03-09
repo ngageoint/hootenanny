@@ -207,6 +207,7 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  _setCurrentId.reset();
   for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -505,43 +506,91 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
 {
   QString tag = "";
   int pos = -1;
-  if(type==ElementType::Node) pos=OsmApiDb::NODES_TAGS;
-  else if(type==ElementType::Way) pos=OsmApiDb::WAYS_TAGS;
-  else if(type==ElementType::Relation) pos=OsmApiDb::RELATIONS_TAGS;
+  if (type == ElementType::Node) pos = OsmApiDb::NODES_TAGS;
+  else if (type == ElementType::Way) pos = OsmApiDb::WAYS_TAGS;
+  else if (type == ElementType::Relation) pos = OsmApiDb::RELATIONS_TAGS;
   else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
 
   // test for blank tag
   QString val1 = row->value(pos).toString();
   QString val2 = row->value(pos+1).toString();
-  if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
+  if (val1 != "" || val2 != "") tag = "\"" + val1 + "\"=>\"" + val2 + "\"";
 
   return tag;
 }
 
-long OsmApiDb::getNextId(const ElementType& type)
+void OsmApiDb::setCurrentId(const QString sequenceName, const long id)
 {
-  switch (type.getEnum())
+  if (!_setCurrentId)
+  {
+    _setCurrentId.reset(new QSqlQuery(_db));
+    _setCurrentId->setForwardOnly(true);
+    QString sql =  "SELECT SETVAL(:sequenceName, :id)";
+    _setCurrentId->prepare(sql);
+  }
+
+  _setCurrentId->bindValue(":sequenceName", sequenceName);
+  _setCurrentId->bindValue(":id", (qlonglong)id);
+  if (_setCurrentId->exec() == false)
+  {
+    throw HootException(
+      "Error setting current ID for sequence: " + sequenceName + " with ID: " + id + ". Error: " +
+      _setCurrentId->lastError().text());
+  }
+  LOG_VART(_setCurrentId->executedQuery());
+  LOG_VART(_setCurrentId->numRowsAffected());
+}
+
+long OsmApiDb::getNextId(const ElementType& elementType)
+{
+  return _getIdFromSequence(elementType, "next");
+}
+
+long OsmApiDb::getNextId(const QString tableName)
+{
+  return _getIdFromSequence(tableName, "next");
+}
+
+long OsmApiDb::getCurrentId(const ElementType& elementType)
+{
+  return _getIdFromSequence(elementType, "current");
+}
+
+long OsmApiDb::getCurrentId(const QString tableName)
+{
+  return _getIdFromSequence(tableName, "current");
+}
+
+long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString sequenceType)
+{
+  switch (elementType.getEnum())
   {
     case ElementType::Node:
     case ElementType::Way:
     case ElementType::Relation:
-      return getNextId("current_" + type.toString().toLower() + "s");
+      return _getIdFromSequence("current_" + elementType.toString().toLower() + "s", sequenceType);
     default:
       throw HootException("Unknown element type");
   }
 }
 
-long OsmApiDb::getNextId(const QString tableName)
+long OsmApiDb::_getIdFromSequence(const QString tableName, const QString sequenceType)
 {
   long result;
-  if (_seqQueries[tableName].get() == 0)
-  {
+  //TODO: is this needed?
+  //if (_seqQueries[tableName].get() == 0)
+  //{
     _seqQueries[tableName].reset(new QSqlQuery(_db));
     _seqQueries[tableName]->setForwardOnly(true);
-    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1%2')")
-                                    .arg(tableName.toLower())
-                                    .arg(ApiDb::getSequenceId()));
-  }
+    //valid sequence types are "next" and "current"
+    QString sql =
+      QString("SELECT NEXTVAL('%1%2')").arg(tableName.toLower()).arg(ApiDb::getSequenceId());
+    if (sequenceType.toLower() == "current")
+    {
+      sql = sql.replace("NEXTVAL", "CURRVAL");
+    }
+    _seqQueries[tableName]->prepare(sql);
+ // }
 
   shared_ptr<QSqlQuery> query = _seqQueries[tableName];
   if (query->exec() == false)
@@ -564,7 +613,6 @@ long OsmApiDb::getNextId(const QString tableName)
     throw HootException("Error retrieving sequence value. type: " +
       tableName + " Error: " + query->lastError().text());
   }
-
   query->finish();
 
   return result;

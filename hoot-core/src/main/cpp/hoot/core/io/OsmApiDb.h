@@ -116,15 +116,20 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
-  virtual long getNextId(const ElementType& elementType);
-
+  //TODO: does this need to abstract in the parent?
   /**
    * Gets the next sequence ID for the given database table
    *
    * @param tableName database table name
    * @return an element ID
    */
+  virtual long getNextId(const ElementType& elementType);
   long getNextId(const QString tableName);
+
+  long getCurrentId(const ElementType& elementType);
+  long getCurrentId(const QString tableName);
+
+  void setCurrentId(const QString sequenceName, const long id);
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
@@ -162,12 +167,16 @@ private:
   shared_ptr<QSqlQuery> _selectTagsForRelation;
   shared_ptr<QSqlQuery> _selectMembersForRelation;
   shared_ptr<QSqlQuery> _selectNodeById;
+  shared_ptr<QSqlQuery> _setCurrentId;
 
   QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
 
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
+
+  long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
+  long _getIdFromSequence(const QString tableName, const QString sequenceType);
 
 };
 

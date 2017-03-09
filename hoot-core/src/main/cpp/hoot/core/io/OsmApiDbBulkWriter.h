@@ -82,35 +82,32 @@ using namespace Tgs;
 /**
  * OSM element writer optimized for bulk element inserts to an OSM API database.
  *
- * If you need to write small amounts of elements to an OSM API database or modify data in an existing
- * database, you're beter off creating a new writer class or using the Rails Port.
+ * If you need to write small amounts of elements to an OSM API database or modify data in an
+ * existing database, you're beter off creating a new writer class or using the Rails Port.
  *
- * This writer has two modes: offline and online.
+ * This writer guarantees element ID uniqueness against a live database.  If the element SQL
+ * write transaction fails, the element data will not be written but the IDs reserved will not be
+ * freed and will go unused in the database.
  *
- * Offline mode is meant to be used against an offline database (one with no other writers
- * present). Offline mode does not guarantee element/changeset ID uniqueness against an online
- * database, since external writes can occur during the SQL file generation.  Offline mode will
- * run faster than online mode due an extra pass over the data required by online mode.
+ * Workflow:
  *
- * Offline workflow:
+ *   * write the element/changeset SQL copy statements out to individual temp SQL files in a
+ *     buffered fashion with a first pass over the data; arbitrarily start all ID sequences at 1
  *
- *   * query for the current element/changeset ID sequences from the database when it is opened
- *   * write the element/changeset SQL copy statements out to a file in a buffered fashion
- *   * execute the element/changeset SQL copy and ID sequence update statements against the database;
- *     IDs begin with the starting IDs obtained when the database was opened and end with the ID
- *     of the last record written in each sequence
+ *   * combine the temp files into a master SQL file in a buffered fashion in a second pass over
+ *     the data
  *
- * Online mode will guarantee element ID uniqueness against a live database  If the element SQL
- * write in online mode fails, the IDs reserved will not be freed and will go unused in the database.
+ *   * use the element count obtained during the first pass SQL files write to determine the ID
+ *     ranges the elements and changesets being written consume; lock these ID ranges out by
+ *     executing setval statements against the database in a separate SQL exec
  *
- * Online workflow:
+ *   * update the ids in the master SQL file to those that were locked out in a third pass over
+ *     the data
  *
- *   * write the element/changeset SQL copy statements out to a file in a buffered fashion; arbitrarily
- *     start all ID sequences at 1
- *   * use the element count obtained during the first pass SQL write to determine the ID ranges the
- *     write consumes; lock these ID ranges out by executing setval statements against the database
- *     in a separate SQL exec
  *   * execute the element/changeset SQL copy statements against the database
+ *
+ * @todo Get rid of the second pass over the data by writing all SQL to a master file from the
+ * start, if possible.
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -190,14 +187,6 @@ public:
 
   virtual void setConfiguration(const hoot::Settings& conf);
 
-  void setMode(QString mode)
-  {
-    if (mode != "offline" && mode != "online")
-    {
-      throw HootException("Invalid OSM API database bulk writer mode: " + mode);
-    }
-    _mode = mode;
-  }
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
@@ -206,6 +195,9 @@ public:
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
 
 private:
+
+  // for white box testing.
+  friend class ServiceOsmApiDbBulkWriterTest;
 
   ElementWriteStats _writeStats;
   IdMappings _idMappings;
@@ -218,7 +210,6 @@ private:
   QStringList _sectionNames;
 
   QString _outputUrl;
-  QString _mode;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   QString _sqlFileCopyLocation;
@@ -235,8 +226,9 @@ private:
   void _createTable(const QString tableName, const QString tableHeader);
   void _createTable(const QString tableName, const QString tableHeader,
                     const bool addByteOrderMarker);
+  void _closeSectionTempFilesAndConcat();
 
-  void _getLatestIdsFromDb();
+  void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
@@ -258,8 +250,6 @@ private:
   void _writeTagsToTables(const Tags& tags, const long nodeDbId,
     shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
     shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
-
-  void _closeSectionTempFilesAndConcat();
 
   shared_ptr<QTemporaryFile> _updateIdOffsetsInNewFile(shared_ptr<QTemporaryFile> inputSqlFile);
   void _executeElementSql(const QString sqlFile);
