@@ -266,13 +266,6 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
         continue;
       }
 
-//      if (*it == "sequence_updates")
-//      {
-//        //sequences are now exec'd separately before the element sql is exec'd
-//        LOG_TRACE("Skipping sequence updates in initial master file write...");
-//        continue;
-//      }
-
       LOG_TRACE(
         "Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
 
@@ -760,7 +753,6 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
   QStringList sections;
 
   sections.push_back(QString("byte_order_mark"));
-  //sections.push_back(QString("sequence_updates"));
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
   sections.push_back(ApiDb::getCurrentNodeTagsTableName());
@@ -1352,8 +1344,6 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
                                                QString& outputStr)
 {
   LOG_TRACE("Writing sequence updates stream...");
-
-  //_createTable("sequence_updates", "");
 
   shared_ptr<QTextStream> sequenceUpdatesStream(new QTextStream(&outputStr));
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
