@@ -188,7 +188,6 @@ private:
   QString _sqlFileCopyLocation;
   bool _executeSql;
   long _maxChangesetSize;
-  long _totalFileLinesWrittenFirstPass;
 
   void _reset();
 
@@ -227,6 +226,7 @@ private:
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
   void _executeElementSql(const QString sqlFile);
   void _writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
+  void _retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutputFile);
   void _lockIds();
   long _getTotalRecordsWritten() const;
 

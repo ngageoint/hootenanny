@@ -47,8 +47,7 @@ unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
-OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
-_totalFileLinesWrittenFirstPass(0)
+OsmApiDbBulkWriter::OsmApiDbBulkWriter()
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -83,11 +82,11 @@ void OsmApiDbBulkWriter::open(QString url)
   _outputUrl = url;
   _database.open(_outputUrl);
 
-  //would rather put this message in write, but if both reader and writer implement the streaming
-  //interface and neither implement the partial interface you'll never see this message, due to how
-  //ElementOutputStream::writeAllElements works
+  //would rather put this message in the write method, but if both reader and writer implement the
+  //streaming interface and neither implement the partial interface you'll never see this message,
+  //due to how ElementOutputStream::writeAllElements works
   LOG_INFO(
-    "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of 3...");
+    "Preparing to stream elements from input to temporary SQL file outputs.  Data pass #1 of 2...");
 }
 
 void OsmApiDbBulkWriter::close()
@@ -175,7 +174,8 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     _writeChangesetToTable();
   }
-  //If there was only one changeset written, this won't have yet been incremented, so do it now.
+  //If there was only one changeset written total, this won't have yet been incremented, so do it
+  //now.
   if (_changesetData.changesetsWritten == 0)
   {
     _changesetData.changesetsWritten++;
@@ -195,29 +195,12 @@ void OsmApiDbBulkWriter::finalizePartial()
   //retain the sql output file if that option was selected
   if (!_sqlFileCopyLocation.isEmpty())
   {
-    QFile copyFile(_sqlFileCopyLocation);
-    if (copyFile.exists())
-    {
-      copyFile.remove();
-    }
-    QFileInfo sqlOutputFileInfo(sqlOutputFile->fileName());
-    LOG_INFO(
-      "Copying SQL output file of size " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) <<
-      " to " << _sqlFileCopyLocation << "...");
-    if (!sqlOutputFile->copy(_sqlFileCopyLocation))
-    {
-      LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
-    }
-    else
-    {
-      LOG_DEBUG("Copied SQL file output to " << _sqlFileCopyLocation);
-    }
+    _retainSqlOutputFile(sqlOutputFile);
   }
 
   if (_executeSql)
   {
     _executeElementSql(sqlOutputFile->fileName());
-
     LOG_INFO("Total database write stats:");
   }
   else
@@ -228,11 +211,32 @@ void OsmApiDbBulkWriter::finalizePartial()
   _logStats();
 }
 
+void OsmApiDbBulkWriter::_retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutputFile)
+{
+  QFile copyFile(_sqlFileCopyLocation);
+  if (copyFile.exists())
+  {
+    copyFile.remove();
+  }
+  QFileInfo sqlOutputFileInfo(sqlOutputFile->fileName());
+  LOG_INFO(
+    "Copying SQL output file of size " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) <<
+    " to " << _sqlFileCopyLocation << "...");
+  if (!sqlOutputFile->copy(_sqlFileCopyLocation))
+  {
+    LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
+  }
+  else
+  {
+    LOG_DEBUG("Copied SQL file output to " << _sqlFileCopyLocation);
+  }
+}
+
 void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile)
 {
   try
   {
-    LOG_INFO("Writing combined SQL output file.  Data pass #2 of 3...");
+    LOG_INFO("Writing combined SQL output file.  Data pass #2 of 2...");
     LOG_VART(sqlTempOutputFile->fileName());
 
     LOG_VART(_sectionNames.size());
@@ -331,9 +335,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTem
     outStream.flush();
     sqlTempOutputFile->close();
 
-    LOG_INFO("SQL file write complete; data pass #2 of 3.");
+    LOG_INFO("SQL file write complete; data pass #2 of 2.");
     LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(totalLineCtr) << " total SQL file lines.");
-    _totalFileLinesWrittenFirstPass = totalLineCtr;
 
     QFileInfo outputInfo(sqlTempOutputFile->fileName());
     LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
@@ -440,7 +443,9 @@ void OsmApiDbBulkWriter::_lockIds()
       QString("have been parsed from the input."));
   }
 
+  //get the next available id from the db for all sequence types
   _incrementAndGetLatestIdsFromDb();
+  //generate setval statements to lock each of the id ranges out from use by others
   QString lockElementIdsSql;
   _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
                         _idMappings.currentNodeId + _writeStats.nodesWritten,
@@ -458,9 +463,9 @@ void OsmApiDbBulkWriter::_lockIds()
 
 void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
 {
-  //exec element sql against the db; Using psql here b/c I'm assuming it is doing buffered reads
-  //against the sql file, so no need to handle buffering the sql read manually and applying it to a
-  //QSqlQuery.
+  //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
+  //sql file, so no need doing the extra work to handle buffering the sql read manually and
+  //applying it to a QSqlQuery.
   LOG_INFO(
     "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records...");
@@ -494,7 +499,6 @@ long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
 void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
 {
   LOG_DEBUG("Retrieving and incrementing current IDs from database...");
-
   _idMappings.currentNodeId = _database.getNextId(ElementType::Node);
   _idMappings.currentWayId = _database.getNextId(ElementType::Way);
   _idMappings.currentRelationId = _database.getNextId(ElementType::Relation);
@@ -512,9 +516,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
   //of all the nodes involved in the changeset.
 
-  //TODO: This actually won't work when ways or relations are written in separate changesets than
-  //the nodes they reference.  Since we're streaming the elements, there's no way to get back to
-  //the bounds information.  This bug has always been here, but just recently noticed.
+  //TODO: See #1451.  This changeset bounds calculation actually won't work when ways or relations
+  //are written in separate changesets than the nodes they reference.  Since we're streaming the
+  //elements, there's no way to get back to the bounds information.  This bug has always been here,
+  //but just recently noticed.
 
   _changesetData.changesetBounds.expandToInclude(n->getX(), n->getY());
   LOG_VART(_changesetData.changesetBounds.toString());
