@@ -158,7 +158,7 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
-  virtual void setConfiguration(const hoot::Settings& conf);
+  virtual void setConfiguration(const Settings& conf);
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
@@ -188,6 +188,7 @@ private:
   QString _sqlFileCopyLocation;
   bool _executeSql;
   long _maxChangesetSize;
+  shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
 
   void _reset();
 
@@ -224,9 +225,9 @@ private:
     shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
 
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
-  void _executeElementSql(const QString sqlFile);
-  void _writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile);
-  void _retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutputFile);
+  void _executeElementSql();
+  void _writeCombinedSqlFile();
+  void _retainSqlOutputFile();
   void _lockIds();
   long _getTotalRecordsWritten() const;
 

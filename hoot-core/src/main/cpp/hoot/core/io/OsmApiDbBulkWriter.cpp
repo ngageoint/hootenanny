@@ -90,6 +90,10 @@ void OsmApiDbBulkWriter::open(QString url)
 
 void OsmApiDbBulkWriter::close()
 {
+  if (_sqlOutputMasterFile.get())
+  {
+    _sqlOutputMasterFile->close();
+  }
   _database.close();
 
   _reset();
@@ -160,10 +164,11 @@ void OsmApiDbBulkWriter::finalizePartial()
   LOG_INFO("Input records parsed stats (data pass #1 of 2):");
   _logStats();
 
-  shared_ptr<QTemporaryFile> sqlOutputFile(new QTemporaryFile());
-  if (!sqlOutputFile->open())
+  _sqlOutputMasterFile.reset(new QTemporaryFile());
+  if (!_sqlOutputMasterFile->open())
   {
-    throw HootException("Could not open temp file for SQL output: " + sqlOutputFile->fileName());
+    throw HootException(
+      "Could not open temp file for SQL output: " + _sqlOutputMasterFile->fileName());
   }
 
   // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
@@ -183,24 +188,24 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   //Get the latest id sequences in case other writes have occurred while we were parsing the input
   //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
-  //update the ids in the sql file in the next step.
-  //We're always going to lock the ids wheter _executeSql is true or false, so that the output SQL
-  //file can still be manually applied later if desired.
+  //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
+  //_executeSql is true or false, so that the output SQL file can still be manually applied later
+  //if desired.
   _lockIds();
 
   //combine all the element/changeset temp files that were written during partial streaming into one
   //file and update the ids in the SQl file according to the id sequences previously locked out
-  _writeCombinedSqlFile(sqlOutputFile);
+  _writeCombinedSqlFile();
 
   //retain the sql output file if that option was selected
   if (!_sqlFileCopyLocation.isEmpty())
   {
-    _retainSqlOutputFile(sqlOutputFile);
+    _retainSqlOutputFile();
   }
 
   if (_executeSql)
   {
-    _executeElementSql(sqlOutputFile->fileName());
+    _executeElementSql();
     LOG_INFO("Final database write stats:");
   }
   else
@@ -211,18 +216,18 @@ void OsmApiDbBulkWriter::finalizePartial()
   _logStats();
 }
 
-void OsmApiDbBulkWriter::_retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutputFile)
+void OsmApiDbBulkWriter::_retainSqlOutputFile()
 {
   QFile copyFile(_sqlFileCopyLocation);
   if (copyFile.exists())
   {
     copyFile.remove();
   }
-  QFileInfo sqlOutputFileInfo(sqlOutputFile->fileName());
+  QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
   LOG_INFO(
-    "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file to " <<
-    _sqlFileCopyLocation << "...");
-  if (!sqlOutputFile->copy(_sqlFileCopyLocation))
+    "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
+    "to " << _sqlFileCopyLocation << "...");
+  if (!_sqlOutputMasterFile->copy(_sqlFileCopyLocation))
   {
     LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
   }
@@ -232,128 +237,115 @@ void OsmApiDbBulkWriter::_retainSqlOutputFile(shared_ptr<QTemporaryFile> sqlOutp
   }
 }
 
-void OsmApiDbBulkWriter::_writeCombinedSqlFile(shared_ptr<QTemporaryFile> sqlTempOutputFile)
+void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 {
-  try
+  LOG_INFO("Writing combined SQL output file.  Data pass #2 of 2...");
+
+  LOG_VART(_sqlOutputMasterFile->fileName());
+  LOG_VART(_sectionNames.size());
+  LOG_VART(_outputSections.size());
+  LOG_VART(_statusUpdateInterval);
+  LOG_VART(_fileOutputLineBufferSize);
+
+  QTextStream outStream(_sqlOutputMasterFile.get());
+  outStream << "BEGIN TRANSACTION;" << "\n";
+  outStream.flush();
+  long progressLineCtr = 0;
+  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
-    LOG_INFO("Writing combined SQL output file.  Data pass #2 of 2...");
-
-    LOG_VART(sqlTempOutputFile->fileName());
-    LOG_VART(_sectionNames.size());
-    LOG_VART(_outputSections.size());
-    LOG_VART(_statusUpdateInterval);
-    LOG_VART(_fileOutputLineBufferSize);
-
-    QTextStream outStream(sqlTempOutputFile.get());
-    outStream << "BEGIN TRANSACTION;" << "\n";
-    outStream.flush();
-    long progressLineCtr = 0;
-    for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
+    if (_outputSections.find(*it) == _outputSections.end())
     {
-      if (_outputSections.find(*it) == _outputSections.end())
-      {
-        LOG_TRACE("No data for table " + *it);
-        continue;
-      }
+      LOG_TRACE("No data for table " + *it);
+      continue;
+    }
 
-      LOG_TRACE(
-        "Flushing section " << *it << " to file " << (_outputSections[*it].first)->fileName());
+    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
 
-      // Write close marker for table
-      if ((*it != "byte_order_mark"))
-      {
-        LOG_TRACE("Writing byte order mark to stream...");
-        *(_outputSections[*it].second) << QString("\\.\n\n\n");
-      }
+    // Write close marker for table
+    if ((*it != "byte_order_mark"))
+    {
+      LOG_TRACE("Writing byte order mark to stream...");
+      *(_outputSections[*it].second) << QString("\\.\n\n\n");
+    }
 
-      // Flush any residual content from text stream/file
-      (_outputSections[*it].second)->flush();
-      if ((_outputSections[*it].first)->flush() == false)
-      {
-        throw HootException("Could not flush tempfile for table " + *it);
-      }
+    // Flush any residual content from text stream/file
+    _outputSections[*it].second->flush();
+    if (!_outputSections[*it].first->flush())
+    {
+      throw HootException("Could not flush tempfile for table " + *it);
+    }
 
-      // Append contents of section subfiles to output file
-      QFile tempInputFile(_outputSections[*it].first->fileName());
-      try
+    // Append contents of section subfiles to output file
+    QFile tempInputFile(_outputSections[*it].first->fileName());
+    try
+    {
+      if (tempInputFile.open(QIODevice::ReadOnly))
       {
-        if (tempInputFile.open(QIODevice::ReadOnly))
+        QTextStream inStream(&tempInputFile);
+        QString line;
+        long lineCtr = 0;
+        do
         {
-          QTextStream inStream(&tempInputFile);
-          QString line;
-          long lineCtr = 0;
-          do
+          line = inStream.readLine();
+          LOG_VART(line);
+
+          if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
           {
-            line = inStream.readLine();
-            LOG_VART(line);
-
-            if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
-            {
-              _updateRecordLineWithIdOffset(*it, line);
-              progressLineCtr++;
-            }
-            outStream << line << "\n";
-            lineCtr++;
-
-            if (lineCtr == _fileOutputLineBufferSize)
-            {
-              outStream.flush();
-              lineCtr = 0;
-            }
-
-            if (progressLineCtr > 0 && (progressLineCtr % _statusUpdateInterval == 0))
-            {
-              //TODO: changesets is throwing off the progress totals here...not sure why...don't
-              //care that much right now, since the changeset count is far outnumbered by the
-              //size of the rest of the data
-              PROGRESS_INFO(
-                "Parsed " <<
-                _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
-                _formatPotentiallyLargeNumber(
-                  _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
-                " SQL file lines.");
-            }
+            _updateRecordLineWithIdOffset(*it, line);
+            progressLineCtr++;
           }
-          while (!line.isNull());
-          outStream.flush();
+          outStream << line << "\n";
+          lineCtr++;
 
-          tempInputFile.close();
-          //remove temp file after write to the output file
-          LOG_TRACE("Removing temp file for " << *it << "...");
-          _outputSections[*it].first->remove();
+          if (lineCtr == _fileOutputLineBufferSize)
+          {
+            outStream.flush();
+            lineCtr = 0;
+          }
+
+          if (progressLineCtr > 0 && (progressLineCtr % _statusUpdateInterval == 0))
+          {
+            //TODO: changesets is throwing off the progress totals here...not sure why...don't
+            //care that much right now, since the changeset count is far outnumbered by the
+            //size of the rest of the data
+            PROGRESS_INFO(
+              "Parsed " <<
+              _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
+              _formatPotentiallyLargeNumber(
+                _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
+              " SQL file lines.");
+          }
         }
-        else
-        {
-          throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
-        }
-      }
-      catch (const Exception& e)
-      {
+        while (!line.isNull());
+        outStream.flush();
+
         tempInputFile.close();
-        throw e;
+        //remove temp file after write to the output file
+        LOG_TRACE("Removing temp file for " << *it << "...");
+        _outputSections[*it].first->remove();
       }
-
-      LOG_TRACE("Wrote contents of section " << *it);
+      else
+      {
+      throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
+      }
     }
-    outStream << "COMMIT;";
-    outStream.flush();
-    sqlTempOutputFile->close();
-
-    LOG_INFO("SQL file write complete; data pass #2 of 2.");
-    LOG_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
-
-    QFileInfo outputInfo(sqlTempOutputFile->fileName());
-    LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
-  }
-  catch (const Exception& e)
-  {
-    if (sqlTempOutputFile.get())
+    catch (const Exception& e)
     {
-      sqlTempOutputFile->close();
+      tempInputFile.close();
+      throw e;
     }
-    throw e;
+
+    LOG_TRACE("Wrote contents of section " << *it);
   }
+  outStream << "COMMIT;";
+  outStream.flush();
+  _sqlOutputMasterFile->close();
+
+  LOG_INFO("SQL file write complete; data pass #2 of 2.");
+  LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
+
+  QFileInfo outputInfo(_sqlOutputMasterFile->fileName());
+  LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
 
 void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName,
@@ -466,7 +458,7 @@ void OsmApiDbBulkWriter::_lockIds()
   LOG_DEBUG("Sequence updates written to database.");
 }
 
-void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
+void OsmApiDbBulkWriter::_executeElementSql()
 {
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
@@ -480,7 +472,7 @@ void OsmApiDbBulkWriter::_executeElementSql(const QString sqlFile)
   {
     cmd += " --quiet";
   }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + sqlFile;
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
   if (!(Log::getInstance().getLevel() <= Log::Debug))
   {
     cmd += " > /dev/null";
@@ -541,7 +533,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   long nodeDbId;
   // Do we already know about this node?
-  if (_idMappings.nodeIdMap->contains(n->getId()) == true)
+  if (_idMappings.nodeIdMap->contains(n->getId()))
   {
     throw NotImplementedException("Writer class does not support update operations.");
   }
@@ -579,7 +571,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   long wayDbId;
   // Do we already know about this way?
-  if (_idMappings.wayIdMap->contains(w->getId()) == true)
+  if (_idMappings.wayIdMap->contains(w->getId()))
   {
     throw hoot::NotImplementedException("Writer class does not support update operations");
   }
@@ -621,7 +613,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   long relationDbId;
   // Do we already know about this node?
-  if (_idMappings.relationIdMap->contains(r->getId()) == true)
+  if (_idMappings.relationIdMap->contains(r->getId()))
   {
     throw hoot::NotImplementedException("Writer class does not support update operations");
   }
@@ -908,7 +900,7 @@ void OsmApiDbBulkWriter::_writeWaynodesToTables(const long dbWayId, const vector
 
   for (vector<long>::const_iterator it = waynodeIds.begin(); it != waynodeIds.end(); ++it)
   {
-    if (_idMappings.nodeIdMap->contains(*it) == true)
+    if (_idMappings.nodeIdMap->contains(*it))
     {
       const QString dbNodeIdString = QString::number(_idMappings.nodeIdMap->at(*it));
       const QString nodeIndexString(QString::number(nodeIndex));
@@ -1011,7 +1003,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& r
     }
 
     if ((knownElementMap != shared_ptr<BigMap<long, long> >())
-          && (knownElementMap->contains(memberElementId.getId()) == true))
+          && (knownElementMap->contains(memberElementId.getId())))
     {
       _writeRelationMember(
         dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
@@ -1060,7 +1052,7 @@ void OsmApiDbBulkWriter::_writeRelationMember(const long sourceRelationDbId,
     break;
 
   default:
-    throw HootException("Unsupported element member type");
+    throw HootException("Unsupported element member type: " + memberType);
     break;
   }
 
@@ -1092,13 +1084,12 @@ void OsmApiDbBulkWriter::_createTable(const QString tableName, const QString tab
                                       const bool addByteOrderMark)
 {
   shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
-  if (tempfile->open() == false)
+  if (!tempfile->open())
   {
     throw HootException(
       "Could not open temp file at: " + tempfile->fileName() + " for contents of table " +
       tableName);
   }
-  tempfile->setAutoRemove(false);
 
   _outputSections[tableName] =
     pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> >(
@@ -1109,7 +1100,7 @@ void OsmApiDbBulkWriter::_createTable(const QString tableName, const QString tab
   _outputSections[tableName].second->setCodec("UTF-8");
 
   // First table written out should have byte order mark to help identifify content as UTF-8
-  if (addByteOrderMark == true)
+  if (addByteOrderMark)
   {
     _outputSections[tableName].second->setGenerateByteOrderMark(true);
   }
@@ -1189,7 +1180,7 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
   {
     if ((_unresolvedRefs.unresolvedWaynodeRefs !=
         shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > >()) &&
-        (_unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId()) == true))
+        (_unresolvedRefs.unresolvedWaynodeRefs->contains(element->getId())))
     {
       throw NotImplementedException(
         "Found unresolved waynode ref!  For node: " + QString::number(element->getId()) +
