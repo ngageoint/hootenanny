@@ -35,6 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/OsmApiDbCsvTableFileSetWriter.h>
 
 #include <tgs/System/SystemInfo.h>
 

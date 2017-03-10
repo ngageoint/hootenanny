@@ -24,25 +24,21 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBBULKWRITER2_H
-#define OSMAPIDBBULKWRITER2_H
+#ifndef OSMAPIDBCSVTABLEFILESETWRITER_H
+#define OSMAPIDBCSVTABLEFILESETWRITER_H
 
 #include <string>
-#include <map>
-#include <vector>
 
 #include <QString>
-#include <QTemporaryFile>
+#include <QMap>
 #include <QTextStream>
+#include <QFile>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-
-#include <tgs/BigContainers/BigMap.h>
 
 namespace hoot
 {
@@ -51,20 +47,20 @@ using namespace boost;
 using namespace std;
 
 /**
- * Version of osm api db bulk writing intended to utilize the pg_bulkload utility.
+ * Writes to individual CSV files, one for each table type in an OSM API database.
  */
-class OsmApiDbBulkWriter2 : public PartialOsmMapWriter, public Configurable
+class OsmApiDbCsvTableFileSetWriter : public PartialOsmMapWriter, public Configurable
 {
 
 public:
 
-  static string className() { return "hoot::OsmApiDbBulkWriter2"; }
+  static string className() { return "hoot::OsmApiDbCsvTableFileSetWriter"; }
 
   static unsigned int logWarnCount;
 
-  OsmApiDbBulkWriter2();
+  OsmApiDbCsvTableFileSetWriter();
 
-  virtual ~OsmApiDbBulkWriter2();
+  virtual ~OsmApiDbCsvTableFileSetWriter();
 
   virtual bool isSupported(QString url);
 
@@ -84,25 +80,24 @@ public:
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  //void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
-  void setExecuteSql(bool exec) { _executeSql = exec; }
-  void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
 
 private:
 
   // for white box testing.
   //friend class ServiceOsmApiDbBulkWriterTest;
 
+  QMap<QString, shared_ptr<QFile> > _outputFiles;
+  QMap<QString, shared_ptr<QTextStream> > _outputStreams;
+  QMap<QString, long> _numRecordsWritten;
+  long _unflushedRecords;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
-  bool _executeSql;
-  long _maxChangesetSize;
 
-  void _logStats(const bool debug);
-  void _executeElementSql();
-  long _getTotalRecordsWritten() const;
+  void _init(const QString outputUrl);
+  void _writeTags(ConstElementPtr element);
+
 };
 
 }
 
-#endif // OSMAPIDBBULKWRITER2_H
+#endif // OSMAPIDBCSVTABLEFILESETWRITER_H
