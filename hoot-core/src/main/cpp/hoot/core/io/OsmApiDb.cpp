@@ -284,7 +284,92 @@ QString OsmApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
-QString OsmApiDb::_elementTypeToElementTableName(const ElementType& elementType) const
+QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
+                                                const bool historical, const bool tags)
+{
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+        if (historical)
+        {
+          if (tags)
+          {
+            return ApiDb::getNodeTagsTableName();
+          }
+          else
+          {
+            return ApiDb::getNodesTableName();
+          }
+        }
+        else
+        {
+          if (tags)
+          {
+            return ApiDb::getCurrentNodeTagsTableName();
+          }
+          else
+          {
+            return ApiDb::getCurrentNodesTableName();
+          }
+        }
+      break;
+
+    case ElementType::Way:
+      if (historical)
+      {
+        if (tags)
+        {
+          return ApiDb::getWayTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getWaysTableName();
+        }
+      }
+      else
+      {
+        if (tags)
+        {
+          return ApiDb::getCurrentWayTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getCurrentWaysTableName();
+        }
+      }
+      break;
+
+    case ElementType::Relation:
+      if (historical)
+      {
+        if (tags)
+        {
+          return ApiDb::getRelationTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getRelationsTableName();
+        }
+      }
+      else
+      {
+        if (tags)
+        {
+          return ApiDb::getCurrentRelationTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getCurrentRelationsTableName();
+        }
+      }
+      break;
+
+    default:
+      throw HootException("Unknown element type");
+  }
+}
+
+QString OsmApiDb::_elementTypeToElementTableNameStr(const ElementType& elementType) const
 {
   if (elementType == ElementType::Node)
   {
@@ -388,7 +473,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
   QString sql =
-    "SELECT " + _elementTypeToElementTableName(ElementType::Node) +
+    "SELECT " + _elementTypeToElementTableNameStr(ElementType::Node) +
     " WHERE (id=:elementId) ORDER BY id DESC";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
@@ -412,7 +497,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   _selectElementsForMap->setForwardOnly(true);
 
   // setup base sql query string
-  QString sql =  "SELECT " + _elementTypeToElementTableName(elementType);
+  QString sql =  "SELECT " + _elementTypeToElementTableNameStr(elementType);
 
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true ORDER BY id DESC";

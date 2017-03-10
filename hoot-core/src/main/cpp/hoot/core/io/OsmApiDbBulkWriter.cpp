@@ -768,17 +768,12 @@ long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
   return dbIdentifier;
 }
 
-unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degrees) const
-{
-  return (round(degrees * ApiDb::COORDINATE_SCALE));
-}
-
 void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node, const long nodeDbId)
 {
   const double nodeY = node->getY();
   const double nodeX = node->getX();
-  const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
-  const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
+  const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeY);
+  const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeX);
   const int changesetId = _changesetData.currentChangesetId;
   const QString datestring =
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");

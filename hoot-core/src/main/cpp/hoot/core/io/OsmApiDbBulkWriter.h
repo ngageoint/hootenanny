@@ -206,7 +206,6 @@ private:
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
 
-  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
   QString _escapeCopyToData(const QString stringToOutput) const;
 
   void _writeChangesetToTable();

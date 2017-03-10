@@ -539,7 +539,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp \
     src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.cpp \
-    src/main/cpp/hoot/core/util/DbUtils.cpp
+    src/main/cpp/hoot/core/util/DbUtils.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbCsvFileWriter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1065,5 +1066,6 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.h \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.h \
-    src/main/cpp/hoot/core/util/DbUtils.h
+    src/main/cpp/hoot/core/util/DbUtils.h \
+    src/main/cpp/hoot/core/io/OsmApiDbCsvFileWriter.h
 
