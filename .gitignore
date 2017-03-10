@@ -76,8 +76,6 @@ HOOT_VERSION_FILE
 HootConfig.h
 .idea/*
 *.iml
-ingest/processed
-ingest/upload
 **/lib*.a
 **/lib*.so.*
 local/lib/
@@ -120,14 +118,12 @@ todo.txt
 /test-output
 .project
 matt_test
-/upload
 /src
 /test-out
 hoot-core/src/test/resources/nohup.out
 nohup.out
 /lib
 docs/node_modules/
-customscript/
 **/buildInfo.json/**
 */buildInfo.json/*
 **/buildInfo.json/*.*
@@ -146,7 +142,6 @@ tagCountHistogram2.png
 uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
-data/
 .vagrant/
 inputFeatures.png
 docs/developer/restDocs/
@@ -160,6 +155,7 @@ id_rsa.pub
 coverage/
 plugins/eggdm30_osm_rules.js
 plugins/eggdm30_rules.js
+userfiles/
 
 ###### hoot-services ignores
 hoot-services/db.properties
