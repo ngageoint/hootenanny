@@ -184,7 +184,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
   {
-    _writeChangesetToTable();
+    _writeChangesetToStream();
   }
   //If there was only one changeset written total, this won't have yet been incremented, so do it
   //now.
@@ -569,8 +569,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   _writeNodeToStream(n, nodeDbId);
   _writeTagsToStream(n->getTags(), nodeDbId,
-    _outputSections[ApiDb::getCurrentNodeTagsTableName()].second, "%1\t%2\t%3\n",
-    _outputSections[ApiDb::getNodeTagsTableName()].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentNodeTagsTableName()].second,
+    _outputSections[ApiDb::getNodeTagsTableName()].second);
   _writeStats.nodesWritten++;
   _writeStats.nodeTagsWritten += n->getTags().size();
 
@@ -626,8 +626,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
   _writeWayToStream(wayDbId);
   _writeWayNodesToStream(_idMappings.wayIdMap->at(w->getId()), w->getNodeIds());
   _writeTagsToStream(w->getTags(), wayDbId,
-    _outputSections[ApiDb::getCurrentWayTagsTableName()].second, "%1\t%2\t%3\n",
-    _outputSections[ApiDb::getWayTagsTableName()].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentWayTagsTableName()].second,
+    _outputSections[ApiDb::getWayTagsTableName()].second);
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += w->getTags().size();
   _writeStats.wayNodesWritten += w->getNodeIds().size();
@@ -694,8 +694,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
   _writeRelationToStream(relationDbId);
   _writeRelationMembersToStream(r);
   _writeTagsToStream(r->getTags(), relationDbId,
-    _outputSections[ApiDb::getCurrentRelationTagsTableName()].second, "%1\t%2\t%3\n",
-    _outputSections[ApiDb::getRelationTagsTableName()].second, "%1\t1\t%2\t%3\n");
+    _outputSections[ApiDb::getCurrentRelationTagsTableName()].second,
+    _outputSections[ApiDb::getRelationTagsTableName()].second);
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += r->getTags().size();
   _writeStats.relationMembersWritten += r->getMembers().size();
@@ -890,25 +890,23 @@ void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const long
   }
 
   QString outputLine =
-    QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n").arg(
+    _getCurrentNodesOutputFormatString().arg(
       QString::number(nodeDbId),
       QString::number(nodeYNanodegrees),
       QString::number(nodeXNanodegrees),
       QString::number(changesetId),
       datestring,
       tileNumberString);
-
   *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << outputLine;
 
   outputLine =
-    QString("%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n").arg(
+    _getHistoricalNodesOutputFormatString().arg(
       QString::number(nodeDbId),
       QString::number(nodeYNanodegrees),
       QString::number(nodeXNanodegrees),
       QString::number(changesetId),
       datestring,
       tileNumberString);
-
   *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
 }
 
@@ -919,9 +917,7 @@ unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degre
 
 void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const long nodeDbId,
                                             shared_ptr<QTextStream>& currentTable,
-                                            const QString currentTableFormatString,
-                                            shared_ptr<QTextStream>& historicalTable,
-                                            const QString historicalTableFormatString)
+                                            shared_ptr<QTextStream>& historicalTable)
 {
   const QString nodeDbIdString(QString::number(nodeDbId));
 
@@ -932,8 +928,8 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const long nodeDbI
     const QString value = _escapeCopyToData(it.value());
     LOG_VART(value);
 
-    *currentTable << currentTableFormatString.arg(nodeDbIdString, key, value);
-    *historicalTable << historicalTableFormatString.arg(nodeDbIdString, key, value);
+    *currentTable << _getCurrentTagsOutputFormatString().arg(nodeDbIdString, key, value);
+    *historicalTable << _getHistoricalTagsOutputFormatString().arg(nodeDbIdString, key, value);
   }
 }
 
@@ -972,19 +968,17 @@ void OsmApiDbBulkWriter::_writeWayToStream(const long wayDbId)
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
   QString outputLine =
-    QString("%1\t%2\t%3\tt\t1\n")
+    _getCurrentWaysOutputFormatString()
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
-
   *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << outputLine;
 
   outputLine =
-    QString("%1\t%2\t%3\t1\tt\t\\N\n")
+    _getHistoricalWaysOutputFormatString()
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
-
   *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
 }
 
@@ -995,8 +989,6 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const long dbWayId, const vector
   shared_ptr<QTextStream> currentWayNodesStream =
     _outputSections[ApiDb::getCurrentWayNodesTableName()].second;
   shared_ptr<QTextStream> wayNodesStream = _outputSections[ApiDb::getWayNodesTableName()].second;
-  const QString currentWaynodesFormat("%1\t%2\t%3\n");
-  const QString waynodesFormat("%1\t%2\t1\t%3\n");
   const QString dbWayIdString( QString::number(dbWayId));
 
   for (vector<long>::const_iterator it = waynodeIds.begin(); it != waynodeIds.end(); ++it)
@@ -1006,8 +998,10 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const long dbWayId, const vector
       const QString dbNodeIdString = QString::number(_idMappings.nodeIdMap->at(*it));
       const QString nodeIndexString(QString::number(nodeIndex));
       *currentWayNodesStream <<
-        currentWaynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
-      *wayNodesStream << waynodesFormat.arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+        _getCurrentWayNodesOutputFormatString().arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      *wayNodesStream <<
+        _getHistoricalWayNodesOutputFormatString().arg(
+          dbWayIdString, dbNodeIdString, nodeIndexString);
     }
     else
     {
@@ -1055,19 +1049,17 @@ void OsmApiDbBulkWriter::_writeRelationToStream(const long relationDbId)
   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
   QString outputLine =
-    QString("%1\t%2\t%3\tt\t1\n")
+    _getCurrentRelationsOutputFormatString()
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
-
   *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << outputLine;
 
   outputLine =
-    QString("%1\t%2\t%3\t1\tt\t\\N\n")
+    _getHistoricalRelationsOutputFormatString()
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
-
   *(_outputSections[ApiDb::getRelationsTableName()].second) << outputLine;
 }
 
@@ -1165,13 +1157,13 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
     _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
   shared_ptr<QTextStream> relationMembersStream =
     _outputSections[ApiDb::getRelationMembersTableName()].second;
-  const QString currentRelationMemberFormat("%1\t%2\t%3\t%4\t%5\n");
-  const QString relationMembersFormat("%1\t%2\t%3\t%4\t1\t%5\n");
 
-  *currentRelationMembersStream << currentRelationMemberFormat.arg(
-    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-  *relationMembersStream << relationMembersFormat.arg(
-    dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+  *currentRelationMembersStream <<
+    _getCurrentRelationMembersOutputFormatString().arg(
+      dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+  *relationMembersStream <<
+    _getHistoricalRelationMembersOutputFormatString().arg(
+      dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
 
   _writeStats.relationMembersWritten++;
 }
@@ -1217,7 +1209,7 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
   if (_changesetData.changesInChangeset == _maxChangesetSize)
   {
     LOG_VART(_changesetData.changesInChangeset);
-    _writeChangesetToTable();
+    _writeChangesetToStream();
     //not sure I want to see this interrupt the status message for the element loads...
 //    long changesetUpdateInterval;
 //    if (_statusUpdateInterval > _maxChangesetSize)
@@ -1309,7 +1301,7 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
   return escapedString;
 }
 
-void OsmApiDbBulkWriter::_writeChangesetToTable()
+void OsmApiDbBulkWriter::_writeChangesetToStream()
 {
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_changesetData.currentChangesetId);
@@ -1331,11 +1323,11 @@ void OsmApiDbBulkWriter::_writeChangesetToTable()
 
   shared_ptr<QTextStream> changesetsStream = _outputSections[ApiDb::getChangesetsTableName()].second;
   LOG_VART(changesetsStream.get());
-  const QString datestring = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  const QString changesetFormat("%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n");
+  const QString datestring =
+    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
   *changesetsStream <<
-    changesetFormat.arg(
+    _getChangesetsOutputFormatString().arg(
       QString::number(_changesetData.currentChangesetId),
       QString::number(_changesetData.changesetUserId),
       datestring,
@@ -1383,67 +1375,67 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
 
 QString OsmApiDbBulkWriter::_getChangesetsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\tt\t1\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t1\tt\t\\N\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t1\t%3\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\tt\t1\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t1\tt\t\\N\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentRelationMembersOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t%5\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalRelationMembersOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t1\t%5\n";
 }
 
 QString OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\n";
 }
 
 QString OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString() const
 {
-  return "";
+  return "%1\t1\t%2\t%3\n";
 }
 
 }

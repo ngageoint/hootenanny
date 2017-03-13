@@ -61,7 +61,7 @@ OsmApiDbBulkWriterOffline::~OsmApiDbBulkWriterOffline()
 bool OsmApiDbBulkWriterOffline::isSupported(QString urlStr)
 {
   return OsmApiDbBulkWriter::isSupported(urlStr) &&
-          (_disableWriteAheadLogging || _writeMultiThreaded);
+         (_disableWriteAheadLogging || _writeMultiThreaded);
 }
 
 void OsmApiDbBulkWriterOffline::finalizePartial()
@@ -78,7 +78,7 @@ void OsmApiDbBulkWriterOffline::finalizePartial()
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
   {
-    _writeChangesetToTable();
+    _writeChangesetToStream();
   }
   //If there was only one changeset written total, this won't have yet been incremented, so do it
   //now.
@@ -151,67 +151,67 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
 
 QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\tt\t1\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWaysOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t1\tt\t\\N\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWayNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWayNodesOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t1\t%3\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\tt\t1\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t1\tt\t\\N\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationMembersOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t%5\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationMembersOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\t%4\t1\t%5\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentTagsOutputFormatString() const
 {
-  return "";
+  return "%1\t%2\t%3\n";
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalTagsOutputFormatString() const
 {
-  return "";
+  return "%1\t1\t%2\t%3\n";
 }
 
 }

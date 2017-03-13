@@ -180,7 +180,7 @@ protected:
   long _getTotalRecordsWritten() const;
 
   virtual void _writeDataToDb();
-  void _writeChangesetToTable();
+  void _writeChangesetToStream();
 
   virtual void _retainOutputFiles();
 
@@ -245,8 +245,7 @@ private:
     const vector<long>& waynodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const long nodeDbId,
-    shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
-    shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
+                          shared_ptr<QTextStream>& currentTable, shared_ptr<QTextStream>& historicalTable);
 
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
   void _writeCombinedSqlFile();

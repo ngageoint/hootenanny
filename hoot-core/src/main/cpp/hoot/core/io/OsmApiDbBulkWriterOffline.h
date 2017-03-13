@@ -78,6 +78,12 @@ protected:
   virtual QString _getHistoricalRelationMembersOutputFormatString() const;
   virtual QString _getCurrentTagsOutputFormatString() const;
   virtual QString _getHistoricalTagsOutputFormatString() const;
+
+private:
+
+  // for white box testing.
+  friend class ServiceOsmApiDbBulkWriterTest;
+
 };
 
 }
