@@ -65,9 +65,19 @@ protected:
   virtual void _retainOutputFiles();
   virtual void _writeDataToDb();
 
-private:
-
-
+  virtual QString _getChangesetsOutputFormatString() const;
+  virtual QString _getCurrentNodesOutputFormatString() const;
+  virtual QString _getHistoricalNodesOutputFormatString() const;
+  virtual QString _getCurrentWaysOutputFormatString() const;
+  virtual QString _getHistoricalWaysOutputFormatString() const;
+  virtual QString _getCurrentWayNodesOutputFormatString() const;
+  virtual QString _getHistoricalWayNodesOutputFormatString() const;
+  virtual QString _getCurrentRelationsOutputFormatString() const;
+  virtual QString _getHistoricalRelationsOutputFormatString() const;
+  virtual QString _getCurrentRelationMembersOutputFormatString() const;
+  virtual QString _getHistoricalRelationMembersOutputFormatString() const;
+  virtual QString _getCurrentTagsOutputFormatString() const;
+  virtual QString _getHistoricalTagsOutputFormatString() const;
 };
 
 }

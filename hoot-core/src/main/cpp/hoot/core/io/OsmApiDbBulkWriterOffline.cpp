@@ -149,4 +149,69 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
   LOG_DEBUG("Element SQL execution complete.");
 }
 
+QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalWaysOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentWayNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalWayNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentRelationsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalRelationsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentRelationMembersOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalRelationMembersOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getCurrentTagsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriterOffline::_getHistoricalTagsOutputFormatString() const
+{
+  return "";
+}
+
 }

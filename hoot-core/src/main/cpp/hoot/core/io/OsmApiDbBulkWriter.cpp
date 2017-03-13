@@ -567,8 +567,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
   nodeDbId = _establishNewIdMapping(n->getElementId());
   LOG_VART(nodeDbId);
 
-  _writeNodeToTables(n, nodeDbId);
-  _writeTagsToTables(n->getTags(), nodeDbId,
+  _writeNodeToStream(n, nodeDbId);
+  _writeTagsToStream(n->getTags(), nodeDbId,
     _outputSections[ApiDb::getCurrentNodeTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getNodeTagsTableName()].second, "%1\t1\t%2\t%3\n");
   _writeStats.nodesWritten++;
@@ -623,9 +623,9 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
   wayDbId = _establishNewIdMapping(w->getElementId());
   LOG_VART(wayDbId);
 
-  _writeWayToTables(wayDbId);
-  _writeWaynodesToTables(_idMappings.wayIdMap->at(w->getId()), w->getNodeIds());
-  _writeTagsToTables(w->getTags(), wayDbId,
+  _writeWayToStream(wayDbId);
+  _writeWayNodesToStream(_idMappings.wayIdMap->at(w->getId()), w->getNodeIds());
+  _writeTagsToStream(w->getTags(), wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getWayTagsTableName()].second, "%1\t1\t%2\t%3\n");
   _writeStats.waysWritten++;
@@ -691,9 +691,9 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
   relationDbId = _establishNewIdMapping(r->getElementId());
   LOG_VART(relationDbId);
 
-  _writeRelationToTables(relationDbId);
-  _writeRelationMembersToTables(r);
-  _writeTagsToTables(r->getTags(), relationDbId,
+  _writeRelationToStream(relationDbId);
+  _writeRelationMembersToStream(r);
+  _writeTagsToStream(r->getTags(), relationDbId,
     _outputSections[ApiDb::getCurrentRelationTagsTableName()].second, "%1\t%2\t%3\n",
     _outputSections[ApiDb::getRelationTagsTableName()].second, "%1\t1\t%2\t%3\n");
   _writeStats.relationsWritten++;
@@ -862,7 +862,7 @@ long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
   return dbIdentifier;
 }
 
-void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node, const long nodeDbId)
+void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const long nodeDbId)
 {
   const double nodeY = node->getY();
   const double nodeX = node->getX();
@@ -917,7 +917,7 @@ unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degre
   return (round(degrees * ApiDb::COORDINATE_SCALE));
 }
 
-void OsmApiDbBulkWriter::_writeTagsToTables(const Tags& tags, const long nodeDbId,
+void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const long nodeDbId,
                                             shared_ptr<QTextStream>& currentTable,
                                             const QString currentTableFormatString,
                                             shared_ptr<QTextStream>& historicalTable,
@@ -965,7 +965,7 @@ void OsmApiDbBulkWriter::_createWayTables()
     " (way_id, node_id, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmApiDbBulkWriter::_writeWayToTables(const long wayDbId)
+void OsmApiDbBulkWriter::_writeWayToStream(const long wayDbId)
 {
   const int changesetId = _changesetData.currentChangesetId;
   const QString datestring =
@@ -988,7 +988,7 @@ void OsmApiDbBulkWriter::_writeWayToTables(const long wayDbId)
   *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
 }
 
-void OsmApiDbBulkWriter::_writeWaynodesToTables(const long dbWayId, const vector<long>& waynodeIds)
+void OsmApiDbBulkWriter::_writeWayNodesToStream(const long dbWayId, const vector<long>& waynodeIds)
 {
   unsigned int nodeIndex = 1;
 
@@ -1048,7 +1048,7 @@ void OsmApiDbBulkWriter::_createRelationTables()
     " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
 }
 
-void OsmApiDbBulkWriter::_writeRelationToTables(const long relationDbId)
+void OsmApiDbBulkWriter::_writeRelationToStream(const long relationDbId)
 {
   const int changesetId = _changesetData.currentChangesetId;
   const QString datestring =
@@ -1071,7 +1071,7 @@ void OsmApiDbBulkWriter::_writeRelationToTables(const long relationDbId)
   *(_outputSections[ApiDb::getRelationsTableName()].second) << outputLine;
 }
 
-void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& relation)
+void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& relation)
 {
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
@@ -1106,7 +1106,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& r
     if ((knownElementMap != shared_ptr<BigMap<long, long> >())
           && (knownElementMap->contains(memberElementId.getId())))
     {
-      _writeRelationMember(
+      _writeRelationMemberToStream(
         dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
     }
     else
@@ -1130,10 +1130,10 @@ void OsmApiDbBulkWriter::_writeRelationMembersToTables(const ConstRelationPtr& r
   }
 }
 
-void OsmApiDbBulkWriter::_writeRelationMember(const long sourceRelationDbId,
-                                              const RelationData::Entry& memberEntry,
-                                              const long memberDbId,
-                                              const unsigned int memberSequenceIndex)
+void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationDbId,
+                                                      const RelationData::Entry& memberEntry,
+                                                      const long memberDbId,
+                                                      const unsigned int memberSequenceIndex)
 {
   QString memberType;
   const ElementId memberElementId = memberEntry.getElementId();
@@ -1269,7 +1269,7 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
       }
       logWarnCount++;
 
-      _writeRelationMember(
+      _writeRelationMemberToStream(
         relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
         elementDbId, relationRef->second.relationMemberSequenceId);
 
@@ -1379,6 +1379,71 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
       sequenceUpdateFormat.arg(
         ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)) << "\n\n";
   }
+}
+
+QString OsmApiDbBulkWriter::_getChangesetsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentRelationMembersOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalRelationMembersOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString() const
+{
+  return "";
+}
+
+QString OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString() const
+{
+  return "";
 }
 
 }

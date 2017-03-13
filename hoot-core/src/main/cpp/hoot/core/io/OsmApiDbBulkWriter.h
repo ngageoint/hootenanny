@@ -186,6 +186,20 @@ protected:
 
   QString _formatPotentiallyLargeNumber(const long number);
 
+  virtual QString _getChangesetsOutputFormatString() const;
+  virtual QString _getCurrentNodesOutputFormatString() const;
+  virtual QString _getHistoricalNodesOutputFormatString() const;
+  virtual QString _getCurrentWaysOutputFormatString() const;
+  virtual QString _getHistoricalWaysOutputFormatString() const;
+  virtual QString _getCurrentWayNodesOutputFormatString() const;
+  virtual QString _getHistoricalWayNodesOutputFormatString() const;
+  virtual QString _getCurrentRelationsOutputFormatString() const;
+  virtual QString _getHistoricalRelationsOutputFormatString() const;
+  virtual QString _getCurrentRelationMembersOutputFormatString() const;
+  virtual QString _getHistoricalRelationMembersOutputFormatString() const;
+  virtual QString _getCurrentTagsOutputFormatString() const;
+  virtual QString _getHistoricalTagsOutputFormatString() const;
+
 private:
 
   // for white box testing.
@@ -222,15 +236,15 @@ private:
 
   void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
                              const long relationId, QString& outputStr);
-  void _writeRelationToTables(const long relationDbId);
-  void _writeRelationMembersToTables(const ConstRelationPtr& relation);
-  void _writeRelationMember(const long sourceRelation, const RelationData::Entry& memberEntry,
-                            const long memberDbId, const unsigned int memberSequenceIndex);
-  void _writeWayToTables(const long wayDbId);
-  void _writeWaynodesToTables(const long wayId,
+  void _writeRelationToStream(const long relationDbId);
+  void _writeRelationMembersToStream(const ConstRelationPtr& relation);
+  void _writeRelationMemberToStream(const long sourceRelation, const RelationData::Entry& memberEntry,
+                                    const long memberDbId, const unsigned int memberSequenceIndex);
+  void _writeWayToStream(const long wayDbId);
+  void _writeWayNodesToStream(const long wayId,
     const vector<long>& waynodeIds);
-  void _writeNodeToTables(const ConstNodePtr& node, const long nodeDbId);
-  void _writeTagsToTables(const Tags& tags, const long nodeDbId,
+  void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
+  void _writeTagsToStream(const Tags& tags, const long nodeDbId,
     shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
     shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
 
