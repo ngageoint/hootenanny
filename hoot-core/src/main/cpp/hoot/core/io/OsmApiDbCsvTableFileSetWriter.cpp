@@ -47,7 +47,10 @@ using namespace Tgs;
 
 unsigned int OsmApiDbCsvTableFileSetWriter::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbCsvTableFileSetWriter)
+//Not registering this as its own writer for now, since the only user of this class is
+//OsmApiDbBulkWriter2.  If someone wanted to run hoot convert and get these csv files as output
+//for some reason, then it should be registered.
+//HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbCsvTableFileSetWriter)
 
 OsmApiDbCsvTableFileSetWriter::OsmApiDbCsvTableFileSetWriter() :
 _unflushedRecords(0)
@@ -109,7 +112,7 @@ void OsmApiDbCsvTableFileSetWriter::_init(const QString outputUrl)
     shared_ptr<QTextStream> outStream(new QTextStream(outputFile.get()));
     _outputStreams.insert(outputFileTypes.at(i), outStream);
 
-    _numRecordsWritten[outputFileTypes.at(i)] = 0;
+    _numRecordsWrittenByType[outputFileTypes.at(i)] = 0;
   }
 }
 
@@ -133,6 +136,86 @@ void OsmApiDbCsvTableFileSetWriter::close()
   }
 }
 
+//TODO: move this and the one in OsmApiDbBulkWriter to a StringUtils class?
+QString OsmApiDbCsvTableFileSetWriter::_formatPotentiallyLargeNumber(const long number)
+{
+  //I want to see comma separators...probably a better way to handle this...will go with this for
+  //now.
+  const QLocale& cLocale = QLocale::c();
+  QString ss = cLocale.toString((qulonglong)number);
+  ss.replace(cLocale.groupSeparator(), ',');
+  return ss;
+}
+
+long OsmApiDbCsvTableFileSetWriter::getTotalRecordsWritten() const
+{
+  long total = 0;
+  for (QMap<QString, long>::const_iterator recordCntItr = _numRecordsWrittenByType.begin();
+       recordCntItr != _numRecordsWrittenByType.end(); recordCntItr++)
+  {
+    total += recordCntItr.value();
+  }
+  return total;
+}
+
+QStringList OsmApiDbCsvTableFileSetWriter::getOutputFileNames() const
+{
+  return _outputStreams.keys();
+}
+
+//TODO: consolidate this logic a bit with the one in OsmApiDbBulkWriter?
+void OsmApiDbCsvTableFileSetWriter::logStats(const bool debug)
+{
+  QStringList messages;
+  messages.append(QString("\tNodes: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentNodesTableName()]));
+  messages.append(
+    QString("\tNode tags: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentNodeTagsTableName()]));
+  messages.append(QString("\tWays: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentWaysTableName()]));
+  messages.append(
+    QString("\tWay nodes: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentWayNodesTableName()]));
+  messages.append(
+    QString("\tWay tags: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentWayTagsTableName()]));
+  messages.append(
+    QString("\tRelations: ") +
+    _formatPotentiallyLargeNumber(_numRecordsWrittenByType[ApiDb::getCurrentRelationsTableName()]));
+  messages.append(
+    QString("\tRelation members: ") +
+    _formatPotentiallyLargeNumber(
+      _numRecordsWrittenByType[ApiDb::getCurrentRelationMembersTableName()]));
+  messages.append(
+    QString("\tRelation tags: ") +
+    _formatPotentiallyLargeNumber(
+      _numRecordsWrittenByType[ApiDb::getCurrentRelationTagsTableName()]));
+  //TODO: fix
+//  messages.append(
+//    QString("\tUnresolved relations: ") +
+//    _formatPotentiallyLargeNumber(writeStats[""]));
+//  messages.append(
+//    QString("\tChangesets: ") + _formatPotentiallyLargeNumber(writeStats[""]));
+  messages.append(
+    QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
+  messages.append(
+    QString("\tExecutable SQL records: ") +
+    _formatPotentiallyLargeNumber(getTotalRecordsWritten()));
+
+  for (int i = 0; i < messages.size(); i++)
+  {
+    if (debug)
+    {
+      LOG_DEBUG(messages.at(i));
+    }
+    else
+    {
+      LOG_INFO(messages.at(i));
+    }
+  }
+}
+
 void OsmApiDbCsvTableFileSetWriter::finalizePartial()
 {
   for (QMap<QString, shared_ptr<QTextStream> >::iterator streamItr = _outputStreams.begin();
@@ -148,8 +231,8 @@ void OsmApiDbCsvTableFileSetWriter::finalizePartial()
     }
   }
 
-  for (QMap<QString, long>::const_iterator countItr = _numRecordsWritten.begin();
-       countItr != _numRecordsWritten.end(); countItr++)
+  for (QMap<QString, long>::const_iterator countItr = _numRecordsWrittenByType.begin();
+       countItr != _numRecordsWrittenByType.end(); countItr++)
   {
     LOG_INFO(*countItr << " total records written for " << countItr.key());
   }
@@ -173,7 +256,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstNodePtr& node)
     ",";
   *currentNodesOutStream << QString::number(1) << "\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getCurrentNodesTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getCurrentNodesTableName()]++;
 
   shared_ptr<QTextStream> historicalNodesOutStream = _outputStreams[ApiDb::getNodesTableName()];
   *historicalNodesOutStream << QString::number(node->getId()) << ",";
@@ -189,7 +272,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstNodePtr& node)
   *historicalNodesOutStream << QString::number(1) << ",";
   *historicalNodesOutStream << "\\N\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getNodesTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getNodesTableName()]++;
 
   _writeTags(node);
 
@@ -204,9 +287,9 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstNodePtr& node)
     _unflushedRecords = 0;
   }
 
-  if (_numRecordsWritten[ApiDb::getCurrentNodesTableName()] % _statusUpdateInterval == 0)
+  if (_numRecordsWrittenByType[ApiDb::getCurrentNodesTableName()] % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO(_numRecordsWritten[ApiDb::getCurrentNodesTableName()] << " nodes written.");
+    PROGRESS_INFO(_numRecordsWrittenByType[ApiDb::getCurrentNodesTableName()] << " nodes written.");
   }
 }
 
@@ -222,7 +305,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstWayPtr& way)
   *currentWaysOutStream << "t" << ",";
   *currentWaysOutStream << QString::number(1) << "\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getCurrentWaysTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getCurrentWaysTableName()]++;
 
   shared_ptr<QTextStream> historicalWaysOutStream =
     _outputStreams[ApiDb::getWaysTableName()];
@@ -235,7 +318,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstWayPtr& way)
   *historicalWaysOutStream << "t" << ",";
   *historicalWaysOutStream << "\\N\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getWaysTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getWaysTableName()]++;
 
   shared_ptr<QTextStream> currentWayNodesOutStream =
     _outputStreams[ApiDb::getCurrentWayNodesTableName()];
@@ -272,9 +355,9 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstWayPtr& way)
     _unflushedRecords = 0;
   }
 
-  if (_numRecordsWritten[ApiDb::getCurrentWaysTableName()] % _statusUpdateInterval == 0)
+  if (_numRecordsWrittenByType[ApiDb::getCurrentWaysTableName()] % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO(_numRecordsWritten[ApiDb::getCurrentWaysTableName()] << " ways written.");
+    PROGRESS_INFO(_numRecordsWrittenByType[ApiDb::getCurrentWaysTableName()] << " ways written.");
   }
 }
 
@@ -290,7 +373,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstRelationPtr& relatio
   *currentRelationsOutStream << "t" << ",";
   *currentRelationsOutStream << QString::number(1) << "\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getCurrentRelationsTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getCurrentRelationsTableName()]++;
 
   shared_ptr<QTextStream> historicalRelationsOutStream =
     _outputStreams[ApiDb::getRelationsTableName()];
@@ -303,7 +386,7 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstRelationPtr& relatio
   *historicalRelationsOutStream << "t" << ",";
   *historicalRelationsOutStream << "\\N\n";
   _unflushedRecords++;
-  _numRecordsWritten[ApiDb::getRelationsTableName()]++;
+  _numRecordsWrittenByType[ApiDb::getRelationsTableName()]++;
 
   shared_ptr<QTextStream> currentRelationMembersOutStream =
     _outputStreams[ApiDb::getCurrentRelationMembersTableName()];
@@ -343,10 +426,10 @@ void OsmApiDbCsvTableFileSetWriter::writePartial(const ConstRelationPtr& relatio
     _unflushedRecords = 0;
   }
 
-  if (_numRecordsWritten[ApiDb::getCurrentRelationsTableName()] % _statusUpdateInterval == 0)
+  if (_numRecordsWrittenByType[ApiDb::getCurrentRelationsTableName()] % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      _numRecordsWritten[ApiDb::getCurrentRelationsTableName()] << " relations written.");
+      _numRecordsWrittenByType[ApiDb::getCurrentRelationsTableName()] << " relations written.");
   }
 }
 
@@ -365,14 +448,14 @@ void OsmApiDbCsvTableFileSetWriter::_writeTags(ConstElementPtr element)
     *currentTagsOutStream << /*_escapeCopyToData(*/tagItr.key()/*)*/ << ",";
     *currentTagsOutStream << /*_escapeCopyToData(*/tagItr.value()/*)*/ << "\n";
     _unflushedRecords++;
-    _numRecordsWritten[currentTagsTableName]++;
+    _numRecordsWrittenByType[currentTagsTableName]++;
 
     *historicalTagsOutStream << QString::number(element->getId()) << ",";
     *historicalTagsOutStream << QString::number(element->getVersion()) << ",";
     *historicalTagsOutStream << /*_escapeCopyToData(*/tagItr.key()/*)*/ << ",";
     *historicalTagsOutStream << /*_escapeCopyToData(*/tagItr.value()/*)*/ << "\n";
     _unflushedRecords++;
-    _numRecordsWritten[historicalTagsTableName]++;
+    _numRecordsWrittenByType[historicalTagsTableName]++;
   }
 }
 

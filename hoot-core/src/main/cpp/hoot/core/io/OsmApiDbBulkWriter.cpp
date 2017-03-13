@@ -62,7 +62,9 @@ OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
 bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _database.isSupported(url);
+  return _database.isSupported(url) &&
+          !ConfigOptions().getOsmapidbBulkWriterBypassWriteAheadLogging() &&
+          !ConfigOptions().getOsmapidbBulkWriterMultithreaded();
 }
 
 void OsmApiDbBulkWriter::open(QString url)
@@ -734,7 +736,7 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
-  setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterSqlOutputFileCopyLocation().trimmed());
+  setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterOutputFileCopyLocation().trimmed());
   setExecuteSql(confOptions.getOsmapidbBulkWriterExecuteSql());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
 }

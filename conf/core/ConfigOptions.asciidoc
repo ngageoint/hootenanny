@@ -1231,6 +1231,15 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.writer.bypass.write.ahead.logging
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writes will bypass Postgres Write-Ahead Logging (WAL), which is a
+safety feature to ensure data integrity.  This should only be enabled when there is high confidence
+in the integrity of the data being written.
+
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
 * Data Type: long
@@ -1258,14 +1267,21 @@ Count at which the SQL file output status of each element type should be logged 
 the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see
 a load status update message logged for every 100 SQL lines parsed.
 
-=== osmapidb.bulk.writer.sql.output.file.copy.location
+=== osmapidb.bulk.writer.multithreaded
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writes will be performed with multiple threads.
+
+=== osmapidb.bulk.writer.output.file.copy.location
 
 * Data Type: string
 * Default Value: ``
 
-If populated, the generated SQL file whose statements are executed against the target database as
-the result of a hoot convert command with an OSM API database target is copied to the specified
-location. For debugging purposes.
+If populated, any generated SQL or CSV files generated as a result of a hoot convert command with
+an OSM API database target are copied to the specified location. For debugging purposes or if you
+wish to manually apply the changes to your database.
 
 === osm.changeset.sql.file.writer.generate.new.ids
 

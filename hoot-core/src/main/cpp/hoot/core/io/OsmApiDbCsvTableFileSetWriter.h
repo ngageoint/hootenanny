@@ -80,6 +80,13 @@ public:
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
+  void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
+
+  QStringList getOutputFileNames() const;
+
+  void logStats(const bool debug);
+
+  long getTotalRecordsWritten() const;
 
 private:
 
@@ -88,13 +95,15 @@ private:
 
   QMap<QString, shared_ptr<QFile> > _outputFiles;
   QMap<QString, shared_ptr<QTextStream> > _outputStreams;
-  QMap<QString, long> _numRecordsWritten;
+  QMap<QString, long> _numRecordsWrittenByType;
   long _unflushedRecords;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
+  long _maxChangesetSize;
 
   void _init(const QString outputUrl);
   void _writeTags(ConstElementPtr element);
+  QString _formatPotentiallyLargeNumber(const long number);
 
 };
 

@@ -50,6 +50,8 @@ namespace hoot
 using namespace boost;
 using namespace std;
 
+class OsmApiDbCsvTableFileSetWriter;
+
 /**
  * Version of osm api db bulk writing intended to utilize the pg_bulkload utility.
  */
@@ -87,20 +89,29 @@ public:
   //void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setExecuteSql(bool exec) { _executeSql = exec; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
+  void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
+  void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
+  void setOutputFilesCopyBaseLocation(QString location) { _outputFilesCopyBaseLocation = location; }
 
 private:
 
   // for white box testing.
   //friend class ServiceOsmApiDbBulkWriterTest;
 
+  OsmApiDb _database;
+  QString _outputUrl;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   bool _executeSql;
   long _maxChangesetSize;
+  bool _disableWriteAheadLogging;
+  bool _writeMultiThreaded;
+  QString _outputFilesCopyBaseLocation;
+  shared_ptr<OsmApiDbCsvTableFileSetWriter> _csvWriter;
 
-  void _logStats(const bool debug);
-  void _executeElementSql();
-  long _getTotalRecordsWritten() const;
+  void _writeToDb();
+
+  QString _formatPotentiallyLargeNumber(const long number);
 };
 
 }
