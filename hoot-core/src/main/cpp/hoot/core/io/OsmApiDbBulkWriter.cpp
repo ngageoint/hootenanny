@@ -47,7 +47,8 @@ unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
-OsmApiDbBulkWriter::OsmApiDbBulkWriter()
+OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
+_offline(false)
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -62,9 +63,7 @@ OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
 bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _database.isSupported(url) &&
-          !ConfigOptions().getOsmapidbBulkWriterBypassWriteAheadLogging() &&
-          !ConfigOptions().getOsmapidbBulkWriterMultithreaded();
+  return _database.isSupported(url) && !_disableWriteAheadLogging && !_writeMultiThreaded;
 }
 
 void OsmApiDbBulkWriter::open(QString url)
@@ -84,11 +83,6 @@ void OsmApiDbBulkWriter::open(QString url)
 
   _outputUrl = url;
   _database.open(_outputUrl);
-
-  //would rather put this message in the write method, but if both reader and writer implement the
-  //streaming interface and neither implement the partial interface you'll never see this message,
-  //due to how ElementOutputStream::writeAllElements works
-  LOG_INFO("Streaming elements from input to temporary SQL file outputs.  Data pass #1 of 2...");
 }
 
 void OsmApiDbBulkWriter::close()
@@ -211,14 +205,14 @@ void OsmApiDbBulkWriter::finalizePartial()
   _writeCombinedSqlFile();
 
   //retain the sql output file if that option was selected
-  if (!_sqlFileCopyLocation.isEmpty())
+  if (!_outputFileCopyLocation.isEmpty())
   {
-    _retainSqlOutputFile();
+    _retainOutputFiles();
   }
 
   if (_executeSql)
   {
-    _executeElementSql();
+    _writeDataToDb();
     LOG_INFO("Final database write stats:");
   }
   else
@@ -229,9 +223,9 @@ void OsmApiDbBulkWriter::finalizePartial()
   _logStats();
 }
 
-void OsmApiDbBulkWriter::_retainSqlOutputFile()
+void OsmApiDbBulkWriter::_retainOutputFiles()
 {
-  QFile copyFile(_sqlFileCopyLocation);
+  QFile copyFile(_outputFileCopyLocation);
   if (copyFile.exists())
   {
     copyFile.remove();
@@ -239,14 +233,14 @@ void OsmApiDbBulkWriter::_retainSqlOutputFile()
   QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
   LOG_INFO(
     "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
-    "to " << _sqlFileCopyLocation << "...");
-  if (!_sqlOutputMasterFile->copy(_sqlFileCopyLocation))
+    "to " << _outputFileCopyLocation << "...");
+  if (!_sqlOutputMasterFile->copy(_outputFileCopyLocation))
   {
-    LOG_WARN("Unable to copy SQL output file to " << _sqlFileCopyLocation);
+    LOG_WARN("Unable to copy SQL output file to " << _outputFileCopyLocation);
   }
   else
   {
-    LOG_DEBUG("Copied SQL file output to " << _sqlFileCopyLocation);
+    LOG_DEBUG("Copied SQL file output to " << _outputFileCopyLocation);
   }
 }
 
@@ -472,11 +466,11 @@ void OsmApiDbBulkWriter::_lockIds()
   LOG_DEBUG("Sequence updates written to database.");
 }
 
-void OsmApiDbBulkWriter::_executeElementSql()
+void OsmApiDbBulkWriter::_writeDataToDb()
 {
   //I believe a COPY header is created whether there are any records to copy for the table or not,
   //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
-  //to not write the header if there are no records to copy for the table...s
+  //to not write the header if there are no records to copy for the table...
   LOG_INFO(
     "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records.  17 separate SQL COPY statements will be executed...");
@@ -530,6 +524,20 @@ void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
 
 void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 {
+  if (_writeStats.nodesWritten == 0)
+  {
+    QString msg = "Streaming elements from input to temporary file outputs.";
+    if (!_offline)
+    {
+      msg += "  Data pass #1 of 2...";
+    }
+    else
+    {
+      msg += "..";
+    }
+    LOG_INFO(msg);
+  }
+
   LOG_VART(n);
 
   //Since we're only creating elements, the changeset bounds is simply the combined bounds
@@ -736,9 +744,11 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
-  setSqlFileCopyLocation(confOptions.getOsmapidbBulkWriterOutputFileCopyLocation().trimmed());
+  setOutputFileCopyLocation(confOptions.getOsmapidbBulkWriterOutputFileCopyLocation().trimmed());
   setExecuteSql(confOptions.getOsmapidbBulkWriterExecuteSql());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
+  setDisableWriteAheadLogging(confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging());
+  setWriteMultithreaded(confOptions.getOsmapidbBulkWriterMultithreaded());
 }
 
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
@@ -856,8 +866,11 @@ void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node, const long
 {
   const double nodeY = node->getY();
   const double nodeX = node->getX();
-  const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeY);
-  const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeX);
+  //TODO: should be able to use OsmApiDb::toOsmApiDbCoord here instead
+  //const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeY);
+  //const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeX);
+  const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
+  const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
   const int changesetId = _changesetData.currentChangesetId;
   const QString datestring =
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
@@ -897,6 +910,11 @@ void OsmApiDbBulkWriter::_writeNodeToTables(const ConstNodePtr& node, const long
       tileNumberString);
 
   *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
+}
+
+unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degrees) const
+{
+  return (round(degrees * ApiDb::COORDINATE_SCALE));
 }
 
 void OsmApiDbBulkWriter::_writeTagsToTables(const Tags& tags, const long nodeDbId,

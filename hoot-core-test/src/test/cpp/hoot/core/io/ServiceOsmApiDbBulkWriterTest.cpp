@@ -293,7 +293,7 @@ public:
     writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_no_external_writers_out.sql";
-    writer.setSqlFileCopyLocation(outFile);
+    writer.setOutputFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
@@ -329,7 +329,7 @@ public:
     writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_external_writers_out.sql";
-    writer.setSqlFileCopyLocation(outFile);
+    writer.setOutputFileCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);

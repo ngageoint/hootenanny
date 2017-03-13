@@ -76,8 +76,7 @@ void OsmApiDbCsvTableFileSetWriter::open(QString url)
 void OsmApiDbCsvTableFileSetWriter::_init(const QString outputUrl)
 {
   QStringList outputFileTypes;
-  //TODO: deal with this
-  //outputFileTypes.push_back(ApiDb::getChangesetsTableName());
+  outputFileTypes.push_back(ApiDb::getChangesetsTableName());
   outputFileTypes.push_back(ApiDb::getCurrentNodesTableName());
   outputFileTypes.push_back(ApiDb::getCurrentNodeTagsTableName());
   outputFileTypes.push_back(ApiDb::getNodesTableName());
@@ -195,8 +194,9 @@ void OsmApiDbCsvTableFileSetWriter::logStats(const bool debug)
 //  messages.append(
 //    QString("\tUnresolved relations: ") +
 //    _formatPotentiallyLargeNumber(writeStats[""]));
-//  messages.append(
-//    QString("\tChangesets: ") + _formatPotentiallyLargeNumber(writeStats[""]));
+  messages.append(
+    QString("\tChangesets: ") +
+    _formatPotentiallyLargeNumber(writeStats[ApiDb::getChangesetsTableName()]));
   messages.append(
     QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
   messages.append(
@@ -229,6 +229,12 @@ void OsmApiDbCsvTableFileSetWriter::finalizePartial()
     {
       throw HootException("Unable to flush output stream for table: " + streamItr.key());
     }
+  }
+  //If there was only one changeset written total, this won't have yet been incremented, so do it
+  //now.
+  if (_outputStreams[ApiDb::getChangesetsTableName()] == 0)
+  {
+    _outputStreams[ApiDb::getChangesetsTableName()]++;
   }
 
   for (QMap<QString, long>::const_iterator countItr = _numRecordsWrittenByType.begin();

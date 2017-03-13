@@ -145,50 +145,61 @@ public:
   virtual ~OsmApiDbBulkWriter();
 
   virtual bool isSupported(QString url);
-
   virtual void open(QString url);
-
-  void close();
+  virtual void close();
 
   virtual void finalizePartial();
-
   virtual void writePartial(const ConstNodePtr& n);
-
   virtual void writePartial(const ConstWayPtr& w);
-
   virtual void writePartial(const ConstRelationPtr& r);
 
   virtual void setConfiguration(const Settings& conf);
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
+  void setOutputFileCopyLocation(QString location) { _outputFileCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setExecuteSql(bool exec) { _executeSql = exec; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
+  void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
+  void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
+
+protected:
+
+  ElementWriteStats _writeStats;
+  ChangesetData _changesetData;
+  QString _outputFileCopyLocation;
+  bool _executeSql;
+  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
+  QStringList _sectionNames;
+  bool _offline;
+  bool _disableWriteAheadLogging;
+  bool _writeMultiThreaded;
+
+  void _logStats(const bool debug = false);
+  long _getTotalRecordsWritten() const;
+
+  virtual void _writeDataToDb();
+  void _writeChangesetToTable();
+
+  virtual void _retainOutputFiles();
+
+  QString _formatPotentiallyLargeNumber(const long number);
 
 private:
 
   // for white box testing.
   friend class ServiceOsmApiDbBulkWriterTest;
 
-  ElementWriteStats _writeStats;
   IdMappings _idMappings;
-  ChangesetData _changesetData;
   UnresolvedReferences _unresolvedRefs;
-
-  OsmApiDb _database;
-
-  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
-  QStringList _sectionNames;
 
   QString _outputUrl;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
-  QString _sqlFileCopyLocation;
-  bool _executeSql;
   long _maxChangesetSize;
   shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
+  OsmApiDb _database;
 
   void _reset();
 
@@ -207,8 +218,8 @@ private:
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
 
   QString _escapeCopyToData(const QString stringToOutput) const;
+  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
 
-  void _writeChangesetToTable();
   void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
                              const long relationId, QString& outputStr);
   void _writeRelationToTables(const long relationDbId);
@@ -224,14 +235,8 @@ private:
     shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
 
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
-  void _executeElementSql();
   void _writeCombinedSqlFile();
-  void _retainSqlOutputFile();
   void _lockIds();
-  long _getTotalRecordsWritten() const;
-
-  QString _formatPotentiallyLargeNumber(const long number);
-  void _logStats(const bool debug = false);
 };
 
 }

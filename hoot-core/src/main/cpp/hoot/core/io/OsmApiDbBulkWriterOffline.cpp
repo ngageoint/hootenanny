@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OsmApiDbBulkWriter2.h"
+#include "OsmApiDbBulkWriterOffline.h"
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -43,29 +43,28 @@ namespace hoot
 
 using namespace Tgs;
 
-unsigned int OsmApiDbBulkWriter2::logWarnCount = 0;
+unsigned int OsmApiDbBulkWriterOffline::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter2)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriterOffline)
 
-OsmApiDbBulkWriter2::OsmApiDbBulkWriter2() :
-OsmApiDbBulkWriter(),
-_offline(true)
+OsmApiDbBulkWriterOffline::OsmApiDbBulkWriterOffline() :
+OsmApiDbBulkWriter()
 {
-
+  _offline = true;
 }
 
-OsmApiDbBulkWriter2::~OsmApiDbBulkWriter2()
+OsmApiDbBulkWriterOffline::~OsmApiDbBulkWriterOffline()
 {
   close();
 }
 
-bool OsmApiDbBulkWriter2::isSupported(QString urlStr)
+bool OsmApiDbBulkWriterOffline::isSupported(QString urlStr)
 {
-  QUrl url(urlStr);
-  return _database.isSupported(url) && (_disableWriteAheadLogging || _writeMultiThreaded);
+  return OsmApiDbBulkWriter::isSupported(urlStr) &&
+          (_disableWriteAheadLogging || _writeMultiThreaded);
 }
 
-void OsmApiDbBulkWriter2::finalizePartial()
+void OsmApiDbBulkWriterOffline::finalizePartial()
 {
   if (_writeStats.nodesWritten == 0)
   {
@@ -89,9 +88,9 @@ void OsmApiDbBulkWriter2::finalizePartial()
   }
 
   //retain the sql output file if that option was selected
-  if (!_sqlFileCopyLocation.isEmpty())
+  if (!_outputFileCopyLocation.isEmpty())
   {
-    _retainSqlOutputFile();
+    _retainOutputFiles();
   }
 
   if (_executeSql)
@@ -107,7 +106,7 @@ void OsmApiDbBulkWriter2::finalizePartial()
   _logStats();
 }
 
-void OsmApiDbBulkWriter2::_retainOutputFiles()
+void OsmApiDbBulkWriterOffline::_retainOutputFiles()
 {
   QFileInfo baseFileInfo(_outputFileCopyLocation);
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
@@ -115,13 +114,14 @@ void OsmApiDbBulkWriter2::_retainOutputFiles()
   {
     if (_outputSections[*sectionNamesItr].first.get())
     {
-      const QString outputPath = baseFileInfo.path() + "/" + baseFileInfo.baseName() + "-" +
-        *_sectionNamesItr + "." + baseFileInfo.completeSuffix();
-      QFileInfo fileToCopyInfo(_outputSections[*sectionNamesItr]->fileName());
+      const QString outputPath =
+        baseFileInfo.path() + "/" + baseFileInfo.baseName() + "-" + *sectionNamesItr + "." +
+        baseFileInfo.completeSuffix();
+      QFileInfo fileToCopyInfo((_outputSections[*sectionNamesItr].first)->fileName());
       LOG_INFO(
         "Copying " << SystemInfo::humanReadable(fileToCopyInfo.size()) << " CSV output file " <<
         "to " << outputPath << "...");
-      if (!_outputSections[*sectionNamesItr].first->copy(outputPath))
+      if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
       {
         LOG_WARN("Unable to copy CSV output file to " << outputPath);
       }
@@ -133,11 +133,11 @@ void OsmApiDbBulkWriter2::_retainOutputFiles()
   }
 }
 
-void OsmApiDbBulkWriter2::_writeDataToDb()
+void OsmApiDbBulkWriterOffline::_writeDataToDb()
 {
   LOG_INFO(
-    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records.  17 separate SQL COPY statements will be executed...");
+    "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    " records.  " << _outputSections.size() - 1 << " CSV files will be written...");
 
   //TODO: finish
   QString cmd = "";
@@ -147,15 +147,6 @@ void OsmApiDbBulkWriter2::_writeDataToDb()
     throw HootException("Failed executing bulk element SQL write against the OSM API database.");
   }
   LOG_DEBUG("Element SQL execution complete.");
-}
-
-void OsmApiDbBulkWriter2::setConfiguration(const Settings& conf)
-{
-  OsmApiDbBulkWriter::setConfiguration(conf);
-
-  const ConfigOptions confOptions(conf);
-  setDisableWriteAheadLogging(confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging());
-  setWriteMultithreaded(confOptions.getOsmapidbBulkWriterMultithreaded());
 }
 
 }

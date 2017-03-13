@@ -197,8 +197,7 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlFileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbBulkWriter2Test.cpp
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlWriterTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \

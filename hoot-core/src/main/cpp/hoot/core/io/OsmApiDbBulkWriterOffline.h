@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBBULKWRITER2_H
-#define OSMAPIDBBULKWRITER2_H
+#ifndef OSMAPIDBBULKWRITEROFFLINE_H
+#define OSMAPIDBBULKWRITEROFFLINE_H
 
 #include <hoot/core/io/OsmApiDbBulkWriter.h>
 
@@ -38,29 +38,27 @@ using namespace std;
 class OsmApiDbCsvTableFileSetWriter;
 
 /**
- * Version of osm api db bulk writing intended to utilize the pg_bulkload utility.
+ * Version of osm api db bulk writing intended to utilize the pg_bulkload utility for increased
+ * write performance.
+ *
+ * IMPORTANT: This class should only be used with offline databases (this class is the only writer).
  */
-class OsmApiDbBulkWriter2 : public OsmApiDbBulkWriter
+class OsmApiDbBulkWriterOffline : public OsmApiDbBulkWriter
 {
 
 public:
 
-  static string className() { return "hoot::OsmApiDbBulkWriter2"; }
+  static string className() { return "hoot::OsmApiDbBulkWriterOffline"; }
 
   static unsigned int logWarnCount;
 
-  OsmApiDbBulkWriter2();
+  OsmApiDbBulkWriterOffline();
 
-  virtual ~OsmApiDbBulkWriter2();
+  virtual ~OsmApiDbBulkWriterOffline();
 
   virtual bool isSupported(QString url);
 
   virtual void finalizePartial();
-
-  virtual void setConfiguration(const Settings& conf);
-
-  void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
-  void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
 
 protected:
 
@@ -69,10 +67,9 @@ protected:
 
 private:
 
-  bool _disableWriteAheadLogging;
-  bool _writeMultiThreaded;
+
 };
 
 }
 
-#endif // OSMAPIDBBULKWRITER2_H
+#endif // OSMAPIDBBULKWRITEROFFLINE_H
