@@ -70,7 +70,8 @@ void OsmApiDbBulkWriter::open(QString url)
   if (_database.getDB().isOpen())
   {
     throw HootException(
-      "Database already open.  Close the existing database connection before opening a new one.");
+      QString("Database already open.  Close the existing database connection before opening ") +
+      QString("a new one.  URL: ") + url);
   }
 
   // Make sure we're not already open and the URL is valid
@@ -90,10 +91,20 @@ void OsmApiDbBulkWriter::open(QString url)
 
 void OsmApiDbBulkWriter::close()
 {
+  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  {
+    if (_outputSections[*sectionNamesItr].first.get())
+    {
+      _outputSections[*sectionNamesItr].first->close();
+    }
+  }
+
   if (_sqlOutputMasterFile.get())
   {
     _sqlOutputMasterFile->close();
   }
+
   _database.close();
 
   _reset();
@@ -255,25 +266,23 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   {
     if (_outputSections.find(*it) == _outputSections.end())
     {
-      LOG_TRACE("No data for table " + *it);
+      LOG_DEBUG("No data for table " + *it);
       continue;
     }
 
-    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
-
-    // Write close marker for table
+    LOG_DEBUG("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
     if ((*it != "byte_order_mark"))
     {
-      LOG_TRACE("Writing byte order mark to stream...");
+      LOG_TRACE("Writing closing byte order mark to stream...");
       *(_outputSections[*it].second) << QString("\\.\n\n\n");
     }
-
     // Flush any residual content from text stream/file
     _outputSections[*it].second->flush();
     if (!_outputSections[*it].first->flush())
     {
       throw HootException("Could not flush tempfile for table " + *it);
     }
+    _outputSections[*it].first->close();
 
     // Append contents of section subfiles to output file
     QFile tempInputFile(_outputSections[*it].first->fileName());
@@ -299,6 +308,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
           if (lineCtr == _fileOutputLineBufferSize)
           {
+            LOG_TRACE(
+              "Flushing records to combined file " << _sqlOutputMasterFile->fileName() << "...");
             outStream.flush();
             lineCtr = 0;
           }
@@ -321,12 +332,13 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
         tempInputFile.close();
         //remove temp file after write to the output file
-        LOG_TRACE("Removing temp file for " << *it << "...");
+        LOG_DEBUG("Closing and removing temp file for " << *it << "...");
+        _outputSections[*it].first->close();
         _outputSections[*it].first->remove();
       }
       else
       {
-      throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
+        throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
       }
     }
     catch (const Exception& e)
@@ -335,7 +347,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
       throw e;
     }
 
-    LOG_TRACE("Wrote contents of section " << *it);
+    LOG_DEBUG("Wrote contents of section " << *it);
   }
   outStream << "COMMIT;";
   outStream.flush();
@@ -481,7 +493,7 @@ void OsmApiDbBulkWriter::_executeElementSql()
   {
     cmd += " > /dev/null";
   }
-  LOG_TRACE(cmd);
+  LOG_DEBUG(cmd);
   if (system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Failed executing bulk element SQL write against the OSM API database.");
@@ -556,6 +568,24 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   _checkUnresolvedReferences(n, nodeDbId);
 
+  if ((_writeStats.nodesWritten / 2) % _fileOutputLineBufferSize == 0)
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " nodes to temp files...");
+    _outputSections[ApiDb::getCurrentNodesTableName()].second->flush();
+    _outputSections[ApiDb::getNodesTableName()].second->flush();
+  }
+  if ((n->getTags().size() > 0) &&
+      ((_writeStats.nodeTagsWritten / 2) % _fileOutputLineBufferSize == 0))
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " node tags to temp files...");
+    _outputSections[ApiDb::getCurrentNodeTagsTableName()].second->flush();
+    _outputSections[ApiDb::getNodeTagsTableName()].second->flush();
+  }
+
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
@@ -595,6 +625,32 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
   _incrementChangesInChangeset();
 
   _checkUnresolvedReferences(w, wayDbId);
+
+  if ((_writeStats.waysWritten / 2) % _fileOutputLineBufferSize == 0)
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " ways to temp files...");
+    _outputSections[ApiDb::getCurrentWaysTableName()].second->flush();
+    _outputSections[ApiDb::getWaysTableName()].second->flush();
+  }
+  if ((w->getTags().size() > 0) &&
+      ((_writeStats.wayTagsWritten / 2) % _fileOutputLineBufferSize == 0))
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " way tags to temp files...");
+    _outputSections[ApiDb::getCurrentWayTagsTableName()].second->flush();
+    _outputSections[ApiDb::getWayTagsTableName()].second->flush();
+  }
+  if ((_writeStats.wayNodesWritten / 2) % _fileOutputLineBufferSize == 0)
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " way nodes to temp files...");
+    _outputSections[ApiDb::getCurrentWayNodesTableName()].second->flush();
+    _outputSections[ApiDb::getWayNodesTableName()].second->flush();
+  }
 
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
@@ -638,6 +694,32 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   _checkUnresolvedReferences(r, relationDbId);
 
+  if ((_writeStats.relationsWritten / 2) % _fileOutputLineBufferSize == 0)
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " relations to temp files...");
+    _outputSections[ApiDb::getCurrentRelationsTableName()].second->flush();
+    _outputSections[ApiDb::getRelationsTableName()].second->flush();
+  }
+  if ((r->getTags().size() > 0) &&
+      ((_writeStats.relationTagsWritten / 2) % _fileOutputLineBufferSize == 0))
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " relation tags to temp files...");
+    _outputSections[ApiDb::getCurrentRelationTagsTableName()].second->flush();
+    _outputSections[ApiDb::getRelationTagsTableName()].second->flush();
+  }
+  if ((_writeStats.relationMembersWritten / 2) % _fileOutputLineBufferSize == 0)
+  {
+    LOG_TRACE(
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
+      " relation members to temp files...");
+    _outputSections[ApiDb::getCurrentRelationMembersTableName()].second->flush();
+    _outputSections[ApiDb::getRelationMembersTableName()].second->flush();
+  }
+
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
@@ -646,7 +728,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
   }
 }
 
-void OsmApiDbBulkWriter::setConfiguration(const hoot::Settings& conf)
+void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
@@ -703,7 +785,7 @@ void OsmApiDbBulkWriter::_createNodeTables()
 
 void OsmApiDbBulkWriter::_reset()
 {
-  LOG_TRACE("Resetting variables...");
+  LOG_DEBUG("Resetting variables...");
 
   _writeStats.nodesWritten = 0;
   _writeStats.nodeTagsWritten = 0;
@@ -1082,6 +1164,8 @@ void OsmApiDbBulkWriter::_createTable(const QString tableName, const QString tab
 void OsmApiDbBulkWriter::_createTable(const QString tableName, const QString tableHeader,
                                       const bool addByteOrderMark)
 {
+  LOG_TRACE("Writing opening byte order mark to stream...");
+
   shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
   if (!tempfile->open())
   {
@@ -1247,7 +1331,7 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
                                                const long wayId, const long relationId,
                                                QString& outputStr)
 {
-  LOG_TRACE("Writing sequence updates stream...");
+  LOG_DEBUG("Writing sequence updates stream...");
 
   shared_ptr<QTextStream> sequenceUpdatesStream(new QTextStream(&outputStr));
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
