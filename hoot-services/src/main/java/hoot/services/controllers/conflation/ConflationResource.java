@@ -100,22 +100,25 @@ public class ConflationResource {
      *
      * @param params
      *            parameters in json format :
-     *            <INPUT1_TYPE>Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]</INPUT1_TYPE>
-     *            <INPUT1>Conlfation input 1</INPUT1>
-     *            <INPUT2_TYPE>Conflation input type [OSM] | [OGR] | [DB] </INPUT2_TYPE>
-     *            <INPUT2>Conlfation input 2</INPUT2>
-     *            <OUTPUT_NAME>Conflation operation output name</OUTPUT_NAME>
-     *            <CONFLATION_TYPE>[Average] | [Reference]</CONFLATION_TYPE>
-     *            <REFERENCE_LAYER>
-     *                      The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
-     *                      tags will be dominant with layer 1 as geometry snap layer.
-     *            </REFERENCE_LAYER>
-     *            <AUTO_TUNNING> Not used. Always false</AUTO_TUNNING>
-     *            <COLLECT_STATS> true to collect conflation statistics</COLLECT_STATS>
-     *            <GENERATE_REPORT> true to generate conflation report</GENERATE_REPORT>
-     *            <TIME_STAMP> Time stamp used in generated report if GENERATE_REPORT is true</TIME_STAMP>
-     *            <USER_EMAIL> Email address of the user requesting the conflation job.</USER_EMAIL>
-     *            <ADV_OPTIONS>Advanced options list for hoot-core command </ADV_OPTIONS>
+     *
+     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
+     *     INPUT2_TYPE: Conflation input type [OSM] | [OGR] | [DB]
+     *     INPUT1: Conlfation input 1
+     *     INPUT2: Conlfation input 2
+     *     OUTPUT_NAME: Conflation operation output name
+     *     CONFLATION_TYPE: [Average] | [Reference]
+     *     REFERENCE_LAYER:
+     *         The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
+     *         tags will be dominant with layer 1 as geometry snap layer.
+     *
+     *     COLLECT_STATS: true to collect conflation statistics
+     *     ADV_OPTIONS: Advanced options list for hoot-core command
+     *
+     *     GENERATE_REPORT: Not used.  true to generate conflation report
+     *     TIME_STAMP: Not used   Time stamp used in generated report if GENERATE_REPORT is true
+     *     USER_EMAIL: Not used.  Email address of the user requesting the conflation job
+     *     AUTO_TUNNING: Not used. Always false
+     *
      * @return Job ID
      */
     @POST
@@ -168,16 +171,20 @@ public class ConflationResource {
             }
 
             String confOutputName = oParams.get("OUTPUT_NAME").toString();
-            Boolean generateReport = Boolean.valueOf(oParams.get("GENERATE_REPORT").toString());
 
             Command[] commands = {
                 () -> {
-                    ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, bbox, this.getClass());
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(params, bbox, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
 
+                    /*
                     if (generateReport) {
-                        generateReport();
+                        ifeq "$(GENERATE_REPORT)" "true"
+                            cd $(HOOT_HOME)/userfiles/reports/$(jobid) && a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s reportStyle.sty --param doc.publisher.show=0" -a HasLatexMath -a 'revdate=v`$HOOT_HOME/bin/hoot version --error | sed "s/Hootenanny \([^ ]* \) Built.* /\\1/g"`, `date "+%B %d, %Y"`' -a "input1=$(OP_INPUT1)" -a "input2=$(OP_INPUT2)" -a "output=$(DB_OUTPUT)" -a "args=" -a "cmd1=hoot $(OP_CONFLATE_TYPE) $(OP_CMD) $(OP_INPUT2)  $(OP_STAT)" -v -f pdf report.asciidoc
+                            echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/userfiles/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/userfiles/reports/$(jobid)/meta.data
+                        endif
                     }
+                    */
 
                     return commandResult;
                 },
@@ -207,16 +214,6 @@ public class ConflationResource {
         json.put("jobid", jobId);
 
         return Response.ok(json.toJSONString()).build();
-    }
-
-    // Disabled as of 03/13/2017.  Should be enventually removed....
-    private static void generateReport() {
-        /*
-            ifeq "$(GENERATE_REPORT)" "true"
-                cd $(HOOT_HOME)/userfiles/reports/$(jobid) && a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s reportStyle.sty --param doc.publisher.show=0" -a HasLatexMath -a 'revdate=v`$HOOT_HOME/bin/hoot version --error | sed "s/Hootenanny \([^ ]* \) Built.* /\\1/g"`, `date "+%B %d, %Y"`' -a "input1=$(OP_INPUT1)" -a "input2=$(OP_INPUT2)" -a "output=$(DB_OUTPUT)" -a "args=" -a "cmd1=hoot $(OP_CONFLATE_TYPE) $(OP_CMD) $(OP_INPUT2)  $(OP_STAT)" -v -f pdf report.asciidoc
-                echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/userfiles/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/userfiles/reports/$(jobid)/meta.data
-            endif
-        */
     }
 
     static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {

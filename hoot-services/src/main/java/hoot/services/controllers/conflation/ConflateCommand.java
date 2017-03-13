@@ -29,12 +29,10 @@ package hoot.services.controllers.conflation;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -136,9 +134,7 @@ ifeq "$(GENERATE_REPORT)" "true"
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(String jobId, String params, BoundingBox bounds, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
-
+    ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
         Map<String, String> paramMap;
         try {
             paramMap = JsonUtils.paramsToMap(params);
@@ -191,16 +187,16 @@ class ConflateCommand extends ExternalCommand {
         }
 
         /*
-          ifeq "$(REFERENCE_LAYER)" "2"
-              HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
-          endif
-
           # This is also depending on some extra input validation present in ConflationResource.
           ifeq "$(REFERENCE_LAYER)" "1"
               ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
                   OP_INPUT1=$(OSM_API_DB_URL)
                   HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
               endif
+          endif
+
+          ifeq "$(REFERENCE_LAYER)" "2"
+              HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
           endif
 
           ifeq "$(REFERENCE_LAYER)" "2"
@@ -233,7 +229,6 @@ class ConflateCommand extends ExternalCommand {
             }
         }
 
-
         /*
           ifeq "$(CONFLATION_TYPE)" "Average"
               OP_REPORT_CONF_TYPE=average
@@ -243,16 +238,7 @@ class ConflateCommand extends ExternalCommand {
               OP_REPORT_CONF_TYPE=reference
           endif
          */
-        String conflationType = paramMap.get("CONFLATION_TYPE");
-        String reportConfType = null;
-        if (conflationType != null) {
-            if (conflationType.equals("Average")) {
-                reportConfType = "average";
-            }
-            else if (conflationType.equals("Reference")) {
-                reportConfType = "reference";
-            }
-        }
+        String conflationType = paramMap.get("CONFLATION_TYPE").toLowerCase();
 
         /*
           ifeq "$(GENERATE_REPORT)" "true"
@@ -260,41 +246,12 @@ class ConflateCommand extends ExternalCommand {
               OP_STAT= --stats
               OP_CMD=$(subst ;,!semi!,$(HOOT_OPTS))
           endif
+
+          ifeq "$(GENERATE_REPORT)" "true"
+              mkdir -p $(HOOT_HOME)/userfiles/reports/$(jobid)
+              cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/reports/$(jobid)
+          endif
         */
-        Boolean generateReport = Boolean.valueOf(paramMap.get("GENERATE_REPORT"));
-        String opStat = null;
-        if (generateReport) {
-            opStat = "--stats";
-            hootOptions.add("-D stats.format=asciidoc");
-            hootOptions.add("-D stats.output=" + RPT_STORE_PATH + "/" + jobId + "/reportBody");
-            hootOptions.add("-D conflate.stats.types=" + reportConfType);
-
-            // TODO: Port the line below
-            //OP_CMD=$(subst ;,!semi!,$(HOOT_OPTS))
-
-            /*
-              ifeq "$(GENERATE_REPORT)" "true"
-                mkdir -p $(HOOT_HOME)/userfiles/reports/$(jobid)
-                cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/reports/$(jobid)
-              endif
-            */
-
-            File reportsFolder = new File(RPT_STORE_PATH, jobId);
-            try {
-                FileUtils.forceMkdir(reportsFolder);
-            }
-            catch (IOException ioe) {
-                throw new RuntimeException("Error creating " + reportsFolder, ioe);
-            }
-
-            File srcDir = new File(HOME_FOLDER, "report");
-            try {
-                FileUtils.copyDirectory(srcDir, reportsFolder, true);
-            }
-            catch (IOException ioe) {
-                throw new RuntimeException("Error copying " + srcDir + " to " + reportsFolder, ioe);
-            }
-        }
 
         /*
           ifeq "$(COLLECT_STATS)" "true"
@@ -306,23 +263,22 @@ class ConflateCommand extends ExternalCommand {
         Boolean collectStats = Boolean.valueOf(paramMap.get("COLLECT_STATS"));
         String outputName = paramMap.get("OUTPUT_NAME");
 
+        String statsCommand = "";
         if (collectStats) {
-            opStat = "--stats > " + RPT_STORE_PATH + File.separator + outputName + "-stats.csv";
+            statsCommand = "--stats > " + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv";
+
+            // Don't include non-error log messages in stdout because we are redirecting to file
             hootOptions.add("--error");
-            /*
-              ifeq "$(COLLECT_STATS)" "true"
-                  mkdir -p $(HOOT_HOME)/userfiles/reports
-              endif
-             */
         }
 
         String dbOutput = HOOTAPI_DB_URL + "/" + outputName;
 
         /*
-            hoot $(OP_CONFLATE_TYPE) -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
-        */
+         * hoot $(OP_CONFLATE_TYPE) -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
+         */
         JSONObject arg = new JSONObject();
         arg.put("CONFLATE_TYPE", conflationType);
+        JSONArray commandArgs = new JSONArray();
         commandArgs.add(arg);
 
         arg = new JSONObject();
@@ -346,7 +302,7 @@ class ConflateCommand extends ExternalCommand {
         commandArgs.add(arg);
 
         arg = new JSONObject();
-        arg.put("STAT", opStat);
+        arg.put("STATS_COMMAND", statsCommand);
         commandArgs.add(arg);
 
         super.configureAsHootCommand("--conflate", caller, commandArgs);
