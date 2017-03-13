@@ -331,7 +331,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
         tempInputFile.close();
         //remove temp file after write to the output file
-        LOG_DEBUG("Removing temp file for " << *it << "...");
+        LOG_DEBUG("Closing and removing temp file for " << *it << "...");
+        _outputSections[*it].first->close();
         _outputSections[*it].first->remove();
       }
       else
@@ -566,13 +567,13 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   _checkUnresolvedReferences(n, nodeDbId);
 
-  if (_writeStats.nodesWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.nodesWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing nodes to temp files...");
     _outputSections[ApiDb::getCurrentNodesTableName()].second->flush();
     _outputSections[ApiDb::getNodesTableName()].second->flush();
   }
-  if (_writeStats.nodeTagsWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.nodeTagsWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing node tags to temp files...");
     _outputSections[ApiDb::getCurrentNodeTagsTableName()].second->flush();
@@ -619,19 +620,19 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   _checkUnresolvedReferences(w, wayDbId);
 
-  if (_writeStats.waysWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.waysWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing ways to temp files...");
     _outputSections[ApiDb::getCurrentWaysTableName()].second->flush();
     _outputSections[ApiDb::getWaysTableName()].second->flush();
   }
-  if (_writeStats.wayTagsWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.wayTagsWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing way tags to temp files...");
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second->flush();
     _outputSections[ApiDb::getWayTagsTableName()].second->flush();
   }
-  if (_writeStats.wayNodesWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.wayNodesWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing way nodes to temp files...");
     _outputSections[ApiDb::getCurrentWayNodesTableName()].second->flush();
@@ -680,19 +681,19 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   _checkUnresolvedReferences(r, relationDbId);
 
-  if (_writeStats.relationsWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.relationsWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing relations to temp files...");
     _outputSections[ApiDb::getCurrentRelationsTableName()].second->flush();
     _outputSections[ApiDb::getRelationsTableName()].second->flush();
   }
-  if (_writeStats.relationTagsWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.relationTagsWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing relation tags to temp files...");
     _outputSections[ApiDb::getCurrentRelationTagsTableName()].second->flush();
     _outputSections[ApiDb::getRelationTagsTableName()].second->flush();
   }
-  if (_writeStats.relationMembersWritten % _fileOutputLineBufferSize == 0)
+  if ((_writeStats.relationMembersWritten / 2) % _fileOutputLineBufferSize == 0)
   {
     LOG_DEBUG("Flushing relation members to temp files...");
     _outputSections[ApiDb::getCurrentRelationMembersTableName()].second->flush();
