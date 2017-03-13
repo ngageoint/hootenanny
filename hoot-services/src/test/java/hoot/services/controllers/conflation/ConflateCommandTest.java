@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.CONFLATE_MAKEFILE_PATH;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -51,7 +50,7 @@ public class ConflateCommandTest {
                 "\"USER_EMAIL\":\"test@test.com\"," +
                 "\"COLLECT_STATS\":\"false\"}";
 
-        ConflateCommand conflateCommand = new ConflateCommandFactory().build(params, null, this.getClass());
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(null, params, null, this.getClass());
 
         String expectedCommandArgs =
                 "[{\"MISS_THRESHOLD\":\"0.6\"}," +
@@ -82,7 +81,7 @@ public class ConflateCommandTest {
         assertEquals(expectedExecType, actualExecType);
 
         String actualScriptName = (String) conflateCommand.get("exec");
-        String expectedScriptName = CONFLATE_MAKEFILE_PATH;
+        String expectedScriptName = "CONFLATE_MAKEFILE_PATH";
 
         assertEquals(expectedScriptName, actualScriptName);
     }

@@ -54,7 +54,7 @@ public class HGISPrepareForValidationCommandTest {
         assertEquals(expectedExec, actualExec);
 
         String actualExectype = (String) command.get("exectype");
-        String expectedExectype = "bash";
+        String expectedExectype = "";
         assertEquals(expectedExectype, actualExectype);
 
         String expectedCommandArgs =

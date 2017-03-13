@@ -61,11 +61,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
+import hoot.services.utils.ZipUtils;
 
 
 @Controller
@@ -107,15 +109,35 @@ public class OGRAttributesResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            List<String> filesList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
             List<String> zipList = new ArrayList<>();
 
-            processFormDataMultiPart(filesList, zipList, jobId, inputType, multiPart);
+            processFormDataMultiPart(fileList, zipList, jobId, inputType, multiPart);
 
             Command[] commands = {
                 () -> {
-                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, filesList, zipList, this.getClass());
-                    return externalCommandManager.exec(jobId, getAttributesCommand);
+                    // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
+                    File outputFolder = new File(UPLOAD_FOLDER, jobId);
+
+                    // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
+                    File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
+
+                    // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
+                    ZipUtils.unzipFiles(zipList, outputFolder);
+
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, this.getClass());
+                    CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
+
+                    try {
+                        // Do cleanup
+                        // cd .. && rm -rf "$(OP_INPUT)"
+                        FileUtils.forceDelete(outputFolder);
+                    }
+                    catch (IOException ioe) {
+                        logger.error("Error deleting {} directory!", outputFolder, ioe);
+                    }
+
+                    return commandResult;
                 }
             };
 
@@ -166,7 +188,8 @@ public class OGRAttributesResource {
         return Response.ok(script).build();
     }
 
-    private static void processFormDataMultiPart(List<String> filesList, List<String> zipList, String jobId, String inputType, FormDataMultiPart multiPart)
+    private static void processFormDataMultiPart(List<String> fileList, List<String> zipList, String jobId,
+                                                 String inputType, FormDataMultiPart multiPart)
             throws IOException {
         Map<String, String> uploadedFiles = new HashMap<>();
         Map<String, String> uploadedFilesPaths = new HashMap<>();
@@ -174,44 +197,42 @@ public class OGRAttributesResource {
         MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
 
         for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-            String fName = pairs.getKey();
+            String name = pairs.getKey();
             String ext = pairs.getValue();
+            String inputFileName = uploadedFilesPaths.get(name);
 
-            String inputFileName = uploadedFilesPaths.get(fName);
-
-            // If it is zip file then we crack open to see if it contains
-            // FGDB. If so then we add the folder location and desired output name
-            // which is fgdb name in the zip
+            // If it is zip file then we crack open to see if it contains FGDB.
+            // If so then we add the folder location and desired output name which is fgdb name in the zip.
             if (ext.equalsIgnoreCase("ZIP")) {
-                zipList.add(fName);
-                String zipFilePath = UPLOAD_FOLDER + File.separator + jobId + File.separator + inputFileName;
-                try (FileInputStream in = new FileInputStream(zipFilePath)) {
-                    try (ZipInputStream zis = new ZipInputStream(in)) {
-                        ZipEntry ze = zis.getNextEntry();
-                        while (ze != null) {
-                            String zipName = ze.getName();
-                            if (ze.isDirectory()) {
-                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
-                                        || zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                    String fgdbZipName = zipName;
-                                    if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                        fgdbZipName = zipName.substring(0, zipName.length() - 1);
+                zipList.add(name);
+                File zipFile = new File(new File(UPLOAD_FOLDER, jobId), inputFileName);
+                try (FileInputStream fin = new FileInputStream(zipFile)) {
+                    try (ZipInputStream zis = new ZipInputStream(fin)) {
+                        ZipEntry zipEntry = zis.getNextEntry();
+                        while (zipEntry != null) {
+                            String zeName = zipEntry.getName();
+                            if (zipEntry.isDirectory()) {
+                                if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
+                                        || zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
+                                    String fgdbZipName = zeName;
+                                    if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
+                                        fgdbZipName = zeName.substring(0, zeName.length() - 1);
                                     }
-                                    filesList.add("\"" + fName + "/" + fgdbZipName + "\"");
+                                    fileList.add("\"" + name + "/" + fgdbZipName + "\"");
                                 }
                             }
                             else {
-                                if (zipName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                    filesList.add("\"" + fName + "/" + zipName + "\"");
+                                if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
+                                    fileList.add("\"" + name + "/" + zeName + "\"");
                                 }
                             }
-                            ze = zis.getNextEntry();
+                            zipEntry = zis.getNextEntry();
                         }
                     }
                 }
             }
             else {
-                filesList.add("\"" + inputFileName + "\"");
+                fileList.add("\"" + inputFileName + "\"");
             }
         }
     }

@@ -28,14 +28,15 @@ package hoot.services.command;
 
 
 import static hoot.services.HootProperties.replaceSensitiveData;
+import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -43,11 +44,11 @@ import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.QCommandStatus;
 
 
 /**
@@ -63,7 +64,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String[] command, String jobId, String caller) {
+    public CommandResult exec(String[] command, String jobId, String caller, File workingDir) {
         logger.debug("About to execute the following command: {}", commandArrayToString(command, caller));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
@@ -78,6 +79,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             executor.setWatchdog(this.watchDog);
             executor.setStreamHandler(executeStreamHandler);
 
+            if (workingDir != null) {
+                executor.setWorkingDirectory(workingDir);
+            }
+
             LocalDateTime start = null;
             Exception exception = null;
             int exitCode;
@@ -85,7 +90,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             try {
                 CommandLine cmdLine = new CommandLine(command[0]);
                 for (int i = 1; i < command.length; i++) {
-                    cmdLine.addArgument(replaceSensitiveData(command[i]), false);
+                    cmdLine.addArgument(replaceSensitiveData(command[i]));
                 }
 
                 start = LocalDateTime.now();
@@ -108,7 +113,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             //, exitCode, stdout.toString(), stderr.toString()
             CommandResult commandResult = new CommandResult();
-            commandResult.setCommand(commandArrayToString(command, caller));
+            commandResult.setCommand(command);
+            commandResult.setCaller(caller);
             commandResult.setExitCode(exitCode);
             commandResult.setStderr(stderr.toString());
             commandResult.setStdout(stdout.toString());
@@ -133,25 +139,22 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     }
 
     private static void updateDatabase(CommandResult commandResult) {
-        CommandStatus commandStatus = new CommandStatus();
-        commandStatus.setCommand(commandResult.getCommand());
-        commandStatus.setExitCode(commandResult.getExitCode());
-        commandStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
-        commandStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
-        commandStatus.setJobId(commandResult.getJobId());
-        commandStatus.setStderr(commandResult.getStderr());
-        commandStatus.setStdout(commandResult.getStdout());
+        CommandStatus cmdStatus = new CommandStatus();
+        cmdStatus.setCommand(commandResult.getCommandAsString());
+        cmdStatus.setExitCode(commandResult.getExitCode());
+        cmdStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
+        cmdStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
+        cmdStatus.setJobId(commandResult.getJobId());
+        cmdStatus.setStderr(commandResult.getStderr());
+        cmdStatus.setStdout(commandResult.getStdout());
 
-        Long id = createQuery()
-                .insert(QCommandStatus.commandStatus)
-                .populate(commandStatus)
-                .executeWithKey(QCommandStatus.commandStatus.id);
+        Long id = createQuery().insert(commandStatus).populate(cmdStatus).executeWithKey(commandStatus.id);
 
         commandResult.setId(id);
     }
 
     private static String commandArrayToString(String[] command, String caller) {
-        return Arrays.toString(command) + ", Caller=" + caller ;
+        return "[" + StringUtils.join(command, " ") + "], Caller=" + caller;
     }
 
     @Override

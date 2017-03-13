@@ -52,12 +52,13 @@ class HGISCommand extends ExternalCommand {
         arg.put("OUTPUT", generateDbMapParam(outputMap));
         commandArgs.add(arg);
 
-        super.configureAsBashCommand(CORE_SCRIPT_PATH + File.separator + scriptName, caller, commandArgs);
+        String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
+
+        super.configureAsRegularCommand(script, caller, commandArgs);
     }
 
     /**
-     * Creates db conection string based on config settings in
-     * hoot-services.conf
+     * Creates DB conection string
      *
      * @param mapName
      * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois

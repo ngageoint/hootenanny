@@ -58,6 +58,8 @@ class ExportRenderDBCommand extends ExternalCommand {
         argument.put("DB_URL", HOOTAPI_DB_URL);
         commandArgs.add(argument);
 
-        super.configureAsBashCommand(CORE_SCRIPT_PATH + File.separator + EXPORT_RENDERDB_SCRIPT, caller, commandArgs);
+        String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
+
+        super.configureAsRegularCommand(script, caller, commandArgs);
     }
 }

@@ -48,9 +48,6 @@ testChangesetAutoClose=false
 # the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts/services
 
-# ETL make files script
-ETLMakefile=makeetl
-
 # Conflate make file script
 ConflateMakefilePath=makeconflate
 
@@ -59,9 +56,6 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
-
-# osm2ogr script used in export
-ExportScript=osm2ogrscript
 
 exportRenderDBScript=exportrenderdb.sh
 
@@ -76,9 +70,6 @@ osmApiDbEnabled=true
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
-
-# Basemap Raster to tile make file
-BasemapRasterToTiles=makebasemaprastertotiles.sh
 
 # Supported basemap type extensions
 BasemapRasterExtensions=png,tif
@@ -106,9 +97,6 @@ translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
 translationServerScript=/plugins/TranslationServer.js
-
-# Ogr Attributes script name
-GetOgrAttributeScript=makeGetOgrAttrib
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
@@ -144,7 +132,7 @@ ElementMergeServerThreadCount=0
 ElementMergeServerScript=/plugins/ElementMergeServer.js
 
 # HGIS review prepare for validation script name
-hgisPrepareForValidationScript=PrepareForValidation.sh
+hgisPrepareForValidationScript=PrepareForValidation.js
 
 # HGIS filter script name
-hgisFilterScript=RemoveNonHgisPois.sh
+hgisFilterScript=RemoveNonHgisPois.js

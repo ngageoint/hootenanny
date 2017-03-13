@@ -30,6 +30,8 @@ package hoot.services.command;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 public class CommandResult {
 
@@ -37,18 +39,23 @@ public class CommandResult {
     public static final int FAILURE = -1;
 
     private Long id;
-    private String command;
+    private String[] command;
     private int exitCode;
     private String stdout;
     private String stderr;
     private LocalDateTime start;
     private LocalDateTime finish;
     private String jobId;
+    private String caller;
 
     public CommandResult() {}
 
-    public String getCommand() {
+    public String[] getCommand() {
         return command;
+    }
+
+    public String getCommandAsString() {
+        return (this.command != null) ? StringUtils.join(command, " ").trim() : "";
     }
 
     public int getExitCode() {
@@ -95,7 +102,7 @@ public class CommandResult {
         return (exitCode != SUCCESS);
     }
 
-    public void setCommand(String command) {
+    public void setCommand(String[] command) {
         this.command = command;
     }
 
@@ -119,12 +126,21 @@ public class CommandResult {
         this.id = id;
     }
 
+    public String getCaller() {
+        return caller;
+    }
+
+    public void setCaller(String caller) {
+        this.caller = caller;
+    }
+
     @Override
     public String toString() {
         return "CommandResult{" +
-                "command=" + command.replace(",", "") +
+                "command=[" + getCommandAsString() + "]" +
                 ", jobId=[" + jobId + ']' +
                 ", command_id=[" + id + ']' +
+                ", caller=[" + caller + ']' +
                 ", start=[" + start + ']' +
                 ", finish=[" + finish + ']' +
                 ", duration=[" + getDuration() + "]" +

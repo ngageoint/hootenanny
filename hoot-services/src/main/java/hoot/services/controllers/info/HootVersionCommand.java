@@ -36,18 +36,14 @@ import hoot.services.command.ExternalCommand;
 class HootVersionCommand extends ExternalCommand {
 
     HootVersionCommand(boolean withDetails, Class<?> caller) {
-        super.put("exectype", "hoot");
-        super.put("exec", "version");
-
         JSONArray params = new JSONArray();
 
         if (withDetails) {
             JSONObject param = new JSONObject();
-            param.put("", "--debug");
+            param.put("DEBUG_SWITCH", "--debug");
             params.add(param);
         }
 
-        super.put("params", params);
-        super.put("caller", caller.getName());
+        super.configureAsHootCommand("version", caller, params);
     }
 }

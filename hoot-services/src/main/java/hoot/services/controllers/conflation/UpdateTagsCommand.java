@@ -56,7 +56,7 @@ class UpdateTagsCommand implements InternalCommand {
     private final String mapName;
     private final String jobId;
 
-    UpdateTagsCommand(String params, String mapName, String jobId) {
+    UpdateTagsCommand(String params, String mapName, String jobId, Class<?> caller) {
         this.mapName = mapName;
         this.jobId = jobId;
         this.tags = new HashMap<>();
@@ -116,7 +116,7 @@ class UpdateTagsCommand implements InternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
         commandResult.setJobId(jobId);
-        commandResult.setCommand("[Update Map Tags] of map with name = " + mapName);
+        commandResult.setCommand(new String[]{"[Update Map Tags] of map with name = " + mapName});
         commandResult.setStart(LocalDateTime.now());
 
         updateTagsDirect();

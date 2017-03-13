@@ -26,8 +26,9 @@
  */
 package hoot.services.controllers.ogr;
 
-import static hoot.services.HootProperties.GET_OGR_ATTRIBUTE_SCRIPT;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,23 +38,41 @@ import org.json.simple.JSONObject;
 import hoot.services.command.ExternalCommand;
 
 
+/*
+    #
+    #  GetOrgAttrib Make file
+    #
+
+    OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
+    OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
+
+    ###
+    # Transform and load data
+    ###
+    step1:
+        bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
+        cd "$(OP_INPUT)" && hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
+        cd .. && rm -rf "$(OP_INPUT)"
+ */
 class GetAttributesCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<String> fileList, List<String> zipList, Class<?> caller) {
+    GetAttributesCommand(String jobId, List<String> fileList, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject arg = new JSONObject();
+        arg.put("ERROR", "--error");
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
         arg.put("INPUT_FILES", StringUtils.join(fileList.toArray(), ' '));
         commandArgs.add(arg);
 
-        arg = new JSONObject();
-        arg.put("INPUT_ZIPS", StringUtils.join(zipList.toArray(), ';'));
-        commandArgs.add(arg);
+        File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
 
         arg = new JSONObject();
-        arg.put("jobid", jobId);
+        arg.put("OUTPUT_REDIRECT", " >> " + outputFile.getAbsolutePath());
         commandArgs.add(arg);
 
-        super.configureAsMakeCommand(GET_OGR_ATTRIBUTE_SCRIPT, caller, commandArgs);
+        super.configureAsHootCommand("attribute-count", caller, commandArgs);
     }
  }

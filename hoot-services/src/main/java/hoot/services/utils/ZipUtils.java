@@ -22,27 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.ingest;
+package hoot.services.utils;
 
-
+import java.io.File;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.springframework.stereotype.Component;
 
+public final class ZipUtils {
 
-@Component
-class FileETLCommandFactory {
+    private ZipUtils() {}
 
-    FileETLCommand build(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
-                         int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt,
-                         List<String> zipList, String translation, String jobId, String etlName,
-                         List<String> inputsList, String userEmail, Boolean isNoneTranslation, String fgdbFeatureClasses,
-                         Class<?> caller) {
-        return new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                                  shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId,
-                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses, caller);
+    public static void unzipFiles(List<String> zipList, File outputFoler) {
+        for (String zip : zipList) {
+            try {
+                // TODO: Add logic here!
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Error unzipping : " + zip, e);
+            }
+        }
     }
 }

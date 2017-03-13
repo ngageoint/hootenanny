@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 class IngestBasemapCommandFactory {
 
-    IngestBasemapCommand build(String groupId, String inputFileName, String projection, String tileOutputDir, Class<?> caller) {
-        return new IngestBasemapCommand(groupId, inputFileName, projection, tileOutputDir, caller);
+    IngestBasemapCommand build(String inputFile, String projection, String tileOutputDir, boolean verboseOutput, Class<?> caller) {
+        return new IngestBasemapCommand(inputFile, projection, tileOutputDir, verboseOutput, caller);
     }
 }

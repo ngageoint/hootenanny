@@ -26,29 +26,91 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.ETL_MAKEFILE;
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.UPLOAD_FOLDER;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.utils.JsonUtils;
+
+/*
+    #
+    #  ETL Make file
+    #
+
+    HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
+    HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+    HOOT_OPTS+= -D api.db.email=test@test.com
+
+    OP_INPUT=$(INPUT)
+    OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
+    OP_INPUT_PATH=$(INPUT_PATH)
+
+    # This replaces semicolon with vsizip and path
+    ifeq "$(INPUT_TYPE)" "ZIP"
+        #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
+        OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
+    endif
+
+    ifeq "$(INPUT_TYPE)" "GEONAMES"
+        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+        HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+    endif
+
+    ifeq "$(INPUT_TYPE)" "OSM"
+        ifneq "$(NONE_TRANSLATION)" "true"
+            HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+            HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+        endif
+    endif
+
+    ###
+    # Transform and load data
+    ###
+    step1:
+
+    # Unzip when semicolon separated lists are provided
+    ifneq ($(strip $(UNZIP_LIST)), )
+        bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
+    endif
+
+    ifeq "$(INPUT_TYPE)" "OGR"
+        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+    endif
+
+    ifeq "$(INPUT_TYPE)" "OSM"
+        cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
+    endif
+
+    ifeq "$(INPUT_TYPE)" "ZIP"
+        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+    endif
+
+    ifeq "$(INPUT_TYPE)" "FGDB"
+        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+    endif
+
+    ifeq "$(INPUT_TYPE)" "GEONAMES"
+        cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
+    endif
+
+    rm -rf "$(OP_INPUT_PATH)"
+*/
 
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt, int geonamesZipCnt,
-                   int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt, List<String> zipList, String translation,
+    FileETLCommand(JSONArray reqList, int zipCnt, int shpZipCnt, int fgdbZipCnt,
+                   int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
+                   int osmCnt, int geonamesCnt, List<String> zipList, String translation,
                    String jobId, String etlName, List<String> inputsList, String userEmail,
-                   String isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
+                   Boolean isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
 
         String inputs = "";
         for (Object r : reqList) {
@@ -61,104 +123,200 @@ class FileETLCommand extends ExternalCommand {
         // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
         // if fgdb zip == 0 and shp zip > then it is standard zip.
         // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
-        String curInputType = "";
+        String inputType = "";
         if (zipCnt > 0) {
             if (fgdbZipCnt > 0) {
                 String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                 param.put("UNZIP_LIST", mergedZipList);
-                curInputType = "OGR";
+                inputType = "OGR";
             }
             else {
                 // Mix of shape and zip then we will unzip and treat it like OGR
                 if (shpCnt > 0) { // One or more all ogr zip + shape
-                    curInputType = "OGR";
+                    inputType = "OGR";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
                 else if (osmCnt > 0) { // Mix of One or more all osm zip + osm
-                    curInputType = "OSM";
+                    inputType = "OSM";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
                 else if (geonamesCnt > 0) { // Mix of One or more all osm zip + osm
-                    curInputType = "GEONAMES";
+                    inputType = "GEONAMES";
                     String mergedZipList = StringUtils.join(zipList.toArray(), ';');
                     param.put("UNZIP_LIST", mergedZipList);
                 }
                 else { // One or more zip (all ogr) || One or more zip (all osm)
 
                     // If contains zip of just shape or osm then we will etl zip directly
-                    curInputType = "ZIP";
-                    // add zip extension
+                    inputType = "ZIP";
 
+                    // add zip extension
                     for (int j = 0; j < zipList.size(); j++) {
                         zipList.set(j, zipList.get(j) + ".zip");
                     }
+
                     inputs = StringUtils.join(zipList.toArray(), ';');
                 }
             }
         }
         else if (shpCnt > 0) {
-            curInputType = "OGR";
+            inputType = "OGR";
         }
         else if (osmCnt > 0) {
-            curInputType = "OSM";
+            inputType = "OSM";
         }
         else if (fgdbCnt > 0) {
-            curInputType = "FGDB";
+            inputType = "FGDB";
         }
         else if (geonamesCnt > 0) {
-            curInputType = "GEONAMES";
+            inputType = "GEONAMES";
         }
 
-        Boolean isNone = false;
-        if (isNoneTranslation != null) {
-            isNone = isNoneTranslation.equals("true");
+        //if (translation.contains("/")) {
+        //    translationPath = translation;
+        //}
+
+        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
+        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+        //HOOT_OPTS+= -D api.db.email=test@test.com
+
+        List<String> hootOptions = new LinkedList<>();
+        hootOptions.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        hootOptions.add("-D hootapi.db.writer.overwrite.map=true");
+        hootOptions.add("-D hootapi.db.writer.create.user=true");
+        hootOptions.add("-D api.db.email=test@test.com");
+
+        //ifeq "$(INPUT_TYPE)" "GEONAMES"
+        //    HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+        //    HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+        //endif
+
+        // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
+
+        String translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
+        if ("GEONAMES".equals(inputType)) {
+            hootOptions.add("-D convert.ops=hoot::TranslationOp");
+            hootOptions.add("-D translation.script=\"" + translationPath + "\"");
         }
 
-        String translationPath = "translations" + File.separator + translation;
+        //ifeq "$(INPUT_TYPE)" "OSM"
+        //    ifneq "$(NONE_TRANSLATION)" "true"
+        //        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+        //       HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+        //    endif
+        //endif
 
-        if (translation.contains("/")) {
-            translationPath = translation;
+        if ("OSM".equals(inputType) && !isNoneTranslation) {
+            hootOptions.add("-D convert.ops=hoot::TranslationOp");
+            hootOptions.add("-D translation.script=\"" + translation + "\"");
+        }
+
+        // OP_INPUT_PATH (INPUT_PATH)
+        File workingDir = new File(UPLOAD_FOLDER, jobId);
+
+        //# This replaces semicolon with vsizip and path
+        //ifeq "$(INPUT_TYPE)" "ZIP"
+        //   #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
+        //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
+        //endif
+
+        if ("ZIP".equals(inputType)) {
+            //Reading a GDAL dataset in a .gz file or a .zip archive
+            inputs.replace(";", "/vsizip/" + workingDir.getAbsolutePath());
         }
 
         // Formulate request parameters
 
-        param.put("NONE_TRANSLATION", isNone.toString());
-        param.put("TRANSLATION", translationPath);
-        param.put("INPUT_TYPE", curInputType);
-        param.put("INPUT_PATH", UPLOAD_FOLDER + File.separator + jobId);
-        param.put("INPUT", inputs);
-        param.put("INPUT_NAME", etlName);
-        param.put("USER_EMAIL", userEmail);
-        param.put("DB_URL", HOOTAPI_DB_URL);
+        //param.put("NONE_TRANSLATION", isNone.toString());
+        //param.put("TRANSLATION", translationPath);
+        //param.put("INPUT_TYPE", inputType);
+        //param.put("INPUT_PATH", UPLOAD_FOLDER + File.separator + jobId);
+        //param.put("INPUT", inputs);
+        //param.put("INPUT_NAME", etlName);
+        //param.put("USER_EMAIL", userEmail);
+        //param.put("DB_URL", HOOTAPI_DB_URL);
 
-        if (curInputType.equalsIgnoreCase("FGDB") && (fgdbFeatureClasses != null) && (!fgdbFeatureClasses.isEmpty())) {
+        if (inputType.equalsIgnoreCase("FGDB") && !StringUtils.isBlank(fgdbFeatureClasses)) {
             Object oRq = reqList.get(0);
 
             if (oRq != null) {
-                JSONObject jsonReq = (JSONObject) oRq;
-                String rawInput = jsonReq.get("name").toString();
+                JSONObject json = (JSONObject) oRq;
+                String rawInput = json.get("name").toString();
                 List<String> fgdbInputs = new ArrayList<>();
-                String[] cls = fgdbFeatureClasses.split(",");
+                String[] classes = fgdbFeatureClasses.split(",");
 
-                for (String cl : cls) {
-                    fgdbInputs.add(rawInput + "\\;" + cl);
+                for (String clazz : classes) {
+                    fgdbInputs.add(rawInput + "\\;" + clazz);
                 }
 
                 String fgdbInput = StringUtils.join(fgdbInputs.toArray(), ' ');
-                param.put("INPUT", fgdbInput);
+                inputs = fgdbInput;
+                //param.put("INPUT", fgdbInput);
             }
         }
 
-        JSONArray commandArgs;
-        try {
-            commandArgs = JsonUtils.parseParams(param.toJSONString());
+        JSONArray commandArgs = new JSONArray();
+        //try {
+        //    commandArgs = JsonUtils.parseParams(param.toJSONString());
+        //}
+        //catch (ParseException pe) {
+        //    throw new RuntimeException("Error parsing: " + param.toJSONString(), pe);
+        //}
+
+        //ifeq "$(INPUT_TYPE)" "OGR"
+        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+        //endif
+
+        //ifeq "$(INPUT_TYPE)" "FGDB"
+        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+        //endif
+
+        //ifeq "$(INPUT_TYPE)" "ZIP"
+        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
+        //endif
+
+        //ifeq "$(INPUT_TYPE)" "OSM"
+        //    cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
+        //endif
+
+        //ifeq "$(INPUT_TYPE)" "GEONAMES"
+        //    cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
+        //endif
+
+        JSONObject arg = new JSONObject();
+        arg.put("HOOT_OPTIONS", StringUtils.join(hootOptions, " "));
+        commandArgs.add(arg);
+
+        if ("OGR".equals(inputType) || "FGDB".equals(inputType) || "ZIP".equals(inputType)) {
+            arg = new JSONObject();
+            arg.put("TRANSLATION", translationPath);
+            commandArgs.add(arg);
+
+            arg = new JSONObject();
+            arg.put("INPUT_NAME", HOOTAPI_DB_URL + "/" + etlName);
+            commandArgs.add(arg);
+
+            arg = new JSONObject();
+            arg.put("INPUT", inputs);
+            commandArgs.add(arg);
+
+            super.configureAsHootCommand("ogr2osm", caller, commandArgs);
         }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + param.toJSONString(), pe);
+        else if ("OSM".equals(inputType) || "GEONAMES".equals(inputType)) {
+            arg = new JSONObject();
+            arg.put("INPUT", inputs);
+            commandArgs.add(arg);
+
+            arg = new JSONObject();
+            arg.put("INPUT_NAME", HOOTAPI_DB_URL + "/" + etlName);
+            commandArgs.add(arg);
+
+            super.configureAsHootCommand("convert", caller, commandArgs);
         }
 
-        super.configureAsMakeCommand(ETL_MAKEFILE, caller, commandArgs);
+        // override working directory set during super.configureAsHootCommand()
+        this.put("workingDir", workingDir);
     }
 }

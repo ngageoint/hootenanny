@@ -54,7 +54,7 @@ final class UpdateMapTagsCommand implements InternalCommand {
     @Override
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
-        commandResult.setCommand("[Update Map Tags] of map with name = " + mapName);
+        commandResult.setCommand(new String[]{"[Update Map Tags] of map with name = " + mapName});
         commandResult.setJobId(this.jobId);
         commandResult.setStart(LocalDateTime.now());
 

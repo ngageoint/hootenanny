@@ -48,6 +48,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
@@ -128,18 +129,13 @@ public class ConflationResource {
             JSONParser parser = new JSONParser();
             JSONObject oParams = (JSONObject) parser.parse(params);
 
-            oParams.put("IS_BIG", "false");
-
             boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(oParams);
-            String confOutputName = oParams.get("OUTPUT_NAME").toString();
-            String userEmail = (oParams.get("USER_EMAIL") == null) ? null : oParams.get("USER_EMAIL").toString();
 
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
             if (conflatingOsmApiDbData && !OSM_API_DB_ENABLED) {
-                String msg = "Attempted to conflate an OSM API database data source but OSM " +
-                        "API database support is disabled.";
-                throw new WebApplicationException(Response.serverError().entity(msg).build());
+                throw new IllegalArgumentException("Attempted to conflate an OSM API database data source but OSM " +
+                        "API database support is disabled.");
             }
 
             BoundingBox bbox;
@@ -171,14 +167,23 @@ public class ConflationResource {
                 bbox = null;
             }
 
+            String confOutputName = oParams.get("OUTPUT_NAME").toString();
+            Boolean generateReport = Boolean.valueOf(oParams.get("GENERATE_REPORT").toString());
+
             Command[] commands = {
                 () -> {
-                    ExternalCommand conflateCommand = conflateCommandFactory.build(oParams.toJSONString(), bbox, this.getClass());
-                    return externalCommandManager.exec(jobId, conflateCommand);
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, bbox, this.getClass());
+                    CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
+
+                    if (generateReport) {
+                        generateReport();
+                    }
+
+                    return commandResult;
                 },
 
                 () -> {
-                    InternalCommand updateTagsCommand = updateTagsCommandFactory.build(oParams.toJSONString(), confOutputName, jobId);
+                    InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, confOutputName, this.getClass());
                     return internalCommandManager.exec(jobId, updateTagsCommand);
                 },
 
@@ -202,6 +207,16 @@ public class ConflationResource {
         json.put("jobid", jobId);
 
         return Response.ok(json.toJSONString()).build();
+    }
+
+    // Disabled as of 03/13/2017.  Should be enventually removed....
+    private static void generateReport() {
+        /*
+            ifeq "$(GENERATE_REPORT)" "true"
+                cd $(HOOT_HOME)/userfiles/reports/$(jobid) && a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s reportStyle.sty --param doc.publisher.show=0" -a HasLatexMath -a 'revdate=v`$HOOT_HOME/bin/hoot version --error | sed "s/Hootenanny \([^ ]* \) Built.* /\\1/g"`, `date "+%B %d, %Y"`' -a "input1=$(OP_INPUT1)" -a "input2=$(OP_INPUT2)" -a "output=$(DB_OUTPUT)" -a "args=" -a "cmd1=hoot $(OP_CONFLATE_TYPE) $(OP_CMD) $(OP_INPUT2)  $(OP_STAT)" -v -f pdf report.asciidoc
+                echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/userfiles/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/userfiles/reports/$(jobid)/meta.data
+            endif
+        */
     }
 
     static boolean oneLayerIsOsmApiDb(JSONObject inputParams) {

@@ -65,7 +65,7 @@ public class ExternalCommandManagerTest {
 
         Class<?>[] cArg = new Class[1];
         cArg[0] = JSONObject.class;
-        Method method = ExternalCommandManagerImpl.class.getDeclaredMethod("createCmdArray", cArg);
+        Method method = ExternalCommandManagerImpl.class.getDeclaredMethod("buildHootCommand", cArg);
         method.setAccessible(true);
         String[] ret = (String[]) method.invoke(ps, command);
         String commandStr = ArrayUtils.toString(ret);
