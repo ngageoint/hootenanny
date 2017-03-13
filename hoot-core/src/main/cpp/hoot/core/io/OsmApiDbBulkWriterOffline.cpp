@@ -51,6 +51,7 @@ OsmApiDbBulkWriterOffline::OsmApiDbBulkWriterOffline() :
 OsmApiDbBulkWriter()
 {
   _offline = true;
+  outputDelimiter = ',';
 }
 
 OsmApiDbBulkWriterOffline::~OsmApiDbBulkWriterOffline()
@@ -151,67 +152,93 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
 
 QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
 {
-  return "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
+  return
+    OsmApiDbBulkWriter::_getChangesetsOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentNodesOutputFormatString() const
 {
-  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalNodesOutputFormatString() const
 {
-  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
 {
-  return "%1\t%2\t%3\tt\t1\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWaysOutputFormatString() const
 {
-  return "%1\t%2\t%3\t1\tt\t\\N\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWayNodesOutputFormatString() const
 {
-  return "%1\t%2\t%3\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWayNodesOutputFormatString() const
 {
-  return "%1\t%2\t1\t%3\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationsOutputFormatString() const
 {
-  return "%1\t%2\t%3\tt\t1\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationsOutputFormatString() const
 {
-  return "%1\t%2\t%3\t1\tt\t\\N\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationMembersOutputFormatString() const
 {
-  return "%1\t%2\t%3\t%4\t%5\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentRelationMembersOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationMembersOutputFormatString() const
 {
-  return "%1\t%2\t%3\t%4\t1\t%5\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalRelationMembersOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentTagsOutputFormatString() const
 {
-  return "%1\t%2\t%3\n";
+  return
+    OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalTagsOutputFormatString() const
 {
-  return "%1\t1\t%2\t%3\n";
+  return
+    OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString()
+      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
 }
 
 }

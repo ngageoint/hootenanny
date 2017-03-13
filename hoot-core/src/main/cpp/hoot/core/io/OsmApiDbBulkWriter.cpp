@@ -44,11 +44,13 @@ namespace hoot
 using namespace Tgs;
 
 unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
+QChar OsmApiDbBulkWriter::outputDelimiter = '\t';
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
 OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
-_offline(false)
+_offline(false),
+_delimiter('\t')
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -553,7 +555,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& n)
 
   if (_writeStats.nodesWritten == 0)
   {
-    _createNodeTables();
+    if (!_offline)
+    {
+      _createNodeTables();
+    }
     _idMappings.nodeIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 
@@ -609,7 +614,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
 
   if (_writeStats.waysWritten == 0)
   {
-    _createWayTables();
+    if (!_offline)
+    {
+      _createWayTables();
+    }
     _idMappings.wayIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 
@@ -617,7 +625,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& w)
   // Do we already know about this way?
   if (_idMappings.wayIdMap->contains(w->getId()))
   {
-    throw hoot::NotImplementedException("Writer class does not support update operations");
+    throw NotImplementedException("Writer class does not support update operations");
   }
   // Have to establish new mapping
   wayDbId = _establishNewIdMapping(w->getElementId());
@@ -677,7 +685,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& r)
 
   if (_writeStats.relationsWritten == 0)
   {
-    _createRelationTables();
+    if (!_offline)
+    {
+      _createRelationTables();
+    }
     _idMappings.relationIdMap = shared_ptr<BigMap<long, long> >(new BigMap<long, long>());
   }
 

@@ -140,6 +140,8 @@ public:
 
   static unsigned int logWarnCount;
 
+  static QChar outputDelimiter;
+
   OsmApiDbBulkWriter();
 
   virtual ~OsmApiDbBulkWriter();
@@ -175,6 +177,7 @@ protected:
   bool _offline;
   bool _disableWriteAheadLogging;
   bool _writeMultiThreaded;
+  QChar _delimiter;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
