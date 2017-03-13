@@ -178,6 +178,7 @@ protected:
   bool _disableWriteAheadLogging;
   bool _writeMultiThreaded;
   QChar _delimiter;
+  QString _outputUrl;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
@@ -211,7 +212,6 @@ private:
   IdMappings _idMappings;
   UnresolvedReferences _unresolvedRefs;
 
-  QString _outputUrl;
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   long _maxChangesetSize;

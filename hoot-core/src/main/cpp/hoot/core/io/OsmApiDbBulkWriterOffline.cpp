@@ -140,14 +140,64 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
     "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records.  " << _outputSections.size() - 1 << " CSV files will be written...");
 
-  //TODO: finish
-  QString cmd = "";
-  LOG_DEBUG(cmd);
-  if (system(cmd.toStdString().c_str()) != 0)
+  const QString outputLogPath = "/home/vagrant/pg_bulkload/bin/pg_bulkload_osmapidb.log";
+  QFile outputLog(outputLogPath);
+  if (outputLog.exists())
   {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
+    outputLog.remove();
   }
-  LOG_DEBUG("Element SQL execution complete.");
+
+  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  {
+    if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first.get())
+    {
+      const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+      //TODO:
+      // -this needs to work for hoot user
+      // -need to remove vagrant home path
+      // -don't hardcode log path
+//      QString cmd =
+//        "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " + dbUrlParts["database"] +
+//        " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
+//        " -l " + outputLogPath;
+      QString cmd =
+        "pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
+        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
+        " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
+        " -l " + outputLogPath;
+      //TODO: option for check constraints?
+      if (!_disableWriteAheadLogging)
+      {
+        cmd += " -o \"WRITER=BUFFERED\"";
+      }
+      if (!_writeMultiThreaded)
+      {
+        cmd += " -o \"MULTI_PROCESS=YES\"";
+      }
+      if (!(Log::getInstance().getLevel() <= Log::Trace))
+      {
+        cmd += " -o \"VERBOSE=YES\"";
+      }
+      if (!(Log::getInstance().getLevel() <= Log::Info))
+      {
+        //TODO: re-enable
+        //cmd += " > /dev/null";
+      }
+      LOG_DEBUG(cmd);
+
+      LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
+      if (system(cmd.toStdString().c_str()) != 0)
+      {
+        throw HootException(
+          "Failed executing record write for table " + *sectionNamesItr +
+          " against the OSM API database: " + _outputUrl);
+      }
+      LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
+    }
+  }
+
+  LOG_DEBUG("Record writing complete.");
 }
 
 QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
