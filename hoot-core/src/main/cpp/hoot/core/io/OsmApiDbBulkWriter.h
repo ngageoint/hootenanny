@@ -34,6 +34,7 @@
 #include <QString>
 #include <QTemporaryFile>
 #include <QTextStream>
+#include <QElapsedTimer>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
@@ -141,7 +142,6 @@ public:
   static unsigned int logWarnCount;
 
   OsmApiDbBulkWriter();
-
   virtual ~OsmApiDbBulkWriter();
 
   virtual bool isSupported(QString url);
@@ -149,9 +149,9 @@ public:
   virtual void close();
 
   virtual void finalizePartial();
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& node);
+  virtual void writePartial(const ConstWayPtr& way);
+  virtual void writePartial(const ConstRelationPtr& relation);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -170,20 +170,24 @@ protected:
 
   ElementWriteStats _writeStats;
   ChangesetData _changesetData;
+  IdMappings _idMappings;
+  UnresolvedReferences _unresolvedRefs;
+
   QString _outputFileCopyLocation;
   bool _executeSql;
-  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
-  QStringList _sectionNames;
   bool _disableWriteAheadLogging;
   bool _writeMultiThreaded;
-  QChar _delimiter;
   QString _outputUrl;
   bool _disableConstraints;
   QString _mode;
-  OsmApiDb _database;
-  IdMappings _idMappings;
-  UnresolvedReferences _unresolvedRefs;
   QChar _outputDelimiter;
+
+  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
+  QStringList _sectionNames;
+
+  OsmApiDb _database;
+
+  shared_ptr<QElapsedTimer> _timer;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
@@ -195,6 +199,7 @@ protected:
 
   QString _formatPotentiallyLargeNumber(const long number);
   virtual QString _escapeCopyToData(const QString stringToOutput) const;
+  QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   virtual QString _getChangesetsOutputFormatString() const;
   virtual QString _getCurrentNodesOutputFormatString() const;
@@ -240,14 +245,16 @@ private:
                              const long relationId, QString& outputStr);
   void _writeRelationToStream(const long relationDbId);
   void _writeRelationMembersToStream(const ConstRelationPtr& relation);
-  void _writeRelationMemberToStream(const long sourceRelation, const RelationData::Entry& memberEntry,
-                                    const long memberDbId, const unsigned int memberSequenceIndex);
+  void _writeRelationMemberToStream(const long sourceRelation,
+                                    const RelationData::Entry& memberEntry, const long memberDbId,
+                                    const unsigned int memberSequenceIndex);
   void _writeWayToStream(const long wayDbId);
   void _writeWayNodesToStream(const long wayId,
     const vector<long>& waynodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const long nodeDbId,
-                          shared_ptr<QTextStream>& currentTable, shared_ptr<QTextStream>& historicalTable);
+                          shared_ptr<QTextStream>& currentTable,
+                          shared_ptr<QTextStream>& historicalTable);
 
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
   void _writeCombinedSqlFile();

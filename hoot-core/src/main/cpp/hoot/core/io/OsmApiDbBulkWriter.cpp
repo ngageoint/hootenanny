@@ -163,6 +163,11 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
 
 void OsmApiDbBulkWriter::finalizePartial()
 {
+  LOG_INFO(
+    "Input records parsed (data pass #1 of 2).  Time elapsed: " <<
+    _secondsToDhms(_timer->elapsed()) << " Stats:");
+  _logStats();
+
   //go ahead and clear out some of the data structures we don't need anymore
   _idMappings.nodeIdMap.reset();
   _idMappings.wayIdMap.reset();
@@ -175,9 +180,6 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_DEBUG("No data was written.");
     return;
   }
-
-  LOG_INFO("Input records parsed stats (data pass #1 of 2):");
-  _logStats();
 
   _sqlOutputMasterFile.reset(new QTemporaryFile());
   if (!_sqlOutputMasterFile->open())
@@ -257,6 +259,7 @@ void OsmApiDbBulkWriter::_retainOutputFiles()
 
 void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 {
+  _timer->restart();
   LOG_INFO("Writing combined SQL output file.  Data pass #2 of 2...");
 
   LOG_VART(_sqlOutputMasterFile->fileName());
@@ -362,9 +365,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   outStream.flush();
   _sqlOutputMasterFile->close();
 
-  LOG_INFO("SQL file write complete; data pass #2 of 2.");
+  LOG_INFO(
+    "SQL file write complete; data pass #2 of 2.  Time elapsed: " <<
+    _secondsToDhms(_timer->elapsed()));
   LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
-
   QFileInfo outputInfo(_sqlOutputMasterFile->fileName());
   LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -481,6 +485,7 @@ void OsmApiDbBulkWriter::_lockIds()
 
 void OsmApiDbBulkWriter::_writeDataToDb()
 {
+  _timer->restart();
   //I believe a COPY header is created whether there are any records to copy for the table or not,
   //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
   //to not write the header if there are no records to copy for the table...
@@ -507,7 +512,8 @@ void OsmApiDbBulkWriter::_writeDataToDb()
   {
     throw HootException("Failed executing bulk element SQL write against the OSM API database.");
   }
-  LOG_DEBUG("Element SQL execution complete.");
+  LOG_INFO(
+    "Element SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 }
 
 long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
@@ -537,6 +543,9 @@ void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
 
 void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
 {
+  _timer.reset(new QElapsedTimer());
+  _timer->start();
+
   if (_writeStats.nodesWritten == 0)
   {
     QString msg = "Streaming elements from input to temporary file outputs.";
@@ -614,6 +623,27 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
     PROGRESS_INFO(
       "Parsed " << _formatPotentiallyLargeNumber(_writeStats.nodesWritten) << " nodes from input.");
   }
+}
+
+QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const
+{
+  QString res;
+  long duration = (long)(durationInMilliseconds / 1000);
+  const long seconds = (long)(duration % 60);
+  duration /= 60;
+  const long minutes = (long)(duration % 60);
+  duration /= 60;
+  const long hours = (long)(duration % 24);
+  const long days = (long)(duration / 24);
+  if ((hours == 0) && (days == 0))
+  {
+    return res.sprintf("%02d:%02d", minutes, seconds);
+  }
+  if (days == 0)
+  {
+    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
+  }
+  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
 }
 
 void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
@@ -787,7 +817,6 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
 {
   QStringList sections;
-
   sections.push_back(QString("byte_order_mark"));
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
@@ -806,11 +835,9 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
   sections.push_back(ApiDb::getRelationsTableName());
   sections.push_back(ApiDb::getRelationMembersTableName());
   sections.push_back(ApiDb::getRelationTagsTableName());
-
   return sections;
 }
 
-//TODO: this could be cleaner
 void OsmApiDbBulkWriter::_createNodeOutputFiles()
 {
   if (_mode == "online")

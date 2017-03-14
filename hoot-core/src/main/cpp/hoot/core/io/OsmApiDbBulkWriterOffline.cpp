@@ -81,6 +81,10 @@ void OsmApiDbBulkWriterOffline::finalizePartial()
 {
   //TODO: may be able to reuse the parent logic some here
 
+  LOG_INFO(
+    "Input records parsed.  Time elapsed: " <<  _secondsToDhms(_timer->elapsed()) << " Stats:");
+  _logStats();
+
   //go ahead and clear out some of the data structures we don't need anymore
   _idMappings.nodeIdMap.reset();
   _idMappings.wayIdMap.reset();
@@ -93,9 +97,6 @@ void OsmApiDbBulkWriterOffline::finalizePartial()
     LOG_DEBUG("No data was written.");
     return;
   }
-
-  LOG_INFO("Input records parsed stats:");
-  _logStats();
 
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
@@ -157,6 +158,7 @@ void OsmApiDbBulkWriterOffline::_retainOutputFiles()
 
 void OsmApiDbBulkWriterOffline::_writeDataToDb()
 {
+  _timer->restart();
   LOG_INFO(
     "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records.  " << _outputSections.size() - 1 << " CSV files will be written to the database...");
@@ -240,7 +242,7 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
       const int status = system(cmd.toStdString().c_str());
       if (status != 0)
       {
-        if (status == 3)  //TODO: this may not be reporting correctly
+        if (status == 3)
         {
           LOG_WARN("Some data could not be loaded.");
           someDataNotLoaded = true;
@@ -261,8 +263,11 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
     }
   }
 
-  LOG_DEBUG("Record writing complete.");
-  LOG_WARN("Some data was not loaded.");
+  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  if (someDataNotLoaded)
+  {
+    LOG_WARN("Some data was not loaded.");
+  }
 }
 
 QString OsmApiDbBulkWriterOffline::_escapeCopyToData(const QString stringToOutput) const

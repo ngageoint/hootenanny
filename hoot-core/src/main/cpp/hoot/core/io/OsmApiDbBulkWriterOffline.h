@@ -42,6 +42,8 @@ class OsmApiDbCsvTableFileSetWriter;
  * write performance.
  *
  * IMPORTANT: This class should only be used with offline databases (this class is the only writer).
+ *
+ * TODO: workflow
  */
 class OsmApiDbBulkWriterOffline : public OsmApiDbBulkWriter
 {
@@ -53,7 +55,6 @@ public:
   static unsigned int logWarnCount;
 
   OsmApiDbBulkWriterOffline();
-
   virtual ~OsmApiDbBulkWriterOffline();
 
   virtual void open(QString url);
