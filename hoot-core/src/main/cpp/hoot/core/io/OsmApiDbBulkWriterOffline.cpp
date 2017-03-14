@@ -167,7 +167,14 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
   {
     outputLog.remove();
   }
+  const QString badRecordsLogPath = "/home/vagrant/pg_bulkload/bin/pg_bulkload_bad_records.log";
+  QFile badRecordsLog(badRecordsLogPath);
+  if (badRecordsLog.exists())
+  {
+    badRecordsLog.remove();
+  }
 
+  bool someDataNotLoaded = false;
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
   {
@@ -178,19 +185,33 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
       _outputSections[*sectionNamesItr].first->close();
 
       const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+
       //TODO:
       // -this needs to work for hoot user
       // -need to remove vagrant home path
       // -don't hardcode log path
-//      QString cmd =
-//        "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " + dbUrlParts["database"] +
-//        " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
-//        " -l " + outputLogPath;
+
+      if (!(_outputSections[*sectionNamesItr]).first->setPermissions(QFile::ReadOther))
+      {
+        LOG_WARN(
+          "Unable to set permissions on " << (_outputSections[*sectionNamesItr]).first->fileName());
+      }
       QString cmd =
-        "pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
-        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
+        "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " + dbUrlParts["database"] +
         " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
-        " -l " + outputLogPath;
+        " -l " + outputLogPath + " -P " + badRecordsLogPath;
+
+//      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
+//      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
+//      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
+//      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
+//      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
+//      cmd +=
+//        " pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
+//        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
+//        " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
+//        " -l " + outputLogPath + " -P " + badRecordsLogPath;
+
       if (!_disableConstraints)
       {
         cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
@@ -203,23 +224,32 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
       {
         cmd += " -o \"MULTI_PROCESS=YES\"";
       }
-      if (!(Log::getInstance().getLevel() <= Log::Trace))
+      if ((Log::getInstance().getLevel() <= Log::Trace))
       {
         cmd += " -o \"VERBOSE=YES\"";
       }
       if (!(Log::getInstance().getLevel() <= Log::Info))
       {
-        //TODO: re-enable
-        //cmd += " > /dev/null";
+        cmd += " > /dev/null";
       }
       LOG_DEBUG(cmd);
 
       LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
-      if (system(cmd.toStdString().c_str()) != 0)
+      const int status = system(cmd.toStdString().c_str());
+      if (status != 0)
       {
-        throw HootException(
-          "Failed executing record write for table " + *sectionNamesItr +
-          " against the OSM API database: " + _outputUrl);
+        if (status == 3)
+        {
+          LOG_WARN("Some data could not be loaded.");
+          someDataNotLoaded = true;
+        }
+        else
+        {
+          throw HootException(
+            "Failed executing record write for table " + *sectionNamesItr +
+            " against the OSM API database: " + _outputUrl + ".  Error code: " +
+            QString::number(status));
+        }
       }
       LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
 
@@ -230,7 +260,15 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
   }
 
   LOG_DEBUG("Record writing complete.");
+  LOG_WARN("Some data was not loaded.");
 }
+
+QString OsmApiDbBulkWriterOffline::_escapeCopyToData(const QString stringToOutput) const
+{
+  return OsmApiDbBulkWriter::_escapeCopyToData(stringToOutput).replace(QChar(44), QString(";"));
+}
+
+//TODO: need a cleaner way to swap these delimiters out
 
 QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
 {
@@ -240,18 +278,16 @@ QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
 
 QString OsmApiDbBulkWriterOffline::_getCurrentNodesOutputFormatString() const
 {
-  //LOG_VARD(QString(OsmApiDbBulkWriter::outputDelimiter));
-  //LOG_VARD(QString(_outputDelimiter));
   return
     OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString().replace("\t", _outputDelimiter);
 }
 
-//TODO: need a cleaner way to swap this delimiter out
-
 QString OsmApiDbBulkWriterOffline::_getHistoricalNodesOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString().replace("\t", _outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString()
+      .replace("\t", _outputDelimiter)
+      .replace("\\N", "");
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
@@ -263,7 +299,9 @@ QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
 QString OsmApiDbBulkWriterOffline::_getHistoricalWaysOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString().replace("\t", _outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString()
+      .replace("\t", _outputDelimiter)
+      .replace("\\N", "");
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWayNodesOutputFormatString() const
@@ -287,7 +325,9 @@ QString OsmApiDbBulkWriterOffline::_getCurrentRelationsOutputFormatString() cons
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString().replace("\t", _outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString()
+      .replace("\t", _outputDelimiter)
+      .replace("\\N", "");
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationMembersOutputFormatString() const

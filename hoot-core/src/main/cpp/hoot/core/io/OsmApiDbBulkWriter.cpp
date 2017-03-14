@@ -970,10 +970,18 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const long nodeDbI
   const QString nodeDbIdString(QString::number(nodeDbId));
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString key = _escapeCopyToData(it.key());
+    QString key = _escapeCopyToData(it.key());
+    if (key.trimmed().isEmpty())
+    {
+      key = "<empty>";
+    }
     LOG_VART(key);
-    const QString value = _escapeCopyToData(it.value());
+    QString value = _escapeCopyToData(it.value());
     LOG_VART(value);
+    if (value.trimmed().isEmpty())
+    {
+      value = "<empty>";
+    }
 
     *currentTable << _getCurrentTagsOutputFormatString().arg(nodeDbIdString, key, value);
     *historicalTable << _getHistoricalTagsOutputFormatString().arg(nodeDbIdString, key, value);
@@ -1222,7 +1230,11 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
   const QString dbRelationIdString(QString::number(sourceRelationDbId));
   const QString memberRefIdString(QString::number(memberDbId));
   const QString memberSequenceString(QString::number(memberSequenceIndex));
-  const QString memberRole = _escapeCopyToData(memberEntry.getRole());
+  QString memberRole = _escapeCopyToData(memberEntry.getRole());
+  if (memberRole.trimmed().isEmpty())
+  {
+    memberRole = "<no role>";
+  }
   shared_ptr<QTextStream> currentRelationMembersStream =
     _outputSections[ApiDb::getCurrentRelationMembersTableName()].second;
   shared_ptr<QTextStream> relationMembersStream =
@@ -1237,11 +1249,6 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
 
   _writeStats.relationMembersWritten++;
 }
-
-//void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header)
-//{
-//  _createOutputFile(tableName, header, false);
-//}
 
 void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header,
                                            const bool addByteOrderMark)
@@ -1364,7 +1371,6 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
 QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) const
 {
   QString escapedString(stringToOutput);
-
   // Escape any special characters as required by
   //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
   escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
@@ -1374,7 +1380,6 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
-
   return escapedString;
 }
 
@@ -1391,11 +1396,18 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
 
   if (!_outputSections[ApiDb::getChangesetsTableName()].second)
   {
-    _createOutputFile(
-      ApiDb::getChangesetsTableName(),
-      "COPY " + ApiDb::getChangesetsTableName() +
-      " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
-      "FROM stdin;\n");
+    if (_mode == "online")
+    {
+      _createOutputFile(
+        ApiDb::getChangesetsTableName(),
+        "COPY " + ApiDb::getChangesetsTableName() +
+        " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
+        "FROM stdin;\n");
+    }
+    else
+    {
+      _createOutputFile(ApiDb::getChangesetsTableName(), "");
+    }
   }
 
   shared_ptr<QTextStream> changesetsStream =
@@ -1516,7 +1528,7 @@ QString OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString() const
 
 QString OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString() const
 {
-  return "%1\t1\t%2\t%3\n";
+  return "%1\t%2\t%3\t1\n";
 }
 
 }
