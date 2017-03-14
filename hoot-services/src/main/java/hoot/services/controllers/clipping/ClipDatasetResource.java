@@ -29,9 +29,11 @@ package hoot.services.controllers.clipping;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -94,7 +96,8 @@ public class ClipDatasetResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response clipDataset(String params) {
+    public Response clipDataset(String params,
+                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -106,7 +109,7 @@ public class ClipDatasetResource {
 
                 // Clip to a bounding box
                 () -> {
-                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, this.getClass());
+                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, debugLevel, this.getClass());
                     return externalCommandManager.exec(jobId, clipCommand);
                 },
 

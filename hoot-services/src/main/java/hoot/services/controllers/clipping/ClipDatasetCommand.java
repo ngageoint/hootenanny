@@ -28,11 +28,13 @@ package hoot.services.controllers.clipping;
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.utils.JsonUtils;
@@ -46,6 +48,7 @@ import hoot.services.utils.JsonUtils;
 #HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D add.review.tags=yes
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
 HOOT_OPTS+= -D api.db.email=test@test.com
+
 #DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
 #OUTPUT_DIR=$(HOOT_HOME)/test-out/$(jobid)
 
@@ -55,43 +58,42 @@ OP_INPUT=$(DB_URL)/$(INPUT_NAME)
 OP_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
 
 step1:
-	hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-
+    hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
  */
 
 class ClipDatasetCommand extends ExternalCommand {
 
-    ClipDatasetCommand(String params, Class<?> caller) {
+    ClipDatasetCommand(String params, String debugLevel, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
+        Map<String, String> paramsMap = JsonUtils.paramsToMap(params);
 
-        Map<String, String> paramsMap;
-        try {
-            paramsMap = JsonUtils.paramsToMap(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
+        List<String> options = new LinkedList<>();
+        options.add("-D hootapi.db.writer.overwrite.map=true");
+        options.add("-D hootapi.db.writer.create.user=true");
+        options.add("-D api.db.email=test@test.com");
 
-        StringBuilder options = new StringBuilder();
-        options.append("-D hootapi.db.writer.overwrite.map=true");
-        options.append("-D hootapi.db.writer.create.user=true");
-        options.append("-D api.db.email=test@test.com");
+        JSONObject arg = new JSONObject();
+        arg.put("DEBUG_LEVEL", debugLevel);
+        commandArgs.add(arg);
 
-        JSONObject opts = new JSONObject();
-        opts.put("HOOT_OPTS", options);
-        commandArgs.add(opts);
+        arg = new JSONObject();
+        arg.put("HOOT_OPTS", StringUtils.join(options, " "));
+        commandArgs.add(arg);
 
-        JSONObject input = new JSONObject();
-        input.put("INPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME"));
-        commandArgs.add(input);
+        arg = new JSONObject();
+        //The input OSM data path.
+        arg.put("INPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME"));
+        commandArgs.add(arg);
 
-        JSONObject output = new JSONObject();
-        output.put("OUTPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME"));
-        commandArgs.add(input);
+        arg = new JSONObject();
+        //The output OSM data path.
+        arg.put("OUTPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME"));
+        commandArgs.add(arg);
 
-        JSONObject bbox = new JSONObject();
-        bbox.put("BOUNDS", paramsMap.get("BBOX"));
-        commandArgs.add(bbox);
+        arg = new JSONObject();
+        //bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+        arg.put("BOUNDS", paramsMap.get("BBOX"));
+        commandArgs.add(arg);
 
         /*
             "crop-map" - Crops the input map to the given bounds. Individual features on the border are modified to make

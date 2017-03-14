@@ -80,12 +80,7 @@ class UpdateTagsCommand implements InternalCommand {
         tags.put("input2", input2Name);
 
         // Need to reformat the list of hoot command options to json properties
-        try {
-            tags.put("params", JsonUtils.escapeJson(params));
-        }
-        catch (ParseException e) {
-            throw new RuntimeException("Error escaping JSON: " + params);
-        }
+        tags.put("params", JsonUtils.escapeJson(params));
 
         // Hack alert!
         // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the

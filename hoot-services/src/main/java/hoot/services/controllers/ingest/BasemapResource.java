@@ -116,7 +116,7 @@ public class BasemapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
                                   @QueryParam("PROJECTION") String projection,
-                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("true") boolean verboseOutput,
+                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("true") Boolean verboseOutput,
                                   FormDataMultiPart multiPart) {
         JSONArray jobsArr = new JSONArray();
 
@@ -344,7 +344,7 @@ public class BasemapResource {
     private static JSONArray getBasemapListHelper() throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
 
-        String[] exts = {"processing", "enabled", "disabled", "failed"};
+        String[] exts = { "processing", "enabled", "disabled", "failed" };
 
         List<File> files = (List<File>) FileUtils.listFiles(new File(BASEMAPS_FOLDER), exts, false);
 

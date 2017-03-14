@@ -68,7 +68,7 @@ public class ConflationResourceTest {
                     "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams);
+            spy.conflate(inputParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -102,7 +102,7 @@ public class ConflationResourceTest {
                     "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams);
+            spy.conflate(inputParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -135,7 +135,7 @@ public class ConflationResourceTest {
                     "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams);
+            spy.conflate(inputParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
@@ -172,7 +172,7 @@ public class ConflationResourceTest {
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
 
-            spy.conflate(inputParams);
+            spy.conflate(inputParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());

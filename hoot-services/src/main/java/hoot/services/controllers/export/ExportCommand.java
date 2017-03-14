@@ -103,8 +103,6 @@ endif
 
 #####
 
-
-
 ###
 # Osm2Ogr
 ###
@@ -153,7 +151,7 @@ class ExportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
     //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
-    ExportCommand(String jobId, String params, Class<?> caller) {
+    ExportCommand(String jobId, String params, String debugLevel, Class<?> caller) {
         JSONArray commandArgs;
         JSONObject oParams;
         try {
@@ -223,7 +221,7 @@ class ExportCommand extends ExternalCommand {
             }
         }
 
-        super.configureAsMakeCommand("EXPORT_SCRIPT", caller, commandArgs);
+        //super.configureAsMakeCommand("EXPORT_SCRIPT", caller, commandArgs);
     }
 
     private static JSONArray addExportToOsmApiDbCommandArgs(String jobId, JSONArray commandArgs, JSONObject oParams) {

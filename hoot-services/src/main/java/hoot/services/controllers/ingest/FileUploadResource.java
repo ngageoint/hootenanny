@@ -41,6 +41,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -122,6 +123,7 @@ public class FileUploadResource {
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("FGDB_FC") String fgdbFeatureClasses,
+                                      @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         JSONArray response = new JSONArray();
 
@@ -258,7 +260,7 @@ public class FileUploadResource {
             // variables that are not final or effectively final.
             FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                     shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
-                    noneTranslation, fgdbFeatureClasses, this.getClass());
+                    noneTranslation, fgdbFeatureClasses, debugLevel, this.getClass());
 
             String mapDisplayName = etlName;
 

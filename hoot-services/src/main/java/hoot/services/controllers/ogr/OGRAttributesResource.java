@@ -42,6 +42,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -105,7 +106,9 @@ public class OGRAttributesResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType, FormDataMultiPart multiPart) {
+    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
+                                  @QueryParam("DEBUG_LEVEL") @DefaultValue("error") String debugLevel,
+                                  FormDataMultiPart multiPart) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -125,7 +128,7 @@ public class OGRAttributesResource {
                     // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
                     ZipUtils.unzipFiles(zipList, outputFolder);
 
-                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, this.getClass());
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
 
                     try {

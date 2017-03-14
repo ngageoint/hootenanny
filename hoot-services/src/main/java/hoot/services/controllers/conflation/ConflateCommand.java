@@ -35,7 +35,6 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -134,23 +133,17 @@ ifeq "$(GENERATE_REPORT)" "true"
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
-        Map<String, String> paramMap;
-        try {
-            paramMap = JsonUtils.paramsToMap(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
-
-        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.add.score.tags=yes
-        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-        //HOOT_OPTS+= -D api.db.email=test@test.com
+    ConflateCommand(String params, BoundingBox bounds, String debugLevel, Class<?> caller) {
+        Map<String, String> paramMap = JsonUtils.paramsToMap(params);
 
         String conflateaoi = null;
         if (bounds != null) {
             conflateaoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
         }
+
+        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.add.score.tags=yes
+        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
+        //HOOT_OPTS+= -D api.db.email=test@test.com
 
         List<String> hootOptions = new LinkedList<>();
         hootOptions.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
@@ -262,23 +255,21 @@ class ConflateCommand extends ExternalCommand {
          */
         Boolean collectStats = Boolean.valueOf(paramMap.get("COLLECT_STATS"));
         String outputName = paramMap.get("OUTPUT_NAME");
-
-        String statsCommand = "";
-        if (collectStats) {
-            statsCommand = "--stats > " + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv";
-
-            // Don't include non-error log messages in stdout because we are redirecting to file
-            hootOptions.add("--error");
-        }
-
-        String dbOutput = HOOTAPI_DB_URL + "/" + outputName;
+        String output = HOOTAPI_DB_URL + "/" + outputName;
 
         /*
-         * hoot $(OP_CONFLATE_TYPE) -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
+         * hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
          */
-        JSONObject arg = new JSONObject();
-        arg.put("CONFLATE_TYPE", conflationType);
         JSONArray commandArgs = new JSONArray();
+
+        JSONObject arg = new JSONObject();
+        if (collectStats) {
+            // Don't include non-error log messages in stdout because we are redirecting to file
+            arg.put("DEBUG", "--error");
+        }
+        else {
+            arg.put("DEBUG", "--" + debugLevel);
+        }
         commandArgs.add(arg);
 
         arg = new JSONObject();
@@ -298,13 +289,16 @@ class ConflateCommand extends ExternalCommand {
         commandArgs.add(arg);
 
         arg = new JSONObject();
-        arg.put("DB_OUTPUT", dbOutput);
+        arg.put("OUTPUT", output);
         commandArgs.add(arg);
 
-        arg = new JSONObject();
-        arg.put("STATS_COMMAND", statsCommand);
-        commandArgs.add(arg);
+        if (collectStats) {
+            arg = new JSONObject();
+            //Hootenanny map statistics such as node and way count
+            arg.put("STATS_SWITCH", "--stats > " + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv");
+            commandArgs.add(arg);
+        }
 
-        super.configureAsHootCommand("--conflate", caller, commandArgs);
+        super.configureAsHootCommand("conflate", caller, commandArgs);
     }
 }

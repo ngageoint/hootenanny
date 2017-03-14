@@ -40,9 +40,10 @@ class FileETLCommandFactory {
                          int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt,
                          List<String> zipList, String translation, String jobId, String etlName,
                          List<String> inputsList, String userEmail, Boolean isNoneTranslation, String fgdbFeatureClasses,
-                         Class<?> caller) {
+                         String debugLevel, Class<?> caller) {
         return new FileETLCommand(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
                                   shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId,
-                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses, caller);
+                                  etlName, inputsList, userEmail, isNoneTranslation, fgdbFeatureClasses,
+                                  debugLevel, caller);
     }
 }

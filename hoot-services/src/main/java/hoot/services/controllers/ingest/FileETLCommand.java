@@ -110,7 +110,7 @@ class FileETLCommand extends ExternalCommand {
                    int osmZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt,
                    int osmCnt, int geonamesCnt, List<String> zipList, String translation,
                    String jobId, String etlName, List<String> inputsList, String userEmail,
-                   Boolean isNoneTranslation, String fgdbFeatureClasses, Class<?> caller) {
+                   Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, Class<?> caller) {
 
         String inputs = "";
         for (Object r : reqList) {
@@ -286,6 +286,10 @@ class FileETLCommand extends ExternalCommand {
         //endif
 
         JSONObject arg = new JSONObject();
+        arg.put("DEBUG_LEVEL", "--" + debugLevel);
+        commandArgs.add(arg);
+
+        arg = new JSONObject();
         arg.put("HOOT_OPTIONS", StringUtils.join(hootOptions, " "));
         commandArgs.add(arg);
 

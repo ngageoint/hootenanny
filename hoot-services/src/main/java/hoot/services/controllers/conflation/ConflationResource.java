@@ -31,9 +31,11 @@ import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -125,7 +127,8 @@ public class ConflationResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflate(String params) {
+    public Response conflate(String params,
+                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -174,7 +177,7 @@ public class ConflationResource {
 
             Command[] commands = {
                 () -> {
-                    ExternalCommand conflateCommand = conflateCommandFactory.build(params, bbox, this.getClass());
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(params, bbox, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
 
                     /*

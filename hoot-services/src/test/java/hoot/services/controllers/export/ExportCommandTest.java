@@ -99,7 +99,7 @@ public class ExportCommandTest {
                          "\"removereview\" : \"false\"}";
 
         ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
 
         String actualCaller = exportCommand.get("caller").toString();
         String expectedCaller = this.getClass().getName();
@@ -150,7 +150,7 @@ public class ExportCommandTest {
                              "\"TASK_BBOX\":\"0.0,0.0,0.0,0.0\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
 
             String actualCaller = exportCommand.get("caller").toString();
             String expectedCaller = this.getClass().getName();
@@ -202,7 +202,7 @@ public class ExportCommandTest {
                          "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
 
         ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
 
         String actualCaller = exportCommand.get("caller").toString();
         String expectedCaller = this.getClass().getName();
@@ -253,7 +253,7 @@ public class ExportCommandTest {
                              "\"translation\":\"MyTranslation.js\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -284,7 +284,7 @@ public class ExportCommandTest {
                              "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
@@ -314,7 +314,7 @@ public class ExportCommandTest {
                              "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -343,7 +343,7 @@ public class ExportCommandTest {
                     "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
@@ -373,7 +373,7 @@ public class ExportCommandTest {
                     "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -398,7 +398,7 @@ public class ExportCommandTest {
             String jobId = UUID.randomUUID().toString();
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());

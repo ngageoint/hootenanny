@@ -56,11 +56,11 @@ import hoot.services.command.ExternalCommand;
  */
 class GetAttributesCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<String> fileList, Class<?> caller) {
+    GetAttributesCommand(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
         JSONArray commandArgs = new JSONArray();
 
         JSONObject arg = new JSONObject();
-        arg.put("ERROR", "--error");
+        arg.put("DEBUG_LEVEL", "--" + debugLevel);
         commandArgs.add(arg);
 
         arg = new JSONObject();

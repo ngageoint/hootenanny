@@ -50,7 +50,7 @@ public class ConflateCommandTest {
                 "\"USER_EMAIL\":\"test@test.com\"," +
                 "\"COLLECT_STATS\":\"false\"}";
 
-        ConflateCommand conflateCommand = new ConflateCommandFactory().build(null, params, null, this.getClass());
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(params, null, "error", this.getClass());
 
         String expectedCommandArgs =
                 "[{\"MISS_THRESHOLD\":\"0.6\"}," +

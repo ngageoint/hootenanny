@@ -60,14 +60,19 @@ public final class JsonUtils {
      * @param obj
      *            POJO
      * @return JSON string
-     * @throws IOException
      */
-    public static String objectToJson(Object obj) throws IOException {
+    public static String objectToJson(Object obj) {
         StringWriter writer = new StringWriter();
-        try (JsonGenerator jsonGenerator = new JsonFactory().createGenerator(writer)) {
-            jsonGenerator.setCodec(new ObjectMapper());
-            jsonGenerator.writeObject(obj);
+        try {
+            try (JsonGenerator jsonGenerator = new JsonFactory().createGenerator(writer)) {
+                jsonGenerator.setCodec(new ObjectMapper());
+                jsonGenerator.writeObject(obj);
+            }
         }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error converting object to JSON!", ioe);
+        }
+
         return writer.toString();
     }
 
@@ -83,11 +88,16 @@ public final class JsonUtils {
      *            if true, "'s are left in the parse value; otherwise they are
      *            removed
      * @return string value
-     * @throws IOException
      */
-    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes)
-            throws IOException {
-        JsonNode root = (new ObjectMapper()).readTree(json).path(fieldName);
+    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes) {
+        JsonNode root = null;
+        try {
+            root = (new ObjectMapper()).readTree(json).path(fieldName);
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error reading JSON : " + json, ioe);
+        }
+
         if (root != null) {
             String value = root.toString();
             if (!retainQuotes && (value != null)) {
@@ -95,6 +105,7 @@ public final class JsonUtils {
             }
             return value;
         }
+
         return null;
     }
 
@@ -104,9 +115,15 @@ public final class JsonUtils {
      * @param input
      * @return String
      */
-    public static String escapeJson(String input) throws ParseException {
+    public static String escapeJson(String input) {
         JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(input);
+        JSONObject json;
+        try {
+            json = (JSONObject) parser.parse(input);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing JSON : " + input, pe);
+        }
 
         // Special handling of ADV_OPTIONS
         String key = "ADV_OPTIONS";
@@ -121,7 +138,13 @@ public final class JsonUtils {
             // wrap with curly braces and remove trailing comma
             cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
 
-            JSONObject obj = (JSONObject) parser.parse(cleanup);
+            JSONObject obj = null;
+            try {
+                obj = (JSONObject) parser.parse(cleanup);
+            }
+            catch (ParseException pe) {
+                throw new RuntimeException("Error parsing JSON: " + cleanup, pe);
+            }
             json.put(key, obj);
         }
 
@@ -145,9 +168,15 @@ public final class JsonUtils {
         return paramsMap;
     }
 
-    public static Map<String, String> paramsToMap(String params) throws ParseException {
+    public static Map<String, String> paramsToMap(String json) {
         JSONParser parser = new JSONParser();
-        JSONObject command = (JSONObject) parser.parse(params);
+        JSONObject command;
+        try {
+            command = (JSONObject) parser.parse(json);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing JSON: " + json, pe);
+        }
 
         Map<String, String> paramsMap = new HashMap<>();
         for (Object o : command.entrySet()) {
@@ -155,15 +184,21 @@ public final class JsonUtils {
             String key = (String) mEntry.getKey();
             String val = (String) mEntry.getValue();
             paramsMap.put(key, val);
-
         }
 
         return paramsMap;
     }
 
-    public static JSONArray parseParams(String params) throws ParseException {
+    public static JSONArray parseParams(String json) {
         JSONParser parser = new JSONParser();
-        JSONObject command = (JSONObject) parser.parse(params);
+        JSONObject command;
+        try {
+            command = (JSONObject) parser.parse(json);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing JSON: " + json, pe);
+        }
+
         JSONArray commandArgs = new JSONArray();
 
         for (Object o : command.entrySet()) {

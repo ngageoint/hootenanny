@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 class ExportCommandFactory {
 
-    ExportCommand build(String jobId, String params, Class<?> caller) {
-        return new ExportCommand(jobId, params, caller);
+    ExportCommand build(String jobId, String params, String debugLevel, Class<?> caller) {
+        return new ExportCommand(jobId, params, debugLevel, caller);
     }
 }

@@ -33,7 +33,7 @@ import hoot.services.geo.BoundingBox;
 @Component
 class ConflateCommandFactory {
 
-    ConflateCommand build(String params, BoundingBox bbox, Class<?> caller) {
-        return new ConflateCommand(params, bbox, caller);
+    ConflateCommand build(String params, BoundingBox bbox, String debugLevel, Class<?> caller) {
+        return new ConflateCommand(params, bbox, debugLevel, caller);
     }
 }

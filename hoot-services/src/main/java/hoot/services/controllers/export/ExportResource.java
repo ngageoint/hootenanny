@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -115,7 +116,8 @@ public class ExportResource {
     @Path("/execute")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response export(String params) {
+    public Response export(String params,
+                           @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
@@ -129,7 +131,7 @@ public class ExportResource {
             if ("wfs".equalsIgnoreCase(type)) {
                 commands = new Command[] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, debugLevel, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     },
                     () -> {
@@ -145,7 +147,7 @@ public class ExportResource {
             else {
                 commands = new Command [] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, debugLevel, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     }
                 };

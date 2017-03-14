@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 @Component
 class GetAttributesCommandFactory {
 
-    GetAttributesCommand build(String jobId, List<String> fileList, Class<?> caller) {
-        return new GetAttributesCommand(jobId, fileList, caller);
+    GetAttributesCommand build(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
+        return new GetAttributesCommand(jobId, fileList, debugLevel, caller);
     }
 }
