@@ -130,8 +130,8 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   {
     // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
     // order for waynode)
-    shared_ptr<BigMap<long, vector< pair<long, unsigned long> > > > unresolvedWaynodeRefs;
-    shared_ptr< map<ElementId, UnresolvedRelationReference > > unresolvedRelationRefs;
+    shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > > unresolvedWaynodeRefs;
+    shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
@@ -194,6 +194,7 @@ protected:
   virtual void _retainOutputFiles();
 
   QString _formatPotentiallyLargeNumber(const long number);
+  virtual QString _escapeCopyToData(const QString stringToOutput) const;
 
   virtual QString _getChangesetsOutputFormatString() const;
   virtual QString _getCurrentNodesOutputFormatString() const;
@@ -227,15 +228,12 @@ private:
   void _createRelationOutputFiles();
   void _createOutputFile(const QString tableName, const QString header = "",
                          const bool addByteOrderMarker = false);
-  //void _createOutputFile(const QString tableName, const QString header,
-                         //const bool addByteOrderMarker);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
 
-  QString _escapeCopyToData(const QString stringToOutput) const;
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
 
   void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,

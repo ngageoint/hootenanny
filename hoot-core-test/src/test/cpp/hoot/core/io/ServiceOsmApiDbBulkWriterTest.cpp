@@ -47,11 +47,14 @@
 namespace hoot
 {
 
+/*
+ * TODO: need unresolved way node/relation member and offline mode tests
+ */
 class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
-  CPPUNIT_TEST(runNoExternalWritersTest);
-  CPPUNIT_TEST(runExternalWritersTest);
+  CPPUNIT_TEST(runNoExternalWritersOnlineModeTest);
+  CPPUNIT_TEST(runExternalWritersOnlineModeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -281,7 +284,7 @@ public:
     reader.close();
   }
 
-  void runNoExternalWritersTest()
+  void runNoExternalWritersOnlineModeTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
 
@@ -298,6 +301,7 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputLineBufferSize(3);
+    writer.setMode("online");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
@@ -317,7 +321,7 @@ public:
     verifyDatabaseOutputNoExternalWriters();
   }
 
-  void runExternalWritersTest()
+  void runExternalWritersOnlineModeTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
 
@@ -334,6 +338,7 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputLineBufferSize(3);
+    writer.setMode("online");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 

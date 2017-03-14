@@ -1288,8 +1288,9 @@ a load status update message logged for every 100 SQL lines parsed.
 Valid values are "online" or "offline".  Online mode is safe for use against a live database
 (multiple writers).  Offline mode is unsafe for use against a live database but will have better
 writing performance.  Offline mode requires the the pg_bulkload extension be installed on the
-database being written to and has additional maintenance requirements.  Some osmapidb.* options
-are only available in offline mode.  See the User Documentation for more details.
+database being written to, will not roll back all database changes in the event of a failure, and
+has additional maintenance requirements.  Some osmapidb.* options are only available in offline
+mode.  See the User Documentation for more details.
 
 === osmapidb.bulk.writer.multithreaded
 

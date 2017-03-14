@@ -65,6 +65,7 @@ protected:
 
   virtual void _retainOutputFiles();
   virtual void _writeDataToDb();
+  virtual QString _escapeCopyToData(const QString stringToOutput) const;
 
   virtual QString _getChangesetsOutputFormatString() const;
   virtual QString _getCurrentNodesOutputFormatString() const;
