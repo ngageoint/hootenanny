@@ -164,6 +164,13 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
 
 void OsmApiDbBulkWriter::finalizePartial()
 {
+  //go ahead and clear out some of the data structures we don't need anymore
+  _idMappings.nodeIdMap.reset();
+  _idMappings.wayIdMap.reset();
+  _idMappings.relationIdMap.reset();
+  _unresolvedRefs.unresolvedWaynodeRefs.reset();
+  _unresolvedRefs.unresolvedRelationRefs.reset();
+
   if (_writeStats.nodesWritten == 0)
   {
     LOG_DEBUG("No data was written.");
@@ -331,8 +338,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
         tempInputFile.close();
         //remove temp file after write to the output file
         LOG_DEBUG("Closing and removing temp file for " << *it << "...");
+        _outputSections[*it].second.reset();
         _outputSections[*it].first->close();
         _outputSections[*it].first->remove();
+        _outputSections[*it].first.reset();
       }
       else
       {
@@ -1114,8 +1123,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
     }
     else
     {
-      if (_unresolvedRefs.unresolvedRelationRefs ==
-          shared_ptr<map<ElementId, UnresolvedRelationReference > >())
+      if (!_unresolvedRefs.unresolvedRelationRefs)
       {
         _unresolvedRefs.unresolvedRelationRefs =
           shared_ptr<map<ElementId, UnresolvedRelationReference > >(
@@ -1251,8 +1259,7 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
                                                     const long elementDbId)
 {
   // Regardless of type, may be referenced in relation
-  if (_unresolvedRefs.unresolvedRelationRefs !=
-      shared_ptr<map<ElementId, UnresolvedRelationReference > >())
+  if (_unresolvedRefs.unresolvedRelationRefs)
   {
     map<ElementId, UnresolvedRelationReference >::iterator relationRef =
       _unresolvedRefs.unresolvedRelationRefs->find(element->getElementId());

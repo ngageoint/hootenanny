@@ -71,7 +71,7 @@ Reading from an OpenStreetMap Editing API database requires the use of Hootenann
 % Input source:
 a sample OpenStreetMap Edit API Database: osmapidb://hoot:hoottest@localhost:5432/osmapi_test  This database is the test database and should be active for testing. However, any database input source may be supplied here. 
 
-% Output source:
+% Output destination:
 define an output osm file: /tmp/ToyTestA-out.osm
 
 % Command syntax example:
