@@ -50,8 +50,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriterOffline)
 OsmApiDbBulkWriterOffline::OsmApiDbBulkWriterOffline() :
 OsmApiDbBulkWriter()
 {
-  _offline = true;
-  outputDelimiter = ',';
+  _outputDelimiter = ',';
 }
 
 OsmApiDbBulkWriterOffline::~OsmApiDbBulkWriterOffline()
@@ -61,12 +60,34 @@ OsmApiDbBulkWriterOffline::~OsmApiDbBulkWriterOffline()
 
 bool OsmApiDbBulkWriterOffline::isSupported(QString urlStr)
 {
-  return OsmApiDbBulkWriter::isSupported(urlStr) &&
-         (_disableWriteAheadLogging || _writeMultiThreaded);
+  LOG_VART(_mode);
+  QUrl url(urlStr);
+  return _database.isSupported(url) && _mode == "offline";
+}
+
+void OsmApiDbBulkWriterOffline::open(QString url)
+{
+  OsmApiDbBulkWriter::open(url);
+
+  if (!_database.hasExtension("pg_bulkload"))
+  {
+    throw HootException(
+      QString("When running OSM API database writing in 'offline' mode, the database being ") +
+      QString("written to must have the pg_bulkload extension installed."));
+  }
 }
 
 void OsmApiDbBulkWriterOffline::finalizePartial()
 {
+  //TODO: may be able to reuse the parent logic some here
+
+  //go ahead and clear out some of the data structures we don't need anymore
+  _idMappings.nodeIdMap.reset();
+  _idMappings.wayIdMap.reset();
+  _idMappings.relationIdMap.reset();
+  _unresolvedRefs.unresolvedWaynodeRefs.reset();
+  _unresolvedRefs.unresolvedRelationRefs.reset();
+
   if (_writeStats.nodesWritten == 0)
   {
     LOG_DEBUG("No data was written.");
@@ -88,7 +109,7 @@ void OsmApiDbBulkWriterOffline::finalizePartial()
     _changesetData.changesetsWritten++;
   }
 
-  //retain the sql output file if that option was selected
+  //retain the csv output files if that option was selected
   if (!_outputFileCopyLocation.isEmpty())
   {
     _retainOutputFiles();
@@ -101,8 +122,8 @@ void OsmApiDbBulkWriterOffline::finalizePartial()
   }
   else
   {
-    LOG_INFO("Skipping SQL execution against database due to configuration...");
-    LOG_INFO("Final SQL file write stats:");
+    LOG_INFO("Skipping writing records to database due to configuration...");
+    LOG_INFO("Final CSV file write stats:");
   }
   _logStats();
 }
@@ -113,7 +134,7 @@ void OsmApiDbBulkWriterOffline::_retainOutputFiles()
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
   {
-    if (_outputSections[*sectionNamesItr].first.get())
+    if (_outputSections[*sectionNamesItr].first)
     {
       const QString outputPath =
         baseFileInfo.path() + "/" + baseFileInfo.baseName() + "-" + *sectionNamesItr + "." +
@@ -138,7 +159,7 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
 {
   LOG_INFO(
     "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records.  " << _outputSections.size() - 1 << " CSV files will be written...");
+    " records.  " << _outputSections.size() - 1 << " CSV files will be written to the database...");
 
   const QString outputLogPath = "/home/vagrant/pg_bulkload/bin/pg_bulkload_osmapidb.log";
   QFile outputLog(outputLogPath);
@@ -150,8 +171,12 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
   {
-    if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first.get())
+    if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
     {
+      LOG_DEBUG("Closing temp file for " << *sectionNamesItr << "...");
+      _outputSections[*sectionNamesItr].second.reset();
+      _outputSections[*sectionNamesItr].first->close();
+
       const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
       //TODO:
       // -this needs to work for hoot user
@@ -166,12 +191,15 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
         dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
         " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
         " -l " + outputLogPath;
-      //TODO: option for check constraints?
+      if (!_disableConstraints)
+      {
+        cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
+      }
       if (!_disableWriteAheadLogging)
       {
         cmd += " -o \"WRITER=BUFFERED\"";
       }
-      if (!_writeMultiThreaded)
+      if (_writeMultiThreaded)
       {
         cmd += " -o \"MULTI_PROCESS=YES\"";
       }
@@ -194,6 +222,10 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
           " against the OSM API database: " + _outputUrl);
       }
       LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
+
+      LOG_DEBUG("Removing temp file for " << *sectionNamesItr << "...");
+      _outputSections[*sectionNamesItr].first->remove();
+      _outputSections[*sectionNamesItr].first.reset();
     }
   }
 
@@ -203,92 +235,85 @@ void OsmApiDbBulkWriterOffline::_writeDataToDb()
 QString OsmApiDbBulkWriterOffline::_getChangesetsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getChangesetsOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getChangesetsOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentNodesOutputFormatString() const
 {
+  //LOG_VARD(QString(OsmApiDbBulkWriter::outputDelimiter));
+  //LOG_VARD(QString(_outputDelimiter));
   return
-    OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString().replace("\t", _outputDelimiter);
 }
+
+//TODO: need a cleaner way to swap this delimiter out
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalNodesOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWaysOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWaysOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentWayNodesOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalWayNodesOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentRelationMembersOutputFormatString() const
 {
   return
     OsmApiDbBulkWriter::_getCurrentRelationMembersOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+      .replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalRelationMembersOutputFormatString() const
 {
   return
     OsmApiDbBulkWriter::_getHistoricalRelationMembersOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+      .replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getCurrentTagsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 QString OsmApiDbBulkWriterOffline::_getHistoricalTagsOutputFormatString() const
 {
   return
-    OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString()
-      .replace(OsmApiDbBulkWriterOffline::outputDelimiter, outputDelimiter);
+    OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString().replace("\t", _outputDelimiter);
 }
 
 }

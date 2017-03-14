@@ -1231,15 +1231,27 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.writer.disable.constraints
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, OSM API database writes will bypass Postgres database constraint checks, which are a
+safety feature to ensure data integrity.  This will increase database writing performance.
+The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT:
+This should only be enabled when there is high confidence in the integrity of the data being
+written.
+
 === osmapidb.bulk.writer.disable.write.ahead.logging
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM API database writes will bypass Postgres Write-Ahead Logging (WAL), which is a
-safety feature to ensure data integrity.  IMPORTANT: This should only be enabled when there is
-high confidence in the integrity of the data being written and the database has been taken offline
-(you are the only writer).
+If true, OSM API database writes will bypass Postgres Write-Ahead Logging (WAL), which is a
+safety feature to ensure data integrity.  This will increase database writing performance.
+The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT:
+This should only be enabled when there is high confidence in the integrity of the data being written
+and the database has been taken offline (you are the only writer).
 
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
@@ -1254,10 +1266,10 @@ For the most part, each line represents an element or an element tag.
 * Data Type: bool
 * Default Value: `true`
 
-If false, outputting to an OSM API database will write the SQL file to be executed only without
-executing the SQL against the database.  Use this setting in conjuction with the
-osmapidb.bulk.writer.sql.output.file.copy.location setting to view SQL output before applying it to
-a database.
+If false, outputting to an OSM API database will write the intermediate step, temporary SQL or CSV
+files to be executed only without actually writing the records to the database.  Use this setting
+in conjuction with the osmapidb.bulk.writer.output.file.copy.locatio setting to view SQL or CSV
+output before writing it to the database.
 
 === osmapidb.bulk.writer.file.output.status.update.interval
 
@@ -1268,14 +1280,26 @@ Count at which the SQL file output status of each element type should be logged 
 the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see
 a load status update message logged for every 100 SQL lines parsed.
 
+=== osmapidb.bulk.writer.mode
+
+* Data Type: string
+* Default Value: `online`
+
+Valid values are "online" or "offline".  Online mode is safe for use against a live database
+(multiple writers).  Offline mode is unsafe for use against a live database but will have better
+writing performance.  Offline mode requires the the pg_bulkload extension be installed on the
+database being written to and has additional maintenance requirements.  Some osmapidb.* options
+are only available in offline mode.  See the User Documentation for more details.
+
 === osmapidb.bulk.writer.multithreaded
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM API database writes will be performed with multiple threads.  IMPORTANT: This
-should only be enabled when the database has previously been taken offline (you are the only
-writer).
+If true, the OSM API database writes will be performed with multiple threads.  This will increase
+database writing performance.  The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to
+enable this setting.  IMPORTANT: This should only be enabled when the database has previously
+been taken offline (you are the only writer).
 
 === osmapidb.bulk.writer.output.file.copy.location
 

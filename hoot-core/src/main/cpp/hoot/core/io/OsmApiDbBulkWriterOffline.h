@@ -56,6 +56,7 @@ public:
 
   virtual ~OsmApiDbBulkWriterOffline();
 
+  virtual void open(QString url);
   virtual bool isSupported(QString url);
 
   virtual void finalizePartial();

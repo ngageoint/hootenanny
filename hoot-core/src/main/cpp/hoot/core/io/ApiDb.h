@@ -309,6 +309,14 @@ public:
   static QMap<QString, QString> getDbUrlParts(const QString url);
   static QString getPsqlString(const QString url);
 
+  /**
+   * Determines whether a Postgres database has a particular extension installed
+   *
+   * @param extensionName name of the extension to check for
+   * @return true if the extension is installed; false otherwise
+   */
+  bool hasExtension(const QString extensionName);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
@@ -322,6 +330,7 @@ protected:
   shared_ptr<QSqlQuery> _selectUserByEmail;
   shared_ptr<QSqlQuery> _insertUser;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  shared_ptr<QSqlQuery> _hasExtension;
 
   QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;

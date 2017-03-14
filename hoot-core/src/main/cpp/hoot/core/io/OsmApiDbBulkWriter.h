@@ -140,8 +140,6 @@ public:
 
   static unsigned int logWarnCount;
 
-  static QChar outputDelimiter;
-
   OsmApiDbBulkWriter();
 
   virtual ~OsmApiDbBulkWriter();
@@ -165,6 +163,8 @@ public:
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
   void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
   void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
+  void setDisableConstraints(bool disable) { _disableConstraints = disable; }
+  void setMode(QString mode) { _mode = mode; }
 
 protected:
 
@@ -174,11 +174,16 @@ protected:
   bool _executeSql;
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
-  bool _offline;
   bool _disableWriteAheadLogging;
   bool _writeMultiThreaded;
   QChar _delimiter;
   QString _outputUrl;
+  bool _disableConstraints;
+  QString _mode;
+  OsmApiDb _database;
+  IdMappings _idMappings;
+  UnresolvedReferences _unresolvedRefs;
+  QChar _outputDelimiter;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
@@ -209,25 +214,21 @@ private:
   // for white box testing.
   friend class ServiceOsmApiDbBulkWriterTest;
 
-  IdMappings _idMappings;
-  UnresolvedReferences _unresolvedRefs;
-
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   long _maxChangesetSize;
   shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
-  OsmApiDb _database;
 
   void _reset();
 
-  void _createNodeTables();
+  void _createNodeOutputFiles();
   QStringList _createSectionNameList();
-  void _createWayTables();
-  void _createRelationTables();
-  void _createTable(const QString tableName, const QString tableHeader);
-  void _createTable(const QString tableName, const QString tableHeader,
-                    const bool addByteOrderMarker);
-  void _closeSectionTempFilesAndConcat();
+  void _createWayOutputFiles();
+  void _createRelationOutputFiles();
+  void _createOutputFile(const QString tableName, const QString header = "",
+                         const bool addByteOrderMarker = false);
+  //void _createOutputFile(const QString tableName, const QString header,
+                         //const bool addByteOrderMarker);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
