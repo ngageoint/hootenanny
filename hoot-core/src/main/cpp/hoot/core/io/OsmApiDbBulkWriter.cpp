@@ -585,7 +585,7 @@ void OsmApiDbBulkWriter::_writeDataToDb()
 {
   if (_mode == "online")
   {
-      _writeDataToDbOnline();
+    _writeDataToDbOnline();
   }
   else
   {

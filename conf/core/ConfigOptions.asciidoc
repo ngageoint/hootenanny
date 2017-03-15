@@ -1237,10 +1237,11 @@ Operations that should be applied to ingested OGR data before saving the data.
 * Default Value: `false`
 
 If true, OSM API database writes will bypass Postgres database constraint checks, which are a
-safety feature to ensure data integrity.  This will increase database writing performance.
-The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT:
-Hootenanny does basic constraint checking for OSM data during load, but this should still only be
-enabled when there is high confidence in the integrity of the data being written.
+safety feature to ensure data integrity.  This will increase database writing performance but will
+possibly require extra database maintenance after the data is loaded.  The option
+'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT: Hootenanny
+does basic constraint checking for OSM data during load, but this should still only be enabled when
+there is high confidence in the integrity of the data being written.
 
 === osmapidb.bulk.writer.disable.write.ahead.logging
 
@@ -1248,10 +1249,10 @@ enabled when there is high confidence in the integrity of the data being written
 * Default Value: `false`
 
 If true, OSM API database writes will bypass Postgres Write-Ahead Logging (WAL), which is a
-safety feature to ensure data integrity.  This will increase database writing performance.
-The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT:
-This should only be enabled the database has previously been taken offline (you are the only
-writer).
+safety feature to ensure data integrity.  This will increase database writing performance but will
+require additional database maintenance after the data is loaded.  The option
+'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.  IMPORTANT:  This
+should only be enabled the database has previously been taken offline (you are the only writer).
 
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
@@ -1298,9 +1299,8 @@ mode.  See the User Documentation for more details.
 * Default Value: `false`
 
 If true, the OSM API database writes will be performed with multiple threads.  This will increase
-database writing performance.  The option 'osmapidb.bulk.writer.mode' must be set to 'offline' to
-enable this setting.  IMPORTANT: This should only be enabled when the database has previously
-been taken offline (you are the only writer).
+database writing performance but may degrade database performance for other users.  The option
+'osmapidb.bulk.writer.mode' must be set to 'offline' to enable this setting.
 
 === osmapidb.bulk.writer.offline.log.path
 
