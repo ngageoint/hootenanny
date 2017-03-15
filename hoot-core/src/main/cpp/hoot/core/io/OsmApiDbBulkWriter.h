@@ -243,6 +243,12 @@ private:
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
   void _retainOutputFiles();
+  void _retainOutputFilesOffline();
+  void _retainOutputFilesOnline();
+  void _verifyDependencies();
+  void _verifyMode();
+  void _verifyOutputCopySettings();
+  void _closeOutputFiles();
 
   void _createNodeOutputFiles();
   QStringList _createSectionNameList();
@@ -274,6 +280,8 @@ private:
   void _writeCombinedSqlFile();
   void _reserveIds();
   void _writeDataToDb();
+  void _writeDataToDbOffline();
+  void _writeDataToDbOnline();
 };
 
 }

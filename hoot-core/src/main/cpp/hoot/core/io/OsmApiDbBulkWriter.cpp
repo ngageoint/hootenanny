@@ -70,6 +70,8 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 
 void OsmApiDbBulkWriter::open(QString url)
 {
+  _outputUrl = url;
+
   if (_database.getDB().isOpen())
   {
     throw HootException(
@@ -83,6 +85,40 @@ void OsmApiDbBulkWriter::open(QString url)
     throw HootException(QString("Could not open URL ") + url);
   }
 
+  _verifyMode();
+  _verifyOutputCopySettings();
+  _database.open(_outputUrl);
+  _verifyDependencies();
+}
+
+void OsmApiDbBulkWriter::_verifyDependencies()
+{
+  if (_mode == "online")
+  {
+    if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
+    {
+      throw HootException("Unable to access the psql application.  Is Postgres installed?");
+    }
+  }
+  else
+  {
+    if (system(QString("pg_bulkload --version > /dev/null").toStdString().c_str()) != 0)
+    {
+      throw HootException(
+        "Unable to access the pg_bulkload application.  Is pg_bulkload installed?");
+    }
+
+    if (!_database.hasExtension("pg_bulkload"))
+    {
+      throw HootException(
+        QString("When running OSM API database writing in 'offline' mode, the database being ") +
+        QString("written to must have the pg_bulkload extension installed."));
+    }
+  }
+}
+
+void OsmApiDbBulkWriter::_verifyMode()
+{
   if (_mode != "offline" && _mode != "online")
   {
     throw HootException("Invalid OSM API database write mode: " + _mode);
@@ -101,9 +137,12 @@ void OsmApiDbBulkWriter::open(QString url)
   }
   else
   {
-    _outputDelimiter = ",";
+  _outputDelimiter = ",";
   }
+}
 
+void OsmApiDbBulkWriter::_verifyOutputCopySettings()
+{
   if (!_outputFileCopyLocation.isEmpty())
   {
     QFileInfo outputCopyLocationInfo(_outputFileCopyLocation);
@@ -121,39 +160,19 @@ void OsmApiDbBulkWriter::open(QString url)
         QString("Location specified: ") + _outputFileCopyLocation);
     }
   }
-
-//  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-//  QString cmd;
-//  if (_mode == "online")
-//  {
-//    cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql --version";
-//    if (system(cmd.toStdString().c_str()) != 0)
-//    {
-//      throw HootException("Unable to access psql application.  Is Postgres installed?");
-//    }
-//  }
-//  else
-//  {
-//    //TODO: fix this
-//    cmd = "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload --version";
-//    if (system(cmd.toStdString().c_str()) != 0)
-//    {
-//      throw HootException("Unable to access psql application.  Is pg_bulkload installed?");
-//    }
-//  }
-
-  _outputUrl = url;
-  _database.open(_outputUrl);
-
-  if (_mode == "offline" && !_database.hasExtension("pg_bulkload"))
-  {
-    throw HootException(
-      QString("When running OSM API database writing in 'offline' mode, the database being ") +
-      QString("written to must have the pg_bulkload extension installed."));
-  }
 }
 
 void OsmApiDbBulkWriter::close()
+{
+  _closeOutputFiles();
+  _database.close();
+
+  _reset();
+  _sectionNames = _createSectionNameList();
+  setConfiguration(conf());
+}
+
+void OsmApiDbBulkWriter::_closeOutputFiles()
 {
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
@@ -168,12 +187,6 @@ void OsmApiDbBulkWriter::close()
   {
     _sqlOutputMasterFile->close();
   }
-
-  _database.close();
-
-  _reset();
-  _sectionNames = _createSectionNameList();
-  setConfiguration(conf());
 }
 
 QString OsmApiDbBulkWriter::_formatPotentiallyLargeNumber(const long number)
@@ -319,196 +332,196 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
 }
 
-void OsmApiDbBulkWriter::_retainOutputFiles()
+void OsmApiDbBulkWriter::_retainOutputFilesOnline()
 {
-  if (_mode == "online")
+  QFile copyFile(_outputFileCopyLocation);
+  if (copyFile.exists())
   {
-    QFile copyFile(_outputFileCopyLocation);
-    if (copyFile.exists())
-    {
-      copyFile.remove();
-    }
-    QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
-    LOG_INFO(
-      "Moving " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
-      " at " << _sqlOutputMasterFile->fileName() << " to " << _outputFileCopyLocation << "...");
-    if (!_sqlOutputMasterFile->rename(_sqlOutputMasterFile->fileName(), _outputFileCopyLocation))
-    {
-      LOG_WARN("Unable to move SQL output file to " << _outputFileCopyLocation << ".");
-    }
+    copyFile.remove();
   }
-  else
+  QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
+  LOG_INFO(
+    "Moving " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
+    " at " << _sqlOutputMasterFile->fileName() << " to " << _outputFileCopyLocation << "...");
+  if (!_sqlOutputMasterFile->rename(_sqlOutputMasterFile->fileName(), _outputFileCopyLocation))
   {
-    LOG_INFO("Copying temporary CSV output files to " << _outputFileCopyLocation);
+    LOG_WARN("Unable to move SQL output file to " << _outputFileCopyLocation << ".");
+  }
+}
 
-//    if (outputDir.exists())
-//    {
-//      if (!outputDir.remove(_outputFileCopyLocation))
-//      {
-//        LOG_ERROR("Unable to remove temp copy file output directory.");
-//        return;
-//      }
-//    }
-    if (!QDir().mkpath(_outputFileCopyLocation))
-    {
-      LOG_ERROR("Unable to create temp copy file output directory.");
-      return;
-    }
+void OsmApiDbBulkWriter::_retainOutputFilesOffline()
+{
+  LOG_INFO("Copying temporary CSV output files to " << _outputFileCopyLocation);
 
-    QDir outputDir(_outputFileCopyLocation);
-    for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-         sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  if (!QDir().mkpath(_outputFileCopyLocation))
+  {
+    LOG_ERROR("Unable to create temp copy file output directory.");
+    return;
+  }
+
+  QDir outputDir(_outputFileCopyLocation);
+  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  {
+    if (_outputSections[*sectionNamesItr].first)
     {
-      if (_outputSections[*sectionNamesItr].first)
+      const QString outputPath =
+        outputDir.path() + "/" + outputDir.dirName() + "-" + *sectionNamesItr + ".csv";
+      const QString fileToCopyPath = (_outputSections[*sectionNamesItr].first)->fileName();
+      QFile copyDestFile(outputPath);
+      if (copyDestFile.exists())
       {
-        const QString outputPath =
-          outputDir.path() + "/" + outputDir.dirName() + "-" + *sectionNamesItr + ".csv";
-        const QString fileToCopyPath = (_outputSections[*sectionNamesItr].first)->fileName();
-        QFile copyDestFile(outputPath);
-        if (copyDestFile.exists())
-        {
-          copyDestFile.remove();
-        }
-        QFileInfo fileToCopyInfo(fileToCopyPath);
-        LOG_DEBUG(
-          "Copying " << SystemInfo::humanReadable(fileToCopyInfo.size()) << " CSV output file " <<
-          "at " << fileToCopyPath << " to " << outputPath << "...");
-        if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
-        {
-          LOG_WARN("Unable to copy CSV output file to " << outputPath << ".");
-        }
-        if (!(_outputSections[*sectionNamesItr].first)->remove())
-        {
-          LOG_WARN(
-            "Unable to remove temp file " << (_outputSections[*sectionNamesItr].first)->fileName());
-        }
+        copyDestFile.remove();
+      }
+      QFileInfo fileToCopyInfo(fileToCopyPath);
+      LOG_DEBUG(
+        "Copying " << SystemInfo::humanReadable(fileToCopyInfo.size()) << " CSV output file " <<
+        "at " << fileToCopyPath << " to " << outputPath << "...");
+      if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
+      {
+        LOG_WARN("Unable to copy CSV output file to " << outputPath << ".");
+      }
+      if (!(_outputSections[*sectionNamesItr].first)->remove())
+      {
+        LOG_WARN(
+          "Unable to remove temp file " << (_outputSections[*sectionNamesItr].first)->fileName());
       }
     }
   }
 }
 
-void OsmApiDbBulkWriter::_writeDataToDb()
+void OsmApiDbBulkWriter::_retainOutputFiles()
 {
-  _timer->restart();
-  bool someDataNotLoaded = false;
-
   if (_mode == "online")
   {
-    //I believe a COPY header is created whether there are any records to copy for the table or not,
-    //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
-    //to not write the header if there are no records to copy for the table...
-    LOG_INFO(
-      "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-      " records.  17 separate SQL COPY statements will be executed...");
-
-    //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
-    //sql file, so no need doing the extra work to handle buffering the sql read manually and
-    //applying it to a QSqlQuery.
-    const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-    QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-    if (!(Log::getInstance().getLevel() <= Log::Info))
-    {
-      cmd += " --quiet";
-    }
-    cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
-    if (!(Log::getInstance().getLevel() <= Log::Info))
-    {
-      cmd += " > /dev/null";
-    }
-    LOG_DEBUG(cmd);
-    if (system(cmd.toStdString().c_str()) != 0)
-    {
-      throw HootException("Failed executing bulk element SQL write against the OSM API database.");
-    }
+    _retainOutputFilesOnline();
   }
   else
   {
-    LOG_INFO(
-      "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-      " records.  " << _outputSections.size() - 1 <<
-      " CSV files will be written to the database...");
+    _retainOutputFilesOffline();
+  }
+}
 
-    //Do we want to remove these every time?
-    if (!_pgBulkLogPath.isEmpty())
+void OsmApiDbBulkWriter::_writeDataToDbOnline()
+{
+  _timer->restart();
+  //I believe a COPY header is created whether there are any records to copy for the table or not,
+  //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
+  //to not write the header if there are no records to copy for the table...
+  LOG_INFO(
+    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    " records.  17 separate SQL COPY statements will be executed...");
+
+  //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
+  //sql file, so no need doing the extra work to handle buffering the sql read manually and
+  //applying it to a QSqlQuery.
+  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " --quiet";
+  }
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " > /dev/null";
+  }
+  LOG_DEBUG(cmd);
+  if (system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
+  }
+  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+}
+
+void OsmApiDbBulkWriter::_writeDataToDbOffline()
+{
+  _timer->restart();
+  bool someDataNotLoaded = false;
+  LOG_INFO(
+    "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    " records.  " << _outputSections.size() - 1 << " CSV files will be written to the database...");
+
+  //Do we want to remove these every time?
+  if (!_pgBulkLogPath.isEmpty())
+  {
+    QFile pgBulkOutputLog(_pgBulkLogPath);
+    if (pgBulkOutputLog.exists())
     {
-      QFile pgBulkOutputLog(_pgBulkLogPath);
-      if (pgBulkOutputLog.exists())
-      {
-        pgBulkOutputLog.remove();
-      }
+      pgBulkOutputLog.remove();
     }
-    if (!_pgBulkBadRecordsLogPath.isEmpty())
+  }
+  if (!_pgBulkBadRecordsLogPath.isEmpty())
+  {
+    QFile pgBulkBadRecordsOutputLog(_pgBulkBadRecordsLogPath);
+    if (pgBulkBadRecordsOutputLog.exists())
     {
-      QFile pgBulkBadRecordsOutputLog(_pgBulkBadRecordsLogPath);
-      if (pgBulkBadRecordsOutputLog.exists())
-      {
-        pgBulkBadRecordsOutputLog.remove();
-      }
+      pgBulkBadRecordsOutputLog.remove();
     }
+  }
 
-    for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-         sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  {
+    if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
     {
-      if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
+      LOG_DEBUG("Closing temp file for " << *sectionNamesItr << "...");
+      _outputSections[*sectionNamesItr].second.reset();
+      _outputSections[*sectionNamesItr].first->close();
+
+      const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+
+      //TODO:
+      // - this needs to work for the hoot user
+      // - need to remove vagrant home path from executable
+
+      if (!(_outputSections[*sectionNamesItr]).first->setPermissions(QFile::ReadOther))
       {
-        LOG_DEBUG("Closing temp file for " << *sectionNamesItr << "...");
-        _outputSections[*sectionNamesItr].second.reset();
-        _outputSections[*sectionNamesItr].first->close();
-
-        const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-
-        //TODO:
-        // - this needs to work for the hoot user
-        // - need to remove vagrant home path from executable
-
-        if (!(_outputSections[*sectionNamesItr]).first->setPermissions(QFile::ReadOther))
-        {
-          LOG_WARN(
-            "Unable to set permissions on " <<
-            (_outputSections[*sectionNamesItr]).first->fileName());
-        }
-        QString cmd =
-          "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " +
-          dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
-          (_outputSections[*sectionNamesItr]).first->fileName();
+        LOG_WARN(
+          "Unable to set permissions on " << (_outputSections[*sectionNamesItr]).first->fileName());
+      }
+      QString cmd =
+        "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " +
+        dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
+        (_outputSections[*sectionNamesItr]).first->fileName();
 
 //      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
 //      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
- //      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
- //      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
- //      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
- //      cmd +=
- //        " pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
- //        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
- //        " -O " + *sectionNamesItr + " -i " +
+//      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
+//      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
+//      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
+//      cmd +=
+//        " pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
+//        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
+//        " -O " + *sectionNamesItr + " -i " +
 //         (_outputSections[*sectionNamesItr]).first->fileName();
 
-        if (!_pgBulkLogPath.isEmpty())
-        {
-          cmd += " -l " + _pgBulkLogPath;
-        }
-        if (!_pgBulkBadRecordsLogPath.isEmpty())
-        {
-          cmd += " -P " + _pgBulkBadRecordsLogPath;
-        }
-        if (!_disableConstraints)
-        {
-          cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
-        }
-        if (!_disableWriteAheadLogging)
-        {
-          cmd += " -o \"WRITER=BUFFERED\"";
-        }
-        if (_writeMultiThreaded)
-        {
-          cmd += " -o \"MULTI_PROCESS=YES\"";
-        }
-        if (Log::getInstance().getLevel() <= Log::Trace)
-        {
-          cmd += " -o \"VERBOSE=YES\"";
-        }
-        switch (Log::getInstance().getLevel())
-        {
+      if (!_pgBulkLogPath.isEmpty())
+      {
+        cmd += " -l " + _pgBulkLogPath;
+      }
+      if (!_pgBulkBadRecordsLogPath.isEmpty())
+      {
+        cmd += " -P " + _pgBulkBadRecordsLogPath;
+      }
+      if (!_disableConstraints)
+      {
+        cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
+      }
+      if (!_disableWriteAheadLogging)
+      {
+        cmd += " -o \"WRITER=BUFFERED\"";
+      }
+      if (_writeMultiThreaded)
+      {
+        cmd += " -o \"MULTI_PROCESS=YES\"";
+      }
+      if (Log::getInstance().getLevel() <= Log::Trace)
+      {
+        cmd += " -o \"VERBOSE=YES\"";
+      }
+      switch (Log::getInstance().getLevel())
+      {
         case Log::Trace:
           cmd += " -E DEBUG";
           break;
@@ -526,38 +539,37 @@ void OsmApiDbBulkWriter::_writeDataToDb()
           break;
         default:
           throw HootException("Unsupported log level.");
-        }
-        if (!(Log::getInstance().getLevel() <= Log::Info))
-        {
-          cmd += " > /dev/null";
-        }
-        LOG_DEBUG(cmd);
+      }
+      if (!(Log::getInstance().getLevel() <= Log::Info))
+      {
+        cmd += " > /dev/null";
+      }
+      LOG_DEBUG(cmd);
 
-        LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
-        const int status = system(cmd.toStdString().c_str());
-        if (status != 0)
+      LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
+      const int status = system(cmd.toStdString().c_str());
+      if (status != 0)
+      {
+        if (status == 3)
         {
-          if (status == 3)
-          {
-            LOG_WARN("Some data could not be loaded.");
-            someDataNotLoaded = true;
-          }
-          else
-          {
-            throw HootException(
-              "Failed executing record write for table " + *sectionNamesItr +
-              " against the OSM API database: " + _outputUrl + ".  Error code: " +
-              QString::number(status));
-          }
+          LOG_WARN("Some data could not be loaded.");
+          someDataNotLoaded = true;
         }
-        LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
+        else
+        {
+          throw HootException(
+            "Failed executing record write for table " + *sectionNamesItr +
+            " against the OSM API database: " + _outputUrl + ".  Error code: " +
+            QString::number(status));
+        }
+      }
+      LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
 
-        if (_outputFileCopyLocation.isEmpty())
-        {
-          LOG_DEBUG("Removing temp file for " << *sectionNamesItr << "...");
-          _outputSections[*sectionNamesItr].first->remove();
-          _outputSections[*sectionNamesItr].first.reset();
-        }
+      if (_outputFileCopyLocation.isEmpty())
+      {
+        LOG_DEBUG("Removing temp file for " << *sectionNamesItr << "...");
+        _outputSections[*sectionNamesItr].first->remove();
+        _outputSections[*sectionNamesItr].first.reset();
       }
     }
   }
@@ -566,6 +578,18 @@ void OsmApiDbBulkWriter::_writeDataToDb()
   if (someDataNotLoaded)
   {
     LOG_WARN("Some data was not loaded.");
+  }
+}
+
+void OsmApiDbBulkWriter::_writeDataToDb()
+{
+  if (_mode == "online")
+  {
+      _writeDataToDbOnline();
+  }
+  else
+  {
+    _writeDataToDbOffline();
   }
 }
 
@@ -905,6 +929,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
 
 QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const
 {
+  //TODO: move to utility class
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
   const int seconds = (int)(duration % 60);
@@ -1627,23 +1652,6 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
   {
     LOG_VART(_changesetData.changesInChangeset);
     _writeChangesetToStream();
-    //not sure I want to see this interrupt the status message for the element loads yet...
-//    long changesetUpdateInterval;
-//    if (_statusUpdateInterval > _maxChangesetSize)
-//    {
-//      changesetUpdateInterval = _statusUpdateInterval / _maxChangesetSize;
-//    }
-//    else
-//    {
-//      changesetUpdateInterval = _statusUpdateInterval;
-//    }
-//    if (_changesetData.changesetsWritten > 0 &&
-//        (_changesetData.changesetsWritten % changesetUpdateInterval == 0))
-//    {
-//      PROGRESS_INFO(
-//        "Parsed " << _formatPotentiallyLargeNumber(_changesetData.changesetsWritten) <<
-//        " changesets from input.");
-//    }
     _changesetData.currentChangesetId++;
     LOG_VART(_changesetData.currentChangesetId);
     _changesetData.changesInChangeset = 0;
