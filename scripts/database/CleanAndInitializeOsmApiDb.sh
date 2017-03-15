@@ -12,5 +12,3 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 source $HOOT_HOME/scripts/database/SetupOsmApiDB.sh force
 # load dummy user
 psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/test-files/servicesdb/users.sql
-# extension need by osm api db offline mode writing
-sudo -u postgres psql -d $DB_NAME_OSMAPI -c 'create extension pg_bulkload;'
