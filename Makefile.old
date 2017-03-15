@@ -131,7 +131,7 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
-ifneq ($(shell which mocha),)
+ifneq ($(shell hash mocha >/dev/null 2>&1),)
 	cd plugins; npm install && npm test
 else
 	@echo Skipping mocha tests
