@@ -30,6 +30,7 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QStringBuilder>
+#include <QDir>
 
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
@@ -48,7 +49,7 @@ unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
 OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
-_outputDelimiter('\t')
+_outputDelimiter("\t")
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -62,9 +63,9 @@ OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
 
 bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 {
-  LOG_VART(_mode);
+  LOG_VARD(_mode);
   QUrl url(urlStr);
-  return _database.isSupported(url) && _mode == "online";
+  return _database.isSupported(url);
 }
 
 void OsmApiDbBulkWriter::open(QString url)
@@ -84,6 +85,13 @@ void OsmApiDbBulkWriter::open(QString url)
 
   _outputUrl = url;
   _database.open(_outputUrl);
+
+  if (_mode == "offline" && !_database.hasExtension("pg_bulkload"))
+  {
+    throw HootException(
+      QString("When running OSM API database writing in 'offline' mode, the database being ") +
+      QString("written to must have the pg_bulkload extension installed."));
+  }
 }
 
 void OsmApiDbBulkWriter::close()
@@ -163,10 +171,15 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
 
 void OsmApiDbBulkWriter::finalizePartial()
 {
-  LOG_INFO(
-    "Input records parsed (data pass #1 of 2).  Time elapsed: " <<
-    _secondsToDhms(_timer->elapsed()) << " Stats:");
-  _logStats();
+  QString msg = "Input records parsed";
+  if (_mode == "online")
+  {
+    msg += "(data pass #1 of 2)";
+  }
+  msg += ".  Time elapsed: " + _secondsToDhms(_timer->elapsed());
+  //msg += " Stats:";
+  LOG_INFO(msg);
+  //_logStats();
 
   //go ahead and clear out some of the data structures we don't need anymore
   _idMappings.nodeIdMap.reset();
@@ -181,15 +194,22 @@ void OsmApiDbBulkWriter::finalizePartial()
     return;
   }
 
-  _sqlOutputMasterFile.reset(new QTemporaryFile());
-  if (!_sqlOutputMasterFile->open())
+  if (_mode == "online")
   {
-    throw HootException(
-      "Could not open temp file for SQL output: " + _sqlOutputMasterFile->fileName());
-  }
+    _sqlOutputMasterFile.reset(new QTemporaryFile());
+    if (!_outputFileCopyLocation.isEmpty())
+    {
+      _sqlOutputMasterFile->setAutoRemove(false);
+    }
+    if (!_sqlOutputMasterFile->open())
+    {
+      throw HootException(
+        "Could not open temp file for SQL output: " + _sqlOutputMasterFile->fileName());
+    }
 
-  // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
-  _createOutputFile("byte_order_mark", "\n", true);
+    // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
+    _createOutputFile("byte_order_mark", "\n", true);
+  }
 
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
@@ -203,24 +223,22 @@ void OsmApiDbBulkWriter::finalizePartial()
     _changesetData.changesetsWritten++;
   }
 
-  //Get the latest id sequences in case other writes have occurred while we were parsing the input
-  //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
-  //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
-  //_executeSql is true or false, so that the output SQL file can still be manually applied later
-  //if desired.
-  _lockIds();
-
-  //combine all the element/changeset temp files that were written during partial streaming into one
-  //file and update the ids in the SQl file according to the id sequences previously locked out
-  _writeCombinedSqlFile();
-
-  LOG_INFO("SQL file combined write stats (data pass #2 of 2):");
-  _logStats();
-
-  //retain the sql output file if that option was selected
-  if (!_outputFileCopyLocation.isEmpty())
+  if (_mode == "online")
   {
-    _retainOutputFiles();
+    //Get the latest id sequences in case other writes have occurred while we were parsing the input
+    //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
+    //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
+    //_executeSql is true or false, so that the output SQL file can still be manually applied later
+    //if desired.
+    _lockIds();
+
+    //combine all the element/changeset temp files that were written during partial streaming into
+    //one file and update the ids in the SQl file according to the id sequences previously locked
+    //out
+    _writeCombinedSqlFile();
+
+    LOG_INFO("SQL file combined write stats:");
+    _logStats();
   }
 
   if (_executeSql)
@@ -234,26 +252,215 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_INFO("Final SQL file write stats:");
   }
   _logStats();
+
+  //retain the sql output file if that option was selected
+  if (!_outputFileCopyLocation.isEmpty())
+  {
+    _retainOutputFiles();
+  }
 }
 
 void OsmApiDbBulkWriter::_retainOutputFiles()
 {
-  QFile copyFile(_outputFileCopyLocation);
-  if (copyFile.exists())
+  if (_mode == "online")
   {
-    copyFile.remove();
-  }
-  QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
-  LOG_INFO(
-    "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
-    "to " << _outputFileCopyLocation << "...");
-  if (!_sqlOutputMasterFile->copy(_outputFileCopyLocation))
-  {
-    LOG_WARN("Unable to copy SQL output file to " << _outputFileCopyLocation);
+    QFile copyFile(_outputFileCopyLocation);
+    if (copyFile.exists())
+    {
+      copyFile.remove();
+    }
+    QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
+    LOG_INFO(
+      "Copying " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
+      "to " << _outputFileCopyLocation << "...");
+    if (!_sqlOutputMasterFile->rename(_sqlOutputMasterFile->fileName(), _outputFileCopyLocation))
+    {
+      LOG_WARN("Unable to copy SQL output file to " << _outputFileCopyLocation);
+    }
   }
   else
   {
-    LOG_DEBUG("Copied SQL file output to " << _outputFileCopyLocation);
+    QDir outputDir(_outputFileCopyLocation);
+    if (outputDir.exists())
+    {
+      if (!outputDir.remove(_outputFileCopyLocation))
+      {
+        LOG_ERROR("Unable to remove temp copy file output directory.");
+        return;
+      }
+    }
+    if (!outputDir.mkpath(_outputFileCopyLocation))
+    {
+      LOG_ERROR("Unable to create temp copy file output directory.");
+      return;
+    }
+
+    for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+         sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+    {
+      if (_outputSections[*sectionNamesItr].first)
+      {
+        const QString outputPath =
+          outputDir.path() + "/" + outputDir.dirName() + "-" + *sectionNamesItr + ".csv";
+        QFileInfo fileToCopyInfo((_outputSections[*sectionNamesItr].first)->fileName());
+        LOG_INFO(
+          "Copying " << SystemInfo::humanReadable(fileToCopyInfo.size()) << " CSV output file " <<
+          "to " << outputPath << "...");
+        if (!outputDir.rename((_outputSections[*sectionNamesItr].first)->fileName(), outputPath))
+        {
+          LOG_WARN("Unable to copy CSV output file to " << outputPath);
+        }
+      }
+    }
+  }
+}
+
+void OsmApiDbBulkWriter::_writeDataToDb()
+{
+  _timer->restart();
+  if (_mode == "online")
+  {
+    //I believe a COPY header is created whether there are any records to copy for the table or not,
+    //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
+    //to not write the header if there are no records to copy for the table...
+    LOG_INFO(
+      "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+      " records.  17 separate SQL COPY statements will be executed...");
+
+    //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
+    //sql file, so no need doing the extra work to handle buffering the sql read manually and
+    //applying it to a QSqlQuery.
+    QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+    QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
+    if (!(Log::getInstance().getLevel() <= Log::Info))
+    {
+      cmd += " --quiet";
+    }
+    cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
+    if (!(Log::getInstance().getLevel() <= Log::Info))
+    {
+      cmd += " > /dev/null";
+    }
+    LOG_DEBUG(cmd);
+    if (system(cmd.toStdString().c_str()) != 0)
+    {
+      throw HootException("Failed executing bulk element SQL write against the OSM API database.");
+    }
+    LOG_INFO(
+      "Element SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  }
+  else
+  {
+    LOG_INFO(
+      "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+      " records.  " << _outputSections.size() - 1 << " CSV files will be written to the database...");
+
+    const QString outputLogPath = "/home/vagrant/pg_bulkload/bin/pg_bulkload_osmapidb.log";
+    QFile outputLog(outputLogPath);
+    if (outputLog.exists())
+    {
+      outputLog.remove();
+    }
+    const QString badRecordsLogPath = "/home/vagrant/pg_bulkload/bin/pg_bulkload_bad_records.log";
+    QFile badRecordsLog(badRecordsLogPath);
+    if (badRecordsLog.exists())
+    {
+      badRecordsLog.remove();
+    }
+
+    //TODO: if a file has no records, don't attempt to write it
+
+    bool someDataNotLoaded = false;
+    for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+         sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+    {
+      if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
+      {
+        LOG_DEBUG("Closing temp file for " << *sectionNamesItr << "...");
+        _outputSections[*sectionNamesItr].second.reset();
+        _outputSections[*sectionNamesItr].first->close();
+
+        const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+
+        //TODO:
+        // - this needs to work for the hoot user
+        // - need to remove vagrant home path from executable
+        // - don't hardcode log paths
+
+        if (!(_outputSections[*sectionNamesItr]).first->setPermissions(QFile::ReadOther))
+        {
+          LOG_WARN(
+            "Unable to set permissions on " << (_outputSections[*sectionNamesItr]).first->fileName());
+        }
+        QString cmd =
+          "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " +
+          dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
+          (_outputSections[*sectionNamesItr]).first->fileName() + " -l " + outputLogPath + " -P " +
+          badRecordsLogPath;
+
+//      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
+//      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
+ //      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
+ //      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
+ //      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
+ //      cmd +=
+ //        " pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
+ //        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
+ //        " -O " + *sectionNamesItr + " -i " + (_outputSections[*sectionNamesItr]).first->fileName() +
+ //        " -l " + outputLogPath + " -P " + badRecordsLogPath;
+
+        if (!_disableConstraints)
+        {
+          cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
+        }
+        if (!_disableWriteAheadLogging)
+        {
+          cmd += " -o \"WRITER=BUFFERED\"";
+        }
+        if (_writeMultiThreaded)
+        {
+          cmd += " -o \"MULTI_PROCESS=YES\"";
+        }
+        if (Log::getInstance().getLevel() <= Log::Trace)
+        {
+          cmd += " -o \"VERBOSE=YES\"";
+        }
+        if (!(Log::getInstance().getLevel() <= Log::Info))
+        {
+          cmd += " > /dev/null";
+        }
+        LOG_DEBUG(cmd);
+
+        LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
+        const int status = system(cmd.toStdString().c_str());
+        if (status != 0)
+        {
+          if (status == 3)
+          {
+            LOG_WARN("Some data could not be loaded.");
+            someDataNotLoaded = true;
+          }
+          else
+          {
+            throw HootException(
+              "Failed executing record write for table " + *sectionNamesItr +
+              " against the OSM API database: " + _outputUrl + ".  Error code: " +
+              QString::number(status));
+          }
+        }
+        LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
+
+        LOG_DEBUG("Removing temp file for " << *sectionNamesItr << "...");
+        _outputSections[*sectionNamesItr].first->remove();
+        _outputSections[*sectionNamesItr].first.reset();
+      }
+    }
+
+    LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    if (someDataNotLoaded)
+    {
+      LOG_WARN("Some data was not loaded.");
+    }
   }
 }
 
@@ -368,7 +575,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   LOG_INFO(
     "SQL file write complete; data pass #2 of 2.  Time elapsed: " <<
     _secondsToDhms(_timer->elapsed()));
-  LOG_INFO("Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
+  LOG_DEBUG("Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputMasterFile->fileName());
   LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -483,39 +690,6 @@ void OsmApiDbBulkWriter::_lockIds()
   LOG_DEBUG("Sequence updates written to database.");
 }
 
-void OsmApiDbBulkWriter::_writeDataToDb()
-{
-  _timer->restart();
-  //I believe a COPY header is created whether there are any records to copy for the table or not,
-  //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
-  //to not write the header if there are no records to copy for the table...
-  LOG_INFO(
-    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records.  17 separate SQL COPY statements will be executed...");
-
-  //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
-  //sql file, so no need doing the extra work to handle buffering the sql read manually and
-  //applying it to a QSqlQuery.
-  QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " --quiet";
-  }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " > /dev/null";
-  }
-  LOG_DEBUG(cmd);
-  if (system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
-  }
-  LOG_INFO(
-    "Element SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
-}
-
 long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
 {
   //the multiplications by 2 account for the fact that two records are written for each type (other
@@ -628,13 +802,13 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
 QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const
 {
   QString res;
-  long duration = (long)(durationInMilliseconds / 1000);
-  const long seconds = (long)(duration % 60);
+  int duration = (int)(durationInMilliseconds / 1000);
+  const int seconds = (int)(duration % 60);
   duration /= 60;
-  const long minutes = (long)(duration % 60);
+  const int minutes = (int)(duration % 60);
   duration /= 60;
-  const long hours = (long)(duration % 24);
-  const long days = (long)(duration / 24);
+  const int hours = (int)(duration % 24);
+  const int days = (int)(duration / 24);
   if ((hours == 0) && (days == 0))
   {
     return res.sprintf("%02d:%02d", minutes, seconds);
@@ -783,13 +957,12 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  const QString mode = confOptions.getOsmapidbBulkWriterMode().toLower();
-  if (mode != "offline" && mode != "online")
+  setMode(confOptions.getOsmapidbBulkWriterMode().toLower());
+  if (_mode != "offline" && _mode != "online")
   {
-    throw HootException("Invalid OSM API database write mode: " + mode);
+    throw HootException("Invalid OSM API database write mode: " + _mode);
   }
-  setMode(mode);
-  if (_mode == "online" &&
+  else if (_mode == "online" &&
       (confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging() ||
        confOptions.getOsmapidbBulkWriterMultithreaded() ||
        confOptions.getOsmapidbBulkWriterDisableConstraints()))
@@ -799,17 +972,40 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
       QString("'offline' mode: disabling write ahead logging, multi-threaded writes, disabling") +
       QString("database constraints."));
   }
+  if (_mode == "online")
+  {
+    _outputDelimiter = "\t";
+  }
   else
   {
-    setDisableWriteAheadLogging(confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging());
-    setWriteMultithreaded(confOptions.getOsmapidbBulkWriterMultithreaded());
-    setDisableConstraints(confOptions.getOsmapidbBulkWriterDisableConstraints());
+    _outputDelimiter = ",";
   }
 
+  setOutputFileCopyLocation(confOptions.getOsmapidbBulkWriterOutputFileCopyLocation().trimmed());
+  if (!_outputFileCopyLocation.isEmpty())
+  {
+    QFileInfo outputCopyLocationInfo(_outputFileCopyLocation);
+    if (_mode == "offline" && !outputCopyLocationInfo.completeSuffix().isEmpty())
+    {
+      throw HootException(
+        QString("Output file copy location should be set to a directory in offline mode.  ") +
+        QString("Location specified: ") + _outputFileCopyLocation);
+    }
+    else if (_mode == "online" &&
+             !outputCopyLocationInfo.completeSuffix().toLower().endsWith("sql"))
+    {
+      throw HootException(
+        QString("Output file copy location should be set to a SQL file (.sql) in online mode.  ") +
+        QString("Location specified: ") + _outputFileCopyLocation);
+    }
+  }
+
+  setDisableWriteAheadLogging(confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging());
+  setWriteMultithreaded(confOptions.getOsmapidbBulkWriterMultithreaded());
+  setDisableConstraints(confOptions.getOsmapidbBulkWriterDisableConstraints());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
-  setOutputFileCopyLocation(confOptions.getOsmapidbBulkWriterOutputFileCopyLocation().trimmed());
   setExecuteSql(confOptions.getOsmapidbBulkWriterExecuteSql());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
 }
@@ -962,8 +1158,9 @@ void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const long
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(nodeY, nodeX)));
 
+  QString currentFormatString = CURRENT_NODES_OUTPUT_FORMAT_STRING;
   QString outputLine =
-    _getCurrentNodesOutputFormatString().arg(
+    currentFormatString.replace("\t", _outputDelimiter).arg(
       QString::number(nodeDbId),
       QString::number(nodeYNanodegrees),
       QString::number(nodeXNanodegrees),
@@ -972,8 +1169,14 @@ void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const long
       tileNumberString);
   *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << outputLine;
 
+  QString historicalFormatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING;
+  historicalFormatString.replace("\t", _outputDelimiter);
+  if (_mode == "offline")
+  {
+    historicalFormatString.replace("\\N", "");
+  }
   outputLine =
-    _getHistoricalNodesOutputFormatString().arg(
+    historicalFormatString.arg(
       QString::number(nodeDbId),
       QString::number(nodeYNanodegrees),
       QString::number(nodeXNanodegrees),
@@ -1008,8 +1211,14 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const long nodeDbI
       value = "<empty>";
     }
 
-    *currentTable << _getCurrentTagsOutputFormatString().arg(nodeDbIdString, key, value);
-    *historicalTable << _getHistoricalTagsOutputFormatString().arg(nodeDbIdString, key, value);
+    QString currentFormatString = CURRENT_TAGS_OUTPUT_FORMAT_STRING;
+    *currentTable <<
+      currentFormatString.replace("\t", _outputDelimiter)
+        .arg(nodeDbIdString, key, value);
+    QString historicalFormatString = HISTORICAL_TAGS_OUTPUT_FORMAT_STRING;
+    *historicalTable <<
+      historicalFormatString.replace("\t", _outputDelimiter)
+        .arg(nodeDbIdString, key, value);
   }
 }
 
@@ -1044,13 +1253,13 @@ void OsmApiDbBulkWriter::_createWayOutputFiles()
   }
   else
   {
-      _createOutputFile(ApiDb::getCurrentWaysTableName());
-      _createOutputFile(ApiDb::getCurrentWayTagsTableName());
-      _createOutputFile(ApiDb::getCurrentWayNodesTableName());
+    _createOutputFile(ApiDb::getCurrentWaysTableName());
+    _createOutputFile(ApiDb::getCurrentWayTagsTableName());
+    _createOutputFile(ApiDb::getCurrentWayNodesTableName());
 
-      _createOutputFile(ApiDb::getWaysTableName());
-      _createOutputFile(ApiDb::getWayTagsTableName());
-      _createOutputFile(ApiDb::getWayNodesTableName());
+    _createOutputFile(ApiDb::getWaysTableName());
+    _createOutputFile(ApiDb::getWayTagsTableName());
+    _createOutputFile(ApiDb::getWayNodesTableName());
   }
 }
 
@@ -1060,15 +1269,22 @@ void OsmApiDbBulkWriter::_writeWayToStream(const long wayDbId)
   const QString datestring =
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
+  QString currentFormatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING;
   QString outputLine =
-    _getCurrentWaysOutputFormatString()
+    currentFormatString.replace("\t", _outputDelimiter)
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
   *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << outputLine;
 
+  QString historicalFormatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING;
+  historicalFormatString.replace("\t", _outputDelimiter);
+  if (_mode == "offline")
+  {
+    historicalFormatString.replace("\\N", "");
+  }
   outputLine =
-    _getHistoricalWaysOutputFormatString()
+    historicalFormatString
       .arg(wayDbId)
       .arg(changesetId)
       .arg(datestring);
@@ -1085,10 +1301,13 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const long dbWayId, const vector
     {
       const QString dbNodeIdString = QString::number(_idMappings.nodeIdMap->at(*it));
       const QString nodeIndexString(QString::number(nodeIndex));
+      QString currentFormatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING;
       *_outputSections[ApiDb::getCurrentWayNodesTableName()].second <<
-        _getCurrentWayNodesOutputFormatString().arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+        currentFormatString.replace("\t", _outputDelimiter)
+          .arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+      QString historicalFormatString = HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING;
       *_outputSections[ApiDb::getWayNodesTableName()].second <<
-        _getHistoricalWayNodesOutputFormatString().arg(
+        historicalFormatString.replace("\t", _outputDelimiter).arg(
           dbWayIdString, dbNodeIdString, nodeIndexString);
     }
     else
@@ -1148,15 +1367,22 @@ void OsmApiDbBulkWriter::_writeRelationToStream(const long relationDbId)
   const QString datestring =
   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
+  QString currentFormatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING;
   QString outputLine =
-    _getCurrentRelationsOutputFormatString()
+    currentFormatString.replace("\t", _outputDelimiter)
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
   *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << outputLine;
 
+  QString historicalFormatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING;
+  historicalFormatString.replace("\t", _outputDelimiter);
+  if (_mode == "offline")
+  {
+    historicalFormatString.replace("\\N", "");
+  }
   outputLine =
-    _getHistoricalRelationsOutputFormatString()
+    historicalFormatString
       .arg(relationDbId)
       .arg(changesetId)
       .arg(datestring);
@@ -1253,11 +1479,13 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
     memberRole = "<no role>";
   }
 
+  QString currentFormatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING;
   *_outputSections[ApiDb::getCurrentRelationMembersTableName()].second <<
-    _getCurrentRelationMembersOutputFormatString().arg(
+    currentFormatString.replace("\t", _outputDelimiter).arg(
       dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
+  QString historicalFormatString = HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING;
   *_outputSections[ApiDb::getRelationMembersTableName()].second <<
-    _getHistoricalRelationMembersOutputFormatString().arg(
+    historicalFormatString.replace("\t", _outputDelimiter).arg(
       dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
 
   _writeStats.relationMembersWritten++;
@@ -1275,6 +1503,10 @@ void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QStrin
   LOG_TRACE(msg);
 
   shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
+  if (_mode == "offline" && !_outputFileCopyLocation.isEmpty())
+  {
+    tempfile->setAutoRemove(false);
+  }
   if (!tempfile->open())
   {
     throw HootException(
@@ -1392,6 +1624,10 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
+  if (_mode == "offline")
+  {
+    escapedString.replace(QChar(44), QString(";"));
+  }
   return escapedString;
 }
 
@@ -1425,8 +1661,9 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
   const QString datestring =
     QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 
+  QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING;
   *_outputSections[ApiDb::getChangesetsTableName()].second <<
-    _getChangesetsOutputFormatString().arg(
+    formatString.replace("\t", _outputDelimiter).arg(
       QString::number(_changesetData.currentChangesetId),
       QString::number(_changesetData.changesetUserId),
       datestring,
@@ -1474,71 +1711,6 @@ void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const lon
       sequenceUpdateFormat.arg(
         ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)) << "\n\n";
   }
-}
-
-QString OsmApiDbBulkWriter::_getChangesetsOutputFormatString() const
-{
-  return "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentNodesOutputFormatString() const
-{
-  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalNodesOutputFormatString() const
-{
-  return "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentWaysOutputFormatString() const
-{
-  return "%1\t%2\t%3\tt\t1\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalWaysOutputFormatString() const
-{
-  return "%1\t%2\t%3\t1\tt\t\\N\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentWayNodesOutputFormatString() const
-{
-  return "%1\t%2\t%3\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalWayNodesOutputFormatString() const
-{
-  return "%1\t%2\t1\t%3\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentRelationsOutputFormatString() const
-{
-  return "%1\t%2\t%3\tt\t1\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalRelationsOutputFormatString() const
-{
-  return "%1\t%2\t%3\t1\tt\t\\N\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentRelationMembersOutputFormatString() const
-{
-  return "%1\t%2\t%3\t%4\t%5\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalRelationMembersOutputFormatString() const
-{
-  return "%1\t%2\t%3\t%4\t1\t%5\n";
-}
-
-QString OsmApiDbBulkWriter::_getCurrentTagsOutputFormatString() const
-{
-  return "%1\t%2\t%3\n";
-}
-
-QString OsmApiDbBulkWriter::_getHistoricalTagsOutputFormatString() const
-{
-  return "%1\t%2\t%3\t1\n";
 }
 
 }

@@ -48,13 +48,14 @@ namespace hoot
 {
 
 /*
- * TODO: need unresolved way node/relation member and offline mode tests
+ * TODO: need unresolved way node/relation member tests
  */
 class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
   CPPUNIT_TEST(runNoExternalWritersOnlineModeTest);
   CPPUNIT_TEST(runExternalWritersOnlineModeTest);
+  //CPPUNIT_TEST(runNoExternalWritersOfflineModeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -362,6 +363,43 @@ public:
     }
 
     verifyDatabaseOutputExternalWriters();
+  }
+
+  //TODO: finish
+  void runNoExternalWritersOfflineModeTest()
+  {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setFileOutputLineBufferSize(1);
+    const QString outFile = "test-output/io/OsmApiDbBulkWriterTest";
+    writer.setOutputFileCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputLineBufferSize(3);
+    writer.setMode("offine");
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    //verify CSV file output
+//    const QStringList stdSqlTokens =
+//      tokenizeSqlFileWithoutDates(
+//        "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_no_external_writers.sql");
+//    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
+//    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
+//    for (int i = 0; i < stdSqlTokens.size(); i++)
+//    {
+//      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
+//    }
+
+//    verifyDatabaseOutputNoExternalWriters();
   }
 };
 
