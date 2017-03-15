@@ -272,7 +272,7 @@ private:
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
   void _writeCombinedSqlFile();
-  void _lockIds();
+  void _reserveIds();
   void _writeDataToDb();
 };
 

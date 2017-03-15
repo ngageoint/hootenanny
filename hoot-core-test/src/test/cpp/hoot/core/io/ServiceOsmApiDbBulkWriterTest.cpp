@@ -151,7 +151,7 @@ public:
     return tokens;
   }
 
-  void verifyDatabaseOutputNoExternalWriters()
+  void verifyDatabaseOutputNoExternalWritersOnline()
   {
     OsmApiDbReader reader;
     OsmMapPtr map(new OsmMap());
@@ -218,7 +218,7 @@ public:
     reader.close();
   }
 
-  void verifyDatabaseOutputExternalWriters()
+  void verifyDatabaseOutputExternalWritersOnline()
   {
     OsmApiDbReader reader;
     OsmMapPtr map(new OsmMap());
@@ -285,6 +285,76 @@ public:
     reader.close();
   }
 
+  void verifyDatabaseOutputNoExternalWritersOffline()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //verify current elements
+
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)14,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)5,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)7,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)16,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)4,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //TODO: I'm not sure what to do about this yet?  Would we want to update sequences in the
+    //writer when using pg_bulkload, or should some other process be doing that after the load?
+
+    //verify sequences
+//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
+//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
+//    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
+//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+    reader.close();
+  }
+
   void runNoExternalWritersOnlineModeTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
@@ -319,7 +389,7 @@ public:
       HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
     }
 
-    verifyDatabaseOutputNoExternalWriters();
+    verifyDatabaseOutputNoExternalWritersOnline();
   }
 
   void runExternalWritersOnlineModeTest()
@@ -363,7 +433,7 @@ public:
       HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
     }
 
-    verifyDatabaseOutputExternalWriters();
+    verifyDatabaseOutputExternalWritersOnline();
   }
 
   void runNoExternalWritersOfflineModeTest()
@@ -383,8 +453,8 @@ public:
     writer.setMaxChangesetSize(5);
     writer.setFileOutputLineBufferSize(3);
     writer.setMode("offline");
-    writer.setDisableWriteAheadLogging(true);
-    writer.setDisableConstraints(true);
+    writer.setDisableWriteAheadLogging(/*true*/false);
+    writer.setDisableConstraints(/*true*/false);
     writer.setWriteMultithreaded(false);
     //for debugging
     //writer.setOfflineLogPath(outputDirPath + "/OsmApiDbBulkWriterTestOffline.log");
@@ -423,7 +493,7 @@ public:
       }
     }
 
-    //verifyDatabaseOutputNoExternalWriters();
+    verifyDatabaseOutputNoExternalWritersOffline();
   }
 };
 

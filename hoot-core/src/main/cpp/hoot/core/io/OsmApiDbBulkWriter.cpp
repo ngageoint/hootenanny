@@ -122,6 +122,26 @@ void OsmApiDbBulkWriter::open(QString url)
     }
   }
 
+//  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+//  QString cmd;
+//  if (_mode == "online")
+//  {
+//    cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql --version";
+//    if (system(cmd.toStdString().c_str()) != 0)
+//    {
+//      throw HootException("Unable to access psql application.  Is Postgres installed?");
+//    }
+//  }
+//  else
+//  {
+//    //TODO: fix this
+//    cmd = "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload --version";
+//    if (system(cmd.toStdString().c_str()) != 0)
+//    {
+//      throw HootException("Unable to access psql application.  Is pg_bulkload installed?");
+//    }
+//  }
+
   _outputUrl = url;
   _database.open(_outputUrl);
 
@@ -269,7 +289,7 @@ void OsmApiDbBulkWriter::finalizePartial()
     //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
     //_executeSql is true or false, so that the output SQL file can still be manually applied later
     //if desired.
-    _lockIds();
+    _reserveIds();
 
     //combine all the element/changeset temp files that were written during partial streaming into
     //one file and update the ids in the SQl file according to the id sequences previously locked
@@ -384,7 +404,7 @@ void OsmApiDbBulkWriter::_writeDataToDb()
     //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
     //sql file, so no need doing the extra work to handle buffering the sql read manually and
     //applying it to a QSqlQuery.
-    QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+    const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
     QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
     if (!(Log::getInstance().getLevel() <= Log::Info))
     {
@@ -745,7 +765,7 @@ void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName,
   LOG_TRACE("ID offset updated for line: " << sqlRecordLine);
 }
 
-void OsmApiDbBulkWriter::_lockIds()
+void OsmApiDbBulkWriter::_reserveIds()
 {
   //this assumes the data has already been written out to sql file once and _writeStats has valid
   //values for the number of elements written
