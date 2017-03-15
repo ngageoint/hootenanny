@@ -53,7 +53,7 @@ using namespace std;
 using namespace Tgs;
 
 /**
- * OSM element writer optimized for bulk element additions to an OSM API database.
+ * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
  * existing database, you're better off creating a new writer class or using the Rails Port.
@@ -111,6 +111,10 @@ static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3
 static const QString HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t1\t%5\n";
 static const QString CURRENT_TAGS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\n";
 static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t1\n";
+//for whatever strange reason, the historical node tags table column order in the API datbase
+//is different than the other historical tags tables; this makes a difference when using the
+//offline loader, since it is sensitive to ordering
+static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\n";
 
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -175,7 +179,7 @@ public:
 
   virtual bool isSupported(QString url);
   virtual void open(QString url);
-  virtual void close();
+  void close();
 
   virtual void finalizePartial();
   virtual void writePartial(const ConstNodePtr& node);
@@ -194,6 +198,8 @@ public:
   void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
   void setDisableConstraints(bool disable) { _disableConstraints = disable; }
   void setMode(QString mode) { _mode = mode; }
+  void setOfflineLogPath(QString path) { _pgBulkLogPath = path; }
+  void setOfflineBadRecordsLogPath(QString path) { _pgBulkBadRecordsLogPath = path; }
 
 private:
 
@@ -217,6 +223,8 @@ private:
   QString _mode;
   QString _outputDelimiter;
   shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
+  QString _pgBulkLogPath;
+  QString _pgBulkBadRecordsLogPath;
 
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
@@ -254,8 +262,8 @@ private:
   void _writeWayToStream(const long wayDbId);
   void _writeWayNodesToStream(const long wayId, const vector<long>& waynodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
-  void _writeTagsToStream(const Tags& tags, const long nodeDbId,
-                          shared_ptr<QTextStream>& currentTable,
+  void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
+                          const long dbId, shared_ptr<QTextStream>& currentTable,
                           shared_ptr<QTextStream>& historicalTable);
 
   void _incrementAndGetLatestIdsFromDb();

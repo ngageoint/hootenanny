@@ -1302,6 +1302,22 @@ database writing performance.  The option 'osmapidb.bulk.writer.mode' must be se
 enable this setting.  IMPORTANT: This should only be enabled when the database has previously
 been taken offline (you are the only writer).
 
+=== osmapidb.bulk.writer.offline.log.path
+
+* Data Type: string
+* Default Value: ``
+
+Optional path to the log the pg_bulkload utility writes to when writing OSM API database data in
+offline mode.
+
+=== osmapidb.bulk.writer.offline.bad.records.log.path
+
+* Data Type: string
+* Default Value: ``
+
+Optional path to the log the pg_bulkload utility writes any bad records it encounters while writing
+OSM API database data in offline mode.
+
 === osmapidb.bulk.writer.output.file.copy.location
 
 * Data Type: string

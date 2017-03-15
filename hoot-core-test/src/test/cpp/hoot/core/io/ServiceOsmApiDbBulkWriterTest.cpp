@@ -55,7 +55,7 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
   CPPUNIT_TEST(runNoExternalWritersOnlineModeTest);
   CPPUNIT_TEST(runExternalWritersOnlineModeTest);
-  //CPPUNIT_TEST(runNoExternalWritersOfflineModeTest);
+  CPPUNIT_TEST(runNoExternalWritersOfflineModeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -126,7 +126,7 @@ public:
     return map;
   }
 
-  QStringList tokenizeSqlFileWithoutDates(const QString filePath)
+  QStringList tokenizeOutputFileWithoutDates(const QString filePath)
   {
     QStringList tokens;
 
@@ -310,9 +310,9 @@ public:
 
     //verify SQL file output
     const QStringList stdSqlTokens =
-      tokenizeSqlFileWithoutDates(
+      tokenizeOutputFileWithoutDates(
         "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_no_external_writers.sql");
-    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
+    const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFile);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
     for (int i = 0; i < stdSqlTokens.size(); i++)
     {
@@ -343,6 +343,7 @@ public:
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
+    //write some data from somewhere else while before our writer starts writing data
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql"); //1 changeset
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql"); //2 nodes
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql"); //1 way
@@ -353,9 +354,9 @@ public:
 
     //verify SQL file output
     const QStringList stdSqlTokens =
-      tokenizeSqlFileWithoutDates(
+      tokenizeOutputFileWithoutDates(
         "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_external_writers.sql");
-    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
+    const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFile);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
     for (int i = 0; i < stdSqlTokens.size(); i++)
     {
@@ -365,10 +366,10 @@ public:
     verifyDatabaseOutputExternalWriters();
   }
 
-  //TODO: finish
   void runNoExternalWritersOfflineModeTest()
   {
-    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest";
+    QDir().mkpath(outputDirPath);
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -376,30 +377,53 @@ public:
 
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
-    const QString outFile = "test-output/io/OsmApiDbBulkWriterTest";
-    writer.setOutputFileCopyLocation(outFile);
+    writer.setOutputFileCopyLocation(outputDirPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputLineBufferSize(3);
-    writer.setMode("offine");
+    writer.setMode("offline");
+    writer.setDisableWriteAheadLogging(true);
+    writer.setDisableConstraints(true);
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setOfflineLogPath(outputDirPath + "/OsmApiDbBulkWriterTestOffline.log");
+    //writer.setOfflineBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestOfflineBadRecords.log");
+    //TODO: temp
+    //writer.setOfflineLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestOffline.log");
+    //writer.setOfflineBadRecordsLogPath(
+      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestOfflineBadRecords.log");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
     writer.close();
 
-    //verify CSV file output
-//    const QStringList stdSqlTokens =
-//      tokenizeSqlFileWithoutDates(
-//        "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_no_external_writers.sql");
-//    const QStringList outputSqlTokens = tokenizeSqlFileWithoutDates(outFile);
-//    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
-//    for (int i = 0; i < stdSqlTokens.size(); i++)
-//    {
-//      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
-//    }
+    //verify CSV files output
+    QDir outputDir(outputDirPath);
+    const QStringList outputDirContents = outputDir.entryList(QDir::Files, QDir::Name);
+    QString stdDirPath = outputDirPath;
+    stdDirPath.replace("test-output", "test-files");
+    LOG_VART(outputDirPath);
+    LOG_VART(stdDirPath);
+    for (int i = 0; i < outputDirContents.size(); i++)
+    {
+      LOG_VART(outputDirContents.at(i));
+      if (outputDirContents.at(i).toLower().endsWith("csv"))
+      {
+        const QStringList stdCsvTokens =
+          tokenizeOutputFileWithoutDates(stdDirPath + "/" + outputDirContents.at(i));
+        const QStringList outputCsvTokens =
+          tokenizeOutputFileWithoutDates(outputDirPath + "/" + outputDirContents.at(i));
+        CPPUNIT_ASSERT_EQUAL(stdCsvTokens.size(), outputCsvTokens.size());
+        for (int i = 0; i < stdCsvTokens.size(); i++)
+        {
+          HOOT_STR_EQUALS(stdCsvTokens.at(i), outputCsvTokens.at(i));
+        }
+      }
+    }
 
-//    verifyDatabaseOutputNoExternalWriters();
+    //verifyDatabaseOutputNoExternalWriters();
   }
 };
 
