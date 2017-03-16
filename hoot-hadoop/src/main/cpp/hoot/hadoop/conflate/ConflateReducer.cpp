@@ -122,7 +122,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
-  LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Got map. Node count: " << map->getNodes().size() << " way count: " <<
     map->getWays().size());
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
@@ -225,10 +225,10 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     }
   }
 
-  LOG_INFO("best map. Node count: " << conflator.getBestMap()->getNodeMap().size() <<
+  LOG_INFO("best map. Node count: " << conflator.getBestMap()->getNodes().size() <<
     " way count: " << conflator.getBestMap()->getWays().size());
 
-  LOG_INFO("Result map. Node count: " << result->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Result map. Node count: " << result->getNodes().size() << " way count: " <<
     result->getWays().size());
 
   _validate(result);
@@ -304,7 +304,7 @@ shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<
-//    result->getNodeMap().size() << " way count: " << result->getWays().size());
+//    result->getNodes().size() << " way count: " << result->getWays().size());
 
   return result;
 }

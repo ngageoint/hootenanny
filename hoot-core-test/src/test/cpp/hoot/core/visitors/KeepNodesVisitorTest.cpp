@@ -98,9 +98,9 @@ public:
     KeepNodesVisitor v;
     map->visitRw(v);
 
-    HOOT_STR_EQUALS(3, map->getNodeMap().size());
+    HOOT_STR_EQUALS(3, map->getNodes().size());
     HOOT_STR_EQUALS(0, map->getWays().size());
-    HOOT_STR_EQUALS(0, map->getRelationMap().size());
+    HOOT_STR_EQUALS(0, map->getRelations().size());
   }
 
 };

@@ -72,7 +72,7 @@ public:
 
     shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     int count = 0;
-    const RelationMap& rm = map->getRelationMap();
+    const RelationMap& rm = map->getRelations();
     for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
     {
       const ConstRelationPtr r = it->second;

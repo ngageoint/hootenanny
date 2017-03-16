@@ -177,7 +177,7 @@ public:
 
   const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
 
-  const NodeMap& getNodeMap() const { return _nodes; }
+  const NodeMap& getNodes() const { return _nodes; }
 
   set<ElementId> getParents(ElementId eid) const;
 
@@ -190,7 +190,7 @@ public:
 
   virtual const shared_ptr<Relation> getRelation(long id);
 
-  const RelationMap& getRelationMap() const { return _relations; }
+  const RelationMap& getRelations() const { return _relations; }
 
   /**
    * Return the way with the specified id or null if it doesn't exist.

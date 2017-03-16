@@ -93,7 +93,7 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
 {
   set<ElementId> result;
 
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     shared_ptr<Relation> relation = it->second;

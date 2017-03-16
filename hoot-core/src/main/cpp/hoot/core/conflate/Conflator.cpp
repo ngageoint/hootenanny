@@ -107,7 +107,7 @@ void Conflator::_applyManipulations()
   int noImprovement = 0;
 
   double lastPrint = Time::getTime();
-  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodes().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   shared_ptr<const WorkingMap> map = start;
@@ -181,14 +181,14 @@ void Conflator::_applyManipulations()
     cout << endl;
   }
 
-  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodes().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   // remove unnecessary fluff before exporting.
   shared_ptr<OsmMap> tmp = _bestMap->takeMap();
   SuperfluousWayRemover::removeWays(tmp);
 
-  LOG_INFO("Conflating map. Node count: " << tmp->getNodeMap().size() <<
+  LOG_INFO("Conflating map. Node count: " << tmp->getNodes().size() <<
            " way count: " <<  tmp->getWays().size());
 
   _bestMap.reset(new WorkingMap(tmp));

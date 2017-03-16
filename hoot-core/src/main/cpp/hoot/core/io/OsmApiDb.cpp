@@ -34,10 +34,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/DbUtils.h>
 
 // qt
 #include <QStringList>
@@ -101,42 +101,61 @@ void OsmApiDb::close()
 void OsmApiDb::deleteData()
 {
   // delete ways data first
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentRelationsTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentRelationsSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationMembersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db,
+    "DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentRelationTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentRelationsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentRelationsSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getRelationMembersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
 
   // delete relations data 2nd
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWayTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentWaysTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentWaysSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWayNodesTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWayTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentWaysTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentWaysSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
 
   // delete nodes data 3rd
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getCurrentNodesTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getCurrentNodesSequenceName() + " RESTART WITH 1");
-  _execNoPrepare("DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getCurrentNodesTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getCurrentNodesSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
 
   // delete changesets
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetTagsTableName() + " CASCADE");
-  _execNoPrepare("DELETE FROM " + ApiDb::getChangesetsTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getChangesetsSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetTagsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DELETE FROM " + ApiDb::getChangesetsTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getChangesetsSequenceName() + " RESTART WITH 1");
 
   // delete users
-  _execNoPrepare("DELETE FROM " + ApiDb::getUsersTableName() + " CASCADE");
-  _execNoPrepare("ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
+  DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getUsersTableName() + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "ALTER SEQUENCE " + ApiDb::getUsersSequenceName() + " RESTART WITH 1");
 }
 
-bool OsmApiDb::isSupported(QUrl url)
+bool OsmApiDb::isSupported(const QUrl& url)
 {
   bool valid = ApiDb::isSupported(url);
 
@@ -486,42 +505,57 @@ QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType
 {
   QString tag = "";
   int pos = -1;
-  if(type==ElementType::Node) pos=OsmApiDb::NODES_TAGS;
-  else if(type==ElementType::Way) pos=OsmApiDb::WAYS_TAGS;
-  else if(type==ElementType::Relation) pos=OsmApiDb::RELATIONS_TAGS;
+  if (type == ElementType::Node) pos = OsmApiDb::NODES_TAGS;
+  else if (type == ElementType::Way) pos = OsmApiDb::WAYS_TAGS;
+  else if (type == ElementType::Relation) pos = OsmApiDb::RELATIONS_TAGS;
   else throw HootException("extractTagFromRow_OsmApi called with unknown Type");
 
   // test for blank tag
   QString val1 = row->value(pos).toString();
   QString val2 = row->value(pos+1).toString();
-  if(val1!="" || val2!="") tag = "\""+val1+"\"=>\""+val2+"\"";
+  if (val1 != "" || val2 != "") tag = "\"" + val1 + "\"=>\"" + val2 + "\"";
 
   return tag;
 }
 
-long OsmApiDb::getNextId(const ElementType& type)
+long OsmApiDb::getNextId(const ElementType& elementType)
 {
-  switch (type.getEnum())
+  return _getIdFromSequence(elementType, "next");
+}
+
+long OsmApiDb::getNextId(const QString tableName)
+{
+  return _getIdFromSequence(tableName, "next");
+}
+
+long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString sequenceType)
+{
+  switch (elementType.getEnum())
   {
     case ElementType::Node:
     case ElementType::Way:
     case ElementType::Relation:
-      return getNextId("current_" + type.toString().toLower() + "s");
+      return _getIdFromSequence("current_" + elementType.toString().toLower() + "s", sequenceType);
     default:
       throw HootException("Unknown element type");
   }
 }
 
-long OsmApiDb::getNextId(const QString tableName)
+long OsmApiDb::_getIdFromSequence(const QString tableName, const QString sequenceType)
 {
   long result;
   if (_seqQueries[tableName].get() == 0)
   {
     _seqQueries[tableName].reset(new QSqlQuery(_db));
     _seqQueries[tableName]->setForwardOnly(true);
-    _seqQueries[tableName]->prepare(QString("SELECT NEXTVAL('%1%2')")
-                                    .arg(tableName.toLower())
-                                    .arg(ApiDb::getSequenceId()));
+    //valid sequence types are "next" and "current"
+    QString sql =
+      QString("SELECT NEXTVAL('%1%2')").arg(tableName.toLower()).arg(ApiDb::getSequenceId());
+    if (sequenceType.toLower() == "current")
+    {
+      sql = sql.replace("NEXTVAL", "CURRVAL");
+    }
+    _seqQueries[tableName]->prepare(sql);
   }
 
   shared_ptr<QSqlQuery> query = _seqQueries[tableName];
@@ -545,7 +579,6 @@ long OsmApiDb::getNextId(const QString tableName)
     throw HootException("Error retrieving sequence value. type: " +
       tableName + " Error: " + query->lastError().text());
   }
-
   query->finish();
 
   return result;

@@ -54,7 +54,7 @@ public:
 
   virtual void close();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 
@@ -116,13 +116,20 @@ public:
 
   shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
+  /**
+   * Increment the sequence ID for the given sequence and return it
+   *
+   * @param tableName element type associated with the sequence
+   * @return the next sequence ID for the given type
+   */
   virtual long getNextId(const ElementType& elementType);
 
   /**
-   * Gets the next sequence ID for the given database table
+   * Increment the sequence ID for the given sequence and return it
    *
-   * @param tableName database table name
-   * @return an element ID
+   * @param tableName database table name associated with the sequence
+   * @return the next sequence ID for the given type
+   * @todo need to make use of sequence and table strings more consistent here
    */
   long getNextId(const QString tableName);
 
@@ -168,6 +175,9 @@ private:
   void _init();
 
   QString _elementTypeToElementTableName(const ElementType& elementType) const;
+
+  long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
+  long _getIdFromSequence(const QString tableName, const QString sequenceType);
 
 };
 

@@ -148,7 +148,7 @@ void LocalTileWorker::conflate(const vector<Envelope>& tiles, QString mapIn, QSt
     replacements.readDir(mapIn);
     shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i]);
 
-    if (map->getNodeMap().size() > 0)
+    if (map->getNodes().size() > 0)
     {
       map = _conflate(map, replacements.getReplacements());
       _storeMapPart(map, mapOut);

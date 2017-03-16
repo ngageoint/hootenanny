@@ -44,7 +44,6 @@
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -713,16 +712,13 @@ void MatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
 void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
                                             const ElementType::Type& elementType)
 {
-  FilteredVisitor elementWrongVisitor(
-    new ChainCriterion(
-      new ElementTypeCriterion(elementType),
-      new TagKeyCriterion(MetadataTags::HootWrong())),
-    new ElementCountVisitor());
-  FilteredVisitor& filteredVisitor = const_cast<FilteredVisitor&>(elementWrongVisitor);
-  SingleStatistic* singleStat =
-    dynamic_cast<SingleStatistic*>(&elementWrongVisitor.getChildVisitor());
-  map->visitRo(filteredVisitor);
-  _elementWrongCounts[elementType] = singleStat->getStat();
+  _elementWrongCounts[elementType] =
+    (int)FilteredVisitor::getStat(
+      new ChainCriterion(
+        new ElementTypeCriterion(elementType),
+        new TagKeyCriterion(MetadataTags::HootWrong())),
+      new ElementCountVisitor(),
+      map);
 }
 
 QString MatchComparator::toString() const

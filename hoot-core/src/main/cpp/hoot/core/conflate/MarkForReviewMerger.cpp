@@ -30,7 +30,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CountNodesVisitor.h>
 
 #include "ReviewMarker.h"
 
