@@ -52,52 +52,6 @@ using namespace boost;
 using namespace std;
 using namespace Tgs;
 
-/**
- * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
- *
- * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you're better off creating a new writer class or using the Rails Port.
- *
- * This writer has two modes: online and offline.
- *
- * Online mode:
- *
- * In this mode, the writer guarantees element ID uniqueness against a live database and uses psql
- * to write the data.  If the element SQL write transaction fails, the element data will not be
- * written but the IDs reserved will not be freed and will go unused in the database.
- *
- * In this mode, the writer requires two passes over the data before writing the data to the
- * database.  The first pass streams elements from input and writes out SQL COPY statements to
- * temporary files for each database table type.  The second pass combines the data from all temp
- * SQL files into a single SQL file with the correct table ordering, as well as updates record IDs
- * to ensure no ID conflicts will occur if external writing occurred during the first pass of the
- * data.
- *
- * Detailed online mode workflow:
- *
- *   * write the element/changeset SQL copy statements out to individual temp SQL files in a
- *     buffered fashion with a first pass over the data; arbitrarily start all ID sequences at 1
- *
- *   * use the element counts obtained during the first pass SQL files write to determine the ID
- *     ranges the elements and changesets being written consume; lock these ID ranges out by
- *     executing setval statements against the database
- *
- *   * combine the temp files into a master SQL file in a buffered fashion in a second pass over
- *     the data; while parsing each record update element/changeset IDs based on those locked out
- *     in the previous step
- *
- *   * execute the element/changeset SQL copy statements against the database
- *
- * Offline mode:
- *
- * In this mode, the writer does not guarantee element ID uniqueness against a live database
- * (verify this is correct), so it must be used against an offline database (no other writers).
- * The writer also does not write the data within a transaction covering all the data (just a
- * transaction for each table type).  This mode also provides options that will result in better
- * data loading performance, including disabling constraint checking, disabling the write ahead log,
- * and multi-threaded writes.  See the user documentation for further details on when and how to
- * use these options.
- */
 static const QString CHANGESETS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
 static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
 static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
@@ -116,6 +70,40 @@ static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t1\n";
 //offline loader, since it is sensitive to ordering
 static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\n";
 
+/**
+ * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
+ *
+ * If you need to write small amounts of elements to an OSM API database or modify data in an
+ * existing database, you're better off creating a new writer class or using the Rails Port.
+ *
+ * This writer:
+ *
+ * * has two intended workflows for use: online and offline.  The appropriate workflow can be set
+ *   up by configuring the writer with the appropriate options.  See the user documentation for
+ *   details on the two workflows and when to use them.
+ *
+ * * allows for directly writing to a target database or generating output files that can be
+ *   manually written to a database; SQL files are written for the psql writer and CSV files are
+ *   written for the pg_bulkload writer
+ *
+ * * makes use of two underlying database writer applications: psql and pg_bulkload (in the future
+ *   it may be possible to discontinue use of psql)
+ *
+ * * has the ability to guarantee element ID uniqueness against a live database if the record ID
+ *   reservation option is used.
+ *
+ * * is transaction safe when using the psql writer but not transaction safe with the pg_bulkload
+ *   writer
+ *
+ * * requires two passes over the input data *before* writing it to the database if the psql writer
+ *   is used or the record ID reservation option is used; one pass beforehand otherwise
+ *
+ * Originally, the psql and pg_bulkload sets of logic were separated into two classes
+ * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
+ * other ways the code was harder to maintain.  The decision was made to collapse the logic into
+ * the same class, however, separating them again at some point may make sense, if the two logic
+ * paths end up being permanent
+ */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
   struct ElementWriteStats
@@ -190,16 +178,16 @@ public:
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  void setOutputFileCopyLocation(QString location) { _outputFileCopyLocation = location; }
+  void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
-  void setExecuteSql(bool exec) { _executeSql = exec; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
   void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
   void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
   void setDisableConstraints(bool disable) { _disableConstraints = disable; }
-  void setMode(QString mode) { _mode = mode; }
-  void setOfflineLogPath(QString path) { _pgBulkLogPath = path; }
-  void setOfflineBadRecordsLogPath(QString path) { _pgBulkBadRecordsLogPath = path; }
+  void setPgBulkloadLogPath(QString path) { _pgBulkLogPath = path; }
+  void setPgBulkloadBadRecordsLogPath(QString path) { _pgBulkBadRecordsLogPath = path; }
+  void setWriterApp(QString app) { _writerApp = app; }
+  void setReserveRecordIds(bool reserve) { _reserveRecordIds = reserve; }
 
 private:
 
@@ -214,17 +202,18 @@ private:
   long _fileOutputLineBufferSize;
   long _statusUpdateInterval;
   long _maxChangesetSize;
-  QString _outputFileCopyLocation;
-  bool _executeSql;
+  QString _outputFilesCopyLocation;
   bool _disableWriteAheadLogging;
   bool _writeMultiThreaded;
   QString _outputUrl;
   bool _disableConstraints;
-  QString _mode;
   QString _outputDelimiter;
   shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
   QString _pgBulkLogPath;
   QString _pgBulkBadRecordsLogPath;
+  QString _writerApp;
+  bool _reserveRecordIds;
+  unsigned int _tempFileDataPassCtr;
 
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
@@ -239,16 +228,20 @@ private:
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
+  bool _usingDatabase() const;
+  unsigned int _numberOfTempFileDataPasses() const;
+  bool _destinationIsDatabase() const;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
   void _retainOutputFiles();
-  void _retainOutputFilesOffline();
-  void _retainOutputFilesOnline();
+  void _retainOutputFilesPgBulk();
+  void _retainOutputFilesPsql();
   void _verifyDependencies();
-  void _verifyMode();
+  void _verifyApp();
   void _verifyOutputCopySettings();
   void _closeOutputFiles();
+  void _flushTempStreams();
 
   void _createNodeOutputFiles();
   QStringList _createSectionNameList();
@@ -276,12 +269,13 @@ private:
   void _incrementChangesInChangeset();
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
-  void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
+  void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();
+  void _updateRecordLinesWithIdOffsetInCsvFiles();
   void _reserveIds();
   void _writeDataToDb();
-  void _writeDataToDbOffline();
-  void _writeDataToDbOnline();
+  void _writeDataToDbPgBulk();
+  void _writeDataToDbPsql();
 };
 
 }
