@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 
 #include "ElementVisitorConsumer.h"
@@ -77,7 +78,13 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                        const ConstOsmMapPtr& map);
+  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                        const ConstOsmMapPtr& map, const ElementPtr& element);
+
 private:
+
   const ElementCriterion* _criterion;
   shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;

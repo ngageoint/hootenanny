@@ -496,7 +496,7 @@ public:
 
     merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     //will throw an exception on failure
     ConstRelationPtr reviewRelation =
       dynamic_pointer_cast<Relation>(

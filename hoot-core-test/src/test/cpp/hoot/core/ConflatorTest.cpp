@@ -123,8 +123,8 @@ public:
     shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodeMap().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelations().size());
 
     OsmXmlWriter writer;
     writer.setIncludeIds(true);

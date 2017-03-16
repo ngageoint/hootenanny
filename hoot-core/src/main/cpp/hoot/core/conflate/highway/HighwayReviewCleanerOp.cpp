@@ -43,7 +43,7 @@ HighwayReviewCleanerOp::HighwayReviewCleanerOp()
 
 void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
 {
-  RelationMap relations = map->getRelationMap();
+  RelationMap relations = map->getRelations();
 
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {

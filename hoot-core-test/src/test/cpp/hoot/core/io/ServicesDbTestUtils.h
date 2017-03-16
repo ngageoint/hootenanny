@@ -83,7 +83,10 @@ public:
 
   static void execOsmApiDbSqlTestScript(const QString scriptName);
 
+  static void deleteDataFromOsmApiTestDatabase();
+
 private:
+
   static Settings _readDbConfig();
   static void _readDbConfig(Settings& settings, QString config_path);
 };

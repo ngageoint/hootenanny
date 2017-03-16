@@ -42,6 +42,7 @@ class ElementInputStream;
 class PartialOsmMapWriter : public OsmMapWriter, public ElementOutputStream
 {
 public:
+
   PartialOsmMapWriter();
 
   virtual ~PartialOsmMapWriter() {}

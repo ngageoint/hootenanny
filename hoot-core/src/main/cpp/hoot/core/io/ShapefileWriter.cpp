@@ -336,7 +336,7 @@ void ShapefileWriter::writePoints(shared_ptr<const OsmMap> map, const QString& p
     _circularErrorIndex = poLayer->GetLayerDefn()->GetFieldCount() - 1;
   }
 
-  const NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const shared_ptr<Node>& node = it->second;
@@ -452,7 +452,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
     }
   }
 
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
   {
     shared_ptr<Relation> relation = it->second;

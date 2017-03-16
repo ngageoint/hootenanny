@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -103,6 +104,33 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
   {
     _visitor->visit(e);
   }
+}
+
+double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                                const ConstOsmMapPtr& map)
+{
+  FilteredVisitor filteredVisitor(criterion, visitor);
+  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  if (stat == 0)
+  {
+    throw HootException("Visitor does not implement SingleStatistic.");
+  }
+  FilteredVisitor& filteredVis = const_cast<FilteredVisitor&>(filteredVisitor);
+  map->visitRo(filteredVis);
+  return stat->getStat();
+}
+
+double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                                const ConstOsmMapPtr& map, const ElementPtr& element)
+{
+  FilteredVisitor filteredVisitor(criterion, visitor);
+  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  if (stat == 0)
+  {
+    throw HootException("Visitor does not implement SingleStatistic.");
+  }
+  element->visitRo(*map, filteredVisitor);
+  return stat->getStat();
 }
 
 }

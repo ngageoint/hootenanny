@@ -24,33 +24,13 @@ Select all from osm api db...
       1
 (1 row)
 
-15:59:01.356 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm ...
-15:59:01.358 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm ...
+16:49:16.723 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-files/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm ...
+16:49:16.733 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm ...
 Bounding box selection from osm api db...
  setval 
 --------
       1
 (1 row)
 
- setval 
---------
-      2
-(1 row)
-
- setval 
---------
-   4325
-(1 row)
-
- setval 
---------
-    375
-(1 row)
-
- setval 
---------
-      1
-(1 row)
-
-15:59:12.796 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm ...
-15:59:12.803 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm ...
+16:49:22.828 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-files/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm ...
+16:49:23.166 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm ...

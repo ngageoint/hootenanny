@@ -85,7 +85,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
     replacements.readDir(mapIn);
     shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i], _buffer);
 
-    if (map->getNodeMap().size() > 0)
+    if (map->getNodes().size() > 0)
     {
       // keep track of any replaced nodes.
       shared_ptr<ReplacedNodeListener> rnl(
@@ -290,7 +290,7 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
     OutsideBoundsRemover::removeWays(map, buffered, true);
   }
 
-  NodeMap nodes = map->getNodeMap();
+  NodeMap nodes = map->getNodes();
   // @optimize could use the index for this, but not necessary in debug mode.
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {

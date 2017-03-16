@@ -73,7 +73,7 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.

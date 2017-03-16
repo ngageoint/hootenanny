@@ -60,7 +60,6 @@ class OsmMap;
 class ScriptTranslator;
 class ScriptToOgrTranslator;
 class ElementInputStream;
-class ElementOutputStream;
 class ElementProvider;
 
 /**

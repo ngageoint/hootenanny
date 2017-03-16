@@ -357,11 +357,11 @@ private:
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
 
     // Pull out nodes
-    NodeMap nodes = _map->getNodeMap();
+    NodeMap nodes = _map->getNodes();
     CPPUNIT_ASSERT_EQUAL( numNodes, (int)nodes.size() );
 
     // Make sure no relations
-    RelationMap relations = _map->getRelationMap();
+    RelationMap relations = _map->getRelations();
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), relations.size() );
 
     unsigned int nodesLeftToFind = numNodes;

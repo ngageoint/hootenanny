@@ -40,6 +40,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
+#include <QMap>
 
 // Standard
 #include <vector>
@@ -66,7 +67,6 @@ class Node;
 class Way;
 class Relation;
 class ElementType;
-class ElementCache;
 class Range;
 class TableType;
 
@@ -192,7 +192,7 @@ public:
   /**
    * Returns database
    */
-  QSqlDatabase getDB() { return _db; }
+  QSqlDatabase& getDB() { return _db; }
 
   static long round(double x);
 
@@ -306,6 +306,9 @@ public:
   inline static QString getMapsSequenceName()                   { return getMapsTableName() + getSequenceId(); }
   inline static QString getUsersSequenceName()                  { return getUsersTableName() + getSequenceId(); }
 
+  static QMap<QString, QString> getDbUrlParts(const QString url);
+  static QString getPsqlString(const QString url);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
@@ -320,15 +323,8 @@ protected:
   shared_ptr<QSqlQuery> _insertUser;
   shared_ptr<QSqlQuery> _selectNodeIdsForWay;
 
-  virtual QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                          QVariant v3 = QVariant()) const;
-
-  /**
-   * @brief Executes the provided SQL statement without calling prepare. This is handy when creating
-   * constraints, tables, etc.
-   * @param sql SQL to execute.
-   */
-  virtual QSqlQuery _execNoPrepare(const QString sql) const;
+  QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+                  QVariant v3 = QVariant()) const;
 
   static void _unescapeString(QString& s);
 

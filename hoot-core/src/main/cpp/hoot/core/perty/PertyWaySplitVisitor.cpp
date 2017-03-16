@@ -103,7 +103,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     _splitRecursionLevel++;
     LOG_VART(_splitRecursionLevel);
 
-    const int numNodesBeforeSplit = _map->getNodeMap().size();
+    const int numNodesBeforeSplit = _map->getNodes().size();
     LOG_VART(numNodesBeforeSplit);
     const int numWaysBeforeSplit = _map->getWays().size();
     LOG_VART(numWaysBeforeSplit);
@@ -167,7 +167,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
       newElementsAfterSplit.push_back(match);
     }
 
-    const int numNodesAfterSplit = _map->getNodeMap().size();
+    const int numNodesAfterSplit = _map->getNodes().size();
     LOG_VART(numNodesAfterSplit);
     const int numNewNodesCreatedBySplit = numNodesAfterSplit - numNodesBeforeSplit;
     LOG_VART(numNewNodesCreatedBySplit);

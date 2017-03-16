@@ -64,7 +64,6 @@
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 #include "OgrOptions.h"
@@ -516,7 +515,7 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));
 
-  const NodeMap& nm = map->getNodeMap();
+  const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     _writePartial(provider, it->second);
@@ -531,7 +530,7 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   _failOnSkipRelation = false;
   _unwrittenFirstPassRelationIds.clear();
   LOG_DEBUG("Writing first pass relations...");
-  const RelationMap& rm = map->getRelationMap();
+  const RelationMap& rm = map->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     _writePartial(provider, it->second);

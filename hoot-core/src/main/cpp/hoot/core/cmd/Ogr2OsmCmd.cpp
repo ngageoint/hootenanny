@@ -173,7 +173,7 @@ public:
       }
     }
 
-    if (map->getNodeMap().size() == 0)
+    if (map->getNodes().size() == 0)
     {
       progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
       throw HootException("After translation the map is empty. Aborting.");
