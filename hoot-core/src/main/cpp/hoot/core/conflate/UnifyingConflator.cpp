@@ -190,7 +190,14 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
       cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
 
       double cmStart = Time::getTime();
-      cmMatches = cm.calculateSubset();
+      try
+      {
+        cmMatches = cm.calculateSubset();
+      }
+      catch (Exception& exp)
+      {
+        LOG_WARN(exp.what());
+      }
       LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
       LOG_DEBUG("CM Score: " << cm.getScore());
       LOG_TRACE(SystemInfo::getMemoryUsageString());
