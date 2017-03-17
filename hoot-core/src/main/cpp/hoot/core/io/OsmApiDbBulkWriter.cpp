@@ -72,7 +72,8 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 bool OsmApiDbBulkWriter::_usingDatabase() const
 {
   return _destinationIsDatabase() ||
-         ((_outputUrl.endsWith(".sql") || _outputUrl.endsWith(".csv")) && _reserveRecordIds);
+         ((_outputUrl.endsWith(".sql") || _outputUrl.endsWith(".csv")) &&
+            _reserveRecordIdsBeforeWritingData);
 }
 
 void OsmApiDbBulkWriter::open(QString url)
@@ -131,6 +132,20 @@ void OsmApiDbBulkWriter::_verifyApp()
       QString("enabled with the 'pg_bulkload' writer application: disabling write ahead ") +
       QString("logging, multi-threaded writes, disabling table constraint checks."));
   }
+  else if (_writerApp == "psql" && _outputUrl.endsWith(".csv"))
+  {
+    throw HootException(
+      QString("When using the 'psql' writer application, the only valid output formats are ") +
+      QString("SQL file (.sql) or OSM API database (osmapidb://)."));
+  }
+  else if (_writerApp == "pg_bulkload" && _outputUrl.endsWith(".sql"))
+  {
+    throw HootException(
+      QString("When using the 'pg_bulkload' writer application, the only valid output ") +
+      QString("formats are CSV file (.sql) or OSM API database (osmapidb://)."));
+  }
+
+
   if (_writerApp == "psql")
   {
     _outputDelimiter = "\t";
@@ -252,7 +267,7 @@ unsigned int OsmApiDbBulkWriter::_numberOfTempFileDataPasses() const
   {
     numPasses++;
   }
-  else if (_writerApp != "psql" && _destinationIsDatabase() && _reserveRecordIds)
+  else if (_writerApp != "psql" && _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
     numPasses++;
   }
@@ -308,7 +323,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 
           if (!line.isEmpty())
           {
-            if (_destinationIsDatabase() && _reserveRecordIds)
+            if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
             {
               _updateRecordLineWithIdOffset(*it, line);
             }
@@ -433,14 +448,14 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   _flushTempStreams();
 
-  if (_destinationIsDatabase() && _reserveRecordIds)
+  if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
     //Get the latest id sequences in case other writes have occurred while we were parsing the input
     //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
     //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
     //_executeSql is true or false, so that the output SQL file can still be manually applied later
     //if desired.
-    _reserveIds();
+    _reserveIdsInDb();
   }
   else
   {
@@ -463,7 +478,7 @@ void OsmApiDbBulkWriter::finalizePartial()
     //out
     _writeCombinedSqlFile();
   }
-  else if (_destinationIsDatabase() && _reserveRecordIds)
+  else if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
     //update the ids in the CSV file according to the id sequences previously locked out
     _updateRecordLinesWithIdOffsetInCsvFiles();
@@ -544,6 +559,11 @@ void OsmApiDbBulkWriter::_retainOutputFilesPgBulk()
       if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
       {
         LOG_WARN("Unable to copy CSV output file to " << outputPath << ".");
+      }
+      //TODO: temp
+      if (!copyDestFile.setPermissions(QFile::ReadOther))
+      {
+        LOG_WARN("Unable to set permissions on " << outputPath);
       }
       if (!(_outputSections[*sectionNamesItr].first)->remove())
       {
@@ -636,7 +656,6 @@ void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
         throw HootException(
           "Temp file " + _outputSections[*sectionNamesItr].first->fileName() + " does not exist.");
       }
-      //_outputSections[*sectionNamesItr].first->close();
 
       const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
 
@@ -808,7 +827,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
           if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
           {
-            if (_destinationIsDatabase() && _reserveRecordIds)
+            if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
             {
               _updateRecordLineWithIdOffset(*it, line);
             }
@@ -955,7 +974,7 @@ void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName, 
   LOG_TRACE("ID offset updated for line: " << recordLine.left(100));
 }
 
-void OsmApiDbBulkWriter::_reserveIds()
+void OsmApiDbBulkWriter::_reserveIdsInDb()
 {
   //this assumes the data has already been written out to sql file once and _writeStats has valid
   //values for the number of elements written
@@ -1258,7 +1277,8 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   setPgBulkloadBadRecordsLogPath(
     confOptions.getOsmapidbBulkWriterPgbulkloadBadRecordsLogPath().trimmed());
   setWriterApp(confOptions.getOsmapidbBulkWriterApp().toLower().trimmed());
-  setReserveRecordIds(confOptions.getOsmapidbBulkWriterReserveRecordIds());
+  setReserveRecordIdsBeforeWritingData(
+    confOptions.getOsmapidbBulkWriterReserveRecordIdsBeforeWritingData());
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputLineBufferSize);
@@ -1273,7 +1293,7 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_pgBulkLogPath);
   LOG_VART(_pgBulkBadRecordsLogPath);
   LOG_VART(_writerApp);
-  LOG_VART(_reserveRecordIds);
+  LOG_VART(_reserveRecordIdsBeforeWritingData);
 }
 
 QStringList OsmApiDbBulkWriter::_createSectionNameList()

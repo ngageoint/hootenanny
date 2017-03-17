@@ -187,7 +187,8 @@ public:
   void setPgBulkloadLogPath(QString path) { _pgBulkLogPath = path; }
   void setPgBulkloadBadRecordsLogPath(QString path) { _pgBulkBadRecordsLogPath = path; }
   void setWriterApp(QString app) { _writerApp = app; }
-  void setReserveRecordIds(bool reserve) { _reserveRecordIds = reserve; }
+  void setReserveRecordIdsBeforeWritingData(bool reserve)
+  { _reserveRecordIdsBeforeWritingData = reserve; }
 
 private:
 
@@ -212,7 +213,7 @@ private:
   QString _pgBulkLogPath;
   QString _pgBulkBadRecordsLogPath;
   QString _writerApp;
-  bool _reserveRecordIds;
+  bool _reserveRecordIdsBeforeWritingData;
   unsigned int _tempFileDataPassCtr;
 
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
@@ -272,7 +273,7 @@ private:
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();
   void _updateRecordLinesWithIdOffsetInCsvFiles();
-  void _reserveIds();
+  void _reserveIdsInDb();
   void _writeDataToDb();
   void _writeDataToDbPgBulk();
   void _writeDataToDbPsql();

@@ -344,7 +344,7 @@ public:
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_psql_offline_out.sql";
     writer.setWriterApp("psql");
-    writer.setReserveRecordIds(false);
+    writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -373,7 +373,7 @@ public:
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter_psql_online_out.sql";
     writer.setWriterApp("psql");
-    writer.setReserveRecordIds(true);
+    writer.setReserveRecordIdsBeforeWritingData(true);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -406,7 +406,7 @@ public:
 
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
-    writer.setReserveRecordIds(false);
+    writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setFileOutputLineBufferSize(1);
     writer.setOutputFilesCopyLocation(outputDirPath);
     writer.setStatusUpdateInterval(1);
@@ -445,7 +445,7 @@ public:
 
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
-    writer.setReserveRecordIds(true);
+    writer.setReserveRecordIdsBeforeWritingData(true);
     writer.setFileOutputLineBufferSize(1);
     writer.setOutputFilesCopyLocation(outputDirPath);
     writer.setStatusUpdateInterval(1);
