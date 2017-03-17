@@ -69,13 +69,6 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
   return urlStr.endsWith(".sql") || urlStr.endsWith(".csv") || _database.isSupported(url);
 }
 
-bool OsmApiDbBulkWriter::_usingDatabase() const
-{
-  return _destinationIsDatabase() ||
-         ((_outputUrl.endsWith(".sql") || _outputUrl.endsWith(".csv")) &&
-            _reserveRecordIdsBeforeWritingData);
-}
-
 void OsmApiDbBulkWriter::open(QString url)
 {
   _outputUrl = url;
@@ -86,6 +79,7 @@ void OsmApiDbBulkWriter::open(QString url)
     throw HootException(QString("Could not open URL ") + url);
   }
 
+  _verifyStartingIds();
   _verifyApp();
   _verifyOutputCopySettings();
   if (_usingDatabase() && _database.getDB().isOpen())
@@ -101,6 +95,36 @@ void OsmApiDbBulkWriter::open(QString url)
   _verifyDependencies();
 }
 
+void OsmApiDbBulkWriter::_verifyStartingIds()
+{
+  if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 ||
+      _idMappings.startingRelationId < 1)
+  {
+    throw HootException(
+      "Invalid element starting ID specified.  IDs must be greater than or equal to 1.");
+  }
+
+  //this setting overrides any specified starting ids
+  if (_reserveRecordIdsBeforeWritingData)
+  {
+    if (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 ||
+        _idMappings.startingRelationId > 1)
+    {
+      LOG_WARN(
+        "Custom starting element IDs ignored due to reserve record IDs before writing data enabled.");
+    }
+    _idMappings.startingNodeId = 1;
+    _idMappings.startingWayId = 1;
+    _idMappings.startingRelationId = 1;
+  }
+  else
+  {
+    _idMappings.currentNodeId = _idMappings.startingNodeId;
+    _idMappings.currentWayId = _idMappings.startingWayId;
+    _idMappings.currentRelationId = _idMappings.startingRelationId;
+  }
+}
+
 void OsmApiDbBulkWriter::_verifyDependencies()
 {
   if (system(QString(_writerApp + " --version > /dev/null").toStdString().c_str()) != 0)
@@ -113,8 +137,8 @@ void OsmApiDbBulkWriter::_verifyDependencies()
   {
     throw HootException(
       QString("The " + _writerApp + " application was selected for database writing. ") +
-      QString("The database being written to must have the " + _writerApp + " extension ") +
-      QString("installed."));
+      QString("To use this writer application, the database being written to must have the ") +
+      QString(_writerApp + " extension installed."));
   }
 }
 
@@ -144,7 +168,6 @@ void OsmApiDbBulkWriter::_verifyApp()
       QString("When using the 'pg_bulkload' writer application, the only valid output ") +
       QString("formats are CSV file (.sql) or OSM API database (osmapidb://)."));
   }
-
 
   if (_writerApp == "psql")
   {
@@ -294,6 +317,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
     }
 
     // Write updated IDs to a new copy of each file
+
     QFile tempInputFile(_outputSections[*it].first->fileName());
     shared_ptr<QTemporaryFile> newCsvFile(new QTemporaryFile());
     try
@@ -445,21 +469,20 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     _changesetData.changesetsWritten++;
   }
-
   _flushTempStreams();
 
   if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
     //Get the latest id sequences in case other writes have occurred while we were parsing the input
-    //data, and lock those ids out so we can exec the sql w/o risk of future ID conflicts *after* we
-    //update the ids in the sql file in the next step.  We're always going to lock the ids wheter
-    //_executeSql is true or false, so that the output SQL file can still be manually applied later
-    //if desired.
+    //data, and reserve those ids out so we can exec the sql w/o risk of future ID conflicts
+    //*after* we update the ids in the sql file in the next step.
     _reserveIdsInDb();
   }
   else
   {
-    LOG_DEBUG("Skipping record ID reservation due to configuration or output type...");
+    //If the output is a sql file, the setval statements will be written to the file later.  If
+    //the output is csv files, then ID sequences must be managed manually outside of this writer.
+    LOG_DEBUG("Skipping record ID reservation in database due to configuration or output type...");
   }
 
   if (_writerApp == "psql")
@@ -474,13 +497,13 @@ void OsmApiDbBulkWriter::finalizePartial()
     _createOutputFile("byte_order_mark", "\n", true);
 
     //combine all the element/changeset temp files that were written during partial streaming into
-    //one file and update the ids in the SQL file according to the id sequences previously locked
+    //one file and update the ids in the SQL file according to the id sequences previously reserved
     //out
     _writeCombinedSqlFile();
   }
   else if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
-    //update the ids in the CSV file according to the id sequences previously locked out
+    //update the ids in the CSV file according to the id sequences previously reserved
     _updateRecordLinesWithIdOffsetInCsvFiles();
   }
 
@@ -499,11 +522,19 @@ void OsmApiDbBulkWriter::finalizePartial()
   }
   _logStats();
 
-  //retain the output file(s) if that option was selected
+  //retain the output file(s) if that option was selected; this needs to happen after the database
+  //write
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
     _retainOutputFiles();
   }
+}
+
+bool OsmApiDbBulkWriter::_usingDatabase() const
+{
+  return _destinationIsDatabase() ||
+         ((_outputUrl.endsWith(".sql") || _outputUrl.endsWith(".csv")) &&
+            _reserveRecordIdsBeforeWritingData);
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
@@ -561,10 +592,10 @@ void OsmApiDbBulkWriter::_retainOutputFilesPgBulk()
         LOG_WARN("Unable to copy CSV output file to " << outputPath << ".");
       }
       //TODO: temp
-      if (!copyDestFile.setPermissions(QFile::ReadOther))
-      {
-        LOG_WARN("Unable to set permissions on " << outputPath);
-      }
+//      if (!copyDestFile.setPermissions(QFile::ReadOther))
+//      {
+//        LOG_WARN("Unable to set permissions on " << outputPath);
+//      }
       if (!(_outputSections[*sectionNamesItr].first)->remove())
       {
         LOG_WARN(
@@ -800,6 +831,22 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   QTextStream outStream(_sqlOutputMasterFile.get());
   outStream << "BEGIN TRANSACTION;\n";
   outStream.flush();
+
+//  if (!_destinationIsDatabase() && !_reserveRecordIdsBeforeWritingData)
+//  {
+      //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
+      //statements to the sql output here for applying at a later time.
+//    QString reserveElementIdsSql;
+//    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+//                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
+//                                 _idMappings.currentWayId + _writeStats.waysWritten,
+//                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
+//                                 reserveElementIdsSql);
+//    LOG_VART(reserveElementIdsSql);
+//    outStream << reserveElementIdsSql;
+//    outStream.flush();
+//  }
+
   long progressLineCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
@@ -813,7 +860,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
     QFile tempInputFile(_outputSections[*it].first->fileName());
     try
     {
-        LOG_DEBUG("Opening temp file: " << _outputSections[*it].first->fileName());
+      LOG_DEBUG("Opening temp file: " << _outputSections[*it].first->fileName());
       if (tempInputFile.open(QIODevice::ReadOnly))
       {
         LOG_DEBUG("Parsing temp file for table: " << *it << "...");
@@ -976,29 +1023,29 @@ void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName, 
 
 void OsmApiDbBulkWriter::_reserveIdsInDb()
 {
-  //this assumes the data has already been written out to sql file once and _writeStats has valid
+  //this assumes the input data has already been written out to file once and _writeStats has valid
   //values for the number of elements written
   if (_writeStats.nodesWritten == 0)
   {
     throw HootException(
-      QString("OSM API database bulk writer cannot lock out element ID range if no elements ") +
+      QString("OSM API database bulk writer cannot reserve element ID range if no elements ") +
       QString("have been parsed from the input."));
   }
 
   //get the next available id from the db for all sequence types
   _incrementAndGetLatestIdsFromDb();
-  //generate setval statements to lock each of the id ranges out from use by others
-  QString lockElementIdsSql;
-  _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-                        _idMappings.currentNodeId + _writeStats.nodesWritten,
-                        _idMappings.currentWayId + _writeStats.waysWritten,
-                        _idMappings.currentRelationId + _writeStats.relationsWritten,
-                        lockElementIdsSql);
-  LOG_VART(lockElementIdsSql);
+  //generate setval statements to reserve each of the id ranges out from use by others
+  QString reserveElementIdsSql;
+  _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+                                _idMappings.currentNodeId + _writeStats.nodesWritten,
+                                _idMappings.currentWayId + _writeStats.waysWritten,
+                                _idMappings.currentRelationId + _writeStats.relationsWritten,
+                                 reserveElementIdsSql);
+  LOG_VART(reserveElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to reserve record IDs...");
   _database.transaction();
-  DbUtils::execNoPrepare(_database.getDB(), lockElementIdsSql);
+  DbUtils::execNoPrepare(_database.getDB(), reserveElementIdsSql);
   _database.commit();
   LOG_DEBUG("Sequence updates written to database.");
 }
@@ -1279,6 +1326,9 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   setWriterApp(confOptions.getOsmapidbBulkWriterApp().toLower().trimmed());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkWriterReserveRecordIdsBeforeWritingData());
+  _idMappings.startingNodeId = confOptions.getOsmapidbBulkWriterStartingNodeId();
+  _idMappings.startingWayId = confOptions.getOsmapidbBulkWriterStartingWayId();
+  _idMappings.startingRelationId = confOptions.getOsmapidbBulkWriterStartingRelationId();
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputLineBufferSize);
@@ -1294,6 +1344,9 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_pgBulkBadRecordsLogPath);
   LOG_VART(_writerApp);
   LOG_VART(_reserveRecordIdsBeforeWritingData);
+  LOG_VART(_idMappings.startingNodeId);
+  LOG_VART(_changesetData.changesetUserId);
+  LOG_VART(_idMappings.startingWayId);
 }
 
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
@@ -1372,12 +1425,15 @@ void OsmApiDbBulkWriter::_reset()
   _changesetData.changesInChangeset = 0;
   _changesetData.changesetsWritten = 0;
 
+  _idMappings.startingNodeId = 1;
   _idMappings.currentNodeId = 1;
   _idMappings.nodeIdMap.reset();
 
+  _idMappings.startingWayId = 1;
   _idMappings.currentWayId = 1;
   _idMappings.wayIdMap.reset();
 
+  _idMappings.startingRelationId = 1;
   _idMappings.currentRelationId = 1;
   _idMappings.relationIdMap.reset();
 
@@ -1487,6 +1543,7 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     QString key = _escapeCopyToData(it.key());
+    //pg_bulkload doesn't seem to be tolerating the empty data
     if (key.trimmed().isEmpty())
     {
       key = "<empty>";
@@ -1546,6 +1603,8 @@ void OsmApiDbBulkWriter::_createWayOutputFiles()
   }
   else
   {
+    //we're writing csv data (not sql), so no table headers needed
+
     _createOutputFile(ApiDb::getCurrentWaysTableName());
     _createOutputFile(ApiDb::getCurrentWayTagsTableName());
     _createOutputFile(ApiDb::getCurrentWayNodesTableName());
@@ -1644,6 +1703,8 @@ void OsmApiDbBulkWriter::_createRelationOutputFiles()
   }
   else
   {
+    //we're writing csv data (not sql), so no table headers needed
+
     _createOutputFile(ApiDb::getCurrentRelationsTableName());
     _createOutputFile(ApiDb::getCurrentRelationTagsTableName());
     _createOutputFile(ApiDb::getCurrentRelationMembersTableName());
@@ -1764,6 +1825,7 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
   const QString memberRefIdString(QString::number(memberDbId));
   const QString memberSequenceString(QString::number(memberSequenceIndex));
   QString memberRole = _escapeCopyToData(memberEntry.getRole());
+  //pg_bulkload doesn't seem to be handling empty data
   if (memberRole.trimmed().isEmpty())
   {
     memberRole = "<no role>";
@@ -1898,6 +1960,7 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
+  //pg_bulkload data comes from csv, so need a different delimiter than a comma
   if (_writerApp == "pg_bulkload")
   {
     escapedString.replace(QChar(44), QString(";"));
@@ -1953,9 +2016,9 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
       QString::number(_changesetData.changesInChangeset));
 }
 
-void OsmApiDbBulkWriter::_writeSequenceUpdates(const long changesetId, const long nodeId,
-                                               const long wayId, const long relationId,
-                                               QString& outputStr)
+void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(const long changesetId, const long nodeId,
+                                                       const long wayId, const long relationId,
+                                                       QString& outputStr)
 {
   LOG_DEBUG("Writing sequence updates stream...");
 

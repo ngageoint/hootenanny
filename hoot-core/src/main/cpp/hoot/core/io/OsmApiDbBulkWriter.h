@@ -52,6 +52,7 @@ using namespace boost;
 using namespace std;
 using namespace Tgs;
 
+//These match up exclusively with the v0.6 OSM API database and shouldn't be changed.
 static const QString CHANGESETS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
 static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
 static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
@@ -74,20 +75,21 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you're better off creating a new writer class or using the Rails Port.
+ * existing database, you may be better off creating a new writer class or using the Rails Port.
  *
  * This writer:
  *
  * * has two intended workflows for use: online and offline.  The appropriate workflow can be set
  *   up by configuring the writer with the appropriate options.  See the user documentation for
- *   details on the two workflows and when to use them.
+ *   details on the two workflows and examples of how to use them.
+ *
+ * * gives the option of two underlying database writer applications: psql and pg_bulkload;
+ *   currently, pg_bulkload is considered experimental (in the future it may be possible to
+ *   discontinue use of psql and use pg_bulkload exclusively)
  *
  * * allows for directly writing to a target database or generating output files that can be
  *   manually written to a database; SQL files are written for the psql writer and CSV files are
  *   written for the pg_bulkload writer
- *
- * * makes use of two underlying database writer applications: psql and pg_bulkload (in the future
- *   it may be possible to discontinue use of psql)
  *
  * * has the ability to guarantee element ID uniqueness against a live database if the record ID
  *   reservation option is used.
@@ -96,12 +98,13 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\
  *   writer
  *
  * * requires two passes over the input data *before* writing it to the database if the psql writer
- *   is used or the record ID reservation option is used; one pass beforehand otherwise
+ *   is used OR the record ID reservation option is selected; only one pass over the data beforehand
+ *   otherwise
  *
  * Originally, the psql and pg_bulkload sets of logic were separated into two classes
  * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
  * other ways the code was harder to maintain.  The decision was made to collapse the logic into
- * the same class, however, separating them again at some point may make sense, if the two logic
+ * the same class.  However, separating them again at some point may make sense if the two logic
  * paths end up being permanent
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
@@ -121,12 +124,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct IdMappings
   {
+    long startingNodeId;
     long currentNodeId;
     shared_ptr<BigMap<long, long> > nodeIdMap;
 
+    long startingWayId;
     long currentWayId;
     shared_ptr<BigMap<long, long> > wayIdMap;
 
+    long startingRelationId;
     long currentRelationId;
     shared_ptr<BigMap<long, long> > relationIdMap;
   };
@@ -150,9 +156,11 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct UnresolvedReferences
   {
+    //keeps track of unresolved way nodees, which is a deal breaker when writing to the db
     // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
     // order for waynode)
     shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > > unresolvedWaynodeRefs;
+    //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
     shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
@@ -241,9 +249,11 @@ private:
   void _verifyDependencies();
   void _verifyApp();
   void _verifyOutputCopySettings();
+  void _verifyStartingIds();
   void _closeOutputFiles();
   void _flushTempStreams();
 
+  //creates the temporary output files containing the data
   void _createNodeOutputFiles();
   QStringList _createSectionNameList();
   void _createWayOutputFiles();
@@ -251,8 +261,8 @@ private:
   void _createOutputFile(const QString tableName, const QString header = "",
                          const bool addByteOrderMarker = false);
 
-  void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
-                             const long relationId, QString& outputStr);
+  void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
+                                     const long relationId, QString& outputStr);
   void _writeChangesetToStream();
   void _writeRelationToStream(const long relationDbId);
   void _writeRelationMembersToStream(const ConstRelationPtr& relation);
@@ -268,6 +278,10 @@ private:
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
+  /*
+   * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
+   * between the two for reference.
+   */
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
