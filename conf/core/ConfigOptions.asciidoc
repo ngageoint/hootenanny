@@ -1267,7 +1267,7 @@ If populated, the generated SQL file whose statements are executed against the t
 the result of a hoot convert command with an OSM API database target is copied to the specified
 location. For debugging purposes.
 
-=== osm.changeset.sql.file.writer.generate.new.ids
+=== osm.changeset.sql.writer.generate.new.ids
 
 * Data Type: bool
 * Default Value: `true`
