@@ -131,7 +131,7 @@ public class ExportResource {
             if ("wfs".equalsIgnoreCase(outputType)) {
                 commands = new Command[] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, outputType, input, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     },
                     () -> {
@@ -147,7 +147,7 @@ public class ExportResource {
             else {
                 commands = new Command [] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, outputType, input, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     }
                 };

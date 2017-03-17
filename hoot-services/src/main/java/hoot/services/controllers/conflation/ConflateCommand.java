@@ -235,18 +235,15 @@ class ConflateCommand extends ExternalCommand {
         String stats = "";
         if (collectStats) {
             // Don't include non-error log messages in stdout because we are redirecting to file
-            debugLevel = "--error";
+            debugLevel = "error";
             stats = "--stats > " + "\"" + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv\"";
-        }
-        else {
-            debugLevel = "--" + debugLevel;
         }
 
         String hootOptions = options.stream().collect(Collectors.joining(" "));
         String removeReview = "-C RemoveReview2Pre.conf";
 
         // hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
-        String command = "hoot conflate " + debugLevel + " " + removeReview + " " + hootOptions + " " + input1 + " " + input2 + " " + output + " " + stats;
+        String command = "hoot conflate --" + debugLevel + " " + removeReview + " " + hootOptions + " " + input1 + " " + input2 + " " + output + " " + stats;
 
         super.configureAsHootCommand(command, caller);
     }

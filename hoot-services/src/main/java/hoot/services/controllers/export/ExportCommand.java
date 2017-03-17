@@ -156,18 +156,18 @@ class ExportCommand extends ExternalCommand {
     private String input;
 
     //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
-    ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
+    ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         this.jobId = jobId;
         this.paramMap = paramMap;
-        this.outputType = outputType;
-        this.input = input;
+        this.outputType = paramMap.get("outputtype");
+        this.input = paramMap.get("input");
 
         List<String> hootOptions = this.getHootOptions();
 
         //ifeq "$(outputtype)" "shp"
         //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
         //endif
-        if ("shp".equals(paramMap.get("outputtype"))) {
+        if (outputType.equals("shp")) {
             //OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
         }
 
@@ -342,5 +342,16 @@ class ExportCommand extends ExternalCommand {
         BoundingBox bounds = new BoundingBox(paramMap.get("TASK_BBOX"));
 
         return bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
+    }
+
+    String getInput() {
+        //ifeq "$(inputtype)" "file"
+        //    INPUT_PATH=$(input)
+        //endif
+        if (! this.paramMap.get("inputtype").equals("file")) {
+            input = HOOTAPI_DB_URL + "/" + input;
+        }
+
+        return input;
     }
 }

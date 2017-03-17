@@ -26,18 +26,48 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/*
+== derive-changeset
 
-public class ExportOSMAPIDBCommand extends ExportCommand {
+=== Description
 
-    ExportOSMAPIDBCommand(String jobId, Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, outputType, input, caller);
+The +derive-changeset+ command creates an OSM changeset file that represents the difference
+between two input OSM files.  The changeset can later be applied to an OSM API database.
+
+* +input1+ - OSM data input 1 (e.g. .osm file).
+* +input2+ - OSM data input 2 (e.g. .osm file).
+* +output+ - Output location (e.g. .osc or .osc.sql file).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
+                        element ID continuity with the target database when generating SQL changesets only.
+                        Required only if the changeset output format is .osc.sql.
+
+=== Usage
+
+--------------------------------------
+derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+# xml changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
+
+# sql changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+--------------------------------------
+*/
+
+public class DeriveChangesetCommand extends ExportCommand {
+
+    DeriveChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+        super(jobId, paramMap, debugLevel, caller);
 
         String aoi = super.getBoundingBox();
         String output = super.getOutputPath();
@@ -48,9 +78,8 @@ public class ExportOSMAPIDBCommand extends ExportCommand {
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         String input1 = OSMAPI_DB_URL;
-        String input2 = HOOTAPI_DB_URL + "/" + input;
+        String input2 = super.getInput();
 
-        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
         //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + output;
 

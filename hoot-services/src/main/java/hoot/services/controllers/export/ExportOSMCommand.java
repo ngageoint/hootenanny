@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +34,8 @@ import java.util.stream.Collectors;
 
 public class ExportOSMCommand extends ExportCommand {
 
-    ExportOSMCommand(String jobId, Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, outputType, input, caller);
+    ExportOSMCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+        super(jobId, paramMap, debugLevel, caller);
 
         //# Options for osm & osm.pbf export
         // OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
@@ -54,8 +52,7 @@ public class ExportOSMCommand extends ExportCommand {
         }
 
         String osmOptions = options.stream().collect(Collectors.joining(" "));
-        input = HOOTAPI_DB_URL + "/" + input;
-
+        String input = super.getInput();
         String output = super.getOutputPath();
 
         //mkdir -p "$(outputfolder)"

@@ -35,15 +35,10 @@ import java.util.stream.Collectors;
 
 public class ExportWFSCommand extends ExportCommand {
 
-    ExportWFSCommand(String jobId, Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, outputType, input, caller);
+    ExportWFSCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+        super(jobId, paramMap, debugLevel, caller);
 
-        //ifeq "$(inputtype)" "file"
-        //    INPUT_PATH=$(input)
-        //endif
-        if (! paramMap.get("inputtype").equals("file")) {
-            input = HOOTAPI_DB_URL + "/" + input;
-        }
+        String input = super.getInput();
 
         String pgUrl = "host='" + HOOTAPI_DB_HOST + "' port='" + HOOTAPI_DB_PORT + "' user='" + HOOTAPI_DB_USER + "'" +
                        " password='" + HOOTAPI_DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
