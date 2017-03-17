@@ -62,7 +62,7 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
   }
 
-  const NodeMap nodes = map->getNodeMap();
+  const NodeMap nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
@@ -81,7 +81,7 @@ void SuperfluousNodeRemover::apply(shared_ptr<OsmMap>& map)
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
     MapProjector::projectToWgs84(reprojected);
-    nodesWgs84 = &reprojected->getNodeMap();
+    nodesWgs84 = &reprojected->getNodes();
   }
 
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end();

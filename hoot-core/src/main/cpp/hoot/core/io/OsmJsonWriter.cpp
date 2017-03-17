@@ -153,8 +153,8 @@ void OsmJsonWriter::_writeKvp(const QString& key, double value)
 void OsmJsonWriter::_writeNodes(shared_ptr<const OsmMap> map)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodeMap().begin();
-  while (it != map->getNodeMap().end()) {
+  NodeMap::const_iterator it = map->getNodes().begin();
+  while (it != map->getNodes().end()) {
     nids.append(it->first);
     it++;
   }
@@ -262,8 +262,8 @@ void OsmJsonWriter::_writeWays(shared_ptr<const OsmMap> map)
 
 void OsmJsonWriter::_writeRelations(shared_ptr<const OsmMap> map)
 {
-  RelationMap::const_iterator it = map->getRelationMap().begin();
-  while (it != map->getRelationMap().end())
+  RelationMap::const_iterator it = map->getRelations().begin();
+  while (it != map->getRelations().end())
   {
     if (!_firstElement) _write(",", true);
     _firstElement = false;

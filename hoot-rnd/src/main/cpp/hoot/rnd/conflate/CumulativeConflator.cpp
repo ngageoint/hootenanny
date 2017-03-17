@@ -115,7 +115,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       if (reviewCache.get() && reviewCache->getElementCount() > 0)
       {
         LOG_DEBUG("Adding previous reviews...");
-        const RelationMap& reviews = reviewCache->getRelationMap();
+        const RelationMap& reviews = reviewCache->getRelations();
         for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
         {
           RelationPtr review = it->second;

@@ -80,7 +80,7 @@ void PbfElementIterator::_next()
   {
     _reader->parseBlob(_blobs[_blobIndex++], _in.get(), _map);
 
-    const NodeMap& nodes = _map->getNodeMap();
+    const NodeMap& nodes = _map->getNodes();
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
       _addElement(_map->getNode(it->first));
@@ -92,7 +92,7 @@ void PbfElementIterator::_next()
       _addElement(_map->getWay(it->first));
     }
 
-    const RelationMap& relations = _map->getRelationMap();
+    const RelationMap& relations = _map->getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       _addElement(_map->getRelation(it->first));

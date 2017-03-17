@@ -57,7 +57,7 @@ public:
         shared_ptr<OsmMap> map(new OsmMap());
         uut.read("test-files/ToyTestA.osm", map);
 
-        CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeMap().size());
+        CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
         OsmXmlWriter writer;
@@ -74,13 +74,13 @@ public:
         uut.setUseDataSourceIds(true);
         uut.read("test-files/ToyTestA.osm", map);
 
-        CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodeMap().size());
+        CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
         long min = 1e9;
         long max = -1e9;
-        for (NodeMap::const_iterator it = map->getNodeMap().begin();
-             it != map->getNodeMap().end(); ++it)
+        for (NodeMap::const_iterator it = map->getNodes().begin();
+             it != map->getNodes().end(); ++it)
         {
           const shared_ptr<const Node>& n = it->second;
           min = std::min(min, n->getId());
@@ -111,7 +111,7 @@ public:
         uut.setDefaultStatus(Status::Invalid);
         uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
 
-        CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodeMap().size());
+        CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
 
         CPPUNIT_ASSERT_EQUAL(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());

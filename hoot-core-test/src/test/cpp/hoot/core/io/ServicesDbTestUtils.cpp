@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 
@@ -75,6 +76,14 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant
   {
     CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
   }
+}
+
+void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
+{
+  OsmApiDb database;
+  database.open(getOsmApiDbUrl().toString());
+  database.deleteData();
+  database.close();
 }
 
 void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)

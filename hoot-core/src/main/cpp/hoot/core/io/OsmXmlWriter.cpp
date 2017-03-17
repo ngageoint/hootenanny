@@ -254,8 +254,8 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodeMap().begin();
-  while (it != map->getNodeMap().end())
+  NodeMap::const_iterator it = map->getNodes().begin();
+  while (it != map->getNodes().end())
   {
     nids.append(it->first);
     ++it;
@@ -453,8 +453,8 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
 void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
-  RelationMap::const_iterator it = map->getRelationMap().begin();
-  while (it != map->getRelationMap().end())
+  RelationMap::const_iterator it = map->getRelations().begin();
+  while (it != map->getRelations().end())
   {
     rids.append(it->first);
     ++it;

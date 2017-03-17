@@ -58,7 +58,7 @@ public:
 
   virtual QString getDbVersion();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 
@@ -385,12 +385,6 @@ private:
    * Executes the insert, performs error checking and returns the new ID.
    */
   long _insertRecord(QSqlQuery& query);
-
-  // Flushes all elements
-  void _flushElementCacheToDb();
-
-  // Only flushes specified type
-  void _flushElementCacheToDb(const ElementType::Type type);
 
   void _updateChangesetEnvelope( const ConstNodePtr node );
 

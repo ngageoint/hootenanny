@@ -172,8 +172,11 @@ public:
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
-      LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
-               " n: " << n->getX() << ", " << n->getY());
+      if (_errorCount <= 10)
+      {
+        LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
+                 " n: " << n->getX() << ", " << n->getY());
+      }
       _matches = false;
       _errorCount++;
     }
@@ -232,9 +235,9 @@ MapComparator::MapComparator()
 
 bool MapComparator::isMatch(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
 {
-  if (ref->getNodeMap().size() != test->getNodeMap().size() ||
+  if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||
-      ref->getRelationMap().size() != test->getRelationMap().size())
+      ref->getRelations().size() != test->getRelations().size())
   {
     LOG_WARN("Number of elements does not match.");
     return false;

@@ -362,7 +362,7 @@ void OsmPbfWriter::_writeMap()
 {
   // Add the nodes and ways to the blob one at a time. When the blob gets sufficiently large it is
   // written to the output stream and a new blob is started.
-  const NodeMap& nodes = _map->getNodeMap();
+  const NodeMap& nodes = _map->getNodes();
   vector<long> nids;
   nids.reserve(nodes.size());
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -405,7 +405,7 @@ void OsmPbfWriter::_writeMap()
   }
 
   // write out relations
-  const RelationMap& relations = _map->getRelationMap();
+  const RelationMap& relations = _map->getRelations();
   vector<long> rids;
   rids.reserve(relations.size());
 

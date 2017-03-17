@@ -105,7 +105,7 @@ void OsmMapIndex::_buildNodeTree() const
   vector<Box> boxes;
   vector<int> ids;
 
-  const NodeMap& nodes = _map.getNodeMap();
+  const NodeMap& nodes = _map.getNodes();
 
   _treeIdToNid.resize(0);
   _treeIdToNid.reserve(nodes.size());
@@ -429,7 +429,7 @@ const shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelationMap() c
   {
     _elementToRelationMap.reset(new ElementToRelationMap());
 
-    const RelationMap& relations = _map.getRelationMap();
+    const RelationMap& relations = _map.getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       _elementToRelationMap->addRelation(_map, it->second);
@@ -618,7 +618,7 @@ void OsmMapIndex::removeNode(shared_ptr<const Node> n)
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
 
-    if (_pendingNodeRemoval.size() > std::max((size_t)100, (size_t)_map.getNodeMap().size() / 8) &&
+    if (_pendingNodeRemoval.size() > std::max((size_t)100, (size_t)_map.getNodes().size() / 8) &&
         _nodeTree != 0)
     {
       LOG_DEBUG("pending removal size: " << _pendingNodeRemoval.size());

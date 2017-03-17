@@ -86,8 +86,8 @@ public:
 
   shared_ptr<const Node> getNode(const ConstOsmMapPtr& a, QString k, QString v)
   {
-    for (NodeMap::const_iterator it = a->getNodeMap().begin();
-      it != a->getNodeMap().end(); ++it)
+    for (NodeMap::const_iterator it = a->getNodes().begin();
+      it != a->getNodes().end(); ++it)
     {
       const shared_ptr<const Node>& n = it->second;
       if (n->getTags().contains(k) && n->getTags()[k] == v)

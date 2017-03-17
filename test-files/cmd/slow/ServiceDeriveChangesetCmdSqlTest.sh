@@ -12,6 +12,6 @@ psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.
 rm -rf test-output/cmd/ServiceDeriveChangesetCmdSqlTest
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdSqlTest
 
-hoot derive-changeset test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset.osc.sql $OSM_API_DB_URL
+hoot derive-changeset -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset.osc.sql $OSM_API_DB_URL
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset.osc.sql test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset.osc.sql
 
