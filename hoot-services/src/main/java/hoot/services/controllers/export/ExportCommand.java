@@ -31,6 +31,8 @@ import static hoot.services.HootProperties.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -38,8 +40,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,11 +117,11 @@ else ifeq ("$(outputtype)","osm.pbf")
 	mkdir -p "$(outputfolder)"
 	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
 else ifeq ("$(outputtype)","osm_api_db")
-	hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
+	hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
 	hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
 else ifeq ("$(outputtype)","osc")
 	mkdir -p "$(outputfolder)"
-	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
+	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
 else
 	mkdir -p "$(outputfolder)"
 ifeq "$(append)" "true"
@@ -150,78 +150,49 @@ class ExportCommand extends ExternalCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
+    private String jobId;
+    private java.util.Map<String, String> paramMap;
+    private String outputType;
+    private String input;
+
     //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
-    ExportCommand(String jobId, String params, String debugLevel, Class<?> caller) {
-        JSONArray commandArgs;
-        JSONObject oParams;
-        try {
-            commandArgs = JsonUtils.parseParams(params);
-            JSONParser parser = new JSONParser();
-            oParams = (JSONObject) parser.parse(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
+    ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
+        this.jobId = jobId;
+        this.paramMap = paramMap;
+        this.outputType = outputType;
+        this.input = input;
 
-        JSONObject outputfolder = new JSONObject();
-        outputfolder.put("outputfolder", TEMP_OUTPUT_PATH + "/" + jobId);
-        commandArgs.add(outputfolder);
+        List<String> hootOptions = this.getHootOptions();
 
-        JSONObject output = new JSONObject();
-        output.put("output", jobId);
-        commandArgs.add(output);
-
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
-
-        JSONObject osmAPIDBURL = new JSONObject();
-        osmAPIDBURL.put("OSM_API_DB_URL", OSMAPI_DB_URL);
-        commandArgs.add(osmAPIDBURL);
-
-        String type = JsonUtils.getParameterValue("outputtype", oParams);
-
-        if ("wfs".equalsIgnoreCase(type)) {
-            JSONObject arg = new JSONObject();
-            arg.put("outputname", jobId);
-            commandArgs.add(arg);
-
-            String pgUrl = "host='" + HOOTAPI_DB_HOST + "' port='" + HOOTAPI_DB_PORT + "' user='" + HOOTAPI_DB_USER
-                    + "' password='" + HOOTAPI_DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
-
-            arg = new JSONObject();
-            arg.put("PG_URL", pgUrl);
-            commandArgs.add(arg);
-        }
-        else if ("osm_api_db".equalsIgnoreCase(type)) {
-            addExportToOsmApiDbCommandArgs(jobId, commandArgs, oParams);
-        }
-        else if ("osc".equalsIgnoreCase(type)) {
-            addExportToChangesetCommandArgs(commandArgs, oParams);
-        }
-        else {
-            // replace with with getParameterValue
-            boolean paramFound = false;
-            for (Object commandArg : commandArgs) {
-                JSONObject json = (JSONObject) commandArg;
-                Object oo = json.get("outputname");
-                if (oo != null) {
-                    String strO = (String) oo;
-                    if (!strO.isEmpty()) {
-                        paramFound = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!paramFound) {
-                JSONObject arg = new JSONObject();
-                arg.put("outputname", jobId);
-                commandArgs.add(arg);
-            }
+        //ifeq "$(outputtype)" "shp"
+        //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
+        //endif
+        if ("shp".equals(paramMap.get("outputtype"))) {
+            //OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
         }
 
-        //super.configureAsMakeCommand("EXPORT_SCRIPT", caller, commandArgs);
+        //ifeq "$(inputtype)" "file"
+        //    INPUT_PATH=$(input)
+        //endif
+
+        // mkdir -p "$(outputfolder)"
+        // ifeq "$(append)" "true"
+        //     ifeq "$(translation)" "translations/TDSv61.js"
+        //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
+        //             mkdir -p $(OP_OUTPUT)
+        //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+        //         endif # Template Path
+        //    else
+        //       ifeq "$(translation)" "translations/TDSv40.js"
+        //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
+        //               mkdir -p $(OP_OUTPUT)
+        //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+        //           endif # Template Path
+        //       endif # Translations TDSv40
+        //    endif # Else
+        // endif # Append
+        // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
+        // $(OP_ZIP)
     }
 
     private static JSONArray addExportToOsmApiDbCommandArgs(String jobId, JSONArray commandArgs, JSONObject oParams) {
@@ -287,41 +258,7 @@ class ExportCommand extends ExternalCommand {
 
         setAoi(bbox, commandArgs);
 
-        // put the osm userid in the command args
-        if (oParams.get("USER_ID") != null) {
-            JSONObject uid = new JSONObject();
-            uid.put("userid", oParams.get("USER_ID"));
-            commandArgs.add(uid);
-        }
-
         return commandArgs;
-    }
-
-    private static void addExportToChangesetCommandArgs(JSONArray commandArgs, JSONObject oParams) {
-        //handling these inputs a little differently than the rest of ExportJResource as makes it
-        //it possible to test osm2ogrscript with file inputs
-
-        JSONObject commandArg = new JSONObject();
-        commandArg.put("input1", OSMAPI_DB_URL);
-        commandArgs.add(commandArg);
-
-        commandArg = new JSONObject();
-        commandArg.put("input2", HOOTAPI_DB_URL + "/" + oParams.get("input"));
-        commandArgs.add(commandArg);
-
-        if (oParams.get("TASK_BBOX") == null) {
-            String msg = "When exporting to a changeset, TASK_BBOX must be specified.";
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
-        }
-        BoundingBox bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
-        setAoi(bbox, commandArgs);
-
-        // put the osm userid in the command args
-        if (oParams.get("USER_ID") != null) {
-            JSONObject uid = new JSONObject();
-            uid.put("userid", oParams.get("USER_ID"));
-            commandArgs.add(uid);
-        }
     }
 
     private static Map getConflatedMap(String mapName) {
@@ -355,5 +292,55 @@ class ExportCommand extends ExternalCommand {
         JSONObject arg = new JSONObject();
         arg.put("aoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
         commandArgs.add(arg);
+    }
+
+    List<String> getHootOptions() {
+        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
+        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true
+        //HOOT_OPTS+= -D hootapi.db.writer.create.user=true
+        //HOOT_OPTS+= -D api.db.email=test@test.com
+        //HOOT_OPTS+= -D ogr.writer.pre.layer.name
+
+        List<String> options = new LinkedList<>();
+        options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("-D hootapi.db.writer.overwrite.map=true");
+        options.add("-D hootapi.db.writer.create.user=true");
+        options.add("-D api.db.email=test@test.com");
+        options.add("-D ogr.writer.pre.layer.name=" + jobId + "_");
+
+        //# Add the option to append
+        //ifeq "$(append)" "true"
+        //    HOOT_OPTS+= -D ogr.append.data=true
+        //endif
+        if (Boolean.valueOf(paramMap.get("append"))) {
+            options.add("-D ogr.append.data=true");
+        }
+
+        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        //ifeq "$(textstatus)" "true"
+        //    HOOT_OPTS+= -D writer.text.status=true
+        //endif
+        if (Boolean.valueOf(paramMap.get("textstatus"))) {
+            options.add("-D writer.text.status=true");
+        }
+
+        return options;
+    }
+
+    String getOutputPath() {
+        File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
+        File outputFile = new File(outputFolder,jobId + "." + outputType);
+
+        return "\"" + outputFile.getAbsolutePath() + "\"";
+    }
+
+    String getBoundingBox() {
+        if (!paramMap.containsKey("TASK_BBOX")) {
+            throw new IllegalArgumentException("When exporting to a changeset, TASK_BBOX must be specified.");
+        }
+
+        BoundingBox bounds = new BoundingBox(paramMap.get("TASK_BBOX"));
+
+        return bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
     }
 }

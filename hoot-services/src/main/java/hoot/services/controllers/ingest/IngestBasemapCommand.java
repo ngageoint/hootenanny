@@ -27,8 +27,6 @@
 package hoot.services.controllers.ingest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import hoot.services.command.ExternalCommand;
 
@@ -71,57 +69,25 @@ import hoot.services.command.ExternalCommand;
 class IngestBasemapCommand extends ExternalCommand {
 
     IngestBasemapCommand(String inputFile, String projection, String tileOutputDir, boolean verboseOutput, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
-
-        JSONObject arg;
         if (!StringUtils.isBlank(projection)) {
-            arg = new JSONObject();
-            arg.put("PROJECTION_SWITCH", "-s");
-            commandArgs.add(arg);
-
-            arg = new JSONObject();
-            arg.put("PROJECTION", projection);
-            commandArgs.add(arg);
+            projection = "-s " + projection;
         }
 
+        String verboseSwitch = "";
         if (verboseOutput) {
-            arg = new JSONObject();
-            arg.put("VERBOSE_OUTPUT", "-v");
-            commandArgs.add(arg);
+            verboseSwitch = "-v";
         }
 
-        arg = new JSONObject();
-        arg.put("ZOOM_SWITCH", "-z");
-        commandArgs.add(arg);
+        String zoomSwitch = "-z '0-20'";
+        String input = "\"" + inputFile + "\"";
+        String titleSwitch = "-t " + input;
+        String webviewerSwitch = "-w none";
+        String tilesOutputDir = "\"" + tileOutputDir + "\"";
 
-        arg = new JSONObject();
-        arg.put("ZOOM", "0-20");
-        commandArgs.add(arg);
+        //"$(GDAL2TILES)" $(OP_PROJECTION)  -w none -t "$(OP_INPUT)" -z '0-20' "$(OP_INPUT)" "$(OP_TILE_OUTPUT_DIR)"
+        String command = "/usr/local/bin/gdal2tiles.py " + verboseSwitch + " " + projection + " " +
+                webviewerSwitch + " " + titleSwitch + " " + zoomSwitch + " " + input + " " + tilesOutputDir;
 
-        arg = new JSONObject();
-        arg.put("TITLE_SWITCH", "-t");
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("TITLE", inputFile);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("WEBVIEWER_SWITCH", "-w");
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("WEBVIEWER", "none");
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("INPUT_FILE", inputFile);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("TILES_OUTPUT_DIR", tileOutputDir);
-        commandArgs.add(arg);
-
-        super.configureAsRegularCommand("/usr/local/bin/gdal2tiles.py", caller, commandArgs);
+        super.configureAsRegularCommand(command, caller);
     }
 }

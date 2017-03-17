@@ -192,7 +192,7 @@ public final class HootProperties {
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
         HGIS_PREPARE_FOR_VALIDATION_SCRIPT = getProperty("hgisPrepareForValidationScript");
         EXPORT_RENDERDB_SCRIPT = getProperty("exportRenderDBScript");
-        BASEMAP_RASTER_EXTENSIONS = Arrays.asList(getProperty("BasemapRasterExtensions").toLowerCase().split(","));
+        BASEMAP_RASTER_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(getProperty("BasemapRasterExtensions").toLowerCase().split(",")));
         COPYRIGHT = getProperty("copyright");
         ATTRIBUTION = getProperty("attribution");
         LICENSE = getProperty("license");

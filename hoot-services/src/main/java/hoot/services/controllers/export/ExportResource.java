@@ -30,6 +30,7 @@ import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -51,7 +52,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,17 +121,17 @@ public class ExportResource {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject oParams = (JSONObject) parser.parse(params);
+            Map<String, String> paramMap = JsonUtils.paramsToMap(params);
 
-            String type = JsonUtils.getParameterValue("outputtype", oParams);
+            String outputType = paramMap.get("outputtype");
+            String input = paramMap.get("input");
 
             Command[] commands;
 
-            if ("wfs".equalsIgnoreCase(type)) {
+            if ("wfs".equalsIgnoreCase(outputType)) {
                 commands = new Command[] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, debugLevel, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, outputType, input, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     },
                     () -> {
@@ -147,7 +147,7 @@ public class ExportResource {
             else {
                 commands = new Command [] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, debugLevel, this.getClass());
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, outputType, input, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     }
                 };

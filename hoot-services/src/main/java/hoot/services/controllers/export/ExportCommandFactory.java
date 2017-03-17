@@ -26,13 +26,15 @@
  */
 package hoot.services.controllers.export;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 
 @Component
 class ExportCommandFactory {
 
-    ExportCommand build(String jobId, String params, String debugLevel, Class<?> caller) {
-        return new ExportCommand(jobId, params, debugLevel, caller);
+    ExportCommand build(String jobId, Map<String, String> paramMap, String debugLevel, String outputType, String input, Class<?> caller) {
+        return new ExportCommand(jobId, paramMap, debugLevel, outputType, input, caller);
     }
 }

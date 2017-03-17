@@ -30,9 +30,6 @@ import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 
 import java.io.File;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import hoot.services.HootProperties;
 import hoot.services.command.ExternalCommand;
 
@@ -40,21 +37,13 @@ import hoot.services.command.ExternalCommand;
 class HGISCommand extends ExternalCommand {
 
     HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
-
-        // $1
-        JSONObject arg = new JSONObject();
-        arg.put("SOURCE", generateDbMapParam(sourceMap));
-        commandArgs.add(arg);
-
-        // $2
-        arg = new JSONObject();
-        arg.put("OUTPUT", generateDbMapParam(outputMap));
-        commandArgs.add(arg);
-
+        String source = generateDbMapParam(sourceMap);
+        String output = generateDbMapParam(outputMap);
         String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
 
-        super.configureAsRegularCommand(script, caller, commandArgs);
+        String command = script + " " + source + " " + output;
+
+        super.configureAsRegularCommand(command, caller);
     }
 
     /**

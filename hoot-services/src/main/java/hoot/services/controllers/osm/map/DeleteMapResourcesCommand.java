@@ -57,7 +57,7 @@ public class DeleteMapResourcesCommand implements InternalCommand {
     @Override
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
-        commandResult.setCommand(new String[]{"[Delete Map Resources] of map with ID = " + this.mapName});
+        commandResult.setCommand("[Delete Map Resources] of map with ID = " + this.mapName);
         commandResult.setStart(LocalDateTime.now());
 
         try {

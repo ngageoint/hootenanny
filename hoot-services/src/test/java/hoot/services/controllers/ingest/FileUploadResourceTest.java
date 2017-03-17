@@ -218,9 +218,10 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         int fgdbCnt = 0;
 
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt,
-                osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb_ogr",
-                inputsList, "test@test.com", Boolean.FALSE, null, "error", this.getClass());
+        String inputType = "";
+
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb_ogr",
+                Boolean.FALSE, null, "error", inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -322,11 +323,11 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("geonamescnt");
 
+        String inputType = "";
+
         // Test zip containing fgdb + shp
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
-                "fgdb_ogr", inputsList, "test@test.com", Boolean.FALSE, "error", null,
-                this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId,
+                "fgdb_ogr", Boolean.FALSE, "error", null, inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -429,10 +430,11 @@ public class FileUploadResourceTest {
         int geonamesCnt = 0;
         geonamesCnt += (Integer) zipStat.get("osmcnt");
 
+        String inputType = "";
+
         // Test zip containing fgdb + shp
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "osm", inputsList,
-                "test@test.com", Boolean.FALSE, null, "error", this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "osm",
+                Boolean.FALSE, null, "error", inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -535,10 +537,11 @@ public class FileUploadResourceTest {
         int osmCnt = 0;
         int fgdbCnt = 0;
 
-        FileETLCommand command = new FileETLCommand(results, zipCnt,
-                shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList,
-                "TDSv61.js", jobId, "ogr", inputsList, "test@test.com", Boolean.FALSE,
-                null, "error", this.getClass());
+        String inputType = "";
+
+        FileETLCommand command = new FileETLCommand(results, zipList,
+                "TDSv61.js", jobId, "ogr", Boolean.FALSE,
+                null, "error", inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -630,10 +633,11 @@ public class FileUploadResourceTest {
         int shpZipCnt = 0;
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
-                "ogr", inputsList, "test@test.com", Boolean.FALSE, "error", null,
-                this.getClass());
+        String inputType = "";
+
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId,
+                "ogr", Boolean.FALSE, "error", null,
+                inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -724,10 +728,11 @@ public class FileUploadResourceTest {
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId,
-                "osm", inputsList, "test@test.com", Boolean.FALSE, null,
-                "error", this.getClass());
+        String inputType = "";
+
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId,
+                                            "osm", Boolean.FALSE, null,
+                                          "error", inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 
@@ -802,9 +807,11 @@ public class FileUploadResourceTest {
         int osmZipCnt = 0;
         int fgdbZipCnt = 0;
         int geonamesZipCnt = 0;
-        FileETLCommand command = new FileETLCommand(results, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, "TDSv61.js", jobId, "fgdb", inputsList,
-                "test@test.com", Boolean.FALSE, null, "error", this.getClass());
+
+        String inputType = "";
+
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb",
+                Boolean.FALSE, null, "error", inputType, this.getClass());
 
         JSONArray params = (JSONArray) command.get("params");
 

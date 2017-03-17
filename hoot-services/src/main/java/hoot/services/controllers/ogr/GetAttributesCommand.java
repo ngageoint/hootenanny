@@ -30,13 +30,9 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
-
 
 /*
     #
@@ -57,22 +53,12 @@ import hoot.services.command.ExternalCommand;
 class GetAttributesCommand extends ExternalCommand {
 
     GetAttributesCommand(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
+        String inputFiles = fileList.stream().map(file -> "\"" + file + "\"").collect(Collectors.joining(" "));
+        String outputFile = "\"" + TEMP_OUTPUT_PATH + File.separator + jobId + ".out" + "\"";
 
-        JSONObject arg = new JSONObject();
-        arg.put("DEBUG_LEVEL", "--" + debugLevel);
-        commandArgs.add(arg);
+        //hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
+        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + outputFile;
 
-        arg = new JSONObject();
-        arg.put("INPUT_FILES", StringUtils.join(fileList.toArray(), ' '));
-        commandArgs.add(arg);
-
-        File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
-
-        arg = new JSONObject();
-        arg.put("OUTPUT_REDIRECT", " >> " + outputFile.getAbsolutePath());
-        commandArgs.add(arg);
-
-        super.configureAsHootCommand("attribute-count", caller, commandArgs);
+        super.configureAsHootCommand(command, caller);
     }
- }
+}

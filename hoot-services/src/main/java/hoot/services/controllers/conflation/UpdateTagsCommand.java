@@ -111,7 +111,7 @@ class UpdateTagsCommand implements InternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
         commandResult.setJobId(jobId);
-        commandResult.setCommand(new String[]{"[Update Map Tags] of map with name = " + mapName});
+        commandResult.setCommand("[Update Map Tags] of map with name = " + mapName);
         commandResult.setStart(LocalDateTime.now());
 
         updateTagsDirect();

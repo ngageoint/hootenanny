@@ -26,14 +26,10 @@
  */
 package hoot.services.controllers;
 
-import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
-import static hoot.services.HootProperties.EXPORT_RENDERDB_SCRIPT;
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,19 +43,10 @@ class ExportRenderDBCommand extends ExternalCommand {
 
     ExportRenderDBCommand(String name, Class<?> caller) {
         long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
-
-        JSONArray commandArgs = new JSONArray();
-
-        JSONObject argument = new JSONObject();
-        argument.put("MAP_ID", String.valueOf(mapId));
-        commandArgs.add(argument);
-
-        argument = new JSONObject();
-        argument.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(argument);
-
         String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
 
-        super.configureAsRegularCommand(script, caller, commandArgs);
+        String command = script + " " + mapId + " " + HOOTAPI_DB_URL;
+
+        super.configureAsRegularCommand(command, caller);
     }
 }

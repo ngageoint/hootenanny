@@ -32,9 +32,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -145,16 +143,16 @@ class ConflateCommand extends ExternalCommand {
         //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
         //HOOT_OPTS+= -D api.db.email=test@test.com
 
-        List<String> hootOptions = new LinkedList<>();
-        hootOptions.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        hootOptions.add("-D conflate.add.score.tags=yes");
-        hootOptions.add("-D hootapi.db.writer.overwrite.map=true");
-        hootOptions.add("-D hootapi.db.writer.create.user=true");
-        hootOptions.add("-D api.db.email=test@test.com");
+        List<String> options = new LinkedList<>();
+        options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("-D conflate.add.score.tags=yes");
+        options.add("-D hootapi.db.writer.overwrite.map=true");
+        options.add("-D hootapi.db.writer.create.user=true");
+        options.add("-D api.db.email=test@test.com");
 
         //HOOT_OPTS+= $(ADV_OPTIONS)
         if (paramMap.containsKey("ADV_OPTIONS")) {
-            hootOptions.add(paramMap.get("ADV_OPTIONS"));
+            options.add(paramMap.get("ADV_OPTIONS"));
         }
 
         /*
@@ -203,48 +201,24 @@ class ConflateCommand extends ExternalCommand {
         if (referenceLayer.equals("1")) {
             if (input1Type.equals("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
-                hootOptions.add("-D convert.bounding.box=" + conflateaoi);
-                hootOptions.add("-D conflate.use.data.source.ids=true");
-                hootOptions.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                hootOptions.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                hootOptions.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
+                options.add("-D convert.bounding.box=" + conflateaoi);
+                options.add("-D conflate.use.data.source.ids=true");
+                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
             }
         }
         else if (referenceLayer.equals("2")) {
-            hootOptions.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
+            options.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equals("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
-                hootOptions.add("-D convert.bounding.box=" + conflateaoi);
-                hootOptions.add("-D conflate.use.data.source.ids=true");
-                hootOptions.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                hootOptions.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                hootOptions.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
+                options.add("-D convert.bounding.box=" + conflateaoi);
+                options.add("-D conflate.use.data.source.ids=true");
+                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
             }
         }
-
-        /*
-          ifeq "$(CONFLATION_TYPE)" "Average"
-              OP_REPORT_CONF_TYPE=average
-          endif
-
-          ifeq "$(CONFLATION_TYPE)" "Reference"
-              OP_REPORT_CONF_TYPE=reference
-          endif
-         */
-        String conflationType = paramMap.get("CONFLATION_TYPE").toLowerCase();
-
-        /*
-          ifeq "$(GENERATE_REPORT)" "true"
-              HOOT_OPTS+= -D stats.format=asciidoc -D stats.output=$(HOOT_HOME)/userfiles/reports/$(jobid)/reportBody -D conflate.stats.types=$(OP_REPORT_CONF_TYPE)
-              OP_STAT= --stats
-              OP_CMD=$(subst ;,!semi!,$(HOOT_OPTS))
-          endif
-
-          ifeq "$(GENERATE_REPORT)" "true"
-              mkdir -p $(HOOT_HOME)/userfiles/reports/$(jobid)
-              cp -a $(HOOT_HOME)/report/. $(HOOT_HOME)/reports/$(jobid)
-          endif
-        */
 
         /*
           ifeq "$(COLLECT_STATS)" "true"
@@ -257,48 +231,23 @@ class ConflateCommand extends ExternalCommand {
         String outputName = paramMap.get("OUTPUT_NAME");
         String output = HOOTAPI_DB_URL + "/" + outputName;
 
-        /*
-         * hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
-         */
-        JSONArray commandArgs = new JSONArray();
-
-        JSONObject arg = new JSONObject();
+        //Hootenanny map statistics such as node and way count
+        String stats = "";
         if (collectStats) {
             // Don't include non-error log messages in stdout because we are redirecting to file
-            arg.put("DEBUG", "--error");
+            debugLevel = "--error";
+            stats = "--stats > " + "\"" + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv\"";
         }
         else {
-            arg.put("DEBUG", "--" + debugLevel);
-        }
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("REMOVE_REVIEW", "-C RemoveReview2Pre.conf");
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("HOOT_OPTIONS", hootOptions);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("INPUT1", input1);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("INPUT2", input2);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("OUTPUT", output);
-        commandArgs.add(arg);
-
-        if (collectStats) {
-            arg = new JSONObject();
-            //Hootenanny map statistics such as node and way count
-            arg.put("STATS_SWITCH", "--stats > " + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv");
-            commandArgs.add(arg);
+            debugLevel = "--" + debugLevel;
         }
 
-        super.configureAsHootCommand("conflate", caller, commandArgs);
+        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String removeReview = "-C RemoveReview2Pre.conf";
+
+        // hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
+        String command = "hoot conflate " + debugLevel + " " + removeReview + " " + hootOptions + " " + input1 + " " + input2 + " " + output + " " + stats;
+
+        super.configureAsHootCommand(command, caller);
     }
 }

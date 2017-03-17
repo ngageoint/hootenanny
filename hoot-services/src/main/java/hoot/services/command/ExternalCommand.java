@@ -29,7 +29,6 @@ package hoot.services.command;
 
 import java.io.File;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import hoot.services.HootProperties;
@@ -37,19 +36,15 @@ import hoot.services.HootProperties;
 
 public class ExternalCommand extends JSONObject {
 
-    protected void configureAsRegularCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
-        this.put("exectype", "");
-        this.put("exec", scriptName);
+    protected void configureAsRegularCommand(String command, Class<?> caller) {
         this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+        this.put("command", command);
         this.put("workingDir", new File(HootProperties.TEMP_OUTPUT_PATH));
     }
 
-    protected void configureAsHootCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
-        this.put("exectype", "hoot");
-        this.put("exec", scriptName);
+    protected void configureAsHootCommand(String command, Class<?> caller) {
         this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+        this.put("command", command);
         this.put("workingDir", new File(HootProperties.HOME_FOLDER, "bin"));
     }
 }

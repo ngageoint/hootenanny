@@ -73,7 +73,7 @@ public final class WFSManager {
     public static CommandResult createWfsResource(String jobId, String wfsJobName) throws Exception {
         CommandResult commandResult = new CommandResult();
         commandResult.setJobId(jobId);
-        commandResult.setCommand(new String[]{"createWfsResource()"});
+        commandResult.setCommand("createWfsResource()");
         commandResult.setStart(LocalDateTime.now());
 
         List<String> tblsList = DbUtils.getTablesList(wfsJobName);

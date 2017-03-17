@@ -255,12 +255,13 @@ public class FileUploadResource {
                 osmCnt = 1;
             }
 
+            inputType = determineInputType(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList);
+
             // TODO: move creation of FileETLCommand instance inside of the lambda function below.
             // Presently, it's not easy to do since lots of fileETLCommandFactory.build() takes lots of
             // variables that are not final or effectively final.
-            FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                    shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList, translation, jobId, etlName, inputsList, userEmail,
-                    noneTranslation, fgdbFeatureClasses, debugLevel, this.getClass());
+            FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipList, translation, jobId, etlName,
+                                         noneTranslation, fgdbFeatureClasses, debugLevel, inputType, this.getClass());
 
             String mapDisplayName = etlName;
 
@@ -317,6 +318,63 @@ public class FileUploadResource {
         }
 
         return Response.ok(response.toJSONString()).build();
+    }
+
+    private static String determineInputType(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
+            int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt, List<String> zipList) {
+        // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
+        // if fgdb zip == 0 and shp zip > then it is standard zip.
+        // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
+        String inputType = "";
+        if (zipCnt > 0) {
+            if (fgdbZipCnt > 0) {
+                //String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+                //param.put("UNZIP_LIST", mergedZipList);
+                inputType = "OGR";
+            }
+            else {
+                // Mix of shape and zip then we will unzip and treat it like OGR
+                if (shpCnt > 0) { // One or more all ogr zip + shape
+                    inputType = "OGR";
+                    //String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+                    //param.put("UNZIP_LIST", mergedZipList);
+                }
+                else if (osmCnt > 0) { // Mix of One or more all osm zip + osm
+                    inputType = "OSM";
+                    //String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+                    //param.put("UNZIP_LIST", mergedZipList);
+                }
+                else if (geonamesCnt > 0) { // Mix of One or more all osm zip + osm
+                    inputType = "GEONAMES";
+                    //String mergedZipList = StringUtils.join(zipList.toArray(), ';');
+                    //param.put("UNZIP_LIST", mergedZipList);
+                }
+                else { // One or more zip (all ogr) || One or more zip (all osm)
+
+                    // If contains zip of just shape or osm then we will etl zip directly
+                    inputType = "ZIP";
+
+                    // add zip extension
+                    for (int j = 0; j < zipList.size(); j++) {
+                        zipList.set(j, zipList.get(j) + ".zip");
+                    }
+                }
+            }
+        }
+        else if (shpCnt > 0) {
+            inputType = "OGR";
+        }
+        else if (osmCnt > 0) {
+            inputType = "OSM";
+        }
+        else if (fgdbCnt > 0) {
+            inputType = "FGDB";
+        }
+        else if (geonamesCnt > 0) {
+            inputType = "GEONAMES";
+        }
+
+        return inputType;
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,

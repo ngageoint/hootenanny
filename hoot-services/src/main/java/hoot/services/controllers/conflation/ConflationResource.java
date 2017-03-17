@@ -50,7 +50,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
@@ -178,18 +177,7 @@ public class ConflationResource {
             Command[] commands = {
                 () -> {
                     ExternalCommand conflateCommand = conflateCommandFactory.build(params, bbox, debugLevel, this.getClass());
-                    CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
-
-                    /*
-                    if (generateReport) {
-                        ifeq "$(GENERATE_REPORT)" "true"
-                            cd $(HOOT_HOME)/userfiles/reports/$(jobid) && a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s reportStyle.sty --param doc.publisher.show=0" -a HasLatexMath -a 'revdate=v`$HOOT_HOME/bin/hoot version --error | sed "s/Hootenanny \([^ ]* \) Built.* /\\1/g"`, `date "+%B %d, %Y"`' -a "input1=$(OP_INPUT1)" -a "input2=$(OP_INPUT2)" -a "output=$(DB_OUTPUT)" -a "args=" -a "cmd1=hoot $(OP_CONFLATE_TYPE) $(OP_CMD) $(OP_INPUT2)  $(OP_STAT)" -v -f pdf report.asciidoc
-                            echo '{"name":"$(OUTPUT_NAME)","description":"$(OUTPUT_NAME)","created":"$(TIME_STAMP)","reportpath":"$(HOOT_HOME)/userfiles/reports/$(jobid)/report.pdf"}' > $(HOOT_HOME)/userfiles/reports/$(jobid)/meta.data
-                        endif
-                    }
-                    */
-
-                    return commandResult;
+                    return externalCommandManager.exec(jobId, conflateCommand);
                 },
 
                 () -> {

@@ -31,10 +31,7 @@ import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.utils.JsonUtils;
@@ -64,7 +61,6 @@ step1:
 class ClipDatasetCommand extends ExternalCommand {
 
     ClipDatasetCommand(String params, String debugLevel, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
         Map<String, String> paramsMap = JsonUtils.paramsToMap(params);
 
         List<String> options = new LinkedList<>();
@@ -72,28 +68,10 @@ class ClipDatasetCommand extends ExternalCommand {
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
 
-        JSONObject arg = new JSONObject();
-        arg.put("DEBUG_LEVEL", debugLevel);
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        arg.put("HOOT_OPTS", StringUtils.join(options, " "));
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        //The input OSM data path.
-        arg.put("INPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME"));
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        //The output OSM data path.
-        arg.put("OUTPUT", HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME"));
-        commandArgs.add(arg);
-
-        arg = new JSONObject();
-        //bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
-        arg.put("BOUNDS", paramsMap.get("BBOX"));
-        commandArgs.add(arg);
+        String input = HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME");
+        String output = HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME");
+        String bounds = paramsMap.get("BBOX");
+        String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         /*
             "crop-map" - Crops the input map to the given bounds. Individual features on the border are modified to make
@@ -101,7 +79,11 @@ class ClipDatasetCommand extends ExternalCommand {
             • input - The input OSM data path.
             • output - The output OSM data path.
             • bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+
+            hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
         */
-        super.configureAsHootCommand("crop-map", caller, commandArgs);
+        String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + input + " " + output + " " + bounds;
+
+        super.configureAsHootCommand(command, caller);
     }
 }

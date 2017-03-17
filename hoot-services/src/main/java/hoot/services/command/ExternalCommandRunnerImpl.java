@@ -44,7 +44,6 @@ import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +63,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String[] command, String jobId, String caller, File workingDir) {
+    public CommandResult exec(String command, String jobId, String caller, File workingDir) {
         logger.debug("About to execute the following command: {}", commandArrayToString(command, caller));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
@@ -88,10 +87,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             int exitCode;
 
             try {
-                CommandLine cmdLine = new CommandLine(command[0]);
-                for (int i = 1; i < command.length; i++) {
-                    cmdLine.addArgument(replaceSensitiveData(command[i]));
-                }
+                CommandLine cmdLine = CommandLine.parse(replaceSensitiveData(command));
 
                 start = LocalDateTime.now();
 
@@ -140,7 +136,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
     private static void updateDatabase(CommandResult commandResult) {
         CommandStatus cmdStatus = new CommandStatus();
-        cmdStatus.setCommand(commandResult.getCommandAsString());
+        cmdStatus.setCommand(commandResult.getCommand());
         cmdStatus.setExitCode(commandResult.getExitCode());
         cmdStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
         cmdStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
@@ -153,8 +149,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         commandResult.setId(id);
     }
 
-    private static String commandArrayToString(String[] command, String caller) {
-        return "[" + StringUtils.join(command, " ") + "], Caller=" + caller;
+    private static String commandArrayToString(String command, String caller) {
+        return "[" + command + "], Caller=" + caller;
     }
 
     @Override
