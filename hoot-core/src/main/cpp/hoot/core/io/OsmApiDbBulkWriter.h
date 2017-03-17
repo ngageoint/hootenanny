@@ -197,6 +197,9 @@ public:
   void setWriterApp(QString app) { _writerApp = app; }
   void setReserveRecordIdsBeforeWritingData(bool reserve)
   { _reserveRecordIdsBeforeWritingData = reserve; }
+  void setStartingNodeId(long id) { _idMappings.startingNodeId = id; }
+  void setStartingWayId(long id) { _idMappings.startingWayId = id; }
+  void setStartingRelationId(long id) { _idMappings.startingRelationId = id; }
 
 private:
 

@@ -66,6 +66,8 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 {
   LOG_VARD(urlStr);
   QUrl url(urlStr);
+  //if we ever want any other writers that the convert command invokes to output sql or csv, then
+  //this will have to be made more specific
   return urlStr.endsWith(".sql") || urlStr.endsWith(".csv") || _database.isSupported(url);
 }
 
@@ -829,18 +831,18 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   }
 
   QTextStream outStream(_sqlOutputMasterFile.get());
-  outStream << "BEGIN TRANSACTION;\n";
+  outStream << "BEGIN TRANSACTION;\n\n";
   outStream.flush();
 
-  if (!_destinationIsDatabase() && !_reserveRecordIdsBeforeWritingData)
+  if (!_reserveRecordIdsBeforeWritingData)
   {
     //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
     //statements to the sql output here for applying at a later time.
     QString reserveElementIdsSql;
-    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
-                                 _idMappings.currentWayId + _writeStats.waysWritten,
-                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
+    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
+                                 _idMappings.currentNodeId - 1,
+                                 _idMappings.currentWayId - 1,
+                                 _idMappings.currentRelationId - 1,
                                  reserveElementIdsSql);
     LOG_VART(reserveElementIdsSql);
     outStream << reserveElementIdsSql;
@@ -1326,9 +1328,9 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   setWriterApp(confOptions.getOsmapidbBulkWriterApp().toLower().trimmed());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkWriterReserveRecordIdsBeforeWritingData());
-  _idMappings.startingNodeId = confOptions.getOsmapidbBulkWriterStartingNodeId();
-  _idMappings.startingWayId = confOptions.getOsmapidbBulkWriterStartingWayId();
-  _idMappings.startingRelationId = confOptions.getOsmapidbBulkWriterStartingRelationId();
+  setStartingNodeId(confOptions.getOsmapidbBulkWriterStartingNodeId());
+  setStartingWayId(confOptions.getOsmapidbBulkWriterStartingWayId());
+  setStartingRelationId(confOptions.getOsmapidbBulkWriterStartingRelationId());
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputLineBufferSize);
